@@ -99,7 +99,11 @@ export function get5eSlotsForCaster(type, level) {
 }
 
 export function showVttPrompt(title, defaultValue, callback) {
-    if (typeof window !== 'undefined' && typeof window.showVttPrompt === 'function' && window.showVttPrompt !== showVttPrompt) {
+    if (
+        typeof window !== 'undefined' &&
+        typeof window.showVttPrompt === 'function' &&
+        window.showVttPrompt !== showVttPrompt
+    ) {
         return window.showVttPrompt(title, defaultValue, callback);
     }
     if (typeof document === 'undefined') return;
@@ -511,7 +515,9 @@ export function findExistingSpell(name, id, m) {
               : typeof name?.spell === 'string'
                 ? name.spell
                 : String(name?.name || name || '');
-    const cleanName = String(rawName || '').toLowerCase().trim();
+    const cleanName = String(rawName || '')
+        .toLowerCase()
+        .trim();
     const spellNameMatches = (s) => {
         if (!s) return false;
         if (id && s.id === id) return true;
@@ -598,15 +604,21 @@ export function ensureNpcSpells(m) {
 
             // Cantrips
             const rawCantrips =
-                (sc.spellsByLevel && sc.spellsByLevel['0'] && Array.isArray(sc.spellsByLevel['0'].spells) && sc.spellsByLevel['0'].spells.length > 0)
+                sc.spellsByLevel &&
+                sc.spellsByLevel['0'] &&
+                Array.isArray(sc.spellsByLevel['0'].spells) &&
+                sc.spellsByLevel['0'].spells.length > 0
                     ? sc.spellsByLevel['0'].spells
-                    : (sc.spells && sc.spells['0'] && Array.isArray(sc.spells['0'].spells) && sc.spells['0'].spells.length > 0)
-                        ? sc.spells['0'].spells
-                        : (sc.spells && Array.isArray(sc.spells['0']) && sc.spells['0'].length > 0)
-                            ? sc.spells['0']
-                            : (sc.spellsObj && Array.isArray(sc.spellsObj.cantrip))
-                                ? sc.spellsObj.cantrip
-                                : [];
+                    : sc.spells &&
+                        sc.spells['0'] &&
+                        Array.isArray(sc.spells['0'].spells) &&
+                        sc.spells['0'].spells.length > 0
+                      ? sc.spells['0'].spells
+                      : sc.spells && Array.isArray(sc.spells['0']) && sc.spells['0'].length > 0
+                        ? sc.spells['0']
+                        : sc.spellsObj && Array.isArray(sc.spellsObj.cantrip)
+                          ? sc.spellsObj.cantrip
+                          : [];
 
             rawCantrips.forEach((spName, sIdx) => {
                 const cleanNameStr =
@@ -627,7 +639,12 @@ export function ensureNpcSpells(m) {
                     ...(typeof spName === 'object' ? spName : {})
                 };
                 spells.cantrip.push(spObj);
-                if (!sc.spellsObj.cantrip.some((s) => (s.id && s.id === spObj.id) || (s.name && s.name.toLowerCase() === spObj.name.toLowerCase()))) {
+                if (
+                    !sc.spellsObj.cantrip.some(
+                        (s) =>
+                            (s.id && s.id === spObj.id) || (s.name && s.name.toLowerCase() === spObj.name.toLowerCase())
+                    )
+                ) {
                     sc.spellsObj.cantrip.push(spObj);
                 }
             });
@@ -637,15 +654,21 @@ export function ensureNpcSpells(m) {
                 const slKey = `level${i}`;
                 const iStr = i.toString();
                 const rawLeveled =
-                    (sc.spellsByLevel && sc.spellsByLevel[iStr] && Array.isArray(sc.spellsByLevel[iStr].spells) && sc.spellsByLevel[iStr].spells.length > 0)
+                    sc.spellsByLevel &&
+                    sc.spellsByLevel[iStr] &&
+                    Array.isArray(sc.spellsByLevel[iStr].spells) &&
+                    sc.spellsByLevel[iStr].spells.length > 0
                         ? sc.spellsByLevel[iStr].spells
-                        : (sc.spells && sc.spells[iStr] && Array.isArray(sc.spells[iStr].spells) && sc.spells[iStr].spells.length > 0)
-                            ? sc.spells[iStr].spells
-                            : (sc.spells && Array.isArray(sc.spells[iStr]) && sc.spells[iStr].length > 0)
-                                ? sc.spells[iStr]
-                                : (sc.spellsObj && Array.isArray(sc.spellsObj[slKey]))
-                                    ? sc.spellsObj[slKey]
-                                    : [];
+                        : sc.spells &&
+                            sc.spells[iStr] &&
+                            Array.isArray(sc.spells[iStr].spells) &&
+                            sc.spells[iStr].spells.length > 0
+                          ? sc.spells[iStr].spells
+                          : sc.spells && Array.isArray(sc.spells[iStr]) && sc.spells[iStr].length > 0
+                            ? sc.spells[iStr]
+                            : sc.spellsObj && Array.isArray(sc.spellsObj[slKey])
+                              ? sc.spellsObj[slKey]
+                              : [];
 
                 rawLeveled.forEach((spName, sIdx) => {
                     const cleanNameStr =
@@ -666,7 +689,13 @@ export function ensureNpcSpells(m) {
                         ...(typeof spName === 'object' ? spName : {})
                     };
                     spells[slKey].push(spObj);
-                    if (!sc.spellsObj[slKey].some((s) => (s.id && s.id === spObj.id) || (s.name && s.name.toLowerCase() === spObj.name.toLowerCase()))) {
+                    if (
+                        !sc.spellsObj[slKey].some(
+                            (s) =>
+                                (s.id && s.id === spObj.id) ||
+                                (s.name && s.name.toLowerCase() === spObj.name.toLowerCase())
+                        )
+                    ) {
                         sc.spellsObj[slKey].push(spObj);
                     }
                 });
@@ -865,7 +894,8 @@ export function renderSingleSpellRowHtml(
             rawHtml = rawHtml.replace(/<div class="cs-spell-drag-handle"[\s\S]*?<\/div>/gi, '');
         }
     } else {
-        let spName = typeof sp === 'string' ? sp.replace(/{@spell ([^|}]+).*?}/, '$1') : (sp?.name || sp?.spell || 'Unknown');
+        let spName =
+            typeof sp === 'string' ? sp.replace(/{@spell ([^|}]+).*?}/, '$1') : sp?.name || sp?.spell || 'Unknown';
         spName = toSpellTitleCase(spName);
         return `<div class="cs-spell-item" data-block-id="${blockId}" data-spell-id="${spId}" data-section-key="${sectionKey}" data-level="${slKey}" data-idx="${idx}">${spName}</div>`;
     }
@@ -912,7 +942,7 @@ export function buildSpellcastingHtml(m, linkedCharacterId = null) {
         m.spellcasting.forEach((sc, scIdx) => {
             const scName = String(sc.name || 'Spellcasting');
             const abilityStr = String(sc.ability || 'INT').toUpperCase();
-            const pb = getProfBonus(m.cr ? (m.cr.cr || m.cr) : '0');
+            const pb = getProfBonus(m.cr ? m.cr.cr || m.cr : '0');
             const abKey = sc.ability ? String(sc.ability).toLowerCase() : 'int';
             const abScore = m[abKey] || 10;
             const abMod = Math.floor((abScore - 10) / 2);
@@ -925,12 +955,12 @@ export function buildSpellcastingHtml(m, linkedCharacterId = null) {
             const dailyObj = sc.innateObj?.daily || sc.daily || {};
             const hasWill = Array.isArray(willList) && willList.length > 0;
             const hasDaily =
-                dailyObj && typeof dailyObj === 'object' &&
+                dailyObj &&
+                typeof dailyObj === 'object' &&
                 Object.keys(dailyObj).some((k) => Array.isArray(dailyObj[k]) && dailyObj[k].length > 0);
             const hasWillOrDaily = hasWill || hasDaily;
 
-            const scSpellsObj =
-                sc.spellsObj ||
+            const scSpellsObj = sc.spellsObj ||
                 (m.spellcasting.length === 1 ? spellsObj : null) || {
                     cantrip: [],
                     level1: [],
@@ -945,20 +975,19 @@ export function buildSpellcastingHtml(m, linkedCharacterId = null) {
                 };
             const hasSlotsOrLeveledSpells = Boolean(
                 sc.spellsByLevel ||
-                    (sc.spells &&
-                        Object.keys(sc.spells).some(
-                            (k) =>
-                                k !== '0' &&
-                                (Array.isArray(sc.spells[k])
-                                    ? sc.spells[k].length > 0
-                                    : sc.spells[k]?.slots || sc.spells[k]?.spells?.length)
-                        )) ||
-                    spellLevels.some(
-                        (sl) =>
-                            sl.key !== 'cantrip' &&
-                            ((sc.spellsObj && sc.spellsObj[sl.key]?.length > 0) ||
-                                getMaxSlotsForLevel(m, sl.key, sc) > 0)
-                    )
+                (sc.spells &&
+                    Object.keys(sc.spells).some(
+                        (k) =>
+                            k !== '0' &&
+                            (Array.isArray(sc.spells[k])
+                                ? sc.spells[k].length > 0
+                                : sc.spells[k]?.slots || sc.spells[k]?.spells?.length)
+                    )) ||
+                spellLevels.some(
+                    (sl) =>
+                        sl.key !== 'cantrip' &&
+                        ((sc.spellsObj && sc.spellsObj[sl.key]?.length > 0) || getMaxSlotsForLevel(m, sl.key, sc) > 0)
+                )
             );
 
             // Distinct Casting Type Badges
@@ -986,7 +1015,9 @@ export function buildSpellcastingHtml(m, linkedCharacterId = null) {
             }
 
             const hEntries = sc.headerEntries ? sc.headerEntries.map((e) => formatRawEntry(e)).join('<br>') : '';
-            const fEntries = sc.footerEntries ? '<br>' + sc.footerEntries.map((e) => formatRawEntry(e)).join('<br>') : '';
+            const fEntries = sc.footerEntries
+                ? '<br>' + sc.footerEntries.map((e) => formatRawEntry(e)).join('<br>')
+                : '';
             const desc = injectDiceChips(parse5eMarkup(hEntries + fEntries));
 
             html += `
@@ -1020,8 +1051,21 @@ export function buildSpellcastingHtml(m, linkedCharacterId = null) {
                                 willList.length > 0
                                     ? willList
                                           .map((sp, idx) => {
-                                              const spLvl = sp.level !== undefined ? (sp.level === 0 ? 'cantrip' : 'level' + sp.level) : 'cantrip';
-                                              return renderSingleSpellRowHtml(sp, spLvl, idx, allowEdit, sc.id, sp.id, 'will');
+                                              const spLvl =
+                                                  sp.level !== undefined
+                                                      ? sp.level === 0
+                                                          ? 'cantrip'
+                                                          : 'level' + sp.level
+                                                      : 'cantrip';
+                                              return renderSingleSpellRowHtml(
+                                                  sp,
+                                                  spLvl,
+                                                  idx,
+                                                  allowEdit,
+                                                  sc.id,
+                                                  sp.id,
+                                                  'will'
+                                              );
                                           })
                                           .join('')
                                     : '<div style="font-size:0.75rem; color:var(--color-text-muted); font-style:italic; padding:2px 0;">No at-will spells added.</div>'
@@ -1049,8 +1093,21 @@ export function buildSpellcastingHtml(m, linkedCharacterId = null) {
                                         ? list
                                               .map((sp, idx) => {
                                                   const spId = sp.id || `sp_daily_${scIdx}_${dayKey}_${idx}`;
-                                                  const spLvl = sp.level !== undefined ? (sp.level === 0 ? 'cantrip' : 'level' + sp.level) : 'level1';
-                                                  const rowHtml = renderSingleSpellRowHtml(sp, spLvl, idx, allowEdit, sc.id, spId, dayKey);
+                                                  const spLvl =
+                                                      sp.level !== undefined
+                                                          ? sp.level === 0
+                                                              ? 'cantrip'
+                                                              : 'level' + sp.level
+                                                          : 'level1';
+                                                  const rowHtml = renderSingleSpellRowHtml(
+                                                      sp,
+                                                      spLvl,
+                                                      idx,
+                                                      allowEdit,
+                                                      sc.id,
+                                                      spId,
+                                                      dayKey
+                                                  );
                                                   const curUsages =
                                                       m.dailyUsages && m.dailyUsages[spId] !== undefined
                                                           ? m.dailyUsages[spId]
@@ -1086,10 +1143,7 @@ export function buildSpellcastingHtml(m, linkedCharacterId = null) {
                     if (list.length === 0 && !allowEdit && m.spellcasting.length > 1) return;
 
                     const maxSlots = getMaxSlotsForLevel(m, sl.key, sc);
-                    const curSlots =
-                        m.slots?.[sl.key]?.current ??
-                        m.spellSlots?.[sl.key]?.current ??
-                        maxSlots;
+                    const curSlots = m.slots?.[sl.key]?.current ?? m.spellSlots?.[sl.key]?.current ?? maxSlots;
                     const slotTrackerHtml =
                         sl.key !== 'cantrip' && maxSlots > 0
                             ? `
@@ -1140,10 +1194,7 @@ export function buildSpellcastingHtml(m, linkedCharacterId = null) {
         spellLevels.forEach((sl) => {
             const list = spellsObj[sl.key] || [];
             const maxSlots = getMaxSlotsForLevel(m, sl.key);
-            const curSlots =
-                m.slots?.[sl.key]?.current ??
-                m.spellSlots?.[sl.key]?.current ??
-                maxSlots;
+            const curSlots = m.slots?.[sl.key]?.current ?? m.spellSlots?.[sl.key]?.current ?? maxSlots;
             const slotTrackerHtml =
                 sl.key !== 'cantrip' && maxSlots > 0
                     ? `

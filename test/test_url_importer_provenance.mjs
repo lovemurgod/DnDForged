@@ -238,7 +238,7 @@ async function runTests() {
         await serverObj.close();
         try {
             fs.rmSync(tmpDir, { recursive: true, force: true });
-        } catch (_) { }
+        } catch (_) {}
     }
 }
 

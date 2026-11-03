@@ -2,7 +2,11 @@ import { escapeHtml } from './vtt-utils.js';
 
 function sanitizeHtmlContent(rawHtml) {
     if (!rawHtml) return '';
-    if (typeof window !== 'undefined' && typeof window.DOMPurify !== 'undefined' && typeof window.DOMPurify.sanitize === 'function') {
+    if (
+        typeof window !== 'undefined' &&
+        typeof window.DOMPurify !== 'undefined' &&
+        typeof window.DOMPurify.sanitize === 'function'
+    ) {
         return window.DOMPurify.sanitize(rawHtml);
     }
     if (typeof DOMPurify !== 'undefined' && typeof DOMPurify.sanitize === 'function') {
@@ -196,7 +200,7 @@ export function initVttHandouts(vtt) {
             if (window.Renderer?.dice?.bindRollButtons) {
                 try {
                     window.Renderer.dice.bindRollButtons(viewDesc);
-                } catch (e) { }
+                } catch (e) {}
             }
         } else {
             viewDesc.textContent = handout.desc || '';
@@ -893,7 +897,7 @@ export function initVttHandouts(vtt) {
             if (window.Renderer?.dice?.bindRollButtons) {
                 try {
                     window.Renderer.dice.bindRollButtons(htmlBox);
-                } catch (e) { }
+                } catch (e) {}
             }
             previewContainerEl.appendChild(htmlBox);
         } else if (item.desc) {

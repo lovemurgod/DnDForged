@@ -60,8 +60,9 @@ export function renderStep2(ctx) {
 
         <!-- Active Method Configuration -->
         <div class="builder-section-box">
-            ${workingChar.statMethod === 'standard'
-            ? `
+            ${
+                workingChar.statMethod === 'standard'
+                    ? `
                 <div style="margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
                     <div>
                         <strong style="color:var(--color-gold-light);">Standard Array: [15, 14, 13, 12, 10, 8]</strong>
@@ -70,30 +71,31 @@ export function renderStep2(ctx) {
                 </div>
                 <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(130px, 1fr)); gap:10px;">
                     ${statList
-                .map(
-                    (s) => `
+                        .map(
+                            (s) => `
                         <div class="glass-flat" style="padding:10px; border-radius:6px; text-align:center; border:1px solid var(--color-border-subtle);">
                             <label style="font-weight:700; color:var(--color-gold-base); font-size:0.85rem; text-transform:uppercase;">${s}</label>
                             <select class="pc-std-arr-sel" data-stat="${s}" style="width:100%; margin-top:6px; padding:6px; text-align:center; font-weight:bold; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); border-radius:4px;">
                                 ${[15, 14, 13, 12, 10, 8]
-                            .map(
-                                (val) => `
+                                    .map(
+                                        (val) => `
                                     <option value="${val}" ${workingChar.standardArrayAssignments[s] === val ? 'selected' : ''}>${val}</option>
                                 `
-                            )
-                            .join('')}
+                                    )
+                                    .join('')}
                             </select>
                         </div>
                     `
-                )
-                .join('')}
+                        )
+                        .join('')}
                 </div>
             `
-            : ''
-        }
+                    : ''
+            }
 
-            ${workingChar.statMethod === 'pointbuy'
-            ? `
+            ${
+                workingChar.statMethod === 'pointbuy'
+                    ? `
                 <div style="margin-bottom:14px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
                     <div>
                         <strong style="color:var(--color-gold-light); font-size:1rem;">Point Buy Budget (Scores 8 to 15)</strong>
@@ -105,10 +107,10 @@ export function renderStep2(ctx) {
                 </div>
                 <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(130px, 1fr)); gap:10px;">
                     ${statList
-                .map((s) => {
-                    const val = workingChar.pointBuyScores[s] || 8;
-                    const cost = POINT_BUY_COSTS[val] || 0;
-                    return `
+                        .map((s) => {
+                            const val = workingChar.pointBuyScores[s] || 8;
+                            const cost = POINT_BUY_COSTS[val] || 0;
+                            return `
                             <div class="glass-flat" style="padding:10px; border-radius:6px; text-align:center; border:1px solid var(--color-border-subtle);">
                                 <div style="font-weight:700; color:var(--color-gold-base); font-size:0.85rem; text-transform:uppercase;">${s}</div>
                                 <div style="font-size:1.35rem; font-weight:bold; color:var(--color-text-primary); margin:4px 0;">${val}</div>
@@ -119,15 +121,16 @@ export function renderStep2(ctx) {
                                 </div>
                             </div>
                         `;
-                })
-                .join('')}
+                        })
+                        .join('')}
                 </div>
             `
-            : ''
-        }
+                    : ''
+            }
 
-            ${workingChar.statMethod === 'roll'
-            ? `
+            ${
+                workingChar.statMethod === 'roll'
+                    ? `
                 <div style="margin-bottom:14px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
                     <div>
                         <strong style="color:var(--color-gold-light); font-size:1rem;">Roll 4d6 Drop Lowest</strong>
@@ -139,8 +142,8 @@ export function renderStep2(ctx) {
                 </div>
                 <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr)); gap:10px;">
                     ${workingChar.rolledScores
-                .map(
-                    (r, rIdx) => `
+                        .map(
+                            (r, rIdx) => `
                         <div class="glass-flat" style="padding:10px; border-radius:6px; text-align:center; border:1px solid var(--color-border-subtle);">
                             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
                                 <span style="font-size:0.75rem; color:var(--color-text-muted);">Pool ${rIdx + 1}</span>
@@ -153,34 +156,35 @@ export function renderStep2(ctx) {
                             </select>
                         </div>
                     `
-                )
-                .join('')}
+                        )
+                        .join('')}
                 </div>
             `
-            : ''
-        }
+                    : ''
+            }
 
-            ${workingChar.statMethod === 'manual'
-            ? `
+            ${
+                workingChar.statMethod === 'manual'
+                    ? `
                 <div style="margin-bottom:12px;">
                     <strong style="color:var(--color-gold-light);">Manual Score Entry (1 to 30)</strong>
                     <div style="font-size:0.8rem; color:var(--color-text-secondary);">Directly input your character base ability scores.</div>
                 </div>
                 <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(120px, 1fr)); gap:10px;">
                     ${statList
-                .map(
-                    (s) => `
+                        .map(
+                            (s) => `
                         <div class="glass-flat" style="padding:10px; border-radius:6px; text-align:center; border:1px solid var(--color-border-subtle);">
                             <label style="font-weight:700; color:var(--color-gold-base); font-size:0.85rem; text-transform:uppercase;">${s}</label>
                             <input type="number" id="pc-man-stat-${s}" min="1" max="30" value="${workingChar.manualScores[s]}" style="width:100%; margin-top:6px; padding:6px; text-align:center; font-weight:bold; font-size:1.1rem; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); color:var(--color-gold-light); border-radius:4px;">
                         </div>
                     `
-                )
-                .join('')}
+                        )
+                        .join('')}
                 </div>
             `
-            : ''
-        }
+                    : ''
+            }
         </div>
 
         <!-- Racial ASI & Total Scores Breakdown -->
@@ -198,12 +202,13 @@ export function renderStep2(ctx) {
                 </div>
             </div>
 
-            ${workingChar.racialAsiMode === 'catalog' && racialChoiceDefs.length > 0
-            ? `
+            ${
+                workingChar.racialAsiMode === 'catalog' && racialChoiceDefs.length > 0
+                    ? `
                 <div style="display:flex; gap:12px; margin-bottom:12px; flex-wrap:wrap; background:rgba(0,0,0,0.25); padding:8px 12px; border-radius:6px; border:1px solid var(--color-border-subtle);">
                     ${racialChoiceDefs
-                .map(
-                    (cd) => `
+                        .map(
+                            (cd) => `
                         <div style="display:flex; align-items:center; gap:6px;">
                             <span style="font-size:0.8rem; font-weight:600; color:var(--color-gold-light);">${cd.label}:</span>
                             <select class="pc-wiz-racial-choice-sel" data-cid="${cd.id}" style="padding:4px 8px; font-size:0.8rem; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); border-radius:4px;">
@@ -212,15 +217,16 @@ export function renderStep2(ctx) {
                             </select>
                         </div>
                     `
-                )
-                .join('')}
+                        )
+                        .join('')}
                 </div>
             `
-            : ''
-        }
+                    : ''
+            }
 
-            ${workingChar.racialAsiMode === 'tashas'
-            ? `
+            ${
+                workingChar.racialAsiMode === 'tashas'
+                    ? `
                 <div style="background:rgba(0,0,0,0.25); padding:10px 12px; border-radius:6px; border:1px solid var(--color-border-subtle); margin-bottom:12px;">
                     <div style="display:flex; gap:16px; align-items:center; margin-bottom:8px;">
                         <label style="display:flex; align-items:center; gap:6px; cursor:pointer; font-size:0.8rem; color:var(--color-gold-light);">
@@ -232,8 +238,9 @@ export function renderStep2(ctx) {
                             <span>+1 to Three Distinct Scores</span>
                         </label>
                     </div>
-                    ${workingChar.tashasMode === 'threePlus1'
-                ? `
+                    ${
+                        workingChar.tashasMode === 'threePlus1'
+                            ? `
                         <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
                             <div style="display:flex; align-items:center; gap:6px;">
                                 <span style="font-size:0.8rem; font-weight:600; color:var(--color-gold-light);">+1 Stat 1:</span>
@@ -255,7 +262,7 @@ export function renderStep2(ctx) {
                             </div>
                         </div>
                     `
-                : `
+                            : `
                         <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
                             <div style="display:flex; align-items:center; gap:6px;">
                                 <span style="font-size:0.8rem; font-weight:600; color:var(--color-gold-light);">+2 Bonus:</span>
@@ -271,14 +278,15 @@ export function renderStep2(ctx) {
                             </div>
                         </div>
                     `
-            }
+                    }
                 </div>
             `
-            : ''
-        }
+                    : ''
+            }
 
-            ${workingChar.racialAsiMode === 'background'
-            ? `
+            ${
+                workingChar.racialAsiMode === 'background'
+                    ? `
                 <div style="background:rgba(0,0,0,0.25); padding:10px 12px; border-radius:6px; border:1px solid var(--color-border-subtle); margin-bottom:12px;">
                     <div style="display:flex; gap:16px; align-items:center; margin-bottom:8px;">
                         <label style="display:flex; align-items:center; gap:6px; cursor:pointer; font-size:0.8rem; color:var(--color-gold-light);">
@@ -290,8 +298,9 @@ export function renderStep2(ctx) {
                             <span>+1 to Three Distinct Scores</span>
                         </label>
                     </div>
-                    ${workingChar.bgAsiMode === 'threePlus1'
-                ? `
+                    ${
+                        workingChar.bgAsiMode === 'threePlus1'
+                            ? `
                         <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
                             <div style="display:flex; align-items:center; gap:6px;">
                                 <span style="font-size:0.8rem; font-weight:600; color:var(--color-gold-light);">+1 Stat 1:</span>
@@ -313,7 +322,7 @@ export function renderStep2(ctx) {
                             </div>
                         </div>
                     `
-                : `
+                            : `
                         <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
                             <div style="display:flex; align-items:center; gap:6px;">
                                 <span style="font-size:0.8rem; font-weight:600; color:var(--color-gold-light);">+2 Bonus:</span>
@@ -329,20 +338,21 @@ export function renderStep2(ctx) {
                             </div>
                         </div>
                     `
-            }
+                    }
                 </div>
             `
-            : ''
-        }
+                    : ''
+            }
 
-            ${(ctx.asiTiers || []).some((t) => t.choice === 'unselected')
-            ? `
+            ${
+                (ctx.asiTiers || []).some((t) => t.choice === 'unselected')
+                    ? `
                 <div style="margin-bottom:10px; font-size:0.8rem; color:var(--color-gold-light); display:flex; align-items:center; gap:6px; background:rgba(212,175,55,0.1); padding:6px 12px; border-radius:4px; border:1px solid rgba(212,175,55,0.25);">
                     <i class="fa-solid fa-circle-info"></i> <span>You have pending Level Milestone ASIs or Feats to assign in <strong>Step 6 (Feats & ASIs)</strong>.</span>
                 </div>
             `
-            : ''
-        }
+                    : ''
+            }
             <div style="overflow-x:auto;">
                 <table style="width:100%; border-collapse:collapse; font-size:0.85rem; text-align:center;">
                     <thead>
@@ -357,44 +367,45 @@ export function renderStep2(ctx) {
                     </thead>
                     <tbody>
                         ${statList
-            .map((s) => {
-                let baseVal = 10;
-                if (workingChar.statMethod === 'standard')
-                    baseVal = parseInt(workingChar.standardArrayAssignments[s]) || 10;
-                else if (workingChar.statMethod === 'pointbuy')
-                    baseVal = parseInt(workingChar.pointBuyScores[s]) || 8;
-                else if (workingChar.statMethod === 'roll') {
-                    const r = workingChar.rolledScores.find((x) => x.assignedStat === s);
-                    baseVal = r ? r.val : 10;
-                } else if (workingChar.statMethod === 'manual')
-                    baseVal = parseInt(workingChar.manualScores[s]) || 10;
+                            .map((s) => {
+                                let baseVal = 10;
+                                if (workingChar.statMethod === 'standard')
+                                    baseVal = parseInt(workingChar.standardArrayAssignments[s]) || 10;
+                                else if (workingChar.statMethod === 'pointbuy')
+                                    baseVal = parseInt(workingChar.pointBuyScores[s]) || 8;
+                                else if (workingChar.statMethod === 'roll') {
+                                    const r = workingChar.rolledScores.find((x) => x.assignedStat === s);
+                                    baseVal = r ? r.val : 10;
+                                } else if (workingChar.statMethod === 'manual')
+                                    baseVal = parseInt(workingChar.manualScores[s]) || 10;
 
-                const rBonus = racialBonuses[s] || 0;
-                const aBonus = asiBonuses[s] || 0;
-                const tot = stats[s] || 10;
-                const mod = getMod(tot);
+                                const rBonus = racialBonuses[s] || 0;
+                                const aBonus = asiBonuses[s] || 0;
+                                const tot = stats[s] || 10;
+                                const mod = getMod(tot);
 
-                return `
+                                return `
                                 <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
                                      <td style="padding:8px 6px; text-align:left; font-weight:bold; color:var(--color-text-primary);">${statNames[s]} (${s.toUpperCase()})</td>
                                      <td style="padding:8px 6px; color:var(--color-text-secondary);">${baseVal}</td>
                                      <td style="padding:8px 6px;">
-                                         ${workingChar.racialAsiMode === 'custom'
-                        ? `
+                                         ${
+                                             workingChar.racialAsiMode === 'custom'
+                                                 ? `
                                              <input type="number" class="pc-custom-asi-input" data-stat="${s}" value="${workingChar.customRacialBonuses[s] || 0}" min="-5" max="10" style="width:48px; text-align:center; padding:2px; font-size:0.85rem; font-weight:bold; background:rgba(0,0,0,0.5); border:1px solid var(--color-gold-base); color:var(--color-gold-light); border-radius:4px;">
                                          `
-                        : `
+                                                 : `
                                              <span style="color:${rBonus > 0 ? '#81c784' : 'var(--color-text-muted)'}; font-weight:600;">${rBonus > 0 ? '+' + rBonus : '+0'}</span>
                                          `
-                    }
+                                         }
                                      </td>
                                      <td style="padding:8px 6px; color:${aBonus > 0 ? '#4fc3f7' : 'var(--color-text-muted)'};">${aBonus > 0 ? '+' + aBonus : '+0'}</td>
                                      <td style="padding:8px 6px; font-weight:bold; font-size:1.05rem; color:var(--color-gold-light);">${tot}</td>
                                      <td style="padding:8px 6px; font-weight:bold; font-size:1.05rem; color:${mod >= 0 ? 'var(--color-gold-base)' : '#e57373'};">${mod >= 0 ? '+' : ''}${mod}</td>
                                  </tr>
                              `;
-            })
-            .join('')}
+                            })
+                            .join('')}
                     </tbody>
                 </table>
             </div>

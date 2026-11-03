@@ -2587,8 +2587,7 @@ export function initVttChat(vtt, chatHistory) {
             const isGhost = Boolean(c.tokenId && (!canvasEngine || !canvasEngine.getTokens()?.[c.tokenId]));
 
             const isOffLayer = Boolean(
-                (c.layer && c.layer !== 'token') ||
-                (token && token.layer && token.layer !== 'token')
+                (c.layer && c.layer !== 'token') || (token && token.layer && token.layer !== 'token')
             );
             const isPlayerChar = Boolean(
                 token?.isPlayer ||
@@ -2630,7 +2629,8 @@ export function initVttChat(vtt, chatHistory) {
                 e.stopPropagation();
                 if (token && window.VTT?.canvasEngine) {
                     window.VTT.canvasEngine.panTo(token.x, token.y, null, 350);
-                    const canSelect = vtt.role === 'GM' || token.isPlayer || token.characterId === window.VTT?.activeCharacterId;
+                    const canSelect =
+                        vtt.role === 'GM' || token.isPlayer || token.characterId === window.VTT?.activeCharacterId;
                     if (canSelect) {
                         window.VTT.canvasEngine.selectToken(token.id);
                     }
@@ -2690,9 +2690,7 @@ export function initVttChat(vtt, chatHistory) {
             }
 
             // Tooltip HTML (floating on hover with Name & HP)
-            const tooltipName = isGhost
-                ? `${safeName} (Token Removed)`
-                : (isCreaturePlayerView ? 'Creature' : safeName);
+            const tooltipName = isGhost ? `${safeName} (Token Removed)` : isCreaturePlayerView ? 'Creature' : safeName;
             let tooltipHp = '';
             if (!isCreaturePlayerView && token && token.maxHp) {
                 tooltipHp = `<span class="init-card-hover-tooltip-hp" style="color: ${hpColor}; border-color: ${hpColor};">${hpText}</span>`;

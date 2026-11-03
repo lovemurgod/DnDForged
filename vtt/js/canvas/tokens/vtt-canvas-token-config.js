@@ -197,12 +197,12 @@ export function renderAuraList(tempAurasList, options = {}) {
                         <input type="color" class="aura-color-picker" value="${color}" style="width: 28px; height: 28px; border: none; padding: 0; background: none; cursor: pointer;">
                         <div class="aura-swatches" style="display: flex; gap: 4px; flex-wrap: wrap;">
                             ${['#d4af37', '#e74c3c', '#3498db', '#2ecc71', '#9b59b6', '#f39c12', '#1abc9c', '#ffffff']
-                .map(
-                    (c) => `
+                                .map(
+                                    (c) => `
                                 <span class="swatch ${c.toLowerCase() === color.toLowerCase() ? 'active' : ''}" data-color="${c}" style="width: 18px; height: 18px; border-radius: 4px; background: ${c}; cursor: pointer; border: 1px solid rgba(255,255,255,0.2);"></span>
                             `
-                )
-                .join('')}
+                                )
+                                .join('')}
                         </div>
                     </div>
                 </div>
@@ -296,9 +296,9 @@ export function setupHpSettingsControls(options = {}) {
     const {
         vtt = (typeof window !== 'undefined' ? window.VTT : null) || {},
         campaignSettings = {},
-        syncPlayerTokenSettingsUI = () => { },
-        syncGmTokenSettingsUI = () => { },
-        renderAll = () => { }
+        syncPlayerTokenSettingsUI = () => {},
+        syncGmTokenSettingsUI = () => {},
+        renderAll = () => {}
     } = options;
 
     if (vtt.role !== 'GM') return;

@@ -177,8 +177,8 @@ export function parseSpellToMacro(spData, newSpell) {
         newSpell.cantripScale = isMultiAttackCantrip
             ? false
             : spData.cantripScale !== undefined
-                ? !!spData.cantripScale
-                : true;
+              ? !!spData.cantripScale
+              : true;
     }
 
     if (spData.damageList && Array.isArray(spData.damageList) && spData.damageList.length > 0) {
@@ -189,10 +189,10 @@ export function parseSpellToMacro(spData, newSpell) {
                     d.cantripScale = isMultiAttackCantrip
                         ? false
                         : rIdx === 0
-                            ? spData.cantripScale !== undefined
-                                ? !!spData.cantripScale
-                                : true
-                            : false;
+                          ? spData.cantripScale !== undefined
+                              ? !!spData.cantripScale
+                              : true
+                          : false;
                 }
             } else {
                 if (d.upcastBonus === undefined) {
@@ -336,10 +336,10 @@ export function parseSpellToMacro(spData, newSpell) {
                         let type = m[2]
                             ? m[2].charAt(0).toUpperCase() + m[2].slice(1)
                             : dmgInflict[idx]
-                                ? dmgInflict[idx].charAt(0).toUpperCase() + dmgInflict[idx].slice(1)
-                                : dmgInflict[0]
-                                    ? dmgInflict[0].charAt(0).toUpperCase() + dmgInflict[0].slice(1)
-                                    : 'Damage';
+                              ? dmgInflict[idx].charAt(0).toUpperCase() + dmgInflict[idx].slice(1)
+                              : dmgInflict[0]
+                                ? dmgInflict[0].charAt(0).toUpperCase() + dmgInflict[0].slice(1)
+                                : 'Damage';
                         let label = '';
                         if (dmgMatches.length > 1) {
                             label = idx === 0 ? 'Normal' : `Option ${idx + 1}`;
@@ -397,10 +397,10 @@ export function parseSpellToMacro(spData, newSpell) {
                         let type = match[2]
                             ? match[2].charAt(0).toUpperCase() + match[2].slice(1)
                             : dmgInflict[idx]
-                                ? dmgInflict[idx].charAt(0).toUpperCase() + dmgInflict[idx].slice(1)
-                                : dmgInflict[0]
-                                    ? dmgInflict[0].charAt(0).toUpperCase() + dmgInflict[0].slice(1)
-                                    : 'Damage';
+                              ? dmgInflict[idx].charAt(0).toUpperCase() + dmgInflict[idx].slice(1)
+                              : dmgInflict[0]
+                                ? dmgInflict[0].charAt(0).toUpperCase() + dmgInflict[0].slice(1)
+                                : 'Damage';
                         let label = '';
                         if (dmgMatches.length > 1) {
                             if (spName.includes('ice knife')) {
@@ -421,7 +421,7 @@ export function parseSpellToMacro(spData, newSpell) {
             const temp = document.createElement('div');
             temp.innerHTML = window.Renderer.get().render({ entries: spData.entries });
             newSpell.description = temp.textContent || temp.innerText || '';
-        } catch (e) { }
+        } catch (e) {}
     }
 
     if (spData.entriesHigherLevel && !newSpell.upcastBonus) {
@@ -494,10 +494,10 @@ export async function loadSpells(explicitCampId = null) {
         explicitCampId ||
         (typeof window !== 'undefined'
             ? window.VTT?.campaignId ||
-            window.VTT?.campaignState?.id ||
-            new URLSearchParams(window.location?.search || '').get('campaignId') ||
-            new URLSearchParams(window.location?.search || '').get('campaign') ||
-            ''
+              window.VTT?.campaignState?.id ||
+              new URLSearchParams(window.location?.search || '').get('campaignId') ||
+              new URLSearchParams(window.location?.search || '').get('campaign') ||
+              ''
             : '');
     const qs = campId ? `?campaignId=${encodeURIComponent(campId)}&v=${Date.now()}` : `?v=${Date.now()}`;
     pSpellPromise = fetch(`/data/spells-catalog.json${qs}`)
@@ -527,7 +527,7 @@ export async function loadSpells(explicitCampId = null) {
                     }
                     return spells;
                 }
-            } catch (e) { }
+            } catch (e) {}
             if (typeof window !== 'undefined' && window.DataUtil && window.DataUtil.spell) {
                 const spells = await window.DataUtil.spell.pLoadAll();
                 sharedSpellCache = spells;
@@ -708,7 +708,7 @@ export function renderAndInjectSpell(spellName, containerEl, fallbackDesc, sp, s
         return;
     }
     if (!cache) {
-        loadSpells().catch(() => { });
+        loadSpells().catch(() => {});
     }
 
     if (cache && spellName) {
@@ -966,12 +966,13 @@ export function renderSpellRowHtml(sp, slKey, idx, options = {}) {
         <div class="spell-row ${prefix === 'cs-spell-' ? 'cs-spell-item' : 'pc-spell-item'} glass-flat" data-spell-name="${attrName}" data-level="${slKey}" data-idx="${idx}" data-prepared="${isPrepared}" draggable="${allowEdit}" style="padding:8px; display:flex; flex-direction:column; gap:4px; transition: border-color 0.15s, box-shadow 0.15s, opacity 0.15s; ${opacity}">
             <div style="display:flex; justify-content:space-between; align-items:center;">
                 <div style="display:flex; align-items:center; gap:6px;">
-                    ${allowEdit
-            ? `<div class="${prefix}drag-handle" data-level="${slKey}" data-idx="${idx}" title="Click and drag to reorder spell" style="cursor:grab; padding:2px 6px 2px 2px; opacity:0.6; display:flex; align-items:center; user-select:none; transition:opacity 0.15s, color 0.15s;" onmouseover="if(!this.dataset.disabled){this.style.opacity='1'; this.style.color='var(--color-gold-base)';}" onmouseout="if(!this.dataset.disabled){this.style.opacity='0.6'; this.style.color='inherit';}">
+                    ${
+                        allowEdit
+                            ? `<div class="${prefix}drag-handle" data-level="${slKey}" data-idx="${idx}" title="Click and drag to reorder spell" style="cursor:grab; padding:2px 6px 2px 2px; opacity:0.6; display:flex; align-items:center; user-select:none; transition:opacity 0.15s, color 0.15s;" onmouseover="if(!this.dataset.disabled){this.style.opacity='1'; this.style.color='var(--color-gold-base)';}" onmouseout="if(!this.dataset.disabled){this.style.opacity='0.6'; this.style.color='inherit';}">
                         <i class="fa-solid fa-grip-vertical" style="font-size:0.85rem;"></i>
                     </div>`
-            : ''
-        }
+                            : ''
+                    }
                     <div class="${prefix}prep-toggle" data-level="${slKey}" data-idx="${idx}" style="cursor: pointer; color: var(--color-gold-base); font-size: 0.8rem; display: ${slKey === 'cantrip' || slKey === 'legacy' ? 'none' : 'block'};">
                         <i class="${isPrepared ? 'fa-solid' : 'fa-regular'} fa-circle"></i>
                     </div>
@@ -1086,7 +1087,7 @@ export async function ensureSpellIsParsed(sp, options = {}) {
                         Object.assign(spData, full);
                         if (full.descriptionHtml) spData.descriptionHtml = full.descriptionHtml;
                     }
-                } catch (e) { }
+                } catch (e) {}
             }
             try {
                 if (window.vttPlayerSheetAPI && window.vttPlayerSheetAPI.parseSpellToMacro) {
@@ -1354,8 +1355,8 @@ export function rollSpell(sp, slKey, casterObj = {}, options = {}) {
         trueSpellLevel !== null
             ? trueSpellLevel
             : slKey === 'cantrip' || slKey === 'legacy'
-                ? 0
-                : parseInt(String(slKey).replace('level', '')) || 0;
+              ? 0
+              : parseInt(String(slKey).replace('level', '')) || 0;
     const castLvl = customCastLvl !== null ? customCastLvl : baseLvl;
 
     let atkRoll = null;
@@ -1461,8 +1462,8 @@ export function rollSpell(sp, slKey, casterObj = {}, options = {}) {
                     d.cantripScale !== undefined
                         ? Boolean(d.cantripScale)
                         : idx === 0
-                            ? Boolean(sp.cantripScale !== false)
-                            : false;
+                          ? Boolean(sp.cantripScale !== false)
+                          : false;
                 if (rowCantripScale) {
                     if (d.formula && /(?:\d+\s*)?[dD]\s*\d+/.test(d.formula)) {
                         d.formula = d.formula.replace(/^(?:(\d+)\s*)?([dD]\s*\d+)/, (m, countStr, die) => {
@@ -2196,11 +2197,11 @@ export function initVttSpellManager(vtt) {
 
         let classesBadge = sp.classes?.length
             ? sp.classes
-                .map(
-                    (c) =>
-                        `<span style="background:rgba(212,175,55,0.15); border:1px solid var(--color-gold-base); color:var(--color-gold-base); padding:1px 6px; border-radius:10px; font-size:0.7rem; font-weight:600;">${c}</span>`
-                )
-                .join(' ')
+                  .map(
+                      (c) =>
+                          `<span style="background:rgba(212,175,55,0.15); border:1px solid var(--color-gold-base); color:var(--color-gold-base); padding:1px 6px; border-radius:10px; font-size:0.7rem; font-weight:600;">${c}</span>`
+                  )
+                  .join(' ')
             : '';
         let tagsBadge = '';
         if (sp.areaTags?.length)
@@ -2289,7 +2290,7 @@ export function initVttSpellManager(vtt) {
                         }
                     }
                 })
-                .catch(() => { });
+                .catch(() => {});
         }
     }
 
@@ -2526,24 +2527,24 @@ export function initVttSpellManager(vtt) {
                 ((sp.name || '').match(/\[([a-zA-Z0-9_-]+)\]$/)?.[1] || '').toLowerCase().trim();
             let spData = spellCache
                 ? spellCache.find((s) => {
-                    const sName = (s.name || '').toLowerCase().trim();
-                    if (sName !== rawSpName) return false;
-                    if (spSrc && (s.source || '').toLowerCase().trim() !== spSrc) return false;
-                    return true;
-                })
+                      const sName = (s.name || '').toLowerCase().trim();
+                      if (sName !== rawSpName) return false;
+                      if (spSrc && (s.source || '').toLowerCase().trim() !== spSrc) return false;
+                      return true;
+                  })
                 : null;
             if (!spData && spellCache) {
                 const is2024 =
                     opts.is2024 !== undefined
                         ? opts.is2024
                         : (char?.classes &&
-                            char.classes.some(
-                                (c) => (c.name || '').includes('[XPHB]') || (c.source || '').toUpperCase() === 'XPHB'
-                            )) ||
-                        char?.source === 'XMM' ||
-                        char?.source === 'XPHB' ||
-                        char?.ruleset === '2024' ||
-                        !!char?.is2024;
+                              char.classes.some(
+                                  (c) => (c.name || '').includes('[XPHB]') || (c.source || '').toUpperCase() === 'XPHB'
+                              )) ||
+                          char?.source === 'XMM' ||
+                          char?.source === 'XPHB' ||
+                          char?.ruleset === '2024' ||
+                          !!char?.is2024;
                 if (is2024) {
                     spData =
                         spellCache.find(
@@ -2667,8 +2668,8 @@ export function initVttSpellManager(vtt) {
                                 ? sp.cantripScale !== undefined
                                     ? !!sp.cantripScale
                                     : isMultiAttackCantrip
-                                        ? false
-                                        : true
+                                      ? false
+                                      : true
                                 : false;
                     }
                 } else {
@@ -2906,8 +2907,9 @@ export function initVttSpellManager(vtt) {
                     <button type="button" class="btn btn-xs btn-secondary modal-spell-dmg-del" data-idx="${i}" style="width:7%; padding:4px 2px;" title="Delete Row"><i class="fa-solid fa-trash"></i></button>
                 </div>
                 <div class="modal-spell-scale-drawer vtt-hidden" id="modal-spell-scale-drawer-${i}" style="background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); border-radius:4px; padding:8px 10px; margin-top:2px;">
-                    ${isCantrip
-                        ? `
+                    ${
+                        isCantrip
+                            ? `
                         <div style="display:flex; align-items:center; gap:8px;">
                             <input type="checkbox" class="modal-spell-row-cantrip-scale" id="modal-spell-row-cantrip-scale-${i}" data-idx="${i}" ${d.cantripScale ? 'checked' : ''} style="cursor:pointer;">
                             <label for="modal-spell-row-cantrip-scale-${i}" style="margin:0; font-size:0.75rem; cursor:pointer; color:var(--color-text-primary);">
@@ -2915,7 +2917,7 @@ export function initVttSpellManager(vtt) {
                             </label>
                         </div>
                     `
-                        : `
+                            : `
                         <div style="display:flex; gap:8px; align-items:center;">
                             <div style="flex:2; display:flex; flex-direction:column; gap:2px;">
                                 <label style="margin:0; font-size:0.75rem; color:var(--color-text-muted);">Upcast Formula (Dice / Flat per interval)</label>
@@ -3278,7 +3280,7 @@ export function initVttSpellManager(vtt) {
                             const full = await res.json();
                             Object.assign(activePreviewSpell, full);
                         }
-                    } catch (err) { }
+                    } catch (err) {}
                 }
                 const newSpell = {
                     id: 'sp_' + Date.now() + Math.random(),
@@ -3699,7 +3701,7 @@ export function initVttSpellManager(vtt) {
                                     const full = await res.json();
                                     Object.assign(spData, full);
                                 }
-                            } catch (err) { }
+                            } catch (err) {}
                         }
                         const levelKey = lvlMapInverse[spData.level] || targetLevel;
                         if (!char.spells) char.spells = {};

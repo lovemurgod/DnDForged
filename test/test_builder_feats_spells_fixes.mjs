@@ -26,7 +26,7 @@ console.log('\n[Test 1] Creature Spells Defense & Formatting...');
                 name: 'Spellcasting',
                 headerEntries: ['The mage is an 18th-level spellcaster.'],
                 spells: {
-                    '1': {
+                    1: {
                         slots: 4,
                         spells: [
                             { name: 'magic missile' },
@@ -40,7 +40,7 @@ console.log('\n[Test 1] Creature Spells Defense & Formatting...');
                 will: ['light', { name: 'mage hand' }],
                 daily: {
                     '1e': ['globe of invulnerability'],
-                    '2': [{ spell: 'invisibility' }]
+                    2: [{ spell: 'invisibility' }]
                 }
             }
         ]
@@ -96,9 +96,7 @@ console.log('\n[Test 2] Background Source Parsing & Origin Feat Detection...');
         }
     ];
 
-    const matched2024 = catalog.find(
-        (b) => b.name === name2024 && b.source.toUpperCase() === src2024.toUpperCase()
-    );
+    const matched2024 = catalog.find((b) => b.name === name2024 && b.source.toUpperCase() === src2024.toUpperCase());
     assert.ok(matched2024);
     assert.strictEqual(matched2024.source, 'XPHB');
 
@@ -190,14 +188,15 @@ console.log('\n[Test 4] Feat Spell Choices & Injections...');
     }
 
     assert.strictEqual(spellsToGrant.length, 3);
-    assert.deepStrictEqual(spellsToGrant.map((s) => s.name), ['Sacred Flame', 'Guidance', 'Healing Word']);
+    assert.deepStrictEqual(
+        spellsToGrant.map((s) => s.name),
+        ['Sacred Flame', 'Guidance', 'Healing Word']
+    );
 
     // Check mapping into character spells
     const char = { spells: { cantrip: [], level1: [], level2: [] } };
     spellsToGrant.forEach((spReq) => {
-        const spObj = mockSpellsCatalog.find(
-            (s) => s.name.toLowerCase() === spReq.name.toLowerCase()
-        );
+        const spObj = mockSpellsCatalog.find((s) => s.name.toLowerCase() === spReq.name.toLowerCase());
         const sLvl = spObj ? spObj.level : spReq.level;
         const sKey = sLvl === 0 ? 'cantrip' : 'level' + sLvl;
         char.spells[sKey].push({

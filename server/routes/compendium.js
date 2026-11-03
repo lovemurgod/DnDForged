@@ -30,7 +30,7 @@ function getRawSpellsCatalog() {
                 rawSpellsCatalogData = JSON.parse(fs.readFileSync(catPath, 'utf8'));
             }
             return rawSpellsCatalogData;
-        } catch (e) { }
+        } catch (e) {}
     }
     return [];
 }
@@ -188,7 +188,7 @@ function getRawItemsCatalog() {
                 rawItemsCatalogData = JSON.parse(fs.readFileSync(catPath, 'utf8'));
             }
             return rawItemsCatalogData;
-        } catch (e) { }
+        } catch (e) {}
     }
     return [];
 }
@@ -432,7 +432,7 @@ compendiumRouter.get(
         if (fs.existsSync(catPath)) {
             try {
                 items = JSON.parse(fs.readFileSync(catPath, 'utf8'));
-            } catch (e) { }
+            } catch (e) {}
         }
 
         if (disabledSet.size > 0) {
@@ -465,53 +465,70 @@ compendiumRouter.get(
                 if (type === 'races') {
                     hydrated.raceName = ce.raceName || ce.name || 'Unnamed Race';
                     hydrated.subraceName = ce.subraceName || null;
-                    hydrated.size = Array.isArray(ce.size) ? ce.size[0] : (ce.size || 'M');
-                    const walk = typeof ce.speed === 'object' ? ce.speed.walk || 30 : parseInt(ce.speed || ce.speedWalk, 10) || 30;
+                    hydrated.size = Array.isArray(ce.size) ? ce.size[0] : ce.size || 'M';
+                    const walk =
+                        typeof ce.speed === 'object'
+                            ? ce.speed.walk || 30
+                            : parseInt(ce.speed || ce.speedWalk, 10) || 30;
                     const fly = typeof ce.speed === 'object' ? ce.speed.fly || 0 : parseInt(ce.speedFly, 10) || 0;
                     const swim = typeof ce.speed === 'object' ? ce.speed.swim || 0 : parseInt(ce.speedSwim, 10) || 0;
                     const climb = typeof ce.speed === 'object' ? ce.speed.climb || 0 : parseInt(ce.speedClimb, 10) || 0;
-                    const burrow = typeof ce.speed === 'object' ? ce.speed.burrow || 0 : parseInt(ce.speedBurrow, 10) || 0;
+                    const burrow =
+                        typeof ce.speed === 'object' ? ce.speed.burrow || 0 : parseInt(ce.speedBurrow, 10) || 0;
                     hydrated.speed = `${walk} ft` + (fly ? `, fly ${fly} ft` : '') + (swim ? `, swim ${swim} ft` : '');
                     hydrated.speeds = { walk, fly, swim, climb, burrow };
-                    hydrated.senses = ce.senses && typeof ce.senses === 'object' ? ce.senses : {
-                        darkvision: parseInt(ce.darkvision, 10) || 0,
-                        blindsight: 0,
-                        truesight: 0,
-                        devilSight: 0
-                    };
+                    hydrated.senses =
+                        ce.senses && typeof ce.senses === 'object'
+                            ? ce.senses
+                            : {
+                                  darkvision: parseInt(ce.darkvision, 10) || 0,
+                                  blindsight: 0,
+                                  truesight: 0,
+                                  devilSight: 0
+                              };
                     const rawTraits = ce.traits || ce.trait || ce.entries || [];
-                    hydrated.traits = Array.isArray(rawTraits) ? rawTraits.map((t, idx) => ({
-                        id: t.id || `trait_${genId}_${idx}`,
-                        name: t.name || 'Racial Trait',
-                        source: srcCode,
-                        raceName: hydrated.name,
-                        actionType: t.actionType || 'passive',
-                        description: t.description || (Array.isArray(t.entries) ? t.entries.join('\n\n') : t.text || ''),
-                        hasCounter: !!t.hasCounter,
-                        usesMax: t.usesMax || null,
-                        resetType: t.resetType || null,
-                        formula: t.formula || '',
-                        formulaConfig: t.formulaConfig || null,
-                        rawEntries: Array.isArray(t.entries) ? t.entries : [t.text || t.description || '']
-                    })) : [];
+                    hydrated.traits = Array.isArray(rawTraits)
+                        ? rawTraits.map((t, idx) => ({
+                              id: t.id || `trait_${genId}_${idx}`,
+                              name: t.name || 'Racial Trait',
+                              source: srcCode,
+                              raceName: hydrated.name,
+                              actionType: t.actionType || 'passive',
+                              description:
+                                  t.description || (Array.isArray(t.entries) ? t.entries.join('\n\n') : t.text || ''),
+                              hasCounter: !!t.hasCounter,
+                              usesMax: t.usesMax || null,
+                              resetType: t.resetType || null,
+                              formula: t.formula || '',
+                              formulaConfig: t.formulaConfig || null,
+                              rawEntries: Array.isArray(t.entries) ? t.entries : [t.text || t.description || '']
+                          }))
+                        : [];
                     if (!hydrated.ability) {
                         const ai = ce.abilityIncreases || {};
-                        hydrated.ability = [{
-                            str: ai.str !== undefined ? ai.str : ce.strMod || 0,
-                            dex: ai.dex !== undefined ? ai.dex : ce.dexMod || 0,
-                            con: ai.con !== undefined ? ai.con : ce.conMod || 0,
-                            int: ai.int !== undefined ? ai.int : ce.intMod || 0,
-                            wis: ai.wis !== undefined ? ai.wis : ce.wisMod || 0,
-                            cha: ai.cha !== undefined ? ai.cha : ce.chaMod || 0
-                        }];
+                        hydrated.ability = [
+                            {
+                                str: ai.str !== undefined ? ai.str : ce.strMod || 0,
+                                dex: ai.dex !== undefined ? ai.dex : ce.dexMod || 0,
+                                con: ai.con !== undefined ? ai.con : ce.conMod || 0,
+                                int: ai.int !== undefined ? ai.int : ce.intMod || 0,
+                                wis: ai.wis !== undefined ? ai.wis : ce.wisMod || 0,
+                                cha: ai.cha !== undefined ? ai.cha : ce.chaMod || 0
+                            }
+                        ];
                     }
                 } else if (type === 'backgrounds') {
                     const rawSkills = ce.skillProficiencies || ce.skills || '';
                     let skillList = [];
                     if (Array.isArray(rawSkills)) {
-                        skillList = rawSkills.map(s => typeof s === 'string' ? s : Object.keys(s).filter(k => k !== 'choose')).flat();
+                        skillList = rawSkills
+                            .map((s) => (typeof s === 'string' ? s : Object.keys(s).filter((k) => k !== 'choose')))
+                            .flat();
                     } else if (typeof rawSkills === 'string' && rawSkills.trim()) {
-                        skillList = rawSkills.split(',').map(s => s.trim()).filter(Boolean);
+                        skillList = rawSkills
+                            .split(',')
+                            .map((s) => s.trim())
+                            .filter(Boolean);
                     }
                     hydrated.skills = typeof rawSkills === 'string' ? rawSkills : skillList.join(', ');
                     hydrated.skillsData = ce.skillsData || { fixed: skillList, choose: null };
@@ -519,23 +536,48 @@ compendiumRouter.get(
                     const rawTools = ce.toolProficiencies || ce.tools || '';
                     let toolList = [];
                     if (Array.isArray(rawTools)) {
-                        toolList = rawTools.map(t => typeof t === 'string' ? t : Object.keys(t).filter(k => k !== 'choose')).flat();
+                        toolList = rawTools
+                            .map((t) => (typeof t === 'string' ? t : Object.keys(t).filter((k) => k !== 'choose')))
+                            .flat();
                     } else if (typeof rawTools === 'string' && rawTools.trim()) {
-                        toolList = rawTools.split(',').map(t => t.trim()).filter(Boolean);
+                        toolList = rawTools
+                            .split(',')
+                            .map((t) => t.trim())
+                            .filter(Boolean);
                     }
                     hydrated.tools = typeof rawTools === 'string' ? rawTools : toolList.join(', ');
                     hydrated.toolsData = ce.toolsData || { fixed: toolList, choose: null };
 
-                    const featEntry = Array.isArray(ce.entries) ? ce.entries.find(e => e && e.name) : null;
-                    const featName = ce.featureName || featEntry?.name || ce.features?.[0]?.name || `Feature: ${hydrated.name}`;
-                    const featDesc = ce.featureDescription || ce.featureDesc || (Array.isArray(featEntry?.entries) ? featEntry.entries.join('\n\n') : featEntry?.text) || ce.features?.[0]?.description || ce.description || '';
-                    hydrated.features = Array.isArray(ce.features) && ce.features.length > 0 ? ce.features : [{
-                        name: featName,
-                        description: featDesc
-                    }];
+                    const featEntry = Array.isArray(ce.entries) ? ce.entries.find((e) => e && e.name) : null;
+                    const featName =
+                        ce.featureName || featEntry?.name || ce.features?.[0]?.name || `Feature: ${hydrated.name}`;
+                    const featDesc =
+                        ce.featureDescription ||
+                        ce.featureDesc ||
+                        (Array.isArray(featEntry?.entries) ? featEntry.entries.join('\n\n') : featEntry?.text) ||
+                        ce.features?.[0]?.description ||
+                        ce.description ||
+                        '';
+                    hydrated.features =
+                        Array.isArray(ce.features) && ce.features.length > 0
+                            ? ce.features
+                            : [
+                                  {
+                                      name: featName,
+                                      description: featDesc
+                                  }
+                              ];
                     hydrated.description = featDesc;
                     const rawEquipment = ce.startingEquipment || ce.equipment || '';
-                    hydrated.equipment = typeof rawEquipment === 'string' ? rawEquipment : (Array.isArray(rawEquipment) ? rawEquipment.map(e => e?.special || e?.item || (typeof e === 'string' ? e : '')).filter(Boolean).join(', ') : '');
+                    hydrated.equipment =
+                        typeof rawEquipment === 'string'
+                            ? rawEquipment
+                            : Array.isArray(rawEquipment)
+                              ? rawEquipment
+                                    .map((e) => e?.special || e?.item || (typeof e === 'string' ? e : ''))
+                                    .filter(Boolean)
+                                    .join(', ')
+                              : '';
                     hydrated.equipmentData = ce.equipmentData || parseEquipmentTextToData(rawEquipment);
                 }
 
@@ -649,7 +691,7 @@ function getRawBestiaryCatalog() {
                 rawBestiaryCatalogData = JSON.parse(fs.readFileSync(catPath, 'utf8'));
             }
             return rawBestiaryCatalogData;
-        } catch (e) { }
+        } catch (e) {}
     }
     return [];
 }

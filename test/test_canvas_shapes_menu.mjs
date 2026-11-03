@@ -11,12 +11,8 @@ globalThis.document = dom.window.document;
 
 console.log('--- Starting Test Suite: Persistent Shapes Context Menu ---');
 
-const {
-    changeShapeZOrder,
-    getPersistentShapeAtPoint,
-    showShapeContextMenu,
-    isTokenIntersectingShape
-} = await import('../vtt/js/canvas/vtt-canvas-shapes.js');
+const { changeShapeZOrder, getPersistentShapeAtPoint, showShapeContextMenu, isTokenIntersectingShape } =
+    await import('../vtt/js/canvas/vtt-canvas-shapes.js');
 
 // =========================================================================
 // Suite 1: Z-Ordering Logic
@@ -30,7 +26,9 @@ console.log('\n[Suite 1] changeShapeZOrder calculations');
     };
 
     let changed = false;
-    const onShapesChanged = () => { changed = true; };
+    const onShapesChanged = () => {
+        changed = true;
+    };
 
     // 1.1 Bring s1 to front
     changeShapeZOrder('s1', 'front', { shapes, onShapesChanged });

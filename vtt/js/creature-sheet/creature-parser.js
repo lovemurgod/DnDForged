@@ -21,10 +21,10 @@ export const STANDARD_DAMAGE_TYPES = [
 export function toSpellTitleCase(str) {
     if (typeof window !== 'undefined' && window.toSpellTitleCase) {
         try {
-            return window.toSpellTitleCase(typeof str === 'string' ? str : (str?.name || ''));
+            return window.toSpellTitleCase(typeof str === 'string' ? str : str?.name || '');
         } catch (_) {}
     }
-    const rawStr = typeof str === 'string' ? str : (typeof str?.name === 'string' ? str.name : '');
+    const rawStr = typeof str === 'string' ? str : typeof str?.name === 'string' ? str.name : '';
     if (!rawStr) return '';
     const cleanStr = rawStr.replace(/\{@spell ([^|}]+).*?\}/gi, '$1').trim();
     if (!cleanStr) return '';

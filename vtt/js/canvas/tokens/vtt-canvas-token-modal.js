@@ -261,7 +261,8 @@ export function setupTokenEditModal(tokenModalState, options = {}) {
             parseFloat(document.getElementById('token-edit-light-speed')?.value) || 1.0;
         liveTokens[tokenId].lightAnimationIntensity =
             parseFloat(document.getElementById('token-edit-light-intensity')?.value) || 0.1;
-        liveTokens[tokenId].lightAnimationColor2 = document.getElementById('token-edit-light-color2')?.value || '#ffe082';
+        liveTokens[tokenId].lightAnimationColor2 =
+            document.getElementById('token-edit-light-color2')?.value || '#ffe082';
 
         const auras = tokenModalState.tempAurasList || [];
         liveTokens[tokenId].auras = auras.map((a) => {
@@ -502,10 +503,8 @@ export function setupTokenEditModal(tokenModalState, options = {}) {
 
 export function openTokenEditModal(tokenId, tokenModalState, options = {}) {
     if (typeof document === 'undefined') return;
-    const {
-        vtt = (typeof window !== 'undefined' ? window.VTT : null) || {},
-        isTokenControlledByPlayer = () => true
-    } = options;
+    const { vtt = (typeof window !== 'undefined' ? window.VTT : null) || {}, isTokenControlledByPlayer = () => true } =
+        options;
     const liveTokens = typeof options.getTokens === 'function' ? options.getTokens() : options.tokens || {};
 
     if (!isTokenControlledByPlayer(liveTokens[tokenId])) {

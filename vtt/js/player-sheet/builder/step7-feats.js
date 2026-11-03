@@ -71,32 +71,103 @@ export const OUTER_PLANES = {
 };
 
 export const GIANT_STRIKES = {
-    'Cloud Strike': { damage: '1d4', type: 'thunder', save: 'Wisdom', desc: 'Target takes an extra 1d4 thunder damage and must succeed on a WIS save or you become invisible to it until the start of your next turn.' },
+    'Cloud Strike': {
+        damage: '1d4',
+        type: 'thunder',
+        save: 'Wisdom',
+        desc: 'Target takes an extra 1d4 thunder damage and must succeed on a WIS save or you become invisible to it until the start of your next turn.'
+    },
     'Fire Strike': { damage: '1d10', type: 'fire', save: null, desc: 'Target takes an extra 1d10 fire damage.' },
-    'Frost Strike': { damage: '1d6', type: 'cold', save: 'Constitution', desc: 'Target takes an extra 1d6 cold damage and must succeed on a CON save or its speed is reduced to 0 until the start of your next turn.' },
-    'Hill Strike': { damage: '1d6', type: 'weapon', save: 'Strength', desc: 'Target takes an extra 1d6 damage of the weapon\'s type and must succeed on a STR save or have the prone condition.' },
-    'Stone Strike': { damage: '1d6', type: 'force', save: 'Strength', desc: 'Target takes an extra 1d6 force damage and must succeed on a STR save or be pushed 10 feet from you in a straight line.' },
-    'Storm Strike': { damage: '1d6', type: 'lightning', save: 'Constitution', desc: 'Target takes an extra 1d6 lightning damage and must succeed on a CON save or have disadvantage on attack rolls until the start of your next turn.' }
+    'Frost Strike': {
+        damage: '1d6',
+        type: 'cold',
+        save: 'Constitution',
+        desc: 'Target takes an extra 1d6 cold damage and must succeed on a CON save or its speed is reduced to 0 until the start of your next turn.'
+    },
+    'Hill Strike': {
+        damage: '1d6',
+        type: 'weapon',
+        save: 'Strength',
+        desc: "Target takes an extra 1d6 damage of the weapon's type and must succeed on a STR save or have the prone condition."
+    },
+    'Stone Strike': {
+        damage: '1d6',
+        type: 'force',
+        save: 'Strength',
+        desc: 'Target takes an extra 1d6 force damage and must succeed on a STR save or be pushed 10 feet from you in a straight line.'
+    },
+    'Storm Strike': {
+        damage: '1d6',
+        type: 'lightning',
+        save: 'Constitution',
+        desc: 'Target takes an extra 1d6 lightning damage and must succeed on a CON save or have disadvantage on attack rolls until the start of your next turn.'
+    }
 };
 
 export const STANDARD_5E_SKILLS = [
-    'Acrobatics', 'Animal Handling', 'Arcana', 'Athletics', 'Deception', 'History',
-    'Insight', 'Intimidation', 'Investigation', 'Medicine', 'Nature', 'Perception',
-    'Performance', 'Persuasion', 'Religion', 'Sleight of Hand', 'Stealth', 'Survival'
+    'Acrobatics',
+    'Animal Handling',
+    'Arcana',
+    'Athletics',
+    'Deception',
+    'History',
+    'Insight',
+    'Intimidation',
+    'Investigation',
+    'Medicine',
+    'Nature',
+    'Perception',
+    'Performance',
+    'Persuasion',
+    'Religion',
+    'Sleight of Hand',
+    'Stealth',
+    'Survival'
 ];
 
 export const STANDARD_5E_TOOLS = [
-    "Thieves' Tools", "Alchemist's Supplies", "Brewer's Supplies", "Calligrapher's Supplies",
-    "Carpenter's Tools", "Cartographer's Tools", "Cobbler's Tools", "Cook's Utensils",
-    "Glassblower's Tools", "Jeweler's Tools", "Leatherworker's Tools", "Mason's Tools",
-    "Painter's Supplies", "Potter's Tools", "Smith's Tools", "Tinker's Tools",
-    "Weaver's Tools", "Woodcarver's Tools", "Disguise Kit", "Forgery Kit",
-    "Herbalism Kit", "Navigator's Tools", "Poisoner's Kit"
+    "Thieves' Tools",
+    "Alchemist's Supplies",
+    "Brewer's Supplies",
+    "Calligrapher's Supplies",
+    "Carpenter's Tools",
+    "Cartographer's Tools",
+    "Cobbler's Tools",
+    "Cook's Utensils",
+    "Glassblower's Tools",
+    "Jeweler's Tools",
+    "Leatherworker's Tools",
+    "Mason's Tools",
+    "Painter's Supplies",
+    "Potter's Tools",
+    "Smith's Tools",
+    "Tinker's Tools",
+    "Weaver's Tools",
+    "Woodcarver's Tools",
+    'Disguise Kit',
+    'Forgery Kit',
+    'Herbalism Kit',
+    "Navigator's Tools",
+    "Poisoner's Kit"
 ];
 
 export const STANDARD_5E_LANGUAGES = [
-    'Common', 'Dwarvish', 'Elvish', 'Giant', 'Gnomish', 'Goblin', 'Halfling', 'Orc',
-    'Abyssal', 'Celestial', 'Draconic', 'Deep Speech', 'Infernal', 'Primordial', 'Sylvan', 'Undercommon'
+    'Common',
+    'Dwarvish',
+    'Elvish',
+    'Giant',
+    'Gnomish',
+    'Goblin',
+    'Halfling',
+    'Orc',
+    'Abyssal',
+    'Celestial',
+    'Draconic',
+    'Deep Speech',
+    'Infernal',
+    'Primordial',
+    'Sylvan',
+    'Undercommon'
 ];
 
 export function renderStep7(ctx) {
@@ -260,7 +331,9 @@ export function renderStep7(ctx) {
                                                   if (Array.isArray(chooseList) && chooseList.length > 0) {
                                                       allowedStats = chooseList;
                                                   } else if (
-                                                      /fey[- ]touched|shadow[- ]touched|telekinetic|telepathic/i.test(featNameLow)
+                                                      /fey[- ]touched|shadow[- ]touched|telekinetic|telepathic/i.test(
+                                                          featNameLow
+                                                      )
                                                   ) {
                                                       allowedStats = ['int', 'wis', 'cha'];
                                                   }
@@ -301,12 +374,16 @@ export function renderStep7(ctx) {
                                                               cl.toLowerCase().includes(spellClass)
                                                           )
                                                   );
-                                                  const curAbility = tier.featSubChoices?.abilityScore || (
-                                                      spellClass === 'cleric' || spellClass === 'druid' ? 'wis' :
-                                                      spellClass === 'wizard' ? 'int' : 'cha'
-                                                  );
+                                                  const curAbility =
+                                                      tier.featSubChoices?.abilityScore ||
+                                                      (spellClass === 'cleric' || spellClass === 'druid'
+                                                          ? 'wis'
+                                                          : spellClass === 'wizard'
+                                                            ? 'int'
+                                                            : 'cha');
                                                   tier.featSubChoices = tier.featSubChoices || {};
-                                                  if (!tier.featSubChoices.abilityScore) tier.featSubChoices.abilityScore = curAbility;
+                                                  if (!tier.featSubChoices.abilityScore)
+                                                      tier.featSubChoices.abilityScore = curAbility;
 
                                                   subChoiceHtml += `
                                             <div style="background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); padding:10px; border-radius:6px; margin-top:6px; display:flex; flex-direction:column; gap:8px;">
@@ -366,14 +443,17 @@ export function renderStep7(ctx) {
                                                   const bgNameLow = (tier.className || '').toLowerCase();
                                                   if (bgNameLow.includes('prismari')) defaultCol = 'prismari';
                                                   else if (bgNameLow.includes('quandrix')) defaultCol = 'quandrix';
-                                                  else if (bgNameLow.includes('silverquill')) defaultCol = 'silverquill';
-                                                  else if (bgNameLow.includes('witherbloom')) defaultCol = 'witherbloom';
+                                                  else if (bgNameLow.includes('silverquill'))
+                                                      defaultCol = 'silverquill';
+                                                  else if (bgNameLow.includes('witherbloom'))
+                                                      defaultCol = 'witherbloom';
 
                                                   const curCol = tier.featSubChoices?.college || defaultCol;
                                                   tier.featSubChoices = tier.featSubChoices || {};
                                                   tier.featSubChoices.college = curCol;
 
-                                                  const colData = STRIXHAVEN_COLLEGES[curCol] || STRIXHAVEN_COLLEGES.lorehold;
+                                                  const colData =
+                                                      STRIXHAVEN_COLLEGES[curCol] || STRIXHAVEN_COLLEGES.lorehold;
                                                   const eligibleCantrips = colData.cantrips;
                                                   const eligibleClasses = colData.classes;
 
@@ -495,12 +575,16 @@ export function renderStep7(ctx) {
                                                   const artCantrips = (builderCache?.spells || []).filter(
                                                       (s) =>
                                                           parseInt(s.level) === 0 &&
-                                                          (s.classes || []).some((c) => c.toLowerCase().includes('artificer'))
+                                                          (s.classes || []).some((c) =>
+                                                              c.toLowerCase().includes('artificer')
+                                                          )
                                                   );
                                                   const artLvl1 = (builderCache?.spells || []).filter(
                                                       (s) =>
                                                           parseInt(s.level) === 1 &&
-                                                          (s.classes || []).some((c) => c.toLowerCase().includes('artificer'))
+                                                          (s.classes || []).some((c) =>
+                                                              c.toLowerCase().includes('artificer')
+                                                          )
                                                   );
                                                   subChoiceHtml += `
                                             <div style="background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); padding:10px; border-radius:6px; margin-top:6px; display:flex; flex-direction:column; gap:8px;">
@@ -550,11 +634,14 @@ export function renderStep7(ctx) {
                                                   const curMoon = tier.featSubChoices?.moon || 'solinari';
                                                   tier.featSubChoices = tier.featSubChoices || {};
                                                   tier.featSubChoices.moon = curMoon;
-                                                  const moonData = HIGH_SORCERY_MOONS[curMoon] || HIGH_SORCERY_MOONS.solinari;
+                                                  const moonData =
+                                                      HIGH_SORCERY_MOONS[curMoon] || HIGH_SORCERY_MOONS.solinari;
                                                   const moonSpells = (builderCache?.spells || []).filter(
                                                       (s) =>
                                                           parseInt(s.level) === 1 &&
-                                                          moonData.schools.some((sc) => (s.school || '').toLowerCase().startsWith(sc))
+                                                          moonData.schools.some((sc) =>
+                                                              (s.school || '').toLowerCase().startsWith(sc)
+                                                          )
                                                   );
                                                   subChoiceHtml += `
                                             <div style="background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); padding:10px; border-radius:6px; margin-top:6px; display:flex; flex-direction:column; gap:8px;">
@@ -635,7 +722,12 @@ export function renderStep7(ctx) {
                                                     <div>
                                                         <label style="font-size:0.75rem; color:var(--color-text-muted);">Plane Alignment:</label>
                                                         <select class="pc-tier-feat-plane-sel" data-tidx="${tIdx}" style="width:100%; padding:4px; font-size:0.8rem; background:#1e1e1e; color:#fff; border:1px solid var(--color-border-subtle); border-radius:4px;">
-                                                            ${Object.entries(OUTER_PLANES).map(([pk, pv]) => `<option value="${pk}" ${curPlane === pk ? 'selected' : ''}>${pv.name} (${pv.cantrip} / ${pv.resistance} Res)</option>`).join('')}
+                                                            ${Object.entries(OUTER_PLANES)
+                                                                .map(
+                                                                    ([pk, pv]) =>
+                                                                        `<option value="${pk}" ${curPlane === pk ? 'selected' : ''}>${pv.name} (${pv.cantrip} / ${pv.resistance} Res)</option>`
+                                                                )
+                                                                .join('')}
                                                         </select>
                                                     </div>
                                                 </div>
@@ -647,7 +739,8 @@ export function renderStep7(ctx) {
                                                   const curStrike = tier.featSubChoices?.giantStrike || 'Cloud Strike';
                                                   tier.featSubChoices = tier.featSubChoices || {};
                                                   tier.featSubChoices.giantStrike = curStrike;
-                                                  const strikeInfo = GIANT_STRIKES[curStrike] || GIANT_STRIKES['Cloud Strike'];
+                                                  const strikeInfo =
+                                                      GIANT_STRIKES[curStrike] || GIANT_STRIKES['Cloud Strike'];
 
                                                   subChoiceHtml += `
                                             <div style="background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); padding:10px; border-radius:6px; margin-top:6px; display:flex; flex-direction:column; gap:8px;">
@@ -658,7 +751,12 @@ export function renderStep7(ctx) {
                                                 <div>
                                                     <label style="font-size:0.75rem; color:var(--color-text-muted);">Chosen Strike:</label>
                                                     <select class="pc-tier-feat-subchoice-sel" data-tidx="${tIdx}" data-field="giantStrike" style="width:100%; padding:4px; font-size:0.8rem; background:#1e1e1e; color:#fff; border:1px solid var(--color-border-subtle); border-radius:4px;">
-                                                        ${Object.keys(GIANT_STRIKES).map((sk) => `<option value="${sk}" ${curStrike === sk ? 'selected' : ''}>${sk} (+${GIANT_STRIKES[sk].damage} ${GIANT_STRIKES[sk].type})</option>`).join('')}
+                                                        ${Object.keys(GIANT_STRIKES)
+                                                            .map(
+                                                                (sk) =>
+                                                                    `<option value="${sk}" ${curStrike === sk ? 'selected' : ''}>${sk} (+${GIANT_STRIKES[sk].damage} ${GIANT_STRIKES[sk].type})</option>`
+                                                            )
+                                                            .join('')}
                                                     </select>
                                                 </div>
                                                 <div style="font-size:0.75rem; color:var(--color-text-secondary); line-height:1.35; padding:6px 8px; background:rgba(0,0,0,0.25); border-radius:4px;">
@@ -669,11 +767,15 @@ export function renderStep7(ctx) {
                                               }
                                               // 11. Skill Expert
                                               else if (/skill expert/i.test(featNameLow)) {
-                                                  const curSkillProf = tier.featSubChoices?.skillProf || STANDARD_5E_SKILLS[0];
-                                                  const curSkillExp = tier.featSubChoices?.skillExp || STANDARD_5E_SKILLS[1];
+                                                  const curSkillProf =
+                                                      tier.featSubChoices?.skillProf || STANDARD_5E_SKILLS[0];
+                                                  const curSkillExp =
+                                                      tier.featSubChoices?.skillExp || STANDARD_5E_SKILLS[1];
                                                   tier.featSubChoices = tier.featSubChoices || {};
-                                                  if (!tier.featSubChoices.skillProf) tier.featSubChoices.skillProf = curSkillProf;
-                                                  if (!tier.featSubChoices.skillExp) tier.featSubChoices.skillExp = curSkillExp;
+                                                  if (!tier.featSubChoices.skillProf)
+                                                      tier.featSubChoices.skillProf = curSkillProf;
+                                                  if (!tier.featSubChoices.skillExp)
+                                                      tier.featSubChoices.skillExp = curSkillExp;
 
                                                   subChoiceHtml += `
                                             <div style="background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); padding:10px; border-radius:6px; margin-top:6px; display:flex; flex-direction:column; gap:8px;">
@@ -700,13 +802,19 @@ export function renderStep7(ctx) {
                                               }
                                               // 12. Skilled
                                               else if (/skilled/i.test(featNameLow) && !/expert/i.test(featNameLow)) {
-                                                  const curP1 = tier.featSubChoices?.skillTool1 || STANDARD_5E_SKILLS[0];
-                                                  const curP2 = tier.featSubChoices?.skillTool2 || STANDARD_5E_SKILLS[1];
-                                                  const curP3 = tier.featSubChoices?.skillTool3 || STANDARD_5E_SKILLS[2];
+                                                  const curP1 =
+                                                      tier.featSubChoices?.skillTool1 || STANDARD_5E_SKILLS[0];
+                                                  const curP2 =
+                                                      tier.featSubChoices?.skillTool2 || STANDARD_5E_SKILLS[1];
+                                                  const curP3 =
+                                                      tier.featSubChoices?.skillTool3 || STANDARD_5E_SKILLS[2];
                                                   tier.featSubChoices = tier.featSubChoices || {};
-                                                  if (!tier.featSubChoices.skillTool1) tier.featSubChoices.skillTool1 = curP1;
-                                                  if (!tier.featSubChoices.skillTool2) tier.featSubChoices.skillTool2 = curP2;
-                                                  if (!tier.featSubChoices.skillTool3) tier.featSubChoices.skillTool3 = curP3;
+                                                  if (!tier.featSubChoices.skillTool1)
+                                                      tier.featSubChoices.skillTool1 = curP1;
+                                                  if (!tier.featSubChoices.skillTool2)
+                                                      tier.featSubChoices.skillTool2 = curP2;
+                                                  if (!tier.featSubChoices.skillTool3)
+                                                      tier.featSubChoices.skillTool3 = curP3;
 
                                                   const allSkillToolOptions = [
                                                       ...STANDARD_5E_SKILLS.map((s) => ({ group: 'Skills', val: s })),
@@ -746,13 +854,16 @@ export function renderStep7(ctx) {
                                               else if (/prodigy/i.test(featNameLow)) {
                                                   const curSkill = tier.featSubChoices?.skill1 || STANDARD_5E_SKILLS[0];
                                                   const curTool = tier.featSubChoices?.tool1 || STANDARD_5E_TOOLS[0];
-                                                  const curLang = tier.featSubChoices?.lang1 || STANDARD_5E_LANGUAGES[0];
+                                                  const curLang =
+                                                      tier.featSubChoices?.lang1 || STANDARD_5E_LANGUAGES[0];
                                                   const curExp = tier.featSubChoices?.skillExp || STANDARD_5E_SKILLS[1];
                                                   tier.featSubChoices = tier.featSubChoices || {};
-                                                  if (!tier.featSubChoices.skill1) tier.featSubChoices.skill1 = curSkill;
+                                                  if (!tier.featSubChoices.skill1)
+                                                      tier.featSubChoices.skill1 = curSkill;
                                                   if (!tier.featSubChoices.tool1) tier.featSubChoices.tool1 = curTool;
                                                   if (!tier.featSubChoices.lang1) tier.featSubChoices.lang1 = curLang;
-                                                  if (!tier.featSubChoices.skillExp) tier.featSubChoices.skillExp = curExp;
+                                                  if (!tier.featSubChoices.skillExp)
+                                                      tier.featSubChoices.skillExp = curExp;
 
                                                   subChoiceHtml += `
                                             <div style="background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); padding:10px; border-radius:6px; margin-top:6px; display:flex; flex-direction:column; gap:8px;">

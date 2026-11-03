@@ -18,8 +18,8 @@ export function getPlayerActiveTokenUrl(c) {
     if (Array.isArray(c.tokenImages) && c.tokenImages.length > 0) {
         const idx =
             typeof c.activeTokenIndex === 'number' &&
-                c.activeTokenIndex >= 0 &&
-                c.activeTokenIndex < c.tokenImages.length
+            c.activeTokenIndex >= 0 &&
+            c.activeTokenIndex < c.tokenImages.length
                 ? c.activeTokenIndex
                 : 0;
         const raw = c.tokenImages[idx] || c.tokenImages[0];
@@ -48,8 +48,8 @@ export function updateTokenPortrait(url) {
         typeof window.getSafeVttUrl === 'function'
             ? window.getSafeVttUrl(url)
             : url && (url.includes('discordapp.com') || url.includes('discordapp.net'))
-                ? '/api/proxy-discord?url=' + encodeURIComponent(url)
-                : url;
+              ? '/api/proxy-discord?url=' + encodeURIComponent(url)
+              : url;
     const isVideo = cleanUrl.match(/\.(mp4|webm|ogg)$/i);
     const isYoutube =
         url && (url.includes('youtube.com/embed') || url.includes('youtube.com/watch') || url.includes('youtu.be/'));
@@ -64,7 +64,7 @@ export function updateTokenPortrait(url) {
         mediaEl.draggable = false;
         mediaEl.style.cssText = 'width:100%; height:100%; object-fit:cover; display:block; pointer-events:none;';
         portrait.appendChild(mediaEl);
-        mediaEl.play().catch(() => { });
+        mediaEl.play().catch(() => {});
     } else if (isYoutube) {
         mediaEl = document.createElement('iframe');
         mediaEl.src = safeUrl;
@@ -275,8 +275,8 @@ export function renderPlayerTokenGallery(options = {}) {
             typeof window.getSafeVttUrl === 'function'
                 ? window.getSafeVttUrl(url)
                 : url && (url.includes('discordapp.com') || url.includes('discordapp.net'))
-                    ? '/api/proxy-discord?url=' + encodeURIComponent(url)
-                    : url;
+                  ? '/api/proxy-discord?url=' + encodeURIComponent(url)
+                  : url;
         const cleanUrl = url.split('?')[0].toLowerCase();
         const isVideo = cleanUrl.match(/\.(mp4|webm|ogg)$/i);
         const isYoutube =
@@ -296,7 +296,7 @@ export function renderPlayerTokenGallery(options = {}) {
             mediaEl.autoplay = true;
             mediaEl.playsInline = true;
             mediaEl.style.cssText = 'width:100%; height:100%; object-fit:cover; display:block;';
-            mediaEl.play().catch(() => { });
+            mediaEl.play().catch(() => {});
         } else if (isYoutube) {
             mediaEl = document.createElement('iframe');
             mediaEl.src = safeItemUrl;
@@ -346,7 +346,7 @@ export function renderPlayerTokenGallery(options = {}) {
 
         gal.appendChild(wrapper);
 
-        if (isVideo) mediaEl.play().catch(() => { });
+        if (isVideo) mediaEl.play().catch(() => {});
     });
 }
 

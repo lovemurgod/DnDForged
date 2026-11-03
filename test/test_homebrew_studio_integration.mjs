@@ -3,11 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import os from 'os';
 import { SourceManager } from '../electron/source-manager.js';
-import {
-    createBlankEntity,
-    jsonToEntity,
-    entityToJson
-} from '../electron/ui/builder-schemas.js';
+import { createBlankEntity, jsonToEntity, entityToJson } from '../electron/ui/builder-schemas.js';
 
 console.log('--- RUNNING HOMEBREW STUDIO & SOURCE CONTROL INTEGRATION TESTS ---');
 
@@ -100,7 +96,11 @@ console.log('\n[Test 1] SourceManager Security & Dual Metadata Synchronization..
     assert.strictEqual(writtenJson._meta.sources[0].full, 'New Custom Monsters v2');
     assert.deepStrictEqual(writtenJson._meta.sources[0].authors, ['Dungeon Master Jane']);
     assert.strictEqual(writtenJson._meta.sources[0].version, '2.5.0');
-    assert.strictEqual(writtenJson.monster[0].specialCustomField, 'keep-me-safe', 'Unmapped fields in raw JSON must persist');
+    assert.strictEqual(
+        writtenJson.monster[0].specialCustomField,
+        'keep-me-safe',
+        'Unmapped fields in raw JSON must persist'
+    );
 
     // Verify SourceManager config has updated customSources entry
     const savedMeta = sm.config.customSources.find((c) => c.fileName === 'mybrew.json');
@@ -130,7 +130,12 @@ console.log('\n[Test 2] Bestiary Non-Destructive Merge & New Controls...');
         ac: [22, { special: 'natural armor' }],
         hp: { average: 450, formula: '28d20 + 156' },
         speed: { walk: 40, fly: 80, hover: true },
-        str: 30, dex: 12, con: 29, int: 18, wis: 17, cha: 21,
+        str: 30,
+        dex: 12,
+        con: 29,
+        int: 18,
+        wis: 17,
+        cha: 21,
         save: {
             dex: '+8',
             con: '+16',
@@ -145,7 +150,9 @@ console.log('\n[Test 2] Bestiary Non-Destructive Merge & New Controls...');
         passive: 27,
         languages: ['Common', 'Draconic', 'Void Speech'],
         cr: '24',
-        trait: [{ name: 'Legendary Resistance', entries: ['If the dragon fails a save, it can succeed instead (3/day).'] }],
+        trait: [
+            { name: 'Legendary Resistance', entries: ['If the dragon fails a save, it can succeed instead (3/day).'] }
+        ],
         action: [{ name: 'Void Breath', entries: ['Exhales void energy in a 90-foot cone.'] }],
         bonus: [{ name: 'Shadow Shift', entries: ['The dragon teleports up to 30 feet as a bonus action.'] }],
         reaction: [{ name: 'Void Shield', entries: ['Adds +5 to AC against one attack.'] }],
@@ -221,7 +228,10 @@ console.log('\n[Test 3] Spells Ritual & Field Synchronization...');
         damageInflict: ['force'],
         areaTags: ['C'],
         classes: {
-            fromClassList: [{ name: 'Wizard', source: 'PHB' }, { name: 'Sorcerer', source: 'PHB' }]
+            fromClassList: [
+                { name: 'Wizard', source: 'PHB' },
+                { name: 'Sorcerer', source: 'PHB' }
+            ]
         }
     };
 
@@ -327,7 +337,11 @@ console.log('\n[Test 5] Races & Backgrounds Property Synchronization...');
     raceEntity.conMod = 1;
 
     const savedRace = entityToJson('races', raceEntity, 'MYBREW');
-    assert.deepStrictEqual(savedRace.ability, [{ dex: 2, int: 1, con: 1 }], 'Ability increases must be serialized cleanly');
+    assert.deepStrictEqual(
+        savedRace.ability,
+        [{ dex: 2, int: 1, con: 1 }],
+        'Ability increases must be serialized cleanly'
+    );
     assert.strictEqual(savedRace.lineage, 'elf', 'lineage preserved');
     assert.ok(savedRace.subraces, 'subraces array preserved');
 
@@ -404,9 +418,7 @@ console.log('\n[Test 6] Feats String Normalization & Multi-Level Subclass Progre
         }
     ];
     classEntity.levels = {
-        '1': [
-            { name: 'Chronoshift', text: 'Shift moments in time.' }
-        ]
+        1: [{ name: 'Chronoshift', text: 'Shift moments in time.' }]
     };
 
     const savedClass = entityToJson('classes', classEntity, 'MYBREW');
@@ -428,7 +440,8 @@ console.log('\n[Test 6] Feats String Normalization & Multi-Level Subclass Progre
 // =========================================================================
 console.log('\n[Test 7] VTT Consumption Integration Check...');
 {
-    const { buildSavesHtml, buildSkillsHtml, buildTypeString, parseAc } = await import('../vtt/js/creature-sheet/creature-parser.js');
+    const { buildSavesHtml, buildSkillsHtml, buildTypeString, parseAc } =
+        await import('../vtt/js/creature-sheet/creature-parser.js');
     const { ensureNpcSpells } = await import('../vtt/js/creature-sheet/creature-spells.js');
 
     // Feed the saved bestiary monster into VTT parsers
@@ -439,7 +452,12 @@ console.log('\n[Test 7] VTT Consumption Integration Check...');
         type: { type: 'dragon', tags: ['titan'] },
         ac: [22, { special: 'natural armor' }],
         hp: { average: 450, formula: '28d20 + 156' },
-        str: 30, dex: 12, con: 29, int: 18, wis: 17, cha: 21,
+        str: 30,
+        dex: 12,
+        con: 29,
+        int: 18,
+        wis: 17,
+        cha: 21,
         save: { dex: '+8', con: '+16' },
         skill: { perception: '+17', stealth: '+8' },
         passive: 27,
@@ -479,7 +497,10 @@ console.log('\n[Test 7] VTT Consumption Integration Check...');
 
     // 5. Preserved Spellcasting consumption
     ensureNpcSpells(serialized);
-    assert.strictEqual(serialized.spellcasting[0]._parsedSpells?.length > 0 || serialized.spellcasting[0].will?.length > 0, true);
+    assert.strictEqual(
+        serialized.spellcasting[0]._parsedSpells?.length > 0 || serialized.spellcasting[0].will?.length > 0,
+        true
+    );
 
     console.log('  ✓ Serialized bestiary record consumed cleanly by VTT creature-sheet parser');
     console.log('  ✓ Saves, skills, AC, and spellcasting blocks fully functional in VTT engine');

@@ -3,10 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 
-import {
-    hasMapManagerDataChanged,
-    buildMapThumbnailMarkup
-} from '../vtt/js/canvas/vtt-canvas-map-manager.js';
+import { hasMapManagerDataChanged, buildMapThumbnailMarkup } from '../vtt/js/canvas/vtt-canvas-map-manager.js';
 
 import { renderFogOfWarLayer } from '../vtt/js/canvas/vtt-canvas-fog.js';
 import { computeVisibilityPolygon } from '../vtt/js/canvas/vtt-canvas-visibility.js';
@@ -29,11 +26,14 @@ test('Map Manager: Socket Sync Fingerprint Caching & Performance', async (t) => 
         assert.equal(typeof fp1, 'string');
     });
 
-    await t.test('hasMapManagerDataChanged returns false when fingerprint is unchanged (prevents socket re-render loops)', () => {
-        const fp1 = hasMapManagerDataChanged(fakeCamp, '');
-        const fp2 = hasMapManagerDataChanged(fakeCamp, fp1);
-        assert.equal(fp2, false, 'Should return false when campaign state fingerprint matches lastFingerprint');
-    });
+    await t.test(
+        'hasMapManagerDataChanged returns false when fingerprint is unchanged (prevents socket re-render loops)',
+        () => {
+            const fp1 = hasMapManagerDataChanged(fakeCamp, '');
+            const fp2 = hasMapManagerDataChanged(fakeCamp, fp1);
+            assert.equal(fp2, false, 'Should return false when campaign state fingerprint matches lastFingerprint');
+        }
+    );
 
     await t.test('hasMapManagerDataChanged detects when active map or map list updates', () => {
         const fp1 = hasMapManagerDataChanged(fakeCamp, '');
@@ -103,8 +103,8 @@ test('Dynamic Lighting: Line-of-Sight Occlusion & Wall Isolation', async (t) => 
             const st = this.savedStates.pop();
             if (st) this.globalCompositeOperation = st.gco;
         }
-        clearRect() { }
-        fillRect() { }
+        clearRect() {}
+        fillRect() {}
         beginPath() {
             this.currentPath = [];
             this.paths.push(this.currentPath);
@@ -121,19 +121,19 @@ test('Dynamic Lighting: Line-of-Sight Occlusion & Wall Isolation', async (t) => 
         clip() {
             this.clipCalls++;
         }
-        fill() { }
-        scale() { }
+        fill() {}
+        scale() {}
         drawImage(img, x, y) {
             this.drawnImages.push({ x, y, gco: this.globalCompositeOperation });
         }
         createRadialGradient() {
             return {
-                addColorStop: () => { }
+                addColorStop: () => {}
             };
         }
         createConicGradient() {
             return {
-                addColorStop: () => { }
+                addColorStop: () => {}
             };
         }
     }
@@ -220,8 +220,10 @@ test('Dynamic Lighting: Line-of-Sight Occlusion & Wall Isolation', async (t) => 
         const isPointInPolygon = (pt, poly) => {
             let inside = false;
             for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
-                const xi = poly[i].x, yi = poly[i].y;
-                const xj = poly[j].x, yj = poly[j].y;
+                const xi = poly[i].x,
+                    yi = poly[i].y;
+                const xj = poly[j].x,
+                    yj = poly[j].y;
                 const intersect = yi > pt.y !== yj > pt.y && pt.x < ((xj - xi) * (pt.y - yi)) / (yj - yi) + xi;
                 if (intersect) inside = !inside;
             }
@@ -238,4 +240,3 @@ test('Dynamic Lighting: Line-of-Sight Occlusion & Wall Isolation', async (t) => 
         assert.equal(isVisibleToPlayer(ptInRoomB), false, 'Point in Room B must NOT be visible to player in Room A');
     });
 });
-

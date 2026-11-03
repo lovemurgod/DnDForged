@@ -124,7 +124,8 @@ export function getFeatAndAsiBonuses(asiTiers) {
     if (Array.isArray(asiTiers)) {
         asiTiers.forEach((t) => {
             if (t.choice === 'unselected') return;
-            const isOrigin = t.tierType === 'origin_feat_background' || t.tierType === 'origin_feat_species' || t.isOrigin;
+            const isOrigin =
+                t.tierType === 'origin_feat_background' || t.tierType === 'origin_feat_species' || t.isOrigin;
             if (t.choice === 'asi' || t.mode === 'split' || t.mode === 'plus2') {
                 const isPlus2 = t.asiMode === 'plus2' || t.mode === 'plus2';
                 const st1 = (t.stat1 || t.plus2Stat || t.splitStat1 || '').toLowerCase();

@@ -42,8 +42,8 @@ export function renderStep4(ctx) {
             </div>
             <div id="pc-wiz-class-feats-list" style="display:flex; flex-direction:column; gap:8px;">
                 ${candidateClassFeatures
-            .map(
-                (cf) => `
+                    .map(
+                        (cf) => `
                     <div class="glass-flat pc-wiz-feat-item" data-text="${(cf.name + ' ' + (cf.className || '') + ' ' + (cf.description || '')).toLowerCase()}" style="padding:10px 12px; border-radius:6px; border:1px solid var(--color-border-subtle); display:flex; gap:10px; align-items:flex-start;">
                         <input type="checkbox" class="pc-wiz-feat-chk" data-feat-id="${cf.id}" ${cf.checked ? 'checked' : ''} style="margin-top:4px; accent-color:var(--color-gold-base); cursor:pointer;">
                         <div style="flex:1;">
@@ -52,30 +52,31 @@ export function renderStep4(ctx) {
                                 <span class="builder-pill" style="font-size:0.7rem;">${cf.className} Lv ${cf.level}</span>
                                 ${cf.isSubclass ? '<span class="badge" style="background:rgba(186,104,200,0.15); border:1px solid rgba(186,104,200,0.4); color:#ba68c8; font-size:0.65rem;">Subclass</span>' : ''}
                             </div>
-                            ${cf.subOptions && cf.subOptions.length > 0
-                        ? `
+                            ${
+                                cf.subOptions && cf.subOptions.length > 0
+                                    ? `
                                 <div style="margin-top:6px; display:flex; align-items:center; gap:8px;">
                                     <label style="font-size:0.75rem; color:var(--color-gold-light); font-weight:600;"><i class="fa-solid fa-paw"></i> Option:</label>
                                     <select class="pc-wiz-feat-suboption-sel" data-feat-id="${cf.id}" style="padding:2px 8px; font-size:0.8rem; background:#1e1e1e; color:#fff; border:1px solid var(--color-border-subtle); border-radius:4px;">
                                         ${cf.subOptions
-                            .map(
-                                (opt) =>
-                                    `<option value="${opt.name}" ${cf.subOptionChoice === opt.name ? 'selected' : ''}>${opt.name}</option>`
-                            )
-                            .join('')}
+                                            .map(
+                                                (opt) =>
+                                                    `<option value="${opt.name}" ${cf.subOptionChoice === opt.name ? 'selected' : ''}>${opt.name}</option>`
+                                            )
+                                            .join('')}
                                     </select>
                                 </div>
                             `
-                        : ''
-                    }
+                                    : ''
+                            }
                             <div style="font-size:0.8rem; color:var(--color-text-secondary); margin-top:4px; line-height:1.4;">
                                 ${(cf.description || '').replace(/\n/g, '<br>')}
                             </div>
                         </div>
                     </div>
                 `
-            )
-            .join('')}
+                    )
+                    .join('')}
             </div>
         </div>
 
@@ -94,8 +95,8 @@ export function renderStep4(ctx) {
             </div>
             <div id="pc-wiz-racial-feats-list" style="display:flex; flex-direction:column; gap:8px;">
                 ${candidateRacialTraits
-            .map(
-                (rt) => `
+                    .map(
+                        (rt) => `
                     <div class="glass-flat pc-wiz-feat-item" data-text="${(rt.name + ' ' + (rt.description || '')).toLowerCase()}" style="padding:10px 12px; border-radius:6px; border:1px solid var(--color-border-subtle); display:flex; gap:10px; align-items:flex-start;">
                         <input type="checkbox" class="pc-wiz-feat-chk" data-feat-id="${rt.id}" ${rt.checked ? 'checked' : ''} style="margin-top:4px; accent-color:var(--color-gold-base); cursor:pointer;">
                         <div style="flex:1;">
@@ -106,14 +107,15 @@ export function renderStep4(ctx) {
                         </div>
                     </div>
                 `
-            )
-            .join('')}
+                    )
+                    .join('')}
             </div>
         </div>
 
         <!-- Background Features -->
-        ${candidateBgFeatures.length > 0
-            ? `
+        ${
+            candidateBgFeatures.length > 0
+                ? `
             <div class="builder-section-box">
                 <div class="builder-section-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
                     <div style="display:flex; align-items:center; gap:8px;">
@@ -128,8 +130,8 @@ export function renderStep4(ctx) {
                 </div>
                 <div id="pc-wiz-bg-feats-list" style="display:flex; flex-direction:column; gap:8px;">
                     ${candidateBgFeatures
-                .map(
-                    (bf) => `
+                        .map(
+                            (bf) => `
                         <div class="glass-flat pc-wiz-feat-item" data-text="${(bf.name + ' ' + (bf.description || '')).toLowerCase()}" style="padding:10px 12px; border-radius:6px; border:1px solid var(--color-border-subtle); display:flex; gap:10px; align-items:flex-start;">
                             <input type="checkbox" class="pc-wiz-feat-chk" data-feat-id="${bf.id}" ${bf.checked ? 'checked' : ''} style="margin-top:4px; accent-color:var(--color-gold-base); cursor:pointer;">
                             <div style="flex:1;">
@@ -143,12 +145,12 @@ export function renderStep4(ctx) {
                             </div>
                         </div>
                     `
-                )
-                .join('')}
+                        )
+                        .join('')}
                 </div>
             </div>
         `
-            : ''
+                : ''
         }
 
         <!-- Optional Features & Specializations -->
@@ -196,16 +198,17 @@ export function renderStep4(ctx) {
             .join('')}
 
         <!-- Custom Added Features -->
-        ${workingChar.customFeatures.length > 0
-            ? `
+        ${
+            workingChar.customFeatures.length > 0
+                ? `
             <div class="builder-section-box">
                 <div class="builder-section-header">
                     <strong style="font-size:0.95rem; color:var(--color-gold-base);">Custom / Homebrew Features</strong>
                 </div>
                 <div style="display:flex; flex-direction:column; gap:8px;">
                     ${workingChar.customFeatures
-                .map(
-                    (cf, i) => `
+                        .map(
+                            (cf, i) => `
                         <div class="glass-flat" style="padding:10px 12px; border-radius:6px; border:1px solid var(--color-border-subtle); display:flex; justify-content:space-between; align-items:flex-start;">
                             <div>
                                 <strong style="color:var(--color-gold-light); font-size:0.9rem;">${cf.name}</strong>
@@ -214,12 +217,12 @@ export function renderStep4(ctx) {
                             <button type="button" class="btn btn-danger btn-xxs pc-wiz-del-custom-feat" data-idx="${i}"><i class="fa-solid fa-trash"></i></button>
                         </div>
                     `
-                )
-                .join('')}
+                        )
+                        .join('')}
                 </div>
             </div>
         `
-            : ''
+                : ''
         }
     `;
 
@@ -248,7 +251,8 @@ export function renderStep4(ctx) {
                 feat.subOptionChoice = val;
                 const chosen = feat.subOptions.find((o) => o.name === val);
                 if (chosen) {
-                    feat.description = (feat.baseDescription || '') + '\n\n**' + chosen.name + ':** ' + (chosen.description || '');
+                    feat.description =
+                        (feat.baseDescription || '') + '\n\n**' + chosen.name + ':** ' + (chosen.description || '');
                 }
             }
             renderStep4(ctx);

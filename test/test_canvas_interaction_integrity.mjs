@@ -7,7 +7,11 @@ import * as escope from 'eslint-scope';
 
 import { setupPointerInteraction } from '../vtt/js/canvas/vtt-canvas-interaction.js';
 import { setupKeyboardShortcuts } from '../vtt/js/canvas/vtt-canvas-clipboard-shortcuts.js';
-import { handleMapToolMouseDown, handleMapToolMouseMove, handleMapToolMouseUp } from '../vtt/js/canvas/vtt-canvas-map-tools.js';
+import {
+    handleMapToolMouseDown,
+    handleMapToolMouseMove,
+    handleMapToolMouseUp
+} from '../vtt/js/canvas/vtt-canvas-map-tools.js';
 
 console.log('--- Running Canvas Interaction & Submodule Integrity Tests ---');
 
@@ -17,18 +21,101 @@ console.log('--- Running Canvas Interaction & Submodule Integrity Tests ---');
 console.log('\n[Suite 1] AST Scope Analysis on Canvas Submodules');
 
 const standardGlobals = new Set([
-    'Array', 'Boolean', 'Date', 'Error', 'Function', 'JSON', 'Math', 'Number', 'Object', 'Promise',
-    'RegExp', 'Set', 'Map', 'Proxy', 'Reflect', 'String', 'Symbol', 'TypeError', 'RangeError', 'ReferenceError', 'SyntaxError',
-    'console', 'document', 'window', 'globalThis', 'setTimeout', 'clearTimeout', 'setInterval', 'clearInterval',
-    'requestAnimationFrame', 'cancelAnimationFrame', 'parseFloat', 'parseInt', 'isNaN', 'isFinite',
-    'encodeURIComponent', 'decodeURIComponent', 'encodeURI', 'decodeURI', 'undefined', 'NaN', 'Infinity',
-    'URL', 'Blob', 'File', 'FileReader', 'FormData', 'fetch', 'Headers', 'Request', 'Response',
-    'AbortController', 'performance', 'crypto', 'CustomEvent', 'Event', 'MouseEvent', 'KeyboardEvent',
-    'Image', 'Audio', 'HTMLCanvasElement', 'CanvasRenderingContext2D', 'DOMParser',
-    'prompt', 'alert', 'confirm', 'localStorage', 'sessionStorage', 'Uint8Array', 'Uint16Array', 'Uint32Array',
-    'Int8Array', 'Int16Array', 'Int32Array', 'Float32Array', 'Float64Array', 'DOMMatrix',
-    'MutationObserver', 'ResizeObserver', 'IntersectionObserver', 'BroadcastChannel', 'URLSearchParams', 'getComputedStyle', 'navigator', 'structuredClone',
-    'THREE', 'CANNON', 'DOMPurify', 'JqueryUtil', 'Parser', 'Renderer', 'io', 'define', 'VTT', 'vtt'
+    'Array',
+    'Boolean',
+    'Date',
+    'Error',
+    'Function',
+    'JSON',
+    'Math',
+    'Number',
+    'Object',
+    'Promise',
+    'RegExp',
+    'Set',
+    'Map',
+    'Proxy',
+    'Reflect',
+    'String',
+    'Symbol',
+    'TypeError',
+    'RangeError',
+    'ReferenceError',
+    'SyntaxError',
+    'console',
+    'document',
+    'window',
+    'globalThis',
+    'setTimeout',
+    'clearTimeout',
+    'setInterval',
+    'clearInterval',
+    'requestAnimationFrame',
+    'cancelAnimationFrame',
+    'parseFloat',
+    'parseInt',
+    'isNaN',
+    'isFinite',
+    'encodeURIComponent',
+    'decodeURIComponent',
+    'encodeURI',
+    'decodeURI',
+    'undefined',
+    'NaN',
+    'Infinity',
+    'URL',
+    'Blob',
+    'File',
+    'FileReader',
+    'FormData',
+    'fetch',
+    'Headers',
+    'Request',
+    'Response',
+    'AbortController',
+    'performance',
+    'crypto',
+    'CustomEvent',
+    'Event',
+    'MouseEvent',
+    'KeyboardEvent',
+    'Image',
+    'Audio',
+    'HTMLCanvasElement',
+    'CanvasRenderingContext2D',
+    'DOMParser',
+    'prompt',
+    'alert',
+    'confirm',
+    'localStorage',
+    'sessionStorage',
+    'Uint8Array',
+    'Uint16Array',
+    'Uint32Array',
+    'Int8Array',
+    'Int16Array',
+    'Int32Array',
+    'Float32Array',
+    'Float64Array',
+    'DOMMatrix',
+    'MutationObserver',
+    'ResizeObserver',
+    'IntersectionObserver',
+    'BroadcastChannel',
+    'URLSearchParams',
+    'getComputedStyle',
+    'navigator',
+    'structuredClone',
+    'THREE',
+    'CANNON',
+    'DOMPurify',
+    'JqueryUtil',
+    'Parser',
+    'Renderer',
+    'io',
+    'define',
+    'VTT',
+    'vtt'
 ]);
 
 function getJsFiles(dir) {
@@ -85,7 +172,11 @@ for (const file of canvasFiles) {
 if (failureDetails.length > 0) {
     console.error('Failed AST Scope Check. Unresolved variables found:', JSON.stringify(failureDetails, null, 2));
 }
-assert.strictEqual(totalUnresolved, 0, `Expected 0 unresolved canvas variables across all ${canvasFiles.length} canvas files, found ${totalUnresolved}`);
+assert.strictEqual(
+    totalUnresolved,
+    0,
+    `Expected 0 unresolved canvas variables across all ${canvasFiles.length} canvas files, found ${totalUnresolved}`
+);
 console.log(`  ✓ Passed AST verification across ${canvasFiles.length} canvas files with 0 unresolved identifiers.`);
 
 // ============================================================================
@@ -93,7 +184,8 @@ console.log(`  ✓ Passed AST verification across ${canvasFiles.length} canvas f
 // ============================================================================
 console.log('\n[Suite 2] Simulated Pointer Interaction (Pan, Select, Drag, Box Select)');
 
-const dom = new JSDOM(`
+const dom = new JSDOM(
+    `
 <!DOCTYPE html>
 <html>
 <body>
@@ -108,7 +200,9 @@ const dom = new JSDOM(`
     </div>
 </body>
 </html>
-`, { url: 'http://localhost:5050/vtt/' });
+`,
+    { url: 'http://localhost:5050/vtt/' }
+);
 
 globalThis.window = dom.window;
 globalThis.document = dom.window.document;
@@ -127,7 +221,7 @@ canvasInteractionEl.getBoundingClientRect = () => ({
     bottom: 800,
     x: 0,
     y: 0,
-    toJSON: () => { }
+    toJSON: () => {}
 });
 
 // Mock VTT and Engine State
@@ -152,7 +246,7 @@ const ctx = {
         role: 'GM',
         username: 'DungeonMaster',
         socket: {
-            emit: (event, payload) => { }
+            emit: (event, payload) => {}
         }
     },
     canvasInteraction: canvasInteractionEl,
@@ -377,7 +471,11 @@ const nudgeKeyEvent = new dom.window.KeyboardEvent('keydown', {
 });
 window.dispatchEvent(nudgeKeyEvent);
 
-assert.strictEqual(ctx.tokens['tok-warrior'].x, initialTokenX + 50, 'ArrowRight keydown should nudge token x by unitSize (50)');
+assert.strictEqual(
+    ctx.tokens['tok-warrior'].x,
+    initialTokenX + 50,
+    'ArrowRight keydown should nudge token x by unitSize (50)'
+);
 console.log('  ✓ Keyboard shortcuts token nudging verified successfully.');
 
 // ============================================================================
@@ -394,7 +492,9 @@ assert.ok(intStart > 0 && intEnd > intStart, 'interactionContext block must be p
 const interactionBlock = canvasMainContent.substring(intStart, intEnd);
 
 const interactionSubmoduleJs = fs.readFileSync('vtt/js/canvas/vtt-canvas-interaction.js', 'utf8');
-const interactionAssigns = [...new Set([...interactionSubmoduleJs.matchAll(/ctx\.([a-zA-Z0-9_]+)\s*=/g)].map((m) => m[1]))];
+const interactionAssigns = [
+    ...new Set([...interactionSubmoduleJs.matchAll(/ctx\.([a-zA-Z0-9_]+)\s*=/g)].map((m) => m[1]))
+];
 
 const intGetters = new Set([...interactionBlock.matchAll(/get\s+([a-zA-Z0-9_]+)\s*\(/g)].map((m) => m[1]));
 const intSetters = new Set([...interactionBlock.matchAll(/set\s+([a-zA-Z0-9_]+)\s*\(/g)].map((m) => m[1]));
@@ -405,7 +505,9 @@ assert.strictEqual(
     0,
     `Properties assigned in vtt-canvas-interaction.js have getters but missing setters in interactionContext: ${intFailures.join(', ')}`
 );
-console.log(`  ✓ interactionContext verified: 0 missing setters across ${interactionAssigns.length} assigned properties.`);
+console.log(
+    `  ✓ interactionContext verified: 0 missing setters across ${interactionAssigns.length} assigned properties.`
+);
 
 // 2. Verify clipboardContext
 const clipStart = canvasMainContent.indexOf('const clipboardContext = {');
@@ -442,7 +544,11 @@ const snapStandard = snapToGrid(123, 187, true, sampleGrid);
 const snapSwapped = snapToGrid(123, 187, sampleGrid, true);
 assert.strictEqual(snapStandard.x, 100, 'snapToGrid must snap x=123 to 100 on 50px grid');
 assert.strictEqual(snapStandard.y, 200, 'snapToGrid must snap y=187 to 200 on 50px grid');
-assert.deepStrictEqual(snapStandard, snapSwapped, 'snapToGrid must behave identically regardless of parameter order (isToken vs grid)');
+assert.deepStrictEqual(
+    snapStandard,
+    snapSwapped,
+    'snapToGrid must behave identically regardless of parameter order (isToken vs grid)'
+);
 console.log('  ✓ snapToGrid parameter order invariance and grid alignment verified.');
 
 // Test 4.2: Portal handle hit detection under mouse
@@ -498,13 +604,16 @@ console.log('  ✓ Token rotation (Q/E) and flipping (W/A/S/D) shortcuts verifie
 // 5.2 Test Reflected Token Dimensions in drawTargetRoomContent
 const { drawTargetRoomContent } = await import('../vtt/js/canvas/vtt-canvas-portals.js');
 let requestedDimsForToken = null;
-const mockCtx = new Proxy({}, {
-    get: (target, prop) => {
-        if (typeof prop === 'string' && prop.startsWith('set')) return () => { };
-        return () => { };
-    },
-    set: () => true
-});
+const mockCtx = new Proxy(
+    {},
+    {
+        get: (target, prop) => {
+            if (typeof prop === 'string' && prop.startsWith('set')) return () => {};
+            return () => {};
+        },
+        set: () => true
+    }
+);
 
 const largeToken = { id: 'large-ogre', size: 2, x: 200, y: 200, layer: 'token' };
 drawTargetRoomContent(
@@ -524,25 +633,25 @@ drawTargetRoomContent(
         }
     }
 );
-assert.strictEqual(requestedDimsForToken, 'large-ogre', 'drawTargetRoomContent must invoke custom getTokenDrawDimensions for true scale');
+assert.strictEqual(
+    requestedDimsForToken,
+    'large-ogre',
+    'drawTargetRoomContent must invoke custom getTokenDrawDimensions for true scale'
+);
 console.log('  ✓ Reflected token dimensions scale resolution verified.');
 
 // 5.3 Test handleCardAction with selectedTokenIds wiring
 const { handleCardAction } = await import('../vtt/js/canvas/tokens/vtt-canvas-mass-actions.js');
 let appliedDamageTotal = 0;
 const testMonster = { id: 'tok-target', name: 'Goblin', hp: 20, maxHp: 20 };
-handleCardAction(
-    { dmgRolls: [{ roll: { total: 10 }, type: 'slashing' }] },
-    'full',
-    {
-        vtt: { role: 'GM' },
-        selectedTokenIds: new Set(['tok-target']),
-        tokens: { 'tok-target': testMonster },
-        syncHpFn: (tokensList) => {
-            appliedDamageTotal = 20 - tokensList[0].hp;
-        }
+handleCardAction({ dmgRolls: [{ roll: { total: 10 }, type: 'slashing' }] }, 'full', {
+    vtt: { role: 'GM' },
+    selectedTokenIds: new Set(['tok-target']),
+    tokens: { 'tok-target': testMonster },
+    syncHpFn: (tokensList) => {
+        appliedDamageTotal = 20 - tokensList[0].hp;
     }
-);
+});
 assert.strictEqual(appliedDamageTotal, 10, 'handleCardAction full damage must apply 10 damage to selected token');
 console.log('  ✓ Chatcard handleCardAction damage processing verified.');
 

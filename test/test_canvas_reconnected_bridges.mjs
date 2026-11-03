@@ -1,9 +1,6 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
-import {
-    renderProjectedPortals,
-    drawTargetRoomContent
-} from '../vtt/js/canvas/vtt-canvas-portals.js';
+import { renderProjectedPortals, drawTargetRoomContent } from '../vtt/js/canvas/vtt-canvas-portals.js';
 import {
     applyDamageToTokens,
     changeMassTokenZOrder,
@@ -127,17 +124,19 @@ describe('Portal See-Through Reconnected Bridges', () => {
             maps: { map_a: currentMap, map_b: targetMap }
         };
 
-        const portals = [{
-            id: 'p1',
-            shape: 'line',
-            geom: { x1: 100, y1: 100, x2: 200, y2: 100 },
-            targetMapId: 'map_b',
-            targetPortalId: 'p2',
-            oneWay: false,
-            viewThrough: true,
-            reflectMode: 'none',
-            color: '#00ffff'
-        }];
+        const portals = [
+            {
+                id: 'p1',
+                shape: 'line',
+                geom: { x1: 100, y1: 100, x2: 200, y2: 100 },
+                targetMapId: 'map_b',
+                targetPortalId: 'p2',
+                oneWay: false,
+                viewThrough: true,
+                reflectMode: 'none',
+                color: '#00ffff'
+            }
+        ];
 
         const tokens = {
             t1: { id: 't1', x: 150, y: 50, size: 1, sightRange: 60, isPlayer: true }
@@ -199,10 +198,15 @@ describe('Measurement & Shape Context Synchronization', () => {
             localMeasureEnd: { x: 50, y: 50 },
             localShapeStart: { x: 20, y: 20 },
             localShapeEnd: { x: 80, y: 80 },
-            measureAnchorPoints: [{ x: 10, y: 10 }, { x: 30, y: 30 }],
+            measureAnchorPoints: [
+                { x: 10, y: 10 },
+                { x: 30, y: 30 }
+            ],
             gmTokenVisionMode: true,
             selectedTokenIds: new Set(['tok1']),
-            renderAll: () => { rendered = true; }
+            renderAll: () => {
+                rendered = true;
+            }
         };
 
         setupKeyboardShortcuts(ctx);
@@ -245,7 +249,9 @@ describe('Token Mass Actions Parameter Wiring', () => {
             tokens: fakeTokens,
             currentMapId: 'map_1',
             vtt: { socket: { emit: () => {} } },
-            renderAll: () => { rendered = true; },
+            renderAll: () => {
+                rendered = true;
+            },
             syncTokensHpToCharacters: () => {}
         };
 
@@ -268,7 +274,9 @@ describe('Token Mass Actions Parameter Wiring', () => {
             selectedTokenIds: new Set(['tok1', 'tok2']),
             currentMapId: 'map_1',
             vtt: { socket: { emit: () => {} } },
-            renderAll: () => { rendered = true; }
+            renderAll: () => {
+                rendered = true;
+            }
         };
 
         changeMassTokenZOrder(['tok1'], 'front', options);
@@ -320,7 +328,9 @@ describe('Token Mass Actions Parameter Wiring', () => {
     it('canvas contextmenu triggers showMassRollContextMenu when right-clicking a token in a multi-token selection', () => {
         let listeners = {};
         const mockCanvas = {
-            addEventListener: (ev, fn) => { listeners[ev] = fn; },
+            addEventListener: (ev, fn) => {
+                listeners[ev] = fn;
+            },
             removeEventListener: () => {}
         };
         let massRollCalledWith = null;
@@ -334,8 +344,12 @@ describe('Token Mass Actions Parameter Wiring', () => {
             activeLayer: 'token',
             selectedTokenIds,
             getCanvasMouseCoords: () => ({ x: 25, y: 25 }),
-            showMassRollContextMenu: (tokens, x, y) => { massRollCalledWith = { tokens, x, y }; },
-            showTokenContextMenu: (id, x, y) => { singleTokenMenuCalledWith = { id, x, y }; },
+            showMassRollContextMenu: (tokens, x, y) => {
+                massRollCalledWith = { tokens, x, y };
+            },
+            showTokenContextMenu: (id, x, y) => {
+                singleTokenMenuCalledWith = { id, x, y };
+            },
             tokens: {
                 tok1: { id: 'tok1', x: 0, y: 0, layer: 'token' },
                 tok2: { id: 'tok2', x: 100, y: 100, layer: 'token' }
@@ -350,8 +364,12 @@ describe('Token Mass Actions Parameter Wiring', () => {
         const fakeEvt = {
             clientX: 150,
             clientY: 250,
-            preventDefault: () => { defaultPrevented = true; },
-            stopPropagation: () => { propagationStopped = true; }
+            preventDefault: () => {
+                defaultPrevented = true;
+            },
+            stopPropagation: () => {
+                propagationStopped = true;
+            }
         };
 
         listeners.contextmenu(fakeEvt);
@@ -364,7 +382,9 @@ describe('Token Mass Actions Parameter Wiring', () => {
     it('canvas contextmenu preserves multi-selection and triggers showTokenContextMenu when right-clicking an unselected token', () => {
         let listeners = {};
         const mockCanvas = {
-            addEventListener: (ev, fn) => { listeners[ev] = fn; },
+            addEventListener: (ev, fn) => {
+                listeners[ev] = fn;
+            },
             removeEventListener: () => {}
         };
         let massRollCalledWith = null;
@@ -378,8 +398,12 @@ describe('Token Mass Actions Parameter Wiring', () => {
             activeLayer: 'token',
             selectedTokenIds,
             getCanvasMouseCoords: () => ({ x: 220, y: 220 }),
-            showMassRollContextMenu: (tokens, x, y) => { massRollCalledWith = { tokens, x, y }; },
-            showTokenContextMenu: (id, x, y) => { singleTokenMenuCalledWith = { id, x, y }; },
+            showMassRollContextMenu: (tokens, x, y) => {
+                massRollCalledWith = { tokens, x, y };
+            },
+            showTokenContextMenu: (id, x, y) => {
+                singleTokenMenuCalledWith = { id, x, y };
+            },
             tokens: {
                 tok1: { id: 'tok1', x: 0, y: 0, layer: 'token' },
                 tok2: { id: 'tok2', x: 100, y: 100, layer: 'token' },
@@ -468,7 +492,9 @@ describe('Drag and Drop Wire Verification', () => {
         // Verify dragover calls preventDefault() and sets dropEffect = copy
         let prevented = false;
         const dragOverEv = {
-            preventDefault: () => { prevented = true; },
+            preventDefault: () => {
+                prevented = true;
+            },
             dataTransfer: {}
         };
         listeners.canvas.dragover(dragOverEv);
@@ -480,4 +506,3 @@ describe('Drag and Drop Wire Verification', () => {
         delete global.localStorage;
     });
 });
-

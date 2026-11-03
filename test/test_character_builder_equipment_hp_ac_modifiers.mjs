@@ -7,11 +7,23 @@ console.log('--- Test Suite: Equipment, HP & AC Modifiers in Character Builder -
 console.log('Checking Equipment filter tag text extraction...');
 const filterTagStr = '{@filter martial weapon|items|source=phb|category=basic|type=martial weapon} and a shield';
 const extracted = extractTextFromEntries([filterTagStr]);
-assert.strictEqual(extracted, 'martial weapon and a shield', `Expected "martial weapon and a shield", got "${extracted}"`);
+assert.strictEqual(
+    extracted,
+    'martial weapon and a shield',
+    `Expected "martial weapon and a shield", got "${extracted}"`
+);
 console.log('✓ Equipment filter tag correctly extracts display text instead of "source=phb"');
 
 // 2. Unit simulation functions for HP & AC calculation logic
-function simulateHpCalculation({ classes, feats = [], race = '', subrace = '', is2024 = false, conMod = 2, hpMode = 'average' }) {
+function simulateHpCalculation({
+    classes,
+    feats = [],
+    race = '',
+    subrace = '',
+    is2024 = false,
+    conMod = 2,
+    hpMode = 'average'
+}) {
     let total = 0;
     const rolls = [];
 
@@ -22,7 +34,7 @@ function simulateHpCalculation({ classes, feats = [], race = '', subrace = '', i
 
         for (let i = 1; i <= lvl; i++) {
             const isFirst = cIdx === 0 && i === 1;
-            const roll = isFirst ? hd : (hpMode === 'max' ? hd : avg);
+            const roll = isFirst ? hd : hpMode === 'max' ? hd : avg;
             const subTot = Math.max(1, roll + conMod);
             total += subTot;
             rolls.push({ level: i, className: c.name, hd, val: roll, con: conMod, total: subTot });
@@ -54,8 +66,7 @@ function simulateHpCalculation({ classes, feats = [], race = '', subrace = '', i
 
     const sorcClass = classes.find(
         (c) =>
-            (c.name || '').toLowerCase().includes('sorcerer') &&
-            (c.subclass || '').toLowerCase().includes('draconic')
+            (c.name || '').toLowerCase().includes('sorcerer') && (c.subclass || '').toLowerCase().includes('draconic')
     );
     if (sorcClass) {
         const sorcLvl = parseInt(sorcClass.level) || 1;
@@ -281,7 +292,10 @@ const danceBardLvl2 = simulateAcCalculation({
     stats: { dex: 16, con: 12, wis: 10, cha: 16 },
     is2024: true
 });
-assert.ok(!danceBardLvl2.allArmorOptions.some((a) => a.id === 'dance_bard'), 'Lvl 2 Bard should not have Dance Unarmored Defense');
+assert.ok(
+    !danceBardLvl2.allArmorOptions.some((a) => a.id === 'dance_bard'),
+    'Lvl 2 Bard should not have Dance Unarmored Defense'
+);
 
 const danceBardLvl3 = simulateAcCalculation({
     classes: [{ name: 'Bard', subclass: 'College of Dance', level: 3 }],
@@ -323,4 +337,3 @@ assert.strictEqual(defenseChainmail.ac, 19);
 console.log('✓ Defense Fighting Style grants +1 AC with armor, and 0 when unarmored');
 
 console.log('\n=== ALL EQUIPMENT, HP & AC MODIFIER TESTS PASSED! ===');
-

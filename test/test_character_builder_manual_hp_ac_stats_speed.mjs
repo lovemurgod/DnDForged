@@ -56,24 +56,18 @@ console.log('Testing calculateEffectiveSpeed...');
 console.log('Testing ASI & Feats milestone defaults...');
 {
     // Unassigned milestone tier
-    const unassignedTiers = [
-        { level: 4, choice: 'unselected', asiMode: 'plus2', stat1: '', stat2: '' }
-    ];
+    const unassignedTiers = [{ level: 4, choice: 'unselected', asiMode: 'plus2', stat1: '', stat2: '' }];
     const bonuses = getFeatAndAsiBonuses(unassignedTiers);
     assert.strictEqual(bonuses.str, 0, 'Unassigned tier must NOT grant +2 STR');
     assert.strictEqual(bonuses.dex, 0);
 
     // Assigned ASI +2 STR
-    const assignedTiers = [
-        { level: 4, choice: 'asi', asiMode: 'plus2', stat1: 'str', stat2: '' }
-    ];
+    const assignedTiers = [{ level: 4, choice: 'asi', asiMode: 'plus2', stat1: 'str', stat2: '' }];
     const assignedBonuses = getFeatAndAsiBonuses(assignedTiers);
     assert.strictEqual(assignedBonuses.str, 2, 'Assigned tier should grant +2 STR');
 
     // Assigned ASI +1 DEX, +1 CON
-    const splitTiers = [
-        { level: 4, choice: 'asi', asiMode: 'plus1plus1', stat1: 'dex', stat2: 'con' }
-    ];
+    const splitTiers = [{ level: 4, choice: 'asi', asiMode: 'plus1plus1', stat1: 'dex', stat2: 'con' }];
     const splitBonuses = getFeatAndAsiBonuses(splitTiers);
     assert.strictEqual(splitBonuses.dex, 1);
     assert.strictEqual(splitBonuses.con, 1);
@@ -89,18 +83,18 @@ console.log('Testing Ability Score persistence logic...');
         statMethod: 'pointbuy',
         pointBuyScores: { str: 10, dex: 14, con: 14, int: 12, wis: 12, cha: 10 },
         standardArrayAssignments: { str: 15, dex: 14, con: 13, int: 12, wis: 10, cha: 8 },
-        builderFeatSelections: [
-            { level: 4, choice: 'feat', featName: 'Alert' }
-        ]
+        builderFeatSelections: [{ level: 4, choice: 'feat', featName: 'Alert' }]
     };
 
     // Simulate opening builder: restores fields
     const workingChar = {
         statMethod: char.statMethod || 'standard',
         pointBuyScores: { ...(char.pointBuyScores || { str: 8, dex: 8, con: 8, int: 8, wis: 8, cha: 8 }) },
-        standardArrayAssignments: { ...(char.standardArrayAssignments || { str: 15, dex: 14, con: 13, int: 12, wis: 10, cha: 8 }) }
+        standardArrayAssignments: {
+            ...(char.standardArrayAssignments || { str: 15, dex: 14, con: 13, int: 12, wis: 10, cha: 8 })
+        }
     };
-    const asiTiers = (char.builderFeatSelections || []).map(t => ({ ...t }));
+    const asiTiers = (char.builderFeatSelections || []).map((t) => ({ ...t }));
 
     assert.strictEqual(workingChar.statMethod, 'pointbuy');
     assert.strictEqual(workingChar.pointBuyScores.dex, 14);
@@ -126,7 +120,11 @@ console.log('Testing Racial Natural Armor calculations...');
         if (chosenOption.type === 'Special') {
             if (chosenOption.id === 'special_tortle') {
                 ac = 17 + shieldBonus + wfBonus;
-            } else if (chosenOption.id === 'special_lizardfolk' || chosenOption.id === 'special_autognome' || chosenOption.id === 'special_thrikreen') {
+            } else if (
+                chosenOption.id === 'special_lizardfolk' ||
+                chosenOption.id === 'special_autognome' ||
+                chosenOption.id === 'special_thrikreen'
+            ) {
                 ac = 13 + dexMod + shieldBonus + wfBonus;
             } else if (chosenOption.id === 'special_locathah') {
                 ac = 12 + dexMod + shieldBonus + wfBonus;

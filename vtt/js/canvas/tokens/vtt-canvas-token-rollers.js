@@ -325,7 +325,9 @@ export function rollFromToken(formula, label, tokenId, extraModifier = 0, option
     const evt = options.optEvent || (typeof window !== 'undefined' ? window.event : null);
     const isShift =
         (evt && evt.shiftKey) ||
-        (typeof window !== 'undefined' && typeof window.VTT_isShiftPressed === 'function' && window.VTT_isShiftPressed());
+        (typeof window !== 'undefined' &&
+            typeof window.VTT_isShiftPressed === 'function' &&
+            window.VTT_isShiftPressed());
     const isCtrlOrAlt =
         (evt && (evt.ctrlKey || evt.altKey || evt.metaKey)) ||
         (typeof window !== 'undefined' && typeof window.VTT_isCtrlPressed === 'function' && window.VTT_isCtrlPressed());

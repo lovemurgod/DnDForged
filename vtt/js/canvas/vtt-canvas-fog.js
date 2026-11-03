@@ -25,7 +25,7 @@ export function renderFogOfWarLayer(width, height, options = {}) {
         getTokenCenter = (t) => ({ x: t.x + 25, y: t.y + 25 }),
         getTokenDrawDimensions = () => ({ drawW: 50, drawH: 50, tokenRadius: 25 }),
         isTokenControlledByPlayer = () => true,
-        checkLightingAnimationLoop = () => { },
+        checkLightingAnimationLoop = () => {},
         computeVisPolyFn = computeVisibilityPolygon,
         spatialIndex = null,
         wallSpatialIndex = null
@@ -117,7 +117,19 @@ export function renderFogOfWarLayer(width, height, options = {}) {
         if (source._losPolyCache && source._losPolyCache.key === losCacheKey) {
             losPolygon = source._losPolyCache.polygon;
         } else {
-            losPolygon = computeVisPolyFn(cx, cy, maxLosRadius, width, height, 360, 0, null, null, walls, activeSpatialIndex);
+            losPolygon = computeVisPolyFn(
+                cx,
+                cy,
+                maxLosRadius,
+                width,
+                height,
+                360,
+                0,
+                null,
+                null,
+                walls,
+                activeSpatialIndex
+            );
             source._losPolyCache = { key: losCacheKey, polygon: losPolygon };
         }
         if (losPolygon && losPolygon.length > 2) {
@@ -137,7 +149,19 @@ export function renderFogOfWarLayer(width, height, options = {}) {
         if (source._polyCache && source._polyCache.key === cacheKey) {
             visibilityPolygon = source._polyCache.polygon;
         } else {
-            visibilityPolygon = computeVisPolyFn(cx, cy, radius, width, height, 360, 0, null, null, walls, activeSpatialIndex);
+            visibilityPolygon = computeVisPolyFn(
+                cx,
+                cy,
+                radius,
+                width,
+                height,
+                360,
+                0,
+                null,
+                null,
+                walls,
+                activeSpatialIndex
+            );
             source._polyCache = { key: cacheKey, polygon: visibilityPolygon };
         }
 
@@ -227,7 +251,8 @@ export function renderFogOfWarLayer(width, height, options = {}) {
     const isRestrictedByPlayerVision = vtt.role !== 'GM' || gmVisionMode;
 
     if (scratchLightCanvas && ctxScratchLight) {
-        const canRenderLights = lightSources.length > 0 && (!isRestrictedByPlayerVision || playerLosPolygons.length > 0);
+        const canRenderLights =
+            lightSources.length > 0 && (!isRestrictedByPlayerVision || playerLosPolygons.length > 0);
 
         if (canRenderLights) {
             if (isRestrictedByPlayerVision) {
@@ -251,10 +276,15 @@ export function renderFogOfWarLayer(width, height, options = {}) {
                 const tokenRadius = light.tokenRadius || 0;
                 const baseBrightDist =
                     (light.lightBright / (grid.feetPerSquare || 5)) * (grid.size || 50) * (grid.scale || 1);
-                const baseDimDist = (light.lightDim / (grid.feetPerSquare || 5)) * (grid.size || 50) * (grid.scale || 1);
+                const baseDimDist =
+                    (light.lightDim / (grid.feetPerSquare || 5)) * (grid.size || 50) * (grid.scale || 1);
 
                 const baseRadiusBright =
-                    baseBrightDist > 0 ? tokenRadius + baseBrightDist : light.isToken && baseDimDist > 0 ? tokenRadius : 0;
+                    baseBrightDist > 0
+                        ? tokenRadius + baseBrightDist
+                        : light.isToken && baseDimDist > 0
+                          ? tokenRadius
+                          : 0;
                 const baseRadiusDim = baseDimDist > 0 ? baseRadiusBright + baseDimDist : baseRadiusBright;
                 const nominalMaxRadius = Math.max(baseRadiusBright, baseRadiusDim);
 
@@ -297,17 +327,22 @@ export function renderFogOfWarLayer(width, height, options = {}) {
                     baseBrightDist > 0
                         ? tokenRadius + baseBrightDist * radMultiplier
                         : light.isToken && baseDimDist > 0
-                            ? tokenRadius
-                            : 0;
+                          ? tokenRadius
+                          : 0;
                 const radiusDim = baseDimDist > 0 ? radiusBright + baseDimDist * radMultiplier : radiusBright;
                 const maxRadius = Math.max(radiusBright, radiusDim);
                 if (maxRadius <= 0) return;
 
-                const isAngular = typeof light.lightAngle === 'number' && light.lightAngle < 360 && light.lightAngle > 0;
+                const isAngular =
+                    typeof light.lightAngle === 'number' && light.lightAngle < 360 && light.lightAngle > 0;
 
                 const cacheKey = `${light.x.toFixed(1)}_${light.y.toFixed(1)}_${light.lightAngle}_${light.lightRotation.toFixed(1)}_${nominalMaxRadius.toFixed(1)}_${wallsVersion}`;
                 let visibilityPolygon;
-                if (light.sourceEntity && light.sourceEntity._polyCache && light.sourceEntity._polyCache.key === cacheKey) {
+                if (
+                    light.sourceEntity &&
+                    light.sourceEntity._polyCache &&
+                    light.sourceEntity._polyCache.key === cacheKey
+                ) {
                     visibilityPolygon = light.sourceEntity._polyCache.polygon;
                 } else {
                     visibilityPolygon = computeVisPolyFn(
@@ -500,7 +535,7 @@ export function renderLightFloorWashPass(ctxFloor, width, height, options = {}) 
         spatialIndex = null,
         wallSpatialIndex = null,
         playerLosPolygons = null,
-        checkLightingAnimationLoop = () => { }
+        checkLightingAnimationLoop = () => {}
     } = options;
 
     const activeSpatialIndex = spatialIndex || wallSpatialIndex;
@@ -580,8 +615,7 @@ export function renderLightFloorWashPass(ctxFloor, width, height, options = {}) 
 
     lightSources.forEach((light) => {
         const tokenRadius = light.tokenRadius || 0;
-        const baseBrightDist =
-            (light.lightBright / (grid.feetPerSquare || 5)) * (grid.size || 50) * (grid.scale || 1);
+        const baseBrightDist = (light.lightBright / (grid.feetPerSquare || 5)) * (grid.size || 50) * (grid.scale || 1);
         const baseDimDist = (light.lightDim / (grid.feetPerSquare || 5)) * (grid.size || 50) * (grid.scale || 1);
 
         const baseRadiusBright =
@@ -613,8 +647,7 @@ export function renderLightFloorWashPass(ctxFloor, width, height, options = {}) 
             const phase = nowSec * speed * 2 + seed;
 
             if (light.animationType === 'flicker') {
-                const jitter =
-                    Math.sin(phase * 3.7) * 0.5 + Math.sin(phase * 7.1) * 0.3 + Math.sin(phase * 13.9) * 0.2;
+                const jitter = Math.sin(phase * 3.7) * 0.5 + Math.sin(phase * 7.1) * 0.3 + Math.sin(phase * 13.9) * 0.2;
                 radMultiplier = Math.max(0.7, 1.0 + jitter * intensity);
             } else if (light.animationType === 'pulse') {
                 const pulse = Math.sin(phase * 0.8) * intensity;
@@ -630,8 +663,8 @@ export function renderLightFloorWashPass(ctxFloor, width, height, options = {}) 
             baseBrightDist > 0
                 ? tokenRadius + baseBrightDist * radMultiplier
                 : light.isToken && baseDimDist > 0
-                    ? tokenRadius
-                    : 0;
+                  ? tokenRadius
+                  : 0;
         const radiusDim = baseDimDist > 0 ? radiusBright + baseDimDist * radMultiplier : radiusBright;
         const maxRadius = Math.max(radiusBright, radiusDim);
         if (maxRadius <= 0) return;

@@ -115,7 +115,7 @@ export function applyDamageToTokens(tokenIds, amount, type, mode, attackMeta = {
         tokens = {},
         currentMapId = null,
         syncHpFn = syncTokensHpToCharacters,
-        renderAll = () => { },
+        renderAll = () => {},
         getTokenDrawDimensions = () => ({ drawW: 50, drawH: 50 }),
         triggerDamageFXAnimation = null,
         triggerHealingFXAnimation = null
@@ -305,9 +305,9 @@ export function applyCompositeDamageToTokens(tokenIds, dmgRolls, multiplier = 1.
         tokens = {},
         currentMapId = null,
         getTokenDrawDimensions = () => ({ drawW: 50, drawH: 50 }),
-        triggerDamageFXAnimation = () => { },
+        triggerDamageFXAnimation = () => {},
         syncHpFn = syncTokensHpToCharacters,
-        renderAll = () => { }
+        renderAll = () => {}
     } = options;
 
     if (!tokenIds || tokenIds.length === 0 || !tokens) return;
@@ -568,9 +568,9 @@ export function executeMassAttackResolution(massAttackCard, distribution, msgId,
         currentMapId = null,
         getTokenAC = (t) => t?.ac ?? 10,
         getTokenDrawDimensions = () => ({ drawW: 50, drawH: 50 }),
-        triggerDamageFXAnimation = () => { },
+        triggerDamageFXAnimation = () => {},
         syncHpFn = syncTokensHpToCharacters,
-        renderAll = () => { },
+        renderAll = () => {},
         getResolvedCreatureMonsterData = (t) => t?.monsterData || null
     } = options;
 
@@ -769,9 +769,9 @@ export function processCardFullResolution(cardData, selectedIds, options = {}) {
         currentMapId = null,
         getTokenAC = (t) => t?.ac ?? 10,
         getTokenDrawDimensions = () => ({ drawW: 50, drawH: 50 }),
-        triggerDamageFXAnimation = () => { },
+        triggerDamageFXAnimation = () => {},
         syncHpFn = syncTokensHpToCharacters,
-        renderAll = () => { },
+        renderAll = () => {},
         getResolvedCreatureMonsterData = (t) => t?.monsterData || null
     } = options;
 
@@ -955,7 +955,7 @@ export function changeMassTokenZOrder(tokenIds, action, options = {}) {
     const {
         vtt = (typeof window !== 'undefined' ? window.VTT : null) || {},
         tokens = {},
-        renderAll = () => { }
+        renderAll = () => {}
     } = options;
 
     const tokenList = Object.values(tokens);
@@ -1094,10 +1094,10 @@ export function showMassRollContextMenu(tokenIds, clientX, clientY, options = {}
         selectedTokenIds = new Set(),
         campaignSettings = {},
         isMobileViewport = () => false,
-        triggerSplashForSelection = () => { },
+        triggerSplashForSelection = () => {},
         getTokenDrawDimensions = () => ({ drawW: 50, drawH: 50 }),
         snapToGrid = (x, y) => ({ x, y }),
-        renderAll = () => { },
+        renderAll = () => {},
         getResolvedCreatureMonsterData = (t) => t?.monsterData || null
     } = options;
 

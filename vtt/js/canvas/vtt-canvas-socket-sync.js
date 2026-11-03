@@ -357,7 +357,9 @@ export function setupSocketSync(ctx = {}) {
                     }
                 } else if (
                     vtt.role !== 'GM' &&
-                    (data.changes?.layer === 'token' || data.changes?.isVisible === true || data.changes?.hidden === false)
+                    (data.changes?.layer === 'token' ||
+                        data.changes?.isVisible === true ||
+                        data.changes?.hidden === false)
                 ) {
                     // Token revealed on map but player client is missing full token payload: request immediate authoritative sync!
                     socket.emit('token:request_sync', { mapId: data.mapId, tokenId });

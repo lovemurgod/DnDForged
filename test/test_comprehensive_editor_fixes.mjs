@@ -2,11 +2,7 @@ import assert from 'assert';
 import fs from 'fs';
 import path from 'path';
 import os from 'os';
-import {
-    createBlankEntity,
-    jsonToEntity,
-    entityToJson
-} from '../electron/ui/builder-schemas.js';
+import { createBlankEntity, jsonToEntity, entityToJson } from '../electron/ui/builder-schemas.js';
 
 console.log('--- RUNNING COMPREHENSIVE HOMEBREW FIXES VERIFICATION TESTS ---');
 
@@ -124,7 +120,10 @@ console.log('\n[Test 4] Adventure Structured Data Preservation...');
                         type: 'table',
                         caption: 'Random Wandering Monsters',
                         colLabels: ['d6', 'Encounter'],
-                        rows: [['1', '2d4 Goblins'], ['2', '1 Giant Spider']]
+                        rows: [
+                            ['1', '2d4 Goblins'],
+                            ['2', '1 Giant Spider']
+                        ]
                     }
                 ]
             }
@@ -137,7 +136,11 @@ console.log('\n[Test 4] Adventure Structured Data Preservation...');
 
     // Visual save
     const saved = entityToJson('adventures', entity, 'MYBREW');
-    assert.deepStrictEqual(saved.entries, structuredAdventure.entries, 'Structured entries must not be flattened or converted to [object Object]');
+    assert.deepStrictEqual(
+        saved.entries,
+        structuredAdventure.entries,
+        'Structured entries must not be flattened or converted to [object Object]'
+    );
     console.log('  ✓ Adventure structured chapter & table entries fully preserved');
 }
 
@@ -209,9 +212,7 @@ console.log('\n[Test 7] Character Builder Catalog Hydration Parity...');
         speedWalk: 35,
         darkvision: 60,
         abilityIncreases: { cha: 2, dex: 1 },
-        traits: [
-            { name: 'Solar Flare', description: 'Once per day emit blinding light.' }
-        ]
+        traits: [{ name: 'Solar Flare', description: 'Once per day emit blinding light.' }]
     };
 
     const customBg = {
@@ -220,7 +221,7 @@ console.log('\n[Test 7] Character Builder Catalog Hydration Parity...');
         source: 'MYBREW',
         skillProficiencies: 'Arcana, Perception',
         toolProficiencies: "Navigator's Tools",
-        startingEquipment: "A telescope, star chart, 15 gp",
+        startingEquipment: 'A telescope, star chart, 15 gp',
         featureName: 'Cosmic Guidance',
         featureDescription: 'You can navigate by celestial bodies without getting lost.'
     };
@@ -375,9 +376,7 @@ console.log('\n[Test 13] Character Builder Custom Class Synthesis...');
                     {
                         name: 'Order of the Ghostslayer',
                         source: 'MYBREW',
-                        subclassFeatures: [
-                            { name: 'Rite of the Dawn', level: 3, entries: ['Radiant damage rite.'] }
-                        ]
+                        subclassFeatures: [{ name: 'Rite of the Dawn', level: 3, entries: ['Radiant damage rite.'] }]
                     }
                 ]
             }
@@ -387,12 +386,10 @@ console.log('\n[Test 13] Character Builder Custom Class Synthesis...');
 
     // Test synthesized logic from builder-modal.js
     const raw = 'blood hunter';
-    const file = builderCache?.classIndex ? (builderCache.classIndex[raw] || null) : null;
+    const file = builderCache?.classIndex ? builderCache.classIndex[raw] || null : null;
     assert.strictEqual(file, null, 'Custom class must not exist in official classIndex');
 
-    const customCls = (builderCache?.classes || []).find(
-        (c) => (c.name || '').toLowerCase() === raw
-    );
+    const customCls = (builderCache?.classes || []).find((c) => (c.name || '').toLowerCase() === raw);
     assert.ok(customCls, 'Must find custom class in builderCache.classes');
 
     const synthesized = {
@@ -429,7 +426,10 @@ console.log('\n[Test 14] Adventure Smart Preamble Update...');
                 type: 'table',
                 caption: 'Wandering Encounters',
                 colLabels: ['d6', 'Creature'],
-                rows: [[1, '2x Giant Constrictor Snake'], [2, '1x Black Dragon Wyrmling']]
+                rows: [
+                    [1, '2x Giant Constrictor Snake'],
+                    [2, '1x Black Dragon Wyrmling']
+                ]
             }
         ]
     };

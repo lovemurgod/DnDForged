@@ -197,7 +197,11 @@ export function setupViewportControls(context = {}) {
         if (token) {
             e.stopPropagation();
             e.preventDefault();
-            if (context.selectedTokenIds && context.selectedTokenIds.has(token.id) && context.selectedTokenIds.size > 1) {
+            if (
+                context.selectedTokenIds &&
+                context.selectedTokenIds.has(token.id) &&
+                context.selectedTokenIds.size > 1
+            ) {
                 context.showMassRollContextMenu?.(Array.from(context.selectedTokenIds), e.clientX, e.clientY);
                 return;
             }

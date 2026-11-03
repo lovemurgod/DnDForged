@@ -725,7 +725,11 @@ export function wireSpellsEvents(char, ctx) {
                 if (level !== 'cantrip' && level !== 'legacy' && hasUpcast && upcastFn) {
                     upcastFn(parseInt(String(level).replace('level', '')) || 1, (lvl) => {
                         if (lvl) {
-                            window.VTTSpellManager.rollSpell(sp, level, char, { type: 'roll', castLvl: lvl, visibility });
+                            window.VTTSpellManager.rollSpell(sp, level, char, {
+                                type: 'roll',
+                                castLvl: lvl,
+                                visibility
+                            });
                         }
                     });
                 } else {

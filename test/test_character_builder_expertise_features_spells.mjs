@@ -18,9 +18,7 @@ const barbarianClassData = JSON.parse(
 const paladinClassData = JSON.parse(
     fs.readFileSync(path.join(__dirname, '../vtt/data/class/class-paladin.json'), 'utf8')
 );
-const featsCatalog = JSON.parse(
-    fs.readFileSync(path.join(__dirname, '../vtt/data/feats-catalog.json'), 'utf8')
-);
+const featsCatalog = JSON.parse(fs.readFileSync(path.join(__dirname, '../vtt/data/feats-catalog.json'), 'utf8'));
 
 // 1. Expertise Allowance Calculation Tests
 console.log('1. Testing Class Expertise allowance calculation...');
@@ -54,7 +52,10 @@ console.log('1. Testing Class Expertise allowance calculation...');
 
     // Multiclass Rogue 1 / Bard 3
     assert.strictEqual(
-        getClassExpertiseLimit([{ name: 'Rogue', level: 1 }, { name: 'Bard', level: 3 }]),
+        getClassExpertiseLimit([
+            { name: 'Rogue', level: 1 },
+            { name: 'Bard', level: 3 }
+        ]),
         4,
         'Multiclass Rogue 1 / Bard 3 has 4 expertise'
     );
@@ -140,10 +141,22 @@ console.log('3. Testing Totem Barbarian Animal choices & Rune Knight Runes...');
 
     const runeNames = Array.from(new Set(runeKnightMatches.map((r) => r.name)));
     console.log('Rune Knight Runes found:', runeNames.slice(0, 6));
-    assert(runeNames.some((n) => n.includes('Cloud Rune') || n.includes('Skye')), 'Rune Knight has Cloud Rune');
-    assert(runeNames.some((n) => n.includes('Fire Rune') || n.includes('Ild')), 'Rune Knight has Fire Rune');
-    assert(runeNames.some((n) => n.includes('Frost Rune') || n.includes('Ise')), 'Rune Knight has Frost Rune');
-    assert(runeNames.some((n) => n.includes('Stone Rune') || n.includes('Stein')), 'Rune Knight has Stone Rune');
+    assert(
+        runeNames.some((n) => n.includes('Cloud Rune') || n.includes('Skye')),
+        'Rune Knight has Cloud Rune'
+    );
+    assert(
+        runeNames.some((n) => n.includes('Fire Rune') || n.includes('Ild')),
+        'Rune Knight has Fire Rune'
+    );
+    assert(
+        runeNames.some((n) => n.includes('Frost Rune') || n.includes('Ise')),
+        'Rune Knight has Frost Rune'
+    );
+    assert(
+        runeNames.some((n) => n.includes('Stone Rune') || n.includes('Stein')),
+        'Rune Knight has Stone Rune'
+    );
     console.log('✓ Totem Barbarian and Rune Knight options verified.');
 }
 
@@ -197,7 +210,8 @@ console.log('5. Testing Origin Feats gating for 2014 characters...');
                 matchedBg.source === 'XPHB' ||
                 /strixhaven|dragonlance|planescape/i.test(matchedBg.source || '') ||
                 (matchedBg.entries && JSON.stringify(matchedBg.entries).includes('Origin Feat')));
-        const isHumanVersatile = (is2024Char && (workingChar.race || '').toLowerCase().includes('human')) || isVariantHuman;
+        const isHumanVersatile =
+            (is2024Char && (workingChar.race || '').toLowerCase().includes('human')) || isVariantHuman;
 
         const tiers = [];
         if (hasBgFeat) tiers.push({ id: 'origin_feat_background' });
@@ -219,7 +233,7 @@ console.log('5. Testing Origin Feats gating for 2014 characters...');
 
     // 2024 Human + 2024 Background
     const char2024 = { race: 'Human', is2024: true };
-    const bg2024 = { name: 'Farmer', source: 'XPHB', feats: [{ 'Tough': true }] };
+    const bg2024 = { name: 'Farmer', source: 'XPHB', feats: [{ Tough: true }] };
     const tiers2024 = checkOriginFeats(char2024, bg2024, 'Tough');
     assert.strictEqual(tiers2024.length, 2, '2024 Human with 2024 Background must receive 2 Origin Feats');
     console.log('✓ Origin Feats properly gated: 0 for 2014 Human, 1 for Variant Human, 2 for 2024.');
@@ -266,4 +280,3 @@ console.log('7. Testing Feat Sub-Choice handling...');
 console.log('\n======================================================');
 console.log('All Character Builder Upgrades verified successfully!');
 console.log('======================================================\n');
-

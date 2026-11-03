@@ -34,7 +34,11 @@ export function renderStep6(ctx) {
             } else if (/shadow[- ]touched/i.test(fName)) {
                 featSpells.push({ name: 'Invisibility', level: 2, origin: fName });
                 if (sub.spell1) featSpells.push({ name: sub.spell1, level: 1, origin: fName });
-            } else if (/magic initiate/i.test(fName) || /strixhaven initiate/i.test(fName) || /initiate of high sorcery/i.test(fName)) {
+            } else if (
+                /magic initiate/i.test(fName) ||
+                /strixhaven initiate/i.test(fName) ||
+                /initiate of high sorcery/i.test(fName)
+            ) {
                 if (sub.cantrip1) featSpells.push({ name: sub.cantrip1, level: 0, origin: fName });
                 if (sub.cantrip2) featSpells.push({ name: sub.cantrip2, level: 0, origin: fName });
                 if (sub.spell1) featSpells.push({ name: sub.spell1, level: 1, origin: fName });

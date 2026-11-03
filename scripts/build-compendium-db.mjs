@@ -1021,8 +1021,8 @@ function parseBackgroundTools(b) {
                             k === 'anyMusicalInstrument'
                                 ? 'Musical Instrument of your choice'
                                 : k === 'anyArtisansTool'
-                                    ? "Artisan's Tools of your choice"
-                                    : formatToolName(k);
+                                  ? "Artisan's Tools of your choice"
+                                  : formatToolName(k);
                         choose = choose || { count: v === true ? 1 : v || 1, from: [label] };
                     }
                 }
@@ -1116,7 +1116,7 @@ function parseBackgroundEquipment(b) {
                     const label =
                         items.length > 0
                             ? items.map((i) => (i.quantity > 1 ? `${i.quantity}x ` : '') + i.name).join(', ') +
-                            (gold > 0 ? ` + ${gold} gp` : '')
+                              (gold > 0 ? ` + ${gold} gp` : '')
                             : `${gold} gp`;
                     options.push({ key: k.toUpperCase(), label, items, gold });
                 }
@@ -1312,7 +1312,11 @@ function buildBackgrounds() {
     const vttDataDir = path.join(rootDir, 'vtt', 'data');
     if (outArgIdx === -1 && fs.existsSync(vttDataDir) && path.resolve(vttDataDir) !== path.resolve(targetDataDir)) {
         try {
-            fs.writeFileSync(path.join(vttDataDir, 'backgrounds-catalog.json'), JSON.stringify(catalog, null, 2), 'utf8');
+            fs.writeFileSync(
+                path.join(vttDataDir, 'backgrounds-catalog.json'),
+                JSON.stringify(catalog, null, 2),
+                'utf8'
+            );
         } catch {
             // Ignore optional local dev mirror write failures
         }
@@ -1323,7 +1327,12 @@ function buildBackgrounds() {
     if (!fs.existsSync(partDir)) fs.mkdirSync(partDir, { recursive: true });
 
     const vttPartDir = path.join(vttDataDir, 'backgrounds-normalized');
-    if (outArgIdx === -1 && fs.existsSync(vttDataDir) && path.resolve(vttDataDir) !== path.resolve(targetDataDir) && !fs.existsSync(vttPartDir)) {
+    if (
+        outArgIdx === -1 &&
+        fs.existsSync(vttDataDir) &&
+        path.resolve(vttDataDir) !== path.resolve(targetDataDir) &&
+        !fs.existsSync(vttPartDir)
+    ) {
         try {
             fs.mkdirSync(vttPartDir, { recursive: true });
         } catch {

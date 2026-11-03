@@ -26,10 +26,7 @@ import {
     renderStatBlock
 } from '../vtt/js/creature-sheet/creature-renderer.js';
 
-import {
-    createAbilityRow,
-    openEditModal
-} from '../vtt/js/creature-sheet/creature-editor.js';
+import { createAbilityRow, openEditModal } from '../vtt/js/creature-sheet/creature-editor.js';
 
 import { parseActionMacro } from '../vtt/js/creature-sheet/creature-roller.js';
 

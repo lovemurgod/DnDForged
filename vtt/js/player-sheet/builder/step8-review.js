@@ -43,19 +43,20 @@ export function renderStep8(ctx) {
             <!-- Rolls Breakdown -->
             <div style="background:rgba(0,0,0,0.25); border:1px solid var(--color-border-subtle); border-radius:6px; padding:10px; max-height:160px; overflow-y:auto;" class="scroll-styled">
                 ${builderState.hpRolls
-            .map(
-                (r) => `
+                    .map(
+                        (r) => `
                     <div style="display:flex; justify-content:space-between; font-size:0.8rem; padding:3px 0; border-bottom:1px solid rgba(255,255,255,0.05);">
                         <span>${r.className} Lv ${r.level}: [1d${r.hd} -> ${r.val}] + CON (${r.con >= 0 ? '+' + r.con : r.con})</span>
                         <strong style="color:#4fc3f7;">+${r.total} HP</strong>
                     </div>
                 `
-            )
-            .join('')}
+                    )
+                    .join('')}
             </div>
 
-            ${builderState.hpBreakdown && builderState.hpBreakdown.totalBonus > 0
-            ? `
+            ${
+                builderState.hpBreakdown && builderState.hpBreakdown.totalBonus > 0
+                    ? `
             <div style="margin-top:8px; padding:6px 10px; background:rgba(79,195,247,0.08); border:1px solid rgba(79,195,247,0.25); border-radius:6px; font-size:0.8rem; color:var(--color-text-secondary); display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
                 <span style="color:var(--color-gold-light); font-weight:600;"><i class="fa-solid fa-calculator"></i> Bonus Breakdown:</span>
                 <span>Base (${builderState.hpBreakdown.base})</span>
@@ -65,20 +66,21 @@ export function renderStep8(ctx) {
                 <span style="font-weight:bold; color:#4fc3f7;">= ${builderState.calculatedHp} Total HP</span>
             </div>
             `
-            : ''
-        }
+                    : ''
+            }
 
             <div style="margin-top:10px; display:flex; justify-content:space-between; align-items:center;">
                 <label style="display:flex; align-items:center; gap:6px; cursor:pointer; font-size:0.8rem; color:var(--color-text-secondary);">
                     <input type="checkbox" id="pc-wiz-hp-broadcast" ${builderState.hpChatBroadcast ? 'checked' : ''} style="accent-color:var(--color-gold-base);">
                     <span>Broadcast HP calculation to party chat on apply</span>
                 </label>
-                ${builderState.hpMode === 'roll' || builderState.hpMode === 'roll_avg_min'
-            ? `
+                ${
+                    builderState.hpMode === 'roll' || builderState.hpMode === 'roll_avg_min'
+                        ? `
                     <button type="button" id="pc-wiz-reroll-hp" class="btn btn-secondary btn-xs"><i class="fa-solid fa-rotate-right"></i> Re-roll Hit Dice</button>
                 `
-            : ''
-        }
+                        : ''
+                }
             </div>
         </div>
 
@@ -96,15 +98,15 @@ export function renderStep8(ctx) {
             </div>
             <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:12px;">
                 ${allArmorOptions
-            .map(
-                (arm) => `
+                    .map(
+                        (arm) => `
                     <label class="glass-flat" style="padding:8px 12px; border-radius:6px; border:1px solid var(--color-border-subtle); display:flex; gap:10px; align-items:center; cursor:pointer;">
                         <input type="radio" name="pc-wiz-armor-opt" value="${arm.id}" ${builderState.activeArmorId === arm.id ? 'checked' : ''} style="accent-color:var(--color-gold-base);">
                         <span style="font-weight:600; color:var(--color-text-primary);">${arm.name}</span>
                     </label>
                 `
-            )
-            .join('')}
+                    )
+                    .join('')}
             </div>
             <div style="display:flex; justify-content:space-between; align-items:center; padding-top:8px; border-top:1px solid rgba(255,255,255,0.06);">
                 <label style="display:flex; align-items:center; gap:6px; cursor:pointer; font-size:0.85rem; color:var(--color-gold-light);">
@@ -133,14 +135,15 @@ export function renderStep8(ctx) {
                         <label for="pc-wiz-manual-hp" style="font-size:0.85rem; font-weight:600; color:var(--color-gold-light);">
                             <i class="fa-solid fa-heart-pulse" style="color:#4fc3f7; margin-right:4px;"></i> Custom Max HP:
                         </label>
-                        ${builderState.hpManualOverride !== null && builderState.hpManualOverride !== undefined
-            ? `
+                        ${
+                            builderState.hpManualOverride !== null && builderState.hpManualOverride !== undefined
+                                ? `
                             <button type="button" id="pc-wiz-clear-manual-hp" class="btn btn-secondary btn-xxs" title="Clear override and use engine calculation">
                                 <i class="fa-solid fa-rotate-left"></i> Reset
                             </button>
                         `
-            : ''
-        }
+                                : ''
+                        }
                     </div>
                     <div style="display:flex; align-items:center; gap:8px;">
                         <input type="number" id="pc-wiz-manual-hp" min="1" max="999" placeholder="Calculated (${builderState.calculatedHp})" value="${builderState.hpManualOverride !== null && builderState.hpManualOverride !== undefined ? builderState.hpManualOverride : ''}" style="width:100%; padding:6px 10px; font-size:0.95rem; font-weight:bold; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); color:#4fc3f7; border-radius:4px;">
@@ -156,14 +159,15 @@ export function renderStep8(ctx) {
                         <label for="pc-wiz-manual-ac" style="font-size:0.85rem; font-weight:600; color:var(--color-gold-light);">
                             <i class="fa-solid fa-shield" style="color:#81c784; margin-right:4px;"></i> Custom Armor Class:
                         </label>
-                        ${builderState.acManualOverride !== null && builderState.acManualOverride !== undefined
-            ? `
+                        ${
+                            builderState.acManualOverride !== null && builderState.acManualOverride !== undefined
+                                ? `
                             <button type="button" id="pc-wiz-clear-manual-ac" class="btn btn-secondary btn-xxs" title="Clear override and use engine calculation">
                                 <i class="fa-solid fa-rotate-left"></i> Reset
                             </button>
                         `
-            : ''
-        }
+                                : ''
+                        }
                     </div>
                     <div style="display:flex; align-items:center; gap:8px;">
                         <input type="number" id="pc-wiz-manual-ac" min="1" max="50" placeholder="Calculated (${builderState.calculatedAc})" value="${builderState.acManualOverride !== null && builderState.acManualOverride !== undefined ? builderState.acManualOverride : ''}" style="width:100%; padding:6px 10px; font-size:0.95rem; font-weight:bold; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); color:#81c784; border-radius:4px;">
@@ -185,17 +189,17 @@ export function renderStep8(ctx) {
             </div>
             <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(110px, 1fr)); gap:8px; text-align:center;">
                 ${['str', 'dex', 'con', 'int', 'wis', 'cha']
-            .map((s) => {
-                const mod = getMod(stats[s]);
-                return `
+                    .map((s) => {
+                        const mod = getMod(stats[s]);
+                        return `
                         <div class="glass-flat" style="padding:8px; border-radius:6px; border:1px solid var(--color-border-subtle);">
                             <div style="font-size:0.75rem; text-transform:uppercase; color:var(--color-text-muted);">${s}</div>
                             <div style="font-size:1.2rem; font-weight:bold; color:var(--color-gold-light);">${stats[s]}</div>
                             <div style="font-size:0.8rem; color:${mod >= 0 ? 'var(--color-gold-base)' : '#e57373'};">${mod >= 0 ? '+' : ''}${mod}</div>
                         </div>
                     `;
-            })
-            .join('')}
+                    })
+                    .join('')}
             </div>
         </div>
     `;

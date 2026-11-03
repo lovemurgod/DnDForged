@@ -163,13 +163,15 @@ export function setupPointerInteraction(ctx = {}) {
     let lastBroadcastedTokens = ctx.lastBroadcastedTokens || {};
 
     // Direct and context-delegated function bindings
-    const getCanvasMouseCoords = ctx.getCanvasMouseCoords || ((e) => {
-        const rect = canvasInteraction.getBoundingClientRect();
-        return {
-            x: (e.clientX - rect.left - (ctx.panX || 0)) / (ctx.zoom || 1),
-            y: (e.clientY - rect.top - (ctx.panY || 0)) / (ctx.zoom || 1)
-        };
-    });
+    const getCanvasMouseCoords =
+        ctx.getCanvasMouseCoords ||
+        ((e) => {
+            const rect = canvasInteraction.getBoundingClientRect();
+            return {
+                x: (e.clientX - rect.left - (ctx.panX || 0)) / (ctx.zoom || 1),
+                y: (e.clientY - rect.top - (ctx.panY || 0)) / (ctx.zoom || 1)
+            };
+        });
     const renderAll = ctx.renderAll || (() => {});
     const updateContainerTransform = ctx.updateContainerTransform || (() => updateContainerTransformExt(ctx));
     const updateCoordinateDisplay = ctx.updateCoordinateDisplay || ((coords) => updateCoordinateDisplayExt(coords));
@@ -180,7 +182,8 @@ export function setupPointerInteraction(ctx = {}) {
     const snapToGridCenter = ctx.snapToGridCenter || ((x, y) => ({ x, y }));
     const snapToHalfGrid = ctx.snapToHalfGrid || ((x, y) => ({ x, y }));
     const isPointVisible = ctx.isPointVisible || (() => true);
-    const getWallCoordinatesForRaycasting = ctx.getWallCoordinatesForRaycasting || ((w) => ({ x1: w.x1, y1: w.y1, x2: w.x2, y2: w.y2 }));
+    const getWallCoordinatesForRaycasting =
+        ctx.getWallCoordinatesForRaycasting || ((w) => ({ x1: w.x1, y1: w.y1, x2: w.x2, y2: w.y2 }));
     const getWallVertexAtCoord = ctx.getWallVertexAtCoord || (() => null);
     const getWallSegmentAtCoord = ctx.getWallSegmentAtCoord || (() => -1);
     const getLightAtCoord = ctx.getLightAtCoord || (() => null);
@@ -188,9 +191,11 @@ export function setupPointerInteraction(ctx = {}) {
     const getPersistentShapeAtPoint = ctx.getPersistentShapeAtPoint || (() => null);
     const checkTokenMoveTriggers = ctx.checkTokenMoveTriggers || (() => null);
     const calcDistanceFormatted = ctx.calcDistanceFormatted || (() => '0 ft');
-    const emitTokenUpdates = ctx.emitTokenUpdates || ((t) => {
-        if (typeof window !== 'undefined' && window.emitTokenUpdates) window.emitTokenUpdates(t);
-    });
+    const emitTokenUpdates =
+        ctx.emitTokenUpdates ||
+        ((t) => {
+            if (typeof window !== 'undefined' && window.emitTokenUpdates) window.emitTokenUpdates(t);
+        });
     const emitDrawingsUpdate = ctx.emitDrawingsUpdate || (() => {});
     const emitMeasureUpdateThrottled = ctx.emitMeasureUpdateThrottled || (() => {});
     const cancelActiveMeasurement = ctx.cancelActiveMeasurement || (() => {});
@@ -208,24 +213,34 @@ export function setupPointerInteraction(ctx = {}) {
     const getMapToolResizeHandleAt = ctx.getMapToolResizeHandleAt || getMapToolResizeHandleAtExt;
     const applyMapToolResize = ctx.applyMapToolResize || applyMapToolResizeExt;
     const updateDraggedMapToolGeom = ctx.updateDraggedMapToolGeom || updateDraggedMapToolGeomExt;
-    const renderPlacedTrapsList = ctx.renderPlacedTrapsList || (() => renderPlacedTrapsListExt(traps, ctx.selectedMapToolItem));
-    const renderPlacedPortalsList = ctx.renderPlacedPortalsList || (() => renderPlacedPortalsListExt(portals, ctx.selectedMapToolItem));
+    const renderPlacedTrapsList =
+        ctx.renderPlacedTrapsList || (() => renderPlacedTrapsListExt(traps, ctx.selectedMapToolItem));
+    const renderPlacedPortalsList =
+        ctx.renderPlacedPortalsList || (() => renderPlacedPortalsListExt(portals, ctx.selectedMapToolItem));
     const syncLightPanelWithLight = ctx.syncLightPanelWithLight || syncLightPanelWithLightExt;
     const openWallSettingsModal = ctx.openWallSettingsModal || ((...args) => openWallSettingsModalExt(...args));
     const openNoteViewer = ctx.openNoteViewer || ((...args) => openNoteViewerExt(...args));
-    const hideGmTokenTooltip = ctx.hideGmTokenTooltip || ((...args) => hideGmTokenTooltipExt(args[0] || (typeof document !== 'undefined' ? document : null), ctx));
-    const showGmTokenTooltip = ctx.showGmTokenTooltip || ((tokenId, force = false) => showGmTokenTooltipExt(tokenId, force, ctx));
+    const hideGmTokenTooltip =
+        ctx.hideGmTokenTooltip ||
+        ((...args) => hideGmTokenTooltipExt(args[0] || (typeof document !== 'undefined' ? document : null), ctx));
+    const showGmTokenTooltip =
+        ctx.showGmTokenTooltip || ((tokenId, force = false) => showGmTokenTooltipExt(tokenId, force, ctx));
     const isTokenTooltipAllowed = ctx.isTokenTooltipAllowed || ((token) => isTokenTooltipAllowedExt(token, ctx));
     const getNoteAtCoord = ctx.getNoteAtCoord || (() => null);
     const getTokenAtPoint = (m, req = true, match = true, r = 0) =>
         ctx.getTokenAtPoint ? ctx.getTokenAtPoint(m, req, match, r) : getTokenAtPointExt(m, req, match, r, ctx);
     const isTokenControlledByPlayer = (t, ignorePause = false) =>
-        ctx.isTokenControlledByPlayer ? ctx.isTokenControlledByPlayer(t, ignorePause) : isTokenControlledByPlayerExt(t, ignorePause, ctx);
-    const getTokenDrawDimensions = ctx.getTokenDrawDimensions || ((t) => ({ drawW: t?.width || 50, drawH: t?.height || 50 }));
-    const getTokenCenter = ctx.getTokenCenter || ((t) => {
-        const dims = getTokenDrawDimensions(t);
-        return { x: (t?.x || 0) + (dims.drawW || 50) / 2, y: (t?.y || 0) + (dims.drawH || 50) / 2 };
-    });
+        ctx.isTokenControlledByPlayer
+            ? ctx.isTokenControlledByPlayer(t, ignorePause)
+            : isTokenControlledByPlayerExt(t, ignorePause, ctx);
+    const getTokenDrawDimensions =
+        ctx.getTokenDrawDimensions || ((t) => ({ drawW: t?.width || 50, drawH: t?.height || 50 }));
+    const getTokenCenter =
+        ctx.getTokenCenter ||
+        ((t) => {
+            const dims = getTokenDrawDimensions(t);
+            return { x: (t?.x || 0) + (dims.drawW || 50) / 2, y: (t?.y || 0) + (dims.drawH || 50) / 2 };
+        });
     const getTokenEffectiveLightFacing = ctx.getTokenEffectiveLightFacing || ((t) => t?.lightRotation || 0);
     const getLocalLightFacingFromWorldAngle = ctx.getLocalLightFacingFromWorldAngle || ((t, deg) => deg);
     const getTokenRotationHandlePos = ctx.getTokenRotationHandlePos || (() => null);
@@ -271,14 +286,16 @@ export function setupPointerInteraction(ctx = {}) {
             activeLayer: ctx.activeLayer,
             activeTool: ctx.activeTool,
             zoom: ctx.zoom,
-            isGM: (window.vtt?.role === 'GM')
+            isGM: window.vtt?.role === 'GM'
         });
     };
     const getPortalRotationHandlePos = ctx.getPortalRotationHandlePos || getPortalRotationHandlePosExt;
     const distToSegmentSq = ctx.distToSegmentSq || distToSegmentSqExt;
     const getLineIntersection = ctx.getLineIntersection || getLineIntersectionExt;
     const isTokenWithinSelection = (t, r) =>
-        ctx.isTokenWithinSelection ? ctx.isTokenWithinSelection(t, r) : isTokenWithinSelectionExt(t, r, getTokenDrawDimensions);
+        ctx.isTokenWithinSelection
+            ? ctx.isTokenWithinSelection(t, r)
+            : isTokenWithinSelectionExt(t, r, getTokenDrawDimensions);
     const getSelectionBounds = ctx.getSelectionBounds || getSelectionBoundsExt;
     const isMobileViewport = () =>
         typeof window !== 'undefined'
@@ -1956,7 +1973,9 @@ export function setupPointerInteraction(ctx = {}) {
                         const anchor = document.getElementById('measure-square-anchor')?.value || 'center';
                         const beamW = parseFloat(document.getElementById('measure-beam-width')?.value || 5);
                         const points =
-                            ctx.measureAnchorPoints.length > 0 ? [...ctx.measureAnchorPoints, ctx.localMeasureEnd] : null;
+                            ctx.measureAnchorPoints.length > 0
+                                ? [...ctx.measureAnchorPoints, ctx.localMeasureEnd]
+                                : null;
                         const broadcast = document.getElementById('measure-broadcast')?.checked ?? true;
                         if (broadcast) {
                             emitMeasureUpdateThrottled({
@@ -1994,7 +2013,9 @@ export function setupPointerInteraction(ctx = {}) {
             } else if (ctx.localIsMeasuring && (ctx.activeTool === 'measure' || ctx.isTokenMeasuring)) {
                 const mouse = getCanvasMouseCoords(e);
                 ctx.localMeasureEnd = e.altKey ? mouse : snapToGridCenter(mouse.x, mouse.y);
-                const rawShape = ctx.isTokenMeasuring ? 'line' : document.getElementById('measure-shape')?.value || 'line';
+                const rawShape = ctx.isTokenMeasuring
+                    ? 'line'
+                    : document.getElementById('measure-shape')?.value || 'line';
                 const color = document.getElementById('measure-color')?.value || '#00ffff';
                 const anchor = document.getElementById('measure-square-anchor')?.value || 'center';
                 const beamW = parseFloat(document.getElementById('measure-beam-width')?.value || 5);

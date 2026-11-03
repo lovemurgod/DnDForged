@@ -233,7 +233,7 @@ export function initVttPlayerSheet(vtt) {
                 if (resizeHandle.hasPointerCapture(e.pointerId)) {
                     resizeHandle.releasePointerCapture(e.pointerId);
                 }
-            } catch (err) { }
+            } catch (err) {}
             const currentComputed = Math.round(panel.getBoundingClientRect().width);
             if (currentComputed >= 360) {
                 localStorage.setItem('vtt_ps_panel_width', currentComputed);
@@ -400,18 +400,18 @@ export function initVttPlayerSheet(vtt) {
         try {
             const res = await fetch(primaryUrl);
             if (res.ok) return await res.json();
-        } catch (e) { }
+        } catch (e) {}
         if (fallbackUrl) {
             try {
                 const res = await fetch(fallbackUrl);
                 if (res.ok) return await res.json();
-            } catch (e) { }
+            } catch (e) {}
         }
         if (compendiumEndpoint) {
             try {
                 const res = await fetch(compendiumEndpoint);
                 if (res.ok) return await res.json();
-            } catch (e) { }
+            } catch (e) {}
         }
         return defaultVal;
     }
@@ -429,7 +429,7 @@ export function initVttPlayerSheet(vtt) {
                 disabledSourcesCache = new Set((data.disabledSources || []).map((s) => String(s).toUpperCase()));
                 return disabledSourcesCache;
             }
-        } catch (e) { }
+        } catch (e) {}
         disabledSourcesCache = new Set();
         return disabledSourcesCache;
     }
@@ -441,8 +441,8 @@ export function initVttPlayerSheet(vtt) {
             disabledSources instanceof Set
                 ? disabledSources
                 : disabledSourcesCache instanceof Set
-                    ? disabledSourcesCache
-                    : null;
+                  ? disabledSourcesCache
+                  : null;
         if (ds) {
             if (ds.has(upSrc)) return false;
             if (ds.has('UA')) {
@@ -1460,12 +1460,12 @@ export function initVttPlayerSheet(vtt) {
                 currentCategory === 'feat'
                     ? 'feats'
                     : currentCategory === 'race'
-                        ? 'races'
-                        : currentCategory === 'background'
-                            ? 'backgrounds'
-                            : currentCategory === 'optionalfeature'
-                                ? 'optionalfeatures'
-                                : '';
+                      ? 'races'
+                      : currentCategory === 'background'
+                        ? 'backgrounds'
+                        : currentCategory === 'optionalfeature'
+                          ? 'optionalfeatures'
+                          : '';
             if (cType) {
                 try {
                     const res = await fetch(
@@ -1478,7 +1478,7 @@ export function initVttPlayerSheet(vtt) {
                             full.description ||
                             extractTextFromEntries(full.rawEntries || full.entries).trim();
                     }
-                } catch (err) { }
+                } catch (err) {}
             }
         }
         document.getElementById('modal-ability-desc').value = desc;
@@ -1878,7 +1878,7 @@ export function initVttPlayerSheet(vtt) {
                             renderImportFeatureList();
                             return;
                         }
-                    } catch (e) { }
+                    } catch (e) {}
                 }
             }
 
@@ -1921,7 +1921,7 @@ export function initVttPlayerSheet(vtt) {
                     subSel.disabled = false;
                     renderImportFeatureList();
                 })
-                .catch(() => { });
+                .catch(() => {});
         });
     }
 
@@ -2189,11 +2189,11 @@ export function initVttPlayerSheet(vtt) {
             const formulaConfig =
                 baseDice || scalingMod !== 'none' || extraBonus !== 0
                     ? {
-                        baseDice,
-                        scalingMod,
-                        modClass,
-                        extraBonus
-                    }
+                          baseDice,
+                          scalingMod,
+                          modClass,
+                          extraBonus
+                      }
                     : null;
 
             const hasCounter = document.getElementById('modal-ability-has-counter').checked;
@@ -2788,10 +2788,10 @@ export function initVttPlayerSheet(vtt) {
                     d.custom !== undefined && d.custom !== ''
                         ? d.custom
                         : d.extra && parseInt(d.extra)
-                            ? parseInt(d.extra) > 0
-                                ? '+' + d.extra
-                                : String(d.extra)
-                            : '';
+                          ? parseInt(d.extra) > 0
+                              ? '+' + d.extra
+                              : String(d.extra)
+                          : '';
                 return `
             <div style="display:flex; flex-direction:column; gap:4px; padding:6px; background:rgba(0,0,0,0.25); border:1px solid rgba(255,255,255,0.06); border-radius:4px; margin-bottom:6px;">
                 <div style="display:flex; gap:4px; align-items:center;">
@@ -3073,10 +3073,10 @@ export function initVttPlayerSheet(vtt) {
                 const rawMod = modInp
                     ? modInp.value.trim()
                     : prev.custom !== undefined
-                        ? prev.custom
-                        : prev.extra
-                            ? String(prev.extra)
-                            : '';
+                      ? prev.custom
+                      : prev.extra
+                        ? String(prev.extra)
+                        : '';
                 const parsedExtra = parseInt(rawMod);
                 updatedDamageRows.push({
                     id: prev.id || 'dmg_' + Date.now() + '_' + i,
@@ -3610,7 +3610,7 @@ export function initVttPlayerSheet(vtt) {
                     if (!tokenUrl && typeof window.Renderer !== 'undefined' && window.Renderer.monster?.getTokenUrl) {
                         try {
                             tokenUrl = window.Renderer.monster.getTokenUrl(m);
-                        } catch (e) { }
+                        } catch (e) {}
                     }
                     if (!tokenUrl && (m.source || m.name)) {
                         const cleanName =
@@ -3727,10 +3727,10 @@ export function initVttPlayerSheet(vtt) {
                         c.tokenSight !== undefined && c.tokenSight > 0
                             ? c.tokenSight
                             : c.monsterData
-                                ? window.parseMonsterVision
-                                    ? window.parseMonsterVision(c.monsterData)
-                                    : 5
-                                : 5
+                              ? window.parseMonsterVision
+                                  ? window.parseMonsterVision(c.monsterData)
+                                  : 5
+                              : 5
                 });
                 e.dataTransfer.setData('application/json', payload);
                 e.dataTransfer.setData('text/plain', payload);
@@ -3762,8 +3762,8 @@ export function initVttPlayerSheet(vtt) {
                 const entityName = char?.name
                     ? `"${char.name}"`
                     : char?.isCompanion
-                        ? 'this companion'
-                        : 'this character';
+                      ? 'this companion'
+                      : 'this character';
                 if (confirm(`Delete ${entityName} forever?`)) {
                     // Optimistically delete from local state and update UI immediately
                     if (vtt.campaignState?.characters && vtt.campaignState.characters[id]) {
@@ -3938,7 +3938,7 @@ export function initVttPlayerSheet(vtt) {
                                     `/api/creature/${encodeURIComponent(monster.source)}/${encodeURIComponent(monster.id || monster.name)}`
                                 );
                                 if (r.ok) fullMonster = await r.json();
-                            } catch (err) { }
+                            } catch (err) {}
                             if (!fullMonster) {
                                 try {
                                     let partRes = await fetch(
@@ -3955,7 +3955,7 @@ export function initVttPlayerSheet(vtt) {
                                             (m) => m.id?.toLowerCase() === clean || m.name?.toLowerCase() === clean
                                         );
                                     }
-                                } catch (err) { }
+                                } catch (err) {}
                             }
                         }
                         const finalMonsterData = fullMonster
@@ -3974,7 +3974,7 @@ export function initVttPlayerSheet(vtt) {
                         ) {
                             try {
                                 defaultToken = window.Renderer.monster.getTokenUrl(finalMonsterData);
-                            } catch (e) { }
+                            } catch (e) {}
                         }
                         if (!defaultToken && (finalMonsterData.source || finalMonsterData.name)) {
                             const cleanName =
@@ -4002,8 +4002,8 @@ export function initVttPlayerSheet(vtt) {
                                 ? Array.isArray(monster.ac)
                                     ? monster.ac[0].ac || monster.ac[0]
                                     : typeof monster.ac === 'object'
-                                        ? monster.ac.ac
-                                        : monster.ac
+                                      ? monster.ac.ac
+                                      : monster.ac
                                 : 10,
                             tokenImages: initialTokens,
                             activeTokenIndex: 0
@@ -4535,18 +4535,18 @@ export function initVttPlayerSheet(vtt) {
             typeof char.spells === 'object' && char.spells !== null && !Array.isArray(char.spells)
                 ? char.spells
                 : {
-                    cantrip: [],
-                    level1: [],
-                    level2: [],
-                    level3: [],
-                    level4: [],
-                    level5: [],
-                    level6: [],
-                    level7: [],
-                    level8: [],
-                    level9: [],
-                    legacy: [{ id: 'sp_legacy', name: 'Legacy Spells', description: char.spells || '' }]
-                };
+                      cantrip: [],
+                      level1: [],
+                      level2: [],
+                      level3: [],
+                      level4: [],
+                      level5: [],
+                      level6: [],
+                      level7: [],
+                      level8: [],
+                      level9: [],
+                      legacy: [{ id: 'sp_legacy', name: 'Legacy Spells', description: char.spells || '' }]
+                  };
         for (let i = 1; i <= 9; i++) {
             if (Array.isArray(char.spells[String(i)]) && char.spells[String(i)].length > 0) {
                 const targetKey = 'level' + i;
@@ -4631,8 +4631,8 @@ export function initVttPlayerSheet(vtt) {
         char.tokenImages = Array.isArray(char.tokenImages)
             ? char.tokenImages
             : char.tokenImages
-                ? [char.tokenImages]
-                : [];
+              ? [char.tokenImages]
+              : [];
         if (
             typeof char.activeTokenIndex !== 'number' ||
             char.activeTokenIndex < 0 ||
@@ -4782,13 +4782,14 @@ export function initVttPlayerSheet(vtt) {
                     <div class="cs-hp-bar-wrap" style="flex: 1; height: 10px; background: rgba(0,0,0,0.3); border-radius: 4px; overflow: hidden;">
                         <div class="cs-hp-bar-fill" id="pc-hp-bar" style="height: 100%; background-color: var(--color-success-base, #4caf50); width: ${char.hpMax > 0 ? Math.round((char.hpCurrent / char.hpMax) * 100) : 100}%"></div>
                     </div>
-                    ${char.tempHp > 0
-                ? `
+                    ${
+                        char.tempHp > 0
+                            ? `
                     <div class="cs-hp-bar-wrap" style="flex: 0 0 20%; height: 10px; background: rgba(0,0,0,0.3); border-radius: 4px; overflow: hidden;" title="Temp HP">
                         <div class="cs-hp-bar-fill cs-temp-hp-bar-fill" id="pc-temp-hp-bar" style="height: 100%; background-color: var(--color-temphp-base, #2196f3); width: 100%;"></div>
                     </div>`
-                : ''
-            }
+                            : ''
+                    }
                 </div>
                 <div class="cs-hp-row" style="display:flex; align-items:center; justify-content:space-between; gap:16px;">
                     <div style="display:flex; align-items:center; gap:8px;">
@@ -4819,21 +4820,22 @@ export function initVttPlayerSheet(vtt) {
                         </div>
                     </div>
                 </div>
-                ${char.hpToggles && char.hpToggles.length > 0
-                ? `
+                ${
+                    char.hpToggles && char.hpToggles.length > 0
+                        ? `
                 <div style="display:flex; flex-wrap:wrap; gap:6px; margin-top:8px;">
                     ${char.hpToggles
-                    .map(
-                        (t, i) => `
+                        .map(
+                            (t, i) => `
                         <button class="btn btn-xxs btn-secondary pc-hp-quick-toggle" data-idx="${i}" style="border-radius:12px; padding:2px 8px; font-size:0.75rem; background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle);" title="Toggle ${t.name}">
                             <i class="fa-solid fa-circle" style="color:${t.enabled ? '#4caf50' : '#f44336'}; font-size:0.5rem; margin-right:4px;"></i> ${t.name}
                         </button>
                     `
-                    )
-                    .join('')}
+                        )
+                        .join('')}
                 </div>`
-                : ''
-            }
+                        : ''
+                }
                 ${hdHtml}
                 ${restHtml}
             </div>
@@ -4844,44 +4846,45 @@ export function initVttPlayerSheet(vtt) {
                         <div class="cs-stat-pill" style="font-size:1.5rem; padding:8px 16px; border:2px solid var(--color-gold-base);"><i class="fa-solid fa-shield-halved"></i><span style="font-weight:bold;">AC ${char.ac}</span></div>
                         <button class="btn btn-xs pc-ac-settings-btn" style="background:transparent; border:none; color:var(--color-text-muted); cursor:pointer; padding:2px;" title="Configure AC Settings & Toggles"><i class="fa-solid fa-cog"></i></button>
                     </div>
-                    ${char.acToggles && char.acToggles.length > 0
-                ? `
+                    ${
+                        char.acToggles && char.acToggles.length > 0
+                            ? `
                     <div style="display:flex; flex-wrap:wrap; gap:4px; max-width:240px;">
                         ${char.acToggles
-                    .map(
-                        (t, i) => `
+                            .map(
+                                (t, i) => `
                             <button class="btn btn-xxs btn-secondary pc-ac-quick-toggle" data-idx="${i}" style="border-radius:12px; padding:2px 8px; font-size:0.75rem; background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle);" title="Toggle ${t.name}">
                                 <i class="fa-solid fa-circle" style="color:${t.enabled ? '#4caf50' : '#f44336'}; font-size:0.5rem; margin-right:4px;"></i> ${t.name}
                             </button>
                         `
-                    )
-                    .join('')}
+                            )
+                            .join('')}
                     </div>`
-                : ''
-            }
+                            : ''
+                    }
                 </div>
                 <div style="display:flex; flex-wrap:wrap; gap:8px; justify-content:flex-end; align-items:center; flex:1; min-width:0;">
                     ${Object.entries(char.speed)
-                .filter(([k, v]) => v > 0)
-                .map(([k, v]) => {
-                    const icons = {
-                        walk: 'fa-shoe-prints',
-                        climb: 'fa-mountain',
-                        fly: 'fa-feather-pointed',
-                        burrow: 'fa-trowel'
-                    };
-                    return (
-                        '<div class="cs-stat-pill"><i class="fa-solid ' +
-                        (icons[k] || 'fa-shoe-prints') +
-                        '"></i><span>' +
-                        k.charAt(0).toUpperCase() +
-                        k.slice(1) +
-                        ' ' +
-                        v +
-                        ' ft</span></div>'
-                    );
-                })
-                .join('')}
+                        .filter(([k, v]) => v > 0)
+                        .map(([k, v]) => {
+                            const icons = {
+                                walk: 'fa-shoe-prints',
+                                climb: 'fa-mountain',
+                                fly: 'fa-feather-pointed',
+                                burrow: 'fa-trowel'
+                            };
+                            return (
+                                '<div class="cs-stat-pill"><i class="fa-solid ' +
+                                (icons[k] || 'fa-shoe-prints') +
+                                '"></i><span>' +
+                                k.charAt(0).toUpperCase() +
+                                k.slice(1) +
+                                ' ' +
+                                v +
+                                ' ft</span></div>'
+                            );
+                        })
+                        .join('')}
                     <div class="cs-stat-pill"><i class="fa-solid fa-star"></i><span>Prof +${prof}</span></div>
                 </div>
             </div>
@@ -4895,11 +4898,11 @@ export function initVttPlayerSheet(vtt) {
             </div>
             <div class="cs-ability-grid" style="margin-bottom: ${char.saveToggles && char.saveToggles.length > 0 ? '12px' : '24px'};">
                 ${['str', 'dex', 'con', 'int', 'wis', 'cha']
-                .map((ab) => {
-                    const score = getTotalStat(char, ab) || 10;
-                    const mod = getMod(score);
-                    const modStr = mod >= 0 ? '+' + mod : mod;
-                    return `
+                    .map((ab) => {
+                        const score = getTotalStat(char, ab) || 10;
+                        const mod = getMod(score);
+                        const modStr = mod >= 0 ? '+' + mod : mod;
+                        return `
                         <div class="cs-ability-cell" data-ab="${ab}" data-mod="${mod}">
                             <span class="cs-ability-label">${ab.toUpperCase()}</span>
                             <span class="cs-ability-score">${score}</span>
@@ -4912,12 +4915,13 @@ export function initVttPlayerSheet(vtt) {
                             </div>
                         </div>
                     `;
-                })
-                .join('')}
+                    })
+                    .join('')}
             </div>
 
-            ${char.saveToggles && char.saveToggles.length > 0
-                ? `
+            ${
+                char.saveToggles && char.saveToggles.length > 0
+                    ? `
             <div style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:24px;">
                 ${char.saveToggles
                     .map(
@@ -4929,7 +4933,7 @@ export function initVttPlayerSheet(vtt) {
                     )
                     .join('')}
             </div>`
-                : ''
+                    : ''
             }
 
             <div style="display:block;">
@@ -4941,26 +4945,26 @@ export function initVttPlayerSheet(vtt) {
                     <button class="btn btn-xs btn-primary pc-roll-init" title="Roll Initiative"><i class="fa-solid fa-dice-d20"></i> Initiative</button>
                 </div>
                 ${(() => {
-                const calcPass = (sName, abKey) => {
-                    const bMod = getMod(getTotalStat(char, abKey) || 10);
-                    const isP = !!(char.skills && char.skills[sName]);
-                    const isE = !!(char.expertise && char.expertise[sName]);
-                    let score = 10 + bMod + (isP ? prof : 0) + (isE ? prof : 0);
-                    score += parseInt(char.passiveSkillMods?.[sName]) || 0;
-                    if (char.skillToggles && Array.isArray(char.skillToggles)) {
-                        char.skillToggles
-                            .filter((t) => t.enabled)
-                            .forEach((t) => {
-                                const tgt = (t.target || '').toLowerCase();
-                                const sLow = sName.toLowerCase();
-                                if (tgt === 'passive_all' || tgt === `passive_${sLow}`) {
-                                    score += parseInt(t.formula) || 0;
-                                }
-                            });
-                    }
-                    return score;
-                };
-                return `
+                    const calcPass = (sName, abKey) => {
+                        const bMod = getMod(getTotalStat(char, abKey) || 10);
+                        const isP = !!(char.skills && char.skills[sName]);
+                        const isE = !!(char.expertise && char.expertise[sName]);
+                        let score = 10 + bMod + (isP ? prof : 0) + (isE ? prof : 0);
+                        score += parseInt(char.passiveSkillMods?.[sName]) || 0;
+                        if (char.skillToggles && Array.isArray(char.skillToggles)) {
+                            char.skillToggles
+                                .filter((t) => t.enabled)
+                                .forEach((t) => {
+                                    const tgt = (t.target || '').toLowerCase();
+                                    const sLow = sName.toLowerCase();
+                                    if (tgt === 'passive_all' || tgt === `passive_${sLow}`) {
+                                        score += parseInt(t.formula) || 0;
+                                    }
+                                });
+                        }
+                        return score;
+                    };
+                    return `
                         <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px; font-size:0.75rem;">
                             <div style="background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); border-radius:12px; padding:2px 10px; display:inline-flex; align-items:center; gap:6px;">
                                 <span style="color:var(--color-text-muted);">Passive Perception:</span>
@@ -4976,59 +4980,59 @@ export function initVttPlayerSheet(vtt) {
                             </div>
                         </div>
                     `;
-            })()}
+                })()}
                 <div id="pc-skills-list" style="display:grid; grid-template-columns: 1fr 1fr; gap:4px; margin-bottom: 24px;">
                     ${[
-                { name: 'Acrobatics', ability: 'dex' },
-                { name: 'Animal Handling', ability: 'wis' },
-                { name: 'Arcana', ability: 'int' },
-                { name: 'Athletics', ability: 'str' },
-                { name: 'Deception', ability: 'cha' },
-                { name: 'History', ability: 'int' },
-                { name: 'Insight', ability: 'wis' },
-                { name: 'Intimidation', ability: 'cha' },
-                { name: 'Investigation', ability: 'int' },
-                { name: 'Medicine', ability: 'wis' },
-                { name: 'Nature', ability: 'int' },
-                { name: 'Perception', ability: 'wis' },
-                { name: 'Performance', ability: 'cha' },
-                { name: 'Persuasion', ability: 'cha' },
-                { name: 'Religion', ability: 'int' },
-                { name: 'Sleight of Hand', ability: 'dex' },
-                { name: 'Stealth', ability: 'dex' },
-                { name: 'Survival', ability: 'wis' }
-            ]
-                .map((skill) => {
-                    const isProf = char.skills[skill.name];
-                    const isExp = char.expertise[skill.name];
-                    const baseMod = getMod(getTotalStat(char, skill.ability) || 10);
-                    const totalMod = baseMod + (isProf ? prof : 0) + (isExp ? prof : 0);
-                    let modStr = totalMod >= 0 ? '+' + totalMod : totalMod;
-                    const customMod = char.skillMods[skill.name] || '0';
-                    if (customMod !== '0') {
-                        if (customMod.includes('d')) {
-                            modStr +=
-                                customMod.startsWith('+') || customMod.startsWith('-')
-                                    ? customMod
-                                    : '+' + customMod;
-                        } else {
-                            const m = parseInt(customMod) || 0;
-                            const newMod = totalMod + m;
-                            modStr = newMod >= 0 ? '+' + newMod : newMod;
-                        }
-                    }
+                        { name: 'Acrobatics', ability: 'dex' },
+                        { name: 'Animal Handling', ability: 'wis' },
+                        { name: 'Arcana', ability: 'int' },
+                        { name: 'Athletics', ability: 'str' },
+                        { name: 'Deception', ability: 'cha' },
+                        { name: 'History', ability: 'int' },
+                        { name: 'Insight', ability: 'wis' },
+                        { name: 'Intimidation', ability: 'cha' },
+                        { name: 'Investigation', ability: 'int' },
+                        { name: 'Medicine', ability: 'wis' },
+                        { name: 'Nature', ability: 'int' },
+                        { name: 'Perception', ability: 'wis' },
+                        { name: 'Performance', ability: 'cha' },
+                        { name: 'Persuasion', ability: 'cha' },
+                        { name: 'Religion', ability: 'int' },
+                        { name: 'Sleight of Hand', ability: 'dex' },
+                        { name: 'Stealth', ability: 'dex' },
+                        { name: 'Survival', ability: 'wis' }
+                    ]
+                        .map((skill) => {
+                            const isProf = char.skills[skill.name];
+                            const isExp = char.expertise[skill.name];
+                            const baseMod = getMod(getTotalStat(char, skill.ability) || 10);
+                            const totalMod = baseMod + (isProf ? prof : 0) + (isExp ? prof : 0);
+                            let modStr = totalMod >= 0 ? '+' + totalMod : totalMod;
+                            const customMod = char.skillMods[skill.name] || '0';
+                            if (customMod !== '0') {
+                                if (customMod.includes('d')) {
+                                    modStr +=
+                                        customMod.startsWith('+') || customMod.startsWith('-')
+                                            ? customMod
+                                            : '+' + customMod;
+                                } else {
+                                    const m = parseInt(customMod) || 0;
+                                    const newMod = totalMod + m;
+                                    modStr = newMod >= 0 ? '+' + newMod : newMod;
+                                }
+                            }
 
-                    let totalAtkData = totalMod;
-                    if (customMod !== '0') {
-                        totalAtkData = customMod.includes('d')
-                            ? totalMod +
-                            (customMod.startsWith('+') || customMod.startsWith('-')
-                                ? customMod
-                                : '+' + customMod)
-                            : totalMod + parseInt(customMod);
-                    }
+                            let totalAtkData = totalMod;
+                            if (customMod !== '0') {
+                                totalAtkData = customMod.includes('d')
+                                    ? totalMod +
+                                      (customMod.startsWith('+') || customMod.startsWith('-')
+                                          ? customMod
+                                          : '+' + customMod)
+                                    : totalMod + parseInt(customMod);
+                            }
 
-                    return `
+                            return `
                             <div class="skill-row glass-flat" style="display:flex; justify-content:space-between; align-items:center; padding:4px 8px; font-size:0.85rem;">
                                 <div style="display:flex; align-items:center; gap:8px;">
                                     ${isExp ? '<i class="fa-solid fa-star" style="color:var(--color-gold-base); font-size:0.7rem;" title="Expertise"></i>' : isProf ? '<i class="fa-solid fa-star-half-stroke" style="color:var(--color-gold-base); font-size:0.7rem;" title="Proficient"></i>' : '<i class="fa-regular fa-star" style="color:var(--color-text-muted); font-size:0.7rem;" title="No Proficiency"></i>'}
@@ -5039,12 +5043,13 @@ export function initVttPlayerSheet(vtt) {
                                 <div style="font-family:var(--font-code); color:var(--color-gold-light); font-weight:600;">${modStr}</div>
                             </div>
                         `;
-                })
-                .join('')}
+                        })
+                        .join('')}
                 </div>
 
-            ${char.skillToggles && char.skillToggles.length > 0
-                ? `
+            ${
+                char.skillToggles && char.skillToggles.length > 0
+                    ? `
             <div style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:24px;">
                 ${char.skillToggles
                     .map(
@@ -5056,7 +5061,7 @@ export function initVttPlayerSheet(vtt) {
                     )
                     .join('')}
             </div>`
-                : ''
+                    : ''
             }
 
             <div style="display:block; margin-top:12px;">
@@ -5068,38 +5073,38 @@ export function initVttPlayerSheet(vtt) {
                 </div>
                 <div id="pc-tools-list" style="display:grid; grid-template-columns: 1fr 1fr; gap:4px; margin-bottom: 24px;">
                     ${Object.entries(char.tools || {})
-                .filter(([k, v]) => v.show)
-                .map(([toolName, tool]) => {
-                    const isProf = tool.prof;
-                    const isExp = tool.exp;
-                    const baseMod = getMod(getTotalStat(char, tool.ability) || 10);
-                    const totalMod = baseMod + (isProf ? prof : 0) + (isExp ? prof : 0);
-                    let modStr = totalMod >= 0 ? '+' + totalMod : totalMod;
-                    const customMod = tool.mod || '0';
-                    if (customMod !== '0') {
-                        if (customMod.includes('d')) {
-                            modStr +=
-                                customMod.startsWith('+') || customMod.startsWith('-')
-                                    ? customMod
-                                    : '+' + customMod;
-                        } else {
-                            const m = parseInt(customMod) || 0;
-                            const newMod = totalMod + m;
-                            modStr = newMod >= 0 ? '+' + newMod : newMod;
-                        }
-                    }
+                        .filter(([k, v]) => v.show)
+                        .map(([toolName, tool]) => {
+                            const isProf = tool.prof;
+                            const isExp = tool.exp;
+                            const baseMod = getMod(getTotalStat(char, tool.ability) || 10);
+                            const totalMod = baseMod + (isProf ? prof : 0) + (isExp ? prof : 0);
+                            let modStr = totalMod >= 0 ? '+' + totalMod : totalMod;
+                            const customMod = tool.mod || '0';
+                            if (customMod !== '0') {
+                                if (customMod.includes('d')) {
+                                    modStr +=
+                                        customMod.startsWith('+') || customMod.startsWith('-')
+                                            ? customMod
+                                            : '+' + customMod;
+                                } else {
+                                    const m = parseInt(customMod) || 0;
+                                    const newMod = totalMod + m;
+                                    modStr = newMod >= 0 ? '+' + newMod : newMod;
+                                }
+                            }
 
-                    let totalAtkData = totalMod;
-                    if (customMod !== '0') {
-                        totalAtkData = customMod.includes('d')
-                            ? totalMod +
-                            (customMod.startsWith('+') || customMod.startsWith('-')
-                                ? customMod
-                                : '+' + customMod)
-                            : totalMod + parseInt(customMod);
-                    }
+                            let totalAtkData = totalMod;
+                            if (customMod !== '0') {
+                                totalAtkData = customMod.includes('d')
+                                    ? totalMod +
+                                      (customMod.startsWith('+') || customMod.startsWith('-')
+                                          ? customMod
+                                          : '+' + customMod)
+                                    : totalMod + parseInt(customMod);
+                            }
 
-                    return `
+                            return `
                             <div class="skill-row glass-flat" style="display:flex; justify-content:space-between; align-items:center; padding:4px 8px; font-size:0.85rem;">
                                 <div style="display:flex; align-items:center; gap:8px;">
                                     ${isExp ? '<i class="fa-solid fa-star" style="color:var(--color-gold-base); font-size:0.7rem;" title="Expertise"></i>' : isProf ? '<i class="fa-solid fa-star-half-stroke" style="color:var(--color-gold-base); font-size:0.7rem;" title="Proficient"></i>' : '<i class="fa-regular fa-star" style="color:var(--color-text-muted); font-size:0.7rem;" title="No Proficiency"></i>'}
@@ -5110,8 +5115,8 @@ export function initVttPlayerSheet(vtt) {
                                 <div style="font-family:var(--font-code); color:var(--color-gold-light); font-weight:600;">${modStr}</div>
                             </div>
                         `;
-                })
-                .join('')}
+                        })
+                        .join('')}
                 </div>
             </div>
 
@@ -5374,8 +5379,8 @@ export function initVttPlayerSheet(vtt) {
                 <h4 style="margin:0 0 8px 0; color:var(--color-gold-base); font-family:var(--font-heading);">Classes</h4>
                 <div id="pc-classes-container" style="display:flex; flex-direction:column; gap:8px;">
                     ${char.classes
-                .map(
-                    (cls, i) => `
+                        .map(
+                            (cls, i) => `
                         <div class="glass-flat" style="padding:8px; display:flex; gap:8px; align-items:flex-end;">
                             <div class="form-group" style="flex:2;">
                                 <label>Class</label>
@@ -5396,8 +5401,8 @@ export function initVttPlayerSheet(vtt) {
                             <button class="btn btn-danger btn-sm pc-class-del" data-idx="${i}" ${char.classes.length === 1 ? 'disabled' : ''}><i class="fa-solid fa-trash"></i></button>
                         </div>
                     `
-                )
-                .join('')}
+                        )
+                        .join('')}
                 </div>
                 <button id="pc-add-class" class="btn btn-secondary btn-xs" style="margin-top:8px;"><i class="fa-solid fa-plus"></i> Add Class</button>
             </div>
@@ -5587,10 +5592,14 @@ export function initVttPlayerSheet(vtt) {
                         selectEl.innerHTML = opts;
                     }
                 })
-                .catch(() => { });
+                .catch(() => {});
         }
 
-        updateSubraceDropdown = async function updateSubraceDropdown(selectedBaseRace, currentSubraceVal = '', disabledSources = null) {
+        updateSubraceDropdown = async function updateSubraceDropdown(
+            selectedBaseRace,
+            currentSubraceVal = '',
+            disabledSources = null
+        ) {
             const subSel = document.getElementById('pc-subrace');
             if (!subSel) return;
             if (!builderCache || !builderCache.races || builderCache.races.length === 0) {
@@ -5677,7 +5686,7 @@ export function initVttPlayerSheet(vtt) {
                     subSel.value = '';
                 }
             }
-        }
+        };
 
         populateBuildDropdowns = async function populateBuildDropdowns() {
             if (!builderCache || !builderCache.races || builderCache.races.length === 0) {
@@ -5792,7 +5801,7 @@ export function initVttPlayerSheet(vtt) {
                     loadSubclassesForClass(clsVal, sel);
                 }
             });
-        }
+        };
 
         ensureBuilderCache().then(() => {
             populateBuildDropdowns();
@@ -5815,63 +5824,66 @@ export function initVttPlayerSheet(vtt) {
                         <button class="btn btn-xxs btn-danger pc-macro-del" data-idx="${i}"><i class="fa-solid fa-trash"></i></button>
                     </div>
                 </div>
-                ${m.range || m.target
-                ? `
+                ${
+                    m.range || m.target
+                        ? `
                 <div style="display:flex; gap:10px; font-size:0.7rem; color:var(--color-text-muted); margin-top:-2px; margin-bottom:2px; padding:0 2px;">
                     ${m.range ? `<span><i class="fa-solid fa-location-crosshairs" style="color:var(--color-gold-base); font-size:0.65rem; margin-right:4px;"></i>${m.range}</span>` : ''}
                     ${m.target ? `<span><i class="fa-solid fa-bullseye" style="color:var(--color-gold-base); font-size:0.65rem; margin-right:4px;"></i>${m.target}</span>` : ''}
                 </div>`
-                : ''
-            }
-                ${m.description
-                ? `
+                        : ''
+                }
+                ${
+                    m.description
+                        ? `
                 <div style="display:flex; align-items:center; gap:6px; background:rgba(0,0,0,0.2); border-radius:4px; padding:4px 6px;">
                     <span style="font-size:0.72rem; color:var(--color-text-muted); font-style:italic; flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${m.description}</span>
                     <button class="btn btn-xxs btn-secondary pc-macro-desc-ping" data-idx="${i}" title="Ping description to chat" style="flex-shrink:0;"><i class="fa-solid fa-comment-dots"></i></button>
                 </div>`
-                : ''
-            }
+                        : ''
+                }
                 <div style="display:flex; gap:4px; flex-wrap:wrap; align-items:center; justify-content:space-between;">
                     <div style="display:flex; gap:4px; flex-wrap:wrap;">
                         ${(m.attackStat && m.attackStat !== 'none') || m.attackBonus ? `<button class="btn btn-xxs btn-primary pc-macro-attack" data-idx="${i}">⚔️ Attack (${calculatedAtkBonus(m)})</button>` : ''}
                         ${m.saveAbility ? `<button class="btn btn-xxs btn-secondary pc-macro-save" data-idx="${i}">🛡️ DC ${calculatedSaveDc(m)} ${m.saveAbility}</button>` : ''}
-                        ${m.damage && m.damage.length
-                ? (function () {
-                    const desc = m.damage
-                        .map((d) => {
-                            const f = d.formula || d.dice || '';
-                            const mod =
-                                d.custom && d.custom.trim()
-                                    ? d.custom.trim().startsWith('+') ||
-                                        d.custom.trim().startsWith('-')
-                                        ? d.custom.trim()
-                                        : '+' + d.custom.trim()
-                                    : d.extra && parseInt(d.extra)
-                                        ? parseInt(d.extra) > 0
-                                            ? '+' + d.extra
-                                            : String(d.extra)
-                                        : '';
-                            const t = d.type || '';
-                            const lbl = d.label ? ` (${d.label})` : '';
-                            return `${f}${mod ? ' ' + mod : ''} ${t}${lbl}`.trim();
-                        })
-                        .join(', ');
-                    return `<button class="btn btn-xxs btn-danger pc-macro-damage" data-idx="${i}" title="${desc.replace(/"/g, '&quot;')}">💥 Damage</button>`;
-                })()
-                : ''
-            }
+                        ${
+                            m.damage && m.damage.length
+                                ? (function () {
+                                      const desc = m.damage
+                                          .map((d) => {
+                                              const f = d.formula || d.dice || '';
+                                              const mod =
+                                                  d.custom && d.custom.trim()
+                                                      ? d.custom.trim().startsWith('+') ||
+                                                        d.custom.trim().startsWith('-')
+                                                          ? d.custom.trim()
+                                                          : '+' + d.custom.trim()
+                                                      : d.extra && parseInt(d.extra)
+                                                        ? parseInt(d.extra) > 0
+                                                            ? '+' + d.extra
+                                                            : String(d.extra)
+                                                        : '';
+                                              const t = d.type || '';
+                                              const lbl = d.label ? ` (${d.label})` : '';
+                                              return `${f}${mod ? ' ' + mod : ''} ${t}${lbl}`.trim();
+                                          })
+                                          .join(', ');
+                                      return `<button class="btn btn-xxs btn-danger pc-macro-damage" data-idx="${i}" title="${desc.replace(/"/g, '&quot;')}">💥 Damage</button>`;
+                                  })()
+                                : ''
+                        }
                     </div>
                     <div style="display:flex; align-items:center; gap:4px; margin-left:auto;">
                         <span style="font-size:0.7rem; color:var(--color-text-muted);"><i class="fa-solid fa-folder" style="color:var(--color-gold-base); font-size:0.65rem;"></i></span>
                         <select class="pc-macro-cat-select" data-idx="${i}" title="Move to Category" style="background:rgba(0,0,0,0.5); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); font-size:0.7rem; border-radius:4px; padding:1px 4px; max-width:120px;">
                             <option value="" ${!m.categoryId ? 'selected' : ''}>Uncategorized</option>
                             ${(char.macroCategories || [])
-                .map(
-                    (c) => `
+                                .map(
+                                    (c) => `
                                 <option value="${c.id}" ${m.categoryId === c.id ? 'selected' : ''}>📁 ${c.name}</option>
                             `
-                )
-                .join('')}
+                                )
+                                .join('')}
                         </select>
                     </div>
                 </div>
@@ -5932,10 +5944,10 @@ export function initVttPlayerSheet(vtt) {
                     ? card.actionType === 'bonus'
                         ? `<span class="badge" style="background:#d97706; color:#fff; font-size:0.65rem; padding:1px 5px; border-radius:3px; font-weight:600; text-transform:uppercase;">Bonus</span>`
                         : card.actionType === 'reaction'
-                            ? `<span class="badge" style="background:#2563eb; color:#fff; font-size:0.65rem; padding:1px 5px; border-radius:3px; font-weight:600; text-transform:uppercase;">Reaction</span>`
-                            : card.actionType === 'action'
-                                ? `<span class="badge" style="background:#16a34a; color:#fff; font-size:0.65rem; padding:1px 5px; border-radius:3px; font-weight:600; text-transform:uppercase;">Action</span>`
-                                : `<span class="badge" style="background:#9333ea; color:#fff; font-size:0.65rem; padding:1px 5px; border-radius:3px; font-weight:600; text-transform:uppercase;">${card.actionType}</span>`
+                          ? `<span class="badge" style="background:#2563eb; color:#fff; font-size:0.65rem; padding:1px 5px; border-radius:3px; font-weight:600; text-transform:uppercase;">Reaction</span>`
+                          : card.actionType === 'action'
+                            ? `<span class="badge" style="background:#16a34a; color:#fff; font-size:0.65rem; padding:1px 5px; border-radius:3px; font-weight:600; text-transform:uppercase;">Action</span>`
+                            : `<span class="badge" style="background:#9333ea; color:#fff; font-size:0.65rem; padding:1px 5px; border-radius:3px; font-weight:600; text-transform:uppercase;">${card.actionType}</span>`
                     : '';
 
             const evalFormula = evaluateAbilityFormula(card.formula, card.formulaConfig, char);
@@ -5962,8 +5974,9 @@ export function initVttPlayerSheet(vtt) {
                     </div>
                     <div style="display:flex; gap:6px; align-items:center;">
                         ${rollChipHtml}
-                        ${card.hasCounter
-                    ? `
+                        ${
+                            card.hasCounter
+                                ? `
                         <div style="display:flex; align-items:center; gap:4px;">
                             <button class="btn btn-xxs btn-secondary pc-ability-uses-minus" data-idx="${i}">-</button>
                             <span style="font-size:0.8rem; font-family:monospace; min-width:24px; text-align:center;">${card.usesCurrent || 0} / ${card.usesMax || 0}</span>
@@ -5971,8 +5984,8 @@ export function initVttPlayerSheet(vtt) {
                             <span style="font-size:0.65rem; color:var(--color-text-muted); opacity:0.8; margin-left:2px;" title="Resets on ${card.resetType === 'short' ? 'Short Rest' : card.resetType === 'none' ? 'Manual' : 'Long Rest'}">[${card.resetType === 'short' ? 'SR' : card.resetType === 'none' ? 'Man' : 'LR'}]</span>
                         </div>
                         `
-                    : ''
-                }
+                                : ''
+                        }
                         <button class="btn btn-xxs btn-secondary pc-ability-edit" data-idx="${i}"><i class="fa-solid fa-pen"></i></button>
                         <button class="btn btn-xxs btn-danger pc-ability-del" data-idx="${i}"><i class="fa-solid fa-trash"></i></button>
                     </div>
@@ -5985,12 +5998,12 @@ export function initVttPlayerSheet(vtt) {
                             <select class="pc-ability-cat-select" data-idx="${i}" title="Move to Category" style="background:rgba(0,0,0,0.5); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); font-size:0.75rem; border-radius:4px; padding:2px 6px; max-width:140px;">
                                 <option value="" ${!card.categoryId ? 'selected' : ''}>Uncategorized</option>
                                 ${(char.abilityCategories || [])
-                    .map(
-                        (c) => `
+                                    .map(
+                                        (c) => `
                                     <option value="${c.id}" ${card.categoryId === c.id ? 'selected' : ''}>📁 ${c.name}</option>
                                 `
-                    )
-                    .join('')}
+                                    )
+                                    .join('')}
                             </select>
                         </div>
                     </div>
@@ -6008,30 +6021,31 @@ export function initVttPlayerSheet(vtt) {
                         <button class="btn btn-xxs btn-secondary pc-attack-settings-btn" title="Attack Settings"><i class="fa-solid fa-cog"></i></button>
                     </div>
                 </div>
-                ${char.attackSettings?.toggles && char.attackSettings.toggles.length > 0
-                ? `
+                ${
+                    char.attackSettings?.toggles && char.attackSettings.toggles.length > 0
+                        ? `
                 <div style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:8px;">
                     ${char.attackSettings.toggles
-                    .map(
-                        (t, i) => `
+                        .map(
+                            (t, i) => `
                         <button class="btn btn-xxs btn-secondary pc-attack-quick-toggle" data-idx="${i}" style="border-radius:12px; padding:2px 8px; font-size:0.75rem; background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle);">
                             <i class="fa-solid fa-circle" style="color:${t.enabled ? '#4caf50' : '#f44336'}; font-size:0.5rem; margin-right:4px;"></i> ${t.name}
                         </button>
                     `
-                    )
-                    .join('')}
+                        )
+                        .join('')}
                 </div>`
-                : ''
-            }
+                        : ''
+                }
                 
                 <div id="pc-macros-list" style="display:flex; flex-direction:column; gap:8px; margin-bottom:16px;">
                     ${(function () {
-                let html = '';
-                (char.macroCategories || []).forEach((c, cIdx) => {
-                    const cItems = char.macros
-                        .map((m, i) => ({ m, i }))
-                        .filter(({ m }) => m.categoryId === c.id);
-                    html += `
+                        let html = '';
+                        (char.macroCategories || []).forEach((c, cIdx) => {
+                            const cItems = char.macros
+                                .map((m, i) => ({ m, i }))
+                                .filter(({ m }) => m.categoryId === c.id);
+                            html += `
                                 <div class="pc-macro-cat-card glass-flat" data-category-id="${c.id}" data-category-idx="${cIdx}" draggable="true" style="border:1px solid var(--color-border-subtle); border-radius:8px; margin-bottom:4px; overflow:hidden; transition:border-color 0.15s, box-shadow 0.15s;">
                                     <div class="pc-macro-cat-header" data-category-id="${c.id}" style="padding:8px 12px; background:rgba(0,0,0,0.25); display:flex; justify-content:space-between; align-items:center; cursor:pointer; user-select:none;">
                                         <div style="display:flex; align-items:center; gap:8px; flex:1; min-width:0;">
@@ -6054,10 +6068,10 @@ export function initVttPlayerSheet(vtt) {
                                     </div>
                                 </div>
                             `;
-                });
+                        });
 
-                const uncatMacros = char.macros.map((m, i) => ({ m, i })).filter(({ m }) => !m.categoryId);
-                html += `
+                        const uncatMacros = char.macros.map((m, i) => ({ m, i })).filter(({ m }) => !m.categoryId);
+                        html += `
                             <div class="pc-macro-cat-card glass-flat" data-category-id="" style="border:1px solid var(--color-border-subtle); border-radius:8px; margin-bottom:4px; overflow:hidden;">
                                 <div class="pc-macro-cat-header pc-main-macro-header" data-category-id="" style="padding:8px 12px; background:rgba(0,0,0,0.2); display:flex; justify-content:space-between; align-items:center; cursor:pointer; user-select:none;">
                                     <div style="display:flex; align-items:center; gap:8px; flex:1; min-width:0;">
@@ -6073,8 +6087,8 @@ export function initVttPlayerSheet(vtt) {
                                 </div>
                             </div>
                         `;
-                return html;
-            })()}
+                        return html;
+                    })()}
                 </div>
 
             ${renderAbilityCardsHtml(char, sheetCtx)}
@@ -6655,8 +6669,8 @@ export function initVttPlayerSheet(vtt) {
                     : `1d20${raw.startsWith('+') || raw.startsWith('-') ? raw : '+' + raw}`;
                 return simulateRoll(
                     formula +
-                    (globalAtkMod ? (globalAtkMod >= 0 ? '+' : '') + globalAtkMod + '[Global]' : '') +
-                    atkFormula,
+                        (globalAtkMod ? (globalAtkMod >= 0 ? '+' : '') + globalAtkMod + '[Global]' : '') +
+                        atkFormula,
                     m.critRange || 20,
                     optEvent
                 );
@@ -6669,8 +6683,8 @@ export function initVttPlayerSheet(vtt) {
                         : `1d20${m.attackBonus.startsWith('+') || m.attackBonus.startsWith('-') ? m.attackBonus : '+' + m.attackBonus}`;
                     return simulateRoll(
                         formula +
-                        (globalAtkMod ? (globalAtkMod >= 0 ? '+' : '') + globalAtkMod + '[Global]' : '') +
-                        atkFormula,
+                            (globalAtkMod ? (globalAtkMod >= 0 ? '+' : '') + globalAtkMod + '[Global]' : '') +
+                            atkFormula,
                         m.critRange || 20,
                         optEvent
                     );

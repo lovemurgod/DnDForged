@@ -153,7 +153,7 @@ export function attachThumbnailHoverPreview(thumbWrap) {
         const setInitialFrame = () => {
             try {
                 if (video.currentTime === 0) video.currentTime = 0.001;
-            } catch (_) { }
+            } catch (_) {}
         };
         if (video.readyState >= 1) {
             setInitialFrame();
@@ -170,7 +170,7 @@ export function attachThumbnailHoverPreview(thumbWrap) {
             ensureVideoSource();
             playPromise = video.play();
             if (playPromise !== undefined) {
-                playPromise.catch(() => { });
+                playPromise.catch(() => {});
             }
         });
 
@@ -183,20 +183,20 @@ export function attachThumbnailHoverPreview(thumbWrap) {
                             video.pause();
                             try {
                                 video.currentTime = 0.001;
-                            } catch (_) { }
+                            } catch (_) {}
                         }
                     })
                     .catch(() => {
                         video.pause();
                         try {
                             video.currentTime = 0.001;
-                        } catch (_) { }
+                        } catch (_) {}
                     });
             } else {
                 video.pause();
                 try {
                     video.currentTime = 0.001;
-                } catch (_) { }
+                } catch (_) {}
             }
         });
     }
@@ -596,14 +596,15 @@ export function createMapCard(map, allFolderNames, managerState, options = {}, f
                 ${isGmViewing ? '<span style="font-size: 0.65rem; background: var(--color-gold-base); color: #111; padding: 2px 7px; border-radius: 10px; font-weight: bold; flex-shrink: 0;"><i class="fa-solid fa-eye"></i> Viewing</span>' : ''}
             </div>
             <div style="display: flex; gap: 4px; align-items: center; flex-shrink: 0;">
-                ${!isGmViewing
-                ? `
+                ${
+                    !isGmViewing
+                        ? `
                     <button class="btn-view-map btn btn-secondary btn-xxs" title="GM View" style="padding: 4px 7px; font-size: 0.72rem;"><i class="fa-solid fa-eye"></i> View</button>
                 `
-                : `
+                        : `
                     <button class="btn btn-secondary btn-xxs" disabled style="padding: 4px 7px; font-size: 0.72rem; opacity: 0.5;"><i class="fa-solid fa-check"></i> Viewing</button>
                 `
-            }
+                }
                 <button class="btn-activate-map btn btn-primary btn-xxs" title="${isPlayerActive ? 'Push more players' : 'Push players to map'}" style="padding: 4px 7px; font-size: 0.72rem; ${isPlayerActive ? `background: ${activeClass}; border-color: transparent;` : ''}">
                     <i class="fa-solid fa-bullhorn"></i> ${isPlayerActive ? 'Push +' : 'Push'}
                 </button>
@@ -646,14 +647,15 @@ export function createMapCard(map, allFolderNames, managerState, options = {}, f
                 </div>
                 <!-- Tight Button Row (No huge gap) -->
                 <div class="map-card-compact-buttons">
-                    ${!isGmViewing
-                ? `
+                    ${
+                        !isGmViewing
+                            ? `
                         <button class="btn-view-map btn btn-secondary btn-xxs" style="flex: 1; min-width: 0; justify-content: center; font-size: 0.72rem; padding: 4px 6px;"><i class="fa-solid fa-eye"></i> View</button>
                     `
-                : `
+                            : `
                         <button class="btn btn-secondary btn-xxs" disabled style="flex: 1; min-width: 0; justify-content: center; font-size: 0.72rem; opacity: 0.5; padding: 4px 6px;"><i class="fa-solid fa-check"></i> Viewing</button>
                     `
-            }
+                    }
                     <button class="btn-activate-map btn btn-primary btn-xxs" style="flex: 1; min-width: 0; justify-content: center; font-size: 0.72rem; padding: 4px 6px; ${isPlayerActive ? `background: ${activeClass}; border-color: transparent;` : ''}">
                         <i class="fa-solid fa-bullhorn"></i> ${isPlayerActive ? 'Push +' : 'Push'}
                     </button>
@@ -1980,7 +1982,8 @@ export function setupMapUploadControls(managerState, options = {}) {
                         const nh = img.naturalHeight || 1500;
                         const gSize = chosenGridSize;
                         const gWidth = !isNaN(rawGridWidth) && rawGridWidth > 0 ? rawGridWidth : Math.ceil(nw / gSize);
-                        const gHeight = !isNaN(rawGridHeight) && rawGridHeight > 0 ? rawGridHeight : Math.ceil(nh / gSize);
+                        const gHeight =
+                            !isNaN(rawGridHeight) && rawGridHeight > 0 ? rawGridHeight : Math.ceil(nh / gSize);
                         const assetId = `asset_${Date.now()}_map`;
                         const initialTokens = {
                             [assetId]: {

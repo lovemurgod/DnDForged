@@ -166,10 +166,10 @@ export function renderAbilityRowHtml(card, i, char) {
             ? card.actionType === 'bonus'
                 ? `<span class="badge" style="background:#d97706; color:#fff; font-size:0.65rem; padding:1px 5px; border-radius:3px; font-weight:600; text-transform:uppercase;">Bonus</span>`
                 : card.actionType === 'reaction'
-                    ? `<span class="badge" style="background:#2563eb; color:#fff; font-size:0.65rem; padding:1px 5px; border-radius:3px; font-weight:600; text-transform:uppercase;">Reaction</span>`
-                    : card.actionType === 'action'
-                        ? `<span class="badge" style="background:#16a34a; color:#fff; font-size:0.65rem; padding:1px 5px; border-radius:3px; font-weight:600; text-transform:uppercase;">Action</span>`
-                        : `<span class="badge" style="background:#9333ea; color:#fff; font-size:0.65rem; padding:1px 5px; border-radius:3px; font-weight:600; text-transform:uppercase;">${card.actionType}</span>`
+                  ? `<span class="badge" style="background:#2563eb; color:#fff; font-size:0.65rem; padding:1px 5px; border-radius:3px; font-weight:600; text-transform:uppercase;">Reaction</span>`
+                  : card.actionType === 'action'
+                    ? `<span class="badge" style="background:#16a34a; color:#fff; font-size:0.65rem; padding:1px 5px; border-radius:3px; font-weight:600; text-transform:uppercase;">Action</span>`
+                    : `<span class="badge" style="background:#9333ea; color:#fff; font-size:0.65rem; padding:1px 5px; border-radius:3px; font-weight:600; text-transform:uppercase;">${card.actionType}</span>`
             : '';
 
     const evalFormula = evaluateAbilityFormula(card.formula, card.formulaConfig, char);
@@ -196,8 +196,9 @@ export function renderAbilityRowHtml(card, i, char) {
             </div>
             <div style="display:flex; gap:6px; align-items:center;">
                 ${rollChipHtml}
-                ${card.hasCounter
-            ? `
+                ${
+                    card.hasCounter
+                        ? `
                 <div style="display:flex; align-items:center; gap:4px;">
                     <button class="btn btn-xxs btn-secondary pc-ability-uses-minus" data-idx="${i}">-</button>
                     <span style="font-size:0.8rem; font-family:monospace; min-width:24px; text-align:center;">${card.usesCurrent || 0} / ${card.usesMax || 0}</span>
@@ -205,8 +206,8 @@ export function renderAbilityRowHtml(card, i, char) {
                     <span style="font-size:0.65rem; color:var(--color-text-muted); opacity:0.8; margin-left:2px;" title="Resets on ${card.resetType === 'short' ? 'Short Rest' : card.resetType === 'none' ? 'Manual' : 'Long Rest'}">[${card.resetType === 'short' ? 'SR' : card.resetType === 'none' ? 'Man' : 'LR'}]</span>
                 </div>
                 `
-            : ''
-        }
+                        : ''
+                }
                 <button class="btn btn-xxs btn-secondary pc-ability-edit" data-idx="${i}"><i class="fa-solid fa-pen"></i></button>
                 <button class="btn btn-xxs btn-danger pc-ability-del" data-idx="${i}"><i class="fa-solid fa-trash"></i></button>
             </div>
@@ -219,12 +220,12 @@ export function renderAbilityRowHtml(card, i, char) {
                     <select class="pc-ability-cat-select" data-idx="${i}" title="Move to Category" style="background:rgba(0,0,0,0.5); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); font-size:0.75rem; border-radius:4px; padding:2px 6px; max-width:140px;">
                         <option value="" ${!card.categoryId ? 'selected' : ''}>Uncategorized</option>
                         ${(char.abilityCategories || [])
-            .map(
-                (c) => `
+                            .map(
+                                (c) => `
                             <option value="${c.id}" ${card.categoryId === c.id ? 'selected' : ''}>📁 ${c.name}</option>
                         `
-            )
-            .join('')}
+                            )
+                            .join('')}
                     </select>
                 </div>
             </div>
@@ -253,12 +254,12 @@ export function renderAbilityCardsHtml(char, ctx) {
         </div>
         <div id="pc-ability-list" style="display:flex; flex-direction:column; gap:8px;">
             ${(function () {
-            let html = '';
-            (char.abilityCategories || []).forEach((c, cIdx) => {
-                const cItems = char.abilityCards
-                    .map((card, i) => ({ card, i }))
-                    .filter(({ card }) => card.categoryId === c.id);
-                html += `
+                let html = '';
+                (char.abilityCategories || []).forEach((c, cIdx) => {
+                    const cItems = char.abilityCards
+                        .map((card, i) => ({ card, i }))
+                        .filter(({ card }) => card.categoryId === c.id);
+                    html += `
                         <div class="pc-ability-cat-card glass-flat" data-category-id="${c.id}" data-category-idx="${cIdx}" draggable="true" style="border:1px solid var(--color-border-subtle); border-radius:8px; margin-bottom:4px; overflow:hidden; transition:border-color 0.15s, box-shadow 0.15s;">
                             <div class="pc-ability-cat-header" data-category-id="${c.id}" style="padding:8px 12px; background:rgba(0,0,0,0.25); display:flex; justify-content:space-between; align-items:center; cursor:pointer; user-select:none;">
                                 <div style="display:flex; align-items:center; gap:8px; flex:1; min-width:0;">
@@ -281,12 +282,12 @@ export function renderAbilityCardsHtml(char, ctx) {
                             </div>
                         </div>
                     `;
-            });
+                });
 
-            const uncatAbilities = char.abilityCards
-                .map((card, i) => ({ card, i }))
-                .filter(({ card }) => !card.categoryId);
-            html += `
+                const uncatAbilities = char.abilityCards
+                    .map((card, i) => ({ card, i }))
+                    .filter(({ card }) => !card.categoryId);
+                html += `
                     <div class="pc-ability-cat-card glass-flat" data-category-id="" style="border:1px solid var(--color-border-subtle); border-radius:8px; margin-bottom:4px; overflow:hidden;">
                         <div class="pc-ability-cat-header pc-main-ability-header" data-category-id="" style="padding:8px 12px; background:rgba(0,0,0,0.2); display:flex; justify-content:space-between; align-items:center; cursor:pointer; user-select:none;">
                             <div style="display:flex; align-items:center; gap:8px; flex:1; min-width:0;">
@@ -302,8 +303,8 @@ export function renderAbilityCardsHtml(char, ctx) {
                         </div>
                     </div>
                 `;
-            return html;
-        })()}
+                return html;
+            })()}
         </div>
     `;
 }

@@ -110,8 +110,8 @@ export function toCommaSeparatedString(val) {
                 typeof v === 'string'
                     ? v
                     : v.types || v.immune || v.resist || v.vulnerable
-                        ? formatDefenseEntry(v)
-                        : v.sensesString || v.name || v.special || JSON.stringify(v)
+                      ? formatDefenseEntry(v)
+                      : v.sensesString || v.name || v.special || JSON.stringify(v)
             )
             .join(', ');
     }
@@ -533,7 +533,8 @@ export function entityToJson(category, entity) {
                             const match = part.trim().match(/^([A-Za-z\s]+?)\s*([+\-]?\d+)$/);
                             if (match) {
                                 const val = match[2];
-                                sObj[match[1].trim().toLowerCase()] = val.startsWith('+') || val.startsWith('-') ? val : `+${val}`;
+                                sObj[match[1].trim().toLowerCase()] =
+                                    val.startsWith('+') || val.startsWith('-') ? val : `+${val}`;
                             } else if (part.trim()) {
                                 sObj[part.trim().toLowerCase()] = `+${pb}`;
                             }
@@ -602,9 +603,7 @@ export function entityToJson(category, entity) {
                     : rawObj.regionalEffects || undefined,
                 regionalEffectsHtml: entity.regionalEffectsHtml || rawObj.regionalEffectsHtml || undefined,
                 variants: entity.variants?.length ? entity.variants : rawObj.variants || undefined,
-                mythicActions: entity.mythicActions?.length
-                    ? entity.mythicActions
-                    : rawObj.mythicActions || undefined,
+                mythicActions: entity.mythicActions?.length ? entity.mythicActions : rawObj.mythicActions || undefined,
                 spellcasting: entity.spellcasting?.length ? entity.spellcasting : rawObj.spellcasting || undefined
             };
         }
@@ -620,12 +619,32 @@ export function entityToJson(category, entity) {
                 s: !!entity.componentS
             };
             if (entity.componentM) {
-                const hasCost = entity.materialsCost !== undefined && entity.materialsCost !== '' && !isNaN(parseFloat(entity.materialsCost));
-                const costVal = hasCost ? Math.round(parseFloat(entity.materialsCost) * 100) : (typeof rawObj.components?.m === 'object' ? rawObj.components.m.cost : undefined);
-                const consumeVal = entity.materialsConsume !== undefined ? !!entity.materialsConsume : (typeof rawObj.components?.m === 'object' ? rawObj.components.m.consume : undefined);
-                if (costVal !== undefined || consumeVal !== undefined || (typeof rawObj.components?.m === 'object' && rawObj.components.m.text)) {
+                const hasCost =
+                    entity.materialsCost !== undefined &&
+                    entity.materialsCost !== '' &&
+                    !isNaN(parseFloat(entity.materialsCost));
+                const costVal = hasCost
+                    ? Math.round(parseFloat(entity.materialsCost) * 100)
+                    : typeof rawObj.components?.m === 'object'
+                      ? rawObj.components.m.cost
+                      : undefined;
+                const consumeVal =
+                    entity.materialsConsume !== undefined
+                        ? !!entity.materialsConsume
+                        : typeof rawObj.components?.m === 'object'
+                          ? rawObj.components.m.consume
+                          : undefined;
+                if (
+                    costVal !== undefined ||
+                    consumeVal !== undefined ||
+                    (typeof rawObj.components?.m === 'object' && rawObj.components.m.text)
+                ) {
                     componentsObj.m = {
-                        text: entity.materialsText || (typeof rawObj.components?.m === 'object' ? rawObj.components.m.text : (entity.materialsText || '')),
+                        text:
+                            entity.materialsText ||
+                            (typeof rawObj.components?.m === 'object'
+                                ? rawObj.components.m.text
+                                : entity.materialsText || ''),
                         ...(costVal !== undefined ? { cost: costVal } : {}),
                         ...(consumeVal !== undefined ? { consume: consumeVal } : {})
                     };
@@ -649,26 +668,44 @@ export function entityToJson(category, entity) {
             }
 
             const rType = entity.rangeType || rawObj.range?.type || 'feet';
-            const rDist = entity.rangeDistance !== undefined && entity.rangeDistance !== '' ? parseInt(entity.rangeDistance, 10) : (rawObj.range?.distance?.amount ?? 60);
+            const rDist =
+                entity.rangeDistance !== undefined && entity.rangeDistance !== ''
+                    ? parseInt(entity.rangeDistance, 10)
+                    : (rawObj.range?.distance?.amount ?? 60);
             const rangeObj = {
                 type: rType,
-                ...(rType !== 'touch' && rType !== 'self' && rType !== 'sight' && rType !== 'unlimited' && rType !== 'special'
+                ...(rType !== 'touch' &&
+                rType !== 'self' &&
+                rType !== 'sight' &&
+                rType !== 'unlimited' &&
+                rType !== 'special'
                     ? { distance: { type: 'feet', amount: rDist } }
-                    : (rawObj.range?.distance ? { distance: rawObj.range.distance } : {}))
+                    : rawObj.range?.distance
+                      ? { distance: rawObj.range.distance }
+                      : {})
             };
 
-            const descEdited = entity._originalDescription !== undefined && entity.description !== entity._originalDescription;
-            const higherEdited = entity._originalHigherLevelsDesc !== undefined && entity.higherLevelsDesc !== entity._originalHigherLevelsDesc;
+            const descEdited =
+                entity._originalDescription !== undefined && entity.description !== entity._originalDescription;
+            const higherEdited =
+                entity._originalHigherLevelsDesc !== undefined &&
+                entity.higherLevelsDesc !== entity._originalHigherLevelsDesc;
 
             let entries;
             if (!descEdited && (entity._rawEntries || rawObj.entries)) {
                 entries = entity._rawEntries || rawObj.entries;
             } else if (Array.isArray(rawObj.entries) && rawObj.entries.some((e) => typeof e === 'object')) {
-                const newTextEntries = (entity.description || '').split(/\n\n+/).map((s) => s.trim()).filter(Boolean);
+                const newTextEntries = (entity.description || '')
+                    .split(/\n\n+/)
+                    .map((s) => s.trim())
+                    .filter(Boolean);
                 const nonStringEntries = rawObj.entries.filter((e) => typeof e === 'object');
                 entries = [...newTextEntries, ...nonStringEntries];
             } else {
-                entries = (entity.description || '').split(/\n\n+/).map((s) => s.trim()).filter(Boolean);
+                entries = (entity.description || '')
+                    .split(/\n\n+/)
+                    .map((s) => s.trim())
+                    .filter(Boolean);
                 if (entries.length === 0) entries = ['Spell description.'];
             }
 
@@ -724,22 +761,24 @@ export function entityToJson(category, entity) {
                 subclasses: entity.subclasses || rawObj.subclasses || undefined,
                 descriptionHtml: entity.descriptionHtml || rawObj.descriptionHtml || undefined,
                 higherLevelHtml: entity.higherLevelHtml || rawObj.higherLevelHtml || undefined,
-                damageList: (entity.damageFormula || entity.damageDice)
-                    ? [{ formula: entity.damageFormula || entity.damageDice, type: entity.damageType || 'force' }]
-                    : rawObj.damageList || undefined,
+                damageList:
+                    entity.damageFormula || entity.damageDice
+                        ? [{ formula: entity.damageFormula || entity.damageDice, type: entity.damageType || 'force' }]
+                        : rawObj.damageList || undefined,
                 saveAbility: entity.savingThrow || entity.saveAbility || rawObj.saveAbility || undefined,
                 damageInflict: entity.damageType
                     ? [entity.damageType.toLowerCase()]
                     : rawObj.damageInflict || undefined,
-                savingThrow: entity.savingThrow
-                    ? [entity.savingThrow.toLowerCase()]
-                    : rawObj.savingThrow || undefined
+                savingThrow: entity.savingThrow ? [entity.savingThrow.toLowerCase()] : rawObj.savingThrow || undefined
             };
         }
 
         case 'items': {
             const propArr = entity.weaponProperties
-                ? entity.weaponProperties.split(',').map((s) => s.trim()).filter(Boolean)
+                ? entity.weaponProperties
+                      .split(',')
+                      .map((s) => s.trim())
+                      .filter(Boolean)
                 : entity.properties || rawObj.properties || undefined;
 
             return {
@@ -753,18 +792,25 @@ export function entityToJson(category, entity) {
                 type: entity.itemType || entity.type || rawObj.type || 'W',
                 rarity: entity.rarity || rawObj.rarity || 'uncommon',
                 reqAttune: entity.reqAttune ? entity.attuneDetails || true : undefined,
-                bonusWeapon: entity.bonusHitDmg !== undefined && entity.bonusHitDmg !== ''
-                    ? (parseInt(entity.bonusHitDmg, 10) ? `+${entity.bonusHitDmg}` : undefined)
-                    : (entity.bonusWeapon ?? rawObj.bonusWeapon ?? undefined),
+                bonusWeapon:
+                    entity.bonusHitDmg !== undefined && entity.bonusHitDmg !== ''
+                        ? parseInt(entity.bonusHitDmg, 10)
+                            ? `+${entity.bonusHitDmg}`
+                            : undefined
+                        : (entity.bonusWeapon ?? rawObj.bonusWeapon ?? undefined),
                 isMagic: entity.isMagic !== undefined ? !!entity.isMagic : entity.rarity && entity.rarity !== 'none',
                 isSilvered: !!entity.isSilvered,
                 isAdamantine: !!entity.isAdamantine,
-                dmg1: entity.damageDice !== undefined && entity.damageDice !== ''
-                    ? entity.damageDice
-                    : (entity.damageDice === '' ? undefined : (entity.dmg1 || rawObj.dmg1 || undefined)),
+                dmg1:
+                    entity.damageDice !== undefined && entity.damageDice !== ''
+                        ? entity.damageDice
+                        : entity.damageDice === ''
+                          ? undefined
+                          : entity.dmg1 || rawObj.dmg1 || undefined,
                 dmg2: entity.dmg2 || rawObj.dmg2 || undefined,
-                dmgType: (entity.damageType ? entity.damageType.charAt(0).toLowerCase() : undefined)
-                    ?? (entity.damageType === '' ? undefined : (entity.dmgType || rawObj.dmgType || undefined)),
+                dmgType:
+                    (entity.damageType ? entity.damageType.charAt(0).toLowerCase() : undefined) ??
+                    (entity.damageType === '' ? undefined : entity.dmgType || rawObj.dmgType || undefined),
                 properties: propArr,
                 ac: (() => {
                     if (entity.hasBaseAc === false) return undefined;
@@ -775,12 +821,31 @@ export function entityToJson(category, entity) {
                     if (entity.hasBaseAc === true) return undefined;
                     return rawObj.ac !== undefined ? rawObj.ac : undefined;
                 })(),
-                bonusAc: entity.acBonus !== undefined && entity.acBonus !== ''
-                    ? (parseInt(entity.acBonus, 10) ? `+${entity.acBonus}` : undefined)
-                    : (entity.bonusAc ?? rawObj.bonusAc ?? undefined),
-                value: (entity.valueGp !== undefined && entity.valueGp !== '' ? `${entity.valueGp} gp` : undefined) || entity.value || rawObj.value || undefined,
-                weight: (entity.weightLbs !== undefined && entity.weightLbs !== '' ? parseFloat(entity.weightLbs) : undefined) ?? entity.weight ?? rawObj.weight ?? undefined,
-                charges: (entity.charges !== undefined && entity.charges !== '' ? parseInt(entity.charges, 10) : undefined) ?? entity.charges ?? rawObj.charges ?? undefined,
+                bonusAc:
+                    entity.acBonus !== undefined && entity.acBonus !== ''
+                        ? parseInt(entity.acBonus, 10)
+                            ? `+${entity.acBonus}`
+                            : undefined
+                        : (entity.bonusAc ?? rawObj.bonusAc ?? undefined),
+                value:
+                    (entity.valueGp !== undefined && entity.valueGp !== '' ? `${entity.valueGp} gp` : undefined) ||
+                    entity.value ||
+                    rawObj.value ||
+                    undefined,
+                weight:
+                    (entity.weightLbs !== undefined && entity.weightLbs !== ''
+                        ? parseFloat(entity.weightLbs)
+                        : undefined) ??
+                    entity.weight ??
+                    rawObj.weight ??
+                    undefined,
+                charges:
+                    (entity.charges !== undefined && entity.charges !== ''
+                        ? parseInt(entity.charges, 10)
+                        : undefined) ??
+                    entity.charges ??
+                    rawObj.charges ??
+                    undefined,
                 recharge: entity.rechargeText || rawObj.recharge || undefined,
                 descriptionHtml: entity.descriptionHtml || rawObj.descriptionHtml || undefined,
                 descriptionMarkdown: entity.descriptionMarkdown || rawObj.descriptionMarkdown || undefined,
@@ -813,7 +878,10 @@ export function entityToJson(category, entity) {
                                     typeof entity.skillChoices === 'string'
                                         ? entity.skillChoices.split(',').map((s) => s.trim().toLowerCase())
                                         : rawObj.startingProficiencies?.skills?.[0]?.choose?.from || ['athletics'],
-                                count: entity.skillChoicesCount || rawObj.startingProficiencies?.skills?.[0]?.choose?.count || 2
+                                count:
+                                    entity.skillChoicesCount ||
+                                    rawObj.startingProficiencies?.skills?.[0]?.choose?.count ||
+                                    2
                             }
                         }
                     ]
@@ -821,16 +889,16 @@ export function entityToJson(category, entity) {
                 classTableGroups: rawObj.classTableGroups?.length
                     ? rawObj.classTableGroups
                     : [
-                        {
-                            colLabels: ['Level', 'Proficiency Bonus', 'Features'],
-                            rows: Array.from({ length: 20 }, (_, idx) => {
-                                const lvl = idx + 1;
-                                const pb = `+${Math.floor((lvl - 1) / 4) + 2}`;
-                                const features = (entity.levels?.[lvl] || []).map((f) => f.name).join(', ') || '—';
-                                return [lvl, pb, features];
-                            })
-                        }
-                    ],
+                          {
+                              colLabels: ['Level', 'Proficiency Bonus', 'Features'],
+                              rows: Array.from({ length: 20 }, (_, idx) => {
+                                  const lvl = idx + 1;
+                                  const pb = `+${Math.floor((lvl - 1) / 4) + 2}`;
+                                  const features = (entity.levels?.[lvl] || []).map((f) => f.name).join(', ') || '—';
+                                  return [lvl, pb, features];
+                              })
+                          }
+                      ],
                 classFeatures: []
             };
 
@@ -849,18 +917,21 @@ export function entityToJson(category, entity) {
 
             // Add subclasses if present with proper multi-level assignment
             if (Array.isArray(entity.subclasses)) {
-                clsObj.subclasses = entity.subclasses.length > 0
-                    ? entity.subclasses.map((sub) => ({
-                        name: sub.name,
-                        shortName: sub.shortName || sub.name,
-                        source: code,
-                        subclassFeatures: (sub.features || []).map((sf) => ({
-                            name: sf.name,
-                            level: parseInt(sf.level, 10) || 3,
-                            entries: Array.isArray(sf.text || sf.entries) ? sf.text || sf.entries : [sf.text || sf.entries || '']
-                        }))
-                    }))
-                    : undefined;
+                clsObj.subclasses =
+                    entity.subclasses.length > 0
+                        ? entity.subclasses.map((sub) => ({
+                              name: sub.name,
+                              shortName: sub.shortName || sub.name,
+                              source: code,
+                              subclassFeatures: (sub.features || []).map((sf) => ({
+                                  name: sf.name,
+                                  level: parseInt(sf.level, 10) || 3,
+                                  entries: Array.isArray(sf.text || sf.entries)
+                                      ? sf.text || sf.entries
+                                      : [sf.text || sf.entries || '']
+                              }))
+                          }))
+                        : undefined;
             }
 
             return clsObj;
@@ -905,9 +976,14 @@ export function entityToJson(category, entity) {
                     ...(entity.speedSwim ? { swim: parseInt(entity.speedSwim, 10) } : {})
                 },
                 ability: [abMap],
-                darkvision: entity.darkvision !== undefined && entity.darkvision !== '' && !isNaN(parseInt(entity.darkvision, 10))
-                    ? (parseInt(entity.darkvision, 10) > 0 ? parseInt(entity.darkvision, 10) : undefined)
-                    : (rawObj.darkvision || undefined),
+                darkvision:
+                    entity.darkvision !== undefined &&
+                    entity.darkvision !== '' &&
+                    !isNaN(parseInt(entity.darkvision, 10))
+                        ? parseInt(entity.darkvision, 10) > 0
+                            ? parseInt(entity.darkvision, 10)
+                            : undefined
+                        : rawObj.darkvision || undefined,
                 languageTags: entity.languages ? entity.languages.split(',').map((l) => l.trim()) : ['Common'],
                 traits: traitsArr,
                 entries: traitsArr
@@ -925,13 +1001,19 @@ export function entityToJson(category, entity) {
                 return `• ${String(b)}`;
             });
 
-            const descEdited = entity._originalDescription !== undefined && entity.description !== entity._originalDescription;
-            const benefitsEdited = entity._originalBenefits !== undefined && JSON.stringify(entity.benefits || []) !== entity._originalBenefits;
+            const descEdited =
+                entity._originalDescription !== undefined && entity.description !== entity._originalDescription;
+            const benefitsEdited =
+                entity._originalBenefits !== undefined &&
+                JSON.stringify(entity.benefits || []) !== entity._originalBenefits;
 
             let entries;
             if (!descEdited && !benefitsEdited && (entity._rawEntries || rawObj.entries)) {
                 entries = entity._rawEntries || rawObj.entries;
-            } else if (Array.isArray(rawObj.entries) && rawObj.entries.some((e) => typeof e === 'object' && e.type !== 'list')) {
+            } else if (
+                Array.isArray(rawObj.entries) &&
+                rawObj.entries.some((e) => typeof e === 'object' && e.type !== 'list')
+            ) {
                 const nonListObjects = rawObj.entries.filter((e) => typeof e === 'object' && e.type !== 'list');
                 entries = [entity.description, ...benefitsFormatted, ...nonListObjects].filter(Boolean);
             } else {
@@ -953,9 +1035,15 @@ export function entityToJson(category, entity) {
 
         case 'backgrounds': {
             const rawSkills = entity.skillProficiencies || entity.skills || '';
-            const skillArr = typeof rawSkills === 'string'
-                ? rawSkills.split(',').map((s) => s.trim().toLowerCase()).filter(Boolean)
-                : Array.isArray(rawSkills) ? rawSkills : [];
+            const skillArr =
+                typeof rawSkills === 'string'
+                    ? rawSkills
+                          .split(',')
+                          .map((s) => s.trim().toLowerCase())
+                          .filter(Boolean)
+                    : Array.isArray(rawSkills)
+                      ? rawSkills
+                      : [];
             const rawTools = entity.toolProficiencies || entity.tools || '';
             const rawEquip = entity.startingEquipment || entity.equipment || '';
             const featName = entity.featureName || 'Background Feature';
@@ -967,10 +1055,28 @@ export function entityToJson(category, entity) {
                 const lower = clean.toLowerCase();
 
                 const KNOWN_LANGS = [
-                    'common', 'dwarvish', 'elvish', 'giant', 'gnomish', 'goblin',
-                    'halfling', 'orc', 'abyssal', 'celestial', 'draconic', 'deep speech',
-                    'infernal', 'primordial', 'sylvan', 'undercommon',
-                    'druidic', "thieves' cant", 'auran', 'aquan', 'ignan', 'terran'
+                    'common',
+                    'dwarvish',
+                    'elvish',
+                    'giant',
+                    'gnomish',
+                    'goblin',
+                    'halfling',
+                    'orc',
+                    'abyssal',
+                    'celestial',
+                    'draconic',
+                    'deep speech',
+                    'infernal',
+                    'primordial',
+                    'sylvan',
+                    'undercommon',
+                    'druidic',
+                    "thieves' cant",
+                    'auran',
+                    'aquan',
+                    'ignan',
+                    'terran'
                 ];
 
                 const res = [];
@@ -983,20 +1089,27 @@ export function entityToJson(category, entity) {
                         if (lower.includes(lang)) matchedChoice.push(lang);
                     });
                     if (matchedChoice.length === 0) {
-                        const parts = lower.split(/\s+or\s+/i).map((s) => s.trim().replace(/[^a-z\s'-]/g, '')).filter(Boolean);
+                        const parts = lower
+                            .split(/\s+or\s+/i)
+                            .map((s) => s.trim().replace(/[^a-z\s'-]/g, ''))
+                            .filter(Boolean);
                         if (parts.length > 1) matchedChoice.push(...parts);
                     }
                     if (matchedChoice.length > 0) {
                         const countMatch = lower.match(/\b(?:choose\s+)?(\d+|one|two|three)\b/i);
                         const wordMap = { one: 1, two: 2, three: 3 };
-                        const count = countMatch ? (parseInt(countMatch[1], 10) || wordMap[countMatch[1].toLowerCase()] || 1) : 1;
+                        const count = countMatch
+                            ? parseInt(countMatch[1], 10) || wordMap[countMatch[1].toLowerCase()] || 1
+                            : 1;
                         res.push({ choose: { from: matchedChoice, count } });
                         return res;
                     }
                 }
 
                 // 2. Check for generic choice count ("one language of your choice", "choose two other languages", "one language")
-                const genericMatch = lower.match(/(?:choose\s+)?(\d+|one|two|three|four)\s+(?:other\s+|exotic\s+|standard\s+)?languages?/i);
+                const genericMatch = lower.match(
+                    /(?:choose\s+)?(\d+|one|two|three|four)\s+(?:other\s+|exotic\s+|standard\s+)?languages?/i
+                );
                 const wordMap = { one: 1, two: 2, three: 3, four: 4 };
                 let anyCount = 0;
                 if (genericMatch) {
@@ -1125,10 +1238,10 @@ export function jsonToEntity(category, raw) {
                 raw.primaryAc !== undefined
                     ? raw.primaryAc
                     : Array.isArray(raw.ac)
-                        ? typeof raw.ac[0] === 'object'
-                            ? raw.ac[0]?.ac || raw.ac[0]?.value || 10
-                            : raw.ac[0]
-                        : raw.ac || 10;
+                      ? typeof raw.ac[0] === 'object'
+                          ? raw.ac[0]?.ac || raw.ac[0]?.value || 10
+                          : raw.ac[0]
+                      : raw.ac || 10;
             const acCond =
                 raw.acCondition || (Array.isArray(raw.ac) && raw.ac[0]?.condition ? raw.ac[0].condition : '');
 
@@ -1266,12 +1379,13 @@ export function jsonToEntity(category, raw) {
                     typeof raw.components === 'string' && raw.components.includes('(')
                         ? raw.components.slice(raw.components.indexOf('(') + 1, -1)
                         : typeof compObj.m === 'object' && compObj.m.text
-                            ? compObj.m.text
-                            : typeof compObj.m === 'string'
-                                ? compObj.m
-                                : '',
-                materialsCost: typeof compObj.m === 'object' && compObj.m.cost ? compObj.m.cost / 100 : (raw.materialsCost ?? ''),
-                materialsConsume: typeof compObj.m === 'object' ? !!compObj.m.consume : (!!raw.materialsConsume),
+                          ? compObj.m.text
+                          : typeof compObj.m === 'string'
+                            ? compObj.m
+                            : '',
+                materialsCost:
+                    typeof compObj.m === 'object' && compObj.m.cost ? compObj.m.cost / 100 : (raw.materialsCost ?? ''),
+                materialsConsume: typeof compObj.m === 'object' ? !!compObj.m.consume : !!raw.materialsConsume,
                 duration: typeof raw.duration === 'string' ? raw.duration : '',
                 durationUnit: durObj.duration?.type || durObj.type || 'instant',
                 durationAmount: durObj.duration?.amount || 1,
@@ -1295,8 +1409,8 @@ export function jsonToEntity(category, raw) {
                 classes: Array.isArray(raw.classes)
                     ? raw.classes
                     : raw.classes?.fromClassList
-                        ? raw.classes.fromClassList.map((c) => c.name)
-                        : [],
+                      ? raw.classes.fromClassList.map((c) => c.name)
+                      : [],
                 subclasses: raw.subclasses || [],
                 descriptionHtml: raw.descriptionHtml || '',
                 higherLevelHtml: raw.higherLevelHtml || '',

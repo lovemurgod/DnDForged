@@ -405,19 +405,19 @@ export function initVttDataBridge(vtt) {
             ? crMinStr === '1/8'
                 ? 0.125
                 : crMinStr === '1/4'
-                    ? 0.25
-                    : crMinStr === '1/2'
-                        ? 0.5
-                        : parseFloat(crMinStr)
+                  ? 0.25
+                  : crMinStr === '1/2'
+                    ? 0.5
+                    : parseFloat(crMinStr)
             : -1;
         advancedFilters.crMax = crMaxStr
             ? crMaxStr === '1/8'
                 ? 0.125
                 : crMaxStr === '1/4'
-                    ? 0.25
-                    : crMaxStr === '1/2'
-                        ? 0.5
-                        : parseFloat(crMaxStr)
+                  ? 0.25
+                  : crMaxStr === '1/2'
+                    ? 0.5
+                    : parseFloat(crMaxStr)
             : 999;
 
         const catToContainerId = {
@@ -826,8 +826,8 @@ export function initVttDataBridge(vtt) {
         const traitsList = Array.isArray(monster.trait)
             ? monster.trait
             : Array.isArray(monster.traits)
-                ? monster.traits
-                : null;
+              ? monster.traits
+              : null;
         if (maxVision === 0 && traitsList) {
             const senseRegex =
                 /(?:darkvision|blindsight|truesight|tremorsense|devil(?:'s)?\s*sight)\s*(?:up\s+to\s+|to\s+a\s+range\s+of\s+|of\s+)?(\d+)/gi;
@@ -863,7 +863,7 @@ export function initVttDataBridge(vtt) {
             try {
                 const rUrl = Renderer.monster.getTokenUrl(monster);
                 if (rUrl) return rUrl;
-            } catch (e) { }
+            } catch (e) {}
         }
         if (monster.hasToken || monster.source || monster.name) {
             const cleanName =
@@ -948,9 +948,12 @@ export function initVttDataBridge(vtt) {
 
                     const formData = new FormData();
                     formData.append('file', file);
-                    const authHeaders = typeof window !== 'undefined' && typeof window.vttAuthHeaders === 'function'
-                        ? window.vttAuthHeaders()
-                        : (window.VTT?.gmSessionToken ? { 'x-gm-token': window.VTT.gmSessionToken } : {});
+                    const authHeaders =
+                        typeof window !== 'undefined' && typeof window.vttAuthHeaders === 'function'
+                            ? window.vttAuthHeaders()
+                            : window.VTT?.gmSessionToken
+                              ? { 'x-gm-token': window.VTT.gmSessionToken }
+                              : {};
 
                     fetch('/api/assets/upload', {
                         method: 'POST',
@@ -1164,13 +1167,13 @@ export function initVttDataBridge(vtt) {
                             : charRef?.owner || null,
                     monsterData: isGeneric
                         ? Object.assign(
-                            charRef?.monsterData
-                                ? JSON.parse(JSON.stringify(charRef.monsterData))
-                                : data.monsterData
+                              charRef?.monsterData
+                                  ? JSON.parse(JSON.stringify(charRef.monsterData))
+                                  : data.monsterData
                                     ? JSON.parse(JSON.stringify(data.monsterData))
                                     : {},
-                            { isCustomNpc: true, isGeneric: true }
-                        )
+                              { isCustomNpc: true, isGeneric: true }
+                          )
                         : charRef?.monsterData || data.monsterData || null,
                     layer: canvasEngine.getActiveLayer(),
                     isBorderless: true,
@@ -1181,8 +1184,8 @@ export function initVttDataBridge(vtt) {
                         data.lightEnabled !== undefined
                             ? data.lightEnabled
                             : charRef
-                                ? charRef.tokenLightEnabled
-                                : false,
+                              ? charRef.tokenLightEnabled
+                              : false,
                     lightBright:
                         data.lightBright !== undefined ? data.lightBright : charRef ? charRef.tokenLightBright : 0,
                     lightDim: data.lightDim !== undefined ? data.lightDim : charRef ? charRef.tokenLightDim : 0,
@@ -1191,61 +1194,61 @@ export function initVttDataBridge(vtt) {
                         data.lightAngle !== undefined
                             ? data.lightAngle
                             : charRef && charRef.tokenLightAngle !== undefined
-                                ? charRef.tokenLightAngle
-                                : 360,
+                              ? charRef.tokenLightAngle
+                              : 360,
                     lightRotation:
                         data.lightRotation !== undefined
                             ? data.lightRotation
                             : charRef && charRef.tokenLightRotation !== undefined
-                                ? charRef.tokenLightRotation
-                                : 0,
+                              ? charRef.tokenLightRotation
+                              : 0,
                     lightAnimationType: data.lightAnimationType || (charRef ? charRef.tokenLightAnimationType : 'none'),
                     lightAnimationSpeed:
                         data.lightAnimationSpeed !== undefined
                             ? data.lightAnimationSpeed
                             : charRef && charRef.tokenLightAnimationSpeed !== undefined
-                                ? charRef.tokenLightAnimationSpeed
-                                : 1.0,
+                              ? charRef.tokenLightAnimationSpeed
+                              : 1.0,
                     lightAnimationIntensity:
                         data.lightAnimationIntensity !== undefined
                             ? data.lightAnimationIntensity
                             : charRef && charRef.tokenLightAnimationIntensity !== undefined
-                                ? charRef.tokenLightAnimationIntensity
-                                : 0.1,
+                              ? charRef.tokenLightAnimationIntensity
+                              : 0.1,
                     lightAnimationColor2:
                         data.lightAnimationColor2 || (charRef ? charRef.tokenLightAnimationColor2 : '#ffe082'),
                     fxOverlayEnabled:
                         data.fxOverlayEnabled !== undefined
                             ? data.fxOverlayEnabled
                             : charRef
-                                ? charRef.fxOverlayEnabled
-                                : false,
+                              ? charRef.fxOverlayEnabled
+                              : false,
                     fxOverlayOpacity:
                         data.fxOverlayOpacity !== undefined
                             ? data.fxOverlayOpacity
                             : charRef
-                                ? charRef.fxOverlayOpacity
-                                : 0.3,
+                              ? charRef.fxOverlayOpacity
+                              : 0.3,
                     fxOverlayColor: data.fxOverlayColor || (charRef ? charRef.fxOverlayColor : '#007bff'),
                     fxVignetteEnabled:
                         data.fxVignetteEnabled !== undefined
                             ? data.fxVignetteEnabled
                             : charRef
-                                ? charRef.fxVignetteEnabled
-                                : false,
+                              ? charRef.fxVignetteEnabled
+                              : false,
                     fxVignetteOpacity:
                         data.fxVignetteOpacity !== undefined
                             ? data.fxVignetteOpacity
                             : charRef
-                                ? charRef.fxVignetteOpacity
-                                : 0.6,
+                              ? charRef.fxVignetteOpacity
+                              : 0.6,
                     fxVignetteColor: data.fxVignetteColor || (charRef ? charRef.fxVignetteColor : '#000000'),
                     fxShadowEnabled:
                         data.fxShadowEnabled !== undefined
                             ? data.fxShadowEnabled
                             : charRef
-                                ? charRef.fxShadowEnabled
-                                : false,
+                              ? charRef.fxShadowEnabled
+                              : false,
                     fxShadowBlur:
                         data.fxShadowBlur !== undefined ? data.fxShadowBlur : charRef ? charRef.fxShadowBlur : 12,
                     fxShadowOffset:
@@ -1255,8 +1258,8 @@ export function initVttDataBridge(vtt) {
                         data.fxShadowOpacity !== undefined
                             ? data.fxShadowOpacity
                             : charRef
-                                ? charRef.fxShadowOpacity
-                                : 0.7,
+                              ? charRef.fxShadowOpacity
+                              : 0.7,
                     isGif:
                         tokenImg &&
                         typeof tokenImg === 'string' &&
@@ -1505,9 +1508,9 @@ export function initVttDataBridge(vtt) {
             targetWorldX !== undefined && targetWorldY !== undefined
                 ? { x: targetWorldX, y: targetWorldY }
                 : canvasEngine.getCanvasMouseCoords({
-                    clientX: vr.left + vr.width / 2,
-                    clientY: vr.top + vr.height / 2
-                });
+                      clientX: vr.left + vr.width / 2,
+                      clientY: vr.top + vr.height / 2
+                  });
         const grid = canvasEngine.getGrid();
         const sizePx = size * grid.size * grid.scale;
 
@@ -1573,8 +1576,8 @@ export function initVttDataBridge(vtt) {
             npc.tokenSize !== undefined
                 ? npc.tokenSize
                 : npc.monsterData
-                    ? translateSizeCategory(npc.monsterData.size)
-                    : 1;
+                  ? translateSizeCategory(npc.monsterData.size)
+                  : 1;
         const hp = isGeneric ? npc.hpMax || calculateMonsterHp(npc.monsterData) : npc.hpCurrent;
         const maxHp = npc.hpMax || calculateMonsterHp(npc.monsterData);
 
@@ -1597,9 +1600,9 @@ export function initVttDataBridge(vtt) {
             targetWorldX !== undefined && targetWorldY !== undefined
                 ? { x: targetWorldX, y: targetWorldY }
                 : canvasEngine.getCanvasMouseCoords({
-                    clientX: vr.left + vr.width / 2,
-                    clientY: vr.top + vr.height / 2
-                });
+                      clientX: vr.left + vr.width / 2,
+                      clientY: vr.top + vr.height / 2
+                  });
         const sizePx = size * grid.size * grid.scale;
 
         let targetLayer = canvasEngine.getActiveLayer();
@@ -1695,9 +1698,9 @@ export function initVttDataBridge(vtt) {
             targetWorldX !== undefined && targetWorldY !== undefined
                 ? { x: targetWorldX, y: targetWorldY }
                 : canvasEngine.getCanvasMouseCoords({
-                    clientX: vr.left + vr.width / 2,
-                    clientY: vr.top + vr.height / 2
-                });
+                      clientX: vr.left + vr.width / 2,
+                      clientY: vr.top + vr.height / 2
+                  });
         const grid = canvasEngine.getGrid();
         const sizePx = size * grid.size * grid.scale;
 
@@ -1724,10 +1727,10 @@ export function initVttDataBridge(vtt) {
                 char.tokenSight !== undefined && char.tokenSight > 0
                     ? char.tokenSight
                     : char.monsterData
-                        ? parseMonsterVision(char.monsterData)
-                        : isCompanion
-                            ? 5
-                            : 60,
+                      ? parseMonsterVision(char.monsterData)
+                      : isCompanion
+                        ? 5
+                        : 60,
             img: tokenImg,
             layer: targetLayer,
             isBorderless: true,
@@ -1763,9 +1766,9 @@ export function initVttDataBridge(vtt) {
             targetWorldX !== undefined && targetWorldY !== undefined
                 ? { x: targetWorldX, y: targetWorldY }
                 : canvasEngine.getCanvasMouseCoords({
-                    clientX: vr.left + vr.width / 2,
-                    clientY: vr.top + vr.height / 2
-                });
+                      clientX: vr.left + vr.width / 2,
+                      clientY: vr.top + vr.height / 2
+                  });
         const grid = canvasEngine.getGrid();
 
         const spawnAsset = (pixelWidth, pixelHeight) => {

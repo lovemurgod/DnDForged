@@ -47,17 +47,24 @@ test('Damage & Healing FX: Triggering and Shudder Separation', async (t) => {
         const fakeToken = { id: 't1', hp: 20, maxHp: 30, x: 50, y: 50, width: 50, height: 50 };
         const tokens = { t1: fakeToken };
 
-        applyDamageToTokens(['t1'], 8, 'untyped', 'heal', {}, {
-            tokens,
-            getTokenDrawDimensions: () => ({ drawW: 50, drawH: 50 }),
-            triggerHealingFXAnimation: (x, y, r, amt) => {
-                healCalled = true;
-                healAmount = amt;
-            },
-            triggerDamageFXAnimation: () => {
-                damageCalled = true;
+        applyDamageToTokens(
+            ['t1'],
+            8,
+            'untyped',
+            'heal',
+            {},
+            {
+                tokens,
+                getTokenDrawDimensions: () => ({ drawW: 50, drawH: 50 }),
+                triggerHealingFXAnimation: (x, y, r, amt) => {
+                    healCalled = true;
+                    healAmount = amt;
+                },
+                triggerDamageFXAnimation: () => {
+                    damageCalled = true;
+                }
             }
-        });
+        );
 
         assert.equal(fakeToken.hp, 28, 'Token HP should increase from 20 to 28');
         assert.equal(healCalled, true, 'Healing FX should be triggered');
@@ -73,17 +80,24 @@ test('Damage & Healing FX: Triggering and Shudder Separation', async (t) => {
         const fakeToken = { id: 't2', hp: 25, maxHp: 30, x: 50, y: 50, width: 50, height: 50 };
         const tokens = { t2: fakeToken };
 
-        applyDamageToTokens(['t2'], 10, 'fire', 'full', {}, {
-            tokens,
-            getTokenDrawDimensions: () => ({ drawW: 50, drawH: 50 }),
-            triggerHealingFXAnimation: () => {
-                healCalled = true;
-            },
-            triggerDamageFXAnimation: (x, y, r, types, meta) => {
-                damageCalled = true;
-                dmgAmount = meta.amount;
+        applyDamageToTokens(
+            ['t2'],
+            10,
+            'fire',
+            'full',
+            {},
+            {
+                tokens,
+                getTokenDrawDimensions: () => ({ drawW: 50, drawH: 50 }),
+                triggerHealingFXAnimation: () => {
+                    healCalled = true;
+                },
+                triggerDamageFXAnimation: (x, y, r, types, meta) => {
+                    damageCalled = true;
+                    dmgAmount = meta.amount;
+                }
             }
-        });
+        );
 
         assert.equal(fakeToken.hp, 15, 'Token HP should decrease from 25 to 15');
         assert.equal(damageCalled, true, 'Damage FX must be called');
@@ -107,4 +121,3 @@ test('Damage & Healing FX: Triggering and Shudder Separation', async (t) => {
         });
     });
 });
-

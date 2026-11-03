@@ -168,7 +168,9 @@ async function runTests() {
             defaultCamp.activeMapId !== undefined ||
             defaultCamp.mapsCount !== undefined
         ) {
-            throw new Error(`Sensitive campaign metadata leaked to unauthenticated caller: ${JSON.stringify(defaultCamp)}`);
+            throw new Error(
+                `Sensitive campaign metadata leaked to unauthenticated caller: ${JSON.stringify(defaultCamp)}`
+            );
         }
         console.log('  ✓ Public GET /api/campaigns correctly returns only sanitized { id, name } metadata.');
 
@@ -183,7 +185,9 @@ async function runTests() {
             }
         });
         if (unauthCampDetail.statusCode !== 403) {
-            throw new Error(`Expected 403 for unauthenticated GET /api/campaigns/:id, got ${unauthCampDetail.statusCode}`);
+            throw new Error(
+                `Expected 403 for unauthenticated GET /api/campaigns/:id, got ${unauthCampDetail.statusCode}`
+            );
         }
         console.log('  ✓ Unauthenticated GET /api/campaigns/:id safely rejected with 403 Forbidden.');
 
@@ -296,9 +300,13 @@ async function runTests() {
             'DungeonMaster'
         );
         if (tunnelRes.status !== 'rejected' || tunnelRes.data?.code !== 'PASSWORD_REQUIRED') {
-            throw new Error(`Tunnel GM join should be rejected with PASSWORD_REQUIRED, got ${JSON.stringify(tunnelRes)}`);
+            throw new Error(
+                `Tunnel GM join should be rejected with PASSWORD_REQUIRED, got ${JSON.stringify(tunnelRes)}`
+            );
         }
-        console.log('  ✓ Cloudflare Tunnel remote connection attempting passwordless GM rejected with PASSWORD_REQUIRED.');
+        console.log(
+            '  ✓ Cloudflare Tunnel remote connection attempting passwordless GM rejected with PASSWORD_REQUIRED.'
+        );
 
         // 3b. Reverse Proxy Remote Connection (x-forwarded-for) attempting passwordless GM
         const proxyRes = await simulateSocketClient(
@@ -312,22 +320,14 @@ async function runTests() {
         console.log('  ✓ Reverse Proxy remote connection attempting passwordless GM rejected with PASSWORD_REQUIRED.');
 
         // 3c. LAN Remote Connection (non-loopback IP, e.g. 192.168.1.55) attempting passwordless GM
-        const lanRes = await simulateSocketClient(
-            { address: '192.168.1.55', headers: {} },
-            'GM',
-            'DungeonMaster'
-        );
+        const lanRes = await simulateSocketClient({ address: '192.168.1.55', headers: {} }, 'GM', 'DungeonMaster');
         if (lanRes.status !== 'rejected' || lanRes.data?.code !== 'PASSWORD_REQUIRED') {
             throw new Error(`LAN GM join should be rejected with PASSWORD_REQUIRED, got ${JSON.stringify(lanRes)}`);
         }
         console.log('  ✓ LAN remote connection attempting passwordless GM rejected with PASSWORD_REQUIRED.');
 
         // 3d. Direct Loopback Connection (no forwarded headers, loopback IP) attempting GM
-        const localRes = await simulateSocketClient(
-            { address: '127.0.0.1', headers: {} },
-            'GM',
-            'DungeonMaster'
-        );
+        const localRes = await simulateSocketClient({ address: '127.0.0.1', headers: {} }, 'GM', 'DungeonMaster');
         if (localRes.status !== 'joined') {
             throw new Error(`Local loopback GM join should be accepted, got ${JSON.stringify(localRes)}`);
         }
@@ -442,14 +442,12 @@ async function runTests() {
         let redirectSsrfBlocked = false;
         try {
             // Attempt to resolve media redirecting to private endpoint
-            const res = await httpRequest(
-                {
-                    host: '127.0.0.1',
-                    port: TEST_PORT,
-                    path: `/api/resolve-media-url?url=${encodeURIComponent(`http://127.0.0.1:${mockPort}/redirect-to-private`)}`,
-                    method: 'GET'
-                }
-            );
+            const res = await httpRequest({
+                host: '127.0.0.1',
+                port: TEST_PORT,
+                path: `/api/resolve-media-url?url=${encodeURIComponent(`http://127.0.0.1:${mockPort}/redirect-to-private`)}`,
+                method: 'GET'
+            });
             if (res.statusCode === 403) {
                 redirectSsrfBlocked = true;
             }

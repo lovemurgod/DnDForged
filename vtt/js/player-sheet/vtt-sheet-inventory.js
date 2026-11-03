@@ -43,28 +43,28 @@ export function renderEquipRowHtml(eq, i, char) {
                         <select class="pc-equip-container-select" data-idx="${i}" title="Move to Bag" style="background:rgba(0,0,0,0.5); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); font-size:0.75rem; border-radius:4px; padding:2px 6px; max-width:140px;">
                             <option value="" ${!eq.containerId ? 'selected' : ''}>Main Inventory</option>
                             ${containers
-            .map(
-                (c) => `
+                                .map(
+                                    (c) => `
                                 <option value="${c.id}" ${eq.containerId === c.id ? 'selected' : ''}>📦 ${c.name}</option>
                             `
-            )
-            .join('')}
+                                )
+                                .join('')}
                         </select>
                     </div>
                     <button class="btn btn-xxs btn-secondary pc-equip-edit" data-idx="${i}" title="Edit Item"><i class="fa-solid fa-pen"></i> Edit Item</button>
                 </div>
                 <div style="white-space: pre-wrap;">
                     ${(function () {
-            if (!eq.description) return '<i style="opacity:0.5;">No description available.</i>';
-            let html = eq.description.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-            html = html.replace(/\*\*(.*?)\*\*(.*?)\*\*/g, '<b>$1</b>');
-            html = html.replace(/\*(.*?)\*/g, '<i>$1</i>');
-            html = html.replace(
-                /---/g,
-                '<hr style="border:0; border-top:1px solid rgba(255,255,255,0.1); margin:8px 0;">'
-            );
-            return html;
-        })()}
+                        if (!eq.description) return '<i style="opacity:0.5;">No description available.</i>';
+                        let html = eq.description.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                        html = html.replace(/\*\*(.*?)\*\*(.*?)\*\*/g, '<b>$1</b>');
+                        html = html.replace(/\*(.*?)\*/g, '<i>$1</i>');
+                        html = html.replace(
+                            /---/g,
+                            '<hr style="border:0; border-top:1px solid rgba(255,255,255,0.1); margin:8px 0;">'
+                        );
+                        return html;
+                    })()}
                 </div>
             </div>
         </div>
@@ -126,33 +126,33 @@ export function renderEquipmentHtml(char, ctx) {
         </div>
         <div id="pc-equip-list" style="display:flex; flex-direction:column; gap:8px;">
             ${(function () {
-            let listHtml = '';
-            // 1. Bags / Containers Accordions
-            (char.containers || []).forEach((c, cIdx) => {
-                const cItems = char.equipment
-                    .map((eq, i) => ({ eq, i }))
-                    .filter(({ eq }) => eq.containerId === c.id);
-                const itemWeightSum = getContainerContentsWeight(c, char.equipment);
-                const cap = getContainerCapacityStatus(c, char.equipment);
+                let listHtml = '';
+                // 1. Bags / Containers Accordions
+                (char.containers || []).forEach((c, cIdx) => {
+                    const cItems = char.equipment
+                        .map((eq, i) => ({ eq, i }))
+                        .filter(({ eq }) => eq.containerId === c.id);
+                    const itemWeightSum = getContainerContentsWeight(c, char.equipment);
+                    const cap = getContainerCapacityStatus(c, char.equipment);
 
-                let weightLabel =
-                    cap.capacity !== null
-                        ? `${itemWeightSum.toFixed(1)} / ${cap.capacity.toFixed(1)} lb`
-                        : `${itemWeightSum.toFixed(1)} lb`;
+                    let weightLabel =
+                        cap.capacity !== null
+                            ? `${itemWeightSum.toFixed(1)} / ${cap.capacity.toFixed(1)} lb`
+                            : `${itemWeightSum.toFixed(1)} lb`;
 
-                if (c.weightRule === 'fixed') {
-                    weightLabel = `${(parseFloat(c.customWeight) || 0).toFixed(1)} lb (Fixed)`;
-                } else if (c.weightRule === 'weightless') {
-                    weightLabel = `0.0 lb (Weightless)`;
-                } else if (parseFloat(c.baseWeight) > 0) {
-                    weightLabel += ` • Base: ${parseFloat(c.baseWeight).toFixed(1)} lb`;
-                }
+                    if (c.weightRule === 'fixed') {
+                        weightLabel = `${(parseFloat(c.customWeight) || 0).toFixed(1)} lb (Fixed)`;
+                    } else if (c.weightRule === 'weightless') {
+                        weightLabel = `0.0 lb (Weightless)`;
+                    } else if (parseFloat(c.baseWeight) > 0) {
+                        weightLabel += ` • Base: ${parseFloat(c.baseWeight).toFixed(1)} lb`;
+                    }
 
-                const overCapBadge = cap.isOverCapacity
-                    ? `<span class="badge" style="background:#ef5350; color:#fff; font-size:0.65rem; padding:1px 6px; margin-left:4px; font-weight:bold;"><i class="fa-solid fa-triangle-exclamation"></i> OVER CAPACITY</span>`
-                    : '';
+                    const overCapBadge = cap.isOverCapacity
+                        ? `<span class="badge" style="background:#ef5350; color:#fff; font-size:0.65rem; padding:1px 6px; margin-left:4px; font-weight:bold;"><i class="fa-solid fa-triangle-exclamation"></i> OVER CAPACITY</span>`
+                        : '';
 
-                listHtml += `
+                    listHtml += `
                         <div class="pc-bag-card glass-flat" data-container-id="${c.id}" data-container-idx="${cIdx}" draggable="true" style="border:1px solid var(--color-border-subtle); border-radius:8px; margin-bottom:4px; overflow:hidden; transition:border-color 0.15s, box-shadow 0.15s;">
                             <div class="pc-bag-header" data-container-id="${c.id}" style="padding:8px 12px; background:rgba(0,0,0,0.25); display:flex; justify-content:space-between; align-items:center; cursor:pointer; user-select:none;">
                                 <div style="display:flex; align-items:center; gap:8px; flex:1; min-width:0;">
@@ -175,11 +175,11 @@ export function renderEquipmentHtml(char, ctx) {
                             </div>
                         </div>
                     `;
-            });
+                });
 
-            // 2. Main Inventory (Unbagged items)
-            const unbaggedItems = char.equipment.map((eq, i) => ({ eq, i })).filter(({ eq }) => !eq.containerId);
-            listHtml += `
+                // 2. Main Inventory (Unbagged items)
+                const unbaggedItems = char.equipment.map((eq, i) => ({ eq, i })).filter(({ eq }) => !eq.containerId);
+                listHtml += `
                     <div class="pc-bag-card glass-flat" data-container-id="" style="border:1px solid var(--color-border-subtle); border-radius:8px; margin-bottom:4px; overflow:hidden;">
                         <div class="pc-bag-header pc-main-inv-header" data-container-id="" style="padding:8px 12px; background:rgba(0,0,0,0.2); display:flex; justify-content:space-between; align-items:center; cursor:pointer; user-select:none;">
                             <div style="display:flex; align-items:center; gap:8px; flex:1; min-width:0;">
@@ -195,8 +195,8 @@ export function renderEquipmentHtml(char, ctx) {
                         </div>
                     </div>
                 `;
-            return listHtml;
-        })()}
+                return listHtml;
+            })()}
         </div>
         <div style="margin-top:16px; padding:8px; border-top:1px solid var(--color-border-subtle); display:flex; justify-content:space-between; align-items:center;">
             <div>

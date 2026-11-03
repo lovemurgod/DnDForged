@@ -45,9 +45,8 @@ async function runTests() {
     // 1. Canvas Token Hover Tooltip Test
     // ==========================================
     console.log('[Test 1] Canvas Token Hover Tooltip...');
-    const { isTokenTooltipAllowed, showGmTokenTooltip, injectGmTooltipStyles } = await import(
-        '../vtt/js/canvas/vtt-canvas-tooltips-notes.js'
-    );
+    const { isTokenTooltipAllowed, showGmTokenTooltip, injectGmTooltipStyles } =
+        await import('../vtt/js/canvas/vtt-canvas-tooltips-notes.js');
 
     injectGmTooltipStyles(global.document);
 

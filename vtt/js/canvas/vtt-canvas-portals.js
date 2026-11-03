@@ -486,13 +486,14 @@ export function drawTargetRoomContent(
         imageCache = {},
         grid = { size: 50, scale: 1 },
         getOrLoadTokenImage: customGetImage = null,
-        getTokenDrawDimensions = options.getTokenDrawDimensions || ((t) => {
-            const unit = (grid.size || 50) * (grid.scale || 1);
-            const sz = parseFloat(t?.size) || 1;
-            const w = unit * sz;
-            const h = unit * sz;
-            return { drawW: w, drawH: h, tokenRadius: w / 2 };
-        }),
+        getTokenDrawDimensions = options.getTokenDrawDimensions ||
+            ((t) => {
+                const unit = (grid.size || 50) * (grid.scale || 1);
+                const sz = parseFloat(t?.size) || 1;
+                const w = unit * sz;
+                const h = unit * sz;
+                return { drawW: w, drawH: h, tokenRadius: w / 2 };
+            }),
         renderAll = () => {},
         getSafeVttUrl = (u) => u
     } = options;
@@ -510,7 +511,13 @@ export function drawTargetRoomContent(
 
     const tokenImgFn =
         customGetImage ||
-        ((t) => getOrLoadTokenImage(t, { campaignState: options.campaignState || vtt.campaignState, imageCache, renderAll, getSafeVttUrl }));
+        ((t) =>
+            getOrLoadTokenImage(t, {
+                campaignState: options.campaignState || vtt.campaignState,
+                imageCache,
+                renderAll,
+                getSafeVttUrl
+            }));
 
     let bgDrawn = false;
     const campaignState = options.campaignState || vtt.campaignState;
@@ -730,13 +737,14 @@ export function renderProjectedPortals(ctx, portals, options = {}) {
         gmTokenVisionMode = false,
         isTokenControlledByPlayer = () => true,
         getTokenCenter = (t) => ({ x: t.x + 25, y: t.y + 25 }),
-        getTokenDrawDimensions = options.getTokenDrawDimensions || ((t) => {
-            const unit = (grid.size || 50) * (grid.scale || 1);
-            const sz = parseFloat(t?.size) || 1;
-            const w = unit * sz;
-            const h = unit * sz;
-            return { drawW: w, drawH: h, tokenRadius: w / 2 };
-        }),
+        getTokenDrawDimensions = options.getTokenDrawDimensions ||
+            ((t) => {
+                const unit = (grid.size || 50) * (grid.scale || 1);
+                const sz = parseFloat(t?.size) || 1;
+                const w = unit * sz;
+                const h = unit * sz;
+                return { drawW: w, drawH: h, tokenRadius: w / 2 };
+            }),
         getWallCoordinatesForRaycasting = null,
         getLineIntersection = getLineIntersectionInternal,
         drawTargetRoomContentFn = options.drawTargetRoomContent || drawTargetRoomContent

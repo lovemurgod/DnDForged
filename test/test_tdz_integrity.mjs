@@ -77,4 +77,3 @@ if (allIssues.length > 0) {
 
 console.log('✓ Zero TDZ references detected.');
 process.exit(0);
-

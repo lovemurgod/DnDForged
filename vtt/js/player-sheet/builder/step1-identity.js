@@ -120,33 +120,33 @@ export function renderStep1(ctx) {
             </div>
             <div id="pc-wiz-classes-container" style="display:flex; flex-direction:column; gap:8px;">
                 ${workingChar.classes
-            .map((cls, i) => {
-                const curSrc = (cls.source || 'PHB').toUpperCase();
-                const cObj =
-                    builderCache?.classes?.find(
-                        (c) =>
-                            (c.name || '').toLowerCase() === (cls.name || '').toLowerCase() &&
-                            (!cls.source || (c.source || 'PHB').toUpperCase() === curSrc)
-                    ) ||
-                    builderCache?.classes?.find(
-                        (c) => (c.name || '').toLowerCase() === (cls.name || '').toLowerCase()
-                    );
-                const availableSubs = (cObj?.subclasses || []).filter((s) => {
-                    const subSrc = (s.source || cls.source || 'PHB').toUpperCase();
-                    if (!isSourceAllowed(subSrc, s.name, disabledSources)) return false;
-                    if (curSrc === 'PHB') {
-                        if (subSrc === 'XPHB' || subSrc.startsWith('XUA')) return false;
-                    } else if (curSrc === 'XPHB') {
-                        if (subSrc === 'PHB') return false;
-                    }
-                    if (disabledSources && disabledSources.has('UA')) {
-                        if (subSrc.startsWith('UA') || subSrc.startsWith('XUA') || s.name.includes('(UA)'))
-                            return false;
-                    }
-                    return true;
-                });
-                const hasSubs = availableSubs.length > 0;
-                return `
+                    .map((cls, i) => {
+                        const curSrc = (cls.source || 'PHB').toUpperCase();
+                        const cObj =
+                            builderCache?.classes?.find(
+                                (c) =>
+                                    (c.name || '').toLowerCase() === (cls.name || '').toLowerCase() &&
+                                    (!cls.source || (c.source || 'PHB').toUpperCase() === curSrc)
+                            ) ||
+                            builderCache?.classes?.find(
+                                (c) => (c.name || '').toLowerCase() === (cls.name || '').toLowerCase()
+                            );
+                        const availableSubs = (cObj?.subclasses || []).filter((s) => {
+                            const subSrc = (s.source || cls.source || 'PHB').toUpperCase();
+                            if (!isSourceAllowed(subSrc, s.name, disabledSources)) return false;
+                            if (curSrc === 'PHB') {
+                                if (subSrc === 'XPHB' || subSrc.startsWith('XUA')) return false;
+                            } else if (curSrc === 'XPHB') {
+                                if (subSrc === 'PHB') return false;
+                            }
+                            if (disabledSources && disabledSources.has('UA')) {
+                                if (subSrc.startsWith('UA') || subSrc.startsWith('XUA') || s.name.includes('(UA)'))
+                                    return false;
+                            }
+                            return true;
+                        });
+                        const hasSubs = availableSubs.length > 0;
+                        return `
                     <div class="glass-flat" style="padding:10px 12px; display:flex; gap:10px; align-items:flex-end; flex-wrap:wrap; border:1px solid var(--color-border-subtle); border-radius:6px;">
                         <div class="form-group" style="flex:2; min-width:140px;">
                             <label style="font-size:0.75rem; text-transform:uppercase; color:var(--color-text-muted); font-weight:600;">${i === 0 ? 'Primary Class' : 'Multiclass ' + (i + 1)}</label>
@@ -158,8 +158,9 @@ export function renderStep1(ctx) {
                         </div>
                         <div class="form-group" style="flex:2; min-width:140px;">
                             <label style="font-size:0.75rem; text-transform:uppercase; color:var(--color-text-muted); font-weight:600;">Subclass</label>
-                            ${hasSubs
-                        ? `
+                            ${
+                                hasSubs
+                                    ? `
                                 <select class="pc-wiz-subclass-sel" data-idx="${i}" style="width:100%; padding:6px 8px; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); border-radius:4px;">
                                     <option value="">None / Base Class</option>
                                     ${availableSubs.map((s) => `<option value="${s.name}" ${cls.subclass === s.name && !cls.isCustomSubclass ? 'selected' : ''}>${s.name} [${s.source || 'PHB'}]</option>`).join('')}
@@ -167,10 +168,10 @@ export function renderStep1(ctx) {
                                 </select>
                                 <input type="text" class="pc-wiz-custom-subclass-input" data-idx="${i}" placeholder="Enter custom subclass name" value="${cls.customSubclassText || ''}" style="width:100%; margin-top:4px; display:${cls.isCustomSubclass ? 'block' : 'none'}; padding:4px 8px; font-size:0.8rem; background:rgba(0,0,0,0.4); border:1px solid var(--color-gold-base); color:var(--color-gold-light); border-radius:4px;">
                             `
-                        : `
+                                    : `
                                 <input type="text" class="pc-wiz-subclass-input" data-idx="${i}" placeholder="None / e.g. Champion" value="${cls.subclass || ''}" style="width:100%; padding:6px 8px; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); border-radius:4px;">
                             `
-                    }
+                            }
                         </div>
                         <div class="form-group" style="flex:1; min-width:80px;">
                             <label style="font-size:0.75rem; text-transform:uppercase; color:var(--color-text-muted); font-weight:600;">Level</label>
@@ -181,8 +182,8 @@ export function renderStep1(ctx) {
                         </button>
                     </div>
                     `;
-            })
-            .join('')}
+                    })
+                    .join('')}
             </div>
         </div>
 

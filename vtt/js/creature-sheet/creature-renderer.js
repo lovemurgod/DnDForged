@@ -83,7 +83,7 @@ export function setupPanelResizing(panel) {
             if (resizeHandle.hasPointerCapture(e.pointerId)) {
                 resizeHandle.releasePointerCapture(e.pointerId);
             }
-        } catch (err) { }
+        } catch (err) {}
         const currentComputed = Math.round(panel.getBoundingClientRect().width);
         if (currentComputed >= 280) {
             localStorage.setItem('vtt_cs_panel_width', currentComputed);
@@ -308,7 +308,9 @@ export function wireHpControls(panel, m, initial, max, ctx = {}, initialTemp = 0
 
                     const triggerDamageFX = canvasEngine.triggerDamageFXAnimation;
                     const triggerHealingFX = canvasEngine.triggerHealingFXAnimation;
-                    const getTokenDims = canvasEngine.getTokenDrawDimensions || (() => ({ drawW: token.width || 50, drawH: token.height || 50 }));
+                    const getTokenDims =
+                        canvasEngine.getTokenDrawDimensions ||
+                        (() => ({ drawW: token.width || 50, drawH: token.height || 50 }));
                     const dims = getTokenDims(token);
                     const tx = token.x + (dims.drawW || 50) / 2;
                     const ty = token.y + (dims.drawH || 50) / 2;
@@ -673,10 +675,10 @@ export function buildLegendarySection(m) {
     const legEntries = Array.isArray(m.legendaryActions)
         ? m.legendaryActions
         : Array.isArray(m.legendaryActions?.entries)
-            ? m.legendaryActions.entries
-            : Array.isArray(m.legendary)
-                ? m.legendary
-                : [];
+          ? m.legendaryActions.entries
+          : Array.isArray(m.legendary)
+            ? m.legendary
+            : [];
     if (legEntries && legEntries.length > 0) {
         const lairBadge = m.legendaryActionsLair
             ? ` <span class="badge" style="font-size:0.75rem; background:rgba(255,215,0,0.15); color:#ffd700; border:1px solid rgba(255,215,0,0.4); border-radius:3px; padding:1px 5px; margin-left:6px;">${m.legendaryActions?.count || 3} (${m.legendaryActionsLair} in Lair)</span>`
@@ -684,8 +686,8 @@ export function buildLegendarySection(m) {
         const legDesc = m.legendaryActions?.description
             ? `<p class="cs-legendary-desc">${m.legendaryActions.description}</p>`
             : m.legendaryHeader
-                ? `<p class="cs-legendary-desc">${cleanTags(flattenEntriesToText(m.legendaryHeader))}</p>`
-                : '';
+              ? `<p class="cs-legendary-desc">${cleanTags(flattenEntriesToText(m.legendaryHeader))}</p>`
+              : '';
         const rows = legEntries.map((entry) => buildAbilityEntryHtml(entry)).join('');
         html += `
             <div class="cs-section cs-legendary-section">
@@ -701,16 +703,16 @@ export function buildLegendarySection(m) {
     const mythicEntries = Array.isArray(m.mythicActions)
         ? m.mythicActions
         : Array.isArray(m.mythicActions?.entries)
-            ? m.mythicActions.entries
-            : Array.isArray(m.mythic)
-                ? m.mythic
-                : [];
+          ? m.mythicActions.entries
+          : Array.isArray(m.mythic)
+            ? m.mythic
+            : [];
     if (mythicEntries && mythicEntries.length > 0) {
         const mythicDesc = m.mythicActions?.description
             ? `<p class="cs-legendary-desc">${m.mythicActions.description}</p>`
             : m.mythicHeader
-                ? `<p class="cs-legendary-desc">${cleanTags(flattenEntriesToText(m.mythicHeader))}</p>`
-                : '';
+              ? `<p class="cs-legendary-desc">${cleanTags(flattenEntriesToText(m.mythicHeader))}</p>`
+              : '';
         const rows = mythicEntries.map((entry) => buildAbilityEntryHtml(entry)).join('');
         html += `
             <div class="cs-section cs-mythic-section" style="margin-top:12px;">
@@ -726,10 +728,10 @@ export function buildLegendarySection(m) {
     const lairEntries = Array.isArray(m.lairActions)
         ? m.lairActions
         : Array.isArray(m.lairActions?.entries)
-            ? m.lairActions.entries
-            : Array.isArray(m.lair)
-                ? m.lair
-                : [];
+          ? m.lairActions.entries
+          : Array.isArray(m.lair)
+            ? m.lair
+            : [];
     if (lairEntries && lairEntries.length > 0) {
         const lairDesc =
             m.lairHeader ||
@@ -1155,7 +1157,9 @@ export function renderStatBlock(m, panel = null, ctx = {}) {
                 // Sync assigned players to any tokens on canvas
                 if (window.VTT?.canvasEngine) {
                     const tokens = window.VTT.canvasEngine.getTokens();
-                    const currentMapId = window.VTT.canvasEngine.getCurrentMapId ? window.VTT.canvasEngine.getCurrentMapId() : null;
+                    const currentMapId = window.VTT.canvasEngine.getCurrentMapId
+                        ? window.VTT.canvasEngine.getCurrentMapId()
+                        : null;
                     Object.values(tokens).forEach((t) => {
                         if (t.characterId === updatedChar.id || t.id === linkedTokenId) {
                             t.assignedPlayers = [...(updatedChar.assignedPlayers || [])];

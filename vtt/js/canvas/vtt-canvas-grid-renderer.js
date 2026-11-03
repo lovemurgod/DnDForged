@@ -84,7 +84,7 @@ export function snapToGrid(x, y, arg3 = false, arg4 = {}) {
         isToken = Boolean(arg4);
     } else {
         isToken = Boolean(arg3);
-        grid = (typeof arg4 === 'object' && arg4 !== null) ? arg4 : {};
+        grid = typeof arg4 === 'object' && arg4 !== null ? arg4 : {};
     }
     if (!grid || !grid.size) return { x, y };
     const unitSize = (grid.size || 50) * (grid.scale || 1);

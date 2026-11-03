@@ -380,7 +380,11 @@ export function initVttMobileAdapter(vtt) {
 
                 if (activeTouchedToken?.id) {
                     const selIds = canvasEngine?.getSelectedTokenIds?.() || [];
-                    if (selIds.length > 1 && selIds.includes(activeTouchedToken.id) && canvasEngine?.showMassRollContextMenu) {
+                    if (
+                        selIds.length > 1 &&
+                        selIds.includes(activeTouchedToken.id) &&
+                        canvasEngine?.showMassRollContextMenu
+                    ) {
                         canvasEngine.showMassRollContextMenu(selIds, touch.clientX, touch.clientY);
                     } else if (canvasEngine?.showTokenContextMenu) {
                         canvasEngine.showTokenContextMenu(activeTouchedToken.id, touch.clientX, touch.clientY);
@@ -951,8 +955,9 @@ export function initVttMobileAdapter(vtt) {
                     <span style="font-weight: 600;">Handouts</span>
                     <span style="font-size: 0.75rem; color: #94a3b8;">Campaign lore & notes</span>
                 </div>
-                ${isGM
-                ? `
+                ${
+                    isGM
+                        ? `
                 <div class="mobile-more-card" data-action="maps">
                     <i class="fa-solid fa-map-location-dot" style="font-size: 1.8rem; color: #f5c242;"></i>
                     <span style="font-weight: 600;">Map Manager</span>
@@ -974,14 +979,14 @@ export function initVttMobileAdapter(vtt) {
                     <span style="font-size: 0.75rem; color: #94a3b8;">Traps & Portals</span>
                 </div>
                 `
-                : `
+                        : `
                 <div class="mobile-more-card" data-action="characters">
                     <i class="fa-solid fa-users" style="font-size: 1.8rem; color: #f5c242;"></i>
                     <span style="font-weight: 600;">Characters</span>
                     <span style="font-size: 0.75rem; color: #94a3b8;">Party members</span>
                 </div>
                 `
-            }
+                }
                 <div class="mobile-more-card" data-action="paint">
                     <i class="fa-solid fa-palette" style="font-size: 1.8rem; color: #f5c242;"></i>
                     <span style="font-weight: 600;">Paint Tools</span>
@@ -1093,15 +1098,16 @@ export function initVttMobileAdapter(vtt) {
                 </div>
             </div>
             <div style="display: flex; align-items: center; gap: 8px;">
-                ${showSpawn
-                ? `
+                ${
+                    showSpawn
+                        ? `
                 <button class="mobile-sheet-spawn-btn" title="Spawn Token on Canvas">
                     <i class="fa-solid fa-plus"></i>
                     <span>Spawn</span>
                 </button>
                 `
-                : ''
-            }
+                        : ''
+                }
                 <button class="mobile-sheet-close-btn" title="Close Sheet (Return to Map)">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
@@ -1394,9 +1400,11 @@ export function initVttMobileAdapter(vtt) {
                 currentCombatantId = card.dataset.id;
 
                 const isGM = (vtt.role || window.VTT?.role) === 'GM';
-                const nameEl = card.querySelector('.init-card-hover-tooltip-name') || card.querySelector('.init-card-name');
+                const nameEl =
+                    card.querySelector('.init-card-hover-tooltip-name') || card.querySelector('.init-card-name');
                 const name = nameEl ? nameEl.textContent.trim() : 'Combatant';
-                const hpEl = card.querySelector('.init-card-hover-tooltip-hp') || card.querySelector('.init-card-hp-pill');
+                const hpEl =
+                    card.querySelector('.init-card-hover-tooltip-hp') || card.querySelector('.init-card-hp-pill');
                 const scoreEl = card.querySelector('.init-card-score');
                 const score = scoreEl ? scoreEl.textContent.trim() : '—';
                 const avatarSlot = card.querySelector('.init-card-img');
@@ -2643,7 +2651,9 @@ export function initVttMobileAdapter(vtt) {
             }
 
             // Name
-            const nameEl = activeCard.querySelector('.init-card-hover-tooltip-name') || activeCard.querySelector('.init-card-name');
+            const nameEl =
+                activeCard.querySelector('.init-card-hover-tooltip-name') ||
+                activeCard.querySelector('.init-card-name');
             const name = nameEl ? nameEl.textContent.trim() : 'Combatant';
             if (pillName) pillName.textContent = name;
 
@@ -2652,7 +2662,9 @@ export function initVttMobileAdapter(vtt) {
             if (pillRound) pillRound.textContent = `Round ${round}`;
 
             // HP
-            const hpPill = activeCard.querySelector('.init-card-hover-tooltip-hp') || activeCard.querySelector('.init-card-hp-pill');
+            const hpPill =
+                activeCard.querySelector('.init-card-hover-tooltip-hp') ||
+                activeCard.querySelector('.init-card-hp-pill');
             if (pillHp) {
                 if (hpPill && hpPill.textContent.trim()) {
                     pillHp.textContent = `HP: ${hpPill.textContent.trim()}`;
@@ -2664,7 +2676,8 @@ export function initVttMobileAdapter(vtt) {
             }
 
             // Avatar
-            const avatarImg = activeCard.querySelector('.init-card-img img') || activeCard.querySelector('.init-token-avatar');
+            const avatarImg =
+                activeCard.querySelector('.init-card-img img') || activeCard.querySelector('.init-token-avatar');
             if (pillAvatar) {
                 if (avatarImg && avatarImg.src && !avatarImg.src.endsWith('favicon.svg')) {
                     pillAvatar.src = avatarImg.src;

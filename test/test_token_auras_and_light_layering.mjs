@@ -51,7 +51,7 @@ class MockContext2D {
         this.clearedRects.push({ x, y, w, h });
     }
 
-    fillRect() { }
+    fillRect() {}
 
     beginPath() {
         this.currentPath = [];
@@ -90,7 +90,7 @@ class MockContext2D {
         this.strokeCalls++;
     }
 
-    scale() { }
+    scale() {}
 
     drawImage(img, x, y) {
         this.drawnImages.push({ x, y, gco: this.globalCompositeOperation });
@@ -99,7 +99,12 @@ class MockContext2D {
     createRadialGradient(x0, y0, r0, x1, y1, r1) {
         const stops = [];
         return {
-            x0, y0, r0, x1, y1, r1,
+            x0,
+            y0,
+            r0,
+            x1,
+            y1,
+            r1,
             stops,
             addColorStop(offset, color) {
                 stops.push({ offset, color });
@@ -109,7 +114,7 @@ class MockContext2D {
 
     createConicGradient() {
         return {
-            addColorStop() { }
+            addColorStop() {}
         };
     }
 }
@@ -123,9 +128,15 @@ test('Layering Architecture: HTML & CSS Canvas Stacking Order', async (t) => {
 
     await t.test('Floor effects canvas is present in HTML directly below grid and tokens', () => {
         assert.ok(htmlContent.includes('id="vtt-canvas-floor-effects"'), 'Floor effects canvas must exist in HTML');
-        assert.ok(htmlContent.includes('style="z-index: 2; pointer-events: none;"'), 'Floor effects canvas must be z-index 2');
+        assert.ok(
+            htmlContent.includes('style="z-index: 2; pointer-events: none;"'),
+            'Floor effects canvas must be z-index 2'
+        );
         assert.ok(htmlContent.includes('id="vtt-canvas-grid" style="z-index: 3;"'), 'Grid canvas must be z-index 3');
-        assert.ok(htmlContent.includes('id="vtt-canvas-portals" style="z-index: 4;'), 'Portals canvas must be z-index 4');
+        assert.ok(
+            htmlContent.includes('id="vtt-canvas-portals" style="z-index: 4;'),
+            'Portals canvas must be z-index 4'
+        );
         assert.ok(htmlContent.includes('id="vtt-html-overlays"'), 'Token overlays must exist');
     });
 
@@ -249,34 +260,37 @@ test('Light Emission: Floor Washes Below Tokens', async (t) => {
         assert.equal(mockCtxFloor.fillCalls, 2, 'Floor context must receive 2 light color fills');
     });
 
-    await t.test('renderFogOfWarLayer delegates light wash to ctxFloor and does not taint ctxFog with colored wash', () => {
-        const floorCtx = new MockContext2D();
-        const fogCtx = new MockContext2D();
+    await t.test(
+        'renderFogOfWarLayer delegates light wash to ctxFloor and does not taint ctxFog with colored wash',
+        () => {
+            const floorCtx = new MockContext2D();
+            const fogCtx = new MockContext2D();
 
-        renderFogOfWarLayer(1000, 1000, {
-            ctxFog: fogCtx,
-            canvasFog: { width: 1000, height: 1000 },
-            ctxFloor: floorCtx,
-            scratchLightCanvas: mockScratchCanvas,
-            ctxScratchLight: mockCtxScratch,
-            tokens,
-            lights: standaloneLights,
-            walls,
-            grid,
-            vtt: { role: 'GM' },
-            computeVisPolyFn: computeVisibilityPolygon,
-            getTokenCenter: (t) => ({ x: t.x + 25, y: t.y + 25 }),
-            getTokenDrawDimensions: () => ({ drawW: 50, drawH: 50, tokenRadius: 25 })
-        });
+            renderFogOfWarLayer(1000, 1000, {
+                ctxFog: fogCtx,
+                canvasFog: { width: 1000, height: 1000 },
+                ctxFloor: floorCtx,
+                scratchLightCanvas: mockScratchCanvas,
+                ctxScratchLight: mockCtxScratch,
+                tokens,
+                lights: standaloneLights,
+                walls,
+                grid,
+                vtt: { role: 'GM' },
+                computeVisPolyFn: computeVisibilityPolygon,
+                getTokenCenter: (t) => ({ x: t.x + 25, y: t.y + 25 }),
+                getTokenDrawDimensions: () => ({ drawW: 50, drawH: 50, tokenRadius: 25 })
+            });
 
-        // ctxFog punches holes with destination-out
-        assert.ok(fogCtx.drawnImages.length >= 1, 'ctxFog must have drawn light scratch mask');
-        const hasDestOut = fogCtx.drawnImages.some((img) => img.gco === 'destination-out');
-        assert.ok(hasDestOut, 'ctxFog must use destination-out to carve holes in fog');
+            // ctxFog punches holes with destination-out
+            assert.ok(fogCtx.drawnImages.length >= 1, 'ctxFog must have drawn light scratch mask');
+            const hasDestOut = fogCtx.drawnImages.some((img) => img.gco === 'destination-out');
+            assert.ok(hasDestOut, 'ctxFog must use destination-out to carve holes in fog');
 
-        // ctxFloor received the colored washes
-        assert.equal(floorCtx.fillCalls, 2, 'ctxFloor must receive the colored washes');
-    });
+            // ctxFloor received the colored washes
+            assert.equal(floorCtx.fillCalls, 2, 'ctxFloor must receive the colored washes');
+        }
+    );
 
     await t.test('Light floor washes render even when Fog of War is disabled on the map', () => {
         const floorCtx = new MockContext2D();
@@ -313,4 +327,3 @@ test('Light Emission: Floor Washes Below Tokens', async (t) => {
         assert.equal(floorCtx.fillCalls, 2, 'Light floor washes must still be rendered when fogOfWar is false');
     });
 });
-

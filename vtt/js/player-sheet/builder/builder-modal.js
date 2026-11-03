@@ -124,8 +124,8 @@ export async function openCharacterBuilderModal(char, options = {}) {
         ensureBuilderCache = () => Promise.resolve({}),
         getDisabledSources = () => Promise.resolve(new Set()),
         isSourceAllowed = () => true,
-        saveAndEmit = () => { },
-        renderSheetData = () => { },
+        saveAndEmit = () => {},
+        renderSheetData = () => {},
         evaluateAbilityMaxUses = () => 0,
         getCharIs2024 = () => false,
         vtt = window.vtt || {}
@@ -191,16 +191,16 @@ export async function openCharacterBuilderModal(char, options = {}) {
             Array.isArray(char.classes) && char.classes.length > 0
                 ? JSON.parse(JSON.stringify(char.classes))
                 : [
-                    {
-                        name: char.class || 'Fighter',
-                        subclass: '',
-                        level: char.level || 1,
-                        isCustomClass: false,
-                        customClassText: '',
-                        isCustomSubclass: false,
-                        customSubclassText: ''
-                    }
-                ],
+                      {
+                          name: char.class || 'Fighter',
+                          subclass: '',
+                          level: char.level || 1,
+                          isCustomClass: false,
+                          customClassText: '',
+                          isCustomSubclass: false,
+                          customSubclassText: ''
+                      }
+                  ],
         speed: {
             walk: parseInt(char.speed?.walk ?? (char.speed || 30)) || 30,
             climb: parseInt(char.speed?.climb) || 0,
@@ -224,31 +224,32 @@ export async function openCharacterBuilderModal(char, options = {}) {
         baseStats: char.baseStats
             ? { ...char.baseStats }
             : char.stats
-                ? { ...char.stats }
-                : { str: 10, dex: 10, con: 10, int: 10, wis: 10, cha: 10 },
+              ? { ...char.stats }
+              : { str: 10, dex: 10, con: 10, int: 10, wis: 10, cha: 10 },
         standardArrayAssignments: char.standardArrayAssignments
             ? { ...char.standardArrayAssignments }
             : { str: 15, dex: 14, con: 13, int: 12, wis: 10, cha: 8 },
         pointBuyScores: char.pointBuyScores
             ? { ...char.pointBuyScores }
             : { str: 8, dex: 8, con: 8, int: 8, wis: 8, cha: 8 },
-        rolledScores: Array.isArray(char.rolledScores) && char.rolledScores.length === 6
-            ? JSON.parse(JSON.stringify(char.rolledScores))
-            : [
-                { id: 0, rolls: [4, 5, 3, 2], val: 12, assignedStat: 'str' },
-                { id: 1, rolls: [5, 4, 4, 1], val: 13, assignedStat: 'dex' },
-                { id: 2, rolls: [6, 5, 3, 2], val: 14, assignedStat: 'con' },
-                { id: 3, rolls: [3, 4, 3, 1], val: 10, assignedStat: 'int' },
-                { id: 4, rolls: [6, 6, 3, 2], val: 15, assignedStat: 'wis' },
-                { id: 5, rolls: [2, 3, 3, 1], val: 8, assignedStat: 'cha' }
-            ],
+        rolledScores:
+            Array.isArray(char.rolledScores) && char.rolledScores.length === 6
+                ? JSON.parse(JSON.stringify(char.rolledScores))
+                : [
+                      { id: 0, rolls: [4, 5, 3, 2], val: 12, assignedStat: 'str' },
+                      { id: 1, rolls: [5, 4, 4, 1], val: 13, assignedStat: 'dex' },
+                      { id: 2, rolls: [6, 5, 3, 2], val: 14, assignedStat: 'con' },
+                      { id: 3, rolls: [3, 4, 3, 1], val: 10, assignedStat: 'int' },
+                      { id: 4, rolls: [6, 6, 3, 2], val: 15, assignedStat: 'wis' },
+                      { id: 5, rolls: [2, 3, 3, 1], val: 8, assignedStat: 'cha' }
+                  ],
         manualScores: char.manualScores
             ? { ...char.manualScores }
             : char.baseStats
-                ? { ...char.baseStats }
-                : char.stats
-                    ? { ...char.stats }
-                    : { str: 10, dex: 10, con: 10, int: 10, wis: 10, cha: 10 },
+              ? { ...char.baseStats }
+              : char.stats
+                ? { ...char.stats }
+                : { str: 10, dex: 10, con: 10, int: 10, wis: 10, cha: 10 },
         racialAsiMode: char.racialAsiMode || 'catalog',
         tashasMode: char.tashasMode || 'plus2plus1',
         tashasPlus2: char.tashasPlus2 || 'str',
@@ -286,8 +287,8 @@ export async function openCharacterBuilderModal(char, options = {}) {
             catalogItem && Object.keys(catalogItem).length > 1
                 ? catalogItem
                 : stdData
-                    ? { ...stdData }
-                    : catalogItem || {};
+                  ? { ...stdData }
+                  : catalogItem || {};
 
         const isWeapon = !!(
             cat.macroTemplate ||
@@ -332,9 +333,9 @@ export async function openCharacterBuilderModal(char, options = {}) {
             tmpl.isRanged !== undefined
                 ? tmpl.isRanged
                 : cat.rawType === 'R' ||
-                item.rawType === 'R' ||
-                (cat.type || '').toLowerCase().includes('ranged') ||
-                props.some((p) => p.includes('ammunition'));
+                  item.rawType === 'R' ||
+                  (cat.type || '').toLowerCase().includes('ranged') ||
+                  props.some((p) => p.includes('ammunition'));
 
         const stats = getEffectiveStats(workingChar, matchedBaseRace, matchedSubrace, asiTiers, racialChoiceDefs);
         const strVal = parseInt(stats.str) || 10;
@@ -358,23 +359,23 @@ export async function openCharacterBuilderModal(char, options = {}) {
         const dmgRows =
             tmpl.damageRows && tmpl.damageRows.length > 0
                 ? tmpl.damageRows.map((r, rIdx) => ({
-                    id: 'dmg_' + Date.now() + '_' + rIdx,
-                    formula: r.formula,
-                    stat: r.stat === 'auto' ? chosenStat : r.stat || '',
-                    extra: r.extra !== undefined ? r.extra : rIdx === 0 ? bonusVal : 0,
-                    type: r.type || '',
-                    label: r.label || ''
-                }))
+                      id: 'dmg_' + Date.now() + '_' + rIdx,
+                      formula: r.formula,
+                      stat: r.stat === 'auto' ? chosenStat : r.stat || '',
+                      extra: r.extra !== undefined ? r.extra : rIdx === 0 ? bonusVal : 0,
+                      type: r.type || '',
+                      label: r.label || ''
+                  }))
                 : [
-                    {
-                        id: 'dmg_' + Date.now(),
-                        formula: cat.dmg1 || '1d6',
-                        stat: chosenStat,
-                        extra: bonusVal,
-                        type: cat.dmgType ? cat.dmgType.charAt(0).toUpperCase() + cat.dmgType.slice(1) : 'Slashing',
-                        label: ''
-                    }
-                ];
+                      {
+                          id: 'dmg_' + Date.now(),
+                          formula: cat.dmg1 || '1d6',
+                          stat: chosenStat,
+                          extra: bonusVal,
+                          type: cat.dmgType ? cat.dmgType.charAt(0).toUpperCase() + cat.dmgType.slice(1) : 'Slashing',
+                          label: ''
+                      }
+                  ];
 
         let descNote = item.description || (Array.isArray(cat.entries) ? cat.entries.join('\n') : '');
         const versatileVal = tmpl.versatile || cat.dmg2;
@@ -425,11 +426,9 @@ export async function openCharacterBuilderModal(char, options = {}) {
             .trim();
         builderCache.fullClasses = builderCache.fullClasses || {};
         if (builderCache.fullClasses[raw]) return builderCache.fullClasses[raw];
-        const file = builderCache?.classIndex ? (builderCache.classIndex[raw] || null) : null;
+        const file = builderCache?.classIndex ? builderCache.classIndex[raw] || null : null;
         if (!file) {
-            const customCls = (builderCache?.classes || []).find(
-                (c) => (c.name || '').toLowerCase() === raw
-            );
+            const customCls = (builderCache?.classes || []).find((c) => (c.name || '').toLowerCase() === raw);
             if (customCls) {
                 const synthesized = {
                     class: [customCls],
@@ -498,7 +497,9 @@ export async function openCharacterBuilderModal(char, options = {}) {
     let candidateInnateSpells = [];
     let candidateBgExpandedSpells = [];
     let classSpellSections = [];
-    let asiTiers = Array.isArray(char.builderFeatSelections) ? JSON.parse(JSON.stringify(char.builderFeatSelections)) : [];
+    let asiTiers = Array.isArray(char.builderFeatSelections)
+        ? JSON.parse(JSON.stringify(char.builderFeatSelections))
+        : [];
     let allCandidateAbilities = [];
 
     const allArmorOptions = [{ id: 'none', name: 'Unarmored Defense / No Armor (10 + DEX)', type: 'None', baseAc: 10 }];
@@ -623,8 +624,7 @@ export async function openCharacterBuilderModal(char, options = {}) {
         matchedBg =
             builderCache?.bgs?.find(
                 (b) =>
-                    ((b.name && b.name.toLowerCase() === rawBgName) ||
-                        (b.id && b.id.toLowerCase() === rawBgName)) &&
+                    ((b.name && b.name.toLowerCase() === rawBgName) || (b.id && b.id.toLowerCase() === rawBgName)) &&
                     (!reqBgSrc || (b.source || 'PHB').toUpperCase() === reqBgSrc)
             ) ||
             builderCache?.bgs?.find(
@@ -681,7 +681,10 @@ export async function openCharacterBuilderModal(char, options = {}) {
 
             let hasBgEquipItems = false;
             if (matchedBg.equipmentData) {
-                if (Array.isArray(matchedBg.equipmentData.fixedItems) && matchedBg.equipmentData.fixedItems.length > 0) {
+                if (
+                    Array.isArray(matchedBg.equipmentData.fixedItems) &&
+                    matchedBg.equipmentData.fixedItems.length > 0
+                ) {
                     matchedBg.equipmentData.fixedItems.forEach((it) => {
                         hasBgEquipItems = true;
                         candidateBgItems.push({
@@ -1003,7 +1006,10 @@ export async function openCharacterBuilderModal(char, options = {}) {
                                 const baseDesc = extractTextFromEntries(scf.entries) || scf.description || '';
                                 let fullDesc = baseDesc;
 
-                                if (isTotemBarbarian && ['totem spirit', 'aspect of the beast', 'totemic attunement'].includes(key)) {
+                                if (
+                                    isTotemBarbarian &&
+                                    ['totem spirit', 'aspect of the beast', 'totemic attunement'].includes(key)
+                                ) {
                                     const animalOptions = fullData.subclassFeature
                                         .filter(
                                             (sf) =>
@@ -1017,10 +1023,12 @@ export async function openCharacterBuilderModal(char, options = {}) {
                                         }));
                                     if (animalOptions.length > 0) {
                                         subOptions = animalOptions;
-                                        subOptionChoice = workingChar.featureSubChoices?.[featId] || animalOptions[0].name;
+                                        subOptionChoice =
+                                            workingChar.featureSubChoices?.[featId] || animalOptions[0].name;
                                         const chosenAnimal =
                                             animalOptions.find((a) => a.name === subOptionChoice) || animalOptions[0];
-                                        fullDesc = baseDesc + '\n\n**' + chosenAnimal.name + ':** ' + chosenAnimal.description;
+                                        fullDesc =
+                                            baseDesc + '\n\n**' + chosenAnimal.name + ':** ' + chosenAnimal.description;
                                     }
                                 }
 
@@ -1259,7 +1267,8 @@ export async function openCharacterBuilderModal(char, options = {}) {
             });
         }
 
-        const isHumanVersatile = (is2024Char && (workingChar.race || '').toLowerCase().includes('human')) || isVariantHuman;
+        const isHumanVersatile =
+            (is2024Char && (workingChar.race || '').toLowerCase().includes('human')) || isVariantHuman;
         if (isHumanVersatile) {
             const humanOriginId = 'origin_feat_human';
             const prev = previousTiersMap.get(humanOriginId);
@@ -1334,7 +1343,7 @@ export async function openCharacterBuilderModal(char, options = {}) {
                 if (!spRes || !spRes.ok)
                     spRes = await fetch('data/spells-catalog.json?v=' + Date.now()).catch(() => null);
                 if (spRes && spRes.ok) spellList = await spRes.json();
-            } catch (e) { }
+            } catch (e) {}
         }
 
         if (builderCache && (!builderCache.spells || builderCache.spells.length === 0)) {
@@ -1347,7 +1356,10 @@ export async function openCharacterBuilderModal(char, options = {}) {
         for (const c of classes) {
             const fullData = await loadFullClassData(c.name);
             if (c.subclass && fullData && Array.isArray(fullData.subclass)) {
-                const subClean = (c.subclass || '').toLowerCase().replace(/\s*\[.*?\]$/, '').trim();
+                const subClean = (c.subclass || '')
+                    .toLowerCase()
+                    .replace(/\s*\[.*?\]$/, '')
+                    .trim();
                 const scObj = fullData.subclass.find((s) => {
                     const sName = (s.name || '').toLowerCase().trim();
                     return sName === subClean || sName.includes(subClean) || subClean.includes(sName);
@@ -1387,7 +1399,9 @@ export async function openCharacterBuilderModal(char, options = {}) {
                                             time: spObj ? spObj.castingTime || spObj.time || '1 action' : '1 action',
                                             range: spObj ? spObj.range || 'Self' : 'Self',
                                             duration: spObj ? spObj.duration || 'Instantaneous' : 'Instantaneous',
-                                            description: spObj ? spObj.descriptionMarkdown || spObj.description || '' : '',
+                                            description: spObj
+                                                ? spObj.descriptionMarkdown || spObj.description || ''
+                                                : '',
                                             originName: c.subclass,
                                             checked: true,
                                             isCantrip: (spObj ? parseInt(spObj.level) || 0 : 1) === 0,
@@ -1405,7 +1419,9 @@ export async function openCharacterBuilderModal(char, options = {}) {
         // 5b. Extract Background Guild & College Expanded Spells
         candidateBgExpandedSpells = [];
         if (matchedBg && matchedBg.additionalSpells) {
-            const addSp = Array.isArray(matchedBg.additionalSpells) ? matchedBg.additionalSpells : [matchedBg.additionalSpells];
+            const addSp = Array.isArray(matchedBg.additionalSpells)
+                ? matchedBg.additionalSpells
+                : [matchedBg.additionalSpells];
             addSp.forEach((as) => {
                 if (as && as.expanded && typeof as.expanded === 'object') {
                     Object.entries(as.expanded).forEach(([slotKey, spellNames]) => {
@@ -1516,7 +1532,8 @@ export async function openCharacterBuilderModal(char, options = {}) {
                     maxCantrips = 0;
                     if (raw === 'paladin') {
                         const chaMod = getMod(
-                            getEffectiveStats(workingChar, matchedBaseRace, matchedSubrace, asiTiers, racialChoiceDefs).cha
+                            getEffectiveStats(workingChar, matchedBaseRace, matchedSubrace, asiTiers, racialChoiceDefs)
+                                .cha
                         );
                         maxSpells = Math.max(1, chaMod + Math.floor(l / 2));
                     } else {
@@ -1628,8 +1645,12 @@ export async function openCharacterBuilderModal(char, options = {}) {
             ...Object.values(builderState.selectedFeatCustomOptions || {})
         ].filter(Boolean);
 
-        const hasDragonHide = allSelectedFeats.some((f) => (typeof f === 'string' ? f : f.name || '').toLowerCase().includes('dragon hide'));
-        const hasDraconicSorcerer = workingChar.classes.some((c) => (c.subclass || '').toLowerCase().includes('draconic'));
+        const hasDragonHide = allSelectedFeats.some((f) =>
+            (typeof f === 'string' ? f : f.name || '').toLowerCase().includes('dragon hide')
+        );
+        const hasDraconicSorcerer = workingChar.classes.some((c) =>
+            (c.subclass || '').toLowerCase().includes('draconic')
+        );
 
         // 2024 College of Dance Bard (Level 3+)
         const danceBardClass = workingChar.classes.find(
@@ -1815,8 +1836,8 @@ export async function openCharacterBuilderModal(char, options = {}) {
                             cleanLow.includes('plate') ||
                             cleanLow.includes('splint') ||
                             cleanLow.includes('ring mail')
-                            ? 'HA'
-                            : catItem?.rawType || 'MA';
+                          ? 'HA'
+                          : catItem?.rawType || 'MA';
                 const baseAc = catItem?.ac || (rawType === 'LA' ? 11 : rawType === 'HA' ? 16 : 14);
                 if (!allArmorOptions.some((a) => a.name.toLowerCase().includes(cleanLow))) {
                     allArmorOptions.push({
@@ -1859,8 +1880,8 @@ export async function openCharacterBuilderModal(char, options = {}) {
                                         cleanLow.includes('plate') ||
                                         cleanLow.includes('splint') ||
                                         cleanLow.includes('ring mail')
-                                        ? 'HA'
-                                        : catItem?.rawType || 'MA';
+                                      ? 'HA'
+                                      : catItem?.rawType || 'MA';
                             const baseAc = catItem?.ac || (rawType === 'LA' ? 11 : rawType === 'HA' ? 16 : 14);
                             if (!allArmorOptions.some((a) => a.name.toLowerCase().includes(cleanLow))) {
                                 allArmorOptions.push({
@@ -1895,7 +1916,7 @@ export async function openCharacterBuilderModal(char, options = {}) {
             const specialOpts = allArmorOptions.filter((a) => a.type === 'Special');
             if (specialOpts.length > 0) {
                 specialOpts.sort((a, b) => b.baseAc - a.baseAc);
-                if (specialOpts[0].baseAc > (10 + dexMod)) {
+                if (specialOpts[0].baseAc > 10 + dexMod) {
                     builderState.activeArmorId = specialOpts[0].id;
                 }
             }
@@ -1969,7 +1990,9 @@ export async function openCharacterBuilderModal(char, options = {}) {
                 }
             });
         }
-        const hasTough = allSelectedFeats.some((f) => (typeof f === 'string' ? f : f.name || '').toLowerCase().includes('tough'));
+        const hasTough = allSelectedFeats.some((f) =>
+            (typeof f === 'string' ? f : f.name || '').toLowerCase().includes('tough')
+        );
         if (hasTough) {
             hpBreakdown.tough = 2 * totalLvl;
         }
@@ -2066,20 +2089,30 @@ export async function openCharacterBuilderModal(char, options = {}) {
         const hasDefenseFightingStyle = (() => {
             const subVals = Object.values(workingChar.featureSubChoices || {});
             if (subVals.some((v) => typeof v === 'string' && v.toLowerCase() === 'defense')) return true;
-            if (candidateClassFeatures && candidateClassFeatures.some((f) =>
-                (f.checked !== false) &&
-                (f.subOptionChoice && f.subOptionChoice.toLowerCase() === 'defense')
-            )) return true;
+            if (
+                candidateClassFeatures &&
+                candidateClassFeatures.some(
+                    (f) => f.checked !== false && f.subOptionChoice && f.subOptionChoice.toLowerCase() === 'defense'
+                )
+            )
+                return true;
             const featCustomVals = Object.values(builderState.selectedFeatCustomOptions || {});
-            if (featCustomVals.some((opt) => opt && opt.fightingStyle && opt.fightingStyle.toLowerCase() === 'defense')) return true;
-            if ((workingChar.features || []).some((f) => {
-                const n = (typeof f === 'string' ? f : f.name || '').toLowerCase();
-                return n.includes('defense') && (n.includes('fighting style') || n.includes('fighting initiate'));
-            })) return true;
-            if ((workingChar.customFeatures || []).some((f) => {
-                const n = (f.name || '').toLowerCase();
-                return n.includes('defense');
-            })) return true;
+            if (featCustomVals.some((opt) => opt && opt.fightingStyle && opt.fightingStyle.toLowerCase() === 'defense'))
+                return true;
+            if (
+                (workingChar.features || []).some((f) => {
+                    const n = (typeof f === 'string' ? f : f.name || '').toLowerCase();
+                    return n.includes('defense') && (n.includes('fighting style') || n.includes('fighting initiate'));
+                })
+            )
+                return true;
+            if (
+                (workingChar.customFeatures || []).some((f) => {
+                    const n = (f.name || '').toLowerCase();
+                    return n.includes('defense');
+                })
+            )
+                return true;
             return false;
         })();
 
@@ -2289,7 +2322,9 @@ export async function openCharacterBuilderModal(char, options = {}) {
         } else if (currentStep === 6) {
             if (Array.isArray(asiTiers)) {
                 asiTiers.forEach((tier, tIdx) => {
-                    const choiceBtnActive = document.querySelector(`.pc-wiz-tier-choice.btn-primary[data-tidx="${tIdx}"]`);
+                    const choiceBtnActive = document.querySelector(
+                        `.pc-wiz-tier-choice.btn-primary[data-tidx="${tIdx}"]`
+                    );
                     if (choiceBtnActive && choiceBtnActive.dataset.choice) {
                         tier.choice = choiceBtnActive.dataset.choice;
                     }
@@ -2472,17 +2507,17 @@ export async function openCharacterBuilderModal(char, options = {}) {
                 typeof char.spells === 'object' && char.spells !== null && !Array.isArray(char.spells)
                     ? char.spells
                     : {
-                        cantrip: [],
-                        level1: [],
-                        level2: [],
-                        level3: [],
-                        level4: [],
-                        level5: [],
-                        level6: [],
-                        level7: [],
-                        level8: [],
-                        level9: []
-                    };
+                          cantrip: [],
+                          level1: [],
+                          level2: [],
+                          level3: [],
+                          level4: [],
+                          level5: [],
+                          level6: [],
+                          level7: [],
+                          level8: [],
+                          level9: []
+                      };
             [
                 'cantrip',
                 'level1',
@@ -2531,7 +2566,9 @@ export async function openCharacterBuilderModal(char, options = {}) {
             char.pointBuyScores = { ...workingChar.pointBuyScores };
             char.standardArrayAssignments = { ...workingChar.standardArrayAssignments };
             char.manualScores = { ...workingChar.manualScores };
-            char.rolledScores = Array.isArray(workingChar.rolledScores) ? JSON.parse(JSON.stringify(workingChar.rolledScores)) : [];
+            char.rolledScores = Array.isArray(workingChar.rolledScores)
+                ? JSON.parse(JSON.stringify(workingChar.rolledScores))
+                : [];
             char.racialAsiMode = workingChar.racialAsiMode;
             char.tashasMode = workingChar.tashasMode;
             char.tashasPlus2 = workingChar.tashasPlus2;
@@ -2626,7 +2663,11 @@ export async function openCharacterBuilderModal(char, options = {}) {
 
                 const resolvedMax = ab.hasCounter ? evaluateAbilityMaxUses(ab.usesMax, char) : 0;
                 let cardName = ab.name;
-                if (ab.subOptions && ab.subOptionChoice && !cardName.toLowerCase().includes(ab.subOptionChoice.toLowerCase())) {
+                if (
+                    ab.subOptions &&
+                    ab.subOptionChoice &&
+                    !cardName.toLowerCase().includes(ab.subOptionChoice.toLowerCase())
+                ) {
                     cardName = `${ab.name} (${ab.subOptionChoice})`;
                 }
                 char.abilityCards.push({
@@ -2816,7 +2857,11 @@ export async function openCharacterBuilderModal(char, options = {}) {
                             } else if (/shadow[- ]touched/i.test(fName)) {
                                 spellsToImport.push({ name: 'Invisibility', level: 2 });
                                 if (sub.spell1) spellsToImport.push({ name: sub.spell1, level: 1 });
-                            } else if (/magic initiate/i.test(fName) || /strixhaven initiate/i.test(fName) || /initiate of high sorcery/i.test(fName)) {
+                            } else if (
+                                /magic initiate/i.test(fName) ||
+                                /strixhaven initiate/i.test(fName) ||
+                                /initiate of high sorcery/i.test(fName)
+                            ) {
                                 if (sub.cantrip1) spellsToImport.push({ name: sub.cantrip1, level: 0 });
                                 if (sub.cantrip2) spellsToImport.push({ name: sub.cantrip2, level: 0 });
                                 if (sub.spell1) spellsToImport.push({ name: sub.spell1, level: 1 });
@@ -2885,16 +2930,26 @@ export async function openCharacterBuilderModal(char, options = {}) {
 
             char.feats = char.feats || [];
             allSelectedFeatNames.forEach((fName) => {
-                if (fName && !char.feats.some((f) => (typeof f === 'string' ? f : f.name || '').toLowerCase() === fName.toLowerCase())) {
+                if (
+                    fName &&
+                    !char.feats.some(
+                        (f) => (typeof f === 'string' ? f : f.name || '').toLowerCase() === fName.toLowerCase()
+                    )
+                ) {
                     char.feats.push(fName);
                 }
             });
 
-            const hasFeatMatch = (term) => allSelectedFeatNames.some((f) => (f || '').toLowerCase().includes(term.toLowerCase()));
+            const hasFeatMatch = (term) =>
+                allSelectedFeatNames.some((f) => (f || '').toLowerCase().includes(term.toLowerCase()));
 
             // Alert: +5 Initiative
             if (hasFeatMatch('alert')) {
-                if (!char.skillToggles.some((t) => t.id === 'tog_alert' || (t.name || '').toLowerCase().includes('alert'))) {
+                if (
+                    !char.skillToggles.some(
+                        (t) => t.id === 'tog_alert' || (t.name || '').toLowerCase().includes('alert')
+                    )
+                ) {
                     char.skillToggles.push({
                         id: 'tog_alert',
                         name: 'Alert (+5 Initiative)',

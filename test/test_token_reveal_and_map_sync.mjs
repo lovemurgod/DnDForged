@@ -69,14 +69,15 @@ test('[Test 3] Door toggle and walls sync invalidates wallsVersion and token cac
 
     // syncContext must expose wallsVersion and syncWallSpatialIndex
     assert.match(canvasCode, /get\s+wallsVersion\(\)/, 'syncContext must provide wallsVersion getter');
-    assert.match(canvasCode, /syncWallSpatialIndex:\s*\(w,\s*h\)\s*=>\s*syncWallSpatialIndex\(w,\s*h\)/, 'syncContext must provide syncWallSpatialIndex');
+    assert.match(
+        canvasCode,
+        /syncWallSpatialIndex:\s*\(w,\s*h\)\s*=>\s*syncWallSpatialIndex\(w,\s*h\)/,
+        'syncContext must provide syncWallSpatialIndex'
+    );
 });
 
 test('[Test 4] vtt-canvas-socket-sync.js triggers syncWallSpatialIndex on walls:updated and map:request_sync on map:activated', () => {
-    const syncCode = fs.readFileSync(
-        path.join(rootDir, 'vtt', 'js', 'canvas', 'vtt-canvas-socket-sync.js'),
-        'utf8'
-    );
+    const syncCode = fs.readFileSync(path.join(rootDir, 'vtt', 'js', 'canvas', 'vtt-canvas-socket-sync.js'), 'utf8');
 
     // walls:updated must trigger syncWallSpatialIndex
     assert.match(
@@ -113,4 +114,3 @@ test('[Test 5] server/socket.js uses getPlayerMapOverride case-insensitively', (
         'getSanitizedCampaignSync must use getPlayerMapOverride'
     );
 });
-

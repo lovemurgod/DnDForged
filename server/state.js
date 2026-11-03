@@ -383,7 +383,9 @@ export function loadDatabase() {
                 }
 
                 if (!loaded) {
-                    console.error('[Database CRITICAL] Halting database reload to prevent destructive empty overwrite.');
+                    console.error(
+                        '[Database CRITICAL] Halting database reload to prevent destructive empty overwrite.'
+                    );
                     return;
                 }
             }

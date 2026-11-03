@@ -398,15 +398,14 @@ export function createAbilityRow(item = {}) {
 
     const nameToCheck = item.name || '';
     const textToCheck = `${nameToCheck} ${desc}`;
-    const initIsMagic = item.macro?.isMagic !== undefined
-        ? !!item.macro.isMagic
-        : (/\bmagical\b/i.test(textToCheck) || /\+[1-9]\b/.test(nameToCheck));
-    const initIsSilvered = item.macro?.isSilvered !== undefined
-        ? !!item.macro.isSilvered
-        : /\bsilver(?:ed)?\b/i.test(textToCheck);
-    const initIsAdamantine = item.macro?.isAdamantine !== undefined
-        ? !!item.macro.isAdamantine
-        : /\badamantine\b/i.test(textToCheck);
+    const initIsMagic =
+        item.macro?.isMagic !== undefined
+            ? !!item.macro.isMagic
+            : /\bmagical\b/i.test(textToCheck) || /\+[1-9]\b/.test(nameToCheck);
+    const initIsSilvered =
+        item.macro?.isSilvered !== undefined ? !!item.macro.isSilvered : /\bsilver(?:ed)?\b/i.test(textToCheck);
+    const initIsAdamantine =
+        item.macro?.isAdamantine !== undefined ? !!item.macro.isAdamantine : /\badamantine\b/i.test(textToCheck);
 
     if (item.macro) {
         if (item.macro.attackBonus !== undefined && item.macro.attackBonus !== null) {
@@ -452,8 +451,7 @@ export function createAbilityRow(item = {}) {
         dmgMatches.forEach((dm) => {
             const formula = (dm[1] || dm[3] || dm[4] || '').trim();
             const rawType = (dm[5] || 'Slashing').trim();
-            const type =
-                STANDARD_DAMAGE_TYPES.find((dt) => dt.toLowerCase() === rawType.toLowerCase()) || 'Slashing';
+            const type = STANDARD_DAMAGE_TYPES.find((dt) => dt.toLowerCase() === rawType.toLowerCase()) || 'Slashing';
             const isRider = saveBoundary !== -1 && dm.index >= saveBoundary;
             if (formula) {
                 initDamages.push({ formula, type, saveRider: isRider });

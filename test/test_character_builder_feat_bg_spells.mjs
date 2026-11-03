@@ -8,10 +8,7 @@ import {
     RUNE_SHAPER_SPELLS,
     OUTER_PLANES
 } from '../vtt/js/player-sheet/builder/step7-feats.js';
-import {
-    getFeatAndAsiBonuses,
-    extractGrantedSpells
-} from '../vtt/js/player-sheet/builder/builder-state.js';
+import { getFeatAndAsiBonuses, extractGrantedSpells } from '../vtt/js/player-sheet/builder/builder-state.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -143,7 +140,9 @@ console.log('\n[Test 2] Background Feat Detection & College Pre-Selection...');
     assert.strictEqual(detAcolyte.bgFeatName.toLowerCase(), 'magic initiate');
     assert.strictEqual(detAcolyte.bgFeatSpellClass, 'cleric');
 
-    console.log('  ✔ Background feat detection correctly identified Strixhaven Initiate (Lorehold) and Magic Initiate (Cleric)');
+    console.log(
+        '  ✔ Background feat detection correctly identified Strixhaven Initiate (Lorehold) and Magic Initiate (Cleric)'
+    );
 }
 
 // =========================================================================
@@ -303,7 +302,9 @@ console.log('\n[Test 5] Background Expanded Spells Checklist & Import...');
     assert.strictEqual(char.spells.level1.length, 2);
     assert.strictEqual(char.spells.level2.length, 3);
     assert.strictEqual(char.spells.level3.length, 3);
-    assert.ok(char.spells.level3.some((s) => s.name === 'Spirit guardians' || s.name.toLowerCase() === 'spirit guardians'));
+    assert.ok(
+        char.spells.level3.some((s) => s.name === 'Spirit guardians' || s.name.toLowerCase() === 'spirit guardians')
+    );
     console.log('  ✔ Background expanded spells successfully extracted into checklist and imported');
 }
 

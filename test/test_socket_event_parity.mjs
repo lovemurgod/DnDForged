@@ -35,8 +35,16 @@ async function runSocketParityTests() {
         activeGMMapId: 'map_1',
         playerMapOverrides: {},
         maps: {
-            map_1: { id: 'map_1', name: 'Map 1', tokens: { token_player: { id: 'token_player', name: 'Hero', isPlayer: true, characterId: 'char_1' } } },
-            map_2: { id: 'map_2', name: 'Map 2', tokens: { token_player: { id: 'token_player', name: 'Hero', isPlayer: true, characterId: 'char_1' } } }
+            map_1: {
+                id: 'map_1',
+                name: 'Map 1',
+                tokens: { token_player: { id: 'token_player', name: 'Hero', isPlayer: true, characterId: 'char_1' } }
+            },
+            map_2: {
+                id: 'map_2',
+                name: 'Map 2',
+                tokens: { token_player: { id: 'token_player', name: 'Hero', isPlayer: true, characterId: 'char_1' } }
+            }
         },
         characters: {
             char_1: { id: 'char_1', characterName: 'Hero', owner: 'Alice' }
@@ -66,7 +74,11 @@ async function runSocketParityTests() {
     };
 
     initSocketServer(mockIo);
-    assert.strictEqual(typeof connectionHandler, 'function', 'initSocketServer must register a connection listener on io');
+    assert.strictEqual(
+        typeof connectionHandler,
+        'function',
+        'initSocketServer must register a connection listener on io'
+    );
 
     // Helper to create mock client socket
     function createMockSocket(id, role, username) {
@@ -99,8 +111,12 @@ async function runSocketParityTests() {
     roomBroadcasts.length = 0;
     gmSocket.emit('initiative:settings', { visible: true });
 
-    assert.strictEqual(campaigns[testCampaignId].initiative.isVisible, true, 'campaign.initiative.isVisible must be true');
-    const broadcast1 = roomBroadcasts.find(b => b.room === testCampaignId && b.event === 'initiative:settings');
+    assert.strictEqual(
+        campaigns[testCampaignId].initiative.isVisible,
+        true,
+        'campaign.initiative.isVisible must be true'
+    );
+    const broadcast1 = roomBroadcasts.find((b) => b.room === testCampaignId && b.event === 'initiative:settings');
     assert.ok(broadcast1, 'initiative:settings must be broadcast to the campaign room');
     assert.strictEqual(broadcast1.payload.visible, true, 'Broadcast payload must indicate visible: true');
     console.log('  ✓ GM initiative:settings correctly updates database and broadcasts to room.');
@@ -108,50 +124,83 @@ async function runSocketParityTests() {
     // 1b. GM toggles initiative visibility to false
     roomBroadcasts.length = 0;
     gmSocket.emit('initiative:settings', { visible: false });
-    assert.strictEqual(campaigns[testCampaignId].initiative.isVisible, false, 'campaign.initiative.isVisible must be false');
-    const broadcast2 = roomBroadcasts.find(b => b.room === testCampaignId && b.event === 'initiative:settings');
+    assert.strictEqual(
+        campaigns[testCampaignId].initiative.isVisible,
+        false,
+        'campaign.initiative.isVisible must be false'
+    );
+    const broadcast2 = roomBroadcasts.find((b) => b.room === testCampaignId && b.event === 'initiative:settings');
     assert.ok(broadcast2 && broadcast2.payload.visible === false, 'Broadcast payload must indicate visible: false');
     console.log('  ✓ GM initiative:settings correctly toggles to false.');
 
     // 1c. Player tries to alter initiative:settings (unauthorized)
     roomBroadcasts.length = 0;
     playerSocket.emit('initiative:settings', { visible: true });
-    assert.strictEqual(campaigns[testCampaignId].initiative.isVisible, false, 'Player must NOT be able to alter initiative visibility');
+    assert.strictEqual(
+        campaigns[testCampaignId].initiative.isVisible,
+        false,
+        'Player must NOT be able to alter initiative visibility'
+    );
     assert.strictEqual(roomBroadcasts.length, 0, 'No broadcast should occur when player attempts initiative:settings');
     console.log('  ✓ Player initiative:settings mutation safely rejected.');
 
     console.log('\n[Test 2] Testing Map Switching & Inter-Map Portal Aliases...');
     // 2a. GM modern event: map:switch-gm
     gmSocket.emit('map:switch-gm', { mapId: 'map_2' });
-    assert.strictEqual(campaigns[testCampaignId].activeGMMapId, 'map_2', 'activeGMMapId must be updated by map:switch-gm');
+    assert.strictEqual(
+        campaigns[testCampaignId].activeGMMapId,
+        'map_2',
+        'activeGMMapId must be updated by map:switch-gm'
+    );
     console.log('  ✓ map:switch-gm updates activeGMMapId.');
 
     // 2b. GM legacy/portal event alias: map:switch
     gmSocket.emit('map:switch', { mapId: 'map_1' });
-    assert.strictEqual(campaigns[testCampaignId].activeGMMapId, 'map_1', 'activeGMMapId must be updated by legacy alias map:switch');
+    assert.strictEqual(
+        campaigns[testCampaignId].activeGMMapId,
+        'map_1',
+        'activeGMMapId must be updated by legacy alias map:switch'
+    );
     console.log('  ✓ map:switch alias successfully resolves and updates activeGMMapId.');
 
     // 2c. Player modern event: map:switch-player
     playerSocket.emit('map:switch-player', { mapId: 'map_2' });
-    assert.strictEqual(campaigns[testCampaignId].playerMapOverrides['Alice'], 'map_2', 'playerMapOverrides must be updated by map:switch-player');
+    assert.strictEqual(
+        campaigns[testCampaignId].playerMapOverrides['Alice'],
+        'map_2',
+        'playerMapOverrides must be updated by map:switch-player'
+    );
     console.log('  ✓ map:switch-player updates playerMapOverrides.');
 
     // 2d. Player legacy/portal event alias: player:map_override
     playerSocket.emit('player:map_override', { mapId: 'map_1' });
-    assert.strictEqual(campaigns[testCampaignId].playerMapOverrides['Alice'], 'map_1', 'playerMapOverrides must be updated by legacy alias player:map_override');
+    assert.strictEqual(
+        campaigns[testCampaignId].playerMapOverrides['Alice'],
+        'map_1',
+        'playerMapOverrides must be updated by legacy alias player:map_override'
+    );
     console.log('  ✓ player:map_override alias successfully resolves and updates playerMapOverrides.');
 
     console.log('\n[Test 3] Testing vtt-canvas.js switchMapTo implementation...');
     const canvasCode = fs.readFileSync(path.join(rootDir, 'vtt/js/vtt-canvas.js'), 'utf8');
     assert.ok(canvasCode.includes("vtt.socket.emit('map:switch-gm'"), "vtt-canvas.js must emit 'map:switch-gm' for GM");
-    assert.ok(canvasCode.includes("vtt.socket.emit('map:switch-player'"), "vtt-canvas.js must emit 'map:switch-player' for player");
+    assert.ok(
+        canvasCode.includes("vtt.socket.emit('map:switch-player'"),
+        "vtt-canvas.js must emit 'map:switch-player' for player"
+    );
     assert.ok(!canvasCode.includes("vtt.socket.emit('map:switch',"), "vtt-canvas.js should not emit bare 'map:switch'");
-    assert.ok(!canvasCode.includes("vtt.socket.emit('player:map_override',"), "vtt-canvas.js should not emit bare 'player:map_override'");
+    assert.ok(
+        !canvasCode.includes("vtt.socket.emit('player:map_override',"),
+        "vtt-canvas.js should not emit bare 'player:map_override'"
+    );
     console.log('  ✓ vtt-canvas.js switchMapTo verified to emit standardized socket events.');
 
     console.log('\n[Test 4] Testing server.js static route for /img...');
     const serverCode = fs.readFileSync(path.join(rootDir, 'server.js'), 'utf8');
-    assert.ok(serverCode.includes("['/img', '/vtt/img']"), "server.js must register static route for ['/img', '/vtt/img']");
+    assert.ok(
+        serverCode.includes("['/img', '/vtt/img']"),
+        "server.js must register static route for ['/img', '/vtt/img']"
+    );
     console.log('  ✓ server.js registers static route for /img and /vtt/img.');
 
     // Cleanup test campaign
@@ -162,7 +211,7 @@ async function runSocketParityTests() {
     console.log('======================================================');
 }
 
-runSocketParityTests().catch(err => {
+runSocketParityTests().catch((err) => {
     console.error('Test failure:', err);
     process.exit(1);
 });

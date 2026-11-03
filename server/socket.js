@@ -482,7 +482,8 @@ export function initSocketServer(io) {
                 data.mapId ||
                 (socket.role === 'GM'
                     ? campaigns[campaignId].activeGMMapId || campaigns[campaignId].activeMapId
-                    : getPlayerMapOverride(campaigns[campaignId], socket.username) || campaigns[campaignId].activeMapId);
+                    : getPlayerMapOverride(campaigns[campaignId], socket.username) ||
+                      campaigns[campaignId].activeMapId);
 
             // Handle single token format { token } gracefully
             if (data.token && data.token.id && !data.tokens) {
@@ -496,7 +497,8 @@ export function initSocketServer(io) {
                     data.mapId ||
                     (socket.role === 'GM'
                         ? campaigns[campaignId].activeGMMapId || campaigns[campaignId].activeMapId
-                        : getPlayerMapOverride(campaigns[campaignId], socket.username) || campaigns[campaignId].activeMapId);
+                        : getPlayerMapOverride(campaigns[campaignId], socket.username) ||
+                          campaigns[campaignId].activeMapId);
 
                 let wasVisibleToPlayers = false;
                 let isVisibleToPlayers = false;
@@ -625,7 +627,8 @@ export function initSocketServer(io) {
                 data.mapId ||
                 (socket.role === 'GM'
                     ? campaigns[campaignId].activeGMMapId || campaigns[campaignId].activeMapId
-                    : getPlayerMapOverride(campaigns[campaignId], socket.username) || campaigns[campaignId].activeMapId);
+                    : getPlayerMapOverride(campaigns[campaignId], socket.username) ||
+                      campaigns[campaignId].activeMapId);
             if (campaigns[campaignId].maps && campaigns[campaignId].maps[mapId]) {
                 const cloned = JSON.parse(JSON.stringify(data.token || {}));
                 if (!cloned.id) cloned.id = data.tokenId;
@@ -671,7 +674,8 @@ export function initSocketServer(io) {
                 data.mapId ||
                 (socket.role === 'GM'
                     ? campaigns[campaignId].activeGMMapId || campaigns[campaignId].activeMapId
-                    : getPlayerMapOverride(campaigns[campaignId], socket.username) || campaigns[campaignId].activeMapId);
+                    : getPlayerMapOverride(campaigns[campaignId], socket.username) ||
+                      campaigns[campaignId].activeMapId);
             let wasVisibleToPlayers = false;
             let isVisibleToPlayers = false;
             let tokenSnapshot = null;
@@ -760,7 +764,8 @@ export function initSocketServer(io) {
                 data.mapId ||
                 (socket.role === 'GM'
                     ? campaigns[campaignId].activeGMMapId || campaigns[campaignId].activeMapId
-                    : getPlayerMapOverride(campaigns[campaignId], socket.username) || campaigns[campaignId].activeMapId);
+                    : getPlayerMapOverride(campaigns[campaignId], socket.username) ||
+                      campaigns[campaignId].activeMapId);
             if (campaigns[campaignId].maps && campaigns[campaignId].maps[mapId]) {
                 const existingToken = campaigns[campaignId].maps[mapId].tokens[data.tokenId];
                 if (!existingToken) return;
@@ -1160,7 +1165,7 @@ export function initSocketServer(io) {
                     targetMapName: targetMap.name || 'New Map',
                     targetX,
                     targetY,
-                    username: (socket.role === 'GM' ? tokenOwner || username : socket.username)
+                    username: socket.role === 'GM' ? tokenOwner || username : socket.username
                 });
             }
         });
@@ -1278,7 +1283,9 @@ export function initSocketServer(io) {
                         isVisible: false
                     };
                     const existingCombatants = Array.isArray(currentInit.combatants) ? [...currentInit.combatants] : [];
-                    const incomingCombatants = Array.isArray(data.initiative.combatants) ? data.initiative.combatants : [];
+                    const incomingCombatants = Array.isArray(data.initiative.combatants)
+                        ? data.initiative.combatants
+                        : [];
 
                     // Filter incoming combatants: players can only add/update combatants for characters/tokens they control
                     const allowedNewCombatants = incomingCombatants.filter((c) => {
@@ -1334,8 +1341,7 @@ export function initSocketServer(io) {
                         if (typeof allowed.name === 'string') {
                             allowed.name = allowed.name.slice(0, 100);
                         }
-                        const allowedNameLower =
-                            typeof allowed.name === 'string' ? allowed.name.toLowerCase() : null;
+                        const allowedNameLower = typeof allowed.name === 'string' ? allowed.name.toLowerCase() : null;
 
                         const matchIdx = existingCombatants.findIndex((ec) => {
                             if (!ec) return false;
@@ -1430,7 +1436,11 @@ export function initSocketServer(io) {
                 for (const id in newShapes) {
                     const s = newShapes[id];
                     const existing = existingShapes[id];
-                    if (existing && (!existing.ownerUsername || existing.ownerUsername.toLowerCase() !== (username || '').toLowerCase())) {
+                    if (
+                        existing &&
+                        (!existing.ownerUsername ||
+                            existing.ownerUsername.toLowerCase() !== (username || '').toLowerCase())
+                    ) {
                         continue;
                     }
                     mergedShapes[id] = {
@@ -1478,7 +1488,11 @@ export function initSocketServer(io) {
                 for (const id in newDrawings) {
                     const d = newDrawings[id];
                     const existing = existingDrawings[id];
-                    if (existing && (!existing.ownerUsername || existing.ownerUsername.toLowerCase() !== (username || '').toLowerCase())) {
+                    if (
+                        existing &&
+                        (!existing.ownerUsername ||
+                            existing.ownerUsername.toLowerCase() !== (username || '').toLowerCase())
+                    ) {
                         continue;
                     }
                     mergedDrawings[id] = {
@@ -1815,7 +1829,8 @@ export function initSocketServer(io) {
                 data?.mapId ||
                 (socket.role === 'GM'
                     ? campaigns[campaignId].activeGMMapId || campaigns[campaignId].activeMapId
-                    : getPlayerMapOverride(campaigns[campaignId], socket.username) || campaigns[campaignId].activeMapId);
+                    : getPlayerMapOverride(campaigns[campaignId], socket.username) ||
+                      campaigns[campaignId].activeMapId);
             if (campaigns[campaignId].maps && campaigns[campaignId].maps[targetMapId]) {
                 socket.emit('map:full_data', { mapId: targetMapId, map: campaigns[campaignId].maps[targetMapId] });
             }
@@ -1829,7 +1844,8 @@ export function initSocketServer(io) {
                 data.mapId ||
                 (socket.role === 'GM'
                     ? campaigns[campaignId].activeGMMapId || campaigns[campaignId].activeMapId
-                    : getPlayerMapOverride(campaigns[campaignId], socket.username) || campaigns[campaignId].activeMapId);
+                    : getPlayerMapOverride(campaigns[campaignId], socket.username) ||
+                      campaigns[campaignId].activeMapId);
 
             let token = campaigns[campaignId].maps?.[targetMapId]?.tokens?.[data.tokenId];
             if (!token && campaigns[campaignId].maps) {
@@ -1844,8 +1860,7 @@ export function initSocketServer(io) {
 
             if (token) {
                 const isVisible =
-                    socket.role === 'GM' ||
-                    (token.layer !== 'gm' && token.isVisible !== false && !token.hidden);
+                    socket.role === 'GM' || (token.layer !== 'gm' && token.isVisible !== false && !token.hidden);
                 if (isVisible) {
                     const cloned = JSON.parse(JSON.stringify(token));
                     if (!cloned.id) cloned.id = data.tokenId;

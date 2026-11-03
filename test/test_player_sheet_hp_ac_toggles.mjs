@@ -95,8 +95,8 @@ console.log('\n[TEST 2] Testing AC Formula Parsing Engine...');
             dex: 14, // mod +2
             con: 12, // mod +1
             int: 16, // mod +3
-            wis: 8,  // mod -1
-            cha: 18  // mod +4
+            wis: 8, // mod -1
+            cha: 18 // mod +4
         }
     };
 
@@ -132,7 +132,7 @@ console.log('\n[TEST 3] Testing Effective AC Calculation Engine...');
         acMod: 0,
         stats: {
             dex: 14, // +2
-            int: 16  // +3
+            int: 16 // +3
         },
         acToggles: [
             { id: 'ac1', name: 'Shield Spell', formula: '+5', enabled: false },
@@ -167,7 +167,7 @@ console.log('\n[TEST 3] Testing Effective AC Calculation Engine...');
     assert.strictEqual(calculateEffectiveAc(char), 21);
 
     // 6. Disable all toggles -> AC = 15 + 1 = 16
-    char.acToggles.forEach(t => t.enabled = false);
+    char.acToggles.forEach((t) => (t.enabled = false));
     assert.strictEqual(calculateEffectiveAc(char), 16);
 
     console.log('  ✓ Effective AC calculation with multiple active toggles and modifiers verified.');
@@ -204,4 +204,3 @@ console.log('\n[TEST 4] Testing Modal Export Contract & Subsystem Integrity...')
 console.log('\n======================================================');
 console.log('🎉 ALL HP & AC TOGGLE TESTS PASSED CLEANLY!');
 console.log('======================================================\n');
-

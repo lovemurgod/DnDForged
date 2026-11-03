@@ -823,7 +823,10 @@ export function initVttWeather(vtt) {
                 p.maxLife = 8 + Math.random() * 8;
                 p.life = isInitial ? Math.random() * p.maxLife : 0;
                 const halfLife = p.maxLife / 2;
-                p.alpha = isInitial ? (p.life < halfLife ? p.life / halfLife : Math.max(0, 1 - (p.life - halfLife) / halfLife)) * p.maxAlpha : 0;
+                p.alpha = isInitial
+                    ? (p.life < halfLife ? p.life / halfLife : Math.max(0, 1 - (p.life - halfLife) / halfLife)) *
+                      p.maxAlpha
+                    : 0;
                 p.rot = Math.random() * Math.PI * 2;
                 p.vRot = (Math.random() - 0.5) * 0.25;
                 p.spriteIdx = sprColl.void.length > 0 ? Math.floor(Math.random() * sprColl.void.length) : 0;
@@ -1640,11 +1643,12 @@ export function initVttWeather(vtt) {
         voidAnimTimer += dt * speedMultiplier;
 
         // 1. Procedural Writhing Void Tendrils
-        const tendrilCount = currentQuality === 'low' ? Math.max(2, Math.round(4 * intensity)) : Math.max(3, Math.round(7 * intensity));
+        const tendrilCount =
+            currentQuality === 'low' ? Math.max(2, Math.round(4 * intensity)) : Math.max(3, Math.round(7 * intensity));
 
         // Colors: ethereal violet glow outer, obsidian shadow core inner
         let glowRgb = { r: 168, g: 85, b: 247 }; // #a855f7
-        let coreRgb = { r: 10, g: 3, b: 20 };   // #0a0314
+        let coreRgb = { r: 10, g: 3, b: 20 }; // #0a0314
         if (layer.colorStrength > 0.05 && layer.color) {
             glowRgb = blendColorRgb('#a855f7', layer.color, layer.colorStrength);
             coreRgb = blendColorRgb('#0a0314', layer.color, layer.colorStrength * 0.4);
@@ -1658,8 +1662,8 @@ export function initVttWeather(vtt) {
         for (let t = 0; t < tendrilCount; t++) {
             const phase = t * 1.618;
             // Lissajous organic drift across viewport
-            const driftX = (width * 0.15) + ((width * 0.7) * (0.5 + 0.45 * Math.sin(voidAnimTimer * 0.25 + phase * 2)));
-            const driftY = (height * 0.15) + ((height * 0.7) * (0.5 + 0.45 * Math.cos(voidAnimTimer * 0.2 + phase * 1.5)));
+            const driftX = width * 0.15 + width * 0.7 * (0.5 + 0.45 * Math.sin(voidAnimTimer * 0.25 + phase * 2));
+            const driftY = height * 0.15 + height * 0.7 * (0.5 + 0.45 * Math.cos(voidAnimTimer * 0.2 + phase * 1.5));
 
             const tendrilLen = (200 + (t % 4) * 85) * zoomScale;
             const segments = 12;

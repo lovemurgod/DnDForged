@@ -361,14 +361,14 @@ export function initVttCanvas(vtt) {
                     ?.forEach((v) => {
                         try {
                             v.pause();
-                        } catch (e) { }
+                        } catch (e) {}
                     });
             }
             if (typeof ytPingPongControllers !== 'undefined' && ytPingPongControllers) {
                 Object.values(ytPingPongControllers).forEach((c) => {
                     try {
                         c?.pause?.();
-                    } catch (e) { }
+                    } catch (e) {}
                 });
             }
         },
@@ -649,14 +649,14 @@ export function initVttCanvas(vtt) {
                 Number.isFinite(token.pixelWidth) && token.pixelWidth > 0
                     ? token.pixelWidth
                     : (parseTokenDimension(token.customWidth) ?? parseTokenDimension(token.size) ?? 1) *
-                    grid.size *
-                    grid.scale;
+                      grid.size *
+                      grid.scale;
             drawH =
                 Number.isFinite(token.pixelHeight) && token.pixelHeight > 0
                     ? token.pixelHeight
                     : (parseTokenDimension(token.customHeight) ?? parseTokenDimension(token.size) ?? 1) *
-                    grid.size *
-                    grid.scale;
+                      grid.size *
+                      grid.scale;
         } else {
             const widthUnits = parseTokenDimension(token.customWidth) ?? parseTokenDimension(token.size) ?? 1;
             const heightUnits = parseTokenDimension(token.customHeight) ?? parseTokenDimension(token.size) ?? 1;
@@ -1381,7 +1381,7 @@ export function initVttCanvas(vtt) {
     const checkOneWayPortalEntry = (p, f, t) => checkOneWayPortalEntryExt(p, f, t);
     const calcSpatialPortalDestination = (sp, tp, fc, tc, tm = null, tok = null) =>
         calcSpatialPortalDestinationExt(sp, tp, fc, tc, tm, tok, {
-            grid: (tm && tm.grid) ? tm.grid : grid,
+            grid: tm && tm.grid ? tm.grid : grid,
             getTokenDrawDimensions,
             isHexGrid,
             getNearestHexFeatures
@@ -1683,8 +1683,7 @@ export function initVttCanvas(vtt) {
                     if (!isTokenIntersectingShape(tok, s)) return;
 
                     const isPlayerTok = Boolean(
-                        tok.isPlayer ||
-                        (tok.characterId && vtt.campaignState?.characters?.[tok.characterId]?.isPlayer)
+                        tok.isPlayer || (tok.characterId && vtt.campaignState?.characters?.[tok.characterId]?.isPlayer)
                     );
 
                     if (filterType === 'pc' && !isPlayerTok) return;
@@ -1696,9 +1695,16 @@ export function initVttCanvas(vtt) {
                 if (targetIds.length > 0) {
                     targetIds.forEach((id) => selectedTokenIds.add(id));
                     selectedTokenId = targetIds[0];
-                    const label = filterType === 'pc' ? 'player character(s)' : filterType === 'npc' ? 'monster/NPC(s)' : 'creature(s)';
+                    const label =
+                        filterType === 'pc'
+                            ? 'player character(s)'
+                            : filterType === 'npc'
+                              ? 'monster/NPC(s)'
+                              : 'creature(s)';
                     if (vtt.chatEngine?.appendSystemMessage) {
-                        vtt.chatEngine.appendSystemMessage(`Selected ${targetIds.length} ${label} within ${s.shape || 'shape'}.`);
+                        vtt.chatEngine.appendSystemMessage(
+                            `Selected ${targetIds.length} ${label} within ${s.shape || 'shape'}.`
+                        );
                     }
                 } else {
                     selectedTokenId = null;
@@ -2134,8 +2140,8 @@ export function initVttCanvas(vtt) {
             const destCenter = destPortal
                 ? calcPortalCenter(destPortal)
                 : tok
-                    ? { x: tok.x + drawW / 2, y: tok.y + drawH / 2 }
-                    : { x: mapW / 2, y: mapH / 2 };
+                  ? { x: tok.x + drawW / 2, y: tok.y + drawH / 2 }
+                  : { x: mapW / 2, y: mapH / 2 };
 
             // Initialize camera directly aligned with destination portal threshold
             panX = w / 2 - destCenter.x;
@@ -3376,12 +3382,12 @@ export function initVttCanvas(vtt) {
                     ?.forEach((v) => {
                         try {
                             v.pause();
-                        } catch (e) { }
+                        } catch (e) {}
                     });
                 Object.values(ytPingPongControllers).forEach((c) => {
                     try {
                         c?.pause?.();
-                    } catch (e) { }
+                    } catch (e) {}
                 });
             }
             renderAll();
@@ -3568,8 +3574,10 @@ export function initVttCanvas(vtt) {
         handleCardAction: (cardData, action) => handleCardAction(cardData, action),
         resolveSaveFromChat: (cardData, applyHalf, msgId) => resolveSaveFromChat(cardData, applyHalf, msgId),
         processMassAttackFromChat: (massAttackCard, msgId) => processMassAttackFromChat(massAttackCard, msgId),
-        triggerDamageFXAnimation: (x, y, radius, damageTypes, meta) => triggerDamageFXAnimation(x, y, radius, damageTypes, meta),
-        triggerHealingFXAnimation: (x, y, radius, amount, meta) => triggerHealingFXAnimation(x, y, radius, amount, meta),
+        triggerDamageFXAnimation: (x, y, radius, damageTypes, meta) =>
+            triggerDamageFXAnimation(x, y, radius, damageTypes, meta),
+        triggerHealingFXAnimation: (x, y, radius, amount, meta) =>
+            triggerHealingFXAnimation(x, y, radius, amount, meta),
         stepTokenSize: (tokenId, delta) => {
             const token = tokens[tokenId];
             if (!token) return null;
@@ -3678,7 +3686,7 @@ export function initVttCanvas(vtt) {
             currentMapId,
             renderAll,
             openTokenConfigModal: (tokenId) => openTokenEditModal(tokenId),
-            openTokenBulkConfigModal: () => { },
+            openTokenBulkConfigModal: () => {},
             showAddCustomConditionModal,
             showApplyDamageModal,
             showMassRollContextMenu,
@@ -3714,7 +3722,13 @@ export function initVttCanvas(vtt) {
         });
     };
     const changeMassTokenZOrder = (a, tokenIds = null) =>
-        changeMassTokenZOrderExt(tokenIds || Array.from(selectedTokenIds), a, { selectedTokenIds, tokens, currentMapId, vtt, renderAll });
+        changeMassTokenZOrderExt(tokenIds || Array.from(selectedTokenIds), a, {
+            selectedTokenIds,
+            tokens,
+            currentMapId,
+            vtt,
+            renderAll
+        });
     const showAddCustomConditionModal = (id, opts = {}) =>
         showAddCustomConditionModalExt(id, { tokens, currentMapId, vtt, renderAll, ...opts });
     const showApplyDamageModal = (ids = null, opts = {}) =>
@@ -3745,9 +3759,23 @@ export function initVttCanvas(vtt) {
             ...opts
         });
     const applyCardDamageToToken = (tokOrId, dmgRolls, multiplier = 1.0, opts = {}) =>
-        applyCardDamageToTokenExt(tokOrId, dmgRolls, multiplier, { tokens, currentMapId, vtt, renderAll, syncTokensHpToCharacters, ...opts });
+        applyCardDamageToTokenExt(tokOrId, dmgRolls, multiplier, {
+            tokens,
+            currentMapId,
+            vtt,
+            renderAll,
+            syncTokensHpToCharacters,
+            ...opts
+        });
     const applyCompositeDamageToTokens = (ids, dmgRolls, multiplier = 1.0, opts = {}) =>
-        applyCompositeDamageToTokensExt(ids, dmgRolls, multiplier, { tokens, currentMapId, vtt, renderAll, syncTokensHpToCharacters, ...opts });
+        applyCompositeDamageToTokensExt(ids, dmgRolls, multiplier, {
+            tokens,
+            currentMapId,
+            vtt,
+            renderAll,
+            syncTokensHpToCharacters,
+            ...opts
+        });
     const getTokenSaveMod = (tok, ab, opts = {}) => getTokenSaveModExt(tok, ab, { vtt, ...opts });
     const rollSavingThrowToken = (formula, label, tokenId, opts = {}) =>
         rollSavingThrowTokenExt(formula, label, tokenId, { vtt, getTokenSaveMod, postSaveResolutionChatCard, ...opts });
@@ -3766,12 +3794,31 @@ export function initVttCanvas(vtt) {
             rollSavingThrowToken,
             ...opts
         });
-    const promptMassAttackDistribution = (massAttackCard, selectedIds = null, onConfirm = null, onCancel = null, opts = {}) =>
-        promptMassAttackDistributionExt(massAttackCard, selectedIds, onConfirm, onCancel, { selectedTokenIds, tokens, vtt, processMassAttackFromChat, ...opts });
+    const promptMassAttackDistribution = (
+        massAttackCard,
+        selectedIds = null,
+        onConfirm = null,
+        onCancel = null,
+        opts = {}
+    ) =>
+        promptMassAttackDistributionExt(massAttackCard, selectedIds, onConfirm, onCancel, {
+            selectedTokenIds,
+            tokens,
+            vtt,
+            processMassAttackFromChat,
+            ...opts
+        });
     const processMassAttackFromChat = (massAttackCard, msgId = null, opts = {}) =>
         processMassAttackFromChatExt(massAttackCard, msgId, { tokens, executeMassAttackResolution, ...opts });
     const executeMassAttackResolution = (massAttackCard, distribution, msgId = null, opts = {}) =>
-        executeMassAttackResolutionExt(massAttackCard, distribution, msgId, { tokens, currentMapId, vtt, renderAll, syncTokensHpToCharacters, ...opts });
+        executeMassAttackResolutionExt(massAttackCard, distribution, msgId, {
+            tokens,
+            currentMapId,
+            vtt,
+            renderAll,
+            syncTokensHpToCharacters,
+            ...opts
+        });
     const processCardFullResolution = (cardData, selectedIds = null, opts = {}) =>
         processCardFullResolutionExt(cardData, selectedIds, {
             tokens,

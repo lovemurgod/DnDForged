@@ -10,7 +10,7 @@ import { loadPlayerTokenPrefs } from './vtt-canvas-token-config.js';
 
 // Module-level context for animation loops and renderer utilities
 const tokenRendererContext = {
-    renderAll: () => { },
+    renderAll: () => {},
     tokens: {},
     vtt: {},
     getTokenDrawDimensions: () => ({ drawW: 50, drawH: 50, tokenRadius: 25 })
@@ -20,7 +20,7 @@ function getRenderAll() {
     return (
         tokenRendererContext.renderAll ||
         (typeof window !== 'undefined' && window.VTT?.canvasEngine?.renderAll) ||
-        (() => { })
+        (() => {})
     );
 }
 
@@ -60,7 +60,7 @@ function cleanupAllYouTubePingPong() {
     Object.keys(ytPingPongControllers).forEach((id) => {
         try {
             if (ytPingPongControllers[id]?.destroy) ytPingPongControllers[id].destroy();
-        } catch (e) { }
+        } catch (e) {}
         delete ytPingPongControllers[id];
     });
 }
@@ -69,7 +69,7 @@ function cleanupYouTubePingPongForId(id) {
     if (ytPingPongControllers[id]) {
         try {
             if (ytPingPongControllers[id]?.destroy) ytPingPongControllers[id].destroy();
-        } catch (e) { }
+        } catch (e) {}
         delete ytPingPongControllers[id];
     }
 }
@@ -85,27 +85,27 @@ function cleanupMediaElement(node) {
             node.pause();
             node.removeAttribute('src');
             node.load();
-        } catch (e) { }
+        } catch (e) {}
     } else if (node.tagName === 'IFRAME') {
         try {
             node.src = 'about:blank';
-        } catch (e) { }
+        } catch (e) {}
     }
     node.querySelectorAll?.('video')?.forEach((v) => {
         try {
             v.pause();
             v.removeAttribute('src');
             v.load();
-        } catch (e) { }
+        } catch (e) {}
     });
     node.querySelectorAll?.('iframe')?.forEach((f) => {
         try {
             f.src = 'about:blank';
-        } catch (e) { }
+        } catch (e) {}
     });
     try {
         node.remove();
-    } catch (e) { }
+    } catch (e) {}
 }
 
 function ensureYouTubeIframeApi() {
@@ -128,7 +128,7 @@ function ensureYouTubeIframeApi() {
             if (typeof prevOnReady === 'function') {
                 try {
                     prevOnReady();
-                } catch (e) { }
+                } catch (e) {}
             }
             resolve(window.YT);
         };
@@ -157,7 +157,7 @@ function initDualYouTubePlayer(container, rawUrl, id) {
     if (ytPingPongControllers[id]) {
         try {
             ytPingPongControllers[id].destroy();
-        } catch (e) { }
+        } catch (e) {}
         delete ytPingPongControllers[id];
     }
 
@@ -202,7 +202,7 @@ function initDualYouTubePlayer(container, rawUrl, id) {
     let prewarmed = false;
     let pollTimer = null;
     let isDestroyed = false;
-    let startMonitoring = () => { };
+    let startMonitoring = () => {};
 
     let isPaused = false;
     const controller = {
@@ -217,7 +217,7 @@ function initDualYouTubePlayer(container, rawUrl, id) {
                 if (activePlayer === 'A' && playerA && typeof playerA.pauseVideo === 'function') playerA.pauseVideo();
                 else if (activePlayer === 'B' && playerB && typeof playerB.pauseVideo === 'function')
                     playerB.pauseVideo();
-            } catch (e) { }
+            } catch (e) {}
         },
         resume: () => {
             if (isDestroyed) return;
@@ -226,7 +226,7 @@ function initDualYouTubePlayer(container, rawUrl, id) {
                 if (activePlayer === 'A' && playerA && typeof playerA.playVideo === 'function') playerA.playVideo();
                 else if (activePlayer === 'B' && playerB && typeof playerB.playVideo === 'function')
                     playerB.playVideo();
-            } catch (e) { }
+            } catch (e) {}
             startMonitoring();
         },
         destroy: () => {
@@ -237,10 +237,10 @@ function initDualYouTubePlayer(container, rawUrl, id) {
             }
             try {
                 if (playerA && typeof playerA.destroy === 'function') playerA.destroy();
-            } catch (e) { }
+            } catch (e) {}
             try {
                 if (playerB && typeof playerB.destroy === 'function') playerB.destroy();
-            } catch (e) { }
+            } catch (e) {}
             playerA = null;
             playerB = null;
             container.innerHTML = '';
@@ -288,7 +288,7 @@ function initDualYouTubePlayer(container, rawUrl, id) {
                     try {
                         e.target.mute();
                         e.target.playVideo();
-                    } catch (err) { }
+                    } catch (err) {}
                     onReadyCheck();
                 },
                 onStateChange: (e) => {
@@ -308,7 +308,7 @@ function initDualYouTubePlayer(container, rawUrl, id) {
                 onReady: (e) => {
                     try {
                         e.target.mute();
-                    } catch (err) { }
+                    } catch (err) {}
                     onReadyCheck();
                 },
                 onStateChange: (e) => {
@@ -333,10 +333,10 @@ function initDualYouTubePlayer(container, rawUrl, id) {
                     if (activePlayer === 'B' && playerA && typeof playerA.seekTo === 'function') {
                         try {
                             playerA.seekTo(0, false);
-                        } catch (e) { }
+                        } catch (e) {}
                     }
                 }, 350);
-            } catch (err) { }
+            } catch (err) {}
         }
 
         function doSwapToA() {
@@ -353,10 +353,10 @@ function initDualYouTubePlayer(container, rawUrl, id) {
                     if (activePlayer === 'A' && playerB && typeof playerB.seekTo === 'function') {
                         try {
                             playerB.seekTo(0, false);
-                        } catch (e) { }
+                        } catch (e) {}
                     }
                 }, 350);
-            } catch (err) { }
+            } catch (err) {}
         }
 
         startMonitoring = function () {
@@ -386,7 +386,7 @@ function initDualYouTubePlayer(container, rawUrl, id) {
                                 try {
                                     playerB.seekTo(0, true);
                                     playerB.playVideo();
-                                } catch (err) { }
+                                } catch (err) {}
                             }
                             if (cur >= dur - 0.08) {
                                 doSwapToB();
@@ -407,14 +407,14 @@ function initDualYouTubePlayer(container, rawUrl, id) {
                                 try {
                                     playerA.seekTo(0, true);
                                     playerA.playVideo();
-                                } catch (err) { }
+                                } catch (err) {}
                             }
                             if (cur >= dur - 0.08) {
                                 doSwapToA();
                             }
                         }
                     }
-                } catch (err) { }
+                } catch (err) {}
             }, 50);
         };
     });
@@ -572,17 +572,17 @@ export function renderTokensLayer(context = {}) {
         loadGmTokenPrefs = () => ({}),
         getEffectiveVisibility = (pref, gm) => pref || gm,
         getEffectiveNumberVisible = (pref, gm) => pref && gm,
-        renderAll = () => { },
-        openTokenEditModal = () => { },
-        openPushPlayersModal = () => { },
-        startTouchTokenDrag = () => { },
-        moveTouchTokenDrag = () => { },
-        endTouchTokenDrag = () => { },
-        cancelTokenDrag = () => { },
+        renderAll = () => {},
+        openTokenEditModal = () => {},
+        openPushPlayersModal = () => {},
+        startTouchTokenDrag = () => {},
+        moveTouchTokenDrag = () => {},
+        endTouchTokenDrag = () => {},
+        cancelTokenDrag = () => {},
         campaignSettings = {},
         currentMapId = '',
-        showGmTokenTooltip = () => { },
-        hideGmTokenTooltip = () => { },
+        showGmTokenTooltip = () => {},
+        hideGmTokenTooltip = () => {},
         tokenDragOriginalPositions = {},
         imageCache = {},
         activeTool = 'select',
@@ -616,12 +616,12 @@ export function renderTokensLayer(context = {}) {
                 if (offNode.tagName === 'VIDEO' && !offNode.paused) {
                     try {
                         offNode.pause();
-                    } catch (e) { }
+                    } catch (e) {}
                 }
                 if (ytPingPongControllers[id]?.pause) {
                     try {
                         ytPingPongControllers[id].pause();
-                    } catch (e) { }
+                    } catch (e) {}
                 }
             }
             const offUiNode = document.getElementById('token_ui_' + id);
@@ -668,12 +668,12 @@ export function renderTokensLayer(context = {}) {
                 const neededTag = isYoutube
                     ? 'DIV'
                     : needsIframe
-                        ? 'IFRAME'
-                        : needsImg
-                            ? 'IMG'
-                            : needsVideo
-                                ? 'VIDEO'
-                                : 'DIV';
+                      ? 'IFRAME'
+                      : needsImg
+                        ? 'IMG'
+                        : needsVideo
+                          ? 'VIDEO'
+                          : 'DIV';
 
                 // If node exists but is in wrong container or wrong tag, remove and recreate
                 if (node && (node.parentElement !== targetOverlay || node.tagName !== neededTag)) {
@@ -748,7 +748,7 @@ export function renderTokensLayer(context = {}) {
                         const isGamePaused = Boolean(vtt.isPaused || window.VTT?.isPaused);
                         const isTabHidden = typeof document !== 'undefined' && document.visibilityState === 'hidden';
                         if (!isHiddenFromPlayer && !isGamePaused && !isTabHidden) {
-                            node.play().catch(() => { });
+                            node.play().catch(() => {});
                         }
                     }
                 } else if (isYoutube) {
@@ -783,7 +783,7 @@ export function renderTokensLayer(context = {}) {
                         node.defaultMuted = true;
                         node.preload = 'auto';
                         node.load();
-                        node.play().catch(() => { });
+                        node.play().catch(() => {});
                     }
                 }
                 const shouldPauseMedia =
@@ -798,19 +798,19 @@ export function renderTokensLayer(context = {}) {
                         if (!node.paused)
                             try {
                                 node.pause();
-                            } catch (e) { }
+                            } catch (e) {}
                     } else if (node.paused) {
-                        node.play().catch(() => { });
+                        node.play().catch(() => {});
                     }
                 } else if (isYoutube && ytPingPongControllers[id]) {
                     if (shouldPauseMedia) {
                         try {
                             ytPingPongControllers[id].pause();
-                        } catch (e) { }
+                        } catch (e) {}
                     } else {
                         try {
                             ytPingPongControllers[id].resume();
-                        } catch (e) { }
+                        } catch (e) {}
                     }
                 }
 
@@ -880,7 +880,7 @@ export function renderTokensLayer(context = {}) {
                     if (node.tagName === 'VIDEO' && !node.paused) {
                         try {
                             node.pause();
-                        } catch (e) { }
+                        } catch (e) {}
                     }
                 } else {
                     node.style.display = 'block';
@@ -1176,7 +1176,10 @@ export function renderTokensLayer(context = {}) {
 
                 const { drawW, drawH } = getTokenDrawDimensions(token);
                 // Only render UI if the token is visible (visibility by fog handled via CSS z-index)
-                const isVisible = !((tokenLayer === 'gm' || token.isVisible === false || token.hidden) && vtt.role !== 'GM');
+                const isVisible = !(
+                    (tokenLayer === 'gm' || token.isVisible === false || token.hidden) &&
+                    vtt.role !== 'GM'
+                );
 
                 if (isVisible) {
                     if (!uiNode) {
@@ -1759,7 +1762,7 @@ function isDamageFxPrefEnabled() {
     try {
         const prefs = loadPlayerTokenPrefs();
         if (prefs && prefs.damageFxEnabled === false) return false;
-    } catch (e) { }
+    } catch (e) {}
     return true;
 }
 
@@ -1800,8 +1803,8 @@ function triggerDamageFXAnimation(x, y, radius, damageTypes, meta = {}) {
         y,
         radius: Math.max(18, radius || 25),
         types,
-        amount: (meta && meta.amount !== undefined && meta.amount !== null) ? meta.amount : null,
-        tokenId: (meta && meta.tokenId) ? meta.tokenId : null,
+        amount: meta && meta.amount !== undefined && meta.amount !== null ? meta.amount : null,
+        tokenId: meta && meta.tokenId ? meta.tokenId : null,
         startTime: Date.now(),
         duration: 650 // 650ms duration per design spec for dramatic visual breathing room
     });
@@ -1821,8 +1824,8 @@ function triggerHealingFXAnimation(x, y, radius, amount, meta = {}) {
         y,
         radius: Math.max(18, radius || 25),
         types: [isTempHp ? 'temphp' : 'heal'],
-        amount: (amount !== undefined && amount !== null) ? amount : (meta.amount || 0),
-        tokenId: (meta && meta.tokenId) ? meta.tokenId : null,
+        amount: amount !== undefined && amount !== null ? amount : meta.amount || 0,
+        tokenId: meta && meta.tokenId ? meta.tokenId : null,
         isHeal: !isTempHp,
         isTempHp: isTempHp,
         startTime: Date.now(),
@@ -1975,9 +1978,9 @@ function renderDamageFXBurst(ctx, x, y, baseRadius, progress, opacity, damageTyp
         for (let i = 0; i < 8; i++) {
             const seed = i * 0.785;
             const spiralAng = seed + progress * 2.5;
-            const dist = (baseRadius * 0.65) * (0.3 + progress * 0.8);
+            const dist = baseRadius * 0.65 * (0.3 + progress * 0.8);
             const px = x + Math.cos(spiralAng) * dist;
-            const py = y + Math.sin(spiralAng) * (dist * 0.5) - (progress * 32);
+            const py = y + Math.sin(spiralAng) * (dist * 0.5) - progress * 32;
             const sparkR = Math.max(1, 3.5 * (1 - progress));
             ctx.fillStyle = i % 2 === 0 ? `rgba(255, 255, 255, ${opacity})` : `rgba(254, 240, 138, ${opacity * 0.9})`;
             ctx.beginPath();
@@ -2028,7 +2031,7 @@ function renderDamageFXBurst(ctx, x, y, baseRadius, progress, opacity, damageTyp
             const speed = 0.7 + (i % 3) * 0.25;
             const dist = baseRadius * (0.3 + progress * 0.9 * speed);
             const px = x + Math.cos(ang) * dist + Math.sin(progress * 8 + i) * 3;
-            const py = y + Math.sin(ang) * (dist * 0.6) - (progress * 24 * speed);
+            const py = y + Math.sin(ang) * (dist * 0.6) - progress * 24 * speed;
             const sparkR = Math.max(1, 3 * (1 - progress));
             ctx.fillStyle = i % 2 === 0 ? `rgba(255, 235, 120, ${opacity})` : `rgba(255, 107, 53, ${opacity * 0.9})`;
             ctx.beginPath();
@@ -2092,8 +2095,8 @@ function renderDamageFXBurst(ctx, x, y, baseRadius, progress, opacity, damageTyp
             ctx.moveTo(cx, cy);
             const steps = 5;
             for (let s = 1; s <= steps; s++) {
-                const dist = (r * 1.25) * (s / steps);
-                const jitter = (Math.sin(s * 13 + progress * 20 + b * 7) * 0.5) * 14;
+                const dist = r * 1.25 * (s / steps);
+                const jitter = Math.sin(s * 13 + progress * 20 + b * 7) * 0.5 * 14;
                 const nx = x + Math.cos(baseAng) * dist - Math.sin(baseAng) * jitter;
                 const ny = y + Math.sin(baseAng) * dist + Math.cos(baseAng) * jitter;
                 ctx.lineTo(nx, ny);
@@ -2229,7 +2232,8 @@ function renderDamageFXBurst(ctx, x, y, baseRadius, progress, opacity, damageTyp
         // 9. Force: Double concentric dimensional distortion rings + 6 kinetic pulse beads
         for (let i = 0; i < 2; i++) {
             const ringR = r * (i === 0 ? 1.0 : 0.65);
-            ctx.strokeStyle = i === 0 ? `rgba(232, 121, 249, ${opacity * 0.95})` : `rgba(192, 132, 252, ${opacity * 0.8})`;
+            ctx.strokeStyle =
+                i === 0 ? `rgba(232, 121, 249, ${opacity * 0.95})` : `rgba(192, 132, 252, ${opacity * 0.8})`;
             ctx.lineWidth = (4 - i * 1.5) * (1 - progress * 0.4);
             ctx.beginPath();
             ctx.arc(x, y, ringR, 0, Math.PI * 2);

@@ -77,9 +77,7 @@ console.log('\n[Test 2] Tough Feat HP Calculation...');
 {
     // Simulate runHpCalculation Tough logic
     const totalLvl = 5;
-    const asiTiersWithTough = [
-        { choice: 'feat', selectedFeatId: 'tough' }
-    ];
+    const asiTiersWithTough = [{ choice: 'feat', selectedFeatId: 'tough' }];
     const builderCache = {
         feats: [{ id: 'tough', name: 'Tough' }]
     };
@@ -105,7 +103,9 @@ console.log('\n[Test 2] Tough Feat HP Calculation...');
         });
     }
 
-    const hasTough = allSelectedFeats.some((f) => (typeof f === 'string' ? f : f.name || '').toLowerCase().includes('tough'));
+    const hasTough = allSelectedFeats.some((f) =>
+        (typeof f === 'string' ? f : f.name || '').toLowerCase().includes('tough')
+    );
     assert.strictEqual(hasTough, true, 'Tough feat should be detected from asiTiers');
     const toughHp = hasTough ? 2 * totalLvl : 0;
     assert.strictEqual(toughHp, 10, 'Level 5 character with Tough should gain 10 HP (2 * 5)');
@@ -155,10 +155,7 @@ console.log('\n[Test 4] Sheet Toggles & Automation Seeding...');
             { name: 'Rogue', subclass: 'Swashbuckler', level: 3 },
             { name: 'Wizard', subclass: 'War Magic', level: 2 }
         ],
-        abilityCards: [
-            { name: 'Fighting Style: Dueling' },
-            { name: 'Blind Fighting' }
-        ],
+        abilityCards: [{ name: 'Fighting Style: Dueling' }, { name: 'Blind Fighting' }],
         skillToggles: [],
         attackSettings: { atkMod: 0, toggles: [] },
         senses: {}
@@ -189,7 +186,8 @@ console.log('\n[Test 4] Sheet Toggles & Automation Seeding...');
         }
     });
 
-    const hasFeatMatch = (term) => allSelectedFeatNames.some((f) => (f || '').toLowerCase().includes(term.toLowerCase()));
+    const hasFeatMatch = (term) =>
+        allSelectedFeatNames.some((f) => (f || '').toLowerCase().includes(term.toLowerCase()));
 
     // Alert
     if (hasFeatMatch('alert')) {
@@ -324,9 +322,15 @@ console.log('\n[Test 4] Sheet Toggles & Automation Seeding...');
 console.log('\n[Test 5] Spells Tab Non-Glitching Card Verification...');
 {
     const step6Content = fs.readFileSync(path.resolve('vtt/js/player-sheet/builder/step6-spells.js'), 'utf8');
-    assert.ok(!step6Content.includes('glassmorphism'), 'step6-spells.js should NOT use GPU-heavy glassmorphism on cards');
+    assert.ok(
+        !step6Content.includes('glassmorphism'),
+        'step6-spells.js should NOT use GPU-heavy glassmorphism on cards'
+    );
     assert.ok(step6Content.includes('pc-wiz-spell-card'), 'step6-spells.js should define pc-wiz-spell-card');
-    assert.ok(step6Content.includes('contain: content'), 'step6-spells.js should use contain: content for fast layout isolation');
+    assert.ok(
+        step6Content.includes('contain: content'),
+        'step6-spells.js should use contain: content for fast layout isolation'
+    );
     console.log('  ✓ step6-spells.js confirmed free of backdrop-filter glassmorphism screen flickering');
 }
 
@@ -336,10 +340,7 @@ console.log('\n[Test 5] Spells Tab Non-Glitching Card Verification...');
 console.log('\n[Test 6] Save & Apply Identifier & Import Integrity...');
 {
     const builderModalContent = fs.readFileSync(path.resolve('vtt/js/player-sheet/builder/builder-modal.js'), 'utf8');
-    assert.ok(
-        builderModalContent.includes('getProfBonus'),
-        'builder-modal.js should reference getProfBonus'
-    );
+    assert.ok(builderModalContent.includes('getProfBonus'), 'builder-modal.js should reference getProfBonus');
     assert.ok(
         /import\s*\{[^}]*getProfBonus[^}]*\}\s*from\s*['"]\.\.\/calc\/stats\.js['"]/.test(builderModalContent),
         'builder-modal.js must import getProfBonus from ../calc/stats.js to avoid runtime ReferenceError'
@@ -360,4 +361,3 @@ console.log('\n[Test 6] Save & Apply Identifier & Import Integrity...');
 }
 
 console.log('\nALL 6 COMPREHENSIVE CHARACTER BUILDER FEATURE ENGINE TESTS PASSED SUCCESSFULLY! ✅');
-

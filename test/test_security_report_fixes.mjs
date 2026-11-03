@@ -25,9 +25,7 @@ test('Security Report: Portal teleport validation rejects unowned tokens or miss
     const camp = {
         maps: {
             map1: {
-                portals: [
-                    { id: 'p1', targetMapId: 'map2', shape: 'rect', geom: { x: 100, y: 100, w: 50, h: 50 } }
-                ],
+                portals: [{ id: 'p1', targetMapId: 'map2', shape: 'rect', geom: { x: 100, y: 100, w: 50, h: 50 } }],
                 tokens: {
                     tok1: { id: 'tok1', owner: 'alice', x: 110, y: 110 },
                     tok2: { id: 'tok2', owner: 'bob', x: 110, y: 110 },
@@ -57,26 +55,42 @@ test('Security Report: Portal teleport validation rejects unowned tokens or miss
         if (!matchingPortal) return false;
         const pCenter = getPortalCenterPoint(matchingPortal);
         if (pCenter && typeof token.x === 'number' && typeof token.y === 'number') {
-            const distSq = (token.x - pCenter.x) * (token.x - pCenter.x) + (token.y - pCenter.y) * (token.y - pCenter.y);
+            const distSq =
+                (token.x - pCenter.x) * (token.x - pCenter.x) + (token.y - pCenter.y) * (token.y - pCenter.y);
             if (distSq > 400 * 400) return false;
         }
         return true;
     }
 
     // Alice moving Alice's close token to map2 through valid portal -> ALLOWED
-    assert.equal(validatePortalTransition(camp, camp.maps.map1, 'map2', camp.maps.map1.tokens.tok1, null, mockSocketPlayer), true);
+    assert.equal(
+        validatePortalTransition(camp, camp.maps.map1, 'map2', camp.maps.map1.tokens.tok1, null, mockSocketPlayer),
+        true
+    );
 
     // Alice trying to teleport Bob's token -> REJECTED
-    assert.equal(validatePortalTransition(camp, camp.maps.map1, 'map2', camp.maps.map1.tokens.tok2, null, mockSocketPlayer), false);
+    assert.equal(
+        validatePortalTransition(camp, camp.maps.map1, 'map2', camp.maps.map1.tokens.tok2, null, mockSocketPlayer),
+        false
+    );
 
     // Alice trying to teleport to a map with no portal -> REJECTED
-    assert.equal(validatePortalTransition(camp, camp.maps.map1, 'map999', camp.maps.map1.tokens.tok1, null, mockSocketPlayer), false);
+    assert.equal(
+        validatePortalTransition(camp, camp.maps.map1, 'map999', camp.maps.map1.tokens.tok1, null, mockSocketPlayer),
+        false
+    );
 
     // Alice trying to teleport from 1000px away -> REJECTED
-    assert.equal(validatePortalTransition(camp, camp.maps.map1, 'map2', camp.maps.map1.tokens.tok3, null, mockSocketPlayer), false);
+    assert.equal(
+        validatePortalTransition(camp, camp.maps.map1, 'map2', camp.maps.map1.tokens.tok3, null, mockSocketPlayer),
+        false
+    );
 
     // GM moving any token anywhere -> ALLOWED
-    assert.equal(validatePortalTransition(camp, camp.maps.map1, 'map2', camp.maps.map1.tokens.tok2, null, mockSocketGM), true);
+    assert.equal(
+        validatePortalTransition(camp, camp.maps.map1, 'map2', camp.maps.map1.tokens.tok2, null, mockSocketGM),
+        true
+    );
 });
 
 test('Security Report: Initiative handler handles non-string name payloads safely and prevents cross-user overwrites', () => {
@@ -153,4 +167,3 @@ test('Security Report: HTML escaping in chat and portals', async () => {
     assert.equal(escaped.includes('<img'), false);
     assert.equal(escaped.includes('&lt;img'), true);
 });
-

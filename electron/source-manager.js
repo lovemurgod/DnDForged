@@ -749,7 +749,8 @@ export class SourceManager {
                 );
                 if (configMeta) {
                     if (configMeta.code) srcCode = configMeta.code.toUpperCase();
-                    else if (configMeta.id && !configMeta.id.startsWith('custom_')) srcCode = configMeta.id.toUpperCase();
+                    else if (configMeta.id && !configMeta.id.startsWith('custom_'))
+                        srcCode = configMeta.id.toUpperCase();
                     if (configMeta.name) name = configMeta.name;
                     if (configMeta.author) author = configMeta.author;
                     if (configMeta.version) version = configMeta.version;
@@ -1048,7 +1049,18 @@ export class SourceManager {
         };
     }
 
-    saveSourceDetails({ category, code, name, author, version, description, rawJson, license, licenseUrl, attribution }) {
+    saveSourceDetails({
+        category,
+        code,
+        name,
+        author,
+        version,
+        description,
+        rawJson,
+        license,
+        licenseUrl,
+        attribution
+    }) {
         const cleanCode = String(code).trim().toUpperCase();
         const details = this.getSourceDetails(category, cleanCode);
         if (!details.success) return details;
@@ -1057,7 +1069,10 @@ export class SourceManager {
 
         // Protection check: built-in official compendium sources are read-only
         if (!src.isCustom) {
-            return { success: false, error: 'Built-in official compendium sources are read-only and cannot be modified.' };
+            return {
+                success: false,
+                error: 'Built-in official compendium sources are read-only and cannot be modified.'
+            };
         }
 
         let parsedData = null;
@@ -1082,7 +1097,10 @@ export class SourceManager {
             }
 
             let srcMeta = parsedData._meta.sources.find(
-                (s) => s && (String(s.json || '').toUpperCase() === cleanCode || String(s.json || '').toUpperCase() === String(code).toUpperCase())
+                (s) =>
+                    s &&
+                    (String(s.json || '').toUpperCase() === cleanCode ||
+                        String(s.json || '').toUpperCase() === String(code).toUpperCase())
             );
 
             if (!srcMeta) {
@@ -1194,7 +1212,11 @@ export class SourceManager {
                 author: parsed.author || 'Imported',
                 version: parsed.version || '1.0',
                 description: parsed.description || 'Imported custom database file.',
-                license: parsed._meta?.sources?.[0]?.license || parsed._meta?.provenance?.license || parsed.license || 'Not specified',
+                license:
+                    parsed._meta?.sources?.[0]?.license ||
+                    parsed._meta?.provenance?.license ||
+                    parsed.license ||
+                    'Not specified',
                 licenseUrl: parsed._meta?.sources?.[0]?.licenseUrl || parsed._meta?.provenance?.licenseUrl || '',
                 attribution: parsed._meta?.sources?.[0]?.attribution || parsed._meta?.provenance?.attribution || ''
             };
@@ -2237,7 +2259,11 @@ export class SourceManager {
                         name: prov.sourceName || (item.sourceName ? item.sourceName : `${code} Compendium`),
                         author: prov.author || 'Imported',
                         version: prov.version || '1.0.0',
-                        description: prov.description || (sourceUrl ? `Imported from ${sourceUrl} on ${new Date().toLocaleDateString()}` : `Bulk imported on ${new Date().toLocaleDateString()}`),
+                        description:
+                            prov.description ||
+                            (sourceUrl
+                                ? `Imported from ${sourceUrl} on ${new Date().toLocaleDateString()}`
+                                : `Bulk imported on ${new Date().toLocaleDateString()}`),
                         fileName: finalFileName,
                         filePath: destPath,
                         isCustom: true,
@@ -2347,8 +2373,10 @@ export class SourceManager {
                 if (s0) {
                     if (typeof s0.full === 'string' && s0.full.trim()) detectedSourceName = s0.full.trim();
                     if (typeof s0.license === 'string' && s0.license.trim()) detectedLicense = s0.license.trim();
-                    if (typeof s0.licenseUrl === 'string' && s0.licenseUrl.trim()) detectedLicenseUrl = s0.licenseUrl.trim();
-                    if (typeof s0.attribution === 'string' && s0.attribution.trim()) detectedAttribution = s0.attribution.trim();
+                    if (typeof s0.licenseUrl === 'string' && s0.licenseUrl.trim())
+                        detectedLicenseUrl = s0.licenseUrl.trim();
+                    if (typeof s0.attribution === 'string' && s0.attribution.trim())
+                        detectedAttribution = s0.attribution.trim();
                     if (!detectedLicenseUrl && typeof s0.url === 'string' && s0.url.toLowerCase().includes('license')) {
                         detectedLicenseUrl = s0.url.trim();
                     }
@@ -2361,16 +2389,23 @@ export class SourceManager {
                 if (json._meta?.provenance && typeof json._meta.provenance === 'object') {
                     const prov = json._meta.provenance;
                     if (typeof prov.license === 'string' && prov.license.trim()) detectedLicense = prov.license.trim();
-                    if (typeof prov.licenseUrl === 'string' && prov.licenseUrl.trim()) detectedLicenseUrl = prov.licenseUrl.trim();
-                    if (typeof prov.attribution === 'string' && prov.attribution.trim()) detectedAttribution = prov.attribution.trim();
-                    if (typeof prov.sourceName === 'string' && prov.sourceName.trim()) detectedSourceName = prov.sourceName.trim();
+                    if (typeof prov.licenseUrl === 'string' && prov.licenseUrl.trim())
+                        detectedLicenseUrl = prov.licenseUrl.trim();
+                    if (typeof prov.attribution === 'string' && prov.attribution.trim())
+                        detectedAttribution = prov.attribution.trim();
+                    if (typeof prov.sourceName === 'string' && prov.sourceName.trim())
+                        detectedSourceName = prov.sourceName.trim();
                 }
             }
 
-            const sourceName = (optionalMetadata.sourceName && optionalMetadata.sourceName.trim()) || detectedSourceName;
-            const license = (optionalMetadata.license && optionalMetadata.license.trim()) || detectedLicense || 'Not specified';
-            const licenseUrl = (optionalMetadata.licenseUrl && optionalMetadata.licenseUrl.trim()) || detectedLicenseUrl;
-            const attribution = (optionalMetadata.attribution && optionalMetadata.attribution.trim()) || detectedAttribution;
+            const sourceName =
+                (optionalMetadata.sourceName && optionalMetadata.sourceName.trim()) || detectedSourceName;
+            const license =
+                (optionalMetadata.license && optionalMetadata.license.trim()) || detectedLicense || 'Not specified';
+            const licenseUrl =
+                (optionalMetadata.licenseUrl && optionalMetadata.licenseUrl.trim()) || detectedLicenseUrl;
+            const attribution =
+                (optionalMetadata.attribution && optionalMetadata.attribution.trim()) || detectedAttribution;
             const importedAt = new Date().toISOString();
 
             const importMetadata = {
@@ -2409,7 +2444,11 @@ export class SourceManager {
                 candidate.importMetadata = importMetadata;
             }
 
-            const importRes = this.bulkImportSources(inspected.candidates, { [tempFilePath]: 'overwrite' }, importMetadata);
+            const importRes = this.bulkImportSources(
+                inspected.candidates,
+                { [tempFilePath]: 'overwrite' },
+                importMetadata
+            );
             try {
                 fs.rmSync(uniqueSubdir, { recursive: true, force: true });
             } catch (_) {}

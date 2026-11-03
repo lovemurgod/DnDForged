@@ -80,52 +80,55 @@ export function renderStep5(ctx) {
             </div>
         </div>
 
-        ${!workingChar.useStartingWealth
-            ? `
-            <!-- Class Starting Equipment -->
-            ${classEquipChoiceSets.length > 0 || classFixedItems.length > 0
+        ${
+            !workingChar.useStartingWealth
                 ? `
+            <!-- Class Starting Equipment -->
+            ${
+                classEquipChoiceSets.length > 0 || classFixedItems.length > 0
+                    ? `
                 <div class="builder-section-box">
                     <div class="builder-section-header">
                         <strong style="font-size:0.95rem; color:var(--color-gold-base);">Class Starting Equipment (${workingChar.classes[0]?.name || 'Primary Class'})</strong>
                     </div>
                     <div style="display:flex; flex-direction:column; gap:10px;">
                         ${classEquipChoiceSets
-                    .map(
-                        (cSet, csIdx) => `
+                            .map(
+                                (cSet, csIdx) => `
                             <div class="glass-flat" style="padding:10px 12px; border-radius:6px; border:1px solid var(--color-border-subtle);">
                                 <div style="font-size:0.8rem; font-weight:600; color:var(--color-gold-light); margin-bottom:6px;">${cSet.title}</div>
                                 <div style="display:flex; flex-direction:column; gap:6px;">
                                     ${cSet.options
-                                .map((opt) => {
-                                    const optLower = (opt.label || '').toLowerCase();
-                                    const isDualWeapon = /two\s+(martial|simple)\s+weapons/i.test(optLower);
-                                    const isGenericWeapon =
-                                        optLower.includes('martial weapon') ||
-                                        optLower.includes('simple weapon') ||
-                                        isDualWeapon;
-                                    const isMartial = optLower.includes('martial weapon');
-                                    const weaponList = isMartial ? MARTIAL_WEAPONS : SIMPLE_WEAPONS;
-                                    const isSelected = cSet.selectedOption === opt.key;
-                                    if (isDualWeapon) {
-                                        if (!cSet.selectedWeapon1 || !weaponList.includes(cSet.selectedWeapon1))
-                                            cSet.selectedWeapon1 = weaponList[0];
-                                        if (!cSet.selectedWeapon2 || !weaponList.includes(cSet.selectedWeapon2))
-                                            cSet.selectedWeapon2 = weaponList[1] || weaponList[0];
-                                    } else if (
-                                        isGenericWeapon &&
-                                        (!cSet.selectedWeapon || !weaponList.includes(cSet.selectedWeapon))
-                                    ) {
-                                        cSet.selectedWeapon = weaponList[0];
-                                    }
-                                    return `
+                                        .map((opt) => {
+                                            const optLower = (opt.label || '').toLowerCase();
+                                            const isDualWeapon = /two\s+(martial|simple)\s+weapons/i.test(optLower);
+                                            const isGenericWeapon =
+                                                optLower.includes('martial weapon') ||
+                                                optLower.includes('simple weapon') ||
+                                                isDualWeapon;
+                                            const isMartial = optLower.includes('martial weapon');
+                                            const weaponList = isMartial ? MARTIAL_WEAPONS : SIMPLE_WEAPONS;
+                                            const isSelected = cSet.selectedOption === opt.key;
+                                            if (isDualWeapon) {
+                                                if (!cSet.selectedWeapon1 || !weaponList.includes(cSet.selectedWeapon1))
+                                                    cSet.selectedWeapon1 = weaponList[0];
+                                                if (!cSet.selectedWeapon2 || !weaponList.includes(cSet.selectedWeapon2))
+                                                    cSet.selectedWeapon2 = weaponList[1] || weaponList[0];
+                                            } else if (
+                                                isGenericWeapon &&
+                                                (!cSet.selectedWeapon || !weaponList.includes(cSet.selectedWeapon))
+                                            ) {
+                                                cSet.selectedWeapon = weaponList[0];
+                                            }
+                                            return `
                                         <div style="display:flex; flex-direction:column; gap:4px;">
                                             <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-size:0.85rem; color:var(--color-text-primary);">
                                                 <input type="radio" name="pc-wiz-choice-${csIdx}" value="${opt.key}" ${isSelected ? 'checked' : ''} class="pc-wiz-eq-choice-radio" data-csidx="${csIdx}" style="accent-color:var(--color-gold-base);">
                                                 <span><strong>(${opt.key.toUpperCase()})</strong> ${opt.label}</span>
                                             </label>
-                                            ${isDualWeapon && isSelected
-                                            ? `
+                                            ${
+                                                isDualWeapon && isSelected
+                                                    ? `
                                                 <div style="margin-left:24px; display:flex; flex-direction:column; gap:6px; margin-top:4px;">
                                                     <div style="display:flex; align-items:center; gap:8px;">
                                                         <span style="font-size:0.75rem; color:var(--color-gold-base); font-weight:600;"><i class="fa-solid fa-crosshairs"></i> Weapon 1:</span>
@@ -141,8 +144,8 @@ export function renderStep5(ctx) {
                                                     </div>
                                                 </div>
                                             `
-                                            : isGenericWeapon && isSelected
-                                                ? `
+                                                    : isGenericWeapon && isSelected
+                                                      ? `
                                                 <div style="margin-left:24px; display:flex; align-items:center; gap:8px; margin-top:4px;">
                                                     <span style="font-size:0.75rem; color:var(--color-gold-base); font-weight:600;"><i class="fa-solid fa-crosshairs"></i> Select Weapon:</span>
                                                     <select class="pc-wiz-eq-weapon-sel" data-csidx="${csIdx}" style="padding:2px 6px; font-size:0.8rem; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); border-radius:4px;">
@@ -150,45 +153,47 @@ export function renderStep5(ctx) {
                                                     </select>
                                                 </div>
                                             `
-                                                : ''
-                                        }
+                                                      : ''
+                                            }
                                         </div>
                                         `;
-                                })
-                                .join('')}
+                                        })
+                                        .join('')}
                                 </div>
                             </div>
                         `
-                    )
-                    .join('')}
+                            )
+                            .join('')}
 
-                        ${classFixedItems.length > 0
-                    ? `
+                        ${
+                            classFixedItems.length > 0
+                                ? `
                             <div class="glass-flat" style="padding:10px 12px; border-radius:6px; border:1px solid var(--color-border-subtle);">
                                 <div style="font-size:0.8rem; font-weight:600; color:var(--color-gold-light); margin-bottom:6px;">Standard Class Items</div>
                                 <div style="display:flex; flex-direction:column; gap:6px;">
                                     ${classFixedItems
-                        .map((fit) => {
-                            const fitLower = (fit.name || '').toLowerCase();
-                            const isGenericWeapon =
-                                fitLower.includes('simple weapon') ||
-                                fitLower.includes('martial weapon');
-                            const isMartial = fitLower.includes('martial weapon');
-                            const weaponList = isMartial ? MARTIAL_WEAPONS : SIMPLE_WEAPONS;
-                            if (
-                                isGenericWeapon &&
-                                (!fit.selectedWeapon || !weaponList.includes(fit.selectedWeapon))
-                            ) {
-                                fit.selectedWeapon = weaponList[0];
-                            }
-                            return `
+                                        .map((fit) => {
+                                            const fitLower = (fit.name || '').toLowerCase();
+                                            const isGenericWeapon =
+                                                fitLower.includes('simple weapon') ||
+                                                fitLower.includes('martial weapon');
+                                            const isMartial = fitLower.includes('martial weapon');
+                                            const weaponList = isMartial ? MARTIAL_WEAPONS : SIMPLE_WEAPONS;
+                                            if (
+                                                isGenericWeapon &&
+                                                (!fit.selectedWeapon || !weaponList.includes(fit.selectedWeapon))
+                                            ) {
+                                                fit.selectedWeapon = weaponList[0];
+                                            }
+                                            return `
                                         <div style="display:flex; align-items:center; justify-content:space-between; gap:8px; font-size:0.85rem; color:var(--color-text-primary); flex-wrap:wrap;">
                                             <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
                                                 <input type="checkbox" class="pc-wiz-fixed-item-chk" data-item-id="${fit.id}" ${fit.checked ? 'checked' : ''} style="accent-color:var(--color-gold-base);">
                                                 <span>${fit.name}</span>
                                             </label>
-                                            ${isGenericWeapon
-                                    ? `
+                                            ${
+                                                isGenericWeapon
+                                                    ? `
                                                 <div style="display:flex; align-items:center; gap:6px;">
                                                     <span style="font-size:0.75rem; color:var(--color-gold-base); font-weight:600;"><i class="fa-solid fa-crosshairs"></i> Select Weapon:</span>
                                                     <select class="pc-wiz-fixed-weapon-sel" data-fitid="${fit.id}" style="padding:2px 6px; font-size:0.8rem; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); border-radius:4px;">
@@ -196,48 +201,49 @@ export function renderStep5(ctx) {
                                                     </select>
                                                 </div>
                                             `
-                                    : ''
-                                }
+                                                    : ''
+                                            }
                                         </div>
                                         `;
-                        })
-                        .join('')}
+                                        })
+                                        .join('')}
                                 </div>
                             </div>
                         `
-                    : ''
-                }
+                                : ''
+                        }
                     </div>
                 </div>
             `
-                : ''
+                    : ''
             }
 
             <!-- Background Items -->
-            ${candidateBgItems.length > 0
-                ? `
+            ${
+                candidateBgItems.length > 0
+                    ? `
                 <div class="builder-section-box">
                     <div class="builder-section-header">
                         <strong style="font-size:0.95rem; color:var(--color-gold-base);">Background Items (${workingChar.background || 'Background'})</strong>
                     </div>
                     <div style="display:flex; flex-direction:column; gap:6px;">
                         ${candidateBgItems
-                    .map(
-                        (it) => `
+                            .map(
+                                (it) => `
                             <label class="glass-flat" style="padding:8px 12px; border-radius:6px; border:1px solid var(--color-border-subtle); display:flex; gap:10px; align-items:center; cursor:pointer;">
                                 <input type="checkbox" class="pc-wiz-bg-item-chk" data-item-id="${it.id}" ${it.checked ? 'checked' : ''} style="accent-color:var(--color-gold-base);">
                                 <span style="font-weight:600; color:var(--color-text-primary);">${it.name} ${it.qty > 1 && !it.isGold && it.type !== 'Currency' ? `(x${it.qty})` : ''}</span>
                             </label>
                         `
-                    )
-                    .join('')}
+                            )
+                            .join('')}
                     </div>
                 </div>
             `
-                : ''
+                    : ''
             }
         `
-            : `
+                : `
             <!-- Starting Wealth Input -->
             <div class="builder-section-box">
                 <strong style="color:var(--color-gold-light); font-size:0.95rem;">Starting Wealth (Gold Pieces)</strong>

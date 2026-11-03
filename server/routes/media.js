@@ -24,7 +24,10 @@ export const imageRouter = express.Router();
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         let sub = extractSubdomain(req.headers.host) || req.body.campaignId || 'default';
-        sub = String(sub).replace(/[^a-zA-Z0-9_-]/g, '').trim() || 'default';
+        sub =
+            String(sub)
+                .replace(/[^a-zA-Z0-9_-]/g, '')
+                .trim() || 'default';
         const campaignsRoot = path.resolve(DATA_DIR, 'campaigns');
         const targetDir = path.resolve(campaignsRoot, sub, 'uploads');
         const rel = path.relative(campaignsRoot, targetDir);

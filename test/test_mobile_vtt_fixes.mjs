@@ -48,9 +48,12 @@ test('Mobile/Tablet UI and VTT Fixes Regression Suite', async (t) => {
             assert.ok(!code.includes('(func tion()'), `Script ${idx + 1} must not contain '(func tion()'`);
 
             // Verify clean compilation
-            assert.doesNotThrow(() => {
-                new vm.Script(code);
-            }, `Script ${idx + 1} must compile cleanly without SyntaxError`);
+            assert.doesNotThrow(
+                () => {
+                    new vm.Script(code);
+                },
+                `Script ${idx + 1} must compile cleanly without SyntaxError`
+            );
         });
     });
 
@@ -170,22 +173,10 @@ test('Mobile/Tablet UI and VTT Fixes Regression Suite', async (t) => {
         assert.ok(viewportMatch, 'Viewport meta tag must be present');
 
         const contentAttr = viewportMatch[1];
-        assert.ok(
-            !contentAttr.includes('maximum-scale=1.0'),
-            'Viewport meta tag must not restrict maximum-scale=1.0'
-        );
-        assert.ok(
-            !contentAttr.includes('user-scalable=no'),
-            'Viewport meta tag must not restrict user-scalable=no'
-        );
-        assert.ok(
-            contentAttr.includes('width=device-width'),
-            'Viewport meta tag must set width=device-width'
-        );
-        assert.ok(
-            contentAttr.includes('initial-scale=1.0'),
-            'Viewport meta tag must set initial-scale=1.0'
-        );
+        assert.ok(!contentAttr.includes('maximum-scale=1.0'), 'Viewport meta tag must not restrict maximum-scale=1.0');
+        assert.ok(!contentAttr.includes('user-scalable=no'), 'Viewport meta tag must not restrict user-scalable=no');
+        assert.ok(contentAttr.includes('width=device-width'), 'Viewport meta tag must set width=device-width');
+        assert.ok(contentAttr.includes('initial-scale=1.0'), 'Viewport meta tag must set initial-scale=1.0');
     });
 
     await t.test('Issue 6: Creature sheet removes 16px backdrop-filter blur on mobile', () => {
@@ -195,16 +186,14 @@ test('Mobile/Tablet UI and VTT Fixes Regression Suite', async (t) => {
 
         // Verify creature-sheet.css includes mobile media query with backdrop-filter: none
         assert.ok(
-            creatureCss.includes('#creature-sheet-panel') &&
-            creatureCss.includes('backdrop-filter: none !important;'),
+            creatureCss.includes('#creature-sheet-panel') && creatureCss.includes('backdrop-filter: none !important;'),
             'creature-sheet.css must provide mobile override with backdrop-filter: none !important;'
         );
 
         // Verify vtt-mobile.css enforces backdrop-filter: none !important
         const mobileCss = fs.readFileSync(MOBILE_CSS_PATH, 'utf8');
         assert.ok(
-            mobileCss.includes('#creature-sheet-panel') &&
-            mobileCss.includes('backdrop-filter: none !important;'),
+            mobileCss.includes('#creature-sheet-panel') && mobileCss.includes('backdrop-filter: none !important;'),
             'vtt-mobile.css must enforce backdrop-filter: none !important on creature-sheet-panel'
         );
     });
@@ -221,7 +210,9 @@ test('Mobile/Tablet UI and VTT Fixes Regression Suite', async (t) => {
         );
 
         // Functional verification: simulate canvas & container without global ResizeObserver
-        const dom = new JSDOM('<!DOCTYPE html><html><body><div id="container"><canvas id="vtt-canvas-weather"></canvas></div></body></html>');
+        const dom = new JSDOM(
+            '<!DOCTYPE html><html><body><div id="container"><canvas id="vtt-canvas-weather"></canvas></div></body></html>'
+        );
         const origWindow = globalThis.window;
         const origDocument = globalThis.document;
         const origLocalStorage = globalThis.localStorage;
@@ -238,16 +229,19 @@ test('Mobile/Tablet UI and VTT Fixes Regression Suite', async (t) => {
 
         try {
             const { initVttWeather } = await import(`../vtt/js/vtt-weather.js?t=${Date.now()}`);
-            const mockCtx = new Proxy({
-                createLinearGradient: () => ({ addColorStop: () => {} }),
-                createRadialGradient: () => ({ addColorStop: () => {} }),
-                createImageData: () => ({ data: new Uint8ClampedArray(4) })
-            }, {
-                get: (target, prop) => {
-                    if (prop in target) return target[prop];
-                    return () => {};
+            const mockCtx = new Proxy(
+                {
+                    createLinearGradient: () => ({ addColorStop: () => {} }),
+                    createRadialGradient: () => ({ addColorStop: () => {} }),
+                    createImageData: () => ({ data: new Uint8ClampedArray(4) })
+                },
+                {
+                    get: (target, prop) => {
+                        if (prop in target) return target[prop];
+                        return () => {};
+                    }
                 }
-            });
+            );
             dom.window.HTMLCanvasElement.prototype.getContext = () => mockCtx;
 
             const engine = initVttWeather({});

@@ -12,8 +12,11 @@ test('Regression Fix 1: GM session token 60s grace period on socket disconnect',
     const socketCode = fs.readFileSync(path.join(rootDir, 'server', 'socket.js'), 'utf8');
 
     // Confirm that disconnect does not immediately activeGmTokens.delete
-    assert.match(socketCode, /socket\.on\('disconnect',\s*\(\)\s*=>\s*\{[^}]*setTimeout\(\s*\(\)\s*=>\s*\{[^}]*activeGmTokens\.delete\(tokenToPurge\)/s,
-        'Disconnect must use grace period setTimeout before deleting GM session token');
+    assert.match(
+        socketCode,
+        /socket\.on\('disconnect',\s*\(\)\s*=>\s*\{[^}]*setTimeout\(\s*\(\)\s*=>\s*\{[^}]*activeGmTokens\.delete\(tokenToPurge\)/s,
+        'Disconnect must use grace period setTimeout before deleting GM session token'
+    );
     assert.match(socketCode, /60000/, 'Grace period must be 60 seconds (60000ms)');
 });
 
@@ -21,16 +24,22 @@ test('Regression Fix 2: token:update and token:update_delta cross-map mutation e
     const socketCode = fs.readFileSync(path.join(rootDir, 'server', 'socket.js'), 'utf8');
 
     // Ensure we do not loop over all maps overriding mapId if token is not found on requested mapId
-    assert.doesNotMatch(socketCode, /for\s*\(\s*const\s+mId\s+in\s+campaigns\[campaignId\]\.maps\s*\)\s*\{\s*if\s*\(\s*campaigns\[campaignId\]\.maps\[mId\]\.tokens/,
-        'Must not contain cross-map fallback loop overriding mapId in token:update handlers');
+    assert.doesNotMatch(
+        socketCode,
+        /for\s*\(\s*const\s+mId\s+in\s+campaigns\[campaignId\]\.maps\s*\)\s*\{\s*if\s*\(\s*campaigns\[campaignId\]\.maps\[mId\]\.tokens/,
+        'Must not contain cross-map fallback loop overriding mapId in token:update handlers'
+    );
 });
 
 test('Regression Fix 3: Reconnection deduplication and re-sync in vtt-session.js', async (t) => {
     const sessionCode = fs.readFileSync(path.join(rootDir, 'vtt', 'js', 'bootstrap', 'vtt-session.js'), 'utf8');
 
     // Verify reconnect event does NOT emit join directly (avoiding duplicate join race with connect)
-    assert.doesNotMatch(sessionCode, /socket\.io\.on\('reconnect',\s*\(\)\s*=>\s*\{[^}]*socket\.emit\('join'/,
-        'socket.io on reconnect must not duplicate socket.emit join');
+    assert.doesNotMatch(
+        sessionCode,
+        /socket\.io\.on\('reconnect',\s*\(\)\s*=>\s*\{[^}]*socket\.emit\('join'/,
+        'socket.io on reconnect must not duplicate socket.emit join'
+    );
 
     // Verify connect handler handles join and joined handles reconnection re-sync
     assert.match(sessionCode, /socket\.on\('connect'/, 'socket.on connect must exist');
@@ -43,22 +52,34 @@ test('Regression Fix 4: switchMapTo emits map:request_sync and portal projection
     const canvasCode = fs.readFileSync(path.join(rootDir, 'vtt', 'js', 'vtt-canvas.js'), 'utf8');
 
     // switchMapTo must emit map:request_sync to ensure complete map entity synchronization
-    assert.match(canvasCode, /vtt\.socket\.emit\('map:request_sync',\s*\{\s*mapId:\s*targetMapId\s*\}\)/,
-        'switchMapTo must emit map:request_sync');
+    assert.match(
+        canvasCode,
+        /vtt\.socket\.emit\('map:request_sync',\s*\{\s*mapId:\s*targetMapId\s*\}\)/,
+        'switchMapTo must emit map:request_sync'
+    );
 
     // renderProjectedPortals must use dynamic getter for currentMapId and currentMap
-    assert.match(canvasCode, /get\s+currentMapId\(\)\s*\{\s*return\s+currentMapId;\s*\}/,
-        'renderProjectedPortals must use dynamic getter for currentMapId');
-    assert.match(canvasCode, /get\s+currentMap\(\)\s*\{\s*return\s+vtt\.campaignState\?\.maps\?\.\[currentMapId\];\s*\}/,
-        'renderProjectedPortals must use dynamic getter for currentMap');
+    assert.match(
+        canvasCode,
+        /get\s+currentMapId\(\)\s*\{\s*return\s+currentMapId;\s*\}/,
+        'renderProjectedPortals must use dynamic getter for currentMapId'
+    );
+    assert.match(
+        canvasCode,
+        /get\s+currentMap\(\)\s*\{\s*return\s+vtt\.campaignState\?\.maps\?\.\[currentMapId\];\s*\}/,
+        'renderProjectedPortals must use dynamic getter for currentMap'
+    );
 });
 
 test('Regression Fix 5: Map Manager loadMap delegates to switchMapTo', async (t) => {
     const canvasCode = fs.readFileSync(path.join(rootDir, 'vtt', 'js', 'vtt-canvas.js'), 'utf8');
 
     // Map Manager loadMap option must route to switchMapTo
-    assert.match(canvasCode, /loadMap:\s*\(id\)\s*=>\s*switchMapTo\(id\)/,
-        'getMapManagerOptions must route loadMap to switchMapTo');
+    assert.match(
+        canvasCode,
+        /loadMap:\s*\(id\)\s*=>\s*switchMapTo\(id\)/,
+        'getMapManagerOptions must route loadMap to switchMapTo'
+    );
 });
 
 test('Regression Fix 6: syncCampaignState preserves local dragging token while updating map entities', async (t) => {

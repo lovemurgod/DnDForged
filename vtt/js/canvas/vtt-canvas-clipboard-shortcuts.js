@@ -21,7 +21,8 @@ export function setupKeyboardShortcuts(ctx = {}) {
 
     const updateContainerTransform = ctx.updateContainerTransform || (() => updateContainerTransformExt(ctx));
     const cancelCameraAnimation = ctx.cancelCameraAnimation || (() => cancelCameraAnimationExt());
-    const getTokenDrawDimensions = ctx.getTokenDrawDimensions || ((t) => ({ drawW: t?.width || 50, drawH: t?.height || 50 }));
+    const getTokenDrawDimensions =
+        ctx.getTokenDrawDimensions || ((t) => ({ drawW: t?.width || 50, drawH: t?.height || 50 }));
     const cancelMapToolDrawing = ctx.cancelMapToolDrawing || (() => {});
     const snapToGridCenter = ctx.snapToGridCenter || ((x, y) => snapToGridCenterExt(x, y, ctx.grid));
 
@@ -297,637 +298,649 @@ export function setupKeyboardShortcuts(ctx = {}) {
 
     if (typeof window !== 'undefined') {
         window.addEventListener('keydown', (e) => {
-        const isInputActive =
-            ['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName) ||
-            ['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target?.tagName) ||
-            document.activeElement?.isContentEditable ||
-            e.target?.isContentEditable;
-        if (isInputActive) return;
+            const isInputActive =
+                ['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName) ||
+                ['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target?.tagName) ||
+                document.activeElement?.isContentEditable ||
+                e.target?.isContentEditable;
+            if (isInputActive) return;
 
-        const isCtrl = e.ctrlKey || e.metaKey;
-        const key = e.key ? e.key.toLowerCase() : '';
-        const code = e.code || '';
+            const isCtrl = e.ctrlKey || e.metaKey;
+            const key = e.key ? e.key.toLowerCase() : '';
+            const code = e.code || '';
 
-        if (e.key === 'Enter' && ctx.isDrawingMapTool && ctx.currentMapToolShape === 'polygon') {
-            e.preventDefault();
-            ctx.finalizeMapToolPolygon();
-            return;
-        }
-
-        // Layer switching shortcuts: ` + 1..6 (e.g. `+6 for Portals layer)
-        if (e.key === '`' || e.code === 'Backquote' || e.key === '~') {
-            isLayerShortcutModifierDown = true;
-            lastBackquoteTime = Date.now();
-        }
-
-        if (isLayerShortcutModifierDown && vtt.role === 'GM') {
-            const layerMap = {
-                '1': 'token',
-                '2': 'gm',
-                '3': 'lighting',
-                '4': 'notes',
-                '5': 'map',
-                '6': 'portals'
-            };
-            if (layerMap[e.key]) {
+            if (e.key === 'Enter' && ctx.isDrawingMapTool && ctx.currentMapToolShape === 'polygon') {
                 e.preventDefault();
-                const targetLayer = layerMap[e.key];
-                if (typeof ctx.switchActiveLayer === 'function') {
-                    ctx.switchActiveLayer(targetLayer);
-                }
-                const layerPanel = document.getElementById('panel-layers-config');
-                if (layerPanel) {
-                    const layerBtns = layerPanel.querySelectorAll('.layer-btn');
-                    layerBtns.forEach((lb) => {
-                        if (lb.getAttribute('data-layer') === targetLayer) lb.click();
-                    });
-                }
-                lastBackquoteTime = 0;
+                ctx.finalizeMapToolPolygon();
                 return;
             }
-        }
 
-        if (
-            Date.now() - lastBackquoteTime < 1500 &&
-            ['Digit1', 'Digit2', 'Digit3', 'Digit4', 'Digit5', 'Digit6', '1', '2', '3', '4', '5', '6'].includes(
-                e.code || e.key
-            )
-        ) {
-            const num = e.code && e.code.startsWith('Digit') ? e.code.replace('Digit', '') : e.key;
-            const layerMap = { 1: 'token', 2: 'gm', 3: 'lighting', 4: 'notes', 5: 'map', 6: 'portals' };
-            if (layerMap[num]) {
-                e.preventDefault();
-                if (typeof ctx.switchActiveLayer === 'function') {
-                    ctx.switchActiveLayer(layerMap[num]);
-                }
-                lastBackquoteTime = 0;
-                return;
+            // Layer switching shortcuts: ` + 1..6 (e.g. `+6 for Portals layer)
+            if (e.key === '`' || e.code === 'Backquote' || e.key === '~') {
+                isLayerShortcutModifierDown = true;
+                lastBackquoteTime = Date.now();
             }
-        }
 
-        // Tool selection shortcuts (keys 1-6 when backquote modifier is not active)
-        if (!isLayerShortcutModifierDown && Date.now() - lastBackquoteTime >= 1500 && !isCtrl && !e.altKey) {
-            const isDigit = code.startsWith('Digit') || (!code.startsWith('Numpad') && ['1', '2', '3', '4', '5', '6'].includes(e.key));
-            if (isDigit) {
-                const toolMap = {
-                    '1': 'tool-select',
-                    '2': 'tool-measure',
-                    '3': 'tool-shape',
-                    '4': 'tool-ping',
-                    '5': vtt.role === 'GM' ? 'tool-lighting' : null,
-                    '6': 'tool-paint'
+            if (isLayerShortcutModifierDown && vtt.role === 'GM') {
+                const layerMap = {
+                    1: 'token',
+                    2: 'gm',
+                    3: 'lighting',
+                    4: 'notes',
+                    5: 'map',
+                    6: 'portals'
                 };
-                const toolId = toolMap[e.key];
-                if (toolId) {
+                if (layerMap[e.key]) {
                     e.preventDefault();
-                    document.getElementById(toolId)?.click();
+                    const targetLayer = layerMap[e.key];
+                    if (typeof ctx.switchActiveLayer === 'function') {
+                        ctx.switchActiveLayer(targetLayer);
+                    }
+                    const layerPanel = document.getElementById('panel-layers-config');
+                    if (layerPanel) {
+                        const layerBtns = layerPanel.querySelectorAll('.layer-btn');
+                        layerBtns.forEach((lb) => {
+                            if (lb.getAttribute('data-layer') === targetLayer) lb.click();
+                        });
+                    }
+                    lastBackquoteTime = 0;
                     return;
                 }
             }
-        }
 
-        // Paint Undo / Redo Shortcuts (Ctrl+Z, Ctrl+Y, Ctrl+Shift+Z)
-        if (isCtrl && (key === 'z' || key === 'y')) {
-            if (key === 'z') {
-                if (e.shiftKey) {
+            if (
+                Date.now() - lastBackquoteTime < 1500 &&
+                ['Digit1', 'Digit2', 'Digit3', 'Digit4', 'Digit5', 'Digit6', '1', '2', '3', '4', '5', '6'].includes(
+                    e.code || e.key
+                )
+            ) {
+                const num = e.code && e.code.startsWith('Digit') ? e.code.replace('Digit', '') : e.key;
+                const layerMap = { 1: 'token', 2: 'gm', 3: 'lighting', 4: 'notes', 5: 'map', 6: 'portals' };
+                if (layerMap[num]) {
+                    e.preventDefault();
+                    if (typeof ctx.switchActiveLayer === 'function') {
+                        ctx.switchActiveLayer(layerMap[num]);
+                    }
+                    lastBackquoteTime = 0;
+                    return;
+                }
+            }
+
+            // Tool selection shortcuts (keys 1-6 when backquote modifier is not active)
+            if (!isLayerShortcutModifierDown && Date.now() - lastBackquoteTime >= 1500 && !isCtrl && !e.altKey) {
+                const isDigit =
+                    code.startsWith('Digit') ||
+                    (!code.startsWith('Numpad') && ['1', '2', '3', '4', '5', '6'].includes(e.key));
+                if (isDigit) {
+                    const toolMap = {
+                        1: 'tool-select',
+                        2: 'tool-measure',
+                        3: 'tool-shape',
+                        4: 'tool-ping',
+                        5: vtt.role === 'GM' ? 'tool-lighting' : null,
+                        6: 'tool-paint'
+                    };
+                    const toolId = toolMap[e.key];
+                    if (toolId) {
+                        e.preventDefault();
+                        document.getElementById(toolId)?.click();
+                        return;
+                    }
+                }
+            }
+
+            // Paint Undo / Redo Shortcuts (Ctrl+Z, Ctrl+Y, Ctrl+Shift+Z)
+            if (isCtrl && (key === 'z' || key === 'y')) {
+                if (key === 'z') {
+                    if (e.shiftKey) {
+                        e.preventDefault();
+                        if (typeof ctx.paintRedo === 'function') ctx.paintRedo();
+                    } else {
+                        e.preventDefault();
+                        if (typeof ctx.paintUndo === 'function') ctx.paintUndo();
+                    }
+                    return;
+                } else if (key === 'y') {
                     e.preventDefault();
                     if (typeof ctx.paintRedo === 'function') ctx.paintRedo();
+                    return;
+                }
+            }
+
+            // Shift+X: Cinematic Splash Art Zoom Shortcut
+            if (e.shiftKey && key === 'x' && !isCtrl && !e.altKey) {
+                e.preventDefault();
+                if (typeof ctx.isSplashOverlayOpen === 'function' && ctx.isSplashOverlayOpen()) {
+                    if (typeof ctx.closeSplashOverlay === 'function') ctx.closeSplashOverlay();
+                } else if (typeof ctx.triggerSplashForSelection === 'function') {
+                    ctx.triggerSplashForSelection();
+                }
+                return;
+            }
+
+            // Numpad 5: Center view to token / centroid / player character / map center
+            // (or Shift+Numpad 5: GM broadcast view to players)
+            if (code === 'Numpad5') {
+                e.preventDefault();
+                if (e.shiftKey && vtt.role === 'GM') {
+                    ctx.broadcastViewToPlayers();
                 } else {
-                    e.preventDefault();
-                    if (typeof ctx.paintUndo === 'function') ctx.paintUndo();
+                    ctx.centerOnTokenOrMap();
                 }
                 return;
-            } else if (key === 'y') {
-                e.preventDefault();
-                if (typeof ctx.paintRedo === 'function') ctx.paintRedo();
-                return;
-            }
-        }
-
-        // Shift+X: Cinematic Splash Art Zoom Shortcut
-        if (e.shiftKey && key === 'x' && !isCtrl && !e.altKey) {
-            e.preventDefault();
-            if (typeof ctx.isSplashOverlayOpen === 'function' && ctx.isSplashOverlayOpen()) {
-                if (typeof ctx.closeSplashOverlay === 'function') ctx.closeSplashOverlay();
-            } else if (typeof ctx.triggerSplashForSelection === 'function') {
-                ctx.triggerSplashForSelection();
-            }
-            return;
-        }
-
-        // Numpad 5: Center view to token / centroid / player character / map center
-        // (or Shift+Numpad 5: GM broadcast view to players)
-        if (code === 'Numpad5') {
-            e.preventDefault();
-            if (e.shiftKey && vtt.role === 'GM') {
-                ctx.broadcastViewToPlayers();
-            } else {
-                ctx.centerOnTokenOrMap();
-            }
-            return;
-        }
-
-        // Numpad Zoom (+ / -) and standard +/- keys
-        if (
-            code === 'NumpadAdd' ||
-            (e.key === '+' && !isCtrl && !e.altKey) ||
-            (e.key === '=' && !isCtrl && !e.altKey)
-        ) {
-            e.preventDefault();
-            ctx.stepZoom(0.1);
-            return;
-        }
-        if (
-            code === 'NumpadSubtract' ||
-            (e.key === '-' && !isCtrl && !e.altKey) ||
-            (e.key === '_' && !isCtrl && !e.altKey)
-        ) {
-            e.preventDefault();
-            ctx.stepZoom(-0.1);
-            return;
-        }
-
-        // Numpad Panning: 4 (left), 8 (up), 6 (right), 2 (down) + diagonals 7, 9, 1, 3
-        const isNumpad4 = code === 'Numpad4';
-        const isNumpad8 = code === 'Numpad8';
-        const isNumpad6 = code === 'Numpad6';
-        const isNumpad2 = code === 'Numpad2';
-        const isNumpad7 = code === 'Numpad7';
-        const isNumpad9 = code === 'Numpad9';
-        const isNumpad1 = code === 'Numpad1';
-        const isNumpad3 = code === 'Numpad3';
-
-        if (isNumpad4 || isNumpad8 || isNumpad6 || isNumpad2 || isNumpad7 || isNumpad9 || isNumpad1 || isNumpad3) {
-            e.preventDefault();
-            cancelCameraAnimation();
-            const step = e.repeat ? 180 : 120;
-            let dx = 0;
-            let dy = 0;
-
-            if (isNumpad4) dx += step;
-            if (isNumpad6) dx -= step;
-            if (isNumpad8) dy += step;
-            if (isNumpad2) dy -= step;
-            if (isNumpad7) {
-                dx += step * 0.707;
-                dy += step * 0.707;
-            }
-            if (isNumpad9) {
-                dx -= step * 0.707;
-                dy += step * 0.707;
-            }
-            if (isNumpad1) {
-                dx += step * 0.707;
-                dy += step * 0.707;
-            }
-            if (isNumpad3) {
-                dx += step * 0.707;
-                dy += step * 0.707;
             }
 
-            ctx.panX += dx;
-            ctx.panY += dy;
-            updateContainerTransform();
-            ctx.renderAll();
-            return;
-        }
-
-        const activeTool = ctx.activeTool || 'select';
-        if (e.key === ' ' && (ctx.isTokenMeasuring || ctx.localIsMeasuring || ctx.localIsShaping)) {
-            const rawShapeMeasure = document.getElementById('measure-shape')?.value || 'line';
+            // Numpad Zoom (+ / -) and standard +/- keys
             if (
-                ctx.isTokenMeasuring ||
-                ((activeTool === 'measure' || activeTool === 'shape') && rawShapeMeasure === 'line')
+                code === 'NumpadAdd' ||
+                (e.key === '+' && !isCtrl && !e.altKey) ||
+                (e.key === '=' && !isCtrl && !e.altKey)
             ) {
                 e.preventDefault();
-                (ctx.measureAnchorPoints = ctx.measureAnchorPoints || []).push(
-                    e.altKey
-                        ? ctx.currentMouseCoords
-                        : snapToGridCenter(ctx.currentMouseCoords.x, ctx.currentMouseCoords.y)
-                );
-                if (ctx.localIsMeasuring) ctx.localMeasureEnd = ctx.currentMouseCoords;
-                if (ctx.localIsShaping) ctx.localShapeEnd = ctx.currentMouseCoords;
-                ctx.renderAll();
+                ctx.stepZoom(0.1);
                 return;
             }
-        }
-
-        if ((e.key === 'Backspace' || e.key === 'Delete') && (ctx.isTokenMeasuring || ctx.localIsMeasuring || ctx.localIsShaping)) {
-            e.preventDefault();
-            if (ctx.measureAnchorPoints && ctx.measureAnchorPoints.length > 1) {
-                ctx.measureAnchorPoints.pop();
-                ctx.renderAll();
-            }
-            return;
-        }
-
-        if (e.key === 'Escape') {
-            if (typeof ctx.isSplashOverlayOpen === 'function' && ctx.isSplashOverlayOpen()) {
-                if (typeof ctx.closeSplashOverlay === 'function') ctx.closeSplashOverlay();
-            }
-            const menu = document.getElementById('vtt-token-context-menu');
-            if (menu) menu.remove();
-            const hasActiveTextarea = typeof ctx.activeDrawingTextarea === 'function' ? ctx.activeDrawingTextarea() : ctx.activeDrawingTextarea;
-            if (hasActiveTextarea && typeof ctx.cancelDrawingTextInput === 'function') {
-                ctx.cancelDrawingTextInput();
-            }
-            if (ctx.isDrawingMapTool) {
-                cancelMapToolDrawing();
-            }
-            // Clear active measurements or ctx.shapes
-            const dragTargetId = ctx.dragTargetId;
-            if (ctx.localIsMeasuring || ctx.localIsShaping || ctx.isTokenMeasuring || dragTargetId) {
-                if (dragTargetId) {
-                    const originalPos = ctx.tokenDragOriginalPositions?.[dragTargetId];
-                    if (originalPos && ctx.tokens[dragTargetId]) {
-                        ctx.tokens[dragTargetId].x = originalPos.x;
-                        ctx.tokens[dragTargetId].y = originalPos.y;
-                        if (typeof window !== 'undefined' && window.emitTokenUpdates) {
-                            window.emitTokenUpdates(ctx.tokens);
-                        }
-                    }
-                    ctx.dragTargetId = null;
-                }
-                if (ctx.isTokenMeasuring) {
-                    ctx.isTokenMeasuring = false;
-                }
-                if (ctx.localIsMeasuring) {
-                    ctx.localIsMeasuring = false;
-                    vtt.socket.emit('measure:clear', { mapId: ctx.currentMapId, username: vtt.username });
-                    ctx.localMeasureStart = null;
-                    ctx.localMeasureEnd = null;
-                }
-                if (ctx.localIsShaping) {
-                    ctx.localIsShaping = false;
-                    ctx.localShapeStart = null;
-                    ctx.localShapeEnd = null;
-                }
-                ctx.measureAnchorPoints = [];
-            }
-
-            // Close note viewer if open
-            const noteViewer = document.getElementById('vtt-note-viewer');
-            if (noteViewer) {
-                noteViewer.remove();
-                return;
-            }
-            ctx.selectedTokenIds.clear();
-            ctx.gmTokenVisionMode = false;
-            if (typeof ctx.selectedShapeIds !== 'undefined') ctx.selectedShapeIds.clear();
-            if (typeof ctx.selectedDrawingIds !== 'undefined') ctx.selectedDrawingIds.clear();
-            if (typeof ctx.selectedWallIdxs !== 'undefined') ctx.selectedWallIdxs.clear();
-            ctx.selectedShapeId = null;
-            ctx.selectedDrawingId = null;
-            ctx.selectedLightId = null;
-            ctx.hoveredLightId = null;
-            if ('hoveredWallIdx' in ctx) ctx.hoveredWallIdx = -1;
-            ctx.selectedNoteId = null;
-            ctx.renderAll();
-            return;
-        }
-
-        if (e.shiftKey && key === 'l' && vtt.role === 'GM') {
-            e.preventDefault();
-            ctx.gmTokenVisionMode = !ctx.gmTokenVisionMode;
-            if (ctx.gmTokenVisionMode && ctx.selectedTokenIds.size === 0) {
-                ctx.gmTokenVisionMode = false;
-            }
-            ctx.renderAll();
-            return;
-        }
-
-        if (isCtrl && key === 'a') {
-            e.preventDefault();
-            ctx.selectedTokenIds.clear();
-            if (typeof ctx.selectedShapeIds !== 'undefined') ctx.selectedShapeIds.clear();
-            if (typeof ctx.selectedDrawingIds !== 'undefined') ctx.selectedDrawingIds.clear();
-            if (typeof ctx.selectedWallIdxs !== 'undefined') ctx.selectedWallIdxs.clear();
-            ctx.selectedLightId = null;
-            ctx.selectedShapeId = null;
-            ctx.selectedDrawingId = null;
-
-            if (ctx.activeLayer === 'lighting') {
-                if (typeof ctx.walls !== 'undefined') ctx.walls.forEach((w, idx) => ctx.selectedWallIdxs.add(idx));
-            } else {
-                if (typeof ctx.tokens !== 'undefined') {
-                    Object.keys(ctx.tokens).forEach((id) => {
-                        const t = ctx.tokens[id];
-                        const tokenLayer = t?.layer || 'token';
-                        if (t && tokenLayer === ctx.activeLayer && ctx.isTokenControlledByPlayer(t)) {
-                            ctx.selectedTokenIds.add(id);
-                        }
-                    });
-                }
-                if (typeof ctx.shapes !== 'undefined') {
-                    Object.keys(ctx.shapes).forEach((id) => {
-                        const s = ctx.shapes[id];
-                        const shapeLayer = s?.layer || 'token';
-                        if (s && shapeLayer === ctx.activeLayer && ctx.isShapeControlledByPlayer(s)) {
-                            ctx.selectedShapeIds.add(id);
-                        }
-                    });
-                }
-                if (typeof ctx.drawings !== 'undefined') {
-                    Object.keys(ctx.drawings).forEach((id) => {
-                        const d = ctx.drawings[id];
-                        const drawingLayer = d?.layer || 'token';
-                        if (d && drawingLayer === ctx.activeLayer && ctx.isDrawingControlledByPlayer(d)) {
-                            ctx.selectedDrawingIds.add(id);
-                        }
-                    });
-                }
-            }
-            ctx.renderAll();
-            return;
-        }
-
-        if (isCtrl && key === 'c') {
-            e.preventDefault();
-            copySelectionToClipboard();
-            return;
-        }
-
-        if (isCtrl && key === 'x') {
-            e.preventDefault();
-            copySelectionToClipboard();
-            deleteSelection();
-            return;
-        }
-
-        if (isCtrl && key === 'v') {
-            e.preventDefault();
-            pasteClipboard();
-            return;
-        }
-
-        if (e.key === 'Delete' || e.key === 'Backspace') {
-            e.preventDefault();
-            deleteSelection();
-            return;
-        }
-
-        // Token Rotation (Q / E) & Flipping (W / A / S / D)
-        if (!isCtrl && !e.altKey && ctx.selectedTokenIds && ctx.selectedTokenIds.size > 0) {
-            if (key === 'q' || key === 'e') {
-                e.preventDefault();
-                const step = e.shiftKey ? 5 : 45;
-                const delta = key === 'q' ? -step : step;
-                let updated = false;
-                ctx.selectedTokenIds.forEach((id) => {
-                    const token = ctx.tokens[id];
-                    if (token && ctx.isTokenControlledByPlayer(token)) {
-                        let cur = token.rotation || 0;
-                        let next = (cur + delta) % 360;
-                        if (next < 0) next += 360;
-                        token.rotation = next;
-                        updated = true;
-                    }
-                });
-                if (updated) {
-                    if (typeof window !== 'undefined' && window.emitTokenUpdates) {
-                        window.emitTokenUpdates(ctx.tokens);
-                    } else if (typeof ctx.emitTokenUpdates === 'function') {
-                        ctx.emitTokenUpdates(ctx.tokens);
-                    }
-                    ctx.renderAll();
-                    return;
-                }
-            }
-            if (['w', 'a', 's', 'd'].includes(key)) {
-                let updated = false;
-                ctx.selectedTokenIds.forEach((id) => {
-                    const token = ctx.tokens[id];
-                    if (token && ctx.isTokenControlledByPlayer(token)) {
-                        if (key === 'w' && token.flipY !== false) {
-                            token.flipY = false;
-                            updated = true;
-                        } else if (key === 's' && token.flipY !== true) {
-                            token.flipY = true;
-                            updated = true;
-                        } else if (key === 'a' && token.flipX !== true) {
-                            token.flipX = true;
-                            updated = true;
-                        } else if (key === 'd' && token.flipX !== false) {
-                            token.flipX = false;
-                            updated = true;
-                        }
-                    }
-                });
-                if (updated) {
-                    e.preventDefault();
-                    if (typeof window !== 'undefined' && window.emitTokenUpdates) {
-                        window.emitTokenUpdates(ctx.tokens);
-                    } else if (typeof ctx.emitTokenUpdates === 'function') {
-                        ctx.emitTokenUpdates(ctx.tokens);
-                    }
-                    ctx.renderAll();
-                    return;
-                }
-            }
-        }
-
-        if (e.key === 'ArrowUp' || e.key === 'ArrowDown' || e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
             if (
-                ctx.selectedTokenIds.size > 0 ||
-                (typeof ctx.selectedShapeIds !== 'undefined' && ctx.selectedShapeIds.size > 0) ||
-                ctx.selectedShapeId ||
-                ctx.selectedDrawingId ||
-                (typeof ctx.selectedDrawingIds !== 'undefined' && ctx.selectedDrawingIds.size > 0)
+                code === 'NumpadSubtract' ||
+                (e.key === '-' && !isCtrl && !e.altKey) ||
+                (e.key === '_' && !isCtrl && !e.altKey)
             ) {
                 e.preventDefault();
+                ctx.stepZoom(-0.1);
+                return;
+            }
+
+            // Numpad Panning: 4 (left), 8 (up), 6 (right), 2 (down) + diagonals 7, 9, 1, 3
+            const isNumpad4 = code === 'Numpad4';
+            const isNumpad8 = code === 'Numpad8';
+            const isNumpad6 = code === 'Numpad6';
+            const isNumpad2 = code === 'Numpad2';
+            const isNumpad7 = code === 'Numpad7';
+            const isNumpad9 = code === 'Numpad9';
+            const isNumpad1 = code === 'Numpad1';
+            const isNumpad3 = code === 'Numpad3';
+
+            if (isNumpad4 || isNumpad8 || isNumpad6 || isNumpad2 || isNumpad7 || isNumpad9 || isNumpad1 || isNumpad3) {
+                e.preventDefault();
+                cancelCameraAnimation();
+                const step = e.repeat ? 180 : 120;
                 let dx = 0;
                 let dy = 0;
-                const unitSize =
-                    (ctx.grid && ctx.grid.size ? ctx.grid.size : 50) *
-                    (ctx.grid && ctx.grid.scale ? ctx.grid.scale : 1);
-                if (e.key === 'ArrowUp') dy = -unitSize;
-                if (e.key === 'ArrowDown') dy = unitSize;
-                if (e.key === 'ArrowLeft') dx = -unitSize;
-                if (e.key === 'ArrowRight') dx = unitSize;
 
-                let changedTokens = false;
-                let changedShapes = false;
-                let changedDrawings = false;
-
-                const drawingsToNudge = new Set(ctx.selectedDrawingIds || []);
-                if (ctx.selectedDrawingId) drawingsToNudge.add(ctx.selectedDrawingId);
-                if (drawingsToNudge.size > 0) {
-                    drawingsToNudge.forEach((id) => {
-                        const d = ctx.drawings[id];
-                        if (d && ctx.isDrawingControlledByPlayer(d)) {
-                            if (d.points)
-                                d.points.forEach((p) => {
-                                    p.x += dx;
-                                    p.y += dy;
-                                });
-                            if (d.startPoint) {
-                                d.startPoint.x += dx;
-                                d.startPoint.y += dy;
-                            }
-                            if (d.endPoint) {
-                                d.endPoint.x += dx;
-                                d.endPoint.y += dy;
-                            }
-                            if (d.x !== undefined) d.x += dx;
-                            if (d.y !== undefined) d.y += dy;
-                            changedDrawings = true;
-                        }
-                    });
+                if (isNumpad4) dx += step;
+                if (isNumpad6) dx -= step;
+                if (isNumpad8) dy += step;
+                if (isNumpad2) dy -= step;
+                if (isNumpad7) {
+                    dx += step * 0.707;
+                    dy += step * 0.707;
+                }
+                if (isNumpad9) {
+                    dx -= step * 0.707;
+                    dy += step * 0.707;
+                }
+                if (isNumpad1) {
+                    dx += step * 0.707;
+                    dy += step * 0.707;
+                }
+                if (isNumpad3) {
+                    dx += step * 0.707;
+                    dy += step * 0.707;
                 }
 
-                ctx.selectedTokenIds.forEach((id) => {
-                    const t = ctx.tokens[id];
-                    if (ctx.isTokenControlledByPlayer(t)) {
-                        if (t._portalTransitLock && Date.now() < t._portalTransitLock) return;
-                        let logicalX = t.x;
-                        let logicalY = t.y;
-                        if (ctx.tokenAnimations && ctx.tokenAnimations[id]) {
-                            logicalX = ctx.tokenAnimations[id].endX;
-                            logicalY = ctx.tokenAnimations[id].endY;
-                        }
-                        let nx = logicalX + dx;
-                        let ny = logicalY + dy;
+                ctx.panX += dx;
+                ctx.panY += dy;
+                updateContainerTransform();
+                ctx.renderAll();
+                return;
+            }
 
-                        const currentMap = vtt.campaignState?.maps?.[ctx.currentMapId];
-                        if (vtt.role !== 'GM' && currentMap?.lightingSettings?.restrictMovement) {
-                            const { drawW, drawH } = getTokenDrawDimensions(t);
-                            const radius = Math.min(drawW, drawH) / 2;
-                            const startCenter = { x: logicalX + drawW / 2, y: logicalY + drawH / 2 };
-                            const endCenter = { x: nx + drawW / 2, y: ny + drawH / 2 };
-
-                            let closestT = 1.0;
-                            let collisionPoint = null;
-                            const portals = ctx.portals || [];
-
-                            ctx.walls.forEach((wall) => {
-                                if (wall.isOpen) return;
-                                if (
-                                    Array.isArray(portals) &&
-                                    portals.some((po) => {
-                                        if (!po.walkThrough) return false;
-                                        const pRad =
-                                            po.shape === 'circle' && po.geom?.r
-                                                ? po.geom.r
-                                                : po.shape === 'rect' && po.geom
-                                                  ? Math.max(po.geom.w, po.geom.h) / 2
-                                                  : po.shape === 'line' && po.geom
-                                                    ? Math.hypot(po.geom.x2 - po.geom.x1, po.geom.y2 - po.geom.y1) / 2
-                                                    : 45;
-                                        const threshSq = Math.max(pRad * pRad * 1.5, 55 * 55);
-                                        return (
-                                            distToSegmentSq(
-                                                calcPortalCenter(po),
-                                                { x: wall.x1, y: wall.y1 },
-                                                { x: wall.x2, y: wall.y2 }
-                                            ) <= threshSq
-                                        );
-                                    })
-                                )
-                                    return;
-                                const intersect = getLineIntersection(
-                                    startCenter.x,
-                                    startCenter.y,
-                                    endCenter.x,
-                                    endCenter.y,
-                                    wall.x1,
-                                    wall.y1,
-                                    wall.x2,
-                                    wall.y2
-                                );
-                                if (intersect && intersect.t < closestT) {
-                                    closestT = intersect.t;
-                                    collisionPoint = intersect;
-                                }
-                            });
-
-                            if (collisionPoint) {
-                                const length = Math.hypot(dx, dy);
-                                if (length > 0) {
-                                    const backupT = Math.max(0, collisionPoint.t - (radius - 2) / length);
-                                    nx = startCenter.x + dx * backupT - drawW / 2;
-                                    ny = startCenter.y + dy * backupT - drawH / 2;
-                                }
-                            }
-                        }
-
-                        if (logicalX !== nx || logicalY !== ny) {
-                            t.x = nx;
-                            t.y = ny;
-                            const originalPos = { x: logicalX, y: logicalY };
-                            const triggerRes = typeof ctx.checkTokenMoveTriggers === 'function' ? ctx.checkTokenMoveTriggers(t, originalPos) : null;
-                            if (triggerRes?.action === 'teleport' || triggerRes?.action === 'trap') {
-                                delete t._animReq;
-                                if (ctx.tokenAnimations && ctx.tokenAnimations[id]) delete ctx.tokenAnimations[id];
-                                if (triggerRes?.action === 'teleport' && ctx.tokens[id]) {
-                                    ctx.selectedTokenIds.clear();
-                                    ctx.selectedTokenIds.add(id);
-                                    ctx.selectedTokenId = id;
-                                }
-                            } else {
-                                t._animReq = {
-                                    startX: originalPos.x,
-                                    startY: originalPos.y,
-                                    endX: t.x,
-                                    endY: t.y,
-                                    waypoints: [],
-                                    timestamp: Date.now(),
-                                    duration: 300
-                                };
-                            }
-                            changedTokens = true;
-                        }
-                    }
-                });
-
-                const shapeIdsToNudge = new Set(ctx.selectedShapeIds || []);
-                if (ctx.selectedShapeId) shapeIdsToNudge.add(ctx.selectedShapeId);
-                if (shapeIdsToNudge.size > 0) {
-                    shapeIdsToNudge.forEach((id) => {
-                        const s = ctx.shapes[id];
-                        if (s && ctx.isShapeControlledByPlayer(s)) {
-                            s.startPoint.x += dx;
-                            s.startPoint.y += dy;
-                            s.endPoint.x += dx;
-                            s.endPoint.y += dy;
-                            if (s.points)
-                                s.points.forEach((p) => {
-                                    p.x += dx;
-                                    p.y += dy;
-                                });
-                            changedShapes = true;
-                        }
-                    });
-                }
-
-                if (changedTokens) {
-                    if (typeof window !== 'undefined' && typeof window.emitTokenUpdates === 'function') {
-                        window.emitTokenUpdates(ctx.tokens);
-                    } else if (typeof ctx.emitTokenUpdates === 'function') {
-                        ctx.emitTokenUpdates(ctx.tokens);
-                    }
-                    if (typeof ctx.processTokenAnimReqs === 'function') {
-                        ctx.processTokenAnimReqs(ctx.tokens);
-                    }
-                }
-                if (changedShapes && vtt?.socket?.emit) {
-                    vtt.socket.emit('shapes:update', { mapId: ctx.currentMapId, shapes: ctx.shapes });
-                }
-                if (changedDrawings && typeof ctx.emitDrawingsUpdate === 'function') {
-                    ctx.emitDrawingsUpdate();
-                }
-                if (changedTokens || changedShapes || changedDrawings) {
-                    if (typeof ctx.renderAll === 'function') ctx.renderAll();
+            const activeTool = ctx.activeTool || 'select';
+            if (e.key === ' ' && (ctx.isTokenMeasuring || ctx.localIsMeasuring || ctx.localIsShaping)) {
+                const rawShapeMeasure = document.getElementById('measure-shape')?.value || 'line';
+                if (
+                    ctx.isTokenMeasuring ||
+                    ((activeTool === 'measure' || activeTool === 'shape') && rawShapeMeasure === 'line')
+                ) {
+                    e.preventDefault();
+                    (ctx.measureAnchorPoints = ctx.measureAnchorPoints || []).push(
+                        e.altKey
+                            ? ctx.currentMouseCoords
+                            : snapToGridCenter(ctx.currentMouseCoords.x, ctx.currentMouseCoords.y)
+                    );
+                    if (ctx.localIsMeasuring) ctx.localMeasureEnd = ctx.currentMouseCoords;
+                    if (ctx.localIsShaping) ctx.localShapeEnd = ctx.currentMouseCoords;
+                    ctx.renderAll();
+                    return;
                 }
             }
-            return;
-        }
-    });
 
-    window.addEventListener('keyup', (e) => {
-        if (e.key === '`' || e.key === '~' || e.code === 'Backquote') {
-            isLayerShortcutModifierDown = false;
-        }
-    });
+            if (
+                (e.key === 'Backspace' || e.key === 'Delete') &&
+                (ctx.isTokenMeasuring || ctx.localIsMeasuring || ctx.localIsShaping)
+            ) {
+                e.preventDefault();
+                if (ctx.measureAnchorPoints && ctx.measureAnchorPoints.length > 1) {
+                    ctx.measureAnchorPoints.pop();
+                    ctx.renderAll();
+                }
+                return;
+            }
+
+            if (e.key === 'Escape') {
+                if (typeof ctx.isSplashOverlayOpen === 'function' && ctx.isSplashOverlayOpen()) {
+                    if (typeof ctx.closeSplashOverlay === 'function') ctx.closeSplashOverlay();
+                }
+                const menu = document.getElementById('vtt-token-context-menu');
+                if (menu) menu.remove();
+                const hasActiveTextarea =
+                    typeof ctx.activeDrawingTextarea === 'function'
+                        ? ctx.activeDrawingTextarea()
+                        : ctx.activeDrawingTextarea;
+                if (hasActiveTextarea && typeof ctx.cancelDrawingTextInput === 'function') {
+                    ctx.cancelDrawingTextInput();
+                }
+                if (ctx.isDrawingMapTool) {
+                    cancelMapToolDrawing();
+                }
+                // Clear active measurements or ctx.shapes
+                const dragTargetId = ctx.dragTargetId;
+                if (ctx.localIsMeasuring || ctx.localIsShaping || ctx.isTokenMeasuring || dragTargetId) {
+                    if (dragTargetId) {
+                        const originalPos = ctx.tokenDragOriginalPositions?.[dragTargetId];
+                        if (originalPos && ctx.tokens[dragTargetId]) {
+                            ctx.tokens[dragTargetId].x = originalPos.x;
+                            ctx.tokens[dragTargetId].y = originalPos.y;
+                            if (typeof window !== 'undefined' && window.emitTokenUpdates) {
+                                window.emitTokenUpdates(ctx.tokens);
+                            }
+                        }
+                        ctx.dragTargetId = null;
+                    }
+                    if (ctx.isTokenMeasuring) {
+                        ctx.isTokenMeasuring = false;
+                    }
+                    if (ctx.localIsMeasuring) {
+                        ctx.localIsMeasuring = false;
+                        vtt.socket.emit('measure:clear', { mapId: ctx.currentMapId, username: vtt.username });
+                        ctx.localMeasureStart = null;
+                        ctx.localMeasureEnd = null;
+                    }
+                    if (ctx.localIsShaping) {
+                        ctx.localIsShaping = false;
+                        ctx.localShapeStart = null;
+                        ctx.localShapeEnd = null;
+                    }
+                    ctx.measureAnchorPoints = [];
+                }
+
+                // Close note viewer if open
+                const noteViewer = document.getElementById('vtt-note-viewer');
+                if (noteViewer) {
+                    noteViewer.remove();
+                    return;
+                }
+                ctx.selectedTokenIds.clear();
+                ctx.gmTokenVisionMode = false;
+                if (typeof ctx.selectedShapeIds !== 'undefined') ctx.selectedShapeIds.clear();
+                if (typeof ctx.selectedDrawingIds !== 'undefined') ctx.selectedDrawingIds.clear();
+                if (typeof ctx.selectedWallIdxs !== 'undefined') ctx.selectedWallIdxs.clear();
+                ctx.selectedShapeId = null;
+                ctx.selectedDrawingId = null;
+                ctx.selectedLightId = null;
+                ctx.hoveredLightId = null;
+                if ('hoveredWallIdx' in ctx) ctx.hoveredWallIdx = -1;
+                ctx.selectedNoteId = null;
+                ctx.renderAll();
+                return;
+            }
+
+            if (e.shiftKey && key === 'l' && vtt.role === 'GM') {
+                e.preventDefault();
+                ctx.gmTokenVisionMode = !ctx.gmTokenVisionMode;
+                if (ctx.gmTokenVisionMode && ctx.selectedTokenIds.size === 0) {
+                    ctx.gmTokenVisionMode = false;
+                }
+                ctx.renderAll();
+                return;
+            }
+
+            if (isCtrl && key === 'a') {
+                e.preventDefault();
+                ctx.selectedTokenIds.clear();
+                if (typeof ctx.selectedShapeIds !== 'undefined') ctx.selectedShapeIds.clear();
+                if (typeof ctx.selectedDrawingIds !== 'undefined') ctx.selectedDrawingIds.clear();
+                if (typeof ctx.selectedWallIdxs !== 'undefined') ctx.selectedWallIdxs.clear();
+                ctx.selectedLightId = null;
+                ctx.selectedShapeId = null;
+                ctx.selectedDrawingId = null;
+
+                if (ctx.activeLayer === 'lighting') {
+                    if (typeof ctx.walls !== 'undefined') ctx.walls.forEach((w, idx) => ctx.selectedWallIdxs.add(idx));
+                } else {
+                    if (typeof ctx.tokens !== 'undefined') {
+                        Object.keys(ctx.tokens).forEach((id) => {
+                            const t = ctx.tokens[id];
+                            const tokenLayer = t?.layer || 'token';
+                            if (t && tokenLayer === ctx.activeLayer && ctx.isTokenControlledByPlayer(t)) {
+                                ctx.selectedTokenIds.add(id);
+                            }
+                        });
+                    }
+                    if (typeof ctx.shapes !== 'undefined') {
+                        Object.keys(ctx.shapes).forEach((id) => {
+                            const s = ctx.shapes[id];
+                            const shapeLayer = s?.layer || 'token';
+                            if (s && shapeLayer === ctx.activeLayer && ctx.isShapeControlledByPlayer(s)) {
+                                ctx.selectedShapeIds.add(id);
+                            }
+                        });
+                    }
+                    if (typeof ctx.drawings !== 'undefined') {
+                        Object.keys(ctx.drawings).forEach((id) => {
+                            const d = ctx.drawings[id];
+                            const drawingLayer = d?.layer || 'token';
+                            if (d && drawingLayer === ctx.activeLayer && ctx.isDrawingControlledByPlayer(d)) {
+                                ctx.selectedDrawingIds.add(id);
+                            }
+                        });
+                    }
+                }
+                ctx.renderAll();
+                return;
+            }
+
+            if (isCtrl && key === 'c') {
+                e.preventDefault();
+                copySelectionToClipboard();
+                return;
+            }
+
+            if (isCtrl && key === 'x') {
+                e.preventDefault();
+                copySelectionToClipboard();
+                deleteSelection();
+                return;
+            }
+
+            if (isCtrl && key === 'v') {
+                e.preventDefault();
+                pasteClipboard();
+                return;
+            }
+
+            if (e.key === 'Delete' || e.key === 'Backspace') {
+                e.preventDefault();
+                deleteSelection();
+                return;
+            }
+
+            // Token Rotation (Q / E) & Flipping (W / A / S / D)
+            if (!isCtrl && !e.altKey && ctx.selectedTokenIds && ctx.selectedTokenIds.size > 0) {
+                if (key === 'q' || key === 'e') {
+                    e.preventDefault();
+                    const step = e.shiftKey ? 5 : 45;
+                    const delta = key === 'q' ? -step : step;
+                    let updated = false;
+                    ctx.selectedTokenIds.forEach((id) => {
+                        const token = ctx.tokens[id];
+                        if (token && ctx.isTokenControlledByPlayer(token)) {
+                            let cur = token.rotation || 0;
+                            let next = (cur + delta) % 360;
+                            if (next < 0) next += 360;
+                            token.rotation = next;
+                            updated = true;
+                        }
+                    });
+                    if (updated) {
+                        if (typeof window !== 'undefined' && window.emitTokenUpdates) {
+                            window.emitTokenUpdates(ctx.tokens);
+                        } else if (typeof ctx.emitTokenUpdates === 'function') {
+                            ctx.emitTokenUpdates(ctx.tokens);
+                        }
+                        ctx.renderAll();
+                        return;
+                    }
+                }
+                if (['w', 'a', 's', 'd'].includes(key)) {
+                    let updated = false;
+                    ctx.selectedTokenIds.forEach((id) => {
+                        const token = ctx.tokens[id];
+                        if (token && ctx.isTokenControlledByPlayer(token)) {
+                            if (key === 'w' && token.flipY !== false) {
+                                token.flipY = false;
+                                updated = true;
+                            } else if (key === 's' && token.flipY !== true) {
+                                token.flipY = true;
+                                updated = true;
+                            } else if (key === 'a' && token.flipX !== true) {
+                                token.flipX = true;
+                                updated = true;
+                            } else if (key === 'd' && token.flipX !== false) {
+                                token.flipX = false;
+                                updated = true;
+                            }
+                        }
+                    });
+                    if (updated) {
+                        e.preventDefault();
+                        if (typeof window !== 'undefined' && window.emitTokenUpdates) {
+                            window.emitTokenUpdates(ctx.tokens);
+                        } else if (typeof ctx.emitTokenUpdates === 'function') {
+                            ctx.emitTokenUpdates(ctx.tokens);
+                        }
+                        ctx.renderAll();
+                        return;
+                    }
+                }
+            }
+
+            if (e.key === 'ArrowUp' || e.key === 'ArrowDown' || e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+                if (
+                    ctx.selectedTokenIds.size > 0 ||
+                    (typeof ctx.selectedShapeIds !== 'undefined' && ctx.selectedShapeIds.size > 0) ||
+                    ctx.selectedShapeId ||
+                    ctx.selectedDrawingId ||
+                    (typeof ctx.selectedDrawingIds !== 'undefined' && ctx.selectedDrawingIds.size > 0)
+                ) {
+                    e.preventDefault();
+                    let dx = 0;
+                    let dy = 0;
+                    const unitSize =
+                        (ctx.grid && ctx.grid.size ? ctx.grid.size : 50) *
+                        (ctx.grid && ctx.grid.scale ? ctx.grid.scale : 1);
+                    if (e.key === 'ArrowUp') dy = -unitSize;
+                    if (e.key === 'ArrowDown') dy = unitSize;
+                    if (e.key === 'ArrowLeft') dx = -unitSize;
+                    if (e.key === 'ArrowRight') dx = unitSize;
+
+                    let changedTokens = false;
+                    let changedShapes = false;
+                    let changedDrawings = false;
+
+                    const drawingsToNudge = new Set(ctx.selectedDrawingIds || []);
+                    if (ctx.selectedDrawingId) drawingsToNudge.add(ctx.selectedDrawingId);
+                    if (drawingsToNudge.size > 0) {
+                        drawingsToNudge.forEach((id) => {
+                            const d = ctx.drawings[id];
+                            if (d && ctx.isDrawingControlledByPlayer(d)) {
+                                if (d.points)
+                                    d.points.forEach((p) => {
+                                        p.x += dx;
+                                        p.y += dy;
+                                    });
+                                if (d.startPoint) {
+                                    d.startPoint.x += dx;
+                                    d.startPoint.y += dy;
+                                }
+                                if (d.endPoint) {
+                                    d.endPoint.x += dx;
+                                    d.endPoint.y += dy;
+                                }
+                                if (d.x !== undefined) d.x += dx;
+                                if (d.y !== undefined) d.y += dy;
+                                changedDrawings = true;
+                            }
+                        });
+                    }
+
+                    ctx.selectedTokenIds.forEach((id) => {
+                        const t = ctx.tokens[id];
+                        if (ctx.isTokenControlledByPlayer(t)) {
+                            if (t._portalTransitLock && Date.now() < t._portalTransitLock) return;
+                            let logicalX = t.x;
+                            let logicalY = t.y;
+                            if (ctx.tokenAnimations && ctx.tokenAnimations[id]) {
+                                logicalX = ctx.tokenAnimations[id].endX;
+                                logicalY = ctx.tokenAnimations[id].endY;
+                            }
+                            let nx = logicalX + dx;
+                            let ny = logicalY + dy;
+
+                            const currentMap = vtt.campaignState?.maps?.[ctx.currentMapId];
+                            if (vtt.role !== 'GM' && currentMap?.lightingSettings?.restrictMovement) {
+                                const { drawW, drawH } = getTokenDrawDimensions(t);
+                                const radius = Math.min(drawW, drawH) / 2;
+                                const startCenter = { x: logicalX + drawW / 2, y: logicalY + drawH / 2 };
+                                const endCenter = { x: nx + drawW / 2, y: ny + drawH / 2 };
+
+                                let closestT = 1.0;
+                                let collisionPoint = null;
+                                const portals = ctx.portals || [];
+
+                                ctx.walls.forEach((wall) => {
+                                    if (wall.isOpen) return;
+                                    if (
+                                        Array.isArray(portals) &&
+                                        portals.some((po) => {
+                                            if (!po.walkThrough) return false;
+                                            const pRad =
+                                                po.shape === 'circle' && po.geom?.r
+                                                    ? po.geom.r
+                                                    : po.shape === 'rect' && po.geom
+                                                      ? Math.max(po.geom.w, po.geom.h) / 2
+                                                      : po.shape === 'line' && po.geom
+                                                        ? Math.hypot(po.geom.x2 - po.geom.x1, po.geom.y2 - po.geom.y1) /
+                                                          2
+                                                        : 45;
+                                            const threshSq = Math.max(pRad * pRad * 1.5, 55 * 55);
+                                            return (
+                                                distToSegmentSq(
+                                                    calcPortalCenter(po),
+                                                    { x: wall.x1, y: wall.y1 },
+                                                    { x: wall.x2, y: wall.y2 }
+                                                ) <= threshSq
+                                            );
+                                        })
+                                    )
+                                        return;
+                                    const intersect = getLineIntersection(
+                                        startCenter.x,
+                                        startCenter.y,
+                                        endCenter.x,
+                                        endCenter.y,
+                                        wall.x1,
+                                        wall.y1,
+                                        wall.x2,
+                                        wall.y2
+                                    );
+                                    if (intersect && intersect.t < closestT) {
+                                        closestT = intersect.t;
+                                        collisionPoint = intersect;
+                                    }
+                                });
+
+                                if (collisionPoint) {
+                                    const length = Math.hypot(dx, dy);
+                                    if (length > 0) {
+                                        const backupT = Math.max(0, collisionPoint.t - (radius - 2) / length);
+                                        nx = startCenter.x + dx * backupT - drawW / 2;
+                                        ny = startCenter.y + dy * backupT - drawH / 2;
+                                    }
+                                }
+                            }
+
+                            if (logicalX !== nx || logicalY !== ny) {
+                                t.x = nx;
+                                t.y = ny;
+                                const originalPos = { x: logicalX, y: logicalY };
+                                const triggerRes =
+                                    typeof ctx.checkTokenMoveTriggers === 'function'
+                                        ? ctx.checkTokenMoveTriggers(t, originalPos)
+                                        : null;
+                                if (triggerRes?.action === 'teleport' || triggerRes?.action === 'trap') {
+                                    delete t._animReq;
+                                    if (ctx.tokenAnimations && ctx.tokenAnimations[id]) delete ctx.tokenAnimations[id];
+                                    if (triggerRes?.action === 'teleport' && ctx.tokens[id]) {
+                                        ctx.selectedTokenIds.clear();
+                                        ctx.selectedTokenIds.add(id);
+                                        ctx.selectedTokenId = id;
+                                    }
+                                } else {
+                                    t._animReq = {
+                                        startX: originalPos.x,
+                                        startY: originalPos.y,
+                                        endX: t.x,
+                                        endY: t.y,
+                                        waypoints: [],
+                                        timestamp: Date.now(),
+                                        duration: 300
+                                    };
+                                }
+                                changedTokens = true;
+                            }
+                        }
+                    });
+
+                    const shapeIdsToNudge = new Set(ctx.selectedShapeIds || []);
+                    if (ctx.selectedShapeId) shapeIdsToNudge.add(ctx.selectedShapeId);
+                    if (shapeIdsToNudge.size > 0) {
+                        shapeIdsToNudge.forEach((id) => {
+                            const s = ctx.shapes[id];
+                            if (s && ctx.isShapeControlledByPlayer(s)) {
+                                s.startPoint.x += dx;
+                                s.startPoint.y += dy;
+                                s.endPoint.x += dx;
+                                s.endPoint.y += dy;
+                                if (s.points)
+                                    s.points.forEach((p) => {
+                                        p.x += dx;
+                                        p.y += dy;
+                                    });
+                                changedShapes = true;
+                            }
+                        });
+                    }
+
+                    if (changedTokens) {
+                        if (typeof window !== 'undefined' && typeof window.emitTokenUpdates === 'function') {
+                            window.emitTokenUpdates(ctx.tokens);
+                        } else if (typeof ctx.emitTokenUpdates === 'function') {
+                            ctx.emitTokenUpdates(ctx.tokens);
+                        }
+                        if (typeof ctx.processTokenAnimReqs === 'function') {
+                            ctx.processTokenAnimReqs(ctx.tokens);
+                        }
+                    }
+                    if (changedShapes && vtt?.socket?.emit) {
+                        vtt.socket.emit('shapes:update', { mapId: ctx.currentMapId, shapes: ctx.shapes });
+                    }
+                    if (changedDrawings && typeof ctx.emitDrawingsUpdate === 'function') {
+                        ctx.emitDrawingsUpdate();
+                    }
+                    if (changedTokens || changedShapes || changedDrawings) {
+                        if (typeof ctx.renderAll === 'function') ctx.renderAll();
+                    }
+                }
+                return;
+            }
+        });
+
+        window.addEventListener('keyup', (e) => {
+            if (e.key === '`' || e.key === '~' || e.code === 'Backquote') {
+                isLayerShortcutModifierDown = false;
+            }
+        });
     }
 
     return {

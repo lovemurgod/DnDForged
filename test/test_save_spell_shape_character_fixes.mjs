@@ -49,10 +49,10 @@ console.log('\n[Suite 1] NPC Spellcasting formatting with object & string spells
                 name: 'Spellcasting',
                 type: 'spellcasting',
                 spellsByLevel: {
-                    '0': {
+                    0: {
                         spells: ['{@spell light}', { name: 'Mage Hand' }]
                     },
-                    '1': {
+                    1: {
                         spells: ['{@spell magic missile}', { name: 'Shield' }]
                     }
                 }
@@ -68,7 +68,9 @@ console.log('\n[Suite 1] NPC Spellcasting formatting with object & string spells
     assert.strictEqual(resultSpells.level1[0].name, 'Magic Missile');
     assert.strictEqual(resultSpells.level1[1].name, 'Shield');
 
-    console.log('✓ Suite 1 passed: NPC spellcasting correctly formats object and string spells without toLowerCase error.');
+    console.log(
+        '✓ Suite 1 passed: NPC spellcasting correctly formats object and string spells without toLowerCase error.'
+    );
 }
 
 // =========================================================================
@@ -93,8 +95,8 @@ console.log('\n[Suite 2] Saving Throw chatcard resolution damage application');
             dmgRolls: [{ total: 10, formula: '2d6+3', type: 'fire' }]
         },
         results: [
-            { tokenId: 'tok_1', passed: true },  // Succeeded
-            { tokenId: 'tok_2', passed: false }  // Failed
+            { tokenId: 'tok_1', passed: true }, // Succeeded
+            { tokenId: 'tok_2', passed: false } // Failed
         ]
     };
 
@@ -164,7 +166,15 @@ console.log('\n[Suite 3] Persistent shapes center hit-testing, selection & delet
 
     let emittedUpdate = false;
     const ctx = {
-        vtt: { role: 'GM', username: 'admin', socket: { emit: (ev) => { if (ev === 'shapes:update') emittedUpdate = true; } } },
+        vtt: {
+            role: 'GM',
+            username: 'admin',
+            socket: {
+                emit: (ev) => {
+                    if (ev === 'shapes:update') emittedUpdate = true;
+                }
+            }
+        },
         tokens: {},
         selectedTokenIds: new Set(),
         shapes: { ...shapes },
@@ -229,4 +239,3 @@ console.log('\n[Suite 4] Character Sheet auto-open on character creation');
 console.log('\n======================================================');
 console.log('ALL VERIFICATION SUITES PASSED SUCCESSFULLY!');
 console.log('======================================================');
-

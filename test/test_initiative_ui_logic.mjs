@@ -16,10 +16,7 @@ test('CSS: Initiative tracker z-index, sheet layering, and circular layout', () 
         path.join(rootDir, 'vtt', 'css', 'components', 'creature-sheet.css'),
         'utf8'
     );
-    const playerSheetCss = fs.readFileSync(
-        path.join(rootDir, 'vtt', 'css', 'components', 'player-sheet.css'),
-        'utf8'
-    );
+    const playerSheetCss = fs.readFileSync(path.join(rootDir, 'vtt', 'css', 'components', 'player-sheet.css'), 'utf8');
 
     // 1. Verify container z-index is 25 (strictly lower than sheets at 60)
     assert.match(
@@ -70,11 +67,7 @@ test('CSS: Initiative tracker z-index, sheet layering, and circular layout', () 
         /\.init-card-del-btn\s*\{[^}]*z-index:\s*25\s*!important;/s,
         'Delete button must have z-index 25'
     );
-    assert.match(
-        cssContent,
-        /\.init-card-hover-tooltip\s*\{[^}]*opacity:\s*0;/s,
-        'Floating hover tooltip must exist'
-    );
+    assert.match(cssContent, /\.init-card-hover-tooltip\s*\{[^}]*opacity:\s*0;/s, 'Floating hover tooltip must exist');
     assert.match(
         cssContent,
         /\.init-card-score\.is-editing\s*\{[^}]*width:\s*64px\s*!important;/s,
@@ -147,11 +140,7 @@ test('Initiative Tracker Logic: Off-layer filtering and player privacy rules', (
         /function updateCombatantLayer\(tokenId,\s*newLayer\)/s,
         'updateCombatantLayer function must be defined'
     );
-    assert.match(
-        chatJs,
-        /updateCombatantLayer,/s,
-        'updateCombatantLayer must be exported'
-    );
+    assert.match(chatJs, /updateCombatantLayer,/s, 'updateCombatantLayer must be exported');
 
     // 5. Verify token menu layer change invokes updateCombatantLayer
     const tokenMenuJs = fs.readFileSync(
@@ -160,7 +149,7 @@ test('Initiative Tracker Logic: Off-layer filtering and player privacy rules', (
     );
     assert.ok(
         tokenMenuJs.includes('window.VTT?.chatEngine?.updateCombatantLayer(id, targetLayer)') ||
-        tokenMenuJs.includes('window.VTT?.chatEngine?.updateCombatantLayer?.(id, targetLayer)'),
+            tokenMenuJs.includes('window.VTT?.chatEngine?.updateCombatantLayer?.(id, targetLayer)'),
         'Layer change must notify chatEngine.updateCombatantLayer'
     );
 
@@ -193,21 +182,13 @@ test('Audit Optimizations: Ghost Combatants, Video HUD, Selection Guard, and Mob
         /cardClasses\.push\('init-carousel-card--ghost'\);/,
         'Ghost combatants must be flagged with CSS class'
     );
-    assert.match(
-        chatJs,
-        /init-ghost-badge.*Token removed from canvas/s,
-        'Ghost badge must be included on the card'
-    );
+    assert.match(chatJs, /init-ghost-badge.*Token removed from canvas/s, 'Ghost badge must be included on the card');
     assert.match(
         initCss,
         /\.init-carousel-card\.init-carousel-card--ghost\s*\{[^}]*opacity:\s*0\.65/s,
         'Ghost card CSS must dim and grayscale removed tokens'
     );
-    assert.match(
-        initCss,
-        /\.init-ghost-badge\s*\{[^}]*position:\s*absolute/s,
-        'Ghost badge CSS must be defined'
-    );
+    assert.match(initCss, /\.init-ghost-badge\s*\{[^}]*position:\s*absolute/s, 'Ghost badge CSS must be defined');
 
     // 2. Video tokens in HUD: first frame / static poster only
     assert.doesNotMatch(
@@ -248,11 +229,7 @@ test('Audit Optimizations: Ghost Combatants, Video HUD, Selection Guard, and Mob
         /function setupMobileInitiativeActionSheet\(\)/,
         'Mobile adapter must define setupMobileInitiativeActionSheet'
     );
-    assert.match(
-        mobileJs,
-        /vtt-mobile-init-action-sheet/,
-        'Mobile adapter must inject action sheet element'
-    );
+    assert.match(mobileJs, /vtt-mobile-init-action-sheet/, 'Mobile adapter must inject action sheet element');
     assert.match(
         mobileCss,
         /\.vtt-mobile-init-sheet\s*\{[^}]*position:\s*fixed/s,
@@ -265,11 +242,7 @@ test('Audit Optimizations: Ghost Combatants, Video HUD, Selection Guard, and Mob
         /function updateCombatantScore\(targetId,\s*newScore\)/,
         'updateCombatantScore must be defined'
     );
-    assert.match(
-        chatJs,
-        /updateCombatantScore,/s,
-        'updateCombatantScore must be exported from chatEngine'
-    );
+    assert.match(chatJs, /updateCombatantScore,/s, 'updateCombatantScore must be exported from chatEngine');
 });
 
 test('Fine-Tuning: Resize handle across all modes, horizontal ~720px sizing, transparent docked Top/Bottom backgrounds, centered round, and no active glow', () => {

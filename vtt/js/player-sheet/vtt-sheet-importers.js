@@ -140,7 +140,11 @@ export function promptBackgroundImportModal(bgData, char, onCancel, onApplied) {
     const skillsData = bgData.skillsData || { fixed: [], choose: null };
     const toolsData = bgData.toolsData || { fixed: [], choose: null };
     let equipData = bgData.equipmentData;
-    const hasItems = equipData && ((Array.isArray(equipData.fixedItems) && equipData.fixedItems.length > 0) || equipData.fixedGold || (Array.isArray(equipData.choiceSets) && equipData.choiceSets.length > 0));
+    const hasItems =
+        equipData &&
+        ((Array.isArray(equipData.fixedItems) && equipData.fixedItems.length > 0) ||
+            equipData.fixedGold ||
+            (Array.isArray(equipData.choiceSets) && equipData.choiceSets.length > 0));
     if (!hasItems && (bgData.equipment || bgData.startingEquipment)) {
         equipData = parseEquipmentTextToData(bgData.equipment || bgData.startingEquipment);
     }
@@ -180,15 +184,15 @@ export function promptBackgroundImportModal(bgData, char, onCancel, onApplied) {
                 </div>
                 <div style="display:flex; flex-wrap:wrap; gap:6px;" class="bg-skill-choice-group" data-count="${count}">
                     ${fromSkills
-                .map(
-                    (s, idx) => `
+                        .map(
+                            (s, idx) => `
                         <label style="display:inline-flex; align-items:center; gap:6px; font-size:0.8rem; cursor:pointer; background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); padding:4px 8px; border-radius:4px; margin:0;">
                             <input type="checkbox" class="bg-skill-choice-chk" value="${s}" ${idx < count ? 'checked' : ''} style="cursor:pointer; accent-color:var(--color-gold-base);">
                             <span>${s}</span>
                         </label>
                     `
-                )
-                .join('')}
+                        )
+                        .join('')}
                 </div>
             </div>
         `;
@@ -228,14 +232,14 @@ export function promptBackgroundImportModal(bgData, char, onCancel, onApplied) {
                 </div>
                 <div style="display:flex; flex-direction:column; gap:6px;">
                     ${Array.from({ length: count })
-                .map(
-                    (_, idx) => `
+                        .map(
+                            (_, idx) => `
                         <select class="bg-tool-choice-sel" style="width:100%; padding:5px 8px; font-size:0.8rem; background:#222; color:#fff; border:1px solid var(--color-border-subtle); border-radius:4px;">
                             ${expandedTools.map((t) => `<option value="${t}">${t}</option>`).join('')}
                         </select>
                     `
-                )
-                .join('')}
+                        )
+                        .join('')}
                 </div>
             </div>
         `;
@@ -271,12 +275,12 @@ export function promptBackgroundImportModal(bgData, char, onCancel, onApplied) {
             <div style="margin-top:8px; display:flex; flex-direction:column; gap:6px;">
                 <div style="font-size:0.75rem; color:var(--color-text-muted);">Equipment Package:</div>
                 ${set.options
-                        .map((opt, oi) => {
-                            const optLabel =
-                                opt.label ||
-                                opt.items.map((it) => (it.quantity > 1 ? `${it.quantity}x ` : '') + it.name).join(', ') +
+                    .map((opt, oi) => {
+                        const optLabel =
+                            opt.label ||
+                            opt.items.map((it) => (it.quantity > 1 ? `${it.quantity}x ` : '') + it.name).join(', ') +
                                 (opt.gold ? ` + ${opt.gold} gp` : '');
-                            return `
+                        return `
                         <label style="display:flex; align-items:flex-start; gap:8px; font-size:0.8rem; cursor:pointer; background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); padding:6px 10px; border-radius:4px; margin:0;">
                             <input type="radio" name="bg-equip-set-${si}" value="${oi}" ${oi === 0 ? 'checked' : ''} style="cursor:pointer; accent-color:var(--color-gold-base); margin-top:2px;">
                             <div style="flex:1;">
@@ -285,8 +289,8 @@ export function promptBackgroundImportModal(bgData, char, onCancel, onApplied) {
                             </div>
                         </label>
                     `;
-                        })
-                        .join('')}
+                    })
+                    .join('')}
             </div>
         `
             )
@@ -298,14 +302,15 @@ export function promptBackgroundImportModal(bgData, char, onCancel, onApplied) {
             <div style="font-size:0.85rem; font-weight:600; color:var(--color-gold-base); margin-bottom:6px; display:flex; align-items:center; gap:6px;">
                 <i class="fa-solid fa-sack-dollar"></i> Starting Equipment & Gold
             </div>
-            ${fixedEquipSummary.length > 0
-            ? `
+            ${
+                fixedEquipSummary.length > 0
+                    ? `
                 <div style="font-size:0.8rem; color:var(--color-text-secondary); margin-bottom:6px;">
                     <strong>Standard Gear:</strong> ${fixedEquipSummary.join(', ')}
                 </div>
             `
-            : ''
-        }
+                    : ''
+            }
             ${choiceSetsHtml}
 
             <div style="margin-top:10px; padding:8px 10px; background:rgba(0,0,0,0.35); border-radius:4px; border:1px solid rgba(255,255,255,0.05);">

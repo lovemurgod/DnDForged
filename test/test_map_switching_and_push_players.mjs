@@ -25,16 +25,27 @@ function createMockDom() {
             style: {},
             classList: {
                 classes: new Set(),
-                add(c) { this.classes.add(c); },
-                remove(c) { this.classes.delete(c); },
-                contains(c) { return this.classes.has(c); },
+                add(c) {
+                    this.classes.add(c);
+                },
+                remove(c) {
+                    this.classes.delete(c);
+                },
+                contains(c) {
+                    return this.classes.has(c);
+                },
                 toggle(c, force) {
                     if (force !== undefined) {
-                        if (force) this.add(c); else this.remove(c);
+                        if (force) this.add(c);
+                        else this.remove(c);
                         return force;
                     }
-                    if (this.contains(c)) { this.remove(c); return false; }
-                    this.add(c); return true;
+                    if (this.contains(c)) {
+                        this.remove(c);
+                        return false;
+                    }
+                    this.add(c);
+                    return true;
                 }
             },
             listeners: {},
@@ -55,16 +66,21 @@ function createMockDom() {
             querySelector(sel) {
                 if (sel.startsWith('.')) {
                     const cls = sel.slice(1);
-                    return this.children.find(c => c.classList?.contains(cls)) || null;
+                    return this.children.find((c) => c.classList?.contains(cls)) || null;
                 }
                 return null;
             },
             querySelectorAll(sel) {
                 if (sel === 'input[type="checkbox"]') {
-                    return this.children.filter(c => c.tagName === 'INPUT' || (c.children && c.children.some(sub => sub.tagName === 'INPUT')));
+                    return this.children.filter(
+                        (c) =>
+                            c.tagName === 'INPUT' || (c.children && c.children.some((sub) => sub.tagName === 'INPUT'))
+                    );
                 }
                 if (sel === 'input[type="checkbox"]:checked') {
-                    return this.children.filter(c => c.checked || (c.children && c.children.some(sub => sub.checked)));
+                    return this.children.filter(
+                        (c) => c.checked || (c.children && c.children.some((sub) => sub.checked))
+                    );
                 }
                 return [];
             },
@@ -82,7 +98,9 @@ function createMockDom() {
         createDocumentFragment() {
             return {
                 children: [],
-                appendChild(c) { this.children.push(c); }
+                appendChild(c) {
+                    this.children.push(c);
+                }
             };
         },
         getElementById(id) {
@@ -131,14 +149,22 @@ console.log('[Test 1] Map Manager Options Preservation across Navigation...');
         vtt: mockVtt,
         getCurrentMapId: () => 'map_1',
         getSafeVttUrl: (u) => u,
-        loadMap: (id) => { loadedMapId = id; },
-        openPushPlayersModal: (id) => { pushModalOpenedWithMapId = id; },
+        loadMap: (id) => {
+            loadedMapId = id;
+        },
+        openPushPlayersModal: (id) => {
+            pushModalOpenedWithMapId = id;
+        },
         renderMapGrid: () => {}
     };
 
     // Render initial grid
     renderMapGrid(managerState, options);
-    assert.strictEqual(managerState.lastOptions.getCurrentMapId(), 'map_1', 'Initial options should be recorded in managerState');
+    assert.strictEqual(
+        managerState.lastOptions.getCurrentMapId(),
+        'map_1',
+        'Initial options should be recorded in managerState'
+    );
 
     // Simulate search query update which triggers debounced renderMapGrid
     const searchInput = doc.getElementById('map-search-input');
@@ -147,7 +173,11 @@ console.log('[Test 1] Map Manager Options Preservation across Navigation...');
 
     // Ensure effectiveOptions retains loadMap and openPushPlayersModal
     assert.strictEqual(typeof managerState.lastOptions.loadMap, 'function', 'loadMap must be preserved across search');
-    assert.strictEqual(typeof managerState.lastOptions.openPushPlayersModal, 'function', 'openPushPlayersModal must be preserved');
+    assert.strictEqual(
+        typeof managerState.lastOptions.openPushPlayersModal,
+        'function',
+        'openPushPlayersModal must be preserved'
+    );
 
     console.log('  ✔ Options retained completely across search input');
 }
@@ -188,8 +218,12 @@ console.log('\n[Test 2] Push Players Modal Local GM Sync & Event Emission...');
 
     const options = {
         vtt: mockVtt,
-        loadMap: (id) => { localGmLoadedMapId = id; },
-        renderMapGrid: () => { gridRendered = true; }
+        loadMap: (id) => {
+            localGmLoadedMapId = id;
+        },
+        renderMapGrid: () => {
+            gridRendered = true;
+        }
     };
 
     setupPushPlayersModal(options);
@@ -241,14 +275,20 @@ console.log('\n[Test 3] Client Fast-Path map:activated Reception & Action...');
     const ctx = {
         vtt: mockVtt,
         currentMapId: 'map_1',
-        loadMap: (id) => { playerLoadedMapId = id; },
+        loadMap: (id) => {
+            playerLoadedMapId = id;
+        },
         renderMapGrid: () => {},
         updatePreviewBanner: () => {}
     };
 
     setupSocketSync(ctx);
 
-    assert.strictEqual(typeof socketListeners['map:activated'], 'function', 'Socket sync must register map:activated handler');
+    assert.strictEqual(
+        typeof socketListeners['map:activated'],
+        'function',
+        'Socket sync must register map:activated handler'
+    );
 
     // Simulate server dispatching map:activated for all players
     socketListeners['map:activated']({
@@ -294,7 +334,9 @@ console.log('\n[Test 4] Specific Player Target Filtering in map:activated...');
     const ctx = {
         vtt: mockBobVtt,
         currentMapId: 'map_1',
-        loadMap: (id) => { bobLoadedMap = id; },
+        loadMap: (id) => {
+            bobLoadedMap = id;
+        },
         renderMapGrid: () => {},
         updatePreviewBanner: () => {}
     };
@@ -325,4 +367,3 @@ console.log('\n[Test 4] Specific Player Target Filtering in map:activated...');
 }
 
 console.log('\n🎉 ALL 4 MAP SWITCHING & PUSH TO PLAYERS TESTS PASSED SUCCESSFULLY!\n');
-
