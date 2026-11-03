@@ -14,7 +14,14 @@ export class VTTDiceParser {
      */
     static roll(formula) {
         if (!formula || typeof formula !== 'string') {
-            return { total: 0, diceList: [], breakdownStr: '0', compactBreakdown: '0', isCritSuccess: false, isCritFail: false };
+            return {
+                total: 0,
+                diceList: [],
+                breakdownStr: '0',
+                compactBreakdown: '0',
+                isCritSuccess: false,
+                isCritFail: false
+            };
         }
 
         let trimmedFormula = formula.trim();
@@ -27,7 +34,8 @@ export class VTTDiceParser {
         let isCritFail = false;
 
         // Tokenize terms: sign, dice expression / number, and optional bracketed label [LABEL]
-        const termRegex = /([+\-*/]?)\s*([0-9]*d[0-9]+(?:(?:kh|kl|dl|dh)[0-9]*)?(?:ro(?:<=|>=|<|>|=)?[0-9]+)?!?|[0-9]+(?:\.[0-9]+)?)\s*(?:\[([^\]]*)\])?/gi;
+        const termRegex =
+            /([+\-*/]?)\s*([0-9]*d[0-9]+(?:(?:kh|kl|dl|dh)[0-9]*)?(?:ro(?:<=|>=|<|>|=)?[0-9]+)?!?|[0-9]+(?:\.[0-9]+)?)\s*(?:\[([^\]]*)\])?/gi;
 
         let evalExpression = '';
         let match;
@@ -92,13 +100,13 @@ export class VTTDiceParser {
                     indexed.sort((a, b) => b.val - a.val);
                     if (kNum > 0) {
                         if (keepDropType === 'kh') {
-                            indexed.slice(kNum).forEach(x => droppedIndices.add(x.idx));
+                            indexed.slice(kNum).forEach((x) => droppedIndices.add(x.idx));
                         } else if (keepDropType === 'kl') {
-                            indexed.slice(0, -kNum).forEach(x => droppedIndices.add(x.idx));
+                            indexed.slice(0, -kNum).forEach((x) => droppedIndices.add(x.idx));
                         } else if (keepDropType === 'dl') {
-                            indexed.slice(-kNum).forEach(x => droppedIndices.add(x.idx));
+                            indexed.slice(-kNum).forEach((x) => droppedIndices.add(x.idx));
                         } else if (keepDropType === 'dh') {
-                            indexed.slice(0, kNum).forEach(x => droppedIndices.add(x.idx));
+                            indexed.slice(0, kNum).forEach((x) => droppedIndices.add(x.idx));
                         }
                     }
                 }
@@ -118,7 +126,7 @@ export class VTTDiceParser {
                     }
                 }
 
-                const subtotal = rolled.reduce((acc, val, idx) => droppedIndices.has(idx) ? acc : acc + val, 0);
+                const subtotal = rolled.reduce((acc, val, idx) => (droppedIndices.has(idx) ? acc : acc + val), 0);
 
                 const rollStrings = rolled.map((val, idx) => {
                     if (droppedIndices.has(idx)) return `<s>${val}</s>`;
@@ -150,7 +158,7 @@ export class VTTDiceParser {
                     compactParts.push(`${op}${numVal}`);
                     evalExpression += ` ${op} ${numVal}`;
                 } else {
-                    const sign = (op === '-' ? '-' : '');
+                    const sign = op === '-' ? '-' : '';
                     detailedParts.push(`${sign}${detailedTerm}`);
                     compactParts.push(`${sign}${numVal}`);
                     evalExpression += `${sign}${numVal}`;

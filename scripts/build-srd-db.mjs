@@ -9,9 +9,10 @@ const rootDir = path.join(__dirname, '..');
 
 // Target directory for SRD datasets
 const outArgIdx = process.argv.indexOf('--out');
-const targetDataDir = outArgIdx !== -1 && process.argv[outArgIdx + 1]
-    ? path.resolve(rootDir, process.argv[outArgIdx + 1])
-    : path.join(rootDir, '.release-stage', 'vtt', 'data');
+const targetDataDir =
+    outArgIdx !== -1 && process.argv[outArgIdx + 1]
+        ? path.resolve(rootDir, process.argv[outArgIdx + 1])
+        : path.join(rootDir, '.release-stage', 'vtt', 'data');
 
 console.log(`\n======================================================`);
 console.log(`⚔️  BUILDING CLEAN SRD 5.1 & SRD 5.2 COMPENDIUM`);
@@ -64,22 +65,24 @@ if (fs.existsSync(srcClassDir)) {
 
             // Filter class array to SRD
             if (Array.isArray(raw.class)) {
-                cleanObj.class = raw.class.filter(c => c.srd !== undefined || c.srd52 !== undefined);
+                cleanObj.class = raw.class.filter((c) => c.srd !== undefined || c.srd52 !== undefined);
             }
 
             // Filter subclass array to SRD
             if (Array.isArray(raw.subclass)) {
-                cleanObj.subclass = raw.subclass.filter(sc => sc.srd !== undefined || sc.srd52 !== undefined);
+                cleanObj.subclass = raw.subclass.filter((sc) => sc.srd !== undefined || sc.srd52 !== undefined);
             }
 
             // Filter classFeature array to SRD class features
             if (Array.isArray(raw.classFeature)) {
-                cleanObj.classFeature = raw.classFeature.filter(cf => cf.srd !== undefined || cf.srd52 !== undefined);
+                cleanObj.classFeature = raw.classFeature.filter((cf) => cf.srd !== undefined || cf.srd52 !== undefined);
             }
 
             // Filter subclassFeature array to SRD subclass features
             if (Array.isArray(raw.subclassFeature)) {
-                cleanObj.subclassFeature = raw.subclassFeature.filter(sf => sf.srd !== undefined || sf.srd52 !== undefined);
+                cleanObj.subclassFeature = raw.subclassFeature.filter(
+                    (sf) => sf.srd !== undefined || sf.srd52 !== undefined
+                );
             }
 
             if ((cleanObj.class && cleanObj.class.length > 0) || (cleanObj.subclass && cleanObj.subclass.length > 0)) {

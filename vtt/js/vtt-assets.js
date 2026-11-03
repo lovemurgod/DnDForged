@@ -28,6 +28,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const progressPercent = document.getElementById('asset-progress-percent');
     const progressBarFill = document.getElementById('asset-progress-bar-fill');
 
+    function getAuthHeaders(headers = {}) {
+        if (typeof window !== 'undefined' && typeof window.vttAuthHeaders === 'function') {
+            return window.vttAuthHeaders(headers);
+        }
+        const res = { ...headers };
+        if (typeof window !== 'undefined' && window.VTT?.gmSessionToken) {
+            res['x-gm-token'] = window.VTT.gmSessionToken;
+        }
+        return res;
+    }
+
     // Preview Modal elements
     const modalPreview = document.getElementById('modal-asset-preview');
     const previewTitle = document.getElementById('asset-preview-title');
@@ -46,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // State
     let assetTree = null;
-    let currentPath = ""; // empty string means root
+    let currentPath = ''; // empty string means root
     let selectedAssets = new Map(); // key: unique identifier (path or url), value: item object
     let lastClickedIndex = -1;
     let currentRenderItems = [];
@@ -54,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const CHUNK_SIZE = 48;
     let assetContextMenuTarget = null; // { item, el }
     let activePreviewAsset = null;
-    let activeMoveDestination = "";
+    let activeMoveDestination = '';
     let isUploading = false;
 
     // View mode and zoom from preferences
@@ -122,12 +133,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function getCurrentFolderNode(tree, pathStr) {
-        if (!pathStr || pathStr === "") return tree;
+        if (!pathStr || pathStr === '') return tree;
         const parts = pathStr.split('/');
         let current = tree;
         for (const p of parts) {
             if (!p) continue;
-            const child = (current && Array.isArray(current.children)) ? current.children.find(c => c.name === p && c.type === 'folder') : null;
+            const child =
+                current && Array.isArray(current.children)
+                    ? current.children.find((c) => c.name === p && c.type === 'folder')
+                    : null;
             if (child) {
                 current = child;
             } else {
@@ -138,9 +152,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Collect all folder paths for the move destination dialog
-    function collectFolderList(node, currentPrefix = "", acc = []) {
+    function collectFolderList(node, currentPrefix = '', acc = []) {
         if (!node) return acc;
-        if (currentPrefix === "") {
+        if (currentPrefix === '') {
             acc.push({ name: 'Root', path: '' });
         }
         if (Array.isArray(node.children)) {
@@ -160,10 +174,10 @@ document.addEventListener('DOMContentLoaded', () => {
         let html = `<span class="breadcrumb-link" data-path="" title="Drop assets here to move to Root">Root</span>`;
         if (currentPath) {
             const parts = currentPath.split('/');
-            let buildPath = "";
+            let buildPath = '';
             parts.forEach((part) => {
                 if (!part) return;
-                buildPath += (buildPath ? "/" : "") + part;
+                buildPath += (buildPath ? '/' : '') + part;
                 const safePath = escapeHtml(buildPath);
                 const safePart = escapeHtml(part);
                 html += ` <span style="opacity: 0.5;">&gt;</span> <span class="breadcrumb-link" data-path="${safePath}" title="Drop assets here to move to ${safePart}">${safePart}</span>`;
@@ -172,8 +186,8 @@ document.addEventListener('DOMContentLoaded', () => {
         breadcrumbs.innerHTML = html;
 
         // Breadcrumb clicks & Drop zones for internal organization
-        breadcrumbs.querySelectorAll('.breadcrumb-link').forEach(link => {
-            const linkPath = link.getAttribute('data-path') || "";
+        breadcrumbs.querySelectorAll('.breadcrumb-link').forEach((link) => {
+            const linkPath = link.getAttribute('data-path') || '';
             link.addEventListener('click', () => {
                 currentPath = linkPath;
                 selectedAssets.clear();
@@ -217,7 +231,7 @@ document.addEventListener('DOMContentLoaded', () => {
             batchToolbar.classList.add('vtt-hidden');
         }
         // Update selection UI highlight on existing elements
-        galleryList.querySelectorAll('.asset-item').forEach(el => {
+        galleryList.querySelectorAll('.asset-item').forEach((el) => {
             const itemKey = el.getAttribute('data-asset-key');
             if (itemKey && selectedAssets.has(itemKey)) {
                 el.classList.add('selected');
@@ -233,12 +247,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const folderNode = getCurrentFolderNode(assetTree, currentPath);
         if (!folderNode) {
-            currentPath = ""; // reset to root if folder deleted or not found
+            currentPath = ''; // reset to root if folder deleted or not found
             renderAssets();
             return;
         }
 
-        const filterText = searchInput ? searchInput.value.toLowerCase().trim() : "";
+        const filterText = searchInput ? searchInput.value.toLowerCase().trim() : '';
         let items = folderNode.children ? [...folderNode.children] : [];
 
         if (filterText) {
@@ -246,7 +260,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const allItems = [];
             function collect(node) {
                 if (node.children) {
-                    node.children.forEach(c => {
+                    node.children.forEach((c) => {
                         if (c.type !== 'folder' && c.name.toLowerCase().includes(filterText)) {
                             allItems.push(c);
                         }
@@ -267,7 +281,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         currentRenderItems = items;
         renderedCount = 0;
-        galleryList.innerHTML = "";
+        galleryList.innerHTML = '';
 
         if (items.length === 0) {
             galleryList.innerHTML = `<div class="init-empty-state" style="grid-column: 1/-1;">This folder is empty. Drag files or folders here to upload.</div>`;
@@ -338,7 +352,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 currentPath = item.path;
                 selectedAssets.clear();
                 updateBatchToolbar();
-                if (searchInput) searchInput.value = "";
+                if (searchInput) searchInput.value = '';
                 renderAssets();
             });
 
@@ -372,8 +386,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const isYoutube = Boolean(ytMatch);
             const isGif = item.url && item.url.match(/\.gif(\?.*)?$/i);
 
-            let thumbInner = "";
-            let badgeHtml = "";
+            let thumbInner = '';
+            let badgeHtml = '';
 
             if (isVideo) {
                 badgeHtml = `<span class="asset-media-badge"><i class="fa-solid fa-film"></i> VIDEO</span>`;
@@ -427,7 +441,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         try {
                             mountedVideo.pause();
                             mountedVideo.remove();
-                        } catch(e) {}
+                        } catch (e) {}
                         mountedVideo = null;
                     }
                 });
@@ -465,12 +479,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 window._vttDraggingAssets = Array.from(selectedAssets.values());
 
                 // Set data transfer for VTT Map Canvas drop
-                e.dataTransfer.setData('application/json', JSON.stringify({
-                    type: 'vtt-asset',
-                    name: item.name,
-                    url: item.url,
-                    assetType: isVideo ? 'video' : 'image'
-                }));
+                e.dataTransfer.setData(
+                    'application/json',
+                    JSON.stringify({
+                        type: 'vtt-asset',
+                        name: item.name,
+                        url: item.url,
+                        assetType: isVideo ? 'video' : 'image'
+                    })
+                );
                 e.dataTransfer.effectAllowed = 'copyMove';
             });
 
@@ -544,7 +561,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // New Folder
     if (btnNewFolder) {
         btnNewFolder.addEventListener('click', async () => {
-            const name = prompt("Enter new folder name:");
+            const name = prompt('Enter new folder name:');
             if (!name || !name.trim()) return;
             const cleanName = name.trim().replace(/[\/\\?%*:|"<>]/g, '_');
             const folderPath = currentPath ? `${currentPath}/${cleanName}` : cleanName;
@@ -552,7 +569,7 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 const res = await fetch('/api/assets/folder', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
                     body: JSON.stringify({ folderPath })
                 });
                 if (res.ok) {
@@ -562,7 +579,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     alert(`Failed to create folder: ${err.error || 'Unknown error'}`);
                 }
             } catch (err) {
-                console.error("Failed to create folder", err);
+                console.error('Failed to create folder', err);
             }
         });
     }
@@ -570,7 +587,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Add External URL
     if (btnAddUrl) {
         btnAddUrl.addEventListener('click', async () => {
-            let url = prompt("Enter direct image/video URL or YouTube link:");
+            let url = prompt('Enter direct image/video URL or YouTube link:');
             if (!url) return;
 
             if (window.VTT && typeof window.VTT.resolveMediaUrl === 'function') {
@@ -582,20 +599,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 } catch (e) {}
             }
 
-            let name = prompt("Enter a name for this asset:", "External Asset");
-            if (!name) name = "External Asset";
+            let name = prompt('Enter a name for this asset:', 'External Asset');
+            if (!name) name = 'External Asset';
 
             try {
                 const res = await fetch('/api/assets/url', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
                     body: JSON.stringify({ url, name, folderPath: currentPath })
                 });
                 if (res.ok) {
                     await fetchAssetTree();
                 }
             } catch (err) {
-                console.error("Failed to add URL", err);
+                console.error('Failed to add URL', err);
             }
         });
     }
@@ -625,7 +642,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const currentIndex = index++;
                 const item = filesList[currentIndex];
                 const file = item.file || item;
-                const relativePath = item.relativePath || "";
+                const relativePath = item.relativePath || '';
 
                 const formData = new FormData();
                 if (targetFolder) formData.append('folderPath', targetFolder);
@@ -639,6 +656,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     const res = await fetch(`/api/assets/upload?${queryParams.toString()}`, {
                         method: 'POST',
+                        headers: getAuthHeaders(),
                         body: formData
                     });
                     if (!res.ok) throw new Error(`Upload failed: ${res.statusText}`);
@@ -677,9 +695,9 @@ document.addEventListener('DOMContentLoaded', () => {
         fileUpload.addEventListener('change', async (e) => {
             const files = Array.from(e.target.files || []);
             if (files.length === 0) return;
-            const batch = files.map(f => ({ file: f, relativePath: f.name }));
+            const batch = files.map((f) => ({ file: f, relativePath: f.name }));
             await uploadFilesBatch(batch);
-            fileUpload.value = "";
+            fileUpload.value = '';
         });
     }
 
@@ -688,12 +706,12 @@ document.addEventListener('DOMContentLoaded', () => {
         folderUpload.addEventListener('change', async (e) => {
             const files = Array.from(e.target.files || []);
             if (files.length === 0) return;
-            const batch = files.map(f => ({
+            const batch = files.map((f) => ({
                 file: f,
                 relativePath: f.webkitRelativePath || f.name
             }));
             await uploadFilesBatch(batch);
-            folderUpload.value = "";
+            folderUpload.value = '';
         });
     }
 
@@ -742,7 +760,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (items && items.length > 0 && typeof items[0].webkitGetAsEntry === 'function') {
                     // Traverse directory hierarchy recursively
-                    async function traverseEntry(entry, pathPrefix = "") {
+                    async function traverseEntry(entry, pathPrefix = '') {
                         if (entry.isFile) {
                             const file = await new Promise((resolve) => entry.file(resolve));
                             const relPath = pathPrefix ? `${pathPrefix}/${file.name}` : file.name;
@@ -773,13 +791,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     for (let i = 0; i < items.length; i++) {
                         const entry = items[i].webkitGetAsEntry();
                         if (entry) {
-                            await traverseEntry(entry, "");
+                            await traverseEntry(entry, '');
                         }
                     }
                 } else {
                     // Fallback flat files
                     const files = Array.from(e.dataTransfer.files || []);
-                    files.forEach(f => collectedFiles.push({ file: f, relativePath: f.name }));
+                    files.forEach((f) => collectedFiles.push({ file: f, relativePath: f.name }));
                 }
 
                 if (collectedFiles.length > 0) {
@@ -795,9 +813,9 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const res = await fetch('/api/assets/move', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
                 body: JSON.stringify({
-                    items: items.map(item => ({
+                    items: items.map((item) => ({
                         path: item.path,
                         isUrl: item.type === 'url',
                         folderPath: currentPath,
@@ -817,7 +835,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert(`Failed to move: ${err.error || 'Unknown error'}`);
             }
         } catch (err) {
-            console.error("Move error:", err);
+            console.error('Move error:', err);
         }
     }
 
@@ -835,7 +853,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (count === 0) return;
             if (!confirm(`Are you sure you want to delete ${count} selected asset${count > 1 ? 's' : ''}?`)) return;
 
-            const itemsToDelete = Array.from(selectedAssets.values()).map(item => ({
+            const itemsToDelete = Array.from(selectedAssets.values()).map((item) => ({
                 path: item.path,
                 isUrl: item.type === 'url',
                 folderPath: currentPath,
@@ -846,7 +864,7 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 const res = await fetch('/api/assets/delete', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
                     body: JSON.stringify({ items: itemsToDelete })
                 });
                 if (res.ok) {
@@ -858,7 +876,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     alert(`Failed to delete: ${err.error || 'Unknown error'}`);
                 }
             } catch (err) {
-                console.error("Batch delete error", err);
+                console.error('Batch delete error', err);
             }
         });
     }
@@ -873,15 +891,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // Move Destination Picker Modal
     function openMoveDestinationModal(itemsToMove) {
         if (!modalMove || !moveFolderList) return;
-        activeMoveDestination = "";
-        const allFolders = collectFolderList(assetTree, "", []);
+        activeMoveDestination = '';
+        const allFolders = collectFolderList(assetTree, '', []);
 
-        moveFolderList.innerHTML = "";
-        allFolders.forEach(f => {
+        moveFolderList.innerHTML = '';
+        allFolders.forEach((f) => {
             const itemEl = document.createElement('div');
             itemEl.className = 'asset-move-folder-item';
             const isCurrent = f.path === currentPath;
-            const displayName = f.path === "" ? "📁 Root" : `📁 ${f.path}`;
+            const displayName = f.path === '' ? '📁 Root' : `📁 ${f.path}`;
 
             itemEl.innerHTML = `
                 <span>${escapeHtml(displayName)}</span>
@@ -889,7 +907,9 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
 
             itemEl.addEventListener('click', () => {
-                moveFolderList.querySelectorAll('.asset-move-folder-item').forEach(i => i.classList.remove('selected'));
+                moveFolderList
+                    .querySelectorAll('.asset-move-folder-item')
+                    .forEach((i) => i.classList.remove('selected'));
                 itemEl.classList.add('selected');
                 activeMoveDestination = f.path;
             });
@@ -901,7 +921,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const first = moveFolderList.querySelector('.asset-move-folder-item');
         if (first) {
             first.classList.add('selected');
-            activeMoveDestination = allFolders[0]?.path || "";
+            activeMoveDestination = allFolders[0]?.path || '';
         }
 
         modalMove.classList.remove('vtt-hidden');
@@ -920,9 +940,9 @@ document.addEventListener('DOMContentLoaded', () => {
     function openPreviewModal(item) {
         if (!modalPreview || !item || !item.url) return;
         activePreviewAsset = item;
-        previewTitle.textContent = item.name || "Asset Preview";
+        previewTitle.textContent = item.name || 'Asset Preview';
         previewContainer.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-gradient-gold" style="font-size: 2rem;"></i>`;
-        previewInfo.textContent = "Loading dimensions...";
+        previewInfo.textContent = 'Loading dimensions...';
 
         const isVideo = item.url.match(/\.(mp4|webm|ogg)$/i) || item.url.includes('v.pinimg.com');
         const ytMatch = item.url.match(/(?:embed\/|v=|\.be\/)([a-zA-Z0-9_-]{11})/);
@@ -939,7 +959,7 @@ document.addEventListener('DOMContentLoaded', () => {
             vid.onloadedmetadata = () => {
                 previewInfo.textContent = `Video: ${vid.videoWidth} × ${vid.videoHeight} px`;
             };
-            previewContainer.innerHTML = "";
+            previewContainer.innerHTML = '';
             previewContainer.appendChild(vid);
         } else if (ytMatch && ytMatch[1]) {
             previewContainer.innerHTML = `<iframe width="100%" height="100%" src="https://www.youtube.com/embed/${ytMatch[1]}?autoplay=1" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="border: none; border-radius: 4px;"></iframe>`;
@@ -956,7 +976,7 @@ document.addEventListener('DOMContentLoaded', () => {
             img.onerror = () => {
                 previewInfo.textContent = `Failed to load preview`;
             };
-            previewContainer.innerHTML = "";
+            previewContainer.innerHTML = '';
             previewContainer.appendChild(img);
         }
 
@@ -967,7 +987,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btnPreviewCopy) {
         btnPreviewCopy.addEventListener('click', () => {
             if (activePreviewAsset && activePreviewAsset.url) {
-                const fullUrl = activePreviewAsset.url.startsWith('http') ? activePreviewAsset.url : window.location.origin + activePreviewAsset.url;
+                const fullUrl = activePreviewAsset.url.startsWith('http')
+                    ? activePreviewAsset.url
+                    : window.location.origin + activePreviewAsset.url;
                 navigator.clipboard.writeText(fullUrl).then(() => {
                     btnPreviewCopy.innerHTML = `<i class="fa-solid fa-check"></i> Copied!`;
                     setTimeout(() => {
@@ -981,7 +1003,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btnPreviewPlace) {
         btnPreviewPlace.addEventListener('click', () => {
             if (activePreviewAsset) {
-                const isVid = activePreviewAsset.url && (activePreviewAsset.url.match(/\.(mp4|webm|ogg)$/i) || activePreviewAsset.url.includes('youtube.com') || activePreviewAsset.url.includes('youtu.be'));
+                const isVid =
+                    activePreviewAsset.url &&
+                    (activePreviewAsset.url.match(/\.(mp4|webm|ogg)$/i) ||
+                        activePreviewAsset.url.includes('youtube.com') ||
+                        activePreviewAsset.url.includes('youtu.be'));
                 spawnAssetToMap(activePreviewAsset, isVid);
                 modalPreview.classList.add('vtt-hidden');
             }
@@ -990,7 +1016,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Space hotkey to preview selected asset
     document.addEventListener('keydown', (e) => {
-        if (e.code === 'Space' && selectedAssets.size === 1 && document.activeElement?.tagName !== 'INPUT' && document.activeElement?.tagName !== 'TEXTAREA') {
+        if (
+            e.code === 'Space' &&
+            selectedAssets.size === 1 &&
+            document.activeElement?.tagName !== 'INPUT' &&
+            document.activeElement?.tagName !== 'TEXTAREA'
+        ) {
             const first = selectedAssets.values().next().value;
             if (first && first.type !== 'folder') {
                 e.preventDefault();
@@ -1042,20 +1073,20 @@ document.addEventListener('DOMContentLoaded', () => {
         const { item } = assetContextMenuTarget;
         document.getElementById('vtt-asset-context-menu').classList.add('vtt-hidden');
 
-        let newName = prompt("Enter new name for this asset:", item.name);
+        let newName = prompt('Enter new name for this asset:', item.name);
         if (!newName || !newName.trim()) return;
         newName = newName.trim();
 
         let newUrl = null;
         if (item.type === 'url') {
-            newUrl = prompt("Enter new URL (or leave unchanged):", item.url);
+            newUrl = prompt('Enter new URL (or leave unchanged):', item.url);
             if (!newUrl) newUrl = item.url;
         }
 
         try {
             const res = await fetch('/api/assets/edit', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
                 body: JSON.stringify({
                     path: item.path,
                     newName: newName,
@@ -1073,7 +1104,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert(`Failed to edit: ${err.error || 'Unknown error'}`);
             }
         } catch (err) {
-            console.error("Edit error", err);
+            console.error('Edit error', err);
         }
     });
 
@@ -1083,16 +1114,17 @@ document.addEventListener('DOMContentLoaded', () => {
         const { item } = assetContextMenuTarget;
         document.getElementById('vtt-asset-context-menu').classList.add('vtt-hidden');
 
-        const confirmMsg = item.type === 'folder' ?
-            `Are you sure you want to delete the folder "${item.name}" and all its contents?` :
-            `Are you sure you want to delete "${item.name}"?`;
+        const confirmMsg =
+            item.type === 'folder'
+                ? `Are you sure you want to delete the folder "${item.name}" and all its contents?`
+                : `Are you sure you want to delete "${item.name}"?`;
 
         if (!confirm(confirmMsg)) return;
 
         try {
             const res = await fetch('/api/assets/delete', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
                 body: JSON.stringify({
                     path: item.path,
                     isUrl: item.type === 'url',
@@ -1110,7 +1142,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert(`Failed to delete: ${err.error || 'Unknown error'}`);
             }
         } catch (err) {
-            console.error("Delete error", err);
+            console.error('Delete error', err);
         }
     });
 

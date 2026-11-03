@@ -1,0 +1,1246 @@
+/* Creature Sheet Left Side Panel                                             */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+#creature-sheet-panel {
+    position: fixed;
+    top: 0;
+    left: 60px; /* After the controls nav */
+    width: var(--cs-panel-width, 320px);
+    min-width: 280px;
+    max-width: 85vw;
+    height: 100vh;
+    z-index: 60 !important;
+    transform: translateX(calc(-100% - 60px)); /* Hidden off-screen */
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    background: rgba(10, 13, 22, 0.92);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-right: 1px solid var(--color-border-subtle);
+    display: flex;
+    flex-direction: column;
+    overflow: visible;
+}
+
+@media screen and (max-width: 900px), screen and (pointer: coarse) and (max-width: 1366px) {
+    #creature-sheet-panel {
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+    }
+}
+
+#creature-sheet-panel.is-resizing {
+    transition: none !important;
+}
+
+/* Open: slide in fully */
+#creature-sheet-panel.open {
+    transform: translateX(0);
+}
+
+/* Minimized: hide body fully behind the left toolbar (60px), letting only the chevron button stick out */
+#creature-sheet-panel.minimized {
+    transform: translateX(-100%);
+}
+
+/* Resize drag handle */
+.cs-resize-handle,
+.ps-resize-handle {
+    position: absolute;
+    top: 0;
+    right: -4px;
+    width: 8px;
+    height: 100%;
+    cursor: col-resize;
+    z-index: 60;
+    user-select: none;
+    touch-action: none;
+    transition: background 0.15s ease;
+}
+.cs-resize-handle:hover,
+.cs-resize-handle.is-resizing,
+.ps-resize-handle:hover,
+.ps-resize-handle.is-resizing {
+    background: rgba(212, 175, 55, 0.4);
+    box-shadow: 0 0 6px rgba(212, 175, 55, 0.5);
+}
+
+/* Minimize / Expand chevron button */
+.cs-minimize-btn {
+    position: absolute;
+    right: -18px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 18px;
+    height: 48px;
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border-subtle);
+    border-left: none;
+    border-radius: 0 6px 6px 0;
+    color: var(--color-gold-light);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    z-index: 10;
+    transition: var(--transition-smooth);
+}
+.cs-minimize-btn:hover {
+    background: rgba(212, 175, 55, 0.15);
+    color: var(--color-gold-base);
+}
+
+/* Content scrollable area */
+#vtt-creature-sheet-panel {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 0 0 24px 0;
+}
+
+/* Placeholder (no creature loaded) */
+.cs-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    min-height: 300px;
+    gap: 16px;
+    color: var(--color-text-muted);
+    font-size: 0.8rem;
+    text-align: center;
+    padding: 24px;
+}
+.cs-placeholder i {
+    font-size: 3rem;
+    color: var(--color-gold-dark);
+    opacity: 0.4;
+}
+
+/* ── Header ── */
+.cs-header {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    padding: 16px 16px 12px 16px;
+    background: linear-gradient(180deg, rgba(212, 175, 55, 0.06) 0%, transparent 100%);
+    border-bottom: 1px solid var(--color-border-subtle);
+}
+.cs-token-portrait {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    border: 2px solid var(--color-gold-dark);
+    overflow: hidden;
+    flex-shrink: 0;
+    background: rgba(0,0,0,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.cs-token-portrait img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.cs-header-info {
+    flex: 1;
+    min-width: 0;
+}
+.cs-creature-name {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: var(--color-gold-light);
+    line-height: 1.25;
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
+.cs-creature-type {
+    font-size: 0.72rem;
+    color: var(--color-text-secondary);
+    font-style: italic;
+    margin-top: 2px;
+    text-transform: capitalize;
+}
+.cs-header-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 4px;
+    flex-wrap: wrap;
+}
+.cs-cr-badge {
+    display: inline-flex;
+    padding: 2px 7px;
+    border-radius: 10px;
+    background: rgba(212, 175, 55, 0.12);
+    border: 1px solid var(--color-border-glow);
+    color: var(--color-gold-light);
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 0.7rem;
+    letter-spacing: 0.3px;
+}
+.cs-edit-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 0.7rem;
+    line-height: 1;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+/* ── Creature Sheet Top Toolbar ── */
+.cs-top-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 8px 16px;
+    background: rgba(0, 0, 0, 0.25);
+    border-bottom: 1px solid var(--color-border-subtle);
+}
+.cs-top-toolbar-group {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+/* ── HP Row ── */
+.cs-hp-row {
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--color-border-subtle);
+}
+.cs-hp-label {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    font-weight: 600;
+    font-family: var(--font-heading);
+    margin-bottom: 6px;
+    letter-spacing: 0.5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    text-align: center;
+}
+.cs-hp-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+}
+.cs-hp-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--color-border-subtle);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition-smooth);
+    line-height: 1;
+}
+.cs-hp-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--color-gold-light);
+    border-color: var(--color-gold-dark);
+}
+.cs-hp-display {
+    flex: 1;
+    text-align: center;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--color-text-primary);
+}
+#cs-hp-current { color: var(--color-success-base); }
+#cs-temp-hp-current { color: var(--color-temphp-base, #2196f3); }
+.cs-hp-divider { color: var(--color-text-muted); margin: 0 2px; }
+.cs-hp-formula {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 400;
+    color: var(--color-text-muted);
+    font-family: var(--font-code);
+    margin-top: 2px;
+}
+.cs-hp-bar-wrap {
+    height: 5px;
+    background: rgba(0,0,0,0.4);
+    border-radius: 3px;
+    overflow: hidden;
+}
+.cs-hp-bar-fill {
+    height: 100%;
+    background: var(--color-success-base);
+    border-radius: 3px;
+    transition: width 0.4s ease, background 0.3s;
+}
+.cs-hp-bar-fill.injured { background: var(--color-gold-base); }
+.cs-hp-bar-fill.danger { background: var(--color-danger-base); }
+.cs-temp-hp-bar-fill {
+    height: 100%;
+    background: var(--color-temphp-base, #2196f3);
+    border-radius: 3px;
+    transition: width 0.4s ease;
+}
+
+/* ── Combat Stats Row (AC & Initiative) ── */
+.cs-combat-stats-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--color-border-subtle);
+}
+.cs-combat-stat-card {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 12px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+.cs-combat-stat-btn:hover {
+    background: rgba(212, 175, 55, 0.1);
+    border-color: var(--color-gold-dark);
+}
+.cs-combat-stat-icon {
+    font-size: 1.25rem;
+    color: var(--color-gold-base);
+    flex-shrink: 0;
+}
+.cs-combat-stat-content {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+.cs-combat-stat-label {
+    font-size: 0.68rem;
+    color: var(--color-text-muted);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    line-height: 1.1;
+}
+.cs-combat-stat-value {
+    font-size: 1.05rem;
+    font-weight: 700;
+    font-family: var(--font-heading);
+    color: var(--color-text-primary);
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ── Core Stats Pills ── */
+.cs-core-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 8px 16px;
+    border-bottom: 1px solid var(--color-border-subtle);
+}
+.cs-stat-pill {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: 20px;
+    padding: 3px 9px;
+    font-size: 0.72rem;
+    color: var(--color-text-secondary);
+    font-family: var(--font-heading);
+}
+.cs-stat-pill i {
+    color: var(--color-gold-dark);
+    font-size: 0.7rem;
+}
+
+/* ── Section Divider ── */
+.cs-section-divider {
+    height: 1px;
+    background: var(--color-border-subtle);
+    margin: 0;
+}
+
+/* ── Ability Score Grid ── */
+.cs-ability-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 0;
+    border-bottom: 1px solid var(--color-border-subtle);
+}
+.cs-ability-cell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 4px;
+    border-right: 1px solid var(--color-border-subtle);
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    gap: 1px;
+    position: relative;
+    overflow: hidden;
+}
+.cs-ability-cell:last-child { border-right: none; }
+.cs-ability-cell:hover {
+    background: rgba(212, 175, 55, 0.06);
+}
+.cs-ability-cell:hover .cs-ability-label { color: var(--color-gold-light); }
+.cs-ability-actions {
+    position: absolute;
+    bottom: -36px;
+    left: 0;
+    width: 100%;
+    height: 36px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: rgba(10, 13, 22, 0.96);
+    border-top: 1px solid rgba(212, 175, 55, 0.25);
+    transition: bottom 0.2s ease-in-out;
+    gap: 2px;
+}
+.cs-ability-cell:hover .cs-ability-actions {
+    bottom: 0;
+}
+.cs-ability-action-btn {
+    font-family: var(--font-heading);
+    font-size: 0.55rem;
+    font-weight: 700;
+    color: var(--color-gold-light);
+    cursor: pointer;
+    text-transform: uppercase;
+    width: 90%;
+    text-align: center;
+    padding: 1px 0;
+    border-radius: 2px;
+    transition: var(--transition-smooth);
+}
+.cs-ability-action-btn:hover {
+    background: rgba(212, 175, 55, 0.2);
+    color: #fff;
+}
+.cs-ability-label {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 0.6rem;
+    letter-spacing: 0.5px;
+    color: var(--color-text-muted);
+    transition: var(--transition-smooth);
+}
+.cs-ability-score {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--color-text-primary);
+}
+.cs-ability-mod {
+    font-size: 0.65rem;
+    color: var(--color-gold-base);
+    font-family: var(--font-code);
+}
+
+/* ── Info Rows (Saves, Skills, Immunities) ── */
+.cs-info-row {
+    display: flex;
+    padding: 5px 16px;
+    gap: 8px;
+    font-size: 0.72rem;
+    line-height: 1.4;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+.cs-info-label {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    color: var(--color-gold-dark);
+    white-space: nowrap;
+    min-width: 90px;
+    flex-shrink: 0;
+}
+.cs-info-value {
+    color: var(--color-text-secondary);
+}
+
+/* ── Ability Sections (Traits / Actions / Reactions / Legendary) ── */
+/* ── Ability Sections (Traits / Actions / Reactions / Legendary) ── */
+.cs-section {
+    padding: 0 0 4px 0;
+    border-bottom: 1px solid var(--color-border-subtle);
+}
+.cs-section-title {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+    color: var(--color-gold-light);
+    padding: 10px 16px 6px 16px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    text-transform: uppercase;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s ease;
+}
+.cs-section-title:hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+.cs-section-title i {
+    font-size: 0.65rem;
+    opacity: 0.7;
+}
+.cs-section-chevron {
+    margin-left: auto;
+    font-size: 0.7rem !important;
+    color: var(--color-gold-base);
+    transition: transform 0.2s ease;
+}
+.cs-section.collapsed .cs-section-chevron {
+    transform: rotate(-90deg);
+}
+.cs-section.collapsed .cs-section-content {
+    display: none;
+}
+.cs-legendary-section .cs-section-title {
+    color: #e3b964;
+}
+.cs-legendary-desc {
+    font-size: 0.72rem;
+    color: var(--color-text-muted);
+    padding: 0 16px 8px 16px;
+    font-style: italic;
+    line-height: 1.5;
+}
+.cs-ability-entry {
+    padding: 6px 16px 8px 16px;
+    border-top: 1px solid rgba(255,255,255,0.03);
+    transition: background 0.15s;
+}
+.cs-ability-entry:hover { background: rgba(255,255,255,0.02); }
+.cs-ability-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    user-select: none;
+}
+.cs-card-chevron {
+    font-size: 0.65rem;
+    color: var(--color-gold-base);
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
+}
+.cs-ability-entry.expanded .cs-card-chevron {
+    transform: rotate(90deg);
+}
+.cs-ability-name {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 0.78rem;
+    color: var(--color-text-primary);
+    display: inline-block;
+    transition: color 0.15s;
+}
+.cs-ability-name:hover {
+    color: var(--color-gold-light);
+}
+.cs-ability-text {
+    font-size: 0.72rem;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    display: none;
+    margin-top: 6px;
+}
+.cs-ability-entry.expanded .cs-ability-text {
+    display: block;
+}
+
+/* ── Dice Chips ── */
+.dice-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 1px 7px;
+    border-radius: 12px;
+    background: rgba(212, 175, 55, 0.12);
+    border: 1px solid var(--color-border-glow);
+    color: var(--color-gold-light);
+    font-family: var(--font-code);
+    font-size: 0.72rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    vertical-align: middle;
+    margin: 0 1px;
+    line-height: 1.6;
+}
+.dice-chip:hover {
+    background: rgba(212, 175, 55, 0.28);
+    border-color: var(--color-gold-base);
+    color: #fff;
+    box-shadow: 0 0 8px rgba(212, 175, 55, 0.3);
+    transform: scale(1.05);
+}
+.dice-chip:active {
+    transform: scale(0.97);
+}
+
+/* ── Creature Sheet Tabs ── */
+.cs-tabs {
+    display: flex;
+    background: rgba(0, 0, 0, 0.2);
+    border-bottom: 1px solid var(--color-border-subtle);
+}
+.cs-tab-btn {
+    flex: 1;
+    text-align: center;
+    padding: 8px 0;
+    font-family: var(--font-heading);
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: var(--transition-smooth);
+}
+.cs-tab-btn:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--color-text-primary);
+}
+.cs-tab-btn.active {
+    color: var(--color-gold-light);
+    border-bottom-color: var(--color-gold-base);
+    background: rgba(212, 175, 55, 0.05);
+}
+.cs-tab-content {
+    display: none;
+}
+.cs-tab-content.active {
+    display: block;
+}
+
+/* ── Creature Sheet Spellcasting ── */
+.cs-spellcasting-section {
+    padding: 10px 0;
+}
+.cs-spellcasting-header {
+    padding: 0 16px 8px 16px;
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+.cs-spell-group {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+.cs-spell-group:last-child {
+    border-bottom: none;
+}
+.cs-spell-group-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 16px;
+    background: rgba(255, 255, 255, 0.02);
+}
+.cs-spell-group-title {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 0.72rem;
+    color: var(--color-gold-light);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 6px 16px;
+}
+.cs-spell-group-header .cs-spell-group-title {
+    padding: 0;
+}
+.cs-spell-slots {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+.cs-spell-slot-input {
+    width: 32px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: 4px;
+    color: var(--color-text-primary);
+    font-family: var(--font-code);
+    font-size: 0.75rem;
+    text-align: center;
+    padding: 2px 0;
+}
+.cs-spell-slot-input:focus {
+    border-color: var(--color-gold-base);
+    outline: none;
+}
+.cs-spell-slot-max {
+    font-family: var(--font-code);
+    font-size: 0.7rem;
+    color: var(--color-text-muted);
+}
+.cs-spell-list {
+    display: flex;
+    flex-direction: column;
+    padding: 0 0 4px 0;
+}
+.cs-spell-item {
+    display: flex;
+    flex-direction: column;
+}
+.cs-spell-name {
+    padding: 6px 16px;
+    font-size: 0.75rem;
+    color: var(--color-text-primary);
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.cs-spell-name i {
+    color: var(--color-text-muted);
+    font-size: 0.7rem;
+    transition: color 0.15s;
+}
+.cs-spell-name:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+.cs-spell-name:hover i, .cs-spell-name.expanded i {
+    color: var(--color-gold-light);
+}
+.cs-spell-name.expanded {
+    color: var(--color-gold-light);
+    background: rgba(212, 175, 55, 0.05);
+}
+.cs-spell-details {
+    padding: 8px 16px 12px 16px;
+    background: rgba(0, 0, 0, 0.2);
+    border-left: 2px solid var(--color-gold-dark);
+    margin: 0 16px 8px 16px;
+    border-radius: 0 4px 4px 0;
+}
+.cs-spell-post-btn {
+    background: rgba(212, 175, 55, 0.15);
+    border: 1px solid var(--color-gold-dark);
+    color: var(--color-gold-light);
+    font-family: var(--font-heading);
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    margin-bottom: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+.cs-spell-post-btn:hover {
+    background: var(--color-gold-base);
+    color: #111;
+}
+.cs-spell-desc {
+    font-size: 0.7rem;
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+}
+
+/* ── Private Whisper Chat Card ── */
+.chat-message.whisper-card {
+    background: rgba(155, 89, 182, 0.06);
+    border-color: rgba(155, 89, 182, 0.25);
+}
+.chat-message.whisper-card .username {
+    color: #c39bd3;
+}
+.whisper-badge {
+    font-size: 0.78rem;
+    background: rgba(155, 89, 182, 0.2);
+    color: #c39bd3;
+    padding: 1px 5px;
+    border-radius: 8px;
+    margin-left: 4px;
+    vertical-align: middle;
+}
+
+/* ── Ability Chat Card (from creature sheet) ── */
+.ability-chat-card {
+    margin-top: 4px;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    background: rgba(10, 13, 22, 0.5);
+}
+.ability-chat-header {
+    display: flex;
+    flex-direction: column;
+    padding: 7px 10px 6px 10px;
+    background: linear-gradient(90deg, rgba(212, 175, 55, 0.14) 0%, rgba(212, 175, 55, 0.03) 100%);
+    border-bottom: 1px solid rgba(212, 175, 55, 0.18);
+    gap: 2px;
+}
+.ability-chat-creature {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 0.76rem;
+    letter-spacing: 0.8px;
+    color: var(--color-gold-base);
+    text-transform: uppercase;
+    line-height: 1.2;
+}
+.ability-chat-name {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 1.04rem;
+    color: var(--color-text-primary);
+    line-height: 1.25;
+}
+.ability-chat-desc {
+    padding: 6px 10px 8px 10px;
+    font-size: 0.9rem;
+    line-height: 1.65;
+    color: var(--color-text-secondary);
+}
+.ability-chat-desc p {
+    margin: 0 0 6px 0;
+}
+.ability-chat-desc p:last-child {
+    margin-bottom: 0;
+}
+.ability-chat-desc ul,
+.ability-chat-desc ol {
+    margin: 4px 0 6px 18px;
+    padding: 0;
+}
+.ability-chat-desc li {
+    margin-bottom: 3px;
+}
+.ability-chat-desc .dice-chip,
+.ability-chat-desc .render-roller {
+    font-size: 0.75rem;
+    padding: 1px 7px;
+    margin: 0 2px;
+    border-radius: 4px;
+    background: rgba(212, 175, 55, 0.15);
+    border: 1px solid rgba(212, 175, 55, 0.4);
+    color: #f5d77f;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    transition: all 0.15s ease;
+}
+.ability-chat-desc .dice-chip:hover,
+.ability-chat-desc .render-roller:hover {
+    background: rgba(212, 175, 55, 0.3);
+    border-color: #d4af37;
+    box-shadow: 0 0 6px rgba(212, 175, 55, 0.4);
+    transform: translateY(-1px);
+}
+.ability-card-hr {
+    border: 0;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(212, 175, 55, 0) 0%, rgba(212, 175, 55, 0.3) 50%, rgba(212, 175, 55, 0) 100%);
+    margin: 8px 0;
+}
+.ability-card-table-wrap {
+    overflow-x: auto;
+    margin: 8px 0;
+    border-radius: 4px;
+    border: 1px solid rgba(212, 175, 55, 0.2);
+}
+.ability-card-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.82rem;
+    text-align: left;
+    background: rgba(10, 13, 20, 0.6);
+}
+.ability-card-table th {
+    background: rgba(212, 175, 55, 0.12);
+    color: var(--color-gold-base, #d4af37);
+    font-weight: 600;
+    padding: 6px 10px;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.25);
+    white-space: nowrap;
+}
+.ability-card-table td {
+    padding: 5px 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    color: var(--color-text-secondary, #cccccc);
+}
+.ability-card-table tr:last-child td {
+    border-bottom: none;
+}
+.ability-card-table tr:nth-child(even) td {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+/* Premium Glassmorphism Context Menu for Fast Dice */
+.dice-context-menu {
+    position: absolute;
+    z-index: 10000;
+    width: 140px;
+    background: rgba(15, 20, 35, 0.95);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(212, 175, 55, 0.25);
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), 0 0 10px rgba(212, 175, 55, 0.1);
+    padding: 6px 0;
+    font-family: var(--font-heading);
+    animation: diceMenuFadeIn 0.15s ease-out;
+}
+
+@keyframes diceMenuFadeIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.dice-menu-header {
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--color-gold-dark);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 4px 10px 6px 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    margin-bottom: 4px;
+}
+
+.dice-menu-options {
+    max-height: 180px;
+    overflow-y: auto;
+}
+
+.dice-menu-option {
+    font-size: 0.72rem;
+    color: var(--color-text-secondary);
+    padding: 5px 12px;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+}
+
+.dice-menu-option:hover {
+    background: rgba(212, 175, 55, 0.12);
+    color: var(--color-gold-light);
+}
+
+.dice-menu-divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.05);
+    margin: 4px 0;
+}
+
+.dice-menu-custom {
+    display: flex;
+    gap: 4px;
+    padding: 4px 8px;
+}
+
+.dice-menu-custom input {
+    width: 45px;
+    font-size: 0.72rem;
+    padding: 3px 6px;
+    background: rgba(0, 0, 0, 0.4) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 4px;
+    color: #fff !important;
+    font-family: var(--font-code);
+}
+
+.dice-menu-custom button {
+    flex: 1;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 3px 0;
+    background: linear-gradient(135deg, var(--color-gold-base), var(--color-gold-dark)) !important;
+    color: #111 !important;
+    border: none !important;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    text-transform: uppercase;
+}
+
+.dice-menu-custom button:hover {
+    box-shadow: 0 0 8px var(--color-border-glow) !important;
+    transform: scale(1.02);
+}
+
+
+/* ForgeD VTT - Multiple Slideout Sheet Tabs                                  */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Slideout Tabs Container sticking out at left edge next to left toolbar / panel */
+.slideout-tabs-container {
+    position: fixed;
+    top: 140px;
+    left: 60px;
+    z-index: 52;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
+}
+
+.slideout-tab-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    pointer-events: auto;
+}
+
+/* Slideout Tab Handle: styled like the native .cs-minimize-btn sticking out */
+.slideout-tab-handle {
+    width: 24px;
+    height: 44px;
+    background: var(--color-bg-card, #131722);
+    border: 1px solid var(--color-border-subtle, rgba(255, 255, 255, 0.12));
+    border-left: none;
+    border-radius: 0 8px 8px 0;
+    color: var(--color-gold-light, #fef08a);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 3px 2px;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4);
+    outline: none;
+}
+.slideout-tab-handle:hover {
+    width: 28px;
+    background: rgba(30, 41, 59, 0.95);
+}
+
+/* Role Accent Borders & Solid Opaque Active Backgrounds */
+.slideout-tab-handle.role-player {
+    border-color: var(--color-gold-base, #d4af37);
+    color: var(--color-gold-light, #fef08a);
+}
+.slideout-tab-handle.role-player.active {
+    background: linear-gradient(135deg, #2a2211 0%, #151208 100%) !important;
+    border-color: var(--color-gold-base, #d4af37) !important;
+    box-shadow: 0 0 12px rgba(212, 175, 55, 0.65), 2px 2px 8px rgba(0, 0, 0, 0.7);
+    width: 28px;
+}
+
+.slideout-tab-handle.role-companion {
+    border-color: #06b6d4;
+    color: #67e8f9;
+}
+.slideout-tab-handle.role-companion.active {
+    background: linear-gradient(135deg, #0e2730 0%, #071720 100%) !important;
+    border-color: #06b6d4 !important;
+    box-shadow: 0 0 12px rgba(6, 182, 212, 0.65), 2px 2px 8px rgba(0, 0, 0, 0.7);
+    width: 28px;
+}
+
+.slideout-tab-handle.role-generic {
+    border-color: #ef4444;
+    color: #fca5a5;
+}
+.slideout-tab-handle.role-generic.active {
+    background: linear-gradient(135deg, #2d1316 0%, #17090b 100%) !important;
+    border-color: #ef4444 !important;
+    box-shadow: 0 0 12px rgba(239, 68, 68, 0.65), 2px 2px 8px rgba(0, 0, 0, 0.7);
+    width: 28px;
+}
+
+.tab-handle-avatar {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    object-fit: cover;
+    pointer-events: none;
+}
+
+.tab-handle-chevron {
+    font-size: 0.6rem;
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+/* Hover Tooltip extending smoothly to the right with Name, Popout, Close, and Instance Chips */
+.slideout-tab-tooltip {
+    position: absolute;
+    left: 100%;
+    top: 50%;
+    transform: translateY(-50%) translateX(-6px);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--color-border-subtle, rgba(255, 255, 255, 0.15));
+    border-radius: 0 8px 8px 0;
+    padding: 6px 10px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 4px 6px 20px rgba(0, 0, 0, 0.6);
+    z-index: 100;
+}
+.slideout-tab-wrapper:hover .slideout-tab-tooltip {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(-50%) translateX(0);
+}
+
+.tooltip-main-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.tab-tooltip-name {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--color-text-primary, #f8fafc);
+    max-width: 160px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.tab-tooltip-popout {
+    background: transparent;
+    border: none;
+    color: var(--color-text-secondary, #94a3b8);
+    font-size: 0.75rem;
+    cursor: pointer;
+    padding: 2px 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.15s ease, transform 0.15s ease;
+}
+.tab-tooltip-popout:hover {
+    color: var(--color-gold-base, #d4af37);
+    transform: scale(1.15);
+}
+
+.tab-tooltip-close {
+    background: transparent;
+    border: none;
+    color: var(--color-text-secondary, #94a3b8);
+    font-size: 1.1rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.15s ease, transform 0.15s ease;
+}
+.tab-tooltip-close:hover {
+    color: #ef4444;
+    transform: scale(1.15);
+}
+
+/* Instance chips row for generic creatures with multiple tokens */
+.tooltip-instance-row {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding-top: 5px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    flex-wrap: wrap;
+    max-width: 220px;
+}
+
+.tab-instance-chip {
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 10px;
+    padding: 2px 7px;
+    font-size: 0.68rem;
+    font-weight: 500;
+    color: #cbd5e1;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+}
+.tab-instance-chip:hover {
+    border-color: var(--color-gold-base, #d4af37);
+    color: #fef08a;
+    background: rgba(212, 175, 55, 0.15);
+}
+.tab-instance-chip.active {
+    background: rgba(239, 68, 68, 0.25);
+    border-color: #ef4444;
+    color: #fff;
+    font-weight: 700;
+    box-shadow: 0 0 6px rgba(239, 68, 68, 0.4);
+}
+
+/* Drag and Drop Reordering */
+.slideout-tab-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    pointer-events: auto;
+    cursor: grab;
+}
+.slideout-tab-wrapper:active {
+    cursor: grabbing;
+}
+.slideout-tab-wrapper.is-dragging {
+    opacity: 0.35;
+    transform: scale(0.96);
+}
+.slideout-tab-wrapper.drop-above::before {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: 0;
+    width: 28px;
+    height: 3px;
+    background: var(--color-gold-base, #d4af37);
+    border-radius: 2px;
+    box-shadow: 0 0 8px rgba(212, 175, 55, 0.9);
+    z-index: 10;
+    pointer-events: none;
+}
+.slideout-tab-wrapper.drop-below::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 28px;
+    height: 3px;
+    background: var(--color-gold-base, #d4af37);
+    border-radius: 2px;
+    box-shadow: 0 0 8px rgba(212, 175, 55, 0.9);
+    z-index: 10;
+    pointer-events: none;
+}

@@ -1,18 +1,29 @@
 // DnDForged Player Sheet - Roll Simulations, Formulas & Feature Parsers
 import { VTTDiceParser } from '../vtt-dice-parser.js';
+export { normalizeSkill } from './vtt-sheet-importers.js';
 
 export function cleanId(str) {
-    return (str || '').toLowerCase().replace(/[^a-z0-9]/g, '_').replace(/_+/g, '_').replace(/^_|_$/g, '');
+    return (str || '')
+        .toLowerCase()
+        .replace(/[^a-z0-9]/g, '_')
+        .replace(/_+/g, '_')
+        .replace(/^_|_$/g, '');
 }
 
 export function resolveCharClassLevel(char, targetClassName) {
     if (!char || !char.classes || !Array.isArray(char.classes)) return 0;
-    const target = (targetClassName || '').replace(/\s*\[.*?\]$/, '').trim().toLowerCase();
-    const c = char.classes.find(cl => {
-        const raw = (cl.name || '').replace(/\s*\[.*?\]$/, '').trim().toLowerCase();
+    const target = (targetClassName || '')
+        .replace(/\s*\[.*?\]$/, '')
+        .trim()
+        .toLowerCase();
+    const c = char.classes.find((cl) => {
+        const raw = (cl.name || '')
+            .replace(/\s*\[.*?\]$/, '')
+            .trim()
+            .toLowerCase();
         return raw === target || (cl.name || '').trim().toLowerCase() === target;
     });
-    return c ? (parseInt(c.level) || 1) : 0;
+    return c ? parseInt(c.level) || 1 : 0;
 }
 
 export function injectDiceChips(html) {
@@ -62,7 +73,15 @@ export function injectDiceChips(html) {
 
 export function simulateRoll(formula, critRange = 20, optEvent = null) {
     if (!formula || typeof formula !== 'string') {
-        return { formula: formula || '0', diceList: [], total: 0, breakdownStr: '0', compactBreakdown: '0', isCritSuccess: false, isCritFail: false };
+        return {
+            formula: formula || '0',
+            diceList: [],
+            total: 0,
+            breakdownStr: '0',
+            compactBreakdown: '0',
+            isCritSuccess: false,
+            isCritFail: false
+        };
     }
 
     let activeFormula = formula.trim();
@@ -71,18 +90,21 @@ export function simulateRoll(formula, critRange = 20, optEvent = null) {
     // Advantage / Disadvantage handling
     let isAdvantage = false;
     let isDisadvantage = false;
-    
+
     if (activeFormula.match(/(?:^|[^0-9])(?:1)?d20/i)) {
         let rollMode = 'normal';
         try {
-            rollMode = (window.VTT && window.VTT.currentRollMode) || localStorage.getItem('vtt_current_roll_mode') || 'normal';
+            rollMode =
+                (window.VTT && window.VTT.currentRollMode) || localStorage.getItem('vtt_current_roll_mode') || 'normal';
         } catch (e) {
             rollMode = (window.VTT && window.VTT.currentRollMode) || 'normal';
         }
 
         const evt = optEvent || window.event;
-        const isShift = (evt && evt.shiftKey) || (typeof window.VTT_isShiftPressed === 'function' && window.VTT_isShiftPressed());
-        const isCtrl = (evt && evt.ctrlKey) || (typeof window.VTT_isCtrlPressed === 'function' && window.VTT_isCtrlPressed());
+        const isShift =
+            (evt && evt.shiftKey) || (typeof window.VTT_isShiftPressed === 'function' && window.VTT_isShiftPressed());
+        const isCtrl =
+            (evt && evt.ctrlKey) || (typeof window.VTT_isCtrlPressed === 'function' && window.VTT_isCtrlPressed());
 
         if (isShift) rollMode = 'adv';
         else if (isCtrl) rollMode = 'dis';
@@ -106,7 +128,7 @@ export function simulateRoll(formula, critRange = 20, optEvent = null) {
         };
     }
 
-    const parser = (typeof VTTDiceParser !== 'undefined' ? VTTDiceParser : window.VTTDiceParser);
+    const parser = typeof VTTDiceParser !== 'undefined' ? VTTDiceParser : window.VTTDiceParser;
     let rollResult = null;
 
     if (parser && typeof parser.roll === 'function') {
@@ -128,7 +150,7 @@ export function simulateRoll(formula, critRange = 20, optEvent = null) {
                 rollResult = {
                     total,
                     diceList: meta.diceList || [],
-                    breakdownStr: (meta.html || []).join("") || `<strong>${total}</strong>`,
+                    breakdownStr: (meta.html || []).join('') || `<strong>${total}</strong>`,
                     compactBreakdown: `${total}`,
                     isCritSuccess: meta.isCritSuccess || false,
                     isCritFail: meta.isCritFail || false
@@ -143,29 +165,32 @@ export function simulateRoll(formula, critRange = 20, optEvent = null) {
     if (!rollResult) {
         const diceList = [];
         const breakdownParts = [];
-        const parsedStr = strippedFormula.replace(/(\d*)d(\d+)(?:(kh|kl|dl|dh)(\d*))?/gi, (match, countStr, facesStr, keepDropType, keepDropNumStr) => {
-            const count = parseInt(countStr || '1', 10);
-            const faces = parseInt(facesStr, 10);
-            if (faces <= 0 || count <= 0) return '0';
-            const rolled = [];
-            for (let i = 0; i < count; i++) {
-                rolled.push(Math.floor(Math.random() * faces) + 1);
+        const parsedStr = strippedFormula.replace(
+            /(\d*)d(\d+)(?:(kh|kl|dl|dh)(\d*))?/gi,
+            (match, countStr, facesStr, keepDropType, keepDropNumStr) => {
+                const count = parseInt(countStr || '1', 10);
+                const faces = parseInt(facesStr, 10);
+                if (faces <= 0 || count <= 0) return '0';
+                const rolled = [];
+                for (let i = 0; i < count; i++) {
+                    rolled.push(Math.floor(Math.random() * faces) + 1);
+                }
+                let droppedIndices = new Set();
+                if (keepDropType) {
+                    const kNum = parseInt(keepDropNumStr || '1', 10);
+                    const indexed = rolled.map((val, idx) => ({ val, idx })).sort((a, b) => b.val - a.val);
+                    if (keepDropType === 'kh') indexed.slice(kNum).forEach((x) => droppedIndices.add(x.idx));
+                    else if (keepDropType === 'kl') indexed.slice(0, -kNum).forEach((x) => droppedIndices.add(x.idx));
+                }
+                rolled.forEach((val, idx) => {
+                    diceList.push({ faces, val, isDropped: droppedIndices.has(idx) });
+                });
+                const subtotal = rolled.reduce((acc, val, idx) => (droppedIndices.has(idx) ? acc : acc + val), 0);
+                const rollStrings = rolled.map((val, idx) => (droppedIndices.has(idx) ? `<s>${val}</s>` : `${val}`));
+                breakdownParts.push(`[${rollStrings.join(', ')}]`);
+                return subtotal.toString();
             }
-            let droppedIndices = new Set();
-            if (keepDropType) {
-                const kNum = parseInt(keepDropNumStr || '1', 10);
-                const indexed = rolled.map((val, idx) => ({ val, idx })).sort((a, b) => b.val - a.val);
-                if (keepDropType === 'kh') indexed.slice(kNum).forEach(x => droppedIndices.add(x.idx));
-                else if (keepDropType === 'kl') indexed.slice(0, -kNum).forEach(x => droppedIndices.add(x.idx));
-            }
-            rolled.forEach((val, idx) => {
-                diceList.push({ faces, val, isDropped: droppedIndices.has(idx) });
-            });
-            const subtotal = rolled.reduce((acc, val, idx) => droppedIndices.has(idx) ? acc : acc + val, 0);
-            const rollStrings = rolled.map((val, idx) => droppedIndices.has(idx) ? `<s>${val}</s>` : `${val}`);
-            breakdownParts.push(`[${rollStrings.join(', ')}]`);
-            return subtotal.toString();
-        });
+        );
 
         let total = 0;
         try {
@@ -175,9 +200,10 @@ export function simulateRoll(formula, critRange = 20, optEvent = null) {
             total = 0;
         }
 
-        const breakdownStr = breakdownParts.length > 0 
-            ? `${breakdownParts.join(' + ')}${strippedFormula.includes('+') || strippedFormula.includes('-') ? ` = <strong>${total}</strong>` : ''}`
-            : `<strong>${total}</strong>`;
+        const breakdownStr =
+            breakdownParts.length > 0
+                ? `${breakdownParts.join(' + ')}${strippedFormula.includes('+') || strippedFormula.includes('-') ? ` = <strong>${total}</strong>` : ''}`
+                : `<strong>${total}</strong>`;
 
         rollResult = { total, diceList, breakdownStr, isCritSuccess: false, isCritFail: false };
     }
@@ -185,7 +211,7 @@ export function simulateRoll(formula, critRange = 20, optEvent = null) {
     if ((!rollResult.diceList || rollResult.diceList.length === 0) && strippedFormula.match(/\d*d\d+/i)) {
         rollResult.diceList = [];
         const dMatches = [...strippedFormula.matchAll(/(\d*)d(\d+)/gi)];
-        dMatches.forEach(m => {
+        dMatches.forEach((m) => {
             const count = parseInt(m[1] || '1', 10);
             const faces = parseInt(m[2], 10);
             for (let i = 0; i < count; i++) {
@@ -202,10 +228,10 @@ export function simulateRoll(formula, critRange = 20, optEvent = null) {
     let isCritFail = false;
     const diceList = rollResult.diceList || [];
     if (strippedFormula.match(/d20/i) && diceList.length > 0) {
-        const activeD20s = diceList.filter(d => d.faces === 20 && !d.isDropped);
+        const activeD20s = diceList.filter((d) => d.faces === 20 && !d.isDropped);
         if (activeD20s.length > 0) {
-            if (activeD20s.some(d => d.val >= (critRange || 20))) isCritSuccess = true;
-            if (activeD20s.some(d => d.val === 1) && !isCritSuccess) isCritFail = true;
+            if (activeD20s.some((d) => d.val >= (critRange || 20))) isCritSuccess = true;
+            if (activeD20s.some((d) => d.val === 1) && !isCritSuccess) isCritFail = true;
         }
     } else {
         isCritSuccess = rollResult.isCritSuccess || false;
@@ -225,7 +251,7 @@ export function simulateRoll(formula, critRange = 20, optEvent = null) {
 
 export function evaluateAbilityFormula(formula, formulaConfig, char) {
     if (!char) return formula || '';
-    
+
     if (formulaConfig && typeof formulaConfig === 'object') {
         const base = (formulaConfig.baseDice || '').trim();
         const sc = formulaConfig.scalingMod || 'none';
@@ -234,7 +260,7 @@ export function evaluateAbilityFormula(formula, formulaConfig, char) {
         let hasMod = false;
 
         if (sc === 'classLevel') {
-            const cls = formulaConfig.modClass || (char.classes?.[0]?.name) || '';
+            const cls = formulaConfig.modClass || char.classes?.[0]?.name || '';
             modVal = resolveCharClassLevel(char, cls);
             hasMod = true;
         } else if (sc === 'level') {
@@ -246,7 +272,7 @@ export function evaluateAbilityFormula(formula, formulaConfig, char) {
             hasMod = true;
         } else if (['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA'].includes(sc)) {
             const statKey = sc.toLowerCase();
-            modVal = (char.statMods && char.statMods[statKey] !== undefined) ? parseInt(char.statMods[statKey]) : 0;
+            modVal = char.statMods && char.statMods[statKey] !== undefined ? parseInt(char.statMods[statKey]) : 0;
             hasMod = true;
         }
 
@@ -278,7 +304,7 @@ export function evaluateAbilityFormula(formula, formulaConfig, char) {
     });
     resolved = resolved.replace(/@(str|dex|con|int|wis|cha)/gi, (m, statKey) => {
         const k = statKey.toLowerCase();
-        return String((char.statMods && char.statMods[k] !== undefined) ? parseInt(char.statMods[k]) : 0);
+        return String(char.statMods && char.statMods[k] !== undefined ? parseInt(char.statMods[k]) : 0);
     });
 
     return resolved.replace(/\s+/g, '').replace(/\+\+/g, '+').replace(/\+-/g, '-');
@@ -294,7 +320,7 @@ export function evaluateAbilityMaxUses(usesMax, char) {
     }
     if (['CHA', 'WIS', 'INT', 'CON', 'DEX', 'STR'].includes(s)) {
         const modKey = s.toLowerCase();
-        return Math.max(1, (char.statMods && char.statMods[modKey] !== undefined) ? parseInt(char.statMods[modKey]) : 1);
+        return Math.max(1, char.statMods && char.statMods[modKey] !== undefined ? parseInt(char.statMods[modKey]) : 1);
     }
     const parsed = parseInt(s);
     return !isNaN(parsed) ? parsed : 1;
@@ -306,16 +332,20 @@ export function extractTextFromEntries(entries) {
         return entries.replace(/\{@([a-z]+)\s+([^}]+)\}/gi, (match, tag, content) => {
             const parts = content.split('|');
             if (tag === 'dice' || tag === 'damage') return parts[0];
+            if (tag === 'filter') return parts[0];
             if (parts.length >= 3 && parts[2]) return parts[2];
             return parts[0];
         });
     }
     if (Array.isArray(entries)) {
-        return entries.map(e => extractTextFromEntries(e)).filter(Boolean).join('\n\n');
+        return entries
+            .map((e) => extractTextFromEntries(e))
+            .filter(Boolean)
+            .join('\n\n');
     }
     if (typeof entries === 'object') {
         if (entries.type === 'list') {
-            return (entries.items || []).map(i => '- ' + extractTextFromEntries(i)).join('\n');
+            return (entries.items || []).map((i) => '- ' + extractTextFromEntries(i)).join('\n');
         }
         if (entries.entries) {
             let text = entries.name ? `**${entries.name}**\n` : '';
@@ -341,7 +371,10 @@ export function getFeatureDescriptionText(f) {
             .replace(/<\/p>/gi, '\n\n')
             .replace(/<li>/gi, '- ')
             .replace(/<\/li>/gi, '\n')
-            .replace(/<div class="compendium-subentry">(?:<div class="compendium-subentry">)?<strong>(.*?)<\/strong>/gi, '\n**$1**\n')
+            .replace(
+                /<div class="compendium-subentry">(?:<div class="compendium-subentry">)?<strong>(.*?)<\/strong>/gi,
+                '\n**$1**\n'
+            )
             .replace(/<[^>]+>/g, '')
             .replace(/&amp;/g, '&')
             .replace(/&lt;/g, '<')
@@ -361,42 +394,66 @@ export function detectFeatureCounter(f, desc, char) {
 
     if (!hasCounter) {
         const plain = ((f.name || '') + ' ' + (desc || '')).toLowerCase();
-        const restMatch = plain.match(/(?:can(?:\'t|not))\s+(?:use\s+(?:it|this\s+feature)|do\s+so)\s+again\s+until\s+you\s+finish\s+a\s+(short\s+(?:or\s+long|and\s+long)|short|long)\s+rest/i);
+        const restMatch = plain.match(
+            /(?:can(?:\'t|not))\s+(?:use\s+(?:it|this\s+feature)|do\s+so)\s+again\s+until\s+you\s+finish\s+a\s+(short\s+(?:or\s+long|and\s+long)|short|long)\s+rest/i
+        );
         if (restMatch) {
             hasCounter = true;
             usesMax = 1;
             resetType = restMatch[1].includes('short') ? 'short' : 'long';
         } else if (plain.includes('action surge') || plain.includes('second wind')) {
-            hasCounter = true; usesMax = 1; resetType = 'short';
+            hasCounter = true;
+            usesMax = 1;
+            resetType = 'short';
         } else if (plain.includes('bardic inspiration')) {
-            hasCounter = true; usesMax = 'CHA'; resetType = 'long';
+            hasCounter = true;
+            usesMax = 'CHA';
+            resetType = 'long';
         } else if (plain.includes('rage') && (f.className === 'Barbarian' || plain.includes('barbarian'))) {
-            hasCounter = true; usesMax = 2; resetType = 'long';
+            hasCounter = true;
+            usesMax = 2;
+            resetType = 'long';
         } else if (plain.includes('moxie points') || (f.name && f.name.toLowerCase() === 'moxie')) {
             hasCounter = true;
-            const pug = (char?.classes || []).find(c => (c.name || '').toLowerCase() === 'pugilist');
-            usesMax = pug ? (parseInt(pug.level) || 1) : (char?.level || 1);
+            const pug = (char?.classes || []).find((c) => (c.name || '').toLowerCase() === 'pugilist');
+            usesMax = pug ? parseInt(pug.level) || 1 : char?.level || 1;
             resetType = 'short';
-        } else if (plain.includes('ki points') || plain.includes('focus points') || (f.name && (f.name.toLowerCase() === 'ki' || f.name.toLowerCase() === "monk's focus"))) {
+        } else if (
+            plain.includes('ki points') ||
+            plain.includes('focus points') ||
+            (f.name && (f.name.toLowerCase() === 'ki' || f.name.toLowerCase() === "monk's focus"))
+        ) {
             hasCounter = true;
-            const mnk = (char?.classes || []).find(c => (c.name || '').toLowerCase() === 'monk');
-            usesMax = mnk ? (parseInt(mnk.level) || 1) : (char?.level || 1);
+            const mnk = (char?.classes || []).find((c) => (c.name || '').toLowerCase() === 'monk');
+            usesMax = mnk ? parseInt(mnk.level) || 1 : char?.level || 1;
             resetType = 'short';
         } else if (plain.includes('sorcery points') || (f.name && f.name.toLowerCase() === 'font of magic')) {
             hasCounter = true;
-            const src = (char?.classes || []).find(c => (c.name || '').toLowerCase() === 'sorcerer');
-            usesMax = src ? (parseInt(src.level) || 2) : (char?.level || 2);
+            const src = (char?.classes || []).find((c) => (c.name || '').toLowerCase() === 'sorcerer');
+            usesMax = src ? parseInt(src.level) || 2 : char?.level || 2;
             resetType = 'long';
         } else if (plain.includes('grit points') || (f.name && f.name.toLowerCase().includes('grit'))) {
             hasCounter = true;
             usesMax = 'WIS';
             resetType = 'short';
-        } else if (plain.match(/(?:finish|complete) a (?:short or long|short) rest before you can use (?:it|this (?:feature|trait|action)) again/)) {
-            hasCounter = true; usesMax = 1; resetType = 'short';
-        } else if (plain.match(/(?:finish|complete) a long rest before you can use (?:it|this (?:feature|trait|action)) again/)) {
-            hasCounter = true; usesMax = 1; resetType = 'long';
+        } else if (
+            plain.match(
+                /(?:finish|complete) a (?:short or long|short) rest before you can use (?:it|this (?:feature|trait|action)) again/
+            )
+        ) {
+            hasCounter = true;
+            usesMax = 1;
+            resetType = 'short';
+        } else if (
+            plain.match(/(?:finish|complete) a long rest before you can use (?:it|this (?:feature|trait|action)) again/)
+        ) {
+            hasCounter = true;
+            usesMax = 1;
+            resetType = 'long';
         } else if (plain.match(/proficiency bonus.*?regain/)) {
-            hasCounter = true; usesMax = 'PB'; resetType = plain.includes('short rest') ? 'short' : 'long';
+            hasCounter = true;
+            usesMax = 'PB';
+            resetType = plain.includes('short rest') ? 'short' : 'long';
         }
     }
 

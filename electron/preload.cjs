@@ -14,6 +14,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   selectDataFolder: () => ipcRenderer.invoke('select-data-folder'),
   selectBackupsFolder: () => ipcRenderer.invoke('select-backups-folder'),
   backupCampaign: () => ipcRenderer.invoke('backup-campaign'),
+  restoreBackup: (filePath) => ipcRenderer.invoke('restore-backup', filePath),
 
   // GM Credentials & Campaign Management
   getGmCredentials: () => ipcRenderer.invoke('get-gm-credentials'),

@@ -2,10 +2,11 @@
 // Handles Background, Species, Class, Subclass, and Feat wizard modals
 
 import { SKILL_NAMES_MASTER } from './vtt-sheet-modals.js';
+import { parseEquipmentTextToData } from './builder/builder-state.js';
 
 export function normalizeSkill(s) {
     if (!s) return '';
-    const found = SKILL_NAMES_MASTER.find(x => x.toLowerCase() === s.trim().toLowerCase());
+    const found = SKILL_NAMES_MASTER.find((x) => x.toLowerCase() === s.trim().toLowerCase());
     return found || s.trim();
 }
 
@@ -24,7 +25,7 @@ export function normalizeTool(t) {
     if (/carpenter'?s?\s*tools?/i.test(clean)) return "Carpenter's Tools";
     if (/cobbler'?s?\s*tools?/i.test(clean)) return "Cobbler's Tools";
     if (/glassblower'?s?\s*tools?/i.test(clean)) return "Glassblower's Tools";
-    if (/herbalism\s*kit/i.test(clean)) return "Herbalism Kit";
+    if (/herbalism\s*kit/i.test(clean)) return 'Herbalism Kit';
     if (/jeweler'?s?\s*tools?/i.test(clean)) return "Jeweler's Tools";
     if (/leatherworker'?s?\s*tools?/i.test(clean)) return "Leatherworker's Tools";
     if (/mason'?s?\s*tools?/i.test(clean)) return "Mason's Tools";
@@ -35,24 +36,47 @@ export function normalizeTool(t) {
     if (/tinker'?s?\s*tools?/i.test(clean)) return "Tinker's Tools";
     if (/weaver'?s?\s*tools?/i.test(clean)) return "Weaver's Tools";
     if (/woodcarver'?s?\s*tools?/i.test(clean)) return "Woodcarver's Tools";
-    if (/disguise\s*kit/i.test(clean)) return "Disguise Kit";
-    if (/forgery\s*kit/i.test(clean)) return "Forgery Kit";
+    if (/disguise\s*kit/i.test(clean)) return 'Disguise Kit';
+    if (/forgery\s*kit/i.test(clean)) return 'Forgery Kit';
     return clean;
 }
 
 export function expandToolOptions(fromList) {
     const ARTISAN_TOOLS = [
-        "Alchemist's Supplies", "Brewer's Supplies", "Calligrapher's Supplies",
-        "Carpenter's Tools", "Cartographer's Tools", "Cobbler's Tools",
-        "Cook's Utensils", "Glassblower's Tools", "Jeweler's Tools",
-        "Leatherworker's Tools", "Mason's Tools", "Painter's Supplies",
-        "Potter's Tools", "Smith's Tools", "Tinker's Tools", "Weaver's Tools", "Woodcarver's Tools"
+        "Alchemist's Supplies",
+        "Brewer's Supplies",
+        "Calligrapher's Supplies",
+        "Carpenter's Tools",
+        "Cartographer's Tools",
+        "Cobbler's Tools",
+        "Cook's Utensils",
+        "Glassblower's Tools",
+        "Jeweler's Tools",
+        "Leatherworker's Tools",
+        "Mason's Tools",
+        "Painter's Supplies",
+        "Potter's Tools",
+        "Smith's Tools",
+        "Tinker's Tools",
+        "Weaver's Tools",
+        "Woodcarver's Tools"
     ];
-    const GAMING_SETS = ["Dice Set", "Dragonchess Set", "Playing Card Set", "Three-Dragon Ante Set"];
-    const MUSICAL_INSTRUMENTS = ["Bagpipes", "Drum", "Dulcimer", "Flute", "Lute", "Lyre", "Horn", "Pan Flute", "Shawm", "Viol"];
+    const GAMING_SETS = ['Dice Set', 'Dragonchess Set', 'Playing Card Set', 'Three-Dragon Ante Set'];
+    const MUSICAL_INSTRUMENTS = [
+        'Bagpipes',
+        'Drum',
+        'Dulcimer',
+        'Flute',
+        'Lute',
+        'Lyre',
+        'Horn',
+        'Pan Flute',
+        'Shawm',
+        'Viol'
+    ];
 
     const res = [];
-    (fromList || []).forEach(f => {
+    (fromList || []).forEach((f) => {
         if (/AnyArtisansTools?|Artisan's Tools/i.test(f)) {
             res.push(...ARTISAN_TOOLS);
         } else if (/AnyGamingSet|Gaming Set/i.test(f)) {
@@ -115,7 +139,14 @@ export function promptBackgroundImportModal(bgData, char, onCancel, onApplied) {
 
     const skillsData = bgData.skillsData || { fixed: [], choose: null };
     const toolsData = bgData.toolsData || { fixed: [], choose: null };
-    const equipData = bgData.equipmentData || { fixedItems: [], fixedGold: 0, choiceSets: [] };
+    let equipData = bgData.equipmentData;
+    const hasItems = equipData && ((Array.isArray(equipData.fixedItems) && equipData.fixedItems.length > 0) || equipData.fixedGold || (Array.isArray(equipData.choiceSets) && equipData.choiceSets.length > 0));
+    if (!hasItems && (bgData.equipment || bgData.startingEquipment)) {
+        equipData = parseEquipmentTextToData(bgData.equipment || bgData.startingEquipment);
+    }
+    if (!equipData) {
+        equipData = { fixedItems: [], fixedGold: 0, choiceSets: [] };
+    }
     const features = bgData.features || [];
 
     let descSnippet = '';
@@ -128,11 +159,15 @@ export function promptBackgroundImportModal(bgData, char, onCancel, onApplied) {
     }
 
     const fixedSkills = (skillsData.fixed || []).map(normalizeSkill);
-    const skillBadges = fixedSkills.map(s => `
+    const skillBadges = fixedSkills
+        .map(
+            (s) => `
         <span style="background:rgba(46,204,113,0.15); border:1px solid rgba(46,204,113,0.4); color:#2ecc71; padding:3px 8px; border-radius:4px; font-size:0.8rem; display:inline-flex; align-items:center; gap:5px;">
             <i class="fa-solid fa-check"></i> ${s}
         </span>
-    `).join('');
+    `
+        )
+        .join('');
 
     let chooseSkillHtml = '';
     if (skillsData.choose && Array.isArray(skillsData.choose.from)) {
@@ -144,12 +179,16 @@ export function promptBackgroundImportModal(bgData, char, onCancel, onApplied) {
                     Choose <strong style="color:var(--color-gold-base);">${count}</strong> skill${count > 1 ? 's' : ''}:
                 </div>
                 <div style="display:flex; flex-wrap:wrap; gap:6px;" class="bg-skill-choice-group" data-count="${count}">
-                    ${fromSkills.map((s, idx) => `
+                    ${fromSkills
+                .map(
+                    (s, idx) => `
                         <label style="display:inline-flex; align-items:center; gap:6px; font-size:0.8rem; cursor:pointer; background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); padding:4px 8px; border-radius:4px; margin:0;">
                             <input type="checkbox" class="bg-skill-choice-chk" value="${s}" ${idx < count ? 'checked' : ''} style="cursor:pointer; accent-color:var(--color-gold-base);">
                             <span>${s}</span>
                         </label>
-                    `).join('')}
+                    `
+                )
+                .join('')}
                 </div>
             </div>
         `;
@@ -168,11 +207,15 @@ export function promptBackgroundImportModal(bgData, char, onCancel, onApplied) {
     `;
 
     const fixedTools = (toolsData.fixed || []).map(normalizeTool);
-    const toolBadges = fixedTools.map(t => `
+    const toolBadges = fixedTools
+        .map(
+            (t) => `
         <span style="background:rgba(52,152,219,0.15); border:1px solid rgba(52,152,219,0.4); color:#3498db; padding:3px 8px; border-radius:4px; font-size:0.8rem; display:inline-flex; align-items:center; gap:5px;">
             <i class="fa-solid fa-wrench"></i> ${t}
         </span>
-    `).join('');
+    `
+        )
+        .join('');
 
     let chooseToolHtml = '';
     if (toolsData.choose && Array.isArray(toolsData.choose.from)) {
@@ -184,11 +227,15 @@ export function promptBackgroundImportModal(bgData, char, onCancel, onApplied) {
                     Choose <strong style="color:var(--color-gold-base);">${count}</strong> tool${count > 1 ? 's' : ''}:
                 </div>
                 <div style="display:flex; flex-direction:column; gap:6px;">
-                    ${Array.from({ length: count }).map((_, idx) => `
+                    ${Array.from({ length: count })
+                .map(
+                    (_, idx) => `
                         <select class="bg-tool-choice-sel" style="width:100%; padding:5px 8px; font-size:0.8rem; background:#222; color:#fff; border:1px solid var(--color-border-subtle); border-radius:4px;">
-                            ${expandedTools.map(t => `<option value="${t}">${t}</option>`).join('')}
+                            ${expandedTools.map((t) => `<option value="${t}">${t}</option>`).join('')}
                         </select>
-                    `).join('')}
+                    `
+                )
+                .join('')}
                 </div>
             </div>
         `;
@@ -211,19 +258,25 @@ export function promptBackgroundImportModal(bgData, char, onCancel, onApplied) {
     const choiceSets = equipData.choiceSets || [];
 
     let fixedEquipSummary = [];
-    fixedItems.forEach(it => {
+    fixedItems.forEach((it) => {
         fixedEquipSummary.push((it.quantity > 1 ? `${it.quantity}x ` : '') + (it.name || 'item'));
     });
     if (fixedGold > 0) fixedEquipSummary.push(`${fixedGold} gp`);
 
     let choiceSetsHtml = '';
     if (choiceSets.length > 0) {
-        choiceSetsHtml = choiceSets.map((set, si) => `
+        choiceSetsHtml = choiceSets
+            .map(
+                (set, si) => `
             <div style="margin-top:8px; display:flex; flex-direction:column; gap:6px;">
                 <div style="font-size:0.75rem; color:var(--color-text-muted);">Equipment Package:</div>
-                ${set.options.map((opt, oi) => {
-                    const optLabel = opt.label || (opt.items.map(it => (it.quantity > 1 ? `${it.quantity}x ` : '') + it.name).join(', ') + (opt.gold ? ` + ${opt.gold} gp` : ''));
-                    return `
+                ${set.options
+                        .map((opt, oi) => {
+                            const optLabel =
+                                opt.label ||
+                                opt.items.map((it) => (it.quantity > 1 ? `${it.quantity}x ` : '') + it.name).join(', ') +
+                                (opt.gold ? ` + ${opt.gold} gp` : '');
+                            return `
                         <label style="display:flex; align-items:flex-start; gap:8px; font-size:0.8rem; cursor:pointer; background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); padding:6px 10px; border-radius:4px; margin:0;">
                             <input type="radio" name="bg-equip-set-${si}" value="${oi}" ${oi === 0 ? 'checked' : ''} style="cursor:pointer; accent-color:var(--color-gold-base); margin-top:2px;">
                             <div style="flex:1;">
@@ -232,9 +285,12 @@ export function promptBackgroundImportModal(bgData, char, onCancel, onApplied) {
                             </div>
                         </label>
                     `;
-                }).join('')}
+                        })
+                        .join('')}
             </div>
-        `).join('');
+        `
+            )
+            .join('');
     }
 
     const equipHtml = `
@@ -242,11 +298,14 @@ export function promptBackgroundImportModal(bgData, char, onCancel, onApplied) {
             <div style="font-size:0.85rem; font-weight:600; color:var(--color-gold-base); margin-bottom:6px; display:flex; align-items:center; gap:6px;">
                 <i class="fa-solid fa-sack-dollar"></i> Starting Equipment & Gold
             </div>
-            ${fixedEquipSummary.length > 0 ? `
+            ${fixedEquipSummary.length > 0
+            ? `
                 <div style="font-size:0.8rem; color:var(--color-text-secondary); margin-bottom:6px;">
                     <strong>Standard Gear:</strong> ${fixedEquipSummary.join(', ')}
                 </div>
-            ` : ''}
+            `
+            : ''
+        }
             ${choiceSetsHtml}
 
             <div style="margin-top:10px; padding:8px 10px; background:rgba(0,0,0,0.35); border-radius:4px; border:1px solid rgba(255,255,255,0.05);">
@@ -265,7 +324,7 @@ export function promptBackgroundImportModal(bgData, char, onCancel, onApplied) {
         </div>
     `;
 
-    const featureNames = features.map(f => f.name).join(', ') || 'Background Feature';
+    const featureNames = features.map((f) => f.name).join(', ') || 'Background Feature';
     const cardsHtml = `
         <div style="background:rgba(0,0,0,0.25); border:1px solid var(--color-border-subtle); border-radius:6px; padding:10px 12px;">
             <div style="font-size:0.85rem; font-weight:600; color:var(--color-gold-base); margin-bottom:6px; display:flex; align-items:center; gap:6px;">
@@ -283,22 +342,22 @@ export function promptBackgroundImportModal(bgData, char, onCancel, onApplied) {
 
     bodyEl.innerHTML = descSnippet + skillsHtml + toolsHtml + equipHtml + cardsHtml;
 
-    bodyEl.querySelectorAll('.bg-skill-choice-group').forEach(group => {
+    bodyEl.querySelectorAll('.bg-skill-choice-group').forEach((group) => {
         const count = parseInt(group.dataset.count) || 1;
         const chks = group.querySelectorAll('.bg-skill-choice-chk');
         const updateSkillLimit = () => {
-            const checkedCount = Array.from(chks).filter(c => c.checked).length;
-            chks.forEach(c => {
+            const checkedCount = Array.from(chks).filter((c) => c.checked).length;
+            chks.forEach((c) => {
                 if (!c.checked) {
                     c.disabled = checkedCount >= count;
-                    c.parentElement.style.opacity = (checkedCount >= count) ? '0.5' : '1';
+                    c.parentElement.style.opacity = checkedCount >= count ? '0.5' : '1';
                 } else {
                     c.disabled = false;
                     c.parentElement.style.opacity = '1';
                 }
             });
         };
-        chks.forEach(c => c.addEventListener('change', updateSkillLimit));
+        chks.forEach((c) => c.addEventListener('change', updateSkillLimit));
         updateSkillLimit();
     });
 
@@ -307,18 +366,27 @@ export function promptBackgroundImportModal(bgData, char, onCancel, onApplied) {
         overlay.classList.add('vtt-hidden');
     };
 
-    document.getElementById('bg-import-modal-close').onclick = () => { closeModal(); if (onCancel) onCancel(); };
-    document.getElementById('bg-import-modal-cancel').onclick = () => { closeModal(); if (onCancel) onCancel(); };
-    overlay.onclick = () => { closeModal(); if (onCancel) onCancel(); };
+    document.getElementById('bg-import-modal-close').onclick = () => {
+        closeModal();
+        if (onCancel) onCancel();
+    };
+    document.getElementById('bg-import-modal-cancel').onclick = () => {
+        closeModal();
+        if (onCancel) onCancel();
+    };
+    overlay.onclick = () => {
+        closeModal();
+        if (onCancel) onCancel();
+    };
 
     document.getElementById('bg-import-modal-apply').onclick = () => {
         const selectedSkills = [...fixedSkills];
-        bodyEl.querySelectorAll('.bg-skill-choice-chk:checked').forEach(c => {
+        bodyEl.querySelectorAll('.bg-skill-choice-chk:checked').forEach((c) => {
             if (!selectedSkills.includes(c.value)) selectedSkills.push(c.value);
         });
 
         const selectedTools = [...fixedTools];
-        bodyEl.querySelectorAll('.bg-tool-choice-sel').forEach(s => {
+        bodyEl.querySelectorAll('.bg-tool-choice-sel').forEach((s) => {
             if (s.value && !selectedTools.includes(s.value)) selectedTools.push(s.value);
         });
 
@@ -329,7 +397,8 @@ export function promptBackgroundImportModal(bgData, char, onCancel, onApplied) {
         let totalGold = fixedGold;
 
         choiceSets.forEach((set, si) => {
-            const selectedOptIdx = parseInt(bodyEl.querySelector(`input[name="bg-equip-set-${si}"]:checked`)?.value) || 0;
+            const selectedOptIdx =
+                parseInt(bodyEl.querySelector(`input[name="bg-equip-set-${si}"]:checked`)?.value) || 0;
             const chosen = set.options[selectedOptIdx];
             if (chosen) {
                 if (chosen.items) finalEquipItems.push(...chosen.items);
@@ -356,10 +425,10 @@ export function promptBackgroundImportModal(bgData, char, onCancel, onApplied) {
 }
 
 export function switchModalTab(tabId) {
-    document.querySelectorAll('#tab-btn-manual, #tab-btn-import').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('#tab-btn-manual, #tab-btn-import').forEach((b) => b.classList.remove('active'));
     document.getElementById('modal-tab-manual')?.classList.add('vtt-hidden');
     document.getElementById('modal-tab-import')?.classList.add('vtt-hidden');
-    
+
     document.getElementById(`tab-btn-${tabId}`)?.classList.add('active');
     document.getElementById(`modal-tab-${tabId}`)?.classList.remove('vtt-hidden');
 }
@@ -369,7 +438,10 @@ export function getSuggestedCategoryName(currentCategory, features) {
         const classSel = document.getElementById('import-class-sel');
         const className = classSel ? classSel.value : '';
         const subSel = document.getElementById('import-subclass-sel');
-        const subName = subSel && subSel.value && subSel.value !== '__base__' ? subSel.options[subSel.selectedIndex]?.text.split('[')[0].trim() : '';
+        const subName =
+            subSel && subSel.value && subSel.value !== '__base__'
+                ? subSel.options[subSel.selectedIndex]?.text.split('[')[0].trim()
+                : '';
 
         if (features && features.length === 1 && features[0].subclassShortName) {
             return `Subclass - ${subName || features[0].subclassShortName}`;
@@ -381,10 +453,10 @@ export function getSuggestedCategoryName(currentCategory, features) {
     }
     if (currentCategory === 'feat') return 'Feats';
     if (currentCategory === 'race') {
-        return (features && features.length === 1) ? `Species - ${features[0].name}` : 'Species Traits';
+        return features && features.length === 1 ? `Species - ${features[0].name}` : 'Species Traits';
     }
     if (currentCategory === 'background') {
-        return (features && features.length === 1) ? `Background - ${features[0].name}` : 'Background Features';
+        return features && features.length === 1 ? `Background - ${features[0].name}` : 'Background Features';
     }
     if (currentCategory === 'charoption') return 'Character Options';
     if (currentCategory === 'optionalfeature') {
@@ -406,14 +478,14 @@ export function populateOptFeatureTypeDropdown(data) {
     const sel = document.getElementById('import-optfeat-type-sel');
     if (!sel) return;
     const typeCounts = new Map();
-    (data || []).forEach(f => {
+    (data || []).forEach((f) => {
         const cat = f.featureCategory || f.featureTypeName || 'Other';
         typeCounts.set(cat, (typeCounts.get(cat) || 0) + 1);
     });
 
     let opts = '<option value="">-- All Feature Types --</option>';
     const sortedTypes = Array.from(typeCounts.keys()).sort((a, b) => a.localeCompare(b));
-    sortedTypes.forEach(t => {
+    sortedTypes.forEach((t) => {
         opts += `<option value="${t}">${t} (${typeCounts.get(t)})</option>`;
     });
     sel.innerHTML = opts;

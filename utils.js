@@ -48,20 +48,26 @@ export function createCampaignTemplate(id, name) {
 
 import crypto from 'crypto';
 
+export const PBKDF2_ITERATIONS = 600000;
+export const PBKDF2_LEGACY_ITERATIONS = 1000;
+
 /**
- * Hashes a password with a salt.
+ * Hashes a password with a salt using PBKDF2-HMAC-SHA256 (600,000 iterations).
  * @param {string} password
  * @param {string} [salt]
+ * @param {number} [iterations=PBKDF2_ITERATIONS]
  * @returns {{ hash: string, salt: string }}
  */
-export function hashPassword(password, salt = null) {
+export function hashPassword(password, salt = null, iterations = PBKDF2_ITERATIONS) {
   const generatedSalt = salt || crypto.randomBytes(16).toString('hex');
-  const hash = crypto.pbkdf2Sync(password, generatedSalt, 1000, 64, 'sha256').toString('hex');
+  const hash = crypto.pbkdf2Sync(password, generatedSalt, iterations, 64, 'sha256').toString('hex');
   return { hash, salt: generatedSalt };
 }
 
 /**
  * Verifies a password against a salt and hash.
+ * Tests 600,000 iterations first (OWASP standard), falling back to 1,000 iterations
+ * for backward compatibility with legacy password hashes.
  * @param {string} password
  * @param {string} salt
  * @param {string} hash
@@ -69,8 +75,13 @@ export function hashPassword(password, salt = null) {
  */
 export function verifyPassword(password, salt, hash) {
   if (!password || !salt || !hash) return false;
-  const computed = crypto.pbkdf2Sync(password, salt, 1000, 64, 'sha256').toString('hex');
-  return computed === hash;
+  // 1. Try modern 600,000 iterations
+  const computedModern = crypto.pbkdf2Sync(password, salt, PBKDF2_ITERATIONS, 64, 'sha256').toString('hex');
+  if (computedModern === hash) return true;
+
+  // 2. Fall back to legacy 1,000 iterations for backward compatibility
+  const computedLegacy = crypto.pbkdf2Sync(password, salt, PBKDF2_LEGACY_ITERATIONS, 64, 'sha256').toString('hex');
+  return computedLegacy === hash;
 }
 
 /**

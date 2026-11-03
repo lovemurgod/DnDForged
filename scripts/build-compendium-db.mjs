@@ -9,16 +9,20 @@ const rootDir = path.join(__dirname, '..');
 
 const isSrdOnly = process.argv.includes('--srd-only');
 const outArgIdx = process.argv.indexOf('--out');
-const targetDataDir = outArgIdx !== -1 && process.argv[outArgIdx + 1]
-    ? path.resolve(rootDir, process.argv[outArgIdx + 1])
-    : path.join(rootDir, '5etools-src', 'data');
+const targetDataDir =
+    outArgIdx !== -1 && process.argv[outArgIdx + 1]
+        ? path.resolve(rootDir, process.argv[outArgIdx + 1])
+        : path.join(rootDir, '5etools-src', 'data');
 
 const dataDir = path.join(rootDir, '5etools-src', 'data');
 
 function cleanTags(text) {
     if (!text || typeof text !== 'string') return '';
     return text
-        .replace(/\{@(?:spell|item|creature|condition|sense|skill|action|background|race|class|feat|table|hazard)\s+([^}|]+)(?:\|[^}]*)?\}/gi, '$1')
+        .replace(
+            /\{@(?:spell|item|creature|condition|sense|skill|action|background|race|class|feat|table|hazard)\s+([^}|]+)(?:\|[^}]*)?\}/gi,
+            '$1'
+        )
         .replace(/\{@(?:dice|damage|d20)\s+([^}|]+)(?:\|[^}]*)?\}/gi, '$1')
         .replace(/\{@b\s+([^}]+)\}/gi, '<strong>$1</strong>')
         .replace(/\{@i\s+([^}]+)\}/gi, '<em>$1</em>')
@@ -33,7 +37,10 @@ function cleanTags(text) {
 function cleanTagsPlain(text) {
     if (!text || typeof text !== 'string') return '';
     return text
-        .replace(/\{@(?:spell|item|creature|condition|sense|skill|action|background|race|class|feat|table|hazard)\s+([^}|]+)(?:\|[^}]*)?\}/gi, '$1')
+        .replace(
+            /\{@(?:spell|item|creature|condition|sense|skill|action|background|race|class|feat|table|hazard)\s+([^}|]+)(?:\|[^}]*)?\}/gi,
+            '$1'
+        )
         .replace(/\{@(?:dice|damage|d20)\s+([^}|]+)(?:\|[^}]*)?\}/gi, '$1')
         .replace(/\{@b\s+([^}]+)\}/gi, '$1')
         .replace(/\{@i\s+([^}]+)\}/gi, '$1')
@@ -49,11 +56,14 @@ function renderEntriesToText(entries) {
     if (!entries) return '';
     if (typeof entries === 'string') return cleanTagsPlain(entries);
     if (Array.isArray(entries)) {
-        return entries.map(e => renderEntriesToText(e)).filter(Boolean).join('\n\n');
+        return entries
+            .map((e) => renderEntriesToText(e))
+            .filter(Boolean)
+            .join('\n\n');
     }
     if (typeof entries === 'object' && entries !== null) {
         if (entries.type === 'list' && Array.isArray(entries.items)) {
-            return entries.items.map(it => '- ' + renderEntriesToText(it)).join('\n');
+            return entries.items.map((it) => '- ' + renderEntriesToText(it)).join('\n');
         }
         let txt = entries.name ? `**${cleanTagsPlain(entries.name)}**` : '';
         if (entries.entry) txt += (txt ? ' ' : '') + renderEntriesToText(entries.entry);
@@ -76,17 +86,23 @@ function renderEntriesToHtml(entries) {
                 const subText = entry.entries ? renderEntriesToHtml(entry.entries) : '';
                 parts.push(`<div class="compendium-subentry">${title}${subText}</div>`);
             } else if (entry.type === 'list' && Array.isArray(entry.items)) {
-                const lis = entry.items.map(it => `<li>${typeof it === 'string' ? cleanTags(it) : renderEntriesToHtml([it])}</li>`).join('');
+                const lis = entry.items
+                    .map((it) => `<li>${typeof it === 'string' ? cleanTags(it) : renderEntriesToHtml([it])}</li>`)
+                    .join('');
                 parts.push(`<ul>${lis}</ul>`);
             } else if (entry.type === 'table' && Array.isArray(entry.rows)) {
                 let ths = '';
                 if (Array.isArray(entry.colLabels)) {
-                    ths = `<tr>${entry.colLabels.map(l => `<th>${cleanTags(l)}</th>`).join('')}</tr>`;
+                    ths = `<tr>${entry.colLabels.map((l) => `<th>${cleanTags(l)}</th>`).join('')}</tr>`;
                 }
-                const trs = entry.rows.map(row => {
-                    const tds = Array.isArray(row) ? row.map(cell => `<td>${cleanTags(cell)}</td>`).join('') : `<td>${cleanTags(row)}</td>`;
-                    return `<tr>${tds}</tr>`;
-                }).join('');
+                const trs = entry.rows
+                    .map((row) => {
+                        const tds = Array.isArray(row)
+                            ? row.map((cell) => `<td>${cleanTags(cell)}</td>`).join('')
+                            : `<td>${cleanTags(row)}</td>`;
+                        return `<tr>${tds}</tr>`;
+                    })
+                    .join('');
                 parts.push(`<table class="compendium-table"><thead>${ths}</thead><tbody>${trs}</tbody></table>`);
             }
         }
@@ -110,9 +126,20 @@ function extractPlainText(entries) {
 
 function detectActionType(text, featureName) {
     const lower = (featureName + ' ' + text).toLowerCase();
-    if (lower.match(/(?:as a|using a|with your|as your|with a)\s+bonus action/i) || lower.match(/\bbonus action:/i) || lower.includes('second wind')) return 'bonus';
-    if (lower.match(/(?:as a|using a|with your|as your|with a)\s+reaction/i) || lower.match(/\breaction:/i)) return 'reaction';
-    if (lower.match(/(?:as an|take an|using an|as a magic|take the magic)\s+action/i) || lower.match(/\baction:/i) || lower.includes('present your holy symbol')) return 'action';
+    if (
+        lower.match(/(?:as a|using a|with your|as your|with a)\s+bonus action/i) ||
+        lower.match(/\bbonus action:/i) ||
+        lower.includes('second wind')
+    )
+        return 'bonus';
+    if (lower.match(/(?:as a|using a|with your|as your|with a)\s+reaction/i) || lower.match(/\breaction:/i))
+        return 'reaction';
+    if (
+        lower.match(/(?:as an|take an|using an|as a magic|take the magic)\s+action/i) ||
+        lower.match(/\baction:/i) ||
+        lower.includes('present your holy symbol')
+    )
+        return 'action';
     return 'passive';
 }
 
@@ -150,18 +177,20 @@ function detectFormula(entries, featureName, className, level) {
     }
 
     // 3. Regex for: (dice) + (your <className> level | your level)
-    const classLvlRegex = /(?:\{@(?:dice|damage)\s+([0-9]+d[0-9]+)\}|([0-9]+d[0-9]+))\s*(?:\+|plus)\s*(?:your\s+)?([a-zA-Z]+)?\s*level/i;
+    const classLvlRegex =
+        /(?:\{@(?:dice|damage)\s+([0-9]+d[0-9]+)\}|([0-9]+d[0-9]+))\s*(?:\+|plus)\s*(?:your\s+)?([a-zA-Z]+)?\s*level/i;
     const matchCls = combined.match(classLvlRegex);
     if (matchCls) {
         const dice = matchCls[1] || matchCls[2];
         const specifiedClass = matchCls[3] ? matchCls[3].trim() : '';
-        const targetClass = (specifiedClass && specifiedClass.toLowerCase() !== 'character') 
-            ? specifiedClass.charAt(0).toUpperCase() + specifiedClass.slice(1).toLowerCase() 
-            : (className || '');
-        
+        const targetClass =
+            specifiedClass && specifiedClass.toLowerCase() !== 'character'
+                ? specifiedClass.charAt(0).toUpperCase() + specifiedClass.slice(1).toLowerCase()
+                : className || '';
+
         const isTotalLevel = !specifiedClass || specifiedClass.toLowerCase() === 'character' || !targetClass;
         const modKey = isTotalLevel ? '@level' : `@classes.${cleanId(targetClass)}.level`;
-        
+
         return {
             formula: `${dice} + ${modKey}`,
             formulaConfig: {
@@ -174,11 +203,19 @@ function detectFormula(entries, featureName, className, level) {
     }
 
     // 4. Regex for: (dice) + (your <ability> modifier)
-    const abModRegex = /(?:\{@(?:dice|damage)\s+([0-9]+d[0-9]+)\}|([0-9]+d[0-9]+))\s*(?:\+|plus)\s*(?:your\s+)?(strength|dexterity|constitution|intelligence|wisdom|charisma)\s*modifier/i;
+    const abModRegex =
+        /(?:\{@(?:dice|damage)\s+([0-9]+d[0-9]+)\}|([0-9]+d[0-9]+))\s*(?:\+|plus)\s*(?:your\s+)?(strength|dexterity|constitution|intelligence|wisdom|charisma)\s*modifier/i;
     const matchAb = combined.match(abModRegex);
     if (matchAb) {
         const dice = matchAb[1] || matchAb[2];
-        const abMap = { strength: 'STR', dexterity: 'DEX', constitution: 'CON', intelligence: 'INT', wisdom: 'WIS', charisma: 'CHA' };
+        const abMap = {
+            strength: 'STR',
+            dexterity: 'DEX',
+            constitution: 'CON',
+            intelligence: 'INT',
+            wisdom: 'WIS',
+            charisma: 'CHA'
+        };
         const stat = abMap[matchAb[3].toLowerCase()] || 'STR';
         return {
             formula: `${dice} + @${stat.toLowerCase()}`,
@@ -192,7 +229,8 @@ function detectFormula(entries, featureName, className, level) {
     }
 
     // 5. Regex for: (dice) + (your proficiency bonus | PB)
-    const pbRegex = /(?:\{@(?:dice|damage)\s+([0-9]+d[0-9]+)\}|([0-9]+d[0-9]+))\s*(?:\+|plus)\s*(?:your\s+)?proficiency\s*bonus/i;
+    const pbRegex =
+        /(?:\{@(?:dice|damage)\s+([0-9]+d[0-9]+)\}|([0-9]+d[0-9]+))\s*(?:\+|plus)\s*(?:your\s+)?proficiency\s*bonus/i;
     const matchPb = combined.match(pbRegex);
     if (matchPb) {
         const dice = matchPb[1] || matchPb[2];
@@ -229,13 +267,13 @@ function detectFormula(entries, featureName, className, level) {
 
 function detectCounter(text, featureName, level) {
     const lower = (featureName + ' ' + text).toLowerCase();
-    
+
     // Specific known class/subclass features
     if (featureName === 'Action Surge') {
-        return { hasCounter: true, usesMax: (level >= 17 ? 2 : 1), resetType: 'short' };
+        return { hasCounter: true, usesMax: level >= 17 ? 2 : 1, resetType: 'short' };
     }
     if (featureName === 'Second Wind') {
-        return { hasCounter: true, usesMax: (level >= 10 ? 3 : (level >= 4 ? 2 : 1)), resetType: 'short' };
+        return { hasCounter: true, usesMax: level >= 10 ? 3 : level >= 4 ? 2 : 1, resetType: 'short' };
     }
     if (featureName === 'Rage') {
         let rUses = 2;
@@ -251,14 +289,18 @@ function detectCounter(text, featureName, level) {
         else if (level >= 13) iUses = 2;
         return { hasCounter: true, usesMax: iUses, resetType: 'long' };
     }
-    if (featureName === 'Channel Divinity' || featureName.startsWith('Channel Divinity:') || lower.includes('use your channel divinity')) {
+    if (
+        featureName === 'Channel Divinity' ||
+        featureName.startsWith('Channel Divinity:') ||
+        lower.includes('use your channel divinity')
+    ) {
         let cdUses = 1;
         if (level >= 18) cdUses = 3;
         else if (level >= 6) cdUses = 2;
         return { hasCounter: true, usesMax: cdUses, resetType: 'short' };
     }
     if (featureName === 'Bardic Inspiration') {
-        return { hasCounter: true, usesMax: 'CHA', resetType: (level >= 5 ? 'short' : 'long') };
+        return { hasCounter: true, usesMax: 'CHA', resetType: level >= 5 ? 'short' : 'long' };
     }
     if (featureName === 'Combat Superiority' || featureName === 'Superiority Dice') {
         let sDice = 4;
@@ -280,44 +322,81 @@ function detectCounter(text, featureName, level) {
     }
 
     // General 5e phrasing heuristics
-    if (lower.match(/(?:finish|complete) a (?:short or long|short) rest before you can use (?:it|this (?:feature|trait|action)) again/)) {
+    if (
+        lower.match(
+            /(?:finish|complete) a (?:short or long|short) rest before you can use (?:it|this (?:feature|trait|action)) again/
+        )
+    ) {
         return { hasCounter: true, usesMax: 1, resetType: 'short' };
     }
     if (lower.match(/(?:finish|complete) a long rest before you can use (?:it|this (?:feature|trait|action)) again/)) {
         return { hasCounter: true, usesMax: 1, resetType: 'long' };
     }
-    if (lower.match(/once you use this (?:feature|trait|action), you can't (?:do so|use it) again until you finish a (?:short or long|short) rest/)) {
+    if (
+        lower.match(
+            /once you use this (?:feature|trait|action), you can't (?:do so|use it) again until you finish a (?:short or long|short) rest/
+        )
+    ) {
         return { hasCounter: true, usesMax: 1, resetType: 'short' };
     }
-    if (lower.match(/once you use this (?:feature|trait|action), you can't (?:do so|use it) again until you finish a long rest/)) {
+    if (
+        lower.match(
+            /once you use this (?:feature|trait|action), you can't (?:do so|use it) again until you finish a long rest/
+        )
+    ) {
         return { hasCounter: true, usesMax: 1, resetType: 'long' };
     }
 
     // Proficiency bonus times per rest
-    const pbMatch = lower.match(/(?:number of times equal to|equal to) your proficiency bonus.*?regain (?:all|any) expended uses (?:when you finish|after) a (short or long|long|short) rest/);
+    const pbMatch = lower.match(
+        /(?:number of times equal to|equal to) your proficiency bonus.*?regain (?:all|any) expended uses (?:when you finish|after) a (short or long|long|short) rest/
+    );
     if (pbMatch) {
         return { hasCounter: true, usesMax: 'PB', resetType: pbMatch[1].includes('short') ? 'short' : 'long' };
     }
 
     // Ability modifier times per rest
-    const modMatch = lower.match(/(?:number of times equal to|equal to) your (charisma|wisdom|intelligence|constitution|dexterity|strength) modifier.*?regain (?:all|any) expended uses (?:when you finish|after) a (short or long|long|short) rest/);
+    const modMatch = lower.match(
+        /(?:number of times equal to|equal to) your (charisma|wisdom|intelligence|constitution|dexterity|strength) modifier.*?regain (?:all|any) expended uses (?:when you finish|after) a (short or long|long|short) rest/
+    );
     if (modMatch) {
-        const modMap = { charisma: 'CHA', wisdom: 'WIS', intelligence: 'INT', constitution: 'CON', dexterity: 'DEX', strength: 'STR' };
-        return { hasCounter: true, usesMax: modMap[modMatch[1]], resetType: modMatch[2].includes('short') ? 'short' : 'long' };
+        const modMap = {
+            charisma: 'CHA',
+            wisdom: 'WIS',
+            intelligence: 'INT',
+            constitution: 'CON',
+            dexterity: 'DEX',
+            strength: 'STR'
+        };
+        return {
+            hasCounter: true,
+            usesMax: modMap[modMatch[1]],
+            resetType: modMatch[2].includes('short') ? 'short' : 'long'
+        };
     }
 
     // Number of times per rest
-    const numMatch = lower.match(/you can use this feature (twice|three times|four times).*?regain.*?(short or long|long|short) rest/);
+    const numMatch = lower.match(
+        /you can use this feature (twice|three times|four times).*?regain.*?(short or long|long|short) rest/
+    );
     if (numMatch) {
         const countMap = { twice: 2, 'three times': 3, 'four times': 4 };
-        return { hasCounter: true, usesMax: countMap[numMatch[1]] || 2, resetType: numMatch[2].includes('short') ? 'short' : 'long' };
+        return {
+            hasCounter: true,
+            usesMax: countMap[numMatch[1]] || 2,
+            resetType: numMatch[2].includes('short') ? 'short' : 'long'
+        };
     }
 
     return { hasCounter: false, usesMax: null, resetType: null };
 }
 
 function cleanId(str) {
-    return (str || '').toLowerCase().replace(/[^a-z0-9]/g, '_').replace(/_+/g, '_').replace(/^_|_$/g, '');
+    return (str || '')
+        .toLowerCase()
+        .replace(/[^a-z0-9]/g, '_')
+        .replace(/_+/g, '_')
+        .replace(/^_|_$/g, '');
 }
 
 // ─── 1. Races / Species Trait Unpacking ───────────────────────────────────────
@@ -329,13 +408,13 @@ function getRaceEntries(r, allRaces, visited = new Set()) {
 
     if (r.entries && r.entries.length > 0) return JSON.parse(JSON.stringify(r.entries));
     if (r._copy) {
-        const base = allRaces.find(x => x.name === r._copy.name && (!r._copy.source || x.source === r._copy.source));
+        const base = allRaces.find((x) => x.name === r._copy.name && (!r._copy.source || x.source === r._copy.source));
         if (base && base !== r) {
             let entries = getRaceEntries(base, allRaces, visited);
             if (r._copy._mod && Array.isArray(r._copy._mod.entries)) {
                 for (const mod of r._copy._mod.entries) {
                     if (mod.mode === 'replaceArr' && mod.replace && mod.items) {
-                        const idx = entries.findIndex(e => e && e.name === mod.replace);
+                        const idx = entries.findIndex((e) => e && e.name === mod.replace);
                         if (idx !== -1) entries[idx] = mod.items;
                         else entries.push(mod.items);
                     } else if (mod.mode === 'appendArr' && mod.items) {
@@ -358,13 +437,15 @@ function getSubraceEntries(s, allSubraces, visited = new Set()) {
 
     if (s.entries && s.entries.length > 0) return JSON.parse(JSON.stringify(s.entries));
     if (s._copy) {
-        const base = allSubraces.find(x => x.name === s._copy.name && (!s._copy.source || x.source === s._copy.source));
+        const base = allSubraces.find(
+            (x) => x.name === s._copy.name && (!s._copy.source || x.source === s._copy.source)
+        );
         if (base && base !== s) {
             let entries = getSubraceEntries(base, allSubraces, visited);
             if (s._copy._mod && Array.isArray(s._copy._mod.entries)) {
                 for (const mod of s._copy._mod.entries) {
                     if (mod.mode === 'replaceArr' && mod.replace && mod.items) {
-                        const idx = entries.findIndex(e => e && e.name === mod.replace);
+                        const idx = entries.findIndex((e) => e && e.name === mod.replace);
                         if (idx !== -1) entries[idx] = mod.items;
                         else entries.push(mod.items);
                     } else if (mod.mode === 'appendArr' && mod.items) {
@@ -509,7 +590,9 @@ function parseSenses(sensesRaw, traits, entries) {
         const title = (item.name || '').toLowerCase();
         const text = renderEntriesToText(item.entries || item.rawEntries || item.description || item).toLowerCase();
         if (title.includes('darkvision') || text.includes('darkvision')) {
-            const m = text.match(/darkvision(?:.*?to a distance of| of)?\s*(\d+)\s*ft/i) || text.match(/within\s*(\d+)\s*feet.*?dark/i);
+            const m =
+                text.match(/darkvision(?:.*?to a distance of| of)?\s*(\d+)\s*ft/i) ||
+                text.match(/within\s*(\d+)\s*feet.*?dark/i);
             if (m) {
                 res.darkvision = Math.max(res.darkvision, parseInt(m[1]) || 60);
             } else if (title.includes('superior darkvision')) {
@@ -553,17 +636,19 @@ function buildRaces() {
 
         const { traits, generalDesc } = unpackRaceTraits(r, rawList);
         r.traits = traits;
-        r.description = generalDesc || traits.map(t => `**${t.name}**: ${t.description}`).join('\n\n');
+        r.description = generalDesc || traits.map((t) => `**${t.name}**: ${t.description}`).join('\n\n');
 
         const key = `${name.toLowerCase()}|${source.toLowerCase()}`;
         if (!seen.has(key)) {
             seen.add(key);
 
-            const size = Array.isArray(r.size) ? r.size.join('/') : (r.size || 'Medium');
+            const size = Array.isArray(r.size) ? r.size.join('/') : r.size || 'Medium';
             let speed = '30 ft';
             if (typeof r.speed === 'number') speed = `${r.speed} ft`;
             else if (typeof r.speed === 'object' && r.speed !== null) {
-                speed = Object.entries(r.speed).map(([k, v]) => `${k !== 'walk' ? k + ' ' : ''}${v} ft`).join(', ');
+                speed = Object.entries(r.speed)
+                    .map(([k, v]) => `${k !== 'walk' ? k + ' ' : ''}${v} ft`)
+                    .join(', ');
             }
             const speeds = parseSpeeds(r.speed, null);
             const senses = parseSenses(r.senses, traits, r.entries);
@@ -596,20 +681,25 @@ function buildRaces() {
             if (!isSrd) continue;
         }
 
-        const subName = (s.name || '').trim();
+        const rawSubName = (s.name || '').trim();
+        const subName = rawSubName.replace(/^variant;\s*/i, '').trim();
         const raceName = (s.raceName || '').trim();
         const source = (s.source || 'PHB').trim();
         if (!subName || !raceName) continue;
 
-        const baseRace = rawList.find(x => x.name.toLowerCase() === raceName.toLowerCase() && (!s.raceSource || x.source.toLowerCase() === s.raceSource.toLowerCase()));
+        const baseRace = rawList.find(
+            (x) =>
+                x.name.toLowerCase() === raceName.toLowerCase() &&
+                (!s.raceSource || x.source.toLowerCase() === s.raceSource.toLowerCase())
+        );
         const baseTraits = baseRace?.traits || [];
 
         const { traits: subTraits, generalDesc: subDesc } = unpackSubraceTraits(s, rawSubList);
-        
+
         // Merge base traits and subrace traits (avoid duplicate trait names)
         const combinedTraits = [...baseTraits];
         for (const st of subTraits) {
-            const existingIdx = combinedTraits.findIndex(t => t.name.toLowerCase() === st.name.toLowerCase());
+            const existingIdx = combinedTraits.findIndex((t) => t.name.toLowerCase() === st.name.toLowerCase());
             if (existingIdx !== -1) {
                 combinedTraits[existingIdx] = st;
             } else {
@@ -618,18 +708,20 @@ function buildRaces() {
         }
 
         s.traits = combinedTraits;
-        s.description = subDesc || combinedTraits.map(t => `**${t.name}**: ${t.description}`).join('\n\n');
+        s.description = subDesc || combinedTraits.map((t) => `**${t.name}**: ${t.description}`).join('\n\n');
 
         const displayName = `${raceName} (${subName})`;
         const key = `${displayName.toLowerCase()}|${source.toLowerCase()}`;
         if (!seen.has(key)) {
             seen.add(key);
 
-            const size = Array.isArray(s.size) ? s.size.join('/') : (s.size || baseRace?.size || 'Medium');
+            const size = Array.isArray(s.size) ? s.size.join('/') : s.size || baseRace?.size || 'Medium';
             let speed = '30 ft';
             if (typeof s.speed === 'number') speed = `${s.speed} ft`;
             else if (typeof s.speed === 'object' && s.speed !== null) {
-                speed = Object.entries(s.speed).map(([k, v]) => `${k !== 'walk' ? k + ' ' : ''}${v} ft`).join(', ');
+                speed = Object.entries(s.speed)
+                    .map(([k, v]) => `${k !== 'walk' ? k + ' ' : ''}${v} ft`)
+                    .join(', ');
             } else if (baseRace?.speed) {
                 speed = typeof baseRace.speed === 'number' ? `${baseRace.speed} ft` : '30 ft';
             }
@@ -666,14 +758,14 @@ function buildRaces() {
     if (!fs.existsSync(targetDataDir)) {
         fs.mkdirSync(targetDataDir, { recursive: true });
     }
-    const catalog = allRaces.map(r => ({ 
-        id: r.id, 
-        name: r.name, 
+    const catalog = allRaces.map((r) => ({
+        id: r.id,
+        name: r.name,
         raceName: r.raceName || r.name,
         subraceName: r.subraceName || null,
-        source: r.source, 
-        page: r.page, 
-        size: r.size, 
+        source: r.source,
+        page: r.page,
+        size: r.size,
         speed: r.speed,
         speeds: r.speeds,
         senses: r.senses,
@@ -696,7 +788,9 @@ function buildRaces() {
     for (const [srcKey, list] of grouped.entries()) {
         fs.writeFileSync(path.join(partDir, `races-${srcKey}.json`), JSON.stringify(list, null, 2), 'utf8');
     }
-    console.log(`✅ Races catalog: ${catalog.length} entries (with ${catalog.reduce((acc, r) => acc + (r.traits?.length || 0), 0)} pre-unpacked traits) across ${grouped.size} partitions.`);
+    console.log(
+        `✅ Races catalog: ${catalog.length} entries (with ${catalog.reduce((acc, r) => acc + (r.traits?.length || 0), 0)} pre-unpacked traits) across ${grouped.size} partitions.`
+    );
 }
 
 // ─── 2. Feats ─────────────────────────────────────────────────────────────────
@@ -756,7 +850,10 @@ function buildFeats() {
             }
         }
 
-        if (name.toLowerCase() === 'resilient' || desc.toLowerCase().includes('saving throw proficiency with the chosen ability')) {
+        if (
+            name.toLowerCase() === 'resilient' ||
+            desc.toLowerCase().includes('saving throw proficiency with the chosen ability')
+        ) {
             linkedSaveProficiency = true;
         }
 
@@ -774,15 +871,33 @@ function buildFeats() {
 
         let prereq = 'None';
         if (Array.isArray(f.prerequisite)) {
-            prereq = f.prerequisite.map(p => {
-                const parts = [];
-                if (p.level) parts.push(`Level ${p.level.level || p.level}`);
-                if (p.ability) parts.push(...p.ability.map(a => Object.entries(a).map(([k, v]) => `${k.toUpperCase()} ${v}`).join(' or ')));
-                if (p.spellcasting) parts.push('Spellcasting ability');
-                if (p.proficiency) parts.push(...p.proficiency.map(pr => Object.entries(pr).map(([k, v]) => `${v} proficiency`).join(' ')));
-                if (p.race) parts.push(p.race.map(rc => rc.name).join(' or '));
-                return parts.join(', ');
-            }).filter(Boolean).join('; ') || 'None';
+            prereq =
+                f.prerequisite
+                    .map((p) => {
+                        const parts = [];
+                        if (p.level) parts.push(`Level ${p.level.level || p.level}`);
+                        if (p.ability)
+                            parts.push(
+                                ...p.ability.map((a) =>
+                                    Object.entries(a)
+                                        .map(([k, v]) => `${k.toUpperCase()} ${v}`)
+                                        .join(' or ')
+                                )
+                            );
+                        if (p.spellcasting) parts.push('Spellcasting ability');
+                        if (p.proficiency)
+                            parts.push(
+                                ...p.proficiency.map((pr) =>
+                                    Object.entries(pr)
+                                        .map(([k, v]) => `${v} proficiency`)
+                                        .join(' ')
+                                )
+                            );
+                        if (p.race) parts.push(p.race.map((rc) => rc.name).join(' or '));
+                        return parts.join(', ');
+                    })
+                    .filter(Boolean)
+                    .join('; ') || 'None';
         }
 
         const entriesHtml = renderEntriesToHtml(f.entries || []);
@@ -812,11 +927,11 @@ function buildFeats() {
     allFeats.sort((a, b) => a.name.localeCompare(b.name));
 
     // Catalog with descriptions & pre-computed mechanics
-    const catalog = allFeats.map(f => ({ 
-        id: f.id, 
-        name: f.name, 
-        source: f.source, 
-        page: f.page, 
+    const catalog = allFeats.map((f) => ({
+        id: f.id,
+        name: f.name,
+        source: f.source,
+        page: f.page,
         prerequisite: f.prerequisite,
         description: f.description,
         actionType: f.actionType,
@@ -859,7 +974,7 @@ function parseBackgroundSkills(b) {
                 if (sp.choose) {
                     choose = {
                         count: sp.choose.count || 1,
-                        from: (sp.choose.from || []).map(s => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase())
+                        from: (sp.choose.from || []).map((s) => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase())
                     };
                 }
                 for (const [k, v] of Object.entries(sp)) {
@@ -877,7 +992,7 @@ function formatToolName(str) {
     if (!str) return '';
     return str
         .split(' ')
-        .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+        .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
         .join(' ')
         .replace(/Tool(s?)\b/gi, 'Tools')
         .replace(/Supplie(s?)\b/gi, 'Supplies')
@@ -902,10 +1017,13 @@ function parseBackgroundTools(b) {
                     if (k !== 'choose' && v === true) {
                         fixed.push(formatToolName(k));
                     } else if (k.startsWith('any')) {
-                        const label = k === 'anyMusicalInstrument' ? 'Musical Instrument of your choice'
-                            : (k === 'anyArtisansTool' ? 'Artisan\'s Tools of your choice'
-                            : formatToolName(k));
-                        choose = choose || { count: v === true ? 1 : (v || 1), from: [label] };
+                        const label =
+                            k === 'anyMusicalInstrument'
+                                ? 'Musical Instrument of your choice'
+                                : k === 'anyArtisansTool'
+                                    ? "Artisan's Tools of your choice"
+                                    : formatToolName(k);
+                        choose = choose || { count: v === true ? 1 : v || 1, from: [label] };
                     }
                 }
             }
@@ -916,7 +1034,10 @@ function parseBackgroundTools(b) {
 
 function cleanItemName(str) {
     if (!str) return '';
-    return str.replace(/\|[^}]+$/g, '').replace(/\{@item\s+([^}|]+)(?:\|[^}]*)?\}/gi, '$1').trim();
+    return str
+        .replace(/\|[^}]+$/g, '')
+        .replace(/\{@item\s+([^}|]+)(?:\|[^}]*)?\}/gi, '$1')
+        .trim();
 }
 
 function parseItemEntry(entry) {
@@ -974,8 +1095,8 @@ function parseBackgroundEquipment(b) {
                     }
                 }
             }
-            
-            const optKeys = Object.keys(group).filter(k => k !== '_' && k.length <= 2);
+
+            const optKeys = Object.keys(group).filter((k) => k !== '_' && k.length <= 2);
             if (optKeys.length > 0) {
                 const options = [];
                 for (const k of optKeys) {
@@ -992,9 +1113,11 @@ function parseBackgroundEquipment(b) {
                             }
                         }
                     }
-                    const label = items.length > 0 
-                        ? items.map(i => (i.quantity > 1 ? `${i.quantity}x ` : '') + i.name).join(', ') + (gold > 0 ? ` + ${gold} gp` : '')
-                        : `${gold} gp`;
+                    const label =
+                        items.length > 0
+                            ? items.map((i) => (i.quantity > 1 ? `${i.quantity}x ` : '') + i.name).join(', ') +
+                            (gold > 0 ? ` + ${gold} gp` : '')
+                            : `${gold} gp`;
                     options.push({ key: k.toUpperCase(), label, items, gold });
                 }
                 choiceSets.push({ options });
@@ -1011,7 +1134,8 @@ function extractBackgroundFeatures(b) {
 
     for (const entry of b.entries) {
         if (typeof entry === 'object' && entry !== null && entry.name) {
-            const isFeat = (entry.data && entry.data.isFeature) ||
+            const isFeat =
+                (entry.data && entry.data.isFeature) ||
                 entry.name.toLowerCase().startsWith('feature:') ||
                 entry.name.toLowerCase().startsWith('feature -') ||
                 entry.name.toLowerCase().includes('specialty');
@@ -1029,9 +1153,11 @@ function extractBackgroundFeatures(b) {
         for (const fObj of b.feats) {
             if (typeof fObj === 'object' && fObj !== null) {
                 for (const k of Object.keys(fObj)) {
-                    const featName = k.replace(/\|.*$/, '').replace(/;/g, ' -')
+                    const featName = k
+                        .replace(/\|.*$/, '')
+                        .replace(/;/g, ' -')
                         .split(' ')
-                        .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+                        .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
                         .join(' ');
                     features.push({
                         name: `Bonus Feat: ${featName}`,
@@ -1045,14 +1171,16 @@ function extractBackgroundFeatures(b) {
         for (const entry of b.entries) {
             if (typeof entry === 'object' && entry !== null && entry.name) {
                 const lower = entry.name.toLowerCase();
-                if (!lower.includes('suggested characteristics') && 
-                    !lower.includes('personality trait') && 
-                    !lower.includes('ideal') && 
-                    !lower.includes('bond') && 
-                    !lower.includes('flaw') && 
-                    !lower.includes('proficiency') && 
+                if (
+                    !lower.includes('suggested characteristics') &&
+                    !lower.includes('personality trait') &&
+                    !lower.includes('ideal') &&
+                    !lower.includes('bond') &&
+                    !lower.includes('flaw') &&
+                    !lower.includes('proficiency') &&
                     !lower.includes('ability score') &&
-                    !lower.includes('equipment')) {
+                    !lower.includes('equipment')
+                ) {
                     features.push({
                         name: cleanTagsPlain(entry.name),
                         description: renderEntriesToText(entry.entries || []).trim()
@@ -1114,7 +1242,8 @@ function buildBackgrounds() {
 
         let skills = skillsData.fixed.join(', ');
         if (skillsData.choose) {
-            skills += (skills ? '; ' : '') + `Choose ${skillsData.choose.count} from ${skillsData.choose.from.join(', ')}`;
+            skills +=
+                (skills ? '; ' : '') + `Choose ${skillsData.choose.count} from ${skillsData.choose.from.join(', ')}`;
         }
         if (!skills) skills = 'None';
 
@@ -1144,7 +1273,10 @@ function buildBackgrounds() {
             usesMax: cnt.usesMax,
             resetType: cnt.resetType,
             formula: fmla.formula || '',
-            formulaConfig: fmla.formulaConfig || null
+            formulaConfig: fmla.formulaConfig || null,
+            additionalSpells: b.additionalSpells || null,
+            feats: b.feats || null,
+            ability: b.ability || null
         });
     }
 
@@ -1153,11 +1285,11 @@ function buildBackgrounds() {
     allBg.sort((a, b) => a.name.localeCompare(b.name));
 
     // Catalog with pre-parsed skillsData, toolsData, equipmentData, features
-    const catalog = allBg.map(b => ({ 
-        id: b.id, 
-        name: b.name, 
-        source: b.source, 
-        page: b.page, 
+    const catalog = allBg.map((b) => ({
+        id: b.id,
+        name: b.name,
+        source: b.source,
+        page: b.page,
         skills: b.skills,
         tools: b.tools,
         skillsData: b.skillsData,
@@ -1170,13 +1302,34 @@ function buildBackgrounds() {
         usesMax: b.usesMax,
         resetType: b.resetType,
         formula: b.formula,
-        formulaConfig: b.formulaConfig
+        formulaConfig: b.formulaConfig,
+        additionalSpells: b.additionalSpells || null,
+        feats: b.feats || null,
+        ability: b.ability || null
     }));
     fs.writeFileSync(path.join(targetDataDir, 'backgrounds-catalog.json'), JSON.stringify(catalog, null, 2), 'utf8');
+
+    const vttDataDir = path.join(rootDir, 'vtt', 'data');
+    if (outArgIdx === -1 && fs.existsSync(vttDataDir) && path.resolve(vttDataDir) !== path.resolve(targetDataDir)) {
+        try {
+            fs.writeFileSync(path.join(vttDataDir, 'backgrounds-catalog.json'), JSON.stringify(catalog, null, 2), 'utf8');
+        } catch {
+            // Ignore optional local dev mirror write failures
+        }
+    }
 
     // Partitions
     const partDir = path.join(targetDataDir, 'backgrounds-normalized');
     if (!fs.existsSync(partDir)) fs.mkdirSync(partDir, { recursive: true });
+
+    const vttPartDir = path.join(vttDataDir, 'backgrounds-normalized');
+    if (outArgIdx === -1 && fs.existsSync(vttDataDir) && path.resolve(vttDataDir) !== path.resolve(targetDataDir) && !fs.existsSync(vttPartDir)) {
+        try {
+            fs.mkdirSync(vttPartDir, { recursive: true });
+        } catch {
+            // Ignore
+        }
+    }
 
     const grouped = new Map();
     for (const b of allBg) {
@@ -1185,9 +1338,19 @@ function buildBackgrounds() {
         grouped.get(srcKey).push(b);
     }
     for (const [srcKey, list] of grouped.entries()) {
-        fs.writeFileSync(path.join(partDir, `backgrounds-${srcKey}.json`), JSON.stringify(list, null, 2), 'utf8');
+        const content = JSON.stringify(list, null, 2);
+        fs.writeFileSync(path.join(partDir, `backgrounds-${srcKey}.json`), content, 'utf8');
+        if (outArgIdx === -1 && fs.existsSync(vttPartDir) && path.resolve(vttDataDir) !== path.resolve(targetDataDir)) {
+            try {
+                fs.writeFileSync(path.join(vttPartDir, `backgrounds-${srcKey}.json`), content, 'utf8');
+            } catch {
+                // Ignore
+            }
+        }
     }
-    console.log(`✅ Backgrounds catalog: ${catalog.length} entries with pre-computed skills, tools, equipment, features across ${grouped.size} partitions.`);
+    console.log(
+        `✅ Backgrounds catalog: ${catalog.length} entries with pre-computed skills, tools, equipment, features across ${grouped.size} partitions.`
+    );
 }
 
 // ─── 4. Classes & Subclasses (with full feature trees & usage counters) ────────
@@ -1209,7 +1372,7 @@ function buildClasses() {
             let modified = false;
 
             if (data.classFeature) {
-                data.classFeature.forEach(cf => {
+                data.classFeature.forEach((cf) => {
                     const plainText = extractPlainText(cf.entries);
                     cf.actionType = detectActionType(plainText, cf.name);
                     const cnt = detectCounter(plainText, cf.name, cf.level || 1);
@@ -1225,7 +1388,7 @@ function buildClasses() {
             }
 
             if (data.subclassFeature) {
-                data.subclassFeature.forEach(sf => {
+                data.subclassFeature.forEach((sf) => {
                     const plainText = extractPlainText(sf.entries);
                     sf.actionType = detectActionType(plainText, sf.name);
                     const cnt = detectCounter(plainText, sf.name, sf.level || 1);
@@ -1253,7 +1416,7 @@ function buildClasses() {
 
     // Ingest Partnered and UA classes, subclasses, and features
     const brewClassFeatures = isSrdOnly ? [] : getBrewEntities('classFeature');
-    brewClassFeatures.forEach(cf => {
+    brewClassFeatures.forEach((cf) => {
         const plainText = extractPlainText(cf.entries);
         cf.actionType = detectActionType(plainText, cf.name);
         const cnt = detectCounter(plainText, cf.name, cf.level || 1);
@@ -1267,7 +1430,7 @@ function buildClasses() {
     rawClassFeatures.push(...brewClassFeatures);
 
     const brewSubclassFeatures = isSrdOnly ? [] : getBrewEntities('subclassFeature');
-    brewSubclassFeatures.forEach(sf => {
+    brewSubclassFeatures.forEach((sf) => {
         const plainText = extractPlainText(sf.entries);
         sf.actionType = detectActionType(plainText, sf.name);
         const cnt = detectCounter(plainText, sf.name, sf.level || 1);
@@ -1285,14 +1448,21 @@ function buildClasses() {
         rawSubclasses.push(...getBrewEntities('subclass'));
     }
 
-    console.log(`Loaded ${rawClasses.length} classes, ${rawSubclasses.length} subclasses, ${rawClassFeatures.length} class features, ${rawSubclassFeatures.length} subclass features.`);
+    console.log(
+        `Loaded ${rawClasses.length} classes, ${rawSubclasses.length} subclasses, ${rawClassFeatures.length} class features, ${rawSubclassFeatures.length} subclass features.`
+    );
 
     // 1. Process Class Features
-    const processedClassFeatures = rawClassFeatures.map(cf => {
+    const processedClassFeatures = rawClassFeatures.map((cf) => {
         const plainText = extractPlainText(cf.entries);
         const actionType = cf.actionType || detectActionType(plainText, cf.name);
-        const cnt = (cf.hasCounter !== undefined) ? { hasCounter: cf.hasCounter, usesMax: cf.usesMax, resetType: cf.resetType } : detectCounter(plainText, cf.name, cf.level || 1);
-        const fmla = cf.formulaConfig ? { formula: cf.formula, formulaConfig: cf.formulaConfig } : detectFormula(cf.entries, cf.name, cf.className, cf.level || 1);
+        const cnt =
+            cf.hasCounter !== undefined
+                ? { hasCounter: cf.hasCounter, usesMax: cf.usesMax, resetType: cf.resetType }
+                : detectCounter(plainText, cf.name, cf.level || 1);
+        const fmla = cf.formulaConfig
+            ? { formula: cf.formula, formulaConfig: cf.formulaConfig }
+            : detectFormula(cf.entries, cf.name, cf.className, cf.level || 1);
         return {
             id: `cf_${cleanId(cf.className)}_${cleanId(cf.classSource)}_${cleanId(cf.name)}_${cf.level}`,
             name: cf.name,
@@ -1313,11 +1483,16 @@ function buildClasses() {
     });
 
     // 2. Process Subclass Features
-    const processedSubclassFeatures = rawSubclassFeatures.map(sf => {
+    const processedSubclassFeatures = rawSubclassFeatures.map((sf) => {
         const plainText = extractPlainText(sf.entries);
         const actionType = sf.actionType || detectActionType(plainText, sf.name);
-        const cnt = (sf.hasCounter !== undefined) ? { hasCounter: sf.hasCounter, usesMax: sf.usesMax, resetType: sf.resetType } : detectCounter(plainText, sf.name, sf.level || 1);
-        const fmla = sf.formulaConfig ? { formula: sf.formula, formulaConfig: sf.formulaConfig } : detectFormula(sf.entries, sf.name, sf.className, sf.level || 1);
+        const cnt =
+            sf.hasCounter !== undefined
+                ? { hasCounter: sf.hasCounter, usesMax: sf.usesMax, resetType: sf.resetType }
+                : detectCounter(plainText, sf.name, sf.level || 1);
+        const fmla = sf.formulaConfig
+            ? { formula: sf.formula, formulaConfig: sf.formulaConfig }
+            : detectFormula(sf.entries, sf.name, sf.className, sf.level || 1);
         return {
             id: `scf_${cleanId(sf.className)}_${cleanId(sf.subclassShortName)}_${cleanId(sf.subclassSource)}_${cleanId(sf.name)}_${sf.level}`,
             name: sf.name,
@@ -1341,16 +1516,17 @@ function buildClasses() {
 
     // Subclass Feature query helper (direct match or _copy fallback)
     function getSubclassFeatures(className, classSource, shortName, source) {
-        return processedSubclassFeatures.filter(sf =>
-            (sf.className || '').toLowerCase() === className.toLowerCase() &&
-            (sf.classSource || '').toLowerCase() === classSource.toLowerCase() &&
-            (sf.subclassShortName || '').toLowerCase() === shortName.toLowerCase() &&
-            (sf.subclassSource || '').toLowerCase() === source.toLowerCase()
+        return processedSubclassFeatures.filter(
+            (sf) =>
+                (sf.className || '').toLowerCase() === className.toLowerCase() &&
+                (sf.classSource || '').toLowerCase() === classSource.toLowerCase() &&
+                (sf.subclassShortName || '').toLowerCase() === shortName.toLowerCase() &&
+                (sf.subclassSource || '').toLowerCase() === source.toLowerCase()
         );
     }
 
     // 3. Process Subclasses and attach their Subclass Features
-    const processedSubclasses = rawSubclasses.map(sc => {
+    const processedSubclasses = rawSubclasses.map((sc) => {
         const scName = sc.name || '';
         const shortName = sc.shortName || scName;
         const className = sc.className || '';
@@ -1358,7 +1534,7 @@ function buildClasses() {
         const scSource = sc.source || 'PHB';
 
         let features = getSubclassFeatures(className, classSource, shortName, scSource);
-        
+
         // If 0 features and has _copy, inherit features from copied target
         if (features.length === 0 && sc._copy) {
             const cp = sc._copy;
@@ -1369,7 +1545,7 @@ function buildClasses() {
             features = getSubclassFeatures(targetClass, targetClassSrc, targetShort, targetSrc);
         }
 
-        features.sort((a, b) => (a.level - b.level) || a.name.localeCompare(b.name));
+        features.sort((a, b) => a.level - b.level || a.name.localeCompare(b.name));
 
         return {
             id: `subclass_${cleanId(className)}_${cleanId(shortName)}_${cleanId(scSource)}`,
@@ -1403,16 +1579,20 @@ function buildClasses() {
 
         const hitDie = c.hd ? `d${c.hd.faces || 8}` : 'd8';
 
-        const features = processedClassFeatures.filter(cf =>
-            (cf.className || '').toLowerCase() === name.toLowerCase() &&
-            (cf.classSource || '').toLowerCase() === source.toLowerCase()
-        ).sort((a, b) => (a.level - b.level) || a.name.localeCompare(b.name));
+        const features = processedClassFeatures
+            .filter(
+                (cf) =>
+                    (cf.className || '').toLowerCase() === name.toLowerCase() &&
+                    (cf.classSource || '').toLowerCase() === source.toLowerCase()
+            )
+            .sort((a, b) => a.level - b.level || a.name.localeCompare(b.name));
 
         // Get subclasses for this class and deduplicate by name (prefer native source or higher feature count)
-        const rawClassSubclasses = processedSubclasses.filter(sc =>
-            (sc.className || '').toLowerCase() === name.toLowerCase() &&
-            (sc.classSource || '').toLowerCase() === source.toLowerCase() &&
-            (!isSrdOnly || (sc.srd !== undefined || sc.srd52 !== undefined))
+        const rawClassSubclasses = processedSubclasses.filter(
+            (sc) =>
+                (sc.className || '').toLowerCase() === name.toLowerCase() &&
+                (sc.classSource || '').toLowerCase() === source.toLowerCase() &&
+                (!isSrdOnly || sc.srd !== undefined || sc.srd52 !== undefined)
         );
 
         const scByName = new Map();
@@ -1424,7 +1604,7 @@ function buildClasses() {
                 const existing = scByName.get(lowName);
                 const isNative = sc.source.toLowerCase() === source.toLowerCase();
                 const wasNative = existing.source.toLowerCase() === source.toLowerCase();
-                if ((isNative && !wasNative) || (sc.features.length > existing.features.length)) {
+                if ((isNative && !wasNative) || sc.features.length > existing.features.length) {
                     scByName.set(lowName, sc);
                 }
             }
@@ -1447,7 +1627,7 @@ function buildClasses() {
     allClasses.sort((a, b) => a.name.localeCompare(b.name));
 
     // Catalog
-    const catalog = allClasses.map(c => ({
+    const catalog = allClasses.map((c) => ({
         id: c.id,
         name: c.name,
         source: c.source,
@@ -1455,7 +1635,7 @@ function buildClasses() {
         hitDie: c.hitDie,
         featuresCount: c.features.length,
         subclassesCount: c.subclasses.length,
-        subclasses: c.subclasses.map(s => ({
+        subclasses: c.subclasses.map((s) => ({
             id: s.id,
             name: s.name,
             shortName: s.shortName,
@@ -1483,40 +1663,46 @@ function buildClasses() {
 
 // ─── 5. Optional Features ─────────────────────────────────────────────────────
 const OPT_FEATURE_TYPE_MAP = {
-    'EI': 'Eldritch Invocation',
-    'AI': 'Artificer Infusion',
-    'MM': 'Metamagic',
-    'MV': 'Maneuver',
+    EI: 'Eldritch Invocation',
+    AI: 'Artificer Infusion',
+    MM: 'Metamagic',
+    MV: 'Maneuver',
     'MV:B': 'Maneuver (Battle Master)',
     'MV:C2-UA': 'Maneuver (Cavalier)',
     'MV:CR': 'Maneuver',
     'MV:BB': 'Maneuver',
     'MV:G': 'Maneuver',
-    'AS': 'Arcane Shot',
+    AS: 'Arcane Shot',
     'AS:V1-UA': 'Arcane Shot',
     'AS:V2-UA': 'Arcane Shot',
-    'FS': 'Fighting Style',
+    FS: 'Fighting Style',
     'FS:F': 'Fighting Style (Fighter)',
     'FS:B': 'Fighting Style (Bard)',
     'FS:P': 'Fighting Style (Paladin)',
     'FS:R': 'Fighting Style (Ranger)',
     'FS:C': 'Fighting Style',
-    'ED': 'Elemental Discipline',
-    'PB': 'Pact Boon',
-    'RN': 'Rune Knight Rune',
-    'AF': 'Alchemical Formula',
-    'TT': "Traveler's Trick",
-    'RP': 'Renown Perk',
-    'OR': 'Onomancy Resonant',
-    'HT': 'Heritage Trait',
-    'DG': 'Dark Gift',
-    'SG': 'Supernatural Gift',
-    'OTH': 'Other'
+    ED: 'Elemental Discipline',
+    PB: 'Pact Boon',
+    RN: 'Rune Knight Rune',
+    AF: 'Alchemical Formula',
+    TT: "Traveler's Trick",
+    RP: 'Renown Perk',
+    OR: 'Onomancy Resonant',
+    HT: 'Heritage Trait',
+    DG: 'Dark Gift',
+    SG: 'Supernatural Gift',
+    OTH: 'Other'
 };
 
 function resolveOptFeatureType(types) {
     if (!types || !Array.isArray(types) || types.length === 0) {
-        return { typeName: 'Optional Feature', category: 'Optional Feature', categoryKey: 'other', defaultClass: null, defaultSubclass: null };
+        return {
+            typeName: 'Optional Feature',
+            category: 'Optional Feature',
+            categoryKey: 'other',
+            defaultClass: null,
+            defaultSubclass: null
+        };
     }
     const primary = types[0];
     let typeName = OPT_FEATURE_TYPE_MAP[primary];
@@ -1617,35 +1803,58 @@ function extractOptFeaturePrereqDetails(prereqList, defaultClass, defaultSubclas
 
 function parseOptFeaturePrereq(prereqList) {
     if (!Array.isArray(prereqList) || prereqList.length === 0) return 'None';
-    return prereqList.map(p => {
-        const parts = [];
-        if (p.level) {
-            if (typeof p.level === 'object') {
-                const lvlStr = p.level.level ? `Level ${p.level.level}` : '';
-                const clsStr = p.level.class?.name ? ` ${p.level.class.name}` : '';
-                if (lvlStr || clsStr) parts.push((lvlStr + clsStr).trim());
-            } else {
-                parts.push(`Level ${p.level}`);
-            }
-        }
-        if (p.pact) parts.push(`Pact of the ${p.pact}`);
-        if (p.patron) parts.push(`${p.patron} patron`);
-        if (p.spell) {
-            const sps = p.spell.map(sp => typeof sp === 'string' ? cleanTagsPlain(sp.replace(/#c$/, '')) : (sp.entrySummary || cleanTagsPlain(sp.entry) || 'Spell'));
-            parts.push(sps.join(' or '));
-        }
-        if (p.feature) {
-            const fts = p.feature.map(ft => cleanTagsPlain(ft));
-            parts.push(fts.join(', '));
-        }
-        if (p.item) parts.push(p.item.join(', '));
-        if (p.ability) parts.push(...p.ability.map(a => Object.entries(a).map(([k, v]) => `${k.toUpperCase()} ${v}`).join(' or ')));
-        if (p.spellcasting) parts.push('Spellcasting ability');
-        if (p.proficiency) parts.push(...p.proficiency.map(pr => Object.entries(pr).map(([k, v]) => `${v} proficiency`).join(' ')));
-        if (p.race) parts.push(p.race.map(rc => rc.name).join(' or '));
-        if (p.other) parts.push(cleanTagsPlain(p.other));
-        return parts.join(', ');
-    }).filter(Boolean).join('; ') || 'None';
+    return (
+        prereqList
+            .map((p) => {
+                const parts = [];
+                if (p.level) {
+                    if (typeof p.level === 'object') {
+                        const lvlStr = p.level.level ? `Level ${p.level.level}` : '';
+                        const clsStr = p.level.class?.name ? ` ${p.level.class.name}` : '';
+                        if (lvlStr || clsStr) parts.push((lvlStr + clsStr).trim());
+                    } else {
+                        parts.push(`Level ${p.level}`);
+                    }
+                }
+                if (p.pact) parts.push(`Pact of the ${p.pact}`);
+                if (p.patron) parts.push(`${p.patron} patron`);
+                if (p.spell) {
+                    const sps = p.spell.map((sp) =>
+                        typeof sp === 'string'
+                            ? cleanTagsPlain(sp.replace(/#c$/, ''))
+                            : sp.entrySummary || cleanTagsPlain(sp.entry) || 'Spell'
+                    );
+                    parts.push(sps.join(' or '));
+                }
+                if (p.feature) {
+                    const fts = p.feature.map((ft) => cleanTagsPlain(ft));
+                    parts.push(fts.join(', '));
+                }
+                if (p.item) parts.push(p.item.join(', '));
+                if (p.ability)
+                    parts.push(
+                        ...p.ability.map((a) =>
+                            Object.entries(a)
+                                .map(([k, v]) => `${k.toUpperCase()} ${v}`)
+                                .join(' or ')
+                        )
+                    );
+                if (p.spellcasting) parts.push('Spellcasting ability');
+                if (p.proficiency)
+                    parts.push(
+                        ...p.proficiency.map((pr) =>
+                            Object.entries(pr)
+                                .map(([k, v]) => `${v} proficiency`)
+                                .join(' ')
+                        )
+                    );
+                if (p.race) parts.push(p.race.map((rc) => rc.name).join(' or '));
+                if (p.other) parts.push(cleanTagsPlain(p.other));
+                return parts.join(', ');
+            })
+            .filter(Boolean)
+            .join('; ') || 'None'
+    );
 }
 
 function buildOptionalFeatures() {
@@ -1677,9 +1886,13 @@ function buildOptionalFeatures() {
         const source = (f.source || 'PHB').trim();
         if (!name) continue;
 
-        const fTypes = Array.isArray(f.featureType) ? f.featureType : (f.featureType ? [f.featureType] : []);
+        const fTypes = Array.isArray(f.featureType) ? f.featureType : f.featureType ? [f.featureType] : [];
         const { typeName, category, categoryKey, defaultClass, defaultSubclass } = resolveOptFeatureType(fTypes);
-        const { classPrereq, subclassPrereq, levelPrereq } = extractOptFeaturePrereqDetails(f.prerequisite, defaultClass, defaultSubclass);
+        const { classPrereq, subclassPrereq, levelPrereq } = extractOptFeaturePrereqDetails(
+            f.prerequisite,
+            defaultClass,
+            defaultSubclass
+        );
 
         const desc = renderEntriesToText(f.entries || []);
         const plain = (f.name || '') + ' ' + desc;
@@ -1733,7 +1946,7 @@ function buildOptionalFeatures() {
     allFeatures.sort((a, b) => a.name.localeCompare(b.name));
 
     // Catalog
-    const catalog = allFeatures.map(f => ({
+    const catalog = allFeatures.map((f) => ({
         id: f.id,
         name: f.name,
         source: f.source,
@@ -1754,7 +1967,11 @@ function buildOptionalFeatures() {
         formula: f.formula,
         formulaConfig: f.formulaConfig
     }));
-    fs.writeFileSync(path.join(targetDataDir, 'optionalfeatures-catalog.json'), JSON.stringify(catalog, null, 2), 'utf8');
+    fs.writeFileSync(
+        path.join(targetDataDir, 'optionalfeatures-catalog.json'),
+        JSON.stringify(catalog, null, 2),
+        'utf8'
+    );
 
     // Partitions
     const partDir = path.join(targetDataDir, 'optionalfeatures-normalized');

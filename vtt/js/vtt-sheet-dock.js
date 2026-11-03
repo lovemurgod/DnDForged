@@ -15,8 +15,14 @@
 function isVideoMedia(url) {
     if (!url || typeof url !== 'string') return false;
     const clean = url.split('?')[0].toLowerCase();
-    return clean.endsWith('.mp4') || clean.endsWith('.webm') || clean.endsWith('.ogg') ||
-           clean.includes('pinimg.com/videos') || clean.includes('youtube.com') || clean.includes('youtu.be');
+    return (
+        clean.endsWith('.mp4') ||
+        clean.endsWith('.webm') ||
+        clean.endsWith('.ogg') ||
+        clean.includes('pinimg.com/videos') ||
+        clean.includes('youtube.com') ||
+        clean.includes('youtu.be')
+    );
 }
 
 export class SheetDockManager {
@@ -133,10 +139,23 @@ export class SheetDockManager {
             }
         }
         // 2. Named Custom NPC or Companion -> Individual Tab
-        else if (isCompanion || isCustomNpc || (characterId && (characterId.startsWith('npc_') || characterId.startsWith('comp_') || this.vtt.campaignState?.characters?.[characterId]))) {
+        else if (
+            isCompanion ||
+            isCustomNpc ||
+            (characterId &&
+                (characterId.startsWith('npc_') ||
+                    characterId.startsWith('comp_') ||
+                    this.vtt.campaignState?.characters?.[characterId]))
+        ) {
             roleCategory = 'companion';
-            const charKey = characterId || id || (monsterData?.name ? monsterData.name.toLowerCase().replace(/[^a-z0-9]/g, '_') : 'custom');
-            tabKey = (isCustomNpc || (characterId && characterId.startsWith('npc_'))) ? `npc_${charKey.replace(/^npc_/, '')}` : `comp_${charKey.replace(/^comp_/, '')}`;
+            const charKey =
+                characterId ||
+                id ||
+                (monsterData?.name ? monsterData.name.toLowerCase().replace(/[^a-z0-9]/g, '_') : 'custom');
+            tabKey =
+                isCustomNpc || (characterId && characterId.startsWith('npc_'))
+                    ? `npc_${charKey.replace(/^npc_/, '')}`
+                    : `comp_${charKey.replace(/^comp_/, '')}`;
             if (characterId && this.vtt.campaignState?.characters?.[characterId]) {
                 const c = this.vtt.campaignState.characters[characterId];
                 tabName = c.name || tabName;
@@ -153,7 +172,9 @@ export class SheetDockManager {
         // 3. Generic Bestiary Monster -> ONE shared tab per creature definition
         else {
             roleCategory = 'generic';
-            const defId = monsterData?.id || (monsterData?.source && monsterData?.name ? `${monsterData.source}_${monsterData.name}` : tabName);
+            const defId =
+                monsterData?.id ||
+                (monsterData?.source && monsterData?.name ? `${monsterData.source}_${monsterData.name}` : tabName);
             tabKey = `gen_${defId.toLowerCase().replace(/[^a-z0-9_-]/g, '_')}`;
             tabName = monsterData?.name || tabName;
             tabAvatar = monsterData?.tokenUrl || monsterData?.img || tabAvatar;
@@ -218,7 +239,8 @@ export class SheetDockManager {
             } else {
                 const tokMonster = tok.monsterData;
                 const matchName = tokMonster?.name === tab.name || tok.name === tab.name;
-                const matchSource = (!tokMonster?.source || !tab.monsterData?.source || tokMonster.source === tab.monsterData.source);
+                const matchSource =
+                    !tokMonster?.source || !tab.monsterData?.source || tokMonster.source === tab.monsterData.source;
                 if (matchName && matchSource) matches.push(tId);
             }
         }
@@ -262,7 +284,9 @@ export class SheetDockManager {
         }
 
         this.renderTabs();
-        setTimeout(() => { if (this.updatePosition) this.updatePosition(); }, 20);
+        setTimeout(() => {
+            if (this.updatePosition) this.updatePosition();
+        }, 20);
     }
 
     switchTokenInstance(tabKey, tokenId) {
@@ -284,12 +308,12 @@ export class SheetDockManager {
         if (!tab) return;
 
         this.tabs.delete(tabKey);
-        this.tabOrder = this.tabOrder.filter(k => k !== tabKey);
+        this.tabOrder = this.tabOrder.filter((k) => k !== tabKey);
         this.saveOrder();
 
         if (this.activeTabKey === tabKey) {
             this.activeTabKey = null;
-            const remainingKeys = this.tabOrder.filter(k => this.tabs.has(k));
+            const remainingKeys = this.tabOrder.filter((k) => this.tabs.has(k));
             if (remainingKeys.length > 0) {
                 this.activateTab(remainingKeys[remainingKeys.length - 1]);
             } else {
@@ -299,7 +323,9 @@ export class SheetDockManager {
         }
 
         this.renderTabs();
-        setTimeout(() => { if (this.updatePosition) this.updatePosition(); }, 20);
+        setTimeout(() => {
+            if (this.updatePosition) this.updatePosition();
+        }, 20);
     }
 
     toggleTab(tabKey) {
@@ -307,7 +333,9 @@ export class SheetDockManager {
         if (!tab) return;
 
         const isPlayer = tab.type === 'player';
-        const panel = isPlayer ? document.getElementById('player-sheet-panel') : document.getElementById('creature-sheet-panel');
+        const panel = isPlayer
+            ? document.getElementById('player-sheet-panel')
+            : document.getElementById('creature-sheet-panel');
         const isOpen = panel && panel.classList.contains('open');
 
         if (this.activeTabKey === tabKey && isOpen) {
@@ -315,7 +343,9 @@ export class SheetDockManager {
             if (isPlayer && this.vtt.playerSheet?.minimizePanel) this.vtt.playerSheet.minimizePanel();
             else if (this.vtt.creatureSheet?.minimizePanel) this.vtt.creatureSheet.minimizePanel();
             this.renderTabs();
-            setTimeout(() => { if (this.updatePosition) this.updatePosition(); }, 20);
+            setTimeout(() => {
+                if (this.updatePosition) this.updatePosition();
+            }, 20);
         } else {
             // Open / switch
             this.activateTab(tabKey);
@@ -359,13 +389,17 @@ export class SheetDockManager {
 
     highlightTabForToken(tokenId) {
         if (!this.containerEl) return;
-        this.containerEl.querySelectorAll('.slideout-tab-handle').forEach(el => el.classList.remove('canvas-hover-pulse'));
+        this.containerEl
+            .querySelectorAll('.slideout-tab-handle')
+            .forEach((el) => el.classList.remove('canvas-hover-pulse'));
 
         if (!tokenId) return;
 
         for (const [key, tab] of this.tabs.entries()) {
             if (tab.activeTokenId === tokenId || tab.linkedTokenIds?.includes(tokenId)) {
-                const tabEl = this.containerEl.querySelector(`.slideout-tab-wrapper[data-tab-key="${key}"] .slideout-tab-handle`);
+                const tabEl = this.containerEl.querySelector(
+                    `.slideout-tab-wrapper[data-tab-key="${key}"] .slideout-tab-handle`
+                );
                 if (tabEl) tabEl.classList.add('canvas-hover-pulse');
                 break;
             }
@@ -412,12 +446,13 @@ export class SheetDockManager {
             if (!this.tabOrder.includes(key)) this.tabOrder.push(key);
         }
         // Filter tabOrder to only active keys
-        const orderedKeys = this.tabOrder.filter(k => this.tabs.has(k));
+        const orderedKeys = this.tabOrder.filter((k) => this.tabs.has(k));
 
         const creaturePanel = document.getElementById('creature-sheet-panel');
         const playerPanel = document.getElementById('player-sheet-panel');
-        const isPanelOpen = (creaturePanel && creaturePanel.classList.contains('open')) ||
-                            (playerPanel && playerPanel.classList.contains('open'));
+        const isPanelOpen =
+            (creaturePanel && creaturePanel.classList.contains('open')) ||
+            (playerPanel && playerPanel.classList.contains('open'));
 
         const allTokens = this.vtt.canvasEngine?.getTokens ? this.vtt.canvasEngine.getTokens() : {};
 
@@ -429,7 +464,7 @@ export class SheetDockManager {
 
             this.updateLinkedTokens(tab);
 
-            const isActive = (key === this.activeTabKey && isPanelOpen);
+            const isActive = key === this.activeTabKey && isPanelOpen;
             const roleClass = `role-${tab.roleCategory}`;
             const activeClass = isActive ? 'active' : '';
             const turnClass = tab.isTurnActive ? 'turn-ring' : '';
@@ -490,7 +525,7 @@ export class SheetDockManager {
         if (!this.containerEl) return;
 
         // 1. Click on tab handle -> toggle / open sheet
-        this.containerEl.querySelectorAll('.slideout-tab-handle').forEach(btn => {
+        this.containerEl.querySelectorAll('.slideout-tab-handle').forEach((btn) => {
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 const key = btn.dataset.tabKey;
@@ -515,7 +550,7 @@ export class SheetDockManager {
         });
 
         // 2. Click on "x" close button in hover tooltip
-        this.containerEl.querySelectorAll('.tab-tooltip-close').forEach(btn => {
+        this.containerEl.querySelectorAll('.tab-tooltip-close').forEach((btn) => {
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 const key = btn.dataset.tabKey;
@@ -524,7 +559,7 @@ export class SheetDockManager {
         });
 
         // 3. Click on Popout button in hover tooltip
-        this.containerEl.querySelectorAll('.tab-tooltip-popout').forEach(btn => {
+        this.containerEl.querySelectorAll('.tab-tooltip-popout').forEach((btn) => {
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 const key = btn.dataset.tabKey;
@@ -533,7 +568,7 @@ export class SheetDockManager {
         });
 
         // 4. Instance Switcher Chips inside tooltip
-        this.containerEl.querySelectorAll('.tab-instance-chip').forEach(btn => {
+        this.containerEl.querySelectorAll('.tab-instance-chip').forEach((btn) => {
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 const tabKey = btn.dataset.tabKey;
@@ -555,7 +590,7 @@ export class SheetDockManager {
     setupDragAndDrop() {
         const wrappers = this.containerEl.querySelectorAll('.slideout-tab-wrapper');
 
-        wrappers.forEach(wrap => {
+        wrappers.forEach((wrap) => {
             wrap.addEventListener('dragstart', (e) => {
                 this.draggedTabKey = wrap.dataset.tabKey;
                 wrap.classList.add('is-dragging');
@@ -565,7 +600,7 @@ export class SheetDockManager {
 
             wrap.addEventListener('dragend', () => {
                 wrap.classList.remove('is-dragging');
-                this.containerEl.querySelectorAll('.slideout-tab-wrapper').forEach(w => {
+                this.containerEl.querySelectorAll('.slideout-tab-wrapper').forEach((w) => {
                     w.classList.remove('drop-above', 'drop-below');
                 });
                 this.draggedTabKey = null;
@@ -600,9 +635,9 @@ export class SheetDockManager {
                 if (!sourceKey || !targetKey || sourceKey === targetKey) return;
 
                 const rect = wrap.getBoundingClientRect();
-                const insertBefore = e.clientY < (rect.top + rect.height / 2);
+                const insertBefore = e.clientY < rect.top + rect.height / 2;
 
-                const currentOrder = this.tabOrder.filter(k => this.tabs.has(k) && k !== sourceKey);
+                const currentOrder = this.tabOrder.filter((k) => this.tabs.has(k) && k !== sourceKey);
                 const targetIdx = currentOrder.indexOf(targetKey);
 
                 if (targetIdx !== -1) {

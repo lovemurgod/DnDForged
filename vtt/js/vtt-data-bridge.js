@@ -4,16 +4,41 @@ export function initVttDataBridge(vtt) {
     const listContainer = document.getElementById('library-monster-list');
     const searchInput = document.getElementById('library-search');
     const viewport = document.getElementById('vtt-canvas-viewport');
-    
+
     let monsters = [];
     let currentSortCol = 'name';
     let currentSortDir = 'asc';
     let currentlyFilteredMonsters = [];
     let renderedCount = 0;
     const CHUNK_SIZE = 100;
-    let advancedFilters = { crMin: -1, crMax: 999, source: [], type: [], size: [], environment: [], alignment: [], resistances: [], immunities: [], vulnerabilities: [], damageTypes: [], saveTypes: [], senses: [], languages: [], movementTypes: [] };
-    let filterLogics = { resistances: 'OR', immunities: 'OR', vulnerabilities: 'OR', damageTypes: 'OR', saveTypes: 'OR', senses: 'OR', languages: 'OR', movementTypes: 'OR' };
-    
+    let advancedFilters = {
+        crMin: -1,
+        crMax: 999,
+        source: [],
+        type: [],
+        size: [],
+        environment: [],
+        alignment: [],
+        resistances: [],
+        immunities: [],
+        vulnerabilities: [],
+        damageTypes: [],
+        saveTypes: [],
+        senses: [],
+        languages: [],
+        movementTypes: []
+    };
+    let filterLogics = {
+        resistances: 'OR',
+        immunities: 'OR',
+        vulnerabilities: 'OR',
+        damageTypes: 'OR',
+        saveTypes: 'OR',
+        senses: 'OR',
+        languages: 'OR',
+        movementTypes: 'OR'
+    };
+
     // In-memory cache for full creature statblocks
     const creatureCache = new Map();
 
@@ -42,10 +67,11 @@ export function initVttDataBridge(vtt) {
             if (partRes.ok) {
                 const partition = await partRes.json();
                 const clean = idOrName.toLowerCase();
-                const found = partition.find(m => 
-                    m.id?.toLowerCase() === clean || 
-                    m.name?.toLowerCase() === clean ||
-                    m.id?.toLowerCase() === `creature_${clean.replace(/ /g, '_')}_${source.toLowerCase()}`
+                const found = partition.find(
+                    (m) =>
+                        m.id?.toLowerCase() === clean ||
+                        m.name?.toLowerCase() === clean ||
+                        m.id?.toLowerCase() === `creature_${clean.replace(/ /g, '_')}_${source.toLowerCase()}`
                 );
                 if (found) {
                     creatureCache.set(key, found);
@@ -71,9 +97,16 @@ export function initVttDataBridge(vtt) {
 
     async function loadBestiaryData(explicitCampId = null) {
         try {
-            listContainer.innerHTML = '<div class="text-muted p-3"><i class="fa-solid fa-spinner fa-spin"></i> Loading normalized bestiary catalog...</div>';
-            
-            const campId = explicitCampId || window.VTT?.campaignId || window.VTT?.campaignState?.id || (new URLSearchParams(window.location.search)).get('campaignId') || (new URLSearchParams(window.location.search)).get('campaign') || '';
+            listContainer.innerHTML =
+                '<div class="text-muted p-3"><i class="fa-solid fa-spinner fa-spin"></i> Loading normalized bestiary catalog...</div>';
+
+            const campId =
+                explicitCampId ||
+                window.VTT?.campaignId ||
+                window.VTT?.campaignState?.id ||
+                new URLSearchParams(window.location.search).get('campaignId') ||
+                new URLSearchParams(window.location.search).get('campaign') ||
+                '';
             const qs = campId ? `?campaignId=${encodeURIComponent(campId)}&_t=${Date.now()}` : `?_t=${Date.now()}`;
 
             let catalogRes = await fetch(`/api/bestiary/catalog${qs}`);
@@ -81,14 +114,15 @@ export function initVttDataBridge(vtt) {
                 catalogRes = await fetch(`/data/bestiary-catalog.json${qs}`);
             }
             if (!catalogRes.ok) throw new Error('Could not load bestiary catalog');
-            
+
             monsters = await catalogRes.json();
             populateFiltersUI();
             setupFilterListeners();
             applyMonsterFilters();
         } catch (e) {
-            console.error("Error fetching normalized bestiary data:", e);
-            listContainer.innerHTML = '<div class="text-danger p-3"><i class="fa-solid fa-triangle-exclamation"></i> Error accessing bestiary library.</div>';
+            console.error('Error fetching normalized bestiary data:', e);
+            listContainer.innerHTML =
+                '<div class="text-danger p-3"><i class="fa-solid fa-triangle-exclamation"></i> Error accessing bestiary library.</div>';
         }
     }
     window.loadBestiaryData = loadBestiaryData;
@@ -99,18 +133,18 @@ export function initVttDataBridge(vtt) {
             if (currentSortCol === 'name') {
                 res = (a.name || '').localeCompare(b.name || '');
             } else if (currentSortCol === 'crNumeric') {
-                const crA = a.crNumeric !== undefined ? a.crNumeric : (parseFloat(a.cr) || 0);
-                const crB = b.crNumeric !== undefined ? b.crNumeric : (parseFloat(b.cr) || 0);
+                const crA = a.crNumeric !== undefined ? a.crNumeric : parseFloat(a.cr) || 0;
+                const crB = b.crNumeric !== undefined ? b.crNumeric : parseFloat(b.cr) || 0;
                 res = crA - crB;
                 if (res === 0) res = (a.name || '').localeCompare(b.name || '');
             } else if (currentSortCol === 'type') {
-                const typeA = (a.type || a.subtype || '');
-                const typeB = (b.type || b.subtype || '');
+                const typeA = a.type || a.subtype || '';
+                const typeB = b.type || b.subtype || '';
                 res = typeA.localeCompare(typeB);
                 if (res === 0) res = (a.name || '').localeCompare(b.name || '');
             } else if (currentSortCol === 'source') {
-                const srcA = (a.source || '');
-                const srcB = (b.source || '');
+                const srcA = a.source || '';
+                const srcB = b.source || '';
                 res = srcA.localeCompare(srcB);
                 if (res === 0) res = (a.name || '').localeCompare(b.name || '');
             }
@@ -121,18 +155,27 @@ export function initVttDataBridge(vtt) {
     function updateSortHeaderIcons() {
         const tableHeader = document.getElementById('bestiary-table-header');
         if (!tableHeader) return;
-        tableHeader.querySelectorAll('.bestiary-th-sort').forEach(th => {
+        tableHeader.querySelectorAll('.bestiary-th-sort').forEach((th) => {
             const col = th.dataset.sort;
             const icon = th.querySelector('.sort-icon');
             if (col === currentSortCol) {
                 th.classList.add('sorted');
                 if (icon) {
                     if (col === 'name') {
-                        icon.className = currentSortDir === 'asc' ? 'fa-solid fa-arrow-down-a-z sort-icon' : 'fa-solid fa-arrow-up-z-a sort-icon';
+                        icon.className =
+                            currentSortDir === 'asc'
+                                ? 'fa-solid fa-arrow-down-a-z sort-icon'
+                                : 'fa-solid fa-arrow-up-z-a sort-icon';
                     } else if (col === 'crNumeric') {
-                        icon.className = currentSortDir === 'asc' ? 'fa-solid fa-arrow-down-1-9 sort-icon' : 'fa-solid fa-arrow-up-9-1 sort-icon';
+                        icon.className =
+                            currentSortDir === 'asc'
+                                ? 'fa-solid fa-arrow-down-1-9 sort-icon'
+                                : 'fa-solid fa-arrow-up-9-1 sort-icon';
                     } else {
-                        icon.className = currentSortDir === 'asc' ? 'fa-solid fa-arrow-down-short-wide sort-icon' : 'fa-solid fa-arrow-up-wide-short sort-icon';
+                        icon.className =
+                            currentSortDir === 'asc'
+                                ? 'fa-solid fa-arrow-down-short-wide sort-icon'
+                                : 'fa-solid fa-arrow-up-wide-short sort-icon';
                     }
                 }
             } else {
@@ -147,14 +190,14 @@ export function initVttDataBridge(vtt) {
     function setupFilterListeners() {
         const tableHeader = document.getElementById('bestiary-table-header');
         if (tableHeader) {
-            tableHeader.querySelectorAll('.bestiary-th-sort').forEach(th => {
+            tableHeader.querySelectorAll('.bestiary-th-sort').forEach((th) => {
                 th.addEventListener('click', () => {
                     const col = th.dataset.sort;
                     if (currentSortCol === col) {
-                        currentSortDir = (currentSortDir === 'asc' ? 'desc' : 'asc');
+                        currentSortDir = currentSortDir === 'asc' ? 'desc' : 'asc';
                     } else {
                         currentSortCol = col;
-                        currentSortDir = (col === 'crNumeric' ? 'desc' : 'asc');
+                        currentSortDir = col === 'crNumeric' ? 'desc' : 'asc';
                     }
                     updateSortHeaderIcons();
                     applyMonsterFilters();
@@ -219,20 +262,22 @@ export function initVttDataBridge(vtt) {
         }
         if (btnClearFilter) {
             btnClearFilter.addEventListener('click', () => {
-                document.querySelectorAll('#modal-bestiary-filter input[type="checkbox"]').forEach(cb => cb.checked = false);
+                document
+                    .querySelectorAll('#modal-bestiary-filter input[type="checkbox"]')
+                    .forEach((cb) => (cb.checked = false));
                 const minEl = document.getElementById('filter-cr-min');
                 const maxEl = document.getElementById('filter-cr-max');
-                if (minEl) minEl.value = "";
-                if (maxEl) maxEl.value = "";
+                if (minEl) minEl.value = '';
+                if (maxEl) maxEl.value = '';
 
                 // Reset logic toggles to OR
-                document.querySelectorAll('#modal-bestiary-filter .filter-logic-toggle').forEach(btn => {
+                document.querySelectorAll('#modal-bestiary-filter .filter-logic-toggle').forEach((btn) => {
                     btn.dataset.logic = 'OR';
                     btn.textContent = 'OR';
                     btn.classList.add('btn-secondary');
                     btn.classList.remove('btn-primary');
                 });
-                Object.keys(filterLogics).forEach(k => filterLogics[k] = 'OR');
+                Object.keys(filterLogics).forEach((k) => (filterLogics[k] = 'OR'));
 
                 syncFiltersFromUI();
                 applyMonsterFilters();
@@ -240,7 +285,7 @@ export function initVttDataBridge(vtt) {
         }
 
         // Logic toggles
-        document.querySelectorAll('.filter-logic-toggle').forEach(btn => {
+        document.querySelectorAll('.filter-logic-toggle').forEach((btn) => {
             btn.addEventListener('click', (e) => {
                 e.preventDefault();
                 e.stopPropagation();
@@ -263,14 +308,14 @@ export function initVttDataBridge(vtt) {
         if (!opt) return '';
         if (category === 'saveTypes') return String(opt).toUpperCase();
         if (category === 'cr') return String(opt);
-        return String(opt).replace(/\b\w/g, c => c.toUpperCase());
+        return String(opt).replace(/\b\w/g, (c) => c.toUpperCase());
     }
 
     function buildCheckboxList(containerId, optionsList, categoryName) {
         const container = document.getElementById(containerId);
         if (!container) return;
         container.innerHTML = '';
-        optionsList.forEach(opt => {
+        optionsList.forEach((opt) => {
             if (!opt) return;
             const lbl = document.createElement('label');
             lbl.style.display = 'flex';
@@ -278,12 +323,12 @@ export function initVttDataBridge(vtt) {
             lbl.style.alignItems = 'center';
             lbl.style.cursor = 'pointer';
             lbl.style.fontSize = '0.8rem';
-            
+
             const cb = document.createElement('input');
             cb.type = 'checkbox';
             cb.value = opt;
             cb.dataset.category = categoryName;
-            
+
             lbl.appendChild(cb);
             lbl.appendChild(document.createTextNode(formatOptionLabel(opt, categoryName)));
             container.appendChild(lbl);
@@ -306,35 +351,35 @@ export function initVttDataBridge(vtt) {
         const langs = new Set();
         const moves = new Set();
 
-        monsters.forEach(m => {
+        monsters.forEach((m) => {
             if (m.cr !== undefined) crs.add(typeof m.cr === 'object' ? String(m.cr.cr) : String(m.cr));
             if (m.source) sources.add(m.source);
             if (m.type) types.add(m.type);
             if (m.subtype) types.add(m.subtype);
             if (m.size) sizes.add(m.size);
             if (m.alignment) aligns.add(m.alignment);
-            if (m.environment) m.environment.forEach(e => envs.add(e));
-            if (m.resistances) m.resistances.forEach(e => resists.add(e));
-            if (m.immunities) m.immunities.forEach(e => immunes.add(e));
-            if (m.vulnerabilities) m.vulnerabilities.forEach(e => vulns.add(e));
-            if (m.damageTypes) m.damageTypes.forEach(e => dmg.add(e));
-            if (m.saveTypes) m.saveTypes.forEach(e => saves.add(e));
-            if (m.senses) m.senses.forEach(e => senses.add(e));
-            if (m.languages) m.languages.forEach(e => langs.add(e));
-            if (m.movementTypes) m.movementTypes.forEach(e => moves.add(e));
+            if (m.environment) m.environment.forEach((e) => envs.add(e));
+            if (m.resistances) m.resistances.forEach((e) => resists.add(e));
+            if (m.immunities) m.immunities.forEach((e) => immunes.add(e));
+            if (m.vulnerabilities) m.vulnerabilities.forEach((e) => vulns.add(e));
+            if (m.damageTypes) m.damageTypes.forEach((e) => dmg.add(e));
+            if (m.saveTypes) m.saveTypes.forEach((e) => saves.add(e));
+            if (m.senses) m.senses.forEach((e) => senses.add(e));
+            if (m.languages) m.languages.forEach((e) => langs.add(e));
+            if (m.movementTypes) m.movementTypes.forEach((e) => moves.add(e));
         });
 
         // CR Dropdowns
         const crMinSel = document.getElementById('filter-cr-min');
         const crMaxSel = document.getElementById('filter-cr-max');
         const sortedCrs = Array.from(crs).sort((a, b) => {
-            const na = a === '1/8' ? 0.125 : (a === '1/4' ? 0.25 : (a === '1/2' ? 0.5 : parseFloat(a)));
-            const nb = b === '1/8' ? 0.125 : (b === '1/4' ? 0.25 : (b === '1/2' ? 0.5 : parseFloat(b)));
+            const na = a === '1/8' ? 0.125 : a === '1/4' ? 0.25 : a === '1/2' ? 0.5 : parseFloat(a);
+            const nb = b === '1/8' ? 0.125 : b === '1/4' ? 0.25 : b === '1/2' ? 0.5 : parseFloat(b);
             return na - nb;
         });
-        
+
         let crHtml = '<option value="">Any</option>';
-        sortedCrs.forEach(c => crHtml += `<option value="${c}">${c}</option>`);
+        sortedCrs.forEach((c) => (crHtml += `<option value="${c}">${c}</option>`));
         if (crMinSel) crMinSel.innerHTML = crHtml;
         if (crMaxSel) crMaxSel.innerHTML = crHtml;
 
@@ -356,8 +401,24 @@ export function initVttDataBridge(vtt) {
     function syncFiltersFromUI() {
         const crMinStr = document.getElementById('filter-cr-min')?.value;
         const crMaxStr = document.getElementById('filter-cr-max')?.value;
-        advancedFilters.crMin = crMinStr ? (crMinStr === '1/8' ? 0.125 : (crMinStr === '1/4' ? 0.25 : (crMinStr === '1/2' ? 0.5 : parseFloat(crMinStr)))) : -1;
-        advancedFilters.crMax = crMaxStr ? (crMaxStr === '1/8' ? 0.125 : (crMaxStr === '1/4' ? 0.25 : (crMaxStr === '1/2' ? 0.5 : parseFloat(crMaxStr)))) : 999;
+        advancedFilters.crMin = crMinStr
+            ? crMinStr === '1/8'
+                ? 0.125
+                : crMinStr === '1/4'
+                    ? 0.25
+                    : crMinStr === '1/2'
+                        ? 0.5
+                        : parseFloat(crMinStr)
+            : -1;
+        advancedFilters.crMax = crMaxStr
+            ? crMaxStr === '1/8'
+                ? 0.125
+                : crMaxStr === '1/4'
+                    ? 0.25
+                    : crMaxStr === '1/2'
+                        ? 0.5
+                        : parseFloat(crMaxStr)
+            : 999;
 
         const catToContainerId = {
             source: 'filter-source-container',
@@ -379,14 +440,17 @@ export function initVttDataBridge(vtt) {
         let activeCount = 0;
         if (advancedFilters.crMin !== -1 || advancedFilters.crMax !== 999) activeCount++;
 
-        cats.forEach(cat => {
-            advancedFilters[cat] = Array.from(document.querySelectorAll(`input[data-category="${cat}"]:checked`)).map(cb => cb.value);
+        cats.forEach((cat) => {
+            advancedFilters[cat] = Array.from(document.querySelectorAll(`input[data-category="${cat}"]:checked`)).map(
+                (cb) => cb.value
+            );
             activeCount += advancedFilters[cat].length;
-            
+
             // Sync Logic button if present
             const contId = catToContainerId[cat];
-            const headerBtn = document.querySelector(`.filter-logic-toggle[data-category="${cat}"]`) || 
-                              document.getElementById(contId)?.parentElement?.querySelector('.filter-logic-toggle');
+            const headerBtn =
+                document.querySelector(`.filter-logic-toggle[data-category="${cat}"]`) ||
+                document.getElementById(contId)?.parentElement?.querySelector('.filter-logic-toggle');
             if (headerBtn) {
                 filterLogics[cat] = headerBtn.dataset.logic || 'OR';
             }
@@ -416,27 +480,28 @@ export function initVttDataBridge(vtt) {
     function checkLogic(monsterArr, filterArr, logic) {
         if (!filterArr || filterArr.length === 0) return true;
         if (!monsterArr || monsterArr.length === 0) return false;
-        const normMonster = monsterArr.map(x => String(x).toLowerCase().trim());
+        const normMonster = monsterArr.map((x) => String(x).toLowerCase().trim());
         if (logic === 'AND') {
-            return filterArr.every(f => normMonster.includes(String(f).toLowerCase().trim()));
+            return filterArr.every((f) => normMonster.includes(String(f).toLowerCase().trim()));
         } else {
-            return filterArr.some(f => normMonster.includes(String(f).toLowerCase().trim()));
+            return filterArr.some((f) => normMonster.includes(String(f).toLowerCase().trim()));
         }
     }
 
     function applyMonsterFilters() {
         const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
-        const filtered = monsters.filter(m => {
+        const filtered = monsters.filter((m) => {
             // Search Query
             if (query) {
                 const nameMatch = m.name && m.name.toLowerCase().includes(query);
-                const typeMatch = (m.type || '').toLowerCase().includes(query) || (m.subtype || '').toLowerCase().includes(query);
+                const typeMatch =
+                    (m.type || '').toLowerCase().includes(query) || (m.subtype || '').toLowerCase().includes(query);
                 const srcMatch = (m.source || '').toLowerCase().includes(query);
                 if (!nameMatch && !typeMatch && !srcMatch) return false;
             }
 
             // CR Min/Max
-            const mCr = m.crNumeric !== undefined ? m.crNumeric : (parseFloat(m.cr) || 0);
+            const mCr = m.crNumeric !== undefined ? m.crNumeric : parseFloat(m.cr) || 0;
             if (advancedFilters.crMin !== -1 && mCr < advancedFilters.crMin) return false;
             if (advancedFilters.crMax !== 999 && mCr > advancedFilters.crMax) return false;
 
@@ -444,20 +509,22 @@ export function initVttDataBridge(vtt) {
             if (advancedFilters.source.length > 0 && !advancedFilters.source.includes(m.source)) return false;
             if (advancedFilters.size.length > 0 && !advancedFilters.size.includes(m.size)) return false;
             if (advancedFilters.alignment.length > 0 && !advancedFilters.alignment.includes(m.alignment)) return false;
-            
+
             // Type/Subtype
             if (advancedFilters.type.length > 0) {
                 const typeArr = [m.type, m.subtype].filter(Boolean);
-                if (!advancedFilters.type.some(t => typeArr.includes(t))) return false;
+                if (!advancedFilters.type.some((t) => typeArr.includes(t))) return false;
             }
 
             // Environment (Array)
-            if (advancedFilters.environment.length > 0 && !checkLogic(m.environment, advancedFilters.environment, 'OR')) return false;
+            if (advancedFilters.environment.length > 0 && !checkLogic(m.environment, advancedFilters.environment, 'OR'))
+                return false;
 
             // Arrays with Logic toggles
             if (!checkLogic(m.resistances, advancedFilters.resistances, filterLogics.resistances)) return false;
             if (!checkLogic(m.immunities, advancedFilters.immunities, filterLogics.immunities)) return false;
-            if (!checkLogic(m.vulnerabilities, advancedFilters.vulnerabilities, filterLogics.vulnerabilities)) return false;
+            if (!checkLogic(m.vulnerabilities, advancedFilters.vulnerabilities, filterLogics.vulnerabilities))
+                return false;
             if (!checkLogic(m.damageTypes, advancedFilters.damageTypes, filterLogics.damageTypes)) return false;
             if (!checkLogic(m.saveTypes, advancedFilters.saveTypes, filterLogics.saveTypes)) return false;
             if (!checkLogic(m.senses, advancedFilters.senses, filterLogics.senses)) return false;
@@ -489,16 +556,16 @@ export function initVttDataBridge(vtt) {
 
         const fragment = document.createDocumentFragment();
 
-        nextBatch.forEach(monster => {
+        nextBatch.forEach((monster) => {
             const item = document.createElement('div');
             item.className = 'bestiary-table-row';
             item.draggable = true;
-            
+
             // Format challenge rating (CR)
             let crStr = monster.cr ? (typeof monster.cr === 'object' ? monster.cr.cr : monster.cr) : '0';
-            
+
             // Spellcaster indicator
-            const spellBadge = monster.hasSpellcasting 
+            const spellBadge = monster.hasSpellcasting
                 ? `<span title="${monster.casterLevel ? monster.casterLevel + 'th-level ' : ''}${monster.spellAbility ? monster.spellAbility.toUpperCase() + ' ' : ''}Spellcaster" style="color:var(--color-gold-base); margin-left:3px; font-size:0.75rem;"><i class="fa-solid fa-wand-magic-sparkles"></i></span>`
                 : '';
 
@@ -543,7 +610,7 @@ export function initVttDataBridge(vtt) {
 
             // Drag start handler - packages token payload
             item.addEventListener('dragstart', (e) => {
-                e.dataTransfer.setData('application/json', JSON.stringify({
+                const payload = JSON.stringify({
                     type: 'bestiary',
                     id: monster.id,
                     name: monster.name,
@@ -554,7 +621,9 @@ export function initVttDataBridge(vtt) {
                     size: size,
                     img: imageUrl,
                     monsterData: monster // Has catalog summary; hydrated with full data on drop
-                }));
+                });
+                e.dataTransfer.setData('application/json', payload);
+                e.dataTransfer.setData('text/plain', payload);
                 e.dataTransfer.effectAllowed = 'copy';
             });
 
@@ -622,7 +691,8 @@ export function initVttDataBridge(vtt) {
             document.body.style.cursor = 'col-resize';
             document.body.style.userSelect = 'none';
 
-            const currentComputed = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--sidebar-width')) || 380;
+            const currentComputed =
+                parseInt(getComputedStyle(document.documentElement).getPropertyValue('--sidebar-width')) || 380;
             startWidth = currentComputed;
 
             const onMouseMove = (moveEv) => {
@@ -641,7 +711,8 @@ export function initVttDataBridge(vtt) {
                 window.removeEventListener('mousemove', onMouseMove);
                 window.removeEventListener('mouseup', onMouseUp);
 
-                const finalWidth = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--sidebar-width')) || 380;
+                const finalWidth =
+                    parseInt(getComputedStyle(document.documentElement).getPropertyValue('--sidebar-width')) || 380;
                 localStorage.setItem('forgedvtt_sidebar_width', String(finalWidth));
                 if (vtt && vtt.canvas && typeof vtt.canvas.handleResize === 'function') {
                     vtt.canvas.handleResize();
@@ -665,14 +736,21 @@ export function initVttDataBridge(vtt) {
         if (!sizeLetter) return 1;
         const raw = Array.isArray(sizeLetter) ? sizeLetter[0] : sizeLetter;
         const letter = String(raw).trim().charAt(0).toUpperCase();
-        switch(letter) {
-            case 'T': return 1; // Tiny
-            case 'S': return 1; // Small
-            case 'M': return 1; // Medium
-            case 'L': return 2; // Large
-            case 'H': return 3; // Huge
-            case 'G': return 4; // Gargantuan
-            default: return 1;
+        switch (letter) {
+            case 'T':
+                return 1; // Tiny
+            case 'S':
+                return 1; // Small
+            case 'M':
+                return 1; // Medium
+            case 'L':
+                return 2; // Large
+            case 'H':
+                return 3; // Huge
+            case 'G':
+                return 4; // Gargantuan
+            default:
+                return 1;
         }
     }
 
@@ -701,7 +779,7 @@ export function initVttDataBridge(vtt) {
         if (sensesData) {
             // Check direct numeric/string sense properties if object
             if (typeof sensesData === 'object' && !Array.isArray(sensesData)) {
-                ['darkvision', 'blindsight', 'truesight', 'tremorsense', 'devilSight', 'devilsSight'].forEach(k => {
+                ['darkvision', 'blindsight', 'truesight', 'tremorsense', 'devilSight', 'devilsSight'].forEach((k) => {
                     if (sensesData[k] !== undefined && sensesData[k] !== null) {
                         const val = parseInt(sensesData[k], 10);
                         if (!isNaN(val) && val > maxVision) maxVision = val;
@@ -714,23 +792,26 @@ export function initVttDataBridge(vtt) {
             if (typeof sensesData === 'string') {
                 textChunks.push(sensesData);
             } else if (Array.isArray(sensesData)) {
-                sensesData.forEach(item => {
+                sensesData.forEach((item) => {
                     if (typeof item === 'string') textChunks.push(item);
                     else if (typeof item === 'object' && item !== null) {
                         if (item.sensesString) textChunks.push(item.sensesString);
-                        Object.values(item).forEach(v => { if (typeof v === 'string') textChunks.push(v); });
+                        Object.values(item).forEach((v) => {
+                            if (typeof v === 'string') textChunks.push(v);
+                        });
                     }
                 });
             } else if (typeof sensesData === 'object' && sensesData !== null) {
                 if (sensesData.sensesString) textChunks.push(sensesData.sensesString);
-                Object.values(sensesData).forEach(v => {
+                Object.values(sensesData).forEach((v) => {
                     if (typeof v === 'string') textChunks.push(v);
                 });
             }
 
             // Parse any special vision ranges from text
-            const senseRegex = /(?:darkvision|blindsight|truesight|tremorsense|devil(?:'s)?\s*sight)\s*(?:up\s+to\s+|to\s+a\s+range\s+of\s+|of\s+)?(\d+)/gi;
-            textChunks.forEach(text => {
+            const senseRegex =
+                /(?:darkvision|blindsight|truesight|tremorsense|devil(?:'s)?\s*sight)\s*(?:up\s+to\s+|to\s+a\s+range\s+of\s+|of\s+)?(\d+)/gi;
+            textChunks.forEach((text) => {
                 let match;
                 while ((match = senseRegex.exec(text)) !== null) {
                     if (match[1]) {
@@ -742,11 +823,19 @@ export function initVttDataBridge(vtt) {
         }
 
         // Check traits if monster object has trait array
-        const traitsList = Array.isArray(monster.trait) ? monster.trait : (Array.isArray(monster.traits) ? monster.traits : null);
+        const traitsList = Array.isArray(monster.trait)
+            ? monster.trait
+            : Array.isArray(monster.traits)
+                ? monster.traits
+                : null;
         if (maxVision === 0 && traitsList) {
-            const senseRegex = /(?:darkvision|blindsight|truesight|tremorsense|devil(?:'s)?\s*sight)\s*(?:up\s+to\s+|to\s+a\s+range\s+of\s+|of\s+)?(\d+)/gi;
-            traitsList.forEach(t => {
-                const desc = (t.name || '') + ' ' + (t.entries ? (Array.isArray(t.entries) ? t.entries.join(' ') : String(t.entries)) : (t.text || ''));
+            const senseRegex =
+                /(?:darkvision|blindsight|truesight|tremorsense|devil(?:'s)?\s*sight)\s*(?:up\s+to\s+|to\s+a\s+range\s+of\s+|of\s+)?(\d+)/gi;
+            traitsList.forEach((t) => {
+                const desc =
+                    (t.name || '') +
+                    ' ' +
+                    (t.entries ? (Array.isArray(t.entries) ? t.entries.join(' ') : String(t.entries)) : t.text || '');
                 let match;
                 while ((match = senseRegex.exec(desc)) !== null) {
                     if (match[1]) {
@@ -763,7 +852,10 @@ export function initVttDataBridge(vtt) {
 
     // Parse image location matching local folder structure with offline generator fallback
     function getMonsterImageUrl(monster) {
-        if (!monster) return (window.VTT?.generateArcaneToken ? window.VTT.generateArcaneToken('Creature', 'monster') : 'favicon.svg');
+        if (!monster)
+            return window.VTT?.generateArcaneToken
+                ? window.VTT.generateArcaneToken('Creature', 'monster')
+                : 'favicon.svg';
         if (monster.tokenImg) return monster.tokenImg;
         if (monster.tokenUrl) return monster.tokenUrl;
         if (monster.imgUrl) return monster.imgUrl;
@@ -771,38 +863,143 @@ export function initVttDataBridge(vtt) {
             try {
                 const rUrl = Renderer.monster.getTokenUrl(monster);
                 if (rUrl) return rUrl;
-            } catch (e) {}
+            } catch (e) { }
         }
         if (monster.hasToken || monster.source || monster.name) {
-            const cleanName = typeof Parser !== 'undefined' ? Parser.nameToTokenName(monster.name) : (monster.name || '').replace(/"/g, '').trim();
+            const cleanName =
+                typeof Parser !== 'undefined'
+                    ? Parser.nameToTokenName(monster.name)
+                    : (monster.name || '').replace(/"/g, '').trim();
             const source = monster.source || 'MM';
             return `img/bestiary/tokens/${source}/${cleanName}.webp`;
         }
         // Fallback to offline arcane token
-        return (window.VTT?.generateArcaneToken ? window.VTT.generateArcaneToken(monster.name, 'monster') : 'favicon.svg');
+        return window.VTT?.generateArcaneToken
+            ? window.VTT.generateArcaneToken(monster.name, 'monster')
+            : 'favicon.svg';
     }
 
     // Direct drag-and-drop landing handler on viewport canvas
-    viewport.addEventListener('dragover', (e) => {
+    const handleDragOver = (e) => {
         e.preventDefault();
-        e.dataTransfer.dropEffect = 'copy';
-    });
+        if (e.dataTransfer) {
+            e.dataTransfer.dropEffect = 'copy';
+        }
+    };
 
-    viewport.addEventListener('drop', (e) => {
+    const spawnDroppedAssetFile = (fileUrl, fileName, mouse, grid, canvasEngine) => {
+        const isVid = fileUrl.toLowerCase().endsWith('.mp4') || fileUrl.toLowerCase().endsWith('.webm');
+        const maxDim = grid.size * grid.scale;
+        const spawnAssetToken = (pixelWidth, pixelHeight) => {
+            const token = {
+                id: `asset_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
+                name: fileName ? fileName.replace(/\.[^/.]+$/, '') : 'Asset',
+                x: mouse.x - pixelWidth / 2,
+                y: mouse.y - pixelHeight / 2,
+                hp: 0,
+                maxHp: 0,
+                size: 1,
+                img: fileUrl,
+                isGif: typeof fileUrl === 'string' && fileUrl.split('?')[0].toLowerCase().endsWith('.gif'),
+                isVideo: isVid,
+                isAsset: true,
+                pixelWidth: pixelWidth,
+                pixelHeight: pixelHeight,
+                isPlayer: false,
+                layer: canvasEngine.getActiveLayer(),
+                monsterData: null
+            };
+            const snap = snapToCoords(token.x, token.y, grid);
+            token.x = snap.x;
+            token.y = snap.y;
+            canvasEngine.addToken(token);
+        };
+
+        if (isVid) {
+            spawnAssetToken(maxDim, maxDim * (9 / 16));
+        } else {
+            const img = new Image();
+            img.onload = () => {
+                const nw = img.naturalWidth || maxDim;
+                const nh = img.naturalHeight || maxDim;
+                const scale = maxDim / Math.max(nw, nh);
+                spawnAssetToken(nw * scale, nh * scale);
+            };
+            img.onerror = () => spawnAssetToken(maxDim, maxDim);
+            img.src = fileUrl;
+        }
+    };
+
+    const handleCanvasDrop = (e) => {
         e.preventDefault();
-        
+        e.stopPropagation();
+
         try {
-            const rawData = e.dataTransfer.getData('application/json');
+            const canvasEngine = vtt?.canvasEngine || window.VTT?.canvasEngine;
+            if (!canvasEngine) return;
+            const grid = canvasEngine.getGrid();
+            const mouse = canvasEngine.getCanvasMouseCoords(e);
+
+            if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+                for (const file of Array.from(e.dataTransfer.files)) {
+                    const isImg = file.type.startsWith('image/') || /\.(png|jpe?g|webp|svg|gif)$/i.test(file.name);
+                    const isVid = file.type.startsWith('video/') || /\.(mp4|webm|ogg)$/i.test(file.name);
+                    if (!isImg && !isVid) continue;
+
+                    const formData = new FormData();
+                    formData.append('file', file);
+                    const authHeaders = typeof window !== 'undefined' && typeof window.vttAuthHeaders === 'function'
+                        ? window.vttAuthHeaders()
+                        : (window.VTT?.gmSessionToken ? { 'x-gm-token': window.VTT.gmSessionToken } : {});
+
+                    fetch('/api/assets/upload', {
+                        method: 'POST',
+                        headers: authHeaders,
+                        body: formData
+                    })
+                        .then((res) => (res.ok ? res.json() : null))
+                        .then((result) => {
+                            const finalUrl = (result && result.url) || null;
+                            if (finalUrl) {
+                                spawnDroppedAssetFile(finalUrl, file.name, mouse, grid, canvasEngine);
+                            } else {
+                                const reader = new FileReader();
+                                reader.onload = (loadEv) => {
+                                    spawnDroppedAssetFile(loadEv.target.result, file.name, mouse, grid, canvasEngine);
+                                };
+                                reader.readAsDataURL(file);
+                            }
+                        })
+                        .catch(() => {
+                            const reader = new FileReader();
+                            reader.onload = (loadEv) => {
+                                spawnDroppedAssetFile(loadEv.target.result, file.name, mouse, grid, canvasEngine);
+                            };
+                            reader.readAsDataURL(file);
+                        });
+                }
+                return;
+            }
+
+            const rawData =
+                e.dataTransfer.getData('application/json') ||
+                e.dataTransfer.getData('text/plain') ||
+                e.dataTransfer.getData('text');
             if (!rawData) return;
-            const data = JSON.parse(rawData);
-            
+            let data;
+            try {
+                data = JSON.parse(rawData);
+            } catch (err) {
+                return;
+            }
+
             if (data.type === 'bestiary') {
                 const canvasEngine = window.VTT.canvasEngine;
                 const grid = canvasEngine.getGrid();
-                
+
                 // Use the exposed coordinates resolver tool to get true canvas coordinate of drag
                 const mouse = canvasEngine.getCanvasMouseCoords(e);
-                
+
                 const sizePx = data.size * grid.size * grid.scale;
 
                 const token = {
@@ -827,10 +1024,10 @@ export function initVttDataBridge(vtt) {
                 token.y = snap.y;
 
                 canvasEngine.addToken(token);
-                
+
                 // Asynchronously hydrate token.monsterData with full normalized creature if needed
                 if (data.source && (data.id || data.name)) {
-                    fetchFullCreature(data.source, data.id || data.name).then(fullMonster => {
+                    fetchFullCreature(data.source, data.id || data.name).then((fullMonster) => {
                         if (fullMonster) {
                             token.monsterData = fullMonster;
                             const fullSight = parseMonsterVision(fullMonster);
@@ -838,14 +1035,15 @@ export function initVttDataBridge(vtt) {
                                 token.sightRange = fullSight;
                             }
                             if (window.VTT?.socket) {
-                                const curMapId = canvasEngine.getCurrentMapId?.() || canvasEngine.currentMap?.id || null;
+                                const curMapId =
+                                    canvasEngine.getCurrentMapId?.() || canvasEngine.currentMap?.id || null;
                                 window.VTT.socket.emit('token:update', { mapId: curMapId, token });
                             }
                             if (canvasEngine.renderAll) canvasEngine.renderAll();
                         }
                     });
                 }
-                
+
                 // Log spawn message
                 // window.VTT.socket.emit('chat:msg', {
                 //     text: `GM spawned token: **${data.name}** (HP: ${data.hp}/${data.maxHp}, Size: ${data.size}x${data.size})`
@@ -853,10 +1051,10 @@ export function initVttDataBridge(vtt) {
             } else if (data.type === 'player') {
                 const canvasEngine = window.VTT.canvasEngine;
                 const grid = canvasEngine.getGrid();
-                
+
                 const mouse = canvasEngine.getCanvasMouseCoords(e);
                 const sizePx = data.size * grid.size * grid.scale;
-                
+
                 let charRef = null;
                 const charLookupId = data.characterId || data.sourceCharacterId;
                 if (charLookupId && window.VTT?.campaignState?.characters) {
@@ -887,7 +1085,7 @@ export function initVttDataBridge(vtt) {
                 const isCompanion = !!(charRef?.isCompanion || data.isCompanion);
                 const isCustomNpc = !!(charRef?.isCustomNpc || data.isCustomNpc);
                 const isGeneric = !!(data.isGeneric || (charRef && charRef.isGeneric === true));
-                const isPlayer = !isCompanion && !isCustomNpc && (data.isPlayer !== false);
+                const isPlayer = !isCompanion && !isCustomNpc && data.isPlayer !== false;
 
                 const finalSize = charRef && charRef.tokenSize !== undefined ? charRef.tokenSize : data.size;
 
@@ -900,7 +1098,11 @@ export function initVttDataBridge(vtt) {
                     const parsedMonsterSight = parseMonsterVision(charRef.monsterData);
                     if (charRef.tokenSight !== undefined && charRef.tokenSight !== null && charRef.tokenSight > 0) {
                         const rawPp = charRef.monsterData.passive || charRef.monsterData.senses?.passivePerception;
-                        if (rawPp && parseInt(charRef.tokenSight, 10) === parseInt(rawPp, 10) && parsedMonsterSight !== parseInt(rawPp, 10)) {
+                        if (
+                            rawPp &&
+                            parseInt(charRef.tokenSight, 10) === parseInt(rawPp, 10) &&
+                            parsedMonsterSight !== parseInt(rawPp, 10)
+                        ) {
                             resolvedSight = parsedMonsterSight;
                             charRef.tokenSight = parsedMonsterSight;
                         } else {
@@ -910,7 +1112,12 @@ export function initVttDataBridge(vtt) {
                         resolvedSight = parsedMonsterSight;
                         charRef.tokenSight = parsedMonsterSight;
                     }
-                } else if (charRef && charRef.tokenSight !== undefined && charRef.tokenSight !== null && charRef.tokenSight > 0) {
+                } else if (
+                    charRef &&
+                    charRef.tokenSight !== undefined &&
+                    charRef.tokenSight !== null &&
+                    charRef.tokenSight > 0
+                ) {
                     resolvedSight = parseInt(charRef.tokenSight, 10);
                 } else if (data.sightRange !== undefined && data.sightRange !== null && data.sightRange > 0) {
                     resolvedSight = parseInt(data.sightRange, 10);
@@ -921,7 +1128,7 @@ export function initVttDataBridge(vtt) {
                         parseInt(charRef.senses.blindsight, 10) || 0,
                         parseInt(charRef.senses.truesight, 10) || 0
                     );
-                    resolvedSight = maxS > 0 ? maxS : (isPlayer ? 60 : 5);
+                    resolvedSight = maxS > 0 ? maxS : isPlayer ? 60 : 5;
                 } else if (data.monsterData) {
                     resolvedSight = parseMonsterVision(data.monsterData);
                 } else if (isPlayer) {
@@ -929,7 +1136,7 @@ export function initVttDataBridge(vtt) {
                 }
 
                 const token = {
-                    id: `token_${isPlayer ? 'pc' : (isCompanion ? 'comp' : 'npc')}_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
+                    id: `token_${isPlayer ? 'pc' : isCompanion ? 'comp' : 'npc'}_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
                     name: data.name,
                     x: mouse.x - sizePx / 2,
                     y: mouse.y - sizePx / 2,
@@ -946,40 +1153,122 @@ export function initVttDataBridge(vtt) {
                     isCustomNpc: isCustomNpc,
                     isGeneric: isGeneric,
                     characterId: isGeneric ? null : data.characterId,
-                    sourceCharacterId: isGeneric ? (data.sourceCharacterId || data.characterId) : null,
-                    ownerUsername: (window.VTT?.role !== 'GM' && window.VTT?.username) ? window.VTT.username : (charRef?.ownerUsername || null),
-                    playerOwner: (window.VTT?.role !== 'GM' && window.VTT?.username) ? window.VTT.username : (charRef?.owner || null),
-                    monsterData: isGeneric 
-                        ? Object.assign(charRef?.monsterData ? JSON.parse(JSON.stringify(charRef.monsterData)) : (data.monsterData ? JSON.parse(JSON.stringify(data.monsterData)) : {}), { isCustomNpc: true, isGeneric: true })
-                        : (charRef?.monsterData || data.monsterData || null),
+                    sourceCharacterId: isGeneric ? data.sourceCharacterId || data.characterId : null,
+                    ownerUsername:
+                        window.VTT?.role !== 'GM' && window.VTT?.username
+                            ? window.VTT.username
+                            : charRef?.ownerUsername || null,
+                    playerOwner:
+                        window.VTT?.role !== 'GM' && window.VTT?.username
+                            ? window.VTT.username
+                            : charRef?.owner || null,
+                    monsterData: isGeneric
+                        ? Object.assign(
+                            charRef?.monsterData
+                                ? JSON.parse(JSON.stringify(charRef.monsterData))
+                                : data.monsterData
+                                    ? JSON.parse(JSON.stringify(data.monsterData))
+                                    : {},
+                            { isCustomNpc: true, isGeneric: true }
+                        )
+                        : charRef?.monsterData || data.monsterData || null,
                     layer: canvasEngine.getActiveLayer(),
                     isBorderless: true,
-                    
+
                     // Auras, Light and FX - fallback to charRef properties
                     auras: data.auras || (charRef && charRef.tokenAuras) || [],
-                    lightEnabled: data.lightEnabled !== undefined ? data.lightEnabled : (charRef ? charRef.tokenLightEnabled : false),
-                    lightBright: data.lightBright !== undefined ? data.lightBright : (charRef ? charRef.tokenLightBright : 0),
-                    lightDim: data.lightDim !== undefined ? data.lightDim : (charRef ? charRef.tokenLightDim : 0),
+                    lightEnabled:
+                        data.lightEnabled !== undefined
+                            ? data.lightEnabled
+                            : charRef
+                                ? charRef.tokenLightEnabled
+                                : false,
+                    lightBright:
+                        data.lightBright !== undefined ? data.lightBright : charRef ? charRef.tokenLightBright : 0,
+                    lightDim: data.lightDim !== undefined ? data.lightDim : charRef ? charRef.tokenLightDim : 0,
                     lightColor: data.lightColor || (charRef ? charRef.tokenLightColor : '#ffaa00'),
-                    lightAngle: data.lightAngle !== undefined ? data.lightAngle : (charRef && charRef.tokenLightAngle !== undefined ? charRef.tokenLightAngle : 360),
-                    lightRotation: data.lightRotation !== undefined ? data.lightRotation : (charRef && charRef.tokenLightRotation !== undefined ? charRef.tokenLightRotation : 0),
+                    lightAngle:
+                        data.lightAngle !== undefined
+                            ? data.lightAngle
+                            : charRef && charRef.tokenLightAngle !== undefined
+                                ? charRef.tokenLightAngle
+                                : 360,
+                    lightRotation:
+                        data.lightRotation !== undefined
+                            ? data.lightRotation
+                            : charRef && charRef.tokenLightRotation !== undefined
+                                ? charRef.tokenLightRotation
+                                : 0,
                     lightAnimationType: data.lightAnimationType || (charRef ? charRef.tokenLightAnimationType : 'none'),
-                    lightAnimationSpeed: data.lightAnimationSpeed !== undefined ? data.lightAnimationSpeed : (charRef && charRef.tokenLightAnimationSpeed !== undefined ? charRef.tokenLightAnimationSpeed : 1.0),
-                    lightAnimationIntensity: data.lightAnimationIntensity !== undefined ? data.lightAnimationIntensity : (charRef && charRef.tokenLightAnimationIntensity !== undefined ? charRef.tokenLightAnimationIntensity : 0.10),
-                    lightAnimationColor2: data.lightAnimationColor2 || (charRef ? charRef.tokenLightAnimationColor2 : '#ffe082'),
-                    fxOverlayEnabled: data.fxOverlayEnabled !== undefined ? data.fxOverlayEnabled : (charRef ? charRef.fxOverlayEnabled : false),
-                    fxOverlayOpacity: data.fxOverlayOpacity !== undefined ? data.fxOverlayOpacity : (charRef ? charRef.fxOverlayOpacity : 0.3),
+                    lightAnimationSpeed:
+                        data.lightAnimationSpeed !== undefined
+                            ? data.lightAnimationSpeed
+                            : charRef && charRef.tokenLightAnimationSpeed !== undefined
+                                ? charRef.tokenLightAnimationSpeed
+                                : 1.0,
+                    lightAnimationIntensity:
+                        data.lightAnimationIntensity !== undefined
+                            ? data.lightAnimationIntensity
+                            : charRef && charRef.tokenLightAnimationIntensity !== undefined
+                                ? charRef.tokenLightAnimationIntensity
+                                : 0.1,
+                    lightAnimationColor2:
+                        data.lightAnimationColor2 || (charRef ? charRef.tokenLightAnimationColor2 : '#ffe082'),
+                    fxOverlayEnabled:
+                        data.fxOverlayEnabled !== undefined
+                            ? data.fxOverlayEnabled
+                            : charRef
+                                ? charRef.fxOverlayEnabled
+                                : false,
+                    fxOverlayOpacity:
+                        data.fxOverlayOpacity !== undefined
+                            ? data.fxOverlayOpacity
+                            : charRef
+                                ? charRef.fxOverlayOpacity
+                                : 0.3,
                     fxOverlayColor: data.fxOverlayColor || (charRef ? charRef.fxOverlayColor : '#007bff'),
-                    fxVignetteEnabled: data.fxVignetteEnabled !== undefined ? data.fxVignetteEnabled : (charRef ? charRef.fxVignetteEnabled : false),
-                    fxVignetteOpacity: data.fxVignetteOpacity !== undefined ? data.fxVignetteOpacity : (charRef ? charRef.fxVignetteOpacity : 0.6),
+                    fxVignetteEnabled:
+                        data.fxVignetteEnabled !== undefined
+                            ? data.fxVignetteEnabled
+                            : charRef
+                                ? charRef.fxVignetteEnabled
+                                : false,
+                    fxVignetteOpacity:
+                        data.fxVignetteOpacity !== undefined
+                            ? data.fxVignetteOpacity
+                            : charRef
+                                ? charRef.fxVignetteOpacity
+                                : 0.6,
                     fxVignetteColor: data.fxVignetteColor || (charRef ? charRef.fxVignetteColor : '#000000'),
-                    fxShadowEnabled: data.fxShadowEnabled !== undefined ? data.fxShadowEnabled : (charRef ? charRef.fxShadowEnabled : false),
-                    fxShadowBlur: data.fxShadowBlur !== undefined ? data.fxShadowBlur : (charRef ? charRef.fxShadowBlur : 12),
-                    fxShadowOffset: data.fxShadowOffset !== undefined ? data.fxShadowOffset : (charRef ? charRef.fxShadowOffset : 4),
+                    fxShadowEnabled:
+                        data.fxShadowEnabled !== undefined
+                            ? data.fxShadowEnabled
+                            : charRef
+                                ? charRef.fxShadowEnabled
+                                : false,
+                    fxShadowBlur:
+                        data.fxShadowBlur !== undefined ? data.fxShadowBlur : charRef ? charRef.fxShadowBlur : 12,
+                    fxShadowOffset:
+                        data.fxShadowOffset !== undefined ? data.fxShadowOffset : charRef ? charRef.fxShadowOffset : 4,
                     fxShadowColor: data.fxShadowColor || (charRef ? charRef.fxShadowColor : '#000000'),
-                    fxShadowOpacity: data.fxShadowOpacity !== undefined ? data.fxShadowOpacity : (charRef ? charRef.fxShadowOpacity : 0.7),
-                    isGif: tokenImg && typeof tokenImg === 'string' && tokenImg.split('?')[0].toLowerCase().endsWith('.gif'),
-                    isVideo: tokenImg && typeof tokenImg === 'string' && ((() => { const _c = tokenImg.split('?')[0].toLowerCase(); return _c.endsWith('.mp4') || _c.endsWith('.webm') || _c.endsWith('.ogg'); })() || tokenImg.includes('youtube.com'))
+                    fxShadowOpacity:
+                        data.fxShadowOpacity !== undefined
+                            ? data.fxShadowOpacity
+                            : charRef
+                                ? charRef.fxShadowOpacity
+                                : 0.7,
+                    isGif:
+                        tokenImg &&
+                        typeof tokenImg === 'string' &&
+                        tokenImg.split('?')[0].toLowerCase().endsWith('.gif'),
+                    isVideo:
+                        tokenImg &&
+                        typeof tokenImg === 'string' &&
+                        ((() => {
+                            const _c = tokenImg.split('?')[0].toLowerCase();
+                            return _c.endsWith('.mp4') || _c.endsWith('.webm') || _c.endsWith('.ogg');
+                        })() ||
+                            tokenImg.includes('youtube.com'))
                 };
 
                 // Backward compatibility for aura
@@ -1000,7 +1289,7 @@ export function initVttDataBridge(vtt) {
                 token.y = snap.y;
 
                 canvasEngine.addToken(token);
-                
+
                 // Log spawn message
                 // window.VTT.socket.emit('chat:msg', {
                 //     text: `Player **${data.name}** joined the map.`
@@ -1009,14 +1298,16 @@ export function initVttDataBridge(vtt) {
                 const canvasEngine = window.VTT.canvasEngine;
                 const grid = canvasEngine.getGrid();
                 const mouse = canvasEngine.getCanvasMouseCoords(e);
-                
+
                 const spawnAsset = (pixelWidth, pixelHeight) => {
                     let finalUrl = data.url;
-                    
+
                     // Convert raw YouTube URLs to embed URLs if needed
                     if (finalUrl.includes('youtube.com') || finalUrl.includes('youtu.be')) {
                         if (!finalUrl.includes('/embed/')) {
-                            const ytMatch = finalUrl.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i);
+                            const ytMatch = finalUrl.match(
+                                /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i
+                            );
                             if (ytMatch && ytMatch[1]) {
                                 const videoId = ytMatch[1];
                                 const listMatch = finalUrl.match(/[?&]list=([^#\&\?]+)/);
@@ -1040,7 +1331,14 @@ export function initVttDataBridge(vtt) {
                         size: 1,
                         img: finalUrl,
                         isGif: typeof finalUrl === 'string' && finalUrl.split('?')[0].toLowerCase().endsWith('.gif'),
-                        isVideo: data.assetType === 'video' || (typeof finalUrl === 'string' && (finalUrl.includes('youtube.com') || (() => { const _c = finalUrl.split('?')[0].toLowerCase(); return _c.endsWith('.mp4') || _c.endsWith('.webm') || _c.endsWith('.ogg'); })())),
+                        isVideo:
+                            data.assetType === 'video' ||
+                            (typeof finalUrl === 'string' &&
+                                (finalUrl.includes('youtube.com') ||
+                                    (() => {
+                                        const _c = finalUrl.split('?')[0].toLowerCase();
+                                        return _c.endsWith('.mp4') || _c.endsWith('.webm') || _c.endsWith('.ogg');
+                                    })())),
                         isAsset: true,
                         pixelWidth: pixelWidth,
                         pixelHeight: pixelHeight,
@@ -1054,7 +1352,7 @@ export function initVttDataBridge(vtt) {
                     token.y = snap.y;
 
                     canvasEngine.addToken(token);
-                    
+
                     // window.VTT.socket.emit('chat:msg', {
                     //     text: `GM placed an asset: **${data.name}**`
                     // });
@@ -1063,7 +1361,7 @@ export function initVttDataBridge(vtt) {
                 const maxDim = grid.size * grid.scale;
                 if (data.assetType === 'video' || data.url.includes('youtube.com')) {
                     // Assume 16:9
-                    spawnAsset(maxDim, maxDim * (9/16));
+                    spawnAsset(maxDim, maxDim * (9 / 16));
                 } else {
                     const img = new Image();
                     img.onload = () => {
@@ -1076,10 +1374,28 @@ export function initVttDataBridge(vtt) {
                     img.src = data.url;
                 }
             }
-        } catch(err) {
-            console.error("Drop failed:", err);
+        } catch (err) {
+            console.error('Drop failed:', err);
         }
-    });
+    };
+
+    const attachCanvasDropTargets = () => {
+        const dropTargets = [
+            viewport,
+            document.getElementById('canvas-container'),
+            document.getElementById('vtt-canvas-interaction')
+        ].filter(Boolean);
+
+        dropTargets.forEach((el) => {
+            el.removeEventListener('dragover', handleDragOver);
+            el.removeEventListener('dragenter', handleDragOver);
+            el.removeEventListener('drop', handleCanvasDrop);
+            el.addEventListener('dragover', handleDragOver);
+            el.addEventListener('dragenter', handleDragOver);
+            el.addEventListener('drop', handleCanvasDrop);
+        });
+    };
+    attachCanvasDropTargets();
 
     function getNearestHexFeatures(x, y, grid, unitSize) {
         const offsetX = grid.offsetX || 0;
@@ -1089,8 +1405,9 @@ export function initVttDataBridge(vtt) {
         const isEven = type === 'hex-v-even' || type === 'hex-h-even';
         const R = unitSize / Math.sqrt(3);
         let bestDistCenter = Infinity;
-        let bestCx = x, bestCy = y;
-        
+        let bestCx = x,
+            bestCy = y;
+
         const checkHex = (cx, cy) => {
             const cDist = (cx - x) ** 2 + (cy - y) ** 2;
             if (cDist < bestDistCenter) {
@@ -1109,7 +1426,7 @@ export function initVttDataBridge(vtt) {
                 for (let dc = -2; dc <= 2; dc++) {
                     const r = estR + dr;
                     const c = estC + dc;
-                    const isShifted = isEven ? (Math.abs(r) % 2 === 0) : (Math.abs(r) % 2 === 1);
+                    const isShifted = isEven ? Math.abs(r) % 2 === 0 : Math.abs(r) % 2 === 1;
                     const cx = offsetX + c * W + (isShifted ? W / 2 : 0);
                     const cy = offsetY + r * ySpacing;
                     checkHex(cx, cy);
@@ -1124,7 +1441,7 @@ export function initVttDataBridge(vtt) {
                 for (let dc = -2; dc <= 2; dc++) {
                     const r = estR + dr;
                     const c = estC + dc;
-                    const isShifted = isEven ? (Math.abs(c) % 2 === 0) : (Math.abs(c) % 2 === 1);
+                    const isShifted = isEven ? Math.abs(c) % 2 === 0 : Math.abs(c) % 2 === 1;
                     const cx = offsetX + c * xSpacing;
                     const cy = offsetY + r * H + (isShifted ? H / 2 : 0);
                     checkHex(cx, cy);
@@ -1181,10 +1498,16 @@ export function initVttDataBridge(vtt) {
         }
 
         const viewportEl = document.getElementById('vtt-canvas-viewport');
-        const vr = viewportEl ? viewportEl.getBoundingClientRect() : { left: 0, top: 0, width: window.innerWidth, height: window.innerHeight };
-        const mouse = (targetWorldX !== undefined && targetWorldY !== undefined)
-            ? { x: targetWorldX, y: targetWorldY }
-            : canvasEngine.getCanvasMouseCoords({ clientX: vr.left + vr.width / 2, clientY: vr.top + vr.height / 2 });
+        const vr = viewportEl
+            ? viewportEl.getBoundingClientRect()
+            : { left: 0, top: 0, width: window.innerWidth, height: window.innerHeight };
+        const mouse =
+            targetWorldX !== undefined && targetWorldY !== undefined
+                ? { x: targetWorldX, y: targetWorldY }
+                : canvasEngine.getCanvasMouseCoords({
+                    clientX: vr.left + vr.width / 2,
+                    clientY: vr.top + vr.height / 2
+                });
         const grid = canvasEngine.getGrid();
         const sizePx = size * grid.size * grid.scale;
 
@@ -1217,7 +1540,7 @@ export function initVttDataBridge(vtt) {
         const source = monster.source || monster.monsterData?.source;
         const idOrName = monster.id || monster.monsterData?.id || monster.name;
         if (source && idOrName) {
-            fetchFullCreature(source, idOrName).then(fullMonster => {
+            fetchFullCreature(source, idOrName).then((fullMonster) => {
                 if (fullMonster) {
                     token.monsterData = fullMonster;
                     if (window.VTT?.socket) {
@@ -1246,8 +1569,13 @@ export function initVttDataBridge(vtt) {
 
         const grid = canvasEngine.getGrid();
         const isGeneric = npc.isGeneric === true;
-        const size = npc.tokenSize !== undefined ? npc.tokenSize : (npc.monsterData ? translateSizeCategory(npc.monsterData.size) : 1);
-        const hp = isGeneric ? (npc.hpMax || calculateMonsterHp(npc.monsterData)) : npc.hpCurrent;
+        const size =
+            npc.tokenSize !== undefined
+                ? npc.tokenSize
+                : npc.monsterData
+                    ? translateSizeCategory(npc.monsterData.size)
+                    : 1;
+        const hp = isGeneric ? npc.hpMax || calculateMonsterHp(npc.monsterData) : npc.hpCurrent;
         const maxHp = npc.hpMax || calculateMonsterHp(npc.monsterData);
 
         let tokenImg = null;
@@ -1262,10 +1590,16 @@ export function initVttDataBridge(vtt) {
         }
 
         const viewportEl = document.getElementById('vtt-canvas-viewport');
-        const vr = viewportEl ? viewportEl.getBoundingClientRect() : { left: 0, top: 0, width: window.innerWidth, height: window.innerHeight };
-        const mouse = (targetWorldX !== undefined && targetWorldY !== undefined)
-            ? { x: targetWorldX, y: targetWorldY }
-            : canvasEngine.getCanvasMouseCoords({ clientX: vr.left + vr.width / 2, clientY: vr.top + vr.height / 2 });
+        const vr = viewportEl
+            ? viewportEl.getBoundingClientRect()
+            : { left: 0, top: 0, width: window.innerWidth, height: window.innerHeight };
+        const mouse =
+            targetWorldX !== undefined && targetWorldY !== undefined
+                ? { x: targetWorldX, y: targetWorldY }
+                : canvasEngine.getCanvasMouseCoords({
+                    clientX: vr.left + vr.width / 2,
+                    clientY: vr.top + vr.height / 2
+                });
         const sizePx = size * grid.size * grid.scale;
 
         let targetLayer = canvasEngine.getActiveLayer();
@@ -1278,14 +1612,17 @@ export function initVttDataBridge(vtt) {
             y: mouse.y - sizePx / 2,
             hp: hp,
             maxHp: maxHp,
-            tempHp: isGeneric ? 0 : (npc.tempHp || 0),
+            tempHp: isGeneric ? 0 : npc.tempHp || 0,
             size: size,
             characterId: isGeneric ? null : npc.id,
             sourceCharacterId: npc.id,
             isGeneric: isGeneric,
             isCustomNpc: true,
             isPlayer: false,
-            sightRange: (npc.tokenSight !== undefined && npc.tokenSight > 0) ? npc.tokenSight : parseMonsterVision(npc.monsterData),
+            sightRange:
+                npc.tokenSight !== undefined && npc.tokenSight > 0
+                    ? npc.tokenSight
+                    : parseMonsterVision(npc.monsterData),
             img: tokenImg,
             layer: targetLayer,
             isBorderless: true,
@@ -1323,7 +1660,11 @@ export function initVttDataBridge(vtt) {
 
         let size = char.tokenSize !== undefined ? char.tokenSize : 1;
         if (char.isCompanion && char.monsterData) {
-            const sz = char.monsterData.size ? (Array.isArray(char.monsterData.size) ? char.monsterData.size[0] : char.monsterData.size) : 'M';
+            const sz = char.monsterData.size
+                ? Array.isArray(char.monsterData.size)
+                    ? char.monsterData.size[0]
+                    : char.monsterData.size
+                : 'M';
             size = translateSizeCategory(sz);
         }
 
@@ -1341,14 +1682,22 @@ export function initVttDataBridge(vtt) {
             tokenImg = char.avatar;
         }
         if (!tokenImg) {
-            tokenImg = window.VTT?.generateArcaneToken ? window.VTT.generateArcaneToken(char.name, 'player') : 'favicon.svg';
+            tokenImg = window.VTT?.generateArcaneToken
+                ? window.VTT.generateArcaneToken(char.name, 'player')
+                : 'favicon.svg';
         }
 
         const viewportEl = document.getElementById('vtt-canvas-viewport');
-        const vr = viewportEl ? viewportEl.getBoundingClientRect() : { left: 0, top: 0, width: window.innerWidth, height: window.innerHeight };
-        const mouse = (targetWorldX !== undefined && targetWorldY !== undefined)
-            ? { x: targetWorldX, y: targetWorldY }
-            : canvasEngine.getCanvasMouseCoords({ clientX: vr.left + vr.width / 2, clientY: vr.top + vr.height / 2 });
+        const vr = viewportEl
+            ? viewportEl.getBoundingClientRect()
+            : { left: 0, top: 0, width: window.innerWidth, height: window.innerHeight };
+        const mouse =
+            targetWorldX !== undefined && targetWorldY !== undefined
+                ? { x: targetWorldX, y: targetWorldY }
+                : canvasEngine.getCanvasMouseCoords({
+                    clientX: vr.left + vr.width / 2,
+                    clientY: vr.top + vr.height / 2
+                });
         const grid = canvasEngine.getGrid();
         const sizePx = size * grid.size * grid.scale;
 
@@ -1371,7 +1720,14 @@ export function initVttDataBridge(vtt) {
             sourceCharacterId: char.id,
             isCompanion: isCompanion,
             isPlayer: !isCompanion && !char.isCustomNpc,
-            sightRange: (char.tokenSight !== undefined && char.tokenSight > 0) ? char.tokenSight : (char.monsterData ? parseMonsterVision(char.monsterData) : (isCompanion ? 5 : 60)),
+            sightRange:
+                char.tokenSight !== undefined && char.tokenSight > 0
+                    ? char.tokenSight
+                    : char.monsterData
+                        ? parseMonsterVision(char.monsterData)
+                        : isCompanion
+                            ? 5
+                            : 60,
             img: tokenImg,
             layer: targetLayer,
             isBorderless: true,
@@ -1400,17 +1756,25 @@ export function initVttDataBridge(vtt) {
         if (!canvasEngine) return;
 
         const viewportEl = document.getElementById('vtt-canvas-viewport');
-        const vr = viewportEl ? viewportEl.getBoundingClientRect() : { left: 0, top: 0, width: window.innerWidth, height: window.innerHeight };
-        const mouse = (targetWorldX !== undefined && targetWorldY !== undefined)
-            ? { x: targetWorldX, y: targetWorldY }
-            : canvasEngine.getCanvasMouseCoords({ clientX: vr.left + vr.width / 2, clientY: vr.top + vr.height / 2 });
+        const vr = viewportEl
+            ? viewportEl.getBoundingClientRect()
+            : { left: 0, top: 0, width: window.innerWidth, height: window.innerHeight };
+        const mouse =
+            targetWorldX !== undefined && targetWorldY !== undefined
+                ? { x: targetWorldX, y: targetWorldY }
+                : canvasEngine.getCanvasMouseCoords({
+                    clientX: vr.left + vr.width / 2,
+                    clientY: vr.top + vr.height / 2
+                });
         const grid = canvasEngine.getGrid();
 
         const spawnAsset = (pixelWidth, pixelHeight) => {
             let finalUrl = data.url;
             if (finalUrl.includes('youtube.com') || finalUrl.includes('youtu.be')) {
                 if (!finalUrl.includes('/embed/')) {
-                    const ytMatch = finalUrl.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i);
+                    const ytMatch = finalUrl.match(
+                        /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i
+                    );
                     if (ytMatch && ytMatch[1]) {
                         const videoId = ytMatch[1];
                         const listMatch = finalUrl.match(/[?&]list=([^#\&\?]+)/);
@@ -1424,27 +1788,34 @@ export function initVttDataBridge(vtt) {
                 }
             }
 
-                let targetLayer = canvasEngine.getActiveLayer();
-                if (targetLayer !== 'map' && targetLayer !== 'gm') targetLayer = 'token';
+            let targetLayer = canvasEngine.getActiveLayer();
+            if (targetLayer !== 'map' && targetLayer !== 'gm') targetLayer = 'token';
 
-                const token = {
-                    id: `asset_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
-                    name: data.name || 'Asset',
-                    x: mouse.x - pixelWidth / 2,
-                    y: mouse.y - pixelHeight / 2,
-                    hp: 0,
-                    maxHp: 0,
-                    size: 1,
-                    img: finalUrl,
-                    isGif: typeof finalUrl === 'string' && finalUrl.split('?')[0].toLowerCase().endsWith('.gif'),
-                    isVideo: data.assetType === 'video' || (typeof finalUrl === 'string' && (finalUrl.includes('youtube.com') || (() => { const _c = finalUrl.split('?')[0].toLowerCase(); return _c.endsWith('.mp4') || _c.endsWith('.webm') || _c.endsWith('.ogg'); })())),
-                    isAsset: true,
-                    pixelWidth: pixelWidth,
-                    pixelHeight: pixelHeight,
-                    isPlayer: false,
-                    layer: targetLayer,
-                    isBorderless: true
-                };
+            const token = {
+                id: `asset_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
+                name: data.name || 'Asset',
+                x: mouse.x - pixelWidth / 2,
+                y: mouse.y - pixelHeight / 2,
+                hp: 0,
+                maxHp: 0,
+                size: 1,
+                img: finalUrl,
+                isGif: typeof finalUrl === 'string' && finalUrl.split('?')[0].toLowerCase().endsWith('.gif'),
+                isVideo:
+                    data.assetType === 'video' ||
+                    (typeof finalUrl === 'string' &&
+                        (finalUrl.includes('youtube.com') ||
+                            (() => {
+                                const _c = finalUrl.split('?')[0].toLowerCase();
+                                return _c.endsWith('.mp4') || _c.endsWith('.webm') || _c.endsWith('.ogg');
+                            })())),
+                isAsset: true,
+                pixelWidth: pixelWidth,
+                pixelHeight: pixelHeight,
+                isPlayer: false,
+                layer: targetLayer,
+                isBorderless: true
+            };
 
             const snap = snapToCoords(token.x, token.y, grid);
             token.x = snap.x;
@@ -1462,7 +1833,14 @@ export function initVttDataBridge(vtt) {
             }
         };
 
-        const isVideo = data.assetType === 'video' || (typeof data.url === 'string' && (data.url.includes('youtube.com') || (() => { const _c = data.url.split('?')[0].toLowerCase(); return _c.endsWith('.mp4') || _c.endsWith('.webm') || _c.endsWith('.ogg'); })()));
+        const isVideo =
+            data.assetType === 'video' ||
+            (typeof data.url === 'string' &&
+                (data.url.includes('youtube.com') ||
+                    (() => {
+                        const _c = data.url.split('?')[0].toLowerCase();
+                        return _c.endsWith('.mp4') || _c.endsWith('.webm') || _c.endsWith('.ogg');
+                    })()));
         if (isVideo) {
             spawnAsset(grid.size * grid.scale * 3, grid.size * grid.scale * 3);
         } else {
@@ -1483,11 +1861,10 @@ export function initVttDataBridge(vtt) {
         }
     }
 
-
     // Tab switching logic for Bestiary Drawer
-    document.querySelectorAll('.lib-tab-btn').forEach(btn => {
+    document.querySelectorAll('.lib-tab-btn').forEach((btn) => {
         btn.addEventListener('click', (e) => {
-            document.querySelectorAll('.lib-tab-btn').forEach(b => {
+            document.querySelectorAll('.lib-tab-btn').forEach((b) => {
                 b.classList.remove('active');
                 b.style.borderBottomColor = 'transparent';
                 b.style.color = 'var(--color-text-secondary)';
@@ -1495,8 +1872,8 @@ export function initVttDataBridge(vtt) {
             e.target.classList.add('active');
             e.target.style.borderBottomColor = 'var(--color-gold-base)';
             e.target.style.color = 'var(--color-text-primary)';
-            
-            document.querySelectorAll('.lib-tab-content').forEach(c => {
+
+            document.querySelectorAll('.lib-tab-content').forEach((c) => {
                 c.classList.add('vtt-hidden');
                 c.classList.remove('active');
             });
@@ -1505,7 +1882,7 @@ export function initVttDataBridge(vtt) {
                 targetContent.classList.remove('vtt-hidden');
                 targetContent.classList.add('active');
             }
-            
+
             if (e.target.dataset.tab === 'lib-custom') {
                 renderCustomNpcList();
             }
@@ -1520,11 +1897,12 @@ export function initVttDataBridge(vtt) {
     function openNpcImportModal() {
         const modalOverlay = document.createElement('div');
         modalOverlay.className = 'vtt-sheet-submodal-overlay';
-        
+
         const modal = document.createElement('div');
         modal.className = 'vtt-sheet-submodal bestiary-import-drawer-mobile';
-        modal.style.cssText = 'width: min(540px, 94vw); max-height: 86vh; display:flex; flex-direction:column; background: var(--color-bg-base); padding: 0;';
-        
+        modal.style.cssText =
+            'width: min(540px, 94vw); max-height: 86vh; display:flex; flex-direction:column; background: var(--color-bg-base); padding: 0;';
+
         modal.innerHTML = `
             <div class="bestiary-drawer-header" style="padding:14px 18px; border-bottom:1px solid var(--color-border-subtle); display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.25);">
                 <h3 style="margin:0; color:var(--color-gold-base); font-size:1.05rem; display:flex; align-items:center; gap:8px;"><i class="fa-solid fa-file-import"></i> Import Bestiary Template</h3>
@@ -1537,42 +1915,49 @@ export function initVttDataBridge(vtt) {
                 <div id="npc-list" style="display:flex; flex-direction:column; gap:4px;"></div>
             </div>
         `;
-        
+
         document.body.appendChild(modalOverlay);
         document.body.appendChild(modal);
-        
+
         const listEl = modal.querySelector('#npc-list');
         const searchInput = modal.querySelector('#npc-search');
-        
+
         const renderList = (query) => {
             listEl.innerHTML = '';
             const q = query.toLowerCase().trim();
-            const filtered = monsters.filter(m => {
-                if (!q) return true;
-                const nameMatch = m.name.toLowerCase().includes(q);
-                const crStr = m.cr ? (typeof m.cr === 'object' ? String(m.cr.cr) : String(m.cr)).toLowerCase() : '0';
-                const crMatch = crStr === q || crStr.includes(q) || `cr ${crStr}`.includes(q) || `cr${crStr}`.includes(q);
-                return nameMatch || crMatch;
-            }).slice(0, 50);
-            
-            filtered.forEach(m => {
+            const filtered = monsters
+                .filter((m) => {
+                    if (!q) return true;
+                    const nameMatch = m.name.toLowerCase().includes(q);
+                    const crStr = m.cr
+                        ? (typeof m.cr === 'object' ? String(m.cr.cr) : String(m.cr)).toLowerCase()
+                        : '0';
+                    const crMatch =
+                        crStr === q || crStr.includes(q) || `cr ${crStr}`.includes(q) || `cr${crStr}`.includes(q);
+                    return nameMatch || crMatch;
+                })
+                .slice(0, 50);
+
+            filtered.forEach((m) => {
                 const row = document.createElement('div');
-                row.className = 'npc-template-row glassmorphism';
-                row.style.cssText = 'padding:10px 14px; border:1px solid var(--color-border-subtle); cursor:pointer; display:flex; justify-content:space-between; align-items: center; border-radius: 6px; margin-bottom: 4px; transition: background 0.2s; min-height: 44px;';
-                row.innerHTML = `<span><strong style="color:var(--color-text-primary); font-size:0.95rem;">${m.name}</strong> <span style="font-size:0.75em; color:var(--color-text-muted);">[${m.source || 'Unknown'}]</span></span> <span style="color:var(--color-gold-light); font-size: 0.85em; font-weight:600; background:rgba(212,175,55,0.12); border:1px solid rgba(212,175,55,0.25); border-radius:12px; padding:2px 8px;">CR ${m.cr ? (m.cr.cr || m.cr) : '0'}</span>`;
+                row.className = 'npc-template-row glass-flat';
+                row.style.cssText =
+                    'padding:10px 14px; border:1px solid var(--color-border-subtle); cursor:pointer; display:flex; justify-content:space-between; align-items: center; border-radius: 6px; margin-bottom: 4px; transition: background 0.2s; min-height: 44px;';
+                row.innerHTML = `<span><strong style="color:var(--color-text-primary); font-size:0.95rem;">${m.name}</strong> <span style="font-size:0.75em; color:var(--color-text-muted);">[${m.source || 'Unknown'}]</span></span> <span style="color:var(--color-gold-light); font-size: 0.85em; font-weight:600; background:rgba(212,175,55,0.12); border:1px solid rgba(212,175,55,0.25); border-radius:12px; padding:2px 8px;">CR ${m.cr ? m.cr.cr || m.cr : '0'}</span>`;
                 row.addEventListener('click', () => {
                     promptCustomNpcName(m);
                     closeModal();
                 });
-                row.onmouseover = () => row.style.background = 'rgba(255,255,255,0.05)';
-                row.onmouseout = () => row.style.background = 'transparent';
+                row.onmouseover = () => (row.style.background = 'rgba(255,255,255,0.05)');
+                row.onmouseout = () => (row.style.background = 'transparent');
                 listEl.appendChild(row);
             });
             if (filtered.length === 0) {
-                listEl.innerHTML = '<div style="padding: 16px; color: var(--color-text-muted); text-align: center;">No monsters found.</div>';
+                listEl.innerHTML =
+                    '<div style="padding: 16px; color: var(--color-text-muted); text-align: center;">No monsters found.</div>';
             }
         };
-        
+
         let escListener = null;
         const closeModal = () => {
             if (escListener) window.removeEventListener('keydown', escListener);
@@ -1584,7 +1969,7 @@ export function initVttDataBridge(vtt) {
             if (e.key === 'Escape') closeModal();
         };
         window.addEventListener('keydown', escListener);
-        
+
         modal.querySelector('#npc-modal-close').addEventListener('click', closeModal);
         modalOverlay.addEventListener('click', closeModal);
         searchInput.addEventListener('input', (e) => renderList(e.target.value));
@@ -1598,7 +1983,7 @@ export function initVttDataBridge(vtt) {
         const modal = document.createElement('div');
         modal.className = 'vtt-sheet-submodal vtt-sheet-submodal-high glassmorphism';
         modal.style.cssText = 'width: min(420px, 92vw); padding: 18px;';
-        
+
         modal.innerHTML = `
             <h4 style="margin-top:0; color:var(--color-gold-base);">Import ${monster.name}</h4>
             <div class="form-group">
@@ -1610,10 +1995,10 @@ export function initVttDataBridge(vtt) {
                 <button id="npc-import-save" class="btn btn-primary btn-sm">Import</button>
             </div>
         `;
-        
+
         document.body.appendChild(overlay);
         document.body.appendChild(modal);
-        
+
         let escListener = null;
         const closeModals = () => {
             if (escListener) window.removeEventListener('keydown', escListener);
@@ -1625,29 +2010,32 @@ export function initVttDataBridge(vtt) {
             if (e.key === 'Escape') closeModals();
         };
         window.addEventListener('keydown', escListener);
-        
+
         overlay.addEventListener('click', closeModals);
         modal.querySelector('#npc-import-cancel').addEventListener('click', closeModals);
         modal.querySelector('#npc-import-save').addEventListener('click', async () => {
             const nickname = modal.querySelector('#npc-nickname').value.trim() || monster.name;
-            
+
             let hp = monster.hp || calculateMonsterHp(monster);
-            
+
             // Hydrate full normalized creature before saving custom NPC
             let fullMonster = null;
             if (typeof fetchFullCreature === 'function') {
                 fullMonster = await fetchFullCreature(monster.source, monster.id || monster.name);
             }
-            const customMonsterData = fullMonster ? JSON.parse(JSON.stringify(fullMonster)) : JSON.parse(JSON.stringify(monster));
+            const customMonsterData = fullMonster
+                ? JSON.parse(JSON.stringify(fullMonster))
+                : JSON.parse(JSON.stringify(monster));
             if (nickname) {
                 customMonsterData.name = nickname;
             }
-            
+
             const defaultToken = getMonsterImageUrl(customMonsterData);
-            const initialTokens = (defaultToken && defaultToken !== 'favicon.svg') 
-                ? [{ url: defaultToken, name: 'Default Token', isDefault: true }] 
-                : [];
-            
+            const initialTokens =
+                defaultToken && defaultToken !== 'favicon.svg'
+                    ? [{ url: defaultToken, name: 'Default Token', isDefault: true }]
+                    : [];
+
             const newId = 'npc_' + Date.now();
             const newNpc = {
                 id: newId,
@@ -1660,19 +2048,20 @@ export function initVttDataBridge(vtt) {
                 hpCurrent: hp,
                 ac: (() => {
                     const acObj = Array.isArray(monster.ac) ? monster.ac[0] : monster.ac;
-                    if (typeof acObj === 'object' && acObj !== null) return (acObj.value ?? acObj.ac ?? monster.primaryAc ?? 10);
-                    return (typeof acObj === 'number' ? acObj : (parseInt(acObj) || monster.primaryAc || 10));
+                    if (typeof acObj === 'object' && acObj !== null)
+                        return acObj.value ?? acObj.ac ?? monster.primaryAc ?? 10;
+                    return typeof acObj === 'number' ? acObj : parseInt(acObj) || monster.primaryAc || 10;
                 })(),
                 activeTokenIndex: 0
             };
-            
+
             if (!vtt.campaignState.characters) vtt.campaignState.characters = {};
             vtt.campaignState.characters[newId] = newNpc;
-            
+
             if (vtt.socket) {
                 vtt.socket.emit('character:update', { character: newNpc });
             }
-            
+
             renderCustomNpcList();
             closeModals();
         });
@@ -1681,17 +2070,19 @@ export function initVttDataBridge(vtt) {
     function renderCustomNpcList() {
         const customListContainer = document.getElementById('library-custom-list');
         if (!customListContainer) return;
-        
-        const chars = (vtt.campaignState && vtt.campaignState.characters) ? Object.values(vtt.campaignState.characters) : [];
-        const customNpcs = chars.filter(c => c.isCustomNpc);
-        
+
+        const chars =
+            vtt.campaignState && vtt.campaignState.characters ? Object.values(vtt.campaignState.characters) : [];
+        const customNpcs = chars.filter((c) => c.isCustomNpc);
+
         if (customNpcs.length === 0) {
-            customListContainer.innerHTML = '<div class="init-empty-state" style="padding: 16px; text-align: center; color: var(--color-text-muted);">No custom NPCs yet. Click "Import & Customize NPC" to add one.</div>';
+            customListContainer.innerHTML =
+                '<div class="init-empty-state" style="padding: 16px; text-align: center; color: var(--color-text-muted);">No custom NPCs yet. Click "Import & Customize NPC" to add one.</div>';
             return;
         }
-        
+
         let html = '';
-        customNpcs.forEach(npc => {
+        customNpcs.forEach((npc) => {
             let tokenImg = getMonsterImageUrl(npc.monsterData || {});
             if (!npc.tokenImages || npc.tokenImages.length === 0) {
                 if (tokenImg && tokenImg !== 'favicon.svg') {
@@ -1705,17 +2096,19 @@ export function initVttDataBridge(vtt) {
                     tokenImg = npc.tokenImages[idx].url;
                 }
             }
-            
+
             const cleanUrl = tokenImg.split('?')[0].toLowerCase();
             const isVideo = cleanUrl.match(/\.(mp4|webm|ogg)$/i);
             const isYoutube = cleanUrl.includes('youtube.com') || cleanUrl.includes('youtu.be');
-            
+
             let mediaHtml = '';
             if (isVideo) {
                 mediaHtml = `<video src="${tokenImg}" autoplay loop muted playsinline style="width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--color-gold-base); object-fit: cover;"></video>`;
             } else if (isYoutube) {
                 let ytUrl = tokenImg;
-                const ytMatch = tokenImg.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i);
+                const ytMatch = tokenImg.match(
+                    /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i
+                );
                 if (ytMatch) {
                     const videoId = ytMatch[1];
                     ytUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&controls=0&disablekb=1&fs=0&modestbranding=1&playsinline=1&playlist=${videoId}`;
@@ -1724,7 +2117,7 @@ export function initVttDataBridge(vtt) {
             } else {
                 mediaHtml = `<img src="${tokenImg}" style="width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--color-gold-base); object-fit: cover;" onerror="this.src='favicon.svg'">`;
             }
-            
+
             html += `
                 <div class="library-item custom-npc-row" data-id="${npc.id}" draggable="true" style="display:flex; justify-content:space-between; align-items:center; padding: 6px 8px;">
                     <div style="display: flex; align-items: center; gap: 12px; pointer-events: none;">
@@ -1742,23 +2135,23 @@ export function initVttDataBridge(vtt) {
                 </div>
             `;
         });
-        
+
         customListContainer.innerHTML = html;
-        
-        customListContainer.querySelectorAll('.custom-npc-row').forEach(row => {
+
+        customListContainer.querySelectorAll('.custom-npc-row').forEach((row) => {
             const id = row.dataset.id;
-            const npc = customNpcs.find(c => c.id === id);
-            
+            const npc = customNpcs.find((c) => c.id === id);
+
             row.addEventListener('dragstart', (e) => {
-                if(e.target.closest('button')) {
+                if (e.target.closest('button')) {
                     e.preventDefault();
                     return;
                 }
-                
+
                 const size = npc.monsterData ? translateSizeCategory(npc.monsterData.size) : 1;
                 const isGeneric = npc.isGeneric === true;
-                
-                e.dataTransfer.setData('application/json', JSON.stringify({
+
+                const payload = JSON.stringify({
                     type: 'player', // Retain character linkage
                     characterId: isGeneric ? null : id,
                     sourceCharacterId: id,
@@ -1766,21 +2159,26 @@ export function initVttDataBridge(vtt) {
                     isCustomNpc: true,
                     isPlayer: false,
                     name: npc.name,
-                    hp: isGeneric ? (npc.hpMax || calculateMonsterHp(npc.monsterData)) : npc.hpCurrent,
+                    hp: isGeneric ? npc.hpMax || calculateMonsterHp(npc.monsterData) : npc.hpCurrent,
                     maxHp: npc.hpMax || calculateMonsterHp(npc.monsterData),
-                    tempHp: isGeneric ? 0 : (npc.tempHp || 0),
+                    tempHp: isGeneric ? 0 : npc.tempHp || 0,
                     size: npc.tokenSize !== undefined ? npc.tokenSize : size,
                     customWidth: npc.tokenCustomWidth,
                     customHeight: npc.tokenCustomHeight,
                     img: null,
-                    sightRange: (npc.tokenSight !== undefined && npc.tokenSight > 0) ? npc.tokenSight : parseMonsterVision(npc.monsterData),
+                    sightRange:
+                        npc.tokenSight !== undefined && npc.tokenSight > 0
+                            ? npc.tokenSight
+                            : parseMonsterVision(npc.monsterData),
                     monsterData: npc.monsterData ? JSON.parse(JSON.stringify(npc.monsterData)) : null
-                }));
+                });
+                e.dataTransfer.setData('application/json', payload);
+                e.dataTransfer.setData('text/plain', payload);
                 e.dataTransfer.effectAllowed = 'copy';
             });
-            
+
             row.addEventListener('click', (e) => {
-                if(e.target.closest('button')) return;
+                if (e.target.closest('button')) return;
                 if (window.VTT?.sheetDock?.openSheet) {
                     window.VTT.sheetDock.openSheet({
                         type: 'creature',
@@ -1798,13 +2196,16 @@ export function initVttDataBridge(vtt) {
             });
         });
 
-        customListContainer.querySelectorAll('.btn-spawn-custom-npc').forEach(btn => {
+        customListContainer.querySelectorAll('.btn-spawn-custom-npc').forEach((btn) => {
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 const id = btn.dataset.id;
-                const npc = customNpcs.find(c => c.id === id);
+                const npc = customNpcs.find((c) => c.id === id);
                 if (npc) {
-                    if (window.VTT?.mobileAdapter?.startTapToPlaceMode && window.VTT?.mobileAdapter?.isMobileViewport?.()) {
+                    if (
+                        window.VTT?.mobileAdapter?.startTapToPlaceMode &&
+                        window.VTT?.mobileAdapter?.isMobileViewport?.()
+                    ) {
                         window.VTT.mobileAdapter.startTapToPlaceMode({
                             type: 'customNpc',
                             title: npc.name,
@@ -1816,19 +2217,19 @@ export function initVttDataBridge(vtt) {
                 }
             });
         });
-        
-        customListContainer.querySelectorAll('.btn-edit-custom-npc').forEach(btn => {
+
+        customListContainer.querySelectorAll('.btn-edit-custom-npc').forEach((btn) => {
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 const id = btn.dataset.id;
-                const npc = customNpcs.find(c => c.id === id);
+                const npc = customNpcs.find((c) => c.id === id);
                 if (window.VTT?.creatureSheet) {
                     window.VTT.creatureSheet.openEditModal(npc.monsterData, id);
                 }
             });
         });
-        
-        customListContainer.querySelectorAll('.btn-del-custom-npc').forEach(btn => {
+
+        customListContainer.querySelectorAll('.btn-del-custom-npc').forEach((btn) => {
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 if (confirm('Delete this custom NPC forever?')) {
@@ -1848,7 +2249,14 @@ export function initVttDataBridge(vtt) {
         const cleanUrl = url.trim();
         if (!cleanUrl) return { resolvedUrl: cleanUrl, isVideo: false };
 
-        if (cleanUrl.includes('pin.it') || cleanUrl.includes('pinterest.com/pin/') || (!cleanUrl.match(/\.(mp4|webm|ogg|png|jpg|jpeg|gif|webp|svg)(\?.*)?$/i) && !cleanUrl.includes('youtube.com') && !cleanUrl.includes('youtu.be') && cleanUrl.startsWith('http'))) {
+        if (
+            cleanUrl.includes('pin.it') ||
+            cleanUrl.includes('pinterest.com/pin/') ||
+            (!cleanUrl.match(/\.(mp4|webm|ogg|png|jpg|jpeg|gif|webp|svg)(\?.*)?$/i) &&
+                !cleanUrl.includes('youtube.com') &&
+                !cleanUrl.includes('youtu.be') &&
+                cleanUrl.startsWith('http'))
+        ) {
             try {
                 const res = await fetch(`/api/resolve-media-url?url=${encodeURIComponent(cleanUrl)}`);
                 if (res.ok) {
@@ -1862,7 +2270,11 @@ export function initVttDataBridge(vtt) {
             }
         }
 
-        const isVideo = !!cleanUrl.match(/\.(mp4|webm|ogg)(\?.*)?$/i) || cleanUrl.includes('pinimg.com/videos') || cleanUrl.includes('youtube.com') || cleanUrl.includes('youtu.be');
+        const isVideo =
+            !!cleanUrl.match(/\.(mp4|webm|ogg)(\?.*)?$/i) ||
+            cleanUrl.includes('pinimg.com/videos') ||
+            cleanUrl.includes('youtube.com') ||
+            cleanUrl.includes('youtu.be');
         return { resolvedUrl: cleanUrl, isVideo };
     }
 
@@ -1873,22 +2285,34 @@ export function initVttDataBridge(vtt) {
 
     if (vtt.socket) {
         vtt.socket.on('character:sync', () => {
-            if (document.getElementById('lib-custom') && !document.getElementById('lib-custom').classList.contains('vtt-hidden')) {
+            if (
+                document.getElementById('lib-custom') &&
+                !document.getElementById('lib-custom').classList.contains('vtt-hidden')
+            ) {
                 renderCustomNpcList();
             }
         });
         vtt.socket.on('character:updated', () => {
-            if (document.getElementById('lib-custom') && !document.getElementById('lib-custom').classList.contains('vtt-hidden')) {
+            if (
+                document.getElementById('lib-custom') &&
+                !document.getElementById('lib-custom').classList.contains('vtt-hidden')
+            ) {
                 renderCustomNpcList();
             }
         });
         vtt.socket.on('character:deleted', () => {
-            if (document.getElementById('lib-custom') && !document.getElementById('lib-custom').classList.contains('vtt-hidden')) {
+            if (
+                document.getElementById('lib-custom') &&
+                !document.getElementById('lib-custom').classList.contains('vtt-hidden')
+            ) {
                 renderCustomNpcList();
             }
         });
         vtt.socket.on('campaign:sync', () => {
-            if (document.getElementById('lib-custom') && !document.getElementById('lib-custom').classList.contains('vtt-hidden')) {
+            if (
+                document.getElementById('lib-custom') &&
+                !document.getElementById('lib-custom').classList.contains('vtt-hidden')
+            ) {
                 renderCustomNpcList();
             }
         });
@@ -1926,6 +2350,9 @@ export function initVttDataBridge(vtt) {
             if (window.vttPlayerSheetAPI?.invalidateItemCache) {
                 window.vttPlayerSheetAPI.invalidateItemCache();
             }
+            if (window.vttPlayerSheetAPI?.invalidateBuilderCache) {
+                window.vttPlayerSheetAPI.invalidateBuilderCache();
+            }
             if (window.VTT?.toast) {
                 window.VTT.toast('📚 Database sources updated');
             } else if (typeof JqueryUtil !== 'undefined' && JqueryUtil.doToast) {
@@ -1939,7 +2366,7 @@ export function initVttDataBridge(vtt) {
             populateAdventureDropdown(advSelect, mapSelect);
             return;
         }
-        
+
         try {
             advSelect.innerHTML = '<option value="">Checking map catalog...</option>';
             const res = await fetch('data/generated/gendata-maps.json');
@@ -1953,10 +2380,10 @@ export function initVttDataBridge(vtt) {
 
     function populateAdventureDropdown(advSelect, mapSelect) {
         advSelect.innerHTML = '<option value="">-- Select an Adventure / Book --</option>';
-        
+
         const sortedAdventures = Object.values(mapCatalog).sort((a, b) => (a.name || '').localeCompare(b.name || ''));
-        
-        sortedAdventures.forEach(adv => {
+
+        sortedAdventures.forEach((adv) => {
             const opt = document.createElement('option');
             opt.value = adv.id;
             opt.textContent = adv.name || adv.id;
@@ -1970,7 +2397,7 @@ export function initVttDataBridge(vtt) {
 
     function populateMapDropdown(adventureId, mapSelect) {
         mapSelect.innerHTML = '<option value="">-- Select a Map --</option>';
-        
+
         if (!adventureId || !mapCatalog[adventureId]) {
             mapSelect.disabled = true;
             return;
@@ -1978,13 +2405,13 @@ export function initVttDataBridge(vtt) {
 
         const adv = mapCatalog[adventureId];
         mapSelect.disabled = false;
-        
+
         // Flatten chapters into maps list
         const maps = [];
         if (adv.chapters) {
-            adv.chapters.forEach(ch => {
+            adv.chapters.forEach((ch) => {
                 if (ch.images) {
-                    ch.images.forEach(img => {
+                    ch.images.forEach((img) => {
                         // Only add maps that have an actual image path
                         if (img.href && img.href.path) {
                             maps.push({
@@ -1999,7 +2426,7 @@ export function initVttDataBridge(vtt) {
             });
         }
 
-        maps.forEach(m => {
+        maps.forEach((m) => {
             const opt = document.createElement('option');
             opt.value = m.id;
             opt.textContent = `[${m.chapterName}] ${m.title} (${m.imageType === 'mapPlayer' ? 'Player' : 'GM'})`;
@@ -2051,7 +2478,7 @@ export function initVttDataBridge(vtt) {
 
     async function import5etoolsMap(adventureId, mapPathId) {
         if (!mapCatalog || !adventureId || !mapPathId) return null;
-        
+
         const adv = mapCatalog[adventureId];
         if (!adv || !adv.chapters) return null;
 
@@ -2059,14 +2486,14 @@ export function initVttDataBridge(vtt) {
         let targetChapter = null;
         for (const ch of adv.chapters) {
             if (ch.images) {
-                targetMap = ch.images.find(img => img.href && img.href.path === mapPathId);
+                targetMap = ch.images.find((img) => img.href && img.href.path === mapPathId);
                 if (targetMap) {
                     targetChapter = ch;
                     break;
                 }
             }
         }
-        
+
         if (!targetMap) return null;
 
         // Find parent map if this is a player/variant map
@@ -2074,14 +2501,14 @@ export function initVttDataBridge(vtt) {
         if (targetMap.mapParent && targetMap.mapParent.id) {
             for (const ch of adv.chapters) {
                 if (ch.images) {
-                    parentMap = ch.images.find(img => img.id === targetMap.mapParent.id);
+                    parentMap = ch.images.find((img) => img.id === targetMap.mapParent.id);
                     if (parentMap) break;
                 }
             }
         }
 
         // Generate a clear, descriptive map name
-        let mapTitle = targetMap.title || "Imported Map";
+        let mapTitle = targetMap.title || 'Imported Map';
         if (targetMap.imageType === 'mapPlayer' || mapTitle.toLowerCase() === 'player version') {
             if (parentMap && parentMap.title) {
                 mapTitle = `${parentMap.title} (Player)`;
@@ -2095,23 +2522,25 @@ export function initVttDataBridge(vtt) {
         // Local image path
         const baseUrl = '/img/';
         const mapUrl = baseUrl + targetMap.href.path;
-        const thumbPath = (targetMap.hrefThumbnail && targetMap.hrefThumbnail.path) || (parentMap && parentMap.hrefThumbnail && parentMap.hrefThumbnail.path);
-        const thumbUrl = thumbPath ? (baseUrl + thumbPath) : mapUrl;
+        const thumbPath =
+            (targetMap.hrefThumbnail && targetMap.hrefThumbnail.path) ||
+            (parentMap && parentMap.hrefThumbnail && parentMap.hrefThumbnail.path);
+        const thumbUrl = thumbPath ? baseUrl + thumbPath : mapUrl;
 
         // Construct grid
         let mapGrid = { size: 50, offsetX: 0, offsetY: 0, scale: 1.0, feetPerSquare: 5, type: 'square' };
-        
+
         let gridSource = targetMap;
         if (!gridSource.grid && parentMap && parentMap.grid) {
             gridSource = parentMap;
         }
-        
+
         if (gridSource.grid) {
             mapGrid.size = gridSource.grid.size || 50;
             mapGrid.offsetX = gridSource.grid.offsetX || 0;
             mapGrid.offsetY = gridSource.grid.offsetY || 0;
-            mapGrid.scale = 1.0; 
-            
+            mapGrid.scale = 1.0;
+
             const rawType = (gridSource.grid.type || 'square').toLowerCase();
             if (rawType === 'hexcolsodd' || rawType === 'hexcols') {
                 mapGrid.type = 'hex-h'; // flat-top odd
@@ -2131,7 +2560,7 @@ export function initVttDataBridge(vtt) {
         // Construct Walls and Notes from mapRegions
         const walls = [];
         const notes = [];
-        
+
         let regionsSource = targetMap;
         if (!regionsSource.mapRegions && parentMap && parentMap.mapRegions) {
             regionsSource = parentMap;
@@ -2145,10 +2574,13 @@ export function initVttDataBridge(vtt) {
                 adventureData = await loadAdventureData(sourceKey);
             }
 
-            regionsSource.mapRegions.forEach(region => {
+            regionsSource.mapRegions.forEach((region) => {
                 if (region.points && Array.isArray(region.points)) {
                     const pts = region.points;
-                    let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+                    let minX = Infinity,
+                        minY = Infinity,
+                        maxX = -Infinity,
+                        maxY = -Infinity;
                     for (let i = 0; i < pts.length; i++) {
                         const p1 = pts[i];
                         const p2 = pts[(i + 1) % pts.length]; // Connect back to start
@@ -2218,7 +2650,7 @@ export function initVttDataBridge(vtt) {
 
         return {
             name: mapTitle,
-            folder: adv.name || adventureId || "",
+            folder: adv.name || adventureId || '',
             mapImage: mapUrl, // Dual-guarantee authoritative background anchor!
             thumbnail: thumbUrl,
             gridWidth: gWidth || 40,

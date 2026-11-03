@@ -8,9 +8,10 @@ const rootDir = path.join(__dirname, '..');
 
 const isSrdOnly = process.argv.includes('--srd-only');
 const outArgIdx = process.argv.indexOf('--out');
-const targetDataDir = outArgIdx !== -1 && process.argv[outArgIdx + 1]
-    ? path.resolve(rootDir, process.argv[outArgIdx + 1])
-    : path.join(rootDir, '5etools-src', 'data');
+const targetDataDir =
+    outArgIdx !== -1 && process.argv[outArgIdx + 1]
+        ? path.resolve(rootDir, process.argv[outArgIdx + 1])
+        : path.join(rootDir, '5etools-src', 'data');
 
 const dataDir = path.join(rootDir, '5etools-src', 'data');
 const adventuresFile = path.join(dataDir, 'adventures.json');
@@ -28,28 +29,42 @@ if (!fs.existsSync(normalizedDir)) {
  */
 function cleanTags(text) {
     if (!text || typeof text !== 'string') return '';
-    return text
-        // Strip 5etools and external backlinks
-        .replace(/\{@5etools\s+([^}|]+)(?:\|[^}]*)?\}/gi, '$1')
-        .replace(/\{@link\s+([^}|]+)(?:\|[^}]*)?\}/gi, '$1')
-        // Clean text formatting
-        .replace(/\{@b\s+([^}]+)\}/gi, '<strong>$1</strong>')
-        .replace(/\{@i\s+([^}]+)\}/gi, '<em>$1</em>')
-        .replace(/\{@u\s+([^}]+)\}/gi, '<u>$1</u>')
-        .replace(/\{@s\s+([^}]+)\}/gi, '<s>$1</s>')
-        .replace(/\{@note\s+([^}]+)\}/gi, '<em class="text-muted">Note: $1</em>')
-        // Compendium cross-references (retained as local clean spans with no external links)
-        .replace(/\{@creature\s+([^}|]+)(?:\|[^}]*)?\}/gi, '<span class="compendium-ref" data-type="creature" data-name="$1">$1</span>')
-        .replace(/\{@spell\s+([^}|]+)(?:\|[^}]*)?\}/gi, '<span class="compendium-ref" data-type="spell" data-name="$1">$1</span>')
-        .replace(/\{@item\s+([^}|]+)(?:\|[^}]*)?\}/gi, '<span class="compendium-ref" data-type="item" data-name="$1">$1</span>')
-        .replace(/\{@condition\s+([^}|]+)(?:\|[^}]*)?\}/gi, '<span class="compendium-ref" data-type="condition" data-name="$1">$1</span>')
-        .replace(/\{@skill\s+([^}|]+)(?:\|[^}]*)?\}/gi, '$1')
-        .replace(/\{@sense\s+([^}|]+)(?:\|[^}]*)?\}/gi, '$1')
-        .replace(/\{@action\s+([^}|]+)(?:\|[^}]*)?\}/gi, '$1')
-        // Keep dice rolls for local VTT roller
-        .replace(/\{@(?:dice|damage|d20)\s+([^}|]+)(?:\|[^}]*)?\}/gi, '{@dice $1}')
-        // Generic fallback for any other {@tag ...}
-        .replace(/\{@[a-zA-Z0-9_-]+\s+([^}|]+)(?:\|[^}]*)?\}/g, '$1');
+    return (
+        text
+            // Strip 5etools and external backlinks
+            .replace(/\{@5etools\s+([^}|]+)(?:\|[^}]*)?\}/gi, '$1')
+            .replace(/\{@link\s+([^}|]+)(?:\|[^}]*)?\}/gi, '$1')
+            // Clean text formatting
+            .replace(/\{@b\s+([^}]+)\}/gi, '<strong>$1</strong>')
+            .replace(/\{@i\s+([^}]+)\}/gi, '<em>$1</em>')
+            .replace(/\{@u\s+([^}]+)\}/gi, '<u>$1</u>')
+            .replace(/\{@s\s+([^}]+)\}/gi, '<s>$1</s>')
+            .replace(/\{@note\s+([^}]+)\}/gi, '<em class="text-muted">Note: $1</em>')
+            // Compendium cross-references (retained as local clean spans with no external links)
+            .replace(
+                /\{@creature\s+([^}|]+)(?:\|[^}]*)?\}/gi,
+                '<span class="compendium-ref" data-type="creature" data-name="$1">$1</span>'
+            )
+            .replace(
+                /\{@spell\s+([^}|]+)(?:\|[^}]*)?\}/gi,
+                '<span class="compendium-ref" data-type="spell" data-name="$1">$1</span>'
+            )
+            .replace(
+                /\{@item\s+([^}|]+)(?:\|[^}]*)?\}/gi,
+                '<span class="compendium-ref" data-type="item" data-name="$1">$1</span>'
+            )
+            .replace(
+                /\{@condition\s+([^}|]+)(?:\|[^}]*)?\}/gi,
+                '<span class="compendium-ref" data-type="condition" data-name="$1">$1</span>'
+            )
+            .replace(/\{@skill\s+([^}|]+)(?:\|[^}]*)?\}/gi, '$1')
+            .replace(/\{@sense\s+([^}|]+)(?:\|[^}]*)?\}/gi, '$1')
+            .replace(/\{@action\s+([^}|]+)(?:\|[^}]*)?\}/gi, '$1')
+            // Keep dice rolls for local VTT roller
+            .replace(/\{@(?:dice|damage|d20)\s+([^}|]+)(?:\|[^}]*)?\}/gi, '{@dice $1}')
+            // Generic fallback for any other {@tag ...}
+            .replace(/\{@[a-zA-Z0-9_-]+\s+([^}|]+)(?:\|[^}]*)?\}/g, '$1')
+    );
 }
 
 function cleanTagsPlain(text) {
@@ -90,11 +105,14 @@ function renderEntriesToHtml(entries) {
 
         // List
         if (entries.type === 'list' && Array.isArray(entries.items)) {
-            const items = entries.items.map(it => {
-                if (typeof it === 'string') return `<li>${cleanTags(it)}</li>`;
-                if (it && it.name && it.entry) return `<li><strong>${cleanTags(it.name)}.</strong> ${cleanTags(it.entry)}</li>`;
-                return `<li>${renderEntriesToHtml(it)}</li>`;
-            }).join('');
+            const items = entries.items
+                .map((it) => {
+                    if (typeof it === 'string') return `<li>${cleanTags(it)}</li>`;
+                    if (it && it.name && it.entry)
+                        return `<li><strong>${cleanTags(it.name)}.</strong> ${cleanTags(it.entry)}</li>`;
+                    return `<li>${renderEntriesToHtml(it)}</li>`;
+                })
+                .join('');
             return `<ul class="handout-list-items">${items}</ul>`;
         }
 
@@ -103,18 +121,20 @@ function renderEntriesToHtml(entries) {
             let caption = entries.caption ? `<caption>${cleanTags(entries.caption)}</caption>` : '';
             let header = '';
             if (Array.isArray(entries.colLabels)) {
-                header = `<thead><tr>${entries.colLabels.map(c => `<th>${cleanTags(c)}</th>`).join('')}</tr></thead>`;
+                header = `<thead><tr>${entries.colLabels.map((c) => `<th>${cleanTags(c)}</th>`).join('')}</tr></thead>`;
             }
-            let rows = entries.rows.map(r => {
-                const cells = Array.isArray(r) ? r : [r];
-                return `<tr>${cells.map(c => `<td>${cleanTags(String(c))}</td>`).join('')}</tr>`;
-            }).join('');
+            let rows = entries.rows
+                .map((r) => {
+                    const cells = Array.isArray(r) ? r : [r];
+                    return `<tr>${cells.map((c) => `<td>${cleanTags(String(c))}</td>`).join('')}</tr>`;
+                })
+                .join('');
             return `<table class="handout-table">${caption}${header}<tbody>${rows}</tbody></table>`;
         }
 
         // Image inside entries
         if (entries.type === 'image' && entries.href) {
-            const pathUrl = entries.href.type === 'internal' ? `img/${entries.href.path}` : (entries.href.url || '');
+            const pathUrl = entries.href.type === 'internal' ? `img/${entries.href.path}` : entries.href.url || '';
             const title = entries.title ? `<div class="handout-img-caption">${cleanTags(entries.title)}</div>` : '';
             return `<div class="handout-img-box"><img src="${pathUrl}" alt="${cleanTagsPlain(entries.title || 'Image')}" class="handout-img" onerror="this.onerror=null; this.src='img/TextLogo.png';">${title}</div>`;
         }
@@ -145,7 +165,7 @@ function extractHandoutsFromModule(moduleData, meta, type) {
         if (!entry) return;
 
         if (Array.isArray(entry)) {
-            entry.forEach(e => walk(e, currentChapter, depth));
+            entry.forEach((e) => walk(e, currentChapter, depth));
             return;
         }
 
@@ -187,7 +207,12 @@ function extractHandoutsFromModule(moduleData, meta, type) {
             const rawTitle = entry.name || (entry.type === 'insetReadaloud' ? 'Read-Aloud Note' : 'Module Inset');
             const title = cleanTagsPlain(rawTitle);
             const htmlContent = renderEntriesToHtml(entry);
-            const descContent = entry.entries ? entry.entries.filter(e => typeof e === 'string').map(cleanTagsPlain).join('\n\n') : '';
+            const descContent = entry.entries
+                ? entry.entries
+                      .filter((e) => typeof e === 'string')
+                      .map(cleanTagsPlain)
+                      .join('\n\n')
+                : '';
 
             handouts.push({
                 id: `ho_${sourceKey}_ins_${handouts.length}`,
@@ -283,9 +308,9 @@ async function buildHandoutDatabase() {
                 const partitionFile = path.join(normalizedDir, `handouts-${key}.json`);
                 fs.writeFileSync(partitionFile, JSON.stringify(handouts, null, 2), 'utf8');
 
-                const imgCount = handouts.filter(h => h.type === 'image').length;
-                const insCount = handouts.filter(h => h.type === 'inset').length;
-                const styCount = handouts.filter(h => h.type === 'story').length;
+                const imgCount = handouts.filter((h) => h.type === 'image').length;
+                const insCount = handouts.filter((h) => h.type === 'inset').length;
+                const styCount = handouts.filter((h) => h.type === 'story').length;
 
                 totalHandouts += handouts.length;
                 totalImages += imgCount;
@@ -328,9 +353,9 @@ async function buildHandoutDatabase() {
                 const partitionFile = path.join(normalizedDir, `handouts-${key}.json`);
                 fs.writeFileSync(partitionFile, JSON.stringify(handouts, null, 2), 'utf8');
 
-                const imgCount = handouts.filter(h => h.type === 'image').length;
-                const insCount = handouts.filter(h => h.type === 'inset').length;
-                const styCount = handouts.filter(h => h.type === 'story').length;
+                const imgCount = handouts.filter((h) => h.type === 'image').length;
+                const insCount = handouts.filter((h) => h.type === 'inset').length;
+                const styCount = handouts.filter((h) => h.type === 'story').length;
 
                 totalHandouts += handouts.length;
                 totalImages += imgCount;
@@ -345,7 +370,7 @@ async function buildHandoutDatabase() {
                     published: book.published || '',
                     author: book.author || '',
                     storyline: book.group || '',
-                    cover: isSrdOnly ? '' : (book.cover?.path ? `img/${book.cover.path}` : ''),
+                    cover: isSrdOnly ? '' : book.cover?.path ? `img/${book.cover.path}` : '',
                     handoutCount: handouts.length,
                     imageCount: imgCount,
                     insetCount: insCount,

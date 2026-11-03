@@ -159,7 +159,9 @@ async function runImport() {
 
             if (completed % 25 === 0 || completed === list.length) {
                 const pct = Math.round((completed / list.length) * 100);
-                process.stdout.write(`\rProgress: ${completed}/${list.length} (${pct}%) | New: ${downloadedCount} | Cached: ${existingCount} | Failed: ${failedCount}`);
+                process.stdout.write(
+                    `\rProgress: ${completed}/${list.length} (${pct}%) | New: ${downloadedCount} | Cached: ${existingCount} | Failed: ${failedCount}`
+                );
             }
         }
     }

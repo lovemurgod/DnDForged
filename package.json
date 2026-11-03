@@ -1,11 +1,19 @@
 {
   "name": "forgedvtt",
-  "version": "1.0.0",
+  "productName": "ForgeDVTT",
+  "version": "1.4.0",
   "description": "ForgeDVTT Virtual Tabletop (VTT) Desktop App & Server",
   "author": "ForgeDVTT Team <lovemurgod92@gmail.com>",
   "main": "electron/main.js",
   "type": "module",
   "scripts": {
+    "lint": "eslint server/ vtt/js/ electron/ test/ scripts/",
+    "lint:fix": "eslint server/ vtt/js/ electron/ test/ scripts/ --fix",
+    "format:check": "prettier --check \"server/**/*.js\" \"vtt/js/**/*.js\" \"electron/**/*.js\" \"test/**/*.mjs\" \"scripts/**/*.mjs\"",
+    "format": "prettier --write \"server/**/*.js\" \"vtt/js/**/*.js\" \"electron/**/*.js\" \"test/**/*.mjs\" \"scripts/**/*.mjs\"",
+    "typecheck": "tsc -p jsconfig.json",
+    "test": "node test/test_character_builder_fixes.mjs && node test/test_character_builder_multiclass.mjs && node test/test_animated_map_thumbnails.mjs && node test/test_security_p0_fixes.mjs && node test/test_server_modular_integration.mjs && node test/test_mobile_vtt_fixes.mjs && node test/test_player_sheet_calc.mjs && node test/test_player_sheet_modular_integration.mjs && node test/test_canvas_portals_traps.mjs && node test/test_canvas_visibility_raycasting.mjs && node test/test_canvas_mass_actions.mjs && node test/test_canvas_map_manager_weather.mjs && node test/test_canvas_modular_integration.mjs && node test/test_bootstrap_modular_integration.mjs && node test/test_creature_sheet_modular_integration.mjs && node test/test_css_modular_integration.mjs && node test/test_performance_memory_leaks.mjs && node test/test_tooling_ci_integration.mjs && node test/test_spatial_eventbus_utils_integration.mjs && node test/test_es_module_exports_integrity.mjs && node test/test_tdz_integrity.mjs && node test/test_vtt_initialization_simulation.mjs && node test/test_socket_event_parity.mjs && node test/test_canvas_interaction_integrity.mjs && node test/test_canvas_reconnected_bridges.mjs && node test/test_builder_feats_spells_fixes.mjs && node test/test_character_builder_feat_bg_spells.mjs && node test/test_map_switching_and_push_players.mjs && node test/test_character_builder_manual_hp_ac_stats_speed.mjs && node test/test_character_builder_expertise_features_spells.mjs && node test/test_character_builder_equipment_hp_ac_modifiers.mjs && node test/test_character_builder_comprehensive_engine.mjs && node test/test_lighting_los_and_map_manager.mjs && node test/test_regression_reconnection_sync.mjs && node test/test_token_reveal_and_map_sync.mjs && node test/test_homebrew_studio_integration.mjs && node test/test_comprehensive_editor_fixes.mjs && node test/test_security_codex_fixes.mjs",
+    "test:e2e": "node test/run_canvas_interactions_e2e.cjs",
     "start": "node server.js",
     "dev": "nodemon server.js",
     "online": "node launcher.js",
@@ -29,18 +37,26 @@
   "dependencies": {
     "compression": "^1.8.2",
     "cors": "^2.8.5",
+    "dompurify": "^3.4.17",
     "express": "^4.19.2",
     "multer": "^1.4.5-lts.1",
     "socket.io": "^4.7.5"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "electron": "^30.0.0",
     "electron-builder": "^24.13.3",
-    "nodemon": "^3.1.0"
+    "eslint": "^10.13.0",
+    "globals": "^17.13.0",
+    "jsdom": "^29.1.1",
+    "nodemon": "^3.1.0",
+    "prettier": "^3.9.10",
+    "typescript": "^7.0.2"
   },
   "build": {
     "appId": "com.forgedvtt.desktop",
     "productName": "ForgeDVTT",
+    "executableName": "ForgeDVTT",
     "asar": false,
     "directories": {
       "output": "dist"
@@ -53,6 +69,7 @@
       "matto.json",
       "LEGAL.md",
       "electron/**/*",
+      "server/**/*",
       "vtt/**/*",
       "img/**/*",
       "css/**/*",
@@ -68,6 +85,7 @@
       }
     ],
     "win": {
+      "executableName": "ForgeDVTT",
       "target": [
         {
           "target": "nsis",

@@ -9,9 +9,10 @@ const rootDir = path.join(__dirname, '..');
 
 const isSrdOnly = process.argv.includes('--srd-only');
 const outArgIdx = process.argv.indexOf('--out');
-const targetDataDir = outArgIdx !== -1 && process.argv[outArgIdx + 1]
-    ? path.resolve(rootDir, process.argv[outArgIdx + 1])
-    : path.join(rootDir, '5etools-src', 'data');
+const targetDataDir =
+    outArgIdx !== -1 && process.argv[outArgIdx + 1]
+        ? path.resolve(rootDir, process.argv[outArgIdx + 1])
+        : path.join(rootDir, '5etools-src', 'data');
 
 const dataDir = path.join(rootDir, '5etools-src', 'data');
 const bestiaryDir = path.join(dataDir, 'bestiary');
@@ -28,9 +29,30 @@ const catalogPath = path.join(targetDataDir, 'bestiary-catalog.json');
 const legGroupsPath = path.join(bestiaryDir, 'legendarygroups.json');
 
 const EDITION_2024_SOURCES = new Set([
-    'XMM', 'XPHB', 'XDMG', 'XSCREEN', 'XSAC', 'XSCREENRHW',
-    'RHW', 'AU', 'AUD', 'ABH', 'FRAIF', 'FRHOF', 'NF', 'LFL', 'EFA',
-    'CABOMP', 'UTHTLH', 'SCOEE', 'HBTD', 'BQGT', 'HOTB', 'WTTHC', 'FFOTR', 'BQDD'
+    'XMM',
+    'XPHB',
+    'XDMG',
+    'XSCREEN',
+    'XSAC',
+    'XSCREENRHW',
+    'RHW',
+    'AU',
+    'AUD',
+    'ABH',
+    'FRAIF',
+    'FRHOF',
+    'NF',
+    'LFL',
+    'EFA',
+    'CABOMP',
+    'UTHTLH',
+    'SCOEE',
+    'HBTD',
+    'BQGT',
+    'HOTB',
+    'WTTHC',
+    'FFOTR',
+    'BQDD'
 ]);
 
 // CR to Proficiency Bonus mapping
@@ -61,12 +83,12 @@ function crToNumber(cr) {
 }
 
 const SIZE_MAP = {
-    'T': 'Tiny',
-    'S': 'Small',
-    'M': 'Medium',
-    'L': 'Large',
-    'H': 'Huge',
-    'G': 'Gargantuan'
+    T: 'Tiny',
+    S: 'Small',
+    M: 'Medium',
+    L: 'Large',
+    H: 'Huge',
+    G: 'Gargantuan'
 };
 
 function cleanTags(str) {
@@ -131,8 +153,19 @@ function cleanTagsPlain(str) {
 }
 
 const STANDARD_DAMAGE_TYPES = [
-    'bludgeoning', 'piercing', 'slashing', 'acid', 'cold', 'fire',
-    'force', 'lightning', 'necrotic', 'poison', 'psychic', 'radiant', 'thunder'
+    'bludgeoning',
+    'piercing',
+    'slashing',
+    'acid',
+    'cold',
+    'fire',
+    'force',
+    'lightning',
+    'necrotic',
+    'poison',
+    'psychic',
+    'radiant',
+    'thunder'
 ];
 
 function normalizeDefenseList(arr) {
@@ -152,8 +185,9 @@ function normalizeDefenseList(arr) {
             const rawTypes = item.resist || item.immune || item.vulnerable || item.conditionImmune || [];
             let types = [];
             if (Array.isArray(rawTypes)) {
-                rawTypes.forEach(t => {
-                    const clean = typeof t === 'string' ? t.trim().toLowerCase() : (t.name || String(t)).trim().toLowerCase();
+                rawTypes.forEach((t) => {
+                    const clean =
+                        typeof t === 'string' ? t.trim().toLowerCase() : (t.name || String(t)).trim().toLowerCase();
                     if (clean && !types.includes(clean)) types.push(clean);
                 });
             } else if (typeof rawTypes === 'string') {
@@ -210,20 +244,42 @@ function extractLairActionName(text, fallbackIndex = 1) {
 
     const spellMatch = text.match(/(?:casts?|uses?)\s+\{@spell\s+([^}|]+)/i);
     if (spellMatch) {
-        const spellName = spellMatch[1].split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
+        const spellName = spellMatch[1]
+            .split(' ')
+            .map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
+            .join(' ');
         return `Cast ${spellName}`;
     }
 
-    const firstClause = text.split(/[.,;]/)[0].trim().replace(/^\{@[^}]+\}\s*/, '');
+    const firstClause = text
+        .split(/[.,;]/)[0]
+        .trim()
+        .replace(/^\{@[^}]+\}\s*/, '');
     let words = firstClause.split(/\s+/).filter(Boolean);
     if (words.length > 0) {
         if (/^(a|an|the)$/i.test(words[0])) words.shift();
-        const stopWords = new Set(['from', 'in', 'of', 'at', 'on', 'to', 'within', 'with', 'by', 'around', 'into', 'for', 'a', 'an', 'the']);
+        const stopWords = new Set([
+            'from',
+            'in',
+            'of',
+            'at',
+            'on',
+            'to',
+            'within',
+            'with',
+            'by',
+            'around',
+            'into',
+            'for',
+            'a',
+            'an',
+            'the'
+        ]);
         words = words.slice(0, 3);
         while (words.length > 1 && stopWords.has(words[words.length - 1].toLowerCase())) {
             words.pop();
         }
-        const shortName = words.map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
+        const shortName = words.map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
         if (shortName.length >= 3) return shortName;
     }
 
@@ -236,7 +292,7 @@ function renderEntriesToHtml(entries) {
     if (!Array.isArray(entries)) entries = [entries];
 
     let html = '';
-    entries.forEach(entry => {
+    entries.forEach((entry) => {
         if (typeof entry === 'string') {
             html += `<p>${cleanTags(entry)}</p>`;
         } else if (typeof entry === 'object' && entry !== null) {
@@ -247,29 +303,40 @@ function renderEntriesToHtml(entries) {
                 const nameStr = entry.name ? `<h4 style="margin:4px 0;">${cleanTags(entry.name)}</h4>` : '';
                 html += `<div class="cs-inset" style="padding:6px 10px; margin:6px 0; border-left:3px solid var(--color-gold-base); background:rgba(255,255,255,0.03); border-radius:4px;">${nameStr}${renderEntriesToHtml(entry.entries || entry.entry)}</div>`;
             } else if (entry.type === 'list') {
-                const items = (entry.items || []).map(item => {
-                    if (typeof item === 'string') return `<li>${cleanTags(item)}</li>`;
-                    if (item && typeof item === 'object') {
-                        const nameStr = item.name ? `<strong><em>${cleanTags(item.name)}.</em></strong> ` : '';
-                        const content = item.entry !== undefined ? item.entry : (item.entries !== undefined ? item.entries : '');
-                        if (content !== '') {
-                            return `<li>${nameStr}${renderEntriesToHtml(content)}</li>`;
+                const items = (entry.items || [])
+                    .map((item) => {
+                        if (typeof item === 'string') return `<li>${cleanTags(item)}</li>`;
+                        if (item && typeof item === 'object') {
+                            const nameStr = item.name ? `<strong><em>${cleanTags(item.name)}.</em></strong> ` : '';
+                            const content =
+                                item.entry !== undefined ? item.entry : item.entries !== undefined ? item.entries : '';
+                            if (content !== '') {
+                                return `<li>${nameStr}${renderEntriesToHtml(content)}</li>`;
+                            }
                         }
-                    }
-                    return `<li>${renderEntriesToHtml(item)}</li>`;
-                }).join('');
+                        return `<li>${renderEntriesToHtml(item)}</li>`;
+                    })
+                    .join('');
                 html += `<ul>${items}</ul>`;
             } else if (entry.type === 'item' || entry.type === 'itemSub' || entry.type === 'itemSpell') {
                 const nameStr = entry.name ? `<strong><em>${cleanTags(entry.name)}.</em></strong> ` : '';
-                const content = entry.entry !== undefined ? entry.entry : (entry.entries !== undefined ? entry.entries : '');
+                const content =
+                    entry.entry !== undefined ? entry.entry : entry.entries !== undefined ? entry.entries : '';
                 html += `<div>${nameStr}${renderEntriesToHtml(content)}</div>`;
             } else if (entry.type === 'table') {
                 let caption = entry.caption ? `<caption>${cleanTags(entry.caption)}</caption>` : '';
-                let headers = (entry.colLabels || []).map(l => `<th>${cleanTags(l)}</th>`).join('');
-                let rows = (entry.rows || []).map(r => {
-                    let cells = r.map(c => `<td>${cleanTags(typeof c === 'object' ? (c.entry || JSON.stringify(c)) : String(c))}</td>`).join('');
-                    return `<tr>${cells}</tr>`;
-                }).join('');
+                let headers = (entry.colLabels || []).map((l) => `<th>${cleanTags(l)}</th>`).join('');
+                let rows = (entry.rows || [])
+                    .map((r) => {
+                        let cells = r
+                            .map(
+                                (c) =>
+                                    `<td>${cleanTags(typeof c === 'object' ? c.entry || JSON.stringify(c) : String(c))}</td>`
+                            )
+                            .join('');
+                        return `<tr>${cells}</tr>`;
+                    })
+                    .join('');
                 html += `<table style="width:100%; border-collapse:collapse; margin:8px 0;">${caption}<thead><tr>${headers}</tr></thead><tbody>${rows}</tbody></table>`;
             } else if (entry.entry || entry.entries) {
                 const nameStr = entry.name ? `<strong><em>${cleanTags(entry.name)}.</em></strong> ` : '';
@@ -285,14 +352,14 @@ function flattenEntriesToText(entries) {
     if (!entries) return '';
     if (typeof entries === 'string') return entries;
     if (Array.isArray(entries)) {
-        return entries.map(e => flattenEntriesToText(e)).join('\n');
+        return entries.map((e) => flattenEntriesToText(e)).join('\n');
     }
     if (typeof entries === 'object' && entries !== null) {
         let text = '';
         if (entries.name) text += entries.name + ': ';
         if (entries.entries) text += flattenEntriesToText(entries.entries);
         else if (entries.entry) text += flattenEntriesToText(entries.entry);
-        if (entries.items) text += entries.items.map(i => flattenEntriesToText(i)).join('; ');
+        if (entries.items) text += entries.items.map((i) => flattenEntriesToText(i)).join('; ');
         return text;
     }
     return String(entries);
@@ -303,12 +370,12 @@ function loadSpellsLookup() {
     console.log('📖 Loading spells database...');
     let raw = [];
     if (fs.existsSync(spellsNormalizedDir)) {
-        const files = fs.readdirSync(spellsNormalizedDir).filter(f => f.endsWith('.json'));
-        files.forEach(f => {
+        const files = fs.readdirSync(spellsNormalizedDir).filter((f) => f.endsWith('.json'));
+        files.forEach((f) => {
             try {
                 const list = JSON.parse(fs.readFileSync(path.join(spellsNormalizedDir, f), 'utf8'));
                 if (Array.isArray(list)) raw.push(...list);
-            } catch(e) {}
+            } catch (e) {}
         });
     } else if (fs.existsSync(spellsCatalogPath)) {
         raw = JSON.parse(fs.readFileSync(spellsCatalogPath, 'utf8'));
@@ -324,14 +391,15 @@ function loadSpellsLookup() {
     const byName2024 = new Map();
     const byName = new Map();
 
-    raw.forEach(sp => {
+    raw.forEach((sp) => {
         byId.set(sp.id, sp);
         const nameLower = (sp.name || '').trim().toLowerCase();
         const srcLower = (sp.source || '').trim().toLowerCase();
         const srcUpper = (sp.source || '').trim().toUpperCase();
         byNameSource.set(`${nameLower}|${srcLower}`, sp);
 
-        const is2024Src = srcUpper === 'XPHB' || srcUpper === 'XDMG' || srcUpper === 'XMM' || srcUpper.startsWith('XUA');
+        const is2024Src =
+            srcUpper === 'XPHB' || srcUpper === 'XDMG' || srcUpper === 'XMM' || srcUpper.startsWith('XUA');
         if (!is2024Src) {
             if (!byName2014.has(nameLower) || srcUpper === 'PHB') {
                 byName2014.set(nameLower, sp);
@@ -353,11 +421,11 @@ function loadSpellsLookup() {
 
 function findSpell(spellRef, spellsLookup, prefer2024 = false) {
     if (!spellRef) return null;
-    let rawStr = typeof spellRef === 'string' ? spellRef : (spellRef.name || '');
+    let rawStr = typeof spellRef === 'string' ? spellRef : spellRef.name || '';
     // Extract name and optional source from tag like {@spell magic missile|phb} or {@spell Fire Bolt|XPHB}
     let tagMatch = rawStr.match(/\{@spell\s+([^|}]+)(?:\|([^|}]+))?/i);
     let name = tagMatch ? tagMatch[1].trim() : rawStr.replace(/[*†‡]/g, '').trim();
-    let source = tagMatch && tagMatch[2] ? tagMatch[2].trim() : (spellRef.source || '');
+    let source = tagMatch && tagMatch[2] ? tagMatch[2].trim() : spellRef.source || '';
 
     const nameLower = name.toLowerCase();
     const srcLower = source.toLowerCase();
@@ -388,26 +456,52 @@ function findSpell(spellRef, spellsLookup, prefer2024 = false) {
 
 function toSpellTitleCase(str) {
     if (!str || typeof str !== 'string') return str;
-    const minorWords = new Set(['a', 'an', 'the', 'and', 'but', 'or', 'for', 'nor', 'on', 'at', 'to', 'from', 'by', 'of', 'in', 'with']);
-    return str.split(/\s+/).map((word, index, arr) => {
-        let clean = word.toLowerCase();
-        if (clean.includes('/')) {
-            return clean.split('/').map(part => {
-                if (!part) return part;
-                return part.charAt(0).toUpperCase() + part.slice(1);
-            }).join('/');
-        }
-        if (clean.includes('-')) {
-            return clean.split('-').map(part => {
-                if (!part) return part;
-                return part.charAt(0).toUpperCase() + part.slice(1);
-            }).join('-');
-        }
-        if (index > 0 && index < arr.length - 1 && minorWords.has(clean)) {
-            return clean;
-        }
-        return clean.charAt(0).toUpperCase() + clean.slice(1);
-    }).join(' ');
+    const minorWords = new Set([
+        'a',
+        'an',
+        'the',
+        'and',
+        'but',
+        'or',
+        'for',
+        'nor',
+        'on',
+        'at',
+        'to',
+        'from',
+        'by',
+        'of',
+        'in',
+        'with'
+    ]);
+    return str
+        .split(/\s+/)
+        .map((word, index, arr) => {
+            let clean = word.toLowerCase();
+            if (clean.includes('/')) {
+                return clean
+                    .split('/')
+                    .map((part) => {
+                        if (!part) return part;
+                        return part.charAt(0).toUpperCase() + part.slice(1);
+                    })
+                    .join('/');
+            }
+            if (clean.includes('-')) {
+                return clean
+                    .split('-')
+                    .map((part) => {
+                        if (!part) return part;
+                        return part.charAt(0).toUpperCase() + part.slice(1);
+                    })
+                    .join('-');
+            }
+            if (index > 0 && index < arr.length - 1 && minorWords.has(clean)) {
+                return clean;
+            }
+            return clean.charAt(0).toUpperCase() + clean.slice(1);
+        })
+        .join(' ');
 }
 
 // Parse attack/save/damage macro structure from an action/trait
@@ -426,7 +520,8 @@ function parseActionMacroData(entryName, rawEntries, charName) {
     };
 
     // Recharge check
-    const rechargeMatch = entryName.match(/\(Recharge\s+(\d+(?:–|-)\d+|\d+)\)/i) || rawString.match(/\{@recharge\s*(\d+)?\}/i);
+    const rechargeMatch =
+        entryName.match(/\(Recharge\s+(\d+(?:–|-)\d+|\d+)\)/i) || rawString.match(/\{@recharge\s*(\d+)?\}/i);
     if (rechargeMatch) {
         macro.recharge = rechargeMatch[1] || '6';
     }
@@ -467,14 +562,18 @@ function parseActionMacroData(entryName, rawEntries, charName) {
     }
 
     // Pattern A: "Con DC 14", "Constitution DC 14", "Con save DC 14", "Constitution saving throw DC 14"
-    const preDcM = rawString.match(/\b(Strength|Dexterity|Constitution|Intelligence|Wisdom|Charisma|Str|Dex|Con|Int|Wis|Cha)\b(?:\s+(?:saving\s+throw|save))?\s*(?:\{@dc\s+(\d+)\}|DC\s*(\d+))/i);
+    const preDcM = rawString.match(
+        /\b(Strength|Dexterity|Constitution|Intelligence|Wisdom|Charisma|Str|Dex|Con|Int|Wis|Cha)\b(?:\s+(?:saving\s+throw|save))?\s*(?:\{@dc\s+(\d+)\}|DC\s*(\d+))/i
+    );
     if (preDcM) {
         if (!saveAbility) saveAbility = preDcM[1].substring(0, 3).toUpperCase();
         if (!saveDc) saveDc = parseInt(preDcM[2] || preDcM[3], 10);
     }
 
     // Pattern B: "DC 14 Constitution", "DC 14 Con", "save DC 14 Constitution"
-    const postDcM = rawString.match(/(?:save\s+DC|DC)\s*(\d+)(?:\s+or\s+higher)?\s+(?:\{@actSave\s+([a-zA-Z]+)\}|(Strength|Dexterity|Constitution|Intelligence|Wisdom|Charisma|Str|Dex|Con|Int|Wis|Cha))/i);
+    const postDcM = rawString.match(
+        /(?:save\s+DC|DC)\s*(\d+)(?:\s+or\s+higher)?\s+(?:\{@actSave\s+([a-zA-Z]+)\}|(Strength|Dexterity|Constitution|Intelligence|Wisdom|Charisma|Str|Dex|Con|Int|Wis|Cha))/i
+    );
     if (postDcM) {
         if (!saveDc) saveDc = parseInt(postDcM[1], 10);
         if (!saveAbility) saveAbility = (postDcM[2] || postDcM[3]).substring(0, 3).toUpperCase();
@@ -490,8 +589,13 @@ function parseActionMacroData(entryName, rawEntries, charName) {
 
     // If we found a DC but still no ability, look anywhere in the rawString for saving throw mention
     if (saveDc && !saveAbility) {
-        const abM = rawString.match(/\b(Strength|Dexterity|Constitution|Intelligence|Wisdom|Charisma|Str|Dex|Con|Int|Wis|Cha)\b\s+saving\s+throw/i) ||
-                    rawString.match(/saving\s+throw\s+against\s+(?:the\s+)?\b(Strength|Dexterity|Constitution|Intelligence|Wisdom|Charisma|Str|Dex|Con|Int|Wis|Cha)\b/i);
+        const abM =
+            rawString.match(
+                /\b(Strength|Dexterity|Constitution|Intelligence|Wisdom|Charisma|Str|Dex|Con|Int|Wis|Cha)\b\s+saving\s+throw/i
+            ) ||
+            rawString.match(
+                /saving\s+throw\s+against\s+(?:the\s+)?\b(Strength|Dexterity|Constitution|Intelligence|Wisdom|Charisma|Str|Dex|Con|Int|Wis|Cha)\b/i
+            );
         if (abM) {
             saveAbility = abM[1].substring(0, 3).toUpperCase();
         }
@@ -499,7 +603,7 @@ function parseActionMacroData(entryName, rawEntries, charName) {
 
     if (saveDc) {
         const validAbilities = new Set(['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA']);
-        const normalizedAbility = (saveAbility && validAbilities.has(saveAbility)) ? saveAbility : null;
+        const normalizedAbility = saveAbility && validAbilities.has(saveAbility) ? saveAbility : null;
         macro.save = { dc: saveDc, ability: normalizedAbility };
     }
 
@@ -527,13 +631,28 @@ function parseActionMacroData(entryName, rawEntries, charName) {
     // Damage formulas
     const dmgRegex = /\{@damage ([^\}]+)\}(?:.*?([\w]+)\s+damage)?/gi;
     let match;
-    const VALID_TYPES = new Set(['Fire', 'Cold', 'Lightning', 'Thunder', 'Poison', 'Acid', 'Necrotic', 'Radiant', 'Force', 'Psychic', 'Slashing', 'Piercing', 'Bludgeoning', 'Healing']);
-    
+    const VALID_TYPES = new Set([
+        'Fire',
+        'Cold',
+        'Lightning',
+        'Thunder',
+        'Poison',
+        'Acid',
+        'Necrotic',
+        'Radiant',
+        'Force',
+        'Psychic',
+        'Slashing',
+        'Piercing',
+        'Bludgeoning',
+        'Healing'
+    ]);
+
     while ((match = dmgRegex.exec(rawString)) !== null) {
         const formula = match[1].trim();
-        let type = match[2] ? (match[2].charAt(0).toUpperCase() + match[2].slice(1).toLowerCase()) : 'Slashing';
+        let type = match[2] ? match[2].charAt(0).toUpperCase() + match[2].slice(1).toLowerCase() : 'Slashing';
         if (!VALID_TYPES.has(type)) type = 'Slashing';
-        
+
         let isRider = false;
         if (!macro.isAttack && macro.save) {
             isRider = true;
@@ -569,8 +688,12 @@ function normalizeAbilityEntry(entry, actionType, charName) {
     if (typeof entry === 'string') {
         entry = { name: actionType === 'lair' ? 'Lair Action' : 'Ability', entries: [entry] };
     }
-    const name = entry.name ? cleanTagsPlain(entry.name).replace(/\.$/, '').trim() : (actionType === 'lair' ? 'Lair Action' : 'Ability');
-    const entries = entry.entries || (entry.items ? entry.items : (entry.entry ? [entry.entry] : []));
+    const name = entry.name
+        ? cleanTagsPlain(entry.name).replace(/\.$/, '').trim()
+        : actionType === 'lair'
+          ? 'Lair Action'
+          : 'Ability';
+    const entries = entry.entries || (entry.items ? entry.items : entry.entry ? [entry.entry] : []);
     const descriptionHtml = renderEntriesToHtml(entries);
     const macro = parseActionMacroData(name, entries, charName);
 
@@ -586,7 +709,12 @@ function normalizeAbilityEntry(entry, actionType, charName) {
 
 // Normalize spellcasting data
 function normalizeSpellcasting(monster, spellsLookup) {
-    const isMonster2024 = (monster.source === 'XMM' || monster.source === 'XPHB' || monster.source === 'XDMG' || (typeof monster.source === 'string' && monster.source.startsWith('XUA')) || !!monster.is2024);
+    const isMonster2024 =
+        monster.source === 'XMM' ||
+        monster.source === 'XPHB' ||
+        monster.source === 'XDMG' ||
+        (typeof monster.source === 'string' && monster.source.startsWith('XUA')) ||
+        !!monster.is2024;
     const spellcastingBlocks = [];
     const rawBlocks = [];
 
@@ -597,14 +725,19 @@ function normalizeSpellcasting(monster, spellsLookup) {
 
     // Also check monster.trait for unnested spellcasting blocks
     if (monster.trait && Array.isArray(monster.trait)) {
-        monster.trait.forEach(t => {
+        monster.trait.forEach((t) => {
             if (!t || !t.name) return;
             const tName = t.name.toLowerCase();
-            if (tName.includes('magic weapon') || tName.includes('magic resistance') || tName.includes('magic absorption') || tName.includes('magic sensitivity')) {
+            if (
+                tName.includes('magic weapon') ||
+                tName.includes('magic resistance') ||
+                tName.includes('magic absorption') ||
+                tName.includes('magic sensitivity')
+            ) {
                 return;
             }
             if (/(?:innate\s+)?spellcasting|psionics/i.test(t.name)) {
-                if (!rawBlocks.some(b => b.name === t.name)) {
+                if (!rawBlocks.some((b) => b.name === t.name)) {
                     rawBlocks.push({
                         name: t.name,
                         headerEntries: t.entries || [],
@@ -615,14 +748,18 @@ function normalizeSpellcasting(monster, spellsLookup) {
         });
     }
 
-    const pb = crToPb(monster.cr ? (monster.cr.cr || monster.cr) : '0');
+    const pb = crToPb(monster.cr ? monster.cr.cr || monster.cr : '0');
 
     rawBlocks.forEach((raw, blockIdx) => {
         const blockName = raw.name || 'Spellcasting';
         const headerText = flattenEntriesToText(raw.headerEntries || raw.entries || []);
         const footerText = flattenEntriesToText(raw.footerEntries || []);
-        const isBlockInnate = raw.type === 'innate' || /innate|psionic/i.test(blockName) || /innate\s+spellcasting/i.test(headerText);
-        const isBlockPact = raw.type === 'pact' || /pact\s+magic/i.test(blockName) || (/warlock/i.test(headerText) && /short\s+or\s+long\s+rest/i.test(headerText));
+        const isBlockInnate =
+            raw.type === 'innate' || /innate|psionic/i.test(blockName) || /innate\s+spellcasting/i.test(headerText);
+        const isBlockPact =
+            raw.type === 'pact' ||
+            /pact\s+magic/i.test(blockName) ||
+            (/warlock/i.test(headerText) && /short\s+or\s+long\s+rest/i.test(headerText));
 
         // 1. Ability determination
         let ability = raw.ability ? String(raw.ability).toLowerCase() : null;
@@ -649,7 +786,9 @@ function normalizeSpellcasting(monster, spellsLookup) {
         // 3. Spell Attack Modifier
         let atkMod = raw.atkMod !== undefined ? parseInt(raw.atkMod, 10) : null;
         if (atkMod === null) {
-            const atkMatch = headerText.match(/([+-]\d+)\s+to\s+hit\s+with\s+spell\s+attacks/i) || headerText.match(/\{@hit\s+([+-]?\d+)\}/i);
+            const atkMatch =
+                headerText.match(/([+-]\d+)\s+to\s+hit\s+with\s+spell\s+attacks/i) ||
+                headerText.match(/\{@hit\s+([+-]?\d+)\}/i);
             if (atkMatch) atkMod = parseInt(atkMatch[1], 10);
             else atkMod = pb + abMod;
         }
@@ -662,7 +801,9 @@ function normalizeSpellcasting(monster, spellsLookup) {
                 casterLevel = parseInt(lvlMatch[1], 10);
             } else if (raw.spells) {
                 // Infer from highest spell slot
-                const slotLevels = Object.keys(raw.spells).map(k => parseInt(k, 10)).filter(n => !isNaN(n) && n > 0);
+                const slotLevels = Object.keys(raw.spells)
+                    .map((k) => parseInt(k, 10))
+                    .filter((n) => !isNaN(n) && n > 0);
                 if (slotLevels.length > 0) {
                     const maxSlot = Math.max(...slotLevels);
                     casterLevel = Math.max(1, maxSlot * 2 - 1);
@@ -677,8 +818,11 @@ function normalizeSpellcasting(monster, spellsLookup) {
         // Build embedded spell object with quick-roll data
         function buildEmbeddedSpell(spellRef, usageMeta = {}) {
             const normSpell = findSpell(spellRef, spellsLookup, isMonster2024);
-            let rawName = typeof spellRef === 'string' ? spellRef : (spellRef.name || 'Unknown Spell');
-            const cleanName = rawName.replace(/\{@spell\s+([^|}]+).*?\}/i, '$1').replace(/[*†‡]/g, '').trim();
+            let rawName = typeof spellRef === 'string' ? spellRef : spellRef.name || 'Unknown Spell';
+            const cleanName = rawName
+                .replace(/\{@spell\s+([^|}]+).*?\}/i, '$1')
+                .replace(/[*†‡]/g, '')
+                .trim();
 
             if (normSpell) {
                 return {
@@ -733,19 +877,24 @@ function normalizeSpellcasting(monster, spellsLookup) {
             for (let lvlKey in raw.spells) {
                 const lvlNum = parseInt(lvlKey, 10);
                 const slotData = raw.spells[lvlKey];
-                const slotsCount = typeof slotData === 'object' && slotData.slots !== undefined ? slotData.slots : (lvlNum === 0 ? 0 : 1);
-                const rawList = Array.isArray(slotData) ? slotData : (slotData.spells || []);
+                const slotsCount =
+                    typeof slotData === 'object' && slotData.slots !== undefined
+                        ? slotData.slots
+                        : lvlNum === 0
+                          ? 0
+                          : 1;
+                const rawList = Array.isArray(slotData) ? slotData : slotData.spells || [];
 
                 spellsByLevel[lvlKey] = {
                     slots: slotsCount,
-                    spells: rawList.map(sp => buildEmbeddedSpell(sp, { level: lvlNum, type: 'slot' }))
+                    spells: rawList.map((sp) => buildEmbeddedSpell(sp, { level: lvlNum, type: 'slot' }))
                 };
             }
         }
 
         // Parse at-will spells
         if (raw.will && Array.isArray(raw.will)) {
-            raw.will.forEach(sp => {
+            raw.will.forEach((sp) => {
                 atWill.push(buildEmbeddedSpell(sp, { uses: 'at_will', type: 'at_will' }));
             });
         }
@@ -754,20 +903,25 @@ function normalizeSpellcasting(monster, spellsLookup) {
         if (raw.daily && typeof raw.daily === 'object') {
             for (let dayKey in raw.daily) {
                 const usesMax = parseInt(dayKey, 10) || 1;
-                daily[dayKey] = (raw.daily[dayKey] || []).map(sp =>
+                daily[dayKey] = (raw.daily[dayKey] || []).map((sp) =>
                     buildEmbeddedSpell(sp, { usesMax, usesRemaining: usesMax, dailyKey: dayKey, type: 'daily' })
                 );
             }
         }
 
         // If from a trait that had text lines (like innate spellcasting lines)
-        if (raw.fromTrait && Object.keys(spellsByLevel).length === 0 && atWill.length === 0 && Object.keys(daily).length === 0) {
+        if (
+            raw.fromTrait &&
+            Object.keys(spellsByLevel).length === 0 &&
+            atWill.length === 0 &&
+            Object.keys(daily).length === 0
+        ) {
             const lines = headerText.split('\n');
-            lines.forEach(line => {
+            lines.forEach((line) => {
                 const trimmed = line.trim();
                 const cantripM = trimmed.match(/^(?:Cantrips\s*\([^)]*\)|At\s+will):\s*(.*)$/i);
                 if (cantripM) {
-                    cantripM[1].split(/,\s*/).forEach(s => {
+                    cantripM[1].split(/,\s*/).forEach((s) => {
                         if (s.trim()) atWill.push(buildEmbeddedSpell(s.trim(), { uses: 'at_will', type: 'at_will' }));
                     });
                     return;
@@ -777,18 +931,30 @@ function normalizeSpellcasting(monster, spellsLookup) {
                     const count = dailyM[1];
                     const key = count + 'e';
                     daily[key] = daily[key] || [];
-                    dailyM[2].split(/,\s*/).forEach(s => {
-                        if (s.trim()) daily[key].push(buildEmbeddedSpell(s.trim(), { usesMax: parseInt(count, 10), dailyKey: key, type: 'daily' }));
+                    dailyM[2].split(/,\s*/).forEach((s) => {
+                        if (s.trim())
+                            daily[key].push(
+                                buildEmbeddedSpell(s.trim(), {
+                                    usesMax: parseInt(count, 10),
+                                    dailyKey: key,
+                                    type: 'daily'
+                                })
+                            );
                     });
                     return;
                 }
-                const slotM = trimmed.match(/^(\d+)(?:st|nd|rd|th)\s+level\s*\((?:(\d+)\s+slots?|at\s+will)\):\s*(.*)$/i);
+                const slotM = trimmed.match(
+                    /^(\d+)(?:st|nd|rd|th)\s+level\s*\((?:(\d+)\s+slots?|at\s+will)\):\s*(.*)$/i
+                );
                 if (slotM) {
                     const lvl = slotM[1];
                     const slots = parseInt(slotM[2], 10) || 0;
                     spellsByLevel[lvl] = spellsByLevel[lvl] || { slots, spells: [] };
-                    slotM[3].split(/,\s*/).forEach(s => {
-                        if (s.trim()) spellsByLevel[lvl].spells.push(buildEmbeddedSpell(s.trim(), { level: parseInt(lvl, 10), type: 'slot' }));
+                    slotM[3].split(/,\s*/).forEach((s) => {
+                        if (s.trim())
+                            spellsByLevel[lvl].spells.push(
+                                buildEmbeddedSpell(s.trim(), { level: parseInt(lvl, 10), type: 'slot' })
+                            );
                     });
                 }
             });
@@ -820,7 +986,7 @@ function normalizeSpellcasting(monster, spellsLookup) {
             spellsByLevel,
             atWill,
             daily,
-            will: atWill.map(s => s.name)
+            will: atWill.map((s) => s.name)
         });
     });
 
@@ -876,12 +1042,16 @@ function applyCopyMod(target, mod) {
                 if (d.replace) {
                     if (typeof d.replace === 'object' && d.replace.regex) {
                         const re = new RegExp(d.replace.regex, d.replace.flags || '');
-                        idx = arr.findIndex(it => (it?.name ? re.test(it.name) : (typeof it === 'string' ? re.test(it) : false)));
+                        idx = arr.findIndex((it) =>
+                            it?.name ? re.test(it.name) : typeof it === 'string' ? re.test(it) : false
+                        );
                     } else if (typeof d.replace === 'object' && d.replace.index != null) {
                         idx = d.replace.index;
                     } else {
                         const matchName = typeof d.replace === 'string' ? d.replace.toLowerCase() : '';
-                        idx = arr.findIndex(it => (it?.name && it.name.toLowerCase() === matchName) || it === d.replace);
+                        idx = arr.findIndex(
+                            (it) => (it?.name && it.name.toLowerCase() === matchName) || it === d.replace
+                        );
                     }
                 }
                 if (idx !== -1) arr.splice(idx, 1, ...items);
@@ -889,8 +1059,12 @@ function applyCopyMod(target, mod) {
             } else if (mode === 'appendArr' || mode === 'appendIfNotExistsArr') {
                 if (!Array.isArray(target[propKey])) target[propKey] = [];
                 if (mode === 'appendIfNotExistsArr') {
-                    items.forEach(it => {
-                        const exists = target[propKey].some(x => (x?.name && it?.name ? x.name.toLowerCase() === it.name.toLowerCase() : JSON.stringify(x) === JSON.stringify(it)));
+                    items.forEach((it) => {
+                        const exists = target[propKey].some((x) =>
+                            x?.name && it?.name
+                                ? x.name.toLowerCase() === it.name.toLowerCase()
+                                : JSON.stringify(x) === JSON.stringify(it)
+                        );
                         if (!exists) target[propKey].push(it);
                     });
                 } else {
@@ -901,16 +1075,20 @@ function applyCopyMod(target, mod) {
                 target[propKey].unshift(...items);
             } else if (mode === 'insertArr') {
                 if (!Array.isArray(target[propKey])) target[propKey] = [];
-                const insIdx = (d.index !== undefined && d.index >= 0) ? d.index : target[propKey].length;
+                const insIdx = d.index !== undefined && d.index >= 0 ? d.index : target[propKey].length;
                 target[propKey].splice(insIdx, 0, ...items);
             } else if (mode === 'removeArr') {
                 if (Array.isArray(target[propKey])) {
                     if (d.names) {
-                        const names = Array.isArray(d.names) ? d.names.map(n => String(n).toLowerCase()) : [String(d.names).toLowerCase()];
-                        target[propKey] = target[propKey].filter(it => !it?.name || !names.includes(it.name.toLowerCase()));
+                        const names = Array.isArray(d.names)
+                            ? d.names.map((n) => String(n).toLowerCase())
+                            : [String(d.names).toLowerCase()];
+                        target[propKey] = target[propKey].filter(
+                            (it) => !it?.name || !names.includes(it.name.toLowerCase())
+                        );
                     } else if (d.items) {
                         const remItems = Array.isArray(d.items) ? d.items : [d.items];
-                        target[propKey] = target[propKey].filter(it => !remItems.includes(it));
+                        target[propKey] = target[propKey].filter((it) => !remItems.includes(it));
                     }
                 }
             } else if (mode === 'replaceOrAppendArr') {
@@ -919,7 +1097,7 @@ function applyCopyMod(target, mod) {
                 let idx = -1;
                 if (d.replace) {
                     const matchName = typeof d.replace === 'string' ? d.replace.toLowerCase() : '';
-                    idx = arr.findIndex(it => (it?.name && it.name.toLowerCase() === matchName) || it === d.replace);
+                    idx = arr.findIndex((it) => (it?.name && it.name.toLowerCase() === matchName) || it === d.replace);
                 }
                 if (idx !== -1) arr.splice(idx, 1, ...items);
                 else arr.push(...items);
@@ -930,7 +1108,7 @@ function applyCopyMod(target, mod) {
                 }
             } else if (mode === 'replaceName') {
                 if (Array.isArray(target[propKey]) && d.replace && d.with) {
-                    const it = target[propKey].find(x => x?.name === d.replace);
+                    const it = target[propKey].find((x) => x?.name === d.replace);
                     if (it) it.name = d.with;
                 }
             } else if (mode === 'setProp') {
@@ -998,13 +1176,13 @@ function buildCreatureDatabase() {
     if (fs.existsSync(legGroupsPath)) {
         try {
             const legData = JSON.parse(fs.readFileSync(legGroupsPath, 'utf8'));
-            (legData.legendaryGroup || []).forEach(lg => {
+            (legData.legendaryGroup || []).forEach((lg) => {
                 const key = `${(lg.name || '').toLowerCase()}|${(lg.source || 'MM').toLowerCase()}`;
                 legendaryGroupsMap.set(key, lg);
                 rawLegGroupsList.push(lg);
             });
             const brewLegGroups = getBrewEntities('legendaryGroup');
-            brewLegGroups.forEach(lg => {
+            brewLegGroups.forEach((lg) => {
                 const key = `${(lg.name || '').toLowerCase()}|${(lg.source || 'MM').toLowerCase()}`;
                 legendaryGroupsMap.set(key, lg);
                 rawLegGroupsList.push(lg);
@@ -1012,7 +1190,7 @@ function buildCreatureDatabase() {
 
             // Resolve _copy on legendary groups
             let resolvedLgCopies = 0;
-            rawLegGroupsList.forEach(lg => {
+            rawLegGroupsList.forEach((lg) => {
                 if (lg._copy) {
                     const resolved = resolveLegendaryGroupCopy(lg, legendaryGroupsMap);
                     const key = `${(resolved.name || '').toLowerCase()}|${(resolved.source || 'MM').toLowerCase()}`;
@@ -1020,7 +1198,9 @@ function buildCreatureDatabase() {
                     resolvedLgCopies++;
                 }
             });
-            console.log(`🏰 Loaded ${legendaryGroupsMap.size} legendary groups (resolved ${resolvedLgCopies} _copy inheritances).`);
+            console.log(
+                `🏰 Loaded ${legendaryGroupsMap.size} legendary groups (resolved ${resolvedLgCopies} _copy inheritances).`
+            );
         } catch (e) {
             console.warn('⚠️ Could not load legendarygroups.json:', e.message);
         }
@@ -1034,7 +1214,9 @@ function buildCreatureDatabase() {
     const allMonstersRaw = [];
     const sourceFilesMap = {};
 
-    console.log(`📦 Reading raw 5etools bestiary files (${Object.keys(indexData).length} sources listed in index.json)...`);
+    console.log(
+        `📦 Reading raw 5etools bestiary files (${Object.keys(indexData).length} sources listed in index.json)...`
+    );
 
     for (const sourceKey in indexData) {
         const fileName = indexData[sourceKey];
@@ -1048,8 +1230,8 @@ function buildCreatureDatabase() {
         const monsterList = content.monster || [];
         sourceFilesMap[sourceKey] = [];
 
-        monsterList.forEach(m => {
-            m.__prop = "monster";
+        monsterList.forEach((m) => {
+            m.__prop = 'monster';
             m.source = m.source || sourceKey;
             allMonstersRaw.push(m);
             sourceFilesMap[sourceKey].push(m);
@@ -1057,8 +1239,8 @@ function buildCreatureDatabase() {
     }
 
     const brewMonsters = isSrdOnly ? [] : getBrewEntities('monster');
-    brewMonsters.forEach(m => {
-        m.__prop = "monster";
+    brewMonsters.forEach((m) => {
+        m.__prop = 'monster';
         m.source = m.source || 'Partnered';
         allMonstersRaw.push(m);
     });
@@ -1067,7 +1249,7 @@ function buildCreatureDatabase() {
 
     // Build raw monster lookup map for _copy resolution
     const monsterMap = new Map();
-    allMonstersRaw.forEach(m => {
+    allMonstersRaw.forEach((m) => {
         const key = `${(m.name || '').toLowerCase()}|${(m.source || 'MM').toLowerCase()}`;
         monsterMap.set(key, m);
     });
@@ -1139,7 +1321,7 @@ function buildCreatureDatabase() {
     const seenCreatures = new Set();
 
     const SRD_BESTIARY_SOURCES = new Set(['MM', 'XMM', 'PHB', 'XPHB', 'DMG', 'XDMG']);
-    allMonstersRaw.forEach(m => {
+    allMonstersRaw.forEach((m) => {
         if (isSrdOnly) {
             const srcUpper = (m.source || 'MM').trim().toUpperCase();
             if (!SRD_BESTIARY_SOURCES.has(srcUpper)) return;
@@ -1155,17 +1337,24 @@ function buildCreatureDatabase() {
         seenCreatures.add(uniqueKey);
 
         const srcUpper = source.toUpperCase();
-        const is2024Src = EDITION_2024_SOURCES.has(srcUpper) || srcUpper.startsWith('XUA') || (srcUpper.startsWith('UA') && /202[4-9]/.test(srcUpper)) || m.edition === 'one' || m.edition === '2024' || m.srd52 || m.basicRules2024;
+        const is2024Src =
+            EDITION_2024_SOURCES.has(srcUpper) ||
+            srcUpper.startsWith('XUA') ||
+            (srcUpper.startsWith('UA') && /202[4-9]/.test(srcUpper)) ||
+            m.edition === 'one' ||
+            m.edition === '2024' ||
+            m.srd52 ||
+            m.basicRules2024;
         const edition = is2024Src ? '2024' : '2014';
         const id = `creature_${name.toLowerCase().replace(/[^a-z0-9]/g, '_')}_${source.toLowerCase()}`;
 
         // CR parsing
-        const crStr = m.cr ? (typeof m.cr === 'object' ? (m.cr.cr || '0') : String(m.cr)) : '0';
+        const crStr = m.cr ? (typeof m.cr === 'object' ? m.cr.cr || '0' : String(m.cr)) : '0';
         const crNum = crToNumber(crStr);
         const pb = crToPb(crStr);
 
         // Size parsing
-        const rawSize = Array.isArray(m.size) ? m.size[0] : (m.size || 'M');
+        const rawSize = Array.isArray(m.size) ? m.size[0] : m.size || 'M';
         const sizeCategory = String(rawSize).toUpperCase();
         const sizeFull = SIZE_MAP[sizeCategory] || 'Medium';
 
@@ -1183,7 +1372,9 @@ function buildCreatureDatabase() {
                 typeStr = 'Humanoid';
             }
             if (m.type.tags && Array.isArray(m.type.tags)) {
-                subTypeStr = m.type.tags.map(t => typeof t === 'string' ? t : (t.tag || JSON.stringify(t))).join(', ');
+                subTypeStr = m.type.tags
+                    .map((t) => (typeof t === 'string' ? t : t.tag || JSON.stringify(t)))
+                    .join(', ');
             }
         }
         if (typeof typeStr !== 'string') typeStr = String(typeStr || 'Humanoid');
@@ -1192,7 +1383,9 @@ function buildCreatureDatabase() {
         // Alignment parsing
         let alignmentStr = 'Unaligned';
         if (Array.isArray(m.alignment)) {
-            alignmentStr = m.alignment.map(a => typeof a === 'string' ? a : (a.alignment ? a.alignment.join(' ') : 'Unaligned')).join(' ');
+            alignmentStr = m.alignment
+                .map((a) => (typeof a === 'string' ? a : a.alignment ? a.alignment.join(' ') : 'Unaligned'))
+                .join(' ');
         } else if (typeof m.alignment === 'string') {
             alignmentStr = m.alignment;
         }
@@ -1256,13 +1449,18 @@ function buildCreatureDatabase() {
                 if (m.speed.walk !== undefined) {
                     speedObj.walk = parseSpeedVal(m.speed.walk, 0);
                 } else {
-                    speedObj.walk = (m.speed.fly || m.speed.swim || m.speed.burrow || m.speed.climb) ? 0 : 30;
+                    speedObj.walk = m.speed.fly || m.speed.swim || m.speed.burrow || m.speed.climb ? 0 : 30;
                 }
                 if (m.speed.fly !== undefined) speedObj.fly = parseSpeedVal(m.speed.fly, 0);
                 if (m.speed.swim !== undefined) speedObj.swim = parseSpeedVal(m.speed.swim, 0);
                 if (m.speed.climb !== undefined) speedObj.climb = parseSpeedVal(m.speed.climb, 0);
                 if (m.speed.burrow !== undefined) speedObj.burrow = parseSpeedVal(m.speed.burrow, 0);
-                if (m.speed.canHover || (typeof m.speed.fly === 'object' && m.speed.fly?.condition && m.speed.fly.condition.includes('hover'))) {
+                if (
+                    m.speed.canHover ||
+                    (typeof m.speed.fly === 'object' &&
+                        m.speed.fly?.condition &&
+                        m.speed.fly.condition.includes('hover'))
+                ) {
                     speedObj.canHover = true;
                 }
             }
@@ -1292,7 +1490,8 @@ function buildCreatureDatabase() {
         const tokenCleanName = (tokenName || '')
             .normalize('NFD')
             .replace(/[\u0300-\u036f]/g, '')
-            .replace(/Æ/g, 'AE').replace(/æ/g, 'ae')
+            .replace(/Æ/g, 'AE')
+            .replace(/æ/g, 'ae')
             .replace(/"/g, '')
             .trim();
         const tokenImg = `img/bestiary/tokens/${tokenSource}/${tokenCleanName}.webp`;
@@ -1303,14 +1502,16 @@ function buildCreatureDatabase() {
         const mainSc = hasSpellcasting ? spellcasting[0] : null;
 
         // Normalize Actions, Bonus Actions, Reactions, Legendary, Traits
-        const traits = (m.trait || []).map(t => normalizeAbilityEntry(t, 'trait', name)).filter(Boolean);
-        const actions = (m.action || []).map(a => normalizeAbilityEntry(a, 'action', name)).filter(Boolean);
-        const bonusActions = (m.bonus || []).map(b => normalizeAbilityEntry(b, 'bonus', name)).filter(Boolean);
-        const reactions = (m.reaction || []).map(r => normalizeAbilityEntry(r, 'reaction', name)).filter(Boolean);
+        const traits = (m.trait || []).map((t) => normalizeAbilityEntry(t, 'trait', name)).filter(Boolean);
+        const actions = (m.action || []).map((a) => normalizeAbilityEntry(a, 'action', name)).filter(Boolean);
+        const bonusActions = (m.bonus || []).map((b) => normalizeAbilityEntry(b, 'bonus', name)).filter(Boolean);
+        const reactions = (m.reaction || []).map((r) => normalizeAbilityEntry(r, 'reaction', name)).filter(Boolean);
         const legendaryActions = {
-            count: m.legendary ? (m.legendaryActions || 3) : 0,
-            description: m.legendaryHeader ? cleanTags(flattenEntriesToText(m.legendaryHeader)) : 'The creature can take 3 legendary actions, choosing from the options below.',
-            entries: (m.legendary || []).map(l => normalizeAbilityEntry(l, 'legendary', name)).filter(Boolean)
+            count: m.legendary ? m.legendaryActions || 3 : 0,
+            description: m.legendaryHeader
+                ? cleanTags(flattenEntriesToText(m.legendaryHeader))
+                : 'The creature can take 3 legendary actions, choosing from the options below.',
+            entries: (m.legendary || []).map((l) => normalizeAbilityEntry(l, 'legendary', name)).filter(Boolean)
         };
 
         let rawLair = m.lairActions;
@@ -1323,12 +1524,11 @@ function buildCreatureDatabase() {
             const lgName = (m.legendaryGroup.name || '').toLowerCase();
             const lgSource = (m.legendaryGroup.source || m.source || 'MM').toLowerCase();
             lg = legendaryGroupsMap.get(`${lgName}|${lgSource}`);
-            
+
             // Check without parentheses, e.g. "Shadow Dragon (Bronze Dragon)" -> "Shadow Dragon"
             if (!lg && lgName.includes('(')) {
                 const cleanName = lgName.replace(/\s*\([^)]*\)/g, '').trim();
-                lg = legendaryGroupsMap.get(`${cleanName}|${lgSource}`) ||
-                     legendaryGroupsMap.get(`${cleanName}|mm`);
+                lg = legendaryGroupsMap.get(`${cleanName}|${lgSource}`) || legendaryGroupsMap.get(`${cleanName}|mm`);
                 if (!lg) {
                     for (const [k, v] of legendaryGroupsMap.entries()) {
                         if (k.startsWith(`${cleanName}|`)) {
@@ -1352,8 +1552,7 @@ function buildCreatureDatabase() {
             // Fallback by creature name if m.legendaryGroup was omitted in source data (e.g. Baalzebul in MaBJoV, Kraken in PSZ)
             const mNameLower = name.toLowerCase();
             const mSrcLower = source.toLowerCase();
-            lg = legendaryGroupsMap.get(`${mNameLower}|${mSrcLower}`) ||
-                 legendaryGroupsMap.get(`${mNameLower}|mm`);
+            lg = legendaryGroupsMap.get(`${mNameLower}|${mSrcLower}`) || legendaryGroupsMap.get(`${mNameLower}|mm`);
             if (!lg) {
                 for (const [k, v] of legendaryGroupsMap.entries()) {
                     if (k.startsWith(`${mNameLower}|`)) {
@@ -1376,26 +1575,37 @@ function buildCreatureDatabase() {
             function unpackLairItem(item) {
                 if (!item) return;
                 if (typeof item === 'string') {
-                    if (/on initiative count 20|when fighting inside its lair|can take (?:a|one) lair action|takes (?:a|one) lair action/i.test(item)) {
+                    if (
+                        /on initiative count 20|when fighting inside its lair|can take (?:a|one) lair action|takes (?:a|one) lair action/i.test(
+                            item
+                        )
+                    ) {
                         if (!lairHeader) lairHeader = cleanTags(item);
                         return;
                     }
-                    const boldMatch = item.match(/^\{@b\s+([^}]+)\}\.?\s*(.*)/i) || item.match(/^\*\*([^*]+)\*\*\.?\s*(.*)/i);
-                    const itemName = boldMatch 
-                        ? cleanTagsPlain(boldMatch[1]).replace(/\.$/, '').trim() 
+                    const boldMatch =
+                        item.match(/^\{@b\s+([^}]+)\}\.?\s*(.*)/i) || item.match(/^\*\*([^*]+)\*\*\.?\s*(.*)/i);
+                    const itemName = boldMatch
+                        ? cleanTagsPlain(boldMatch[1]).replace(/\.$/, '').trim()
                         : extractLairActionName(item, flattenedItems.length + 1);
                     const entryText = boldMatch && boldMatch[2] ? boldMatch[2].trim() : item;
                     flattenedItems.push({ name: itemName, entries: [entryText] });
                 } else if (item.type === 'list' && Array.isArray(item.items)) {
-                    item.items.forEach(li => unpackLairItem(li));
+                    item.items.forEach((li) => unpackLairItem(li));
                 } else if (item.type === 'item' || (item.name && (item.entries || item.entry))) {
                     const rawName = item.name ? cleanTagsPlain(item.name).replace(/\.$/, '').trim() : '';
                     const entries = item.entries || (item.entry ? [item.entry] : []);
-                    
+
                     // Check if this entries block contains a nested list of named items (e.g. Additional Lair Actions)
-                    const hasNestedNamedItems = entries.some(e => e && e.type === 'list' && Array.isArray(e.items) && e.items.some(it => it && typeof it === 'object' && it.name));
+                    const hasNestedNamedItems = entries.some(
+                        (e) =>
+                            e &&
+                            e.type === 'list' &&
+                            Array.isArray(e.items) &&
+                            e.items.some((it) => it && typeof it === 'object' && it.name)
+                    );
                     if (hasNestedNamedItems) {
-                        entries.forEach(sub => {
+                        entries.forEach((sub) => {
                             if (typeof sub !== 'string') unpackLairItem(sub);
                         });
                     } else {
@@ -1403,17 +1613,19 @@ function buildCreatureDatabase() {
                         flattenedItems.push({ name: actionName, entries });
                     }
                 } else if (item.type === 'entries' && Array.isArray(item.entries)) {
-                    item.entries.forEach(sub => unpackLairItem(sub));
+                    item.entries.forEach((sub) => unpackLairItem(sub));
                 } else if (typeof item === 'object') {
                     flattenedItems.push(item);
                 }
             }
 
-            (Array.isArray(rawLair) ? rawLair : [rawLair]).forEach(it => unpackLairItem(it));
+            (Array.isArray(rawLair) ? rawLair : [rawLair]).forEach((it) => unpackLairItem(it));
 
-            lairActions = flattenedItems.map(item => {
-                return normalizeAbilityEntry(item, 'lair', name);
-            }).filter(Boolean);
+            lairActions = flattenedItems
+                .map((item) => {
+                    return normalizeAbilityEntry(item, 'lair', name);
+                })
+                .filter(Boolean);
         }
 
         // Regional Effects
@@ -1422,19 +1634,26 @@ function buildCreatureDatabase() {
         if (rawRegional) {
             regionalEffectsHtml = renderEntriesToHtml(rawRegional);
             const regList = Array.isArray(rawRegional) ? rawRegional : [rawRegional];
-            regList.forEach(item => {
+            regList.forEach((item) => {
                 if (!item) return;
                 if (item.type === 'list' && Array.isArray(item.items)) {
-                    item.items.forEach(li => {
+                    item.items.forEach((li) => {
                         if (typeof li === 'string') {
-                            const boldMatch = li.match(/^\{@b\s+([^}]+)\}\.?\s*(.*)/i) || li.match(/^\*\*([^*]+)\*\*\.?\s*(.*)/i);
-                            const liName = boldMatch ? cleanTagsPlain(boldMatch[1]).replace(/\.$/, '').trim() : 'Regional Effect';
+                            const boldMatch =
+                                li.match(/^\{@b\s+([^}]+)\}\.?\s*(.*)/i) || li.match(/^\*\*([^*]+)\*\*\.?\s*(.*)/i);
+                            const liName = boldMatch
+                                ? cleanTagsPlain(boldMatch[1]).replace(/\.$/, '').trim()
+                                : 'Regional Effect';
                             const entryText = boldMatch && boldMatch[2] ? boldMatch[2].trim() : li;
-                            regionalEffects.push(normalizeAbilityEntry({ name: liName, entries: [entryText] }, 'regional', name));
+                            regionalEffects.push(
+                                normalizeAbilityEntry({ name: liName, entries: [entryText] }, 'regional', name)
+                            );
                         } else if (li && typeof li === 'object') {
                             const liName = li.name ? cleanTags(li.name).replace(/\.$/, '') : 'Regional Effect';
                             const liEntries = li.entries || (li.entry ? [li.entry] : []);
-                            regionalEffects.push(normalizeAbilityEntry({ name: liName, entries: liEntries }, 'regional', name));
+                            regionalEffects.push(
+                                normalizeAbilityEntry({ name: liName, entries: liEntries }, 'regional', name)
+                            );
                         }
                     });
                 } else if (typeof item === 'object' && item.name) {
@@ -1445,23 +1664,25 @@ function buildCreatureDatabase() {
         }
 
         // Variant Traits
-        const variants = (m.variant || []).map(v => {
-            if (!v) return null;
-            const vName = v.name ? cleanTags(v.name).trim() : 'Variant';
-            const vEntries = v.entries || (v.entry ? [v.entry] : []);
-            const descriptionHtml = renderEntriesToHtml(vEntries);
-            return {
-                name: vName,
-                descriptionHtml,
-                entries: vEntries
-            };
-        }).filter(Boolean);
+        const variants = (m.variant || [])
+            .map((v) => {
+                if (!v) return null;
+                const vName = v.name ? cleanTags(v.name).trim() : 'Variant';
+                const vEntries = v.entries || (v.entry ? [v.entry] : []);
+                const descriptionHtml = renderEntriesToHtml(vEntries);
+                return {
+                    name: vName,
+                    descriptionHtml,
+                    entries: vEntries
+                };
+            })
+            .filter(Boolean);
 
         // Mythic Actions
         const mythicActions = {
-            count: m.mythic ? (m.legendaryActions || 3) : 0,
+            count: m.mythic ? m.legendaryActions || 3 : 0,
             description: m.mythicHeader ? cleanTags(flattenEntriesToText(m.mythicHeader)) : '',
-            entries: (m.mythic || []).map(l => normalizeAbilityEntry(l, 'mythic', name)).filter(Boolean)
+            entries: (m.mythic || []).map((l) => normalizeAbilityEntry(l, 'mythic', name)).filter(Boolean)
         };
 
         const legendaryActionsLair = m.legendaryActionsLair || null;
@@ -1500,12 +1721,20 @@ function buildCreatureDatabase() {
             resist: normalizeDefenseList(m.resist),
             vulnerable: normalizeDefenseList(m.vulnerable),
             conditionImmune: Array.isArray(m.conditionImmune)
-                ? m.conditionImmune.map(c => typeof c === 'string' ? c.toLowerCase().trim() : (c.conditionImmune ? String(c.conditionImmune) : JSON.stringify(c)))
-                : (m.conditionImmune ? [String(m.conditionImmune)] : []),
-            passive: m.passive || (10 + abilities.wis.mod),
+                ? m.conditionImmune.map((c) =>
+                      typeof c === 'string'
+                          ? c.toLowerCase().trim()
+                          : c.conditionImmune
+                            ? String(c.conditionImmune)
+                            : JSON.stringify(c)
+                  )
+                : m.conditionImmune
+                  ? [String(m.conditionImmune)]
+                  : [],
+            passive: m.passive || 10 + abilities.wis.mod,
             initiative: m.initiative,
             senses: {
-                passivePerception: m.passive || (10 + abilities.wis.mod),
+                passivePerception: m.passive || 10 + abilities.wis.mod,
                 sensesString: m.senses ? (Array.isArray(m.senses) ? m.senses.join(', ') : String(m.senses)) : ''
             },
             languages: m.languages ? (Array.isArray(m.languages) ? m.languages : [String(m.languages)]) : [],
@@ -1537,7 +1766,7 @@ function buildCreatureDatabase() {
         const flattenDefenses = (arr) => {
             let res = [];
             if (!Array.isArray(arr)) return res;
-            arr.forEach(a => {
+            arr.forEach((a) => {
                 if (typeof a === 'string') res.push(a);
                 else if (a && Array.isArray(a.types)) res.push(...a.types);
                 else if (a && a.resist) res.push(...flattenDefenses(a.resist));
@@ -1552,20 +1781,29 @@ function buildCreatureDatabase() {
         const flatImmune = flattenDefenses(normalizedCreature.immune);
         const flatCondImmune = flattenDefenses(normalizedCreature.conditionImmune);
         const flatVuln = flattenDefenses(normalizedCreature.vulnerable);
-        const envList = Array.isArray(m.environment) ? m.environment : (m.environment ? [m.environment] : []);
-        const moveTypes = Object.keys(speedObj).filter(k => speedObj[k] && typeof speedObj[k] === 'number' || speedObj[k]?.number);
+        const envList = Array.isArray(m.environment) ? m.environment : m.environment ? [m.environment] : [];
+        const moveTypes = Object.keys(speedObj).filter(
+            (k) => (speedObj[k] && typeof speedObj[k] === 'number') || speedObj[k]?.number
+        );
 
         const dmgTypes = new Set();
         const saveTypes = new Set();
-        const allAbilities = [...(actions || []), ...(traits || []), ...(bonusActions || []), ...(reactions || []), ...(legendaryActions?.entries || [])];
-        allAbilities.forEach(a => {
+        const allAbilities = [
+            ...(actions || []),
+            ...(traits || []),
+            ...(bonusActions || []),
+            ...(reactions || []),
+            ...(legendaryActions?.entries || [])
+        ];
+        allAbilities.forEach((a) => {
             if (a.macro) {
-                if (a.macro.damages) a.macro.damages.forEach(d => { 
-                    if (d.type) {
-                        const cleanType = d.type.split('|')[0].trim().toLowerCase();
-                        if (cleanType && cleanType !== 'null' && cleanType !== 'undefined') dmgTypes.add(cleanType);
-                    }
-                });
+                if (a.macro.damages)
+                    a.macro.damages.forEach((d) => {
+                        if (d.type) {
+                            const cleanType = d.type.split('|')[0].trim().toLowerCase();
+                            if (cleanType && cleanType !== 'null' && cleanType !== 'undefined') dmgTypes.add(cleanType);
+                        }
+                    });
                 if (a.macro.save && a.macro.save.ability) {
                     const saveAbil = String(a.macro.save.ability).trim().toUpperCase();
                     if (saveAbil) saveTypes.add(saveAbil);
@@ -1578,10 +1816,10 @@ function buildCreatureDatabase() {
         const flatSenses = new Set();
         if (m.senses) {
             const rawSenses = Array.isArray(m.senses) ? m.senses : [m.senses];
-            rawSenses.forEach(s => {
+            rawSenses.forEach((s) => {
                 if (typeof s === 'string') {
                     const clean = s.toLowerCase();
-                    standardSenses.forEach(ss => {
+                    standardSenses.forEach((ss) => {
                         if (clean.includes(ss)) flatSenses.add(ss);
                     });
                 }
@@ -1590,17 +1828,32 @@ function buildCreatureDatabase() {
 
         // Recognized standard languages
         const standardLangs = [
-            'common', 'undercommon', 'elvish', 'dwarvish', 'draconic', 'giant',
-            'goblin', 'abyssal', 'infernal', 'celestial', 'sylvan', 'primordial',
-            'aquan', 'auran', 'ignan', 'terran', 'deep speech', 'telepathy'
+            'common',
+            'undercommon',
+            'elvish',
+            'dwarvish',
+            'draconic',
+            'giant',
+            'goblin',
+            'abyssal',
+            'infernal',
+            'celestial',
+            'sylvan',
+            'primordial',
+            'aquan',
+            'auran',
+            'ignan',
+            'terran',
+            'deep speech',
+            'telepathy'
         ];
         const flatLangs = new Set();
         if (m.languages) {
             const rawLangs = Array.isArray(m.languages) ? m.languages : [m.languages];
-            rawLangs.forEach(l => {
+            rawLangs.forEach((l) => {
                 if (typeof l === 'string') {
                     const clean = l.toLowerCase();
-                    standardLangs.forEach(sl => {
+                    standardLangs.forEach((sl) => {
                         if (clean.includes(sl)) flatLangs.add(sl);
                     });
                 }
@@ -1635,7 +1888,7 @@ function buildCreatureDatabase() {
             saves: m.save || {},
             skill: m.skill || {},
             skills: m.skill || {},
-            passive: m.passive || (10 + abilities.wis.mod),
+            passive: m.passive || 10 + abilities.wis.mod,
             hasToken: true,
             tokenUrl: tokenImg,
             tokenImg,

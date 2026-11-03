@@ -72,7 +72,7 @@ class SheetWindowManagerClass {
                 if (!this.isStandalone && data.sheetData) {
                     this.remoteActiveSheets.delete(data.sheetKey);
                     this.openWindows.delete(data.sheetKey);
-                    this.dockCallbacks.forEach(cb => cb(data.sheetData));
+                    this.dockCallbacks.forEach((cb) => cb(data.sheetData));
                 }
                 break;
         }
@@ -107,8 +107,13 @@ class SheetWindowManagerClass {
      * Generate standard deterministic sheet key
      */
     getSheetKey(type, idOrName) {
-        const cleanType = String(type || 'sheet').toLowerCase().trim();
-        const cleanId = String(idOrName || 'unknown').toLowerCase().trim().replace(/[^a-z0-9_-]/g, '_');
+        const cleanType = String(type || 'sheet')
+            .toLowerCase()
+            .trim();
+        const cleanId = String(idOrName || 'unknown')
+            .toLowerCase()
+            .trim()
+            .replace(/[^a-z0-9_-]/g, '_');
         return `forgedvtt_${cleanType}_${cleanId}`;
     }
 
@@ -127,7 +132,7 @@ class SheetWindowManagerClass {
 
         // 2. Check remote active sheet heartbeat timestamp (TTL 3 seconds)
         const lastSeen = this.remoteActiveSheets.get(sheetKey);
-        if (lastSeen && (Date.now() - lastSeen < 3000)) {
+        if (lastSeen && Date.now() - lastSeen < 3000) {
             return true;
         } else if (lastSeen) {
             this.remoteActiveSheets.delete(sheetKey);

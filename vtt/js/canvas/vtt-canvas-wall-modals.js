@@ -103,7 +103,7 @@ export function showDoorSettingsModal(wallIdx, clientX, clientY, ctx) {
     setupModalOutsideClick(popup);
 
     popup.querySelector('.modal-close-btn').onclick = () => popup.remove();
-    
+
     popup.querySelector('#modal-door-locked').onchange = (e) => {
         wall.isLocked = e.target.checked;
         if (wall.isLocked && wall.isOpen) wall.isOpen = false;
@@ -226,7 +226,7 @@ export function showWindowSettingsModal(wallIdx, clientX, clientY, ctx) {
     setupModalOutsideClick(popup);
 
     popup.querySelector('.modal-close-btn').onclick = () => popup.remove();
-    
+
     popup.querySelector('#modal-window-locked').onchange = (e) => {
         wall.isLocked = e.target.checked;
         if (wall.isLocked && wall.isOpen) wall.isOpen = false;

@@ -2,12 +2,16 @@
 // Handles distance calculations, grid units, and geometric spell/ruler measurement templates
 
 export function getGridDistanceSettings(g) {
-    const val = (g && typeof g.distancePerSquare === 'number' && !isNaN(g.distancePerSquare) && g.distancePerSquare > 0)
-        ? g.distancePerSquare
-        : (g && typeof g.feetPerSquare === 'number' && !isNaN(g.feetPerSquare) && g.feetPerSquare > 0 ? g.feetPerSquare : 5);
-    const unit = (g && g.distanceUnit && typeof g.distanceUnit === 'string' && g.distanceUnit.trim())
-        ? g.distanceUnit.trim()
-        : 'ft';
+    const val =
+        g && typeof g.distancePerSquare === 'number' && !isNaN(g.distancePerSquare) && g.distancePerSquare > 0
+            ? g.distancePerSquare
+            : g && typeof g.feetPerSquare === 'number' && !isNaN(g.feetPerSquare) && g.feetPerSquare > 0
+              ? g.feetPerSquare
+              : 5;
+    const unit =
+        g && g.distanceUnit && typeof g.distanceUnit === 'string' && g.distanceUnit.trim()
+            ? g.distanceUnit.trim()
+            : 'ft';
     return { val, unit };
 }
 
@@ -38,7 +42,21 @@ export function calcDistanceFt(pixels, g) {
     return calcDistanceFormatted(pixels, g).distance;
 }
 
-export function drawMeasurementTemplate(ctx, startPoint, endPoint, shapeType, squareAnchor, beamWidth, color, ownerUsername, _unused, points, showDistance, gridRef = null, resolveRulerPortalBendingFn = null) {
+export function drawMeasurementTemplate(
+    ctx,
+    startPoint,
+    endPoint,
+    shapeType,
+    squareAnchor,
+    beamWidth,
+    color,
+    ownerUsername,
+    _unused,
+    points,
+    showDistance,
+    gridRef = null,
+    resolveRulerPortalBendingFn = null
+) {
     if (!startPoint || !endPoint) return;
     const fillColor = color || '#00ffff';
     const strokeColor = fillColor;
@@ -74,10 +92,10 @@ export function drawMeasurementTemplate(ctx, startPoint, endPoint, shapeType, sq
         ctx.setLineDash([]);
 
         distancePx = radius;
-
     } else if (shapeType === 'square') {
         const halfSide = radius;
-        let rx = startPoint.x, ry = startPoint.y;
+        let rx = startPoint.x,
+            ry = startPoint.y;
         if (squareAnchor === 'center') {
             rx = startPoint.x - halfSide;
             ry = startPoint.y - halfSide;
@@ -94,7 +112,6 @@ export function drawMeasurementTemplate(ctx, startPoint, endPoint, shapeType, sq
         ctx.stroke();
 
         distancePx = side;
-
     } else if (shapeType === 'cone') {
         const angle = Math.atan2(dy, dx);
         const halfAngle = Math.PI / 4; // 90 degree cone
@@ -108,7 +125,6 @@ export function drawMeasurementTemplate(ctx, startPoint, endPoint, shapeType, sq
         ctx.stroke();
 
         distancePx = radius;
-
     } else if (shapeType === 'beam') {
         const angle = Math.atan2(dy, dx);
         const length = radius;
@@ -132,18 +148,24 @@ export function drawMeasurementTemplate(ctx, startPoint, endPoint, shapeType, sq
         ctx.stroke();
 
         distancePx = length;
-
     } else {
         // Default: line (polyline if points array given, else simple line)
-        const polyPoints = (Array.isArray(points) && points.length >= 2) ? points : [startPoint, endPoint];
-        const bentSegments = typeof resolveRulerPortalBendingFn === 'function' 
-            ? resolveRulerPortalBendingFn(polyPoints) 
-            : [{ points: polyPoints, length: Math.hypot(endPoint.x - startPoint.x, endPoint.y - startPoint.y), isTerminal: true }];
+        const polyPoints = Array.isArray(points) && points.length >= 2 ? points : [startPoint, endPoint];
+        const bentSegments =
+            typeof resolveRulerPortalBendingFn === 'function'
+                ? resolveRulerPortalBendingFn(polyPoints)
+                : [
+                      {
+                          points: polyPoints,
+                          length: Math.hypot(endPoint.x - startPoint.x, endPoint.y - startPoint.y),
+                          isTerminal: true
+                      }
+                  ];
 
         let totalLen = 0;
         let lastPt = polyPoints[polyPoints.length - 1];
 
-        bentSegments.forEach(seg => {
+        bentSegments.forEach((seg) => {
             ctx.beginPath();
             ctx.moveTo(seg.points[0].x, seg.points[0].y);
             for (let i = 1; i < seg.points.length; i++) {

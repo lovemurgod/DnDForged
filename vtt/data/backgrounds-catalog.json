@@ -31,7 +31,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_a_merchant_family_tlotrr",
@@ -65,7 +68,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_a_patient_hunter_tlotrr",
@@ -103,7 +109,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_a_penetrating_gaze_tlotrr",
@@ -137,7 +146,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_aberrant_heir_efa",
@@ -214,7 +226,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "aberrant dragonmark|efa": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "con",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "con",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_acolyte_phb",
@@ -312,7 +363,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_acolyte_xphb",
@@ -399,7 +453,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "magic initiate; cleric|xphb": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "int",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "int",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_acolyte_xua2022characteroptions",
@@ -438,7 +531,19 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "magic initiate|XUA2022CharacterOptions": true
+      }
+    ],
+    "ability": [
+      {
+        "wis": 2,
+        "int": 1
+      }
+    ]
   },
   {
     "id": "bg_agent_of_augustine_grimhollowpg24",
@@ -525,7 +630,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "insightful collector|GrimHollowPG24": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "int",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "int",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_agent_of_the_ninth_quill_au",
@@ -612,7 +756,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "arcane infiltrator|au": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "int",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "int",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_amnesiac_crookedmoon14",
@@ -693,7 +876,14 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "memory starved|CrookedMoon24": true
+      }
+    ],
+    "ability": null
   },
   {
     "id": "bg_amnesiac_crookedmoon24",
@@ -774,7 +964,52 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "memory starved|CrookedMoon24": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "con",
+              "int",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "con",
+              "int",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_anthropologist_toa",
@@ -845,7 +1080,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_antiquarian_grimhollowpg24",
@@ -926,7 +1164,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "skilled|XPHB": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "con",
+              "int"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "con",
+              "int"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_archaeologist_efa",
@@ -1018,7 +1295,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "skilled|xphb": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "int",
+              "wis"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "int",
+              "wis"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_archaeologist_toa",
@@ -1105,7 +1421,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_artisan_xphb",
@@ -1183,7 +1502,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "crafter|xphb": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "int"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "int"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_artisan_xua2022characteroptions",
@@ -1222,7 +1580,19 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "crafter|XUA2022CharacterOptions": true
+      }
+    ],
+    "ability": [
+      {
+        "int": 2,
+        "cha": 1
+      }
+    ]
   },
   {
     "id": "bg_ashari_taldoreicampaignsettingreborn",
@@ -1290,7 +1660,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_astral_drifter_aag",
@@ -1360,7 +1733,14 @@
       "scalingMod": "none",
       "modClass": "",
       "extraBonus": 0
-    }
+    },
+    "additionalSpells": null,
+    "feats": [
+      {
+        "magic initiate|phb": true
+      }
+    ],
+    "ability": null
   },
   {
     "id": "bg_athlete_mot",
@@ -1472,7 +1852,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_augen_trust_spy_egw",
@@ -1501,7 +1884,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_azorius_functionary_ggr",
@@ -1572,7 +1958,39 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": [
+      {
+        "expanded": {
+          "s0": [
+            "friends#c",
+            "message#c"
+          ],
+          "s1": [
+            "command",
+            "ensnaring strike"
+          ],
+          "s2": [
+            "arcane lock",
+            "calm emotions",
+            "hold person"
+          ],
+          "s3": [
+            "clairvoyance",
+            "counterspell"
+          ],
+          "s4": [
+            "compulsion",
+            "divination"
+          ],
+          "s5": [
+            "dominate person"
+          ]
+        }
+      }
+    ],
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_baldur_s_gate_acolyte_bgdia",
@@ -1601,7 +2019,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_baldur_s_gate_charlatan_bgdia",
@@ -1630,7 +2051,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_baldur_s_gate_criminal_bgdia",
@@ -1659,7 +2083,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_baldur_s_gate_entertainer_bgdia",
@@ -1688,7 +2115,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_baldur_s_gate_folk_hero_bgdia",
@@ -1717,7 +2147,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_baldur_s_gate_guild_artisan_bgdia",
@@ -1746,7 +2179,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_baldur_s_gate_hermit_bgdia",
@@ -1775,7 +2211,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_baldur_s_gate_noble_bgdia",
@@ -1804,7 +2243,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_baldur_s_gate_outlander_bgdia",
@@ -1833,7 +2275,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_baldur_s_gate_sage_bgdia",
@@ -1862,7 +2307,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_baldur_s_gate_sailor_bgdia",
@@ -1891,7 +2339,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_baldur_s_gate_soldier_bgdia",
@@ -1920,7 +2371,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_baldur_s_gate_urchin_bgdia",
@@ -1949,7 +2403,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_bandit_defector_humblewoodcampaignsetting",
@@ -2033,7 +2490,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_beast_hunter_grimhollowpg24",
@@ -2120,7 +2580,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "blood hound|GrimHollowPG24": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "int"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "int"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_beast_hunter_sgehpp",
@@ -2213,7 +2712,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "Grizzled|SGEHPP": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "wis"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "wis"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_beggar_grimhollowpg24",
@@ -2288,7 +2826,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "survivor|GrimHollowPG24": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "wis"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "wis"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_bejeweled_conclave_spy_au",
@@ -2360,7 +2937,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "arcane eloquence|au": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_bitter_exile_tlotrr",
@@ -2397,7 +3013,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_boros_legionnaire_ggr",
@@ -2469,7 +3088,38 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": [
+      {
+        "expanded": {
+          "s0": [
+            "fire bolt#c",
+            "sacred flame#c"
+          ],
+          "s1": [
+            "guiding bolt",
+            "heroism"
+          ],
+          "s2": [
+            "aid",
+            "scorching ray"
+          ],
+          "s3": [
+            "beacon of hope",
+            "blinding smite"
+          ],
+          "s4": [
+            "death ward",
+            "wall of fire"
+          ],
+          "s5": [
+            "flame strike"
+          ]
+        }
+      }
+    ],
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_bucklander_tlotrr",
@@ -2507,7 +3157,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_by_hammer_and_anvil_tlotrr",
@@ -2541,7 +3194,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_carouser_abh",
@@ -2639,7 +3295,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "tireless reveler|abh": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "int",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "int",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_celebrity_adventurer_s_scion_ai",
@@ -2695,7 +3390,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_changeling_traveler_exploringeberron24",
@@ -2786,7 +3484,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "focused personas|exploringeberron24": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_chapter_knight_grimhollowpg24",
@@ -2870,7 +3607,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "savage attacker|XPHB": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_charlatan_phb",
@@ -2984,7 +3760,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_charlatan_xphb",
@@ -3059,7 +3838,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "skilled|xphb": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "con",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "con",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_charlatan_xua2022characteroptions",
@@ -3098,7 +3916,19 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "skilled|XUA2022CharacterOptions": true
+      }
+    ],
+    "ability": [
+      {
+        "cha": 2,
+        "dex": 1
+      }
+    ]
   },
   {
     "id": "bg_chondathan_freebooter_frhof",
@@ -3211,7 +4041,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "skilled|xphb": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "wis"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "wis"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_city_watch_scag",
@@ -3273,7 +4142,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_clan_crafter_scag",
@@ -3339,7 +4211,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_clasp_member_taldoreicampaignsettingreborn",
@@ -3407,7 +4282,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_cloistered_scholar_scag",
@@ -3498,7 +4376,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_cobalt_scholar_sage_egw",
@@ -3527,7 +4408,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_continental_nobility_dungeonsdrakkenheim",
@@ -3622,7 +4506,10 @@
       "scalingMod": "none",
       "modClass": "",
       "extraBonus": 0
-    }
+    },
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_cosmic_dawn_experiment_au",
@@ -3703,7 +4590,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "transmuted anatomy|au": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "con"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "con"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_counsellor_tlotrr",
@@ -3737,7 +4663,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_courtier_scag",
@@ -3786,7 +4715,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_courtier_grimhollowpg24",
@@ -3864,7 +4796,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "skilled|XPHB": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "int",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "int",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_covenant_of_the_grave_recruit_au",
@@ -3942,7 +4913,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "arcane undertaker|au": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "int",
+              "wis"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "int",
+              "wis"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_criminal_phb",
@@ -4008,7 +5018,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_criminal_xphb",
@@ -4095,7 +5108,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "alert|xphb": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "con",
+              "int"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "con",
+              "int"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_criminal_xua2022characteroptions",
@@ -4134,7 +5186,19 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "alert|XUA2022CharacterOptions": true
+      }
+    ],
+    "ability": [
+      {
+        "dex": 2,
+        "int": 1
+      }
+    ]
   },
   {
     "id": "bg_crimson_aspirant_crookedmoon14",
@@ -4221,7 +5285,14 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "crimson ritualist|CrookedMoon24": true
+      }
+    ],
+    "ability": null
   },
   {
     "id": "bg_crimson_aspirant_crookedmoon24",
@@ -4308,7 +5379,52 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "crimson ritualist|CrookedMoon24": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "con",
+              "int",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "con",
+              "int",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_crossroads_gambler_crookedmoon14",
@@ -4389,7 +5505,14 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "fate gambler|CrookedMoon24": true
+      }
+    ],
+    "ability": null
   },
   {
     "id": "bg_crossroads_gambler_crookedmoon24",
@@ -4470,7 +5593,52 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "fate gambler|CrookedMoon24": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "con",
+              "int",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "con",
+              "int",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_crossroads_of_the_north_tlotrr",
@@ -4509,7 +5677,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_crucible_storm_chaser_au",
@@ -4586,7 +5757,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "arcane overload|au": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "con",
+              "int"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "con",
+              "int"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_cultist_crookedmoon14",
@@ -4666,7 +5876,14 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "cult initiate|CrookedMoon24": true
+      }
+    ],
+    "ability": null
   },
   {
     "id": "bg_cultist_crookedmoon24",
@@ -4746,7 +5963,52 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "cult initiate|CrookedMoon24": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "con",
+              "int",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "con",
+              "int",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_cultist_xua2022characteroptions",
@@ -4785,7 +6047,19 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "magic initiate|XUA2022CharacterOptions": true
+      }
+    ],
+    "ability": [
+      {
+        "int": 2,
+        "cha": 1
+      }
+    ]
   },
   {
     "id": "bg_custom_background_phb",
@@ -4819,7 +6093,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_dancing_bear_guide_northlandsworldbook",
@@ -4902,7 +6179,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "Alert|XPHB": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "wis"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "wis"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_dead_magic_dweller_frhof",
@@ -5021,7 +6337,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "healer|xphb": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "con",
+              "wis"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "con",
+              "wis"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_devoted_missionary_dungeonsdrakkenheim",
@@ -5094,7 +6449,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_dimir_operative_ggr",
@@ -5158,7 +6516,39 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": [
+      {
+        "expanded": {
+          "s0": [
+            "encode thoughts|ggr#c",
+            "mage hand#c"
+          ],
+          "s1": [
+            "disguise self",
+            "sleep"
+          ],
+          "s2": [
+            "detect thoughts",
+            "pass without trace"
+          ],
+          "s3": [
+            "gaseous form",
+            "meld into stone",
+            "nondetection"
+          ],
+          "s4": [
+            "arcane eye",
+            "freedom of movement"
+          ],
+          "s5": [
+            "modify memory"
+          ]
+        }
+      }
+    ],
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_disgraced_raider_grimhollowpg24",
@@ -5233,7 +6623,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "savage attacker|XPHB": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "con",
+              "wis"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "con",
+              "wis"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_doomed_northlandsworldbook",
@@ -5313,7 +6742,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "Alert|XPHB": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "cha",
+              "int",
+              "wis"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "cha",
+              "int",
+              "wis"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_dragon_cultist_frhof",
@@ -5417,7 +6885,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "cult of the dragon initiate|frhof": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "con",
+              "int"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "con",
+              "int"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_dragon_stories_tlotrr",
@@ -5454,7 +6961,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_dragonmarked_bravo_foequickstone",
@@ -5551,7 +7061,51 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "anyFromCategory": {
+          "category": [
+            "D"
+          ],
+          "count": 1
+        }
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_dragonmarked_foundling_foequickstone",
@@ -5650,7 +7204,51 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "anyFromCategory": {
+          "category": [
+            "D"
+          ],
+          "count": 1
+        }
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "con",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "con",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_dragonmarked_scion_foequickstone",
@@ -5729,7 +7327,51 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "anyFromCategory": {
+          "category": [
+            "D"
+          ],
+          "count": 1
+        }
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "int",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "int",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_druskenvald_dweller_crookedmoon14",
@@ -5806,7 +7448,19 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "anyFromCategory": {
+          "category": [
+            "O"
+          ],
+          "count": 1
+        }
+      }
+    ],
+    "ability": null
   },
   {
     "id": "bg_druskenvald_dweller_crookedmoon24",
@@ -5883,7 +7537,52 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "any": 1
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "con",
+              "int",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "con",
+              "int",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_eloquent_orator_tlotrr",
@@ -5917,7 +7616,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_emerald_enclave_caretaker_frhof",
@@ -6014,7 +7716,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "emerald enclave fledgling|frhof": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "con",
+              "int",
+              "wis"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "con",
+              "int",
+              "wis"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_entertainer_phb",
@@ -6086,7 +7827,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_entertainer_xphb",
@@ -6176,7 +7920,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "musician|xphb": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_entertainer_xua2022characteroptions",
@@ -6215,7 +7998,19 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "musician|XUA2022CharacterOptions": true
+      }
+    ],
+    "ability": [
+      {
+        "cha": 2,
+        "dex": 1
+      }
+    ]
   },
   {
     "id": "bg_envoy_grimhollowpg24",
@@ -6290,7 +8085,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "skilled|XPHB": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "con",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "con",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_executioner_grimhollowpg24",
@@ -6365,7 +8199,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "deathbound|GrimHollowPG24": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "con",
+              "int"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "con",
+              "int"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_experiment_crookedmoon14",
@@ -6446,7 +8319,14 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "altered|CrookedMoon24": true
+      }
+    ],
+    "ability": null
   },
   {
     "id": "bg_experiment_crookedmoon24",
@@ -6527,7 +8407,52 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "altered|CrookedMoon24": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "con",
+              "int",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "con",
+              "int",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_explorer_grimhollowpg24",
@@ -6608,7 +8533,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "alert|XPHB": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "con",
+              "wis"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "con",
+              "wis"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_exterminator_grimhollowpg24",
@@ -6689,7 +8653,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "magic initiate; druid|xphb": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "con",
+              "int"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "con",
+              "int"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_faceless_bgdia",
@@ -6745,7 +8748,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_faction_agent_scag",
@@ -6822,7 +8828,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_failed_merchant_ai",
@@ -6887,7 +8896,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_familiar_trainer_au",
@@ -6988,7 +9000,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "familiar friend|au": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "con",
+              "int",
+              "wis"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "con",
+              "int",
+              "wis"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_far_trader_tlotrr",
@@ -7022,7 +9073,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_far_traveler_scag",
@@ -7120,7 +9174,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_far_reaching_herald_tlotrr",
@@ -7154,7 +9211,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_farmer_xphb",
@@ -7247,7 +9307,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "tough|xphb": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "con",
+              "wis"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "con",
+              "wis"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_farmer_xua2022characteroptions",
@@ -7286,7 +9385,19 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "tough|XUA2022CharacterOptions": true
+      }
+    ],
+    "ability": [
+      {
+        "con": 2,
+        "wis": 1
+      }
+    ]
   },
   {
     "id": "bg_fey_blessed_grimhollowpg24",
@@ -7364,7 +9475,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "magic initiate; wizard|xphb": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "con",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "con",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_feylost_wbtw",
@@ -7430,7 +9580,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_fisher_gos",
@@ -7520,7 +9673,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_flaming_fist_mercenary_frhof",
@@ -7602,7 +9758,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "tough|xphb": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "con",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "con",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_folk_hero_phb",
@@ -7678,7 +9873,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_forest_dweller_tlotrr",
@@ -7712,7 +9910,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_former_captive_northlandsworldbook",
@@ -7795,7 +9996,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "Skilled|XPHB": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "cha",
+              "dex",
+              "wis"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "cha",
+              "dex",
+              "wis"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_free_swords_mercenary_grimhollowpg24",
@@ -7879,7 +10119,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "free sword mercenary's will|GrimHollowPG24": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "con"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "con"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_gambler_ai",
@@ -7945,7 +10224,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_gate_warden_sato",
@@ -8042,7 +10324,14 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "scion of the outer planes|sato": true
+      }
+    ],
+    "ability": null
   },
   {
     "id": "bg_gate_warden_ua2022wondersofthemultiverse",
@@ -8138,7 +10427,14 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "scion of the outer planes|ua2022wondersofthemultiverse": true
+      }
+    ],
+    "ability": null
   },
   {
     "id": "bg_gate_warden_tlotrr",
@@ -8176,7 +10472,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_genie_touched_frhof",
@@ -8259,7 +10558,42 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_ghostlight_passenger_crookedmoon14",
@@ -8340,7 +10674,14 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "Ghostlight Medium|CrookedMoon24": true
+      }
+    ],
+    "ability": null
   },
   {
     "id": "bg_ghostlight_passenger_crookedmoon24",
@@ -8421,7 +10762,52 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "Ghostlight Medium|CrookedMoon24": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "con",
+              "int",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "con",
+              "int",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_ghoul_boundbyblood",
@@ -8518,7 +10904,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "nocturnal|BoundByBlood": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_giant_foundling_bgg",
@@ -8603,7 +11028,14 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "strike of the giants|bgg": true
+      }
+    ],
+    "ability": null
   },
   {
     "id": "bg_giant_foundling_ua2022wondersofthemultiverse",
@@ -8689,7 +11121,14 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "strike of the giants|ua2022wondersofthemultiverse": true
+      }
+    ],
+    "ability": null
   },
   {
     "id": "bg_gifted_senses_tlotrr",
@@ -8727,7 +11166,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_gladiator_xua2022characteroptions",
@@ -8766,7 +11208,19 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "savage attacker|XUA2022CharacterOptions": true
+      }
+    ],
+    "ability": [
+      {
+        "str": 2,
+        "cha": 1
+      }
+    ]
   },
   {
     "id": "bg_golgari_agent_ggr",
@@ -8859,7 +11313,40 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": [
+      {
+        "expanded": {
+          "s0": [
+            "dancing lights#c",
+            "spare the dying#c"
+          ],
+          "s1": [
+            "entangle",
+            "ray of sickness"
+          ],
+          "s2": [
+            "protection from poison",
+            "ray of enfeeblement",
+            "spider climb"
+          ],
+          "s3": [
+            "animate dead",
+            "plant growth"
+          ],
+          "s4": [
+            "giant insect",
+            "grasping vine"
+          ],
+          "s5": [
+            "cloudkill",
+            "insect plague"
+          ]
+        }
+      }
+    ],
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_grinner_egw",
@@ -8932,7 +11419,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_grounded_humblewoodcampaignsetting",
@@ -9004,7 +11494,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_gruul_anarch_ggr",
@@ -9083,7 +11576,39 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": [
+      {
+        "expanded": {
+          "s0": [
+            "fire bolt#c",
+            "produce flame#c"
+          ],
+          "s1": [
+            "compelled duel",
+            "speak with animals",
+            "thunderwave"
+          ],
+          "s2": [
+            "beast sense",
+            "shatter"
+          ],
+          "s3": [
+            "conjure animals",
+            "conjure barrage"
+          ],
+          "s4": [
+            "dominate beast",
+            "stoneskin"
+          ],
+          "s5": [
+            "destructive wave"
+          ]
+        }
+      }
+    ],
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_guard_xphb",
@@ -9191,7 +11716,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "alert|xphb": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "int",
+              "wis"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "int",
+              "wis"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_guard_xua2022characteroptions",
@@ -9230,7 +11794,19 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "alert|XUA2022CharacterOptions": true
+      }
+    ],
+    "ability": [
+      {
+        "str": 2,
+        "wis": 1
+      }
+    ]
   },
   {
     "id": "bg_guide_xphb",
@@ -9329,7 +11905,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "magic initiate; druid|xphb": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "con",
+              "wis"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "con",
+              "wis"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_guide_xua2022characteroptions",
@@ -9368,7 +11983,19 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "magic initiate|XUA2022CharacterOptions": true
+      }
+    ],
+    "ability": [
+      {
+        "wis": 2,
+        "dex": 1
+      }
+    ]
   },
   {
     "id": "bg_guild_artisan_phb",
@@ -9438,7 +12065,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_harper_frhof",
@@ -9525,7 +12155,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "harper agent|frhof": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "int",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "int",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_haunted_one_rhw",
@@ -9643,7 +12312,53 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "survivor|rhw": true
+      },
+      {
+        "anyFromCategory": {
+          "category": [
+            "DG"
+          ]
+        }
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "con",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "con",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_haunted_one_vrgr",
@@ -9702,7 +12417,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_healing_hands_tlotrr",
@@ -9740,7 +12458,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_heretic_grimhollowpg24",
@@ -9815,7 +12536,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "magic initiate; cleric|xphb": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "wis"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "wis"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_hermit_phb",
@@ -9881,7 +12641,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_hermit_xphb",
@@ -9980,7 +12743,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "healer|xphb": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "con",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "con",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_hermit_xua2022characteroptions",
@@ -10019,7 +12821,19 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "magic initiate|XUA2022CharacterOptions": true
+      }
+    ],
+    "ability": [
+      {
+        "wis": 2,
+        "con": 1
+      }
+    ]
   },
   {
     "id": "bg_horizon_weaver_initiate_au",
@@ -10111,7 +12925,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "portal jumper|au": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "con",
+              "wis"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "con",
+              "wis"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_house_agent_efa",
@@ -10182,7 +13035,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "lucky|xphb": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "int",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "int",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_house_agent_erlw",
@@ -10263,7 +13155,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_house_cannith_heir_efa",
@@ -10345,7 +13240,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "mark of making|efa": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "int"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "int"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_house_deneith_heir_efa",
@@ -10440,7 +13374,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "mark of sentinel|efa": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "con",
+              "wis"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "con",
+              "wis"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_house_ghallanda_heir_efa",
@@ -10528,7 +13501,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "mark of hospitality|efa": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_house_jorasco_heir_efa",
@@ -10600,7 +13612,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "mark of healing|efa": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "con",
+              "wis"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "con",
+              "wis"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_house_kundarak_heir_efa",
@@ -10667,7 +13718,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "mark of warding|efa": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "con",
+              "int"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "con",
+              "int"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_house_lyrandar_heir_efa",
@@ -10734,7 +13824,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "mark of storm|efa": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_house_medani_heir_efa",
@@ -10801,7 +13930,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "mark of detection|efa": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "int",
+              "wis"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "int",
+              "wis"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_house_orien_heir_efa",
@@ -10878,7 +14046,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "mark of passage|efa": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "con",
+              "int"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "con",
+              "int"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_house_phiarlan_heir_efa",
@@ -10945,7 +14152,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "mark of shadow|efa": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_house_sivis_heir_efa",
@@ -11035,7 +14281,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "mark of scribing|efa": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "int",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "int",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_house_tharashk_heir_efa",
@@ -11120,7 +14405,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "mark of finding|efa": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "con",
+              "int",
+              "wis"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "con",
+              "int",
+              "wis"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_house_thuranni_heir_efa",
@@ -11195,7 +14519,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "mark of shadow|efa": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "int",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "int",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_house_vadalis_heir_efa",
@@ -11267,7 +14630,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "mark of handling|efa": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "con",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "con",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_hunter_of_orcs_tlotrr",
@@ -11305,7 +14707,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_ice_fisher_frhof",
@@ -11408,7 +14813,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "alert|xphb": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "con"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "con"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_ice_nomad_northlandsworldbook",
@@ -11491,7 +14935,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "Snowrunner|NorthlandsWorldbook": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "int",
+              "wis"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "int",
+              "wis"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_inheritor_scag",
@@ -11589,7 +15072,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_initiate_psa",
@@ -11669,7 +15155,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_initiate_dissenter_psa",
@@ -11698,7 +15187,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_inquisitive_efa",
@@ -11781,7 +15273,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "alert|xphb": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "con",
+              "int",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "con",
+              "int",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_inquisitor_psi",
@@ -11842,7 +15373,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_inquisitor_sgehpp",
@@ -11924,7 +15458,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "Faithful|SGEHPP": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_inquisitor_of_the_faithful_grimhollowpg24",
@@ -12011,7 +15584,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "convincing inquisitor|GrimHollowPG24": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_investigator_rhw",
@@ -12098,7 +15710,53 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "sharp eye|rhw": true
+      },
+      {
+        "anyFromCategory": {
+          "category": [
+            "DG"
+          ]
+        }
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "int",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "int",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_investigator_vrgr",
@@ -12159,7 +15817,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_izzet_engineer_ggr",
@@ -12241,7 +15902,42 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": [
+      {
+        "expanded": {
+          "s0": [
+            "produce flame#c",
+            "shocking grasp#c"
+          ],
+          "s1": [
+            "chaos bolt|xge",
+            "create or destroy water",
+            "unseen servant"
+          ],
+          "s2": [
+            "heat metal",
+            "rope trick"
+          ],
+          "s3": [
+            "call lightning",
+            "elemental weapon",
+            "glyph of warding"
+          ],
+          "s4": [
+            "conjure minor elementals",
+            "divination",
+            "otiluke's resilient sphere"
+          ],
+          "s5": [
+            "animate objects",
+            "conjure elemental"
+          ]
+        }
+      }
+    ],
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_keeper_of_lore_tlotrr",
@@ -12275,7 +15971,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_knight_of_solamnia_dsotdq",
@@ -12335,7 +16034,14 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "squire of solamnia|dsotdq": true
+      }
+    ],
+    "ability": null
   },
   {
     "id": "bg_knight_of_solamnia_ua2022heroesofkrynnrevisited",
@@ -12396,7 +16102,14 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "squire of solamnia|ua2022heroesofkrynnrevisited": true
+      }
+    ],
+    "ability": null
   },
   {
     "id": "bg_knight_of_solamnia_ua2022heroesofkrynn",
@@ -12459,7 +16172,14 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "squire of solamnia|ua2022heroesofkrynn": true
+      }
+    ],
+    "ability": null
   },
   {
     "id": "bg_knight_of_the_gauntlet_frhof",
@@ -12557,7 +16277,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "tyro of the gauntlet|frhof": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "int",
+              "wis"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "int",
+              "wis"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_knight_of_the_order_scag",
@@ -12625,7 +16384,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_laborer_xua2022characteroptions",
@@ -12664,7 +16426,19 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "tough|XUA2022CharacterOptions": true
+      }
+    ],
+    "ability": [
+      {
+        "con": 2,
+        "str": 1
+      }
+    ]
   },
   {
     "id": "bg_lapsed_inquisitor_grimhollowpg24",
@@ -12745,7 +16519,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "convincing inquisitor|GrimHollowPG24": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_lords_alliance_vassal_frhof",
@@ -12835,7 +16648,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "lords' alliance agent|frhof": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "int",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "int",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_lorehold_student_scc",
@@ -12916,7 +16768,39 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": [
+      {
+        "expanded": {
+          "s1": [
+            "comprehend languages",
+            "identify"
+          ],
+          "s2": [
+            "borrowed knowledge|scc",
+            "locate object"
+          ],
+          "s3": [
+            "speak with dead",
+            "spirit guardians"
+          ],
+          "s4": [
+            "arcane eye",
+            "stone shape"
+          ],
+          "s5": [
+            "flame strike",
+            "legend lore"
+          ]
+        }
+      }
+    ],
+    "feats": [
+      {
+        "strixhaven initiate|scc": true
+      }
+    ],
+    "ability": null
   },
   {
     "id": "bg_lorwyn_expert_lfl",
@@ -13009,7 +16893,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "child of the sun|lfl": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "con",
+              "wis"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "con",
+              "wis"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_luxonborn_acolyte_egw",
@@ -13038,7 +16961,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_lyceum_scholar_taldoreicampaignsettingreborn",
@@ -13104,7 +17030,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_mage_of_high_sorcery_dsotdq",
@@ -13163,7 +17092,14 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "initiate of high sorcery|dsotdq": true
+      }
+    ],
+    "ability": null
   },
   {
     "id": "bg_mage_of_high_sorcery_ua2022heroesofkrynnrevisited",
@@ -13222,7 +17158,14 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "initiate of high sorcery|ua2022heroesofkrynnrevisited": true
+      }
+    ],
+    "ability": null
   },
   {
     "id": "bg_mage_of_high_sorcery_ua2022heroesofkrynn",
@@ -13281,7 +17224,14 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "initiate of high sorcery|ua2022heroesofkrynn": true
+      }
+    ],
+    "ability": null
   },
   {
     "id": "bg_mageborn_dungeonsdrakkenheim",
@@ -13378,7 +17328,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_magewright_foequickstone",
@@ -13456,7 +17409,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "magic initiate; wizard|xphb": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "con",
+              "int",
+              "wis"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "con",
+              "int",
+              "wis"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_maker_of_ships_tlotrr",
@@ -13490,7 +17482,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_malenti_exploringeberron24",
@@ -13558,7 +17553,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "aquatic adaptation|exploringeberron24": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "int",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "int",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_marine_gos",
@@ -13622,7 +17656,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_marked_for_death_sgehpp",
@@ -13709,7 +17746,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "Grizzled|SGEHPP": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "con"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "con"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_mercenary_veteran_scag",
@@ -13778,7 +17854,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_merchant_xphb",
@@ -13853,7 +17932,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "lucky|xphb": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "con",
+              "int",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "con",
+              "int",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_mist_wanderer_rhw",
@@ -13950,7 +18068,50 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "anyFromCategory": {
+          "category": [
+            "DG"
+          ]
+        }
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "con",
+              "wis"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "con",
+              "wis"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_moonwell_pilgrim_frhof",
@@ -14052,7 +18213,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "magic initiate; druid|xphb": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "con",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "con",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_mulhorandi_tomb_raider_frhof",
@@ -14187,7 +18387,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "lucky|xphb": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "con",
+              "int"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "con",
+              "int"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_myriad_operative_criminal_egw",
@@ -14216,7 +18455,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_mythalkeeper_frhof",
@@ -14313,7 +18555,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "crafter|xphb": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "int",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "int",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_mythos_investigator_cthulhutorchlight",
@@ -14363,7 +18644,52 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "any": 1
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "con",
+              "int",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "con",
+              "int",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_natural_exploringeberron24",
@@ -14456,7 +18782,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "lucky|xphb": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_night_stalker_crookedmoon14",
@@ -14556,7 +18921,14 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "Hunter of Hunters|CrookedMoon24": true
+      }
+    ],
+    "ability": null
   },
   {
     "id": "bg_night_stalker_crookedmoon24",
@@ -14656,7 +19028,52 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "Hunter of Hunters|CrookedMoon24": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "con",
+              "int",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "con",
+              "int",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_no_longer_free_from_care_and_fear_tlotrr",
@@ -14694,7 +19111,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_noble_phb",
@@ -14759,7 +19179,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_noble_xphb",
@@ -14837,7 +19260,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "Skilled|xphb": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "int",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "int",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_noble_xua2022characteroptions",
@@ -14876,7 +19338,19 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "skilled|XUA2022CharacterOptions": true
+      }
+    ],
+    "ability": [
+      {
+        "cha": 2,
+        "int": 1
+      }
+    ]
   },
   {
     "id": "bg_northlands_reaver_northlandsworldbook",
@@ -14959,7 +19433,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "Savage Attacker|XPHB": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "con",
+              "wis"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "con",
+              "wis"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_off_with_dwarves_tlotrr",
@@ -14993,7 +19506,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_on_patrol_tlotrr",
@@ -15027,7 +19543,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_one_of_the_taken_grimhollowpg24",
@@ -15102,7 +19621,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "magic initiate; druid|xphb": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_orzhov_representative_ggr",
@@ -15169,7 +19727,41 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": [
+      {
+        "expanded": {
+          "s0": [
+            "friends#c",
+            "guidance#c"
+          ],
+          "s1": [
+            "command",
+            "illusory script"
+          ],
+          "s2": [
+            "enthrall",
+            "ray of enfeeblement",
+            "zone of truth"
+          ],
+          "s3": [
+            "bestow curse",
+            "speak with dead",
+            "spirit guardians"
+          ],
+          "s4": [
+            "blight",
+            "death ward",
+            "leomund's secret chest"
+          ],
+          "s5": [
+            "geas"
+          ]
+        }
+      }
+    ],
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_outlander_phb",
@@ -15243,7 +19835,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_pact_seeker_dndbeyonddrops",
@@ -15332,7 +19927,50 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "anyFromCategory": {
+          "category": [
+            "PPact"
+          ]
+        }
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "con",
+              "int",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "con",
+              "int",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_phantasmic_circus_trouper_au",
@@ -15415,7 +20053,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "arcane artist|au": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "con",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "con",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_physician_grimhollowpg24",
@@ -15496,7 +20173,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "triage expert|GrimHollowPG24": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "int",
+              "wis"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "int",
+              "wis"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_pilgrim_xua2022characteroptions",
@@ -15535,7 +20251,19 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "healer|XUA2022CharacterOptions": true
+      }
+    ],
+    "ability": [
+      {
+        "wis": 2,
+        "con": 1
+      }
+    ]
   },
   {
     "id": "bg_pioneer_grimhollowpg24",
@@ -15629,7 +20357,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "survivor|GrimHollowPG24": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "con",
+              "wis"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "con",
+              "wis"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_pit_fighter_grimhollowpg24",
@@ -15713,7 +20480,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "savage attacker|XPHB": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_plaintiff_ai",
@@ -15767,7 +20573,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_planar_philosopher_sato",
@@ -15844,7 +20653,14 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "scion of the outer planes|sato": true
+      }
+    ],
+    "ability": null
   },
   {
     "id": "bg_planar_philosopher_ua2022wondersofthemultiverse",
@@ -15893,7 +20709,14 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "scion of the outer planes|ua2022wondersofthemultiverse": true
+      }
+    ],
+    "ability": null
   },
   {
     "id": "bg_pox_touched_grimhollowpg24",
@@ -15962,7 +20785,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "triage expert|GrimHollowPG24": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "con",
+              "int",
+              "wis"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "con",
+              "int",
+              "wis"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_preordained_hero_northlandsworldbook",
@@ -16054,7 +20916,42 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "cha",
+              "int",
+              "str"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "cha",
+              "int",
+              "str"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_prismari_student_scc",
@@ -16151,7 +21048,39 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": [
+      {
+        "expanded": {
+          "s1": [
+            "chromatic orb",
+            "thunderwave"
+          ],
+          "s2": [
+            "flaming sphere",
+            "kinetic jaunt|scc"
+          ],
+          "s3": [
+            "haste",
+            "water walk"
+          ],
+          "s4": [
+            "freedom of movement",
+            "wall of fire"
+          ],
+          "s5": [
+            "cone of cold",
+            "conjure elemental"
+          ]
+        }
+      }
+    ],
+    "feats": [
+      {
+        "strixhaven initiate|scc": true
+      }
+    ],
+    "ability": null
   },
   {
     "id": "bg_prisoner_grimhollowpg24",
@@ -16226,7 +21155,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "alert|XPHB": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "con",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "con",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_protector_of_the_land_tlotrr",
@@ -16260,7 +21228,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_purple_dragon_squire_frhof",
@@ -16332,7 +21303,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "purple dragon rook|frhof": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_quandrix_student_scc",
@@ -16408,7 +21418,39 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": [
+      {
+        "expanded": {
+          "s1": [
+            "entangle",
+            "guiding bolt"
+          ],
+          "s2": [
+            "enlarge/reduce",
+            "vortex warp|scc"
+          ],
+          "s3": [
+            "aura of vitality",
+            "haste"
+          ],
+          "s4": [
+            "control water",
+            "freedom of movement"
+          ],
+          "s5": [
+            "circle of power",
+            "passwall"
+          ]
+        }
+      }
+    ],
+    "feats": [
+      {
+        "strixhaven initiate|scc": true
+      }
+    ],
+    "ability": null
   },
   {
     "id": "bg_rakdos_cultist_ggr",
@@ -16512,7 +21554,40 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": [
+      {
+        "expanded": {
+          "s0": [
+            "fire bolt#c",
+            "vicious mockery#c"
+          ],
+          "s1": [
+            "burning hands",
+            "dissonant whispers",
+            "hellish rebuke"
+          ],
+          "s2": [
+            "crown of madness",
+            "enthrall",
+            "flaming sphere"
+          ],
+          "s3": [
+            "fear",
+            "haste"
+          ],
+          "s4": [
+            "confusion",
+            "wall of fire"
+          ],
+          "s5": [
+            "dominate person"
+          ]
+        }
+      }
+    ],
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_rashemi_wanderer_frhof",
@@ -16615,7 +21690,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "tough|xphb": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "con",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "con",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_reflected_wanderer_crookedmoon14",
@@ -16690,7 +21804,14 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "Unreflected|CrookedMoon24": true
+      }
+    ],
+    "ability": null
   },
   {
     "id": "bg_reflected_wanderer_crookedmoon24",
@@ -16765,7 +21886,52 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "Unreflected|CrookedMoon24": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "con",
+              "int",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "con",
+              "int",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_reformed_cultist_taldoreicampaignsettingreborn",
@@ -16826,7 +21992,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_released_thrall_grimhollowpg24",
@@ -16904,7 +22073,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "survivor|GrimHollowPG24": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "con",
+              "int",
+              "wis"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "con",
+              "int",
+              "wis"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_rest_warden_crookedmoon14",
@@ -16997,7 +22205,14 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "Grave Keeper|CrookedMoon24": true
+      }
+    ],
+    "ability": null
   },
   {
     "id": "bg_rest_warden_crookedmoon24",
@@ -17090,7 +22305,52 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "Grave Keeper|CrookedMoon24": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "con",
+              "int",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "con",
+              "int",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_restless_farmer_tlotrr",
@@ -17128,7 +22388,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_reveler_crookedmoon14",
@@ -17230,7 +22493,14 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "Reveling Fool|CrookedMoon24": true
+      }
+    ],
+    "ability": null
   },
   {
     "id": "bg_reveler_crookedmoon24",
@@ -17332,7 +22602,52 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "Reveling Fool|CrookedMoon24": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "con",
+              "int",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "con",
+              "int",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_revelry_pirate_sailor_egw",
@@ -17361,7 +22676,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_rewarded_bmt",
@@ -17443,7 +22761,20 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "lucky|phb": true
+      },
+      {
+        "magic initiate|phb": true
+      },
+      {
+        "skilled|phb": true
+      }
+    ],
+    "ability": null
   },
   {
     "id": "bg_ritualist_boundbyblood",
@@ -17526,7 +22857,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "magic initiate; wizard|xphb": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "int",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "int",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_rival_intern_ai",
@@ -17592,7 +22962,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_ruined_bmt",
@@ -17675,7 +23048,20 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "alert|phb": true
+      },
+      {
+        "skilled|phb": true
+      },
+      {
+        "tough|phb": true
+      }
+    ],
+    "ability": null
   },
   {
     "id": "bg_rune_carver_bgg",
@@ -17746,7 +23132,14 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "rune shaper|bgg": true
+      }
+    ],
+    "ability": null
   },
   {
     "id": "bg_rune_carver_ua2022wondersofthemultiverse",
@@ -17814,7 +23207,14 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "rune carver apprentice|ua2022wondersofthemultiverse": true
+      }
+    ],
+    "ability": null
   },
   {
     "id": "bg_sage_phb",
@@ -17890,7 +23290,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_sage_xphb",
@@ -17977,7 +23380,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "magic initiate; wizard|xphb": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "con",
+              "int",
+              "wis"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "con",
+              "int",
+              "wis"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_sage_xua2022characteroptions",
@@ -18016,7 +23458,19 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "magic initiate|XUA2022CharacterOptions": true
+      }
+    ],
+    "ability": [
+      {
+        "int": 2,
+        "wis": 1
+      }
+    ]
   },
   {
     "id": "bg_sailor_phb",
@@ -18085,7 +23539,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_sailor_xphb",
@@ -18166,7 +23623,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "tavern brawler|xphb": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "wis"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "wis"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_sailor_xua2022characteroptions",
@@ -18205,7 +23701,19 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "tavern brawler|XUA2022CharacterOptions": true
+      }
+    ],
+    "ability": [
+      {
+        "dex": 2,
+        "wis": 1
+      }
+    ]
   },
   {
     "id": "bg_savant_exploringeberron24",
@@ -18292,7 +23800,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "magic initiate; wizard|xphb": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "con",
+              "int",
+              "wis"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "con",
+              "int",
+              "wis"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_scholar_of_the_forbidden_crookedmoon14",
@@ -18391,7 +23938,14 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "Dread Speech|CrookedMoon24": true
+      }
+    ],
+    "ability": null
   },
   {
     "id": "bg_scholar_of_the_forbidden_crookedmoon24",
@@ -18490,7 +24044,52 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "Dread Speech|CrookedMoon24": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "con",
+              "int",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "con",
+              "int",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_scholar_of_the_hunt_boundbyblood",
@@ -18571,7 +24170,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "well-read|BoundByBlood": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "con",
+              "int",
+              "wis"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "con",
+              "int",
+              "wis"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_scion_of_the_thaumaturge_grimhollowpg24",
@@ -18652,7 +24290,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "fortune of the thaumaturge|GrimHollowPG24": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "int",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "int",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_scribe_xphb",
@@ -18739,7 +24416,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "skilled|xphb": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "int",
+              "wis"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "int",
+              "wis"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_seafarer_fisher_northlandsworldbook",
@@ -18827,7 +24543,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "Fisher|NorthlandsWorldbook": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "cha",
+              "dex",
+              "str"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "cha",
+              "dex",
+              "str"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_seafarer_northern_raider_northlandsworldbook",
@@ -18861,7 +24616,14 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "Northern Raider|NorthlandsWorldbook": true
+      }
+    ],
+    "ability": null
   },
   {
     "id": "bg_seer_northlandsworldbook",
@@ -18950,7 +24712,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "Norn-Touched|NorthlandsWorldbook": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "con",
+              "int",
+              "wis"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "con",
+              "int",
+              "wis"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_seer_apprentice_au",
@@ -19049,7 +24850,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "arcane omens|au": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "int",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "int",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_selesnya_initiate_ggr",
@@ -19120,7 +24960,41 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": [
+      {
+        "expanded": {
+          "s0": [
+            "druidcraft#c",
+            "friends#c"
+          ],
+          "s1": [
+            "animal friendship",
+            "charm person"
+          ],
+          "s2": [
+            "aid",
+            "animal messenger",
+            "calm emotions",
+            "warding bond"
+          ],
+          "s3": [
+            "plant growth",
+            "speak with plants"
+          ],
+          "s4": [
+            "aura of life",
+            "conjure minor elementals"
+          ],
+          "s5": [
+            "awaken",
+            "commune with nature"
+          ]
+        }
+      }
+    ],
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_shadowmasters_exile_frhof",
@@ -19229,7 +25103,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "savage attacker|xphb": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "int",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "int",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_shadowmoor_expert_lfl",
@@ -19327,7 +25240,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "shadowmoor hexer|lfl": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "int",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "int",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_shipwright_gos",
@@ -19401,7 +25353,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_shipwright_northlandsworldbook",
@@ -19473,7 +25428,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "Sea Wolf|NorthlandsWorldbook": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "str",
+              "wis"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "str",
+              "wis"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_siege_engineer_exploringeberron24",
@@ -19575,7 +25569,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "savage attacker|xphb": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "con"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "con"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_silverquill_student_scc",
@@ -19641,7 +25674,39 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": [
+      {
+        "expanded": {
+          "s1": [
+            "dissonant whispers",
+            "silvery barbs|scc"
+          ],
+          "s2": [
+            "calm emotions",
+            "darkness"
+          ],
+          "s3": [
+            "beacon of hope",
+            "daylight"
+          ],
+          "s4": [
+            "compulsion",
+            "confusion"
+          ],
+          "s5": [
+            "dominate person",
+            "rary's telepathic bond"
+          ]
+        }
+      }
+    ],
+    "feats": [
+      {
+        "strixhaven initiate|scc": true
+      }
+    ],
+    "ability": null
   },
   {
     "id": "bg_simic_scientist_ggr",
@@ -19748,7 +25813,41 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": [
+      {
+        "expanded": {
+          "s0": [
+            "acid splash#c",
+            "druidcraft#c"
+          ],
+          "s1": [
+            "detect poison and disease",
+            "expeditious retreat",
+            "jump"
+          ],
+          "s2": [
+            "alter self",
+            "enhance ability",
+            "enlarge/reduce"
+          ],
+          "s3": [
+            "gaseous form",
+            "water breathing",
+            "wind wall"
+          ],
+          "s4": [
+            "freedom of movement",
+            "polymorph"
+          ],
+          "s5": [
+            "creation"
+          ]
+        }
+      }
+    ],
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_sky_watcher_tlotrr",
@@ -19782,7 +25881,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_smuggler_gos",
@@ -19864,7 +25966,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_soldier_phb",
@@ -19966,7 +26071,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_soldier_xphb",
@@ -20068,7 +26176,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "savage attacker|xphb": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "con"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "con"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_soldier_xua2022characteroptions",
@@ -20107,7 +26254,19 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "savage attacker|XUA2022CharacterOptions": true
+      }
+    ],
+    "ability": [
+      {
+        "str": 2,
+        "con": 1
+      }
+    ]
   },
   {
     "id": "bg_spellfire_initiate_frhof",
@@ -20190,7 +26349,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "spellfire spark|frhof": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "con",
+              "int",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "con",
+              "int",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_spirit_medium_rhw",
@@ -20303,7 +26501,50 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "anyFromCategory": {
+          "category": [
+            "DG"
+          ]
+        }
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "con",
+              "int",
+              "wis"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "con",
+              "int",
+              "wis"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_survivor_dungeonsdrakkenheim",
@@ -20376,7 +26617,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_syndicate_smuggler_grimhollowpg24",
@@ -20457,7 +26701,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "resolution of the syndicate|GrimHollowPG24": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "int",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "int",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_technical_support_exploringeberron24",
@@ -20544,7 +26827,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "alert|xphb": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "con",
+              "int"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "con",
+              "int"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_the_call_of_the_sea_tlotrr",
@@ -20582,7 +26904,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_the_grief_of_azanulbizar_tlotrr",
@@ -20616,7 +26941,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_thrall_boundbyblood",
@@ -20703,7 +27031,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "healthy|BoundByBlood": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "con",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "con",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_too_many_paths_to_tread_tlotrr",
@@ -20737,7 +27104,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_tookish_blood_tlotrr",
@@ -20771,7 +27141,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_touchstone_boundbyblood",
@@ -20842,7 +27215,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "protected|BoundByBlood": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "con",
+              "int",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "con",
+              "int",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_tower_guard_tlotrr",
@@ -20876,7 +27288,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_treasure_seeker_dungeonsdrakkenheim",
@@ -20958,7 +27373,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_up_the_greenway_tlotrr",
@@ -20997,7 +27415,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_urban_bounty_hunter_scag",
@@ -21053,7 +27474,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_urchin_phb",
@@ -21129,7 +27553,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_urchin_xua2022characteroptions",
@@ -21168,7 +27595,19 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "lucky|XUA2022CharacterOptions": true
+      }
+    ],
+    "ability": [
+      {
+        "dex": 2,
+        "wis": 1
+      }
+    ]
   },
   {
     "id": "bg_uthgardt_tribe_member_scag",
@@ -21259,7 +27698,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_vampire_devotee_abh",
@@ -21358,7 +27800,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "vampire's plaything|abh": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "con",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "con",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_vampire_survivor_abh",
@@ -21467,7 +27948,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "vampire hunter|abh": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "con",
+              "wis"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "con",
+              "wis"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_variant_city_watch_investigator_scag",
@@ -21529,7 +28049,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_variant_clasp_member_myriad_operative_taldoreicampaignsettingreborn",
@@ -21558,7 +28081,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_variant_continental_nobility_last_of_the_line_dungeonsdrakkenheim",
@@ -21587,7 +28113,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_variant_criminal_spy_phb",
@@ -21616,7 +28145,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_variant_devoted_missionary_stargazer_dungeonsdrakkenheim",
@@ -21645,7 +28177,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_variant_entertainer_gladiator_phb",
@@ -21674,7 +28209,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_variant_guild_artisan_guild_merchant_phb",
@@ -21712,7 +28250,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_variant_mageborn_malfeasant_mage_dungeonsdrakkenheim",
@@ -21741,7 +28282,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_variant_noble_knight_phb",
@@ -21770,7 +28314,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_variant_noble_retainers_phb",
@@ -21799,7 +28346,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_variant_sailor_pirate_phb",
@@ -21828,7 +28378,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_variant_survivor_veteran_of_the_civil_war_dungeonsdrakkenheim",
@@ -21857,7 +28410,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_variant_treasure_seeker_soldier_of_fortune_dungeonsdrakkenheim",
@@ -21886,7 +28442,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_variant_whitestone_rifle_corps_grey_hunter_taldoreicampaignsettingreborn",
@@ -21915,7 +28474,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_visitor_to_the_mountains_tlotrr",
@@ -21953,7 +28515,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_vizier_psa",
@@ -22050,7 +28615,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_vizier_dissenter_psa",
@@ -22079,7 +28647,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_volstrucker_agent_egw",
@@ -22141,7 +28712,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_wage_mage_exploringeberron24",
@@ -22219,7 +28793,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "crafter|xphb": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "int"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "int"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_wandslinger_foequickstone",
@@ -22304,7 +28917,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "magic initiate; wizard|xphb": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "int",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "int",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_ward_of_the_sheltering_hands_au",
@@ -22402,7 +29054,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "arcane safeguard|au": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "con",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "con",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_watcher_on_the_border_tlotrr",
@@ -22436,7 +29127,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_waterdhavian_noble_scag",
@@ -22533,7 +29227,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_wayfarer_xphb",
@@ -22626,7 +29323,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "lucky|xphb": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_whitestone_rifle_corps_taldoreicampaignsettingreborn",
@@ -22712,7 +29448,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_wicker_weaver_crookedmoon14",
@@ -22805,7 +29544,14 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "Charm Twister|CrookedMoon24": true
+      }
+    ],
+    "ability": null
   },
   {
     "id": "bg_wicker_weaver_crookedmoon24",
@@ -22898,7 +29644,52 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "Charm Twister|CrookedMoon24": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "con",
+              "int",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "con",
+              "int",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_wildspacer_aag",
@@ -22966,7 +29757,14 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "tough|phb": true
+      }
+    ],
+    "ability": null
   },
   {
     "id": "bg_wind_touched_humblewoodcampaignsetting",
@@ -23038,7 +29836,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_witchlight_hand_wbtw",
@@ -23134,7 +29935,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_witherbloom_student_scc",
@@ -23212,7 +30016,39 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": [
+      {
+        "expanded": {
+          "s1": [
+            "cure wounds",
+            "inflict wounds"
+          ],
+          "s2": [
+            "lesser restoration",
+            "wither and bloom|scc"
+          ],
+          "s3": [
+            "revivify",
+            "vampiric touch"
+          ],
+          "s4": [
+            "blight",
+            "death ward"
+          ],
+          "s5": [
+            "antilife shell",
+            "greater restoration"
+          ]
+        }
+      }
+    ],
+    "feats": [
+      {
+        "strixhaven initiate|scc": true
+      }
+    ],
+    "ability": null
   },
   {
     "id": "bg_witty_gentlehobbit_tlotrr",
@@ -23249,7 +30085,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_wordweaver_tlotrr",
@@ -23286,7 +30125,10 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
   },
   {
     "id": "bg_zhentarim_mercenary_frhof",
@@ -23390,6 +30232,45 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "zhentarim ruffian|frhof": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   }
 ]

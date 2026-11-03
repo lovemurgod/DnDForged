@@ -89,7 +89,7 @@ async function syncPartnered() {
 
     // Deduplicate by filename
     const seen = new Set();
-    const uniquePartnered = partneredFiles.filter(item => {
+    const uniquePartnered = partneredFiles.filter((item) => {
         if (seen.has(item.filename)) return false;
         seen.add(item.filename);
         return true;
@@ -134,7 +134,7 @@ async function syncPrerelease() {
 
     // Deduplicate
     const seen = new Set();
-    const uniqueUa = uaFiles.filter(item => {
+    const uniqueUa = uaFiles.filter((item) => {
         if (seen.has(item.filename)) return false;
         seen.add(item.filename);
         return true;
@@ -169,7 +169,7 @@ async function main() {
     console.log(`\n🎉 All content sync operations completed successfully in ${elapsed}s!`);
 }
 
-main().catch(err => {
+main().catch((err) => {
     console.error('\n💥 Fatal Sync Error:', err);
     process.exit(1);
 });

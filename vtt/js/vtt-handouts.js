@@ -1,8 +1,21 @@
+import { escapeHtml } from './vtt-utils.js';
+
+function sanitizeHtmlContent(rawHtml) {
+    if (!rawHtml) return '';
+    if (typeof window !== 'undefined' && typeof window.DOMPurify !== 'undefined' && typeof window.DOMPurify.sanitize === 'function') {
+        return window.DOMPurify.sanitize(rawHtml);
+    }
+    if (typeof DOMPurify !== 'undefined' && typeof DOMPurify.sanitize === 'function') {
+        return DOMPurify.sanitize(rawHtml);
+    }
+    return escapeHtml(rawHtml);
+}
+
 export function initVttHandouts(vtt) {
     const listEl = document.getElementById('handout-list');
     const btnCreate = document.getElementById('btn-handout-create');
     const btnImport = document.getElementById('btn-handout-import');
-    
+
     // Edit Modal Elements
     const modalEdit = document.getElementById('modal-edit-handout');
     const editTitleInput = document.getElementById('edit-handout-name');
@@ -12,7 +25,7 @@ export function initVttHandouts(vtt) {
     const btnEditSave = document.getElementById('btn-handout-save');
     const btnEditCancel = document.getElementById('btn-handout-cancel');
     const editModalTitle = document.getElementById('modal-edit-handout-title');
-    
+
     // View Modal Elements
     const modalView = document.getElementById('modal-view-handout');
     const viewTitle = document.getElementById('view-handout-title');
@@ -78,7 +91,8 @@ export function initVttHandouts(vtt) {
     if (btnCreate) {
         btnCreate.addEventListener('click', () => {
             editingHandoutId = null;
-            if (editModalTitle) editModalTitle.innerHTML = '<i class="fa-solid fa-note-sticky text-gradient-gold"></i> Create Handout';
+            if (editModalTitle)
+                editModalTitle.innerHTML = '<i class="fa-solid fa-note-sticky text-gradient-gold"></i> Create Handout';
             if (editTitleInput) editTitleInput.value = '';
             if (editDescInput) editDescInput.value = '';
             if (editUrlInput) editUrlInput.value = '';
@@ -89,7 +103,8 @@ export function initVttHandouts(vtt) {
 
     function openEditModal(handout) {
         editingHandoutId = handout.id;
-        if (editModalTitle) editModalTitle.innerHTML = '<i class="fa-solid fa-note-sticky text-gradient-gold"></i> Edit Handout';
+        if (editModalTitle)
+            editModalTitle.innerHTML = '<i class="fa-solid fa-note-sticky text-gradient-gold"></i> Edit Handout';
         if (editTitleInput) editTitleInput.value = handout.title || '';
         if (editDescInput) editDescInput.value = handout.desc || '';
         if (editUrlInput) editUrlInput.value = handout.url || '';
@@ -108,7 +123,7 @@ export function initVttHandouts(vtt) {
         btnEditSave.addEventListener('click', () => {
             const title = editTitleInput.value.trim();
             if (!title) {
-                alert("Handout needs a title.");
+                alert('Handout needs a title.');
                 return;
             }
 
@@ -118,7 +133,7 @@ export function initVttHandouts(vtt) {
 
             if (editingHandoutId) {
                 // Update
-                const ho = vtt.campaignState.handouts.find(h => h.id === editingHandoutId);
+                const ho = vtt.campaignState.handouts.find((h) => h.id === editingHandoutId);
                 if (ho) {
                     ho.title = title;
                     ho.desc = desc;
@@ -147,9 +162,11 @@ export function initVttHandouts(vtt) {
     // Viewer Operations
     function parseMediaUrl(url) {
         if (!url) return '';
-        
+
         // YouTube
-        let ytMatch = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i);
+        let ytMatch = url.match(
+            /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i
+        );
         if (ytMatch) {
             return `<iframe width="100%" height="400" src="https://www.youtube.com/embed/${ytMatch[1]}" frameborder="0" allowfullscreen style="border-radius:8px; border:1px solid var(--color-border-subtle);"></iframe>`;
         }
@@ -172,17 +189,19 @@ export function initVttHandouts(vtt) {
     function openViewModal(handout) {
         if (!modalView) return;
         viewTitle.textContent = handout.title || 'Handout';
-        
+
         // Rich HTML or Text Rendering
         if (handout.html) {
-            viewDesc.innerHTML = handout.html;
+            viewDesc.innerHTML = sanitizeHtmlContent(handout.html);
             if (window.Renderer?.dice?.bindRollButtons) {
-                try { window.Renderer.dice.bindRollButtons(viewDesc); } catch (e) {}
+                try {
+                    window.Renderer.dice.bindRollButtons(viewDesc);
+                } catch (e) { }
             }
         } else {
             viewDesc.textContent = handout.desc || '';
         }
-        
+
         if (handout.url) {
             viewMediaContainer.innerHTML = parseMediaUrl(handout.url);
             viewMediaContainer.style.display = 'block';
@@ -190,7 +209,7 @@ export function initVttHandouts(vtt) {
             viewMediaContainer.innerHTML = '';
             viewMediaContainer.style.display = 'none';
         }
-        
+
         modalView.classList.remove('vtt-hidden');
     }
 
@@ -204,7 +223,7 @@ export function initVttHandouts(vtt) {
     // Public method for data bridge
     function handleForceShow(handoutId) {
         if (!vtt.campaignState || !vtt.campaignState.handouts) return;
-        const ho = vtt.campaignState.handouts.find(h => h.id === handoutId);
+        const ho = vtt.campaignState.handouts.find((h) => h.id === handoutId);
         if (ho) {
             openViewModal(ho);
             // Switch tab to handouts if not already
@@ -223,7 +242,7 @@ export function initVttHandouts(vtt) {
     }
 
     function toggleVisibility(id) {
-        const ho = vtt.campaignState.handouts.find(h => h.id === id);
+        const ho = vtt.campaignState.handouts.find((h) => h.id === id);
         if (ho) {
             ho.isVisible = !ho.isVisible;
             syncAndRender();
@@ -231,8 +250,8 @@ export function initVttHandouts(vtt) {
     }
 
     function deleteHandout(id) {
-        if (!confirm("Are you sure you want to delete this handout?")) return;
-        vtt.campaignState.handouts = vtt.campaignState.handouts.filter(h => h.id !== id);
+        if (!confirm('Are you sure you want to delete this handout?')) return;
+        vtt.campaignState.handouts = vtt.campaignState.handouts.filter((h) => h.id !== id);
         syncAndRender();
     }
 
@@ -247,7 +266,7 @@ export function initVttHandouts(vtt) {
     // Helper: Create single handout card element
     function createHandoutCard(ho) {
         const card = document.createElement('div');
-        card.className = 'character-card glassmorphism';
+        card.className = 'character-card glass-flat';
         card.style.display = 'flex';
         card.style.justifyContent = 'space-between';
         card.style.alignItems = 'center';
@@ -259,7 +278,7 @@ export function initVttHandouts(vtt) {
         titleWrap.style.fontWeight = '600';
         titleWrap.style.minWidth = '0';
         titleWrap.style.color = ho.isVisible ? 'var(--color-text-primary)' : 'var(--color-text-muted)';
-        
+
         let typeIcon = 'fa-note-sticky';
         if (ho.type === 'image' || (!ho.type && ho.url)) typeIcon = 'fa-image';
         else if (ho.type === 'inset') typeIcon = 'fa-scroll';
@@ -272,7 +291,7 @@ export function initVttHandouts(vtt) {
                 <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${escapeHtml(ho.title || '')}</span>
             </div>
         `;
-        
+
         titleWrap.addEventListener('click', () => openViewModal(ho));
         card.appendChild(titleWrap);
 
@@ -285,30 +304,42 @@ export function initVttHandouts(vtt) {
             // Toggle visibility
             const btnVis = document.createElement('button');
             btnVis.className = `btn btn-xxs ${ho.isVisible ? 'btn-primary' : 'btn-secondary'}`;
-            btnVis.title = ho.isVisible ? "Hide from Players" : "Show to Players";
+            btnVis.title = ho.isVisible ? 'Hide from Players' : 'Show to Players';
             btnVis.innerHTML = `<i class="fa-solid ${ho.isVisible ? 'fa-eye' : 'fa-eye-slash'}"></i>`;
-            btnVis.addEventListener('click', (e) => { e.stopPropagation(); toggleVisibility(ho.id); });
-            
+            btnVis.addEventListener('click', (e) => {
+                e.stopPropagation();
+                toggleVisibility(ho.id);
+            });
+
             // Force Show
             const btnForce = document.createElement('button');
             btnForce.className = 'btn btn-xxs btn-primary';
-            btnForce.title = "Force Pop-up on Player Screens";
+            btnForce.title = 'Force Pop-up on Player Screens';
             btnForce.innerHTML = '<i class="fa-solid fa-bullhorn"></i>';
-            btnForce.addEventListener('click', (e) => { e.stopPropagation(); forceShow(ho.id); });
+            btnForce.addEventListener('click', (e) => {
+                e.stopPropagation();
+                forceShow(ho.id);
+            });
 
             // Edit
             const btnEdit = document.createElement('button');
             btnEdit.className = 'btn btn-xxs btn-secondary';
-            btnEdit.title = "Edit Handout";
+            btnEdit.title = 'Edit Handout';
             btnEdit.innerHTML = '<i class="fa-solid fa-pencil"></i>';
-            btnEdit.addEventListener('click', (e) => { e.stopPropagation(); openEditModal(ho); });
+            btnEdit.addEventListener('click', (e) => {
+                e.stopPropagation();
+                openEditModal(ho);
+            });
 
             // Delete
             const btnDel = document.createElement('button');
             btnDel.className = 'btn btn-xxs btn-danger';
-            btnDel.title = "Delete Handout";
+            btnDel.title = 'Delete Handout';
             btnDel.innerHTML = '<i class="fa-solid fa-trash"></i>';
-            btnDel.addEventListener('click', (e) => { e.stopPropagation(); deleteHandout(ho.id); });
+            btnDel.addEventListener('click', (e) => {
+                e.stopPropagation();
+                deleteHandout(ho.id);
+            });
 
             actions.appendChild(btnVis);
             actions.appendChild(btnForce);
@@ -324,11 +355,11 @@ export function initVttHandouts(vtt) {
         if (!listEl) return;
         listEl.innerHTML = '';
 
-        const handouts = (vtt.campaignState && vtt.campaignState.handouts) ? vtt.campaignState.handouts : [];
+        const handouts = vtt.campaignState && vtt.campaignState.handouts ? vtt.campaignState.handouts : [];
         let visibleHandouts = handouts;
-        
+
         if (vtt.role !== 'GM') {
-            visibleHandouts = handouts.filter(h => h.isVisible);
+            visibleHandouts = handouts.filter((h) => h.isVisible);
         }
 
         if (visibleHandouts.length === 0) {
@@ -340,7 +371,7 @@ export function initVttHandouts(vtt) {
         const folderGroups = {};
         const rootHandouts = [];
 
-        visibleHandouts.forEach(ho => {
+        visibleHandouts.forEach((ho) => {
             if (ho.folder && ho.folder.trim()) {
                 const fName = ho.folder.trim();
                 if (!folderGroups[fName]) folderGroups[fName] = [];
@@ -358,121 +389,125 @@ export function initVttHandouts(vtt) {
                 rootLabel.innerHTML = '<i class="fa-solid fa-note-sticky text-gradient-gold"></i> Standalone Handouts';
                 listEl.appendChild(rootLabel);
             }
-            rootHandouts.forEach(ho => listEl.appendChild(createHandoutCard(ho)));
+            rootHandouts.forEach((ho) => listEl.appendChild(createHandoutCard(ho)));
         }
 
         // 2. Render folder groups
-        Object.keys(folderGroups).sort().forEach(folderName => {
-            const folderItems = folderGroups[folderName];
-            const isCollapsed = collapsedFolders.has(folderName);
+        Object.keys(folderGroups)
+            .sort()
+            .forEach((folderName) => {
+                const folderItems = folderGroups[folderName];
+                const isCollapsed = collapsedFolders.has(folderName);
 
-            const groupEl = document.createElement('div');
-            groupEl.className = `handout-folder-group ${isCollapsed ? 'collapsed' : ''}`;
+                const groupEl = document.createElement('div');
+                groupEl.className = `handout-folder-group ${isCollapsed ? 'collapsed' : ''}`;
 
-            const headerEl = document.createElement('div');
-            headerEl.className = 'handout-folder-header';
-            
-            const titleWrap = document.createElement('div');
-            titleWrap.className = 'handout-folder-title-wrap';
-            titleWrap.innerHTML = `
+                const headerEl = document.createElement('div');
+                headerEl.className = 'handout-folder-header';
+
+                const titleWrap = document.createElement('div');
+                titleWrap.className = 'handout-folder-title-wrap';
+                titleWrap.innerHTML = `
                 <i class="fa-solid fa-chevron-down handout-folder-caret"></i>
                 <i class="fa-solid fa-folder text-gradient-gold"></i>
                 <span>${escapeHtml(folderName || '')}</span>
                 <span class="handout-folder-count">${folderItems.length}</span>
             `;
-            headerEl.appendChild(titleWrap);
+                headerEl.appendChild(titleWrap);
 
-            headerEl.addEventListener('click', (e) => {
-                if (e.target.closest('.handout-folder-actions')) return;
-                if (collapsedFolders.has(folderName)) {
-                    collapsedFolders.delete(folderName);
-                    groupEl.classList.remove('collapsed');
+                headerEl.addEventListener('click', (e) => {
+                    if (e.target.closest('.handout-folder-actions')) return;
+                    if (collapsedFolders.has(folderName)) {
+                        collapsedFolders.delete(folderName);
+                        groupEl.classList.remove('collapsed');
+                    } else {
+                        collapsedFolders.add(folderName);
+                        groupEl.classList.add('collapsed');
+                    }
+                });
+
+                if (vtt.role === 'GM') {
+                    const actionsEl = document.createElement('div');
+                    actionsEl.className = 'handout-folder-actions';
+
+                    // Show all in folder
+                    const btnShowAll = document.createElement('button');
+                    btnShowAll.className = 'btn btn-xxs btn-secondary';
+                    btnShowAll.title = 'Show all handouts in folder to players';
+                    btnShowAll.innerHTML = '<i class="fa-solid fa-eye"></i>';
+                    btnShowAll.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        folderItems.forEach((h) => (h.isVisible = true));
+                        syncAndRender();
+                    });
+
+                    // Hide all in folder
+                    const btnHideAll = document.createElement('button');
+                    btnHideAll.className = 'btn btn-xxs btn-secondary';
+                    btnHideAll.title = 'Hide all handouts in folder from players';
+                    btnHideAll.innerHTML = '<i class="fa-solid fa-eye-slash"></i>';
+                    btnHideAll.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        folderItems.forEach((h) => (h.isVisible = false));
+                        syncAndRender();
+                    });
+
+                    // Delete folder
+                    const btnDeleteFolder = document.createElement('button');
+                    btnDeleteFolder.className = 'btn btn-xxs btn-danger';
+                    btnDeleteFolder.title = 'Delete all handouts in folder';
+                    btnDeleteFolder.innerHTML = '<i class="fa-solid fa-trash"></i>';
+                    btnDeleteFolder.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        if (!confirm(`Delete all ${folderItems.length} handouts in folder "${folderName}"?`)) return;
+                        const idsToDelete = new Set(folderItems.map((h) => h.id));
+                        vtt.campaignState.handouts = vtt.campaignState.handouts.filter((h) => !idsToDelete.has(h.id));
+                        syncAndRender();
+                    });
+
+                    actionsEl.appendChild(btnShowAll);
+                    actionsEl.appendChild(btnHideAll);
+                    actionsEl.appendChild(btnDeleteFolder);
+                    headerEl.appendChild(actionsEl);
+                }
+
+                const contentEl = document.createElement('div');
+                contentEl.className = 'handout-folder-content';
+
+                // Check for subfolders within this folder
+                const subfolders = {};
+                const unassigned = [];
+                folderItems.forEach((h) => {
+                    if (h.subfolder && h.subfolder.trim() && h.subfolder.trim() !== folderName) {
+                        const sub = h.subfolder.trim();
+                        if (!subfolders[sub]) subfolders[sub] = [];
+                        subfolders[sub].push(h);
+                    } else {
+                        unassigned.push(h);
+                    }
+                });
+
+                if (Object.keys(subfolders).length > 0) {
+                    if (unassigned.length > 0) {
+                        unassigned.forEach((ho) => contentEl.appendChild(createHandoutCard(ho)));
+                    }
+                    Object.keys(subfolders)
+                        .sort()
+                        .forEach((subName) => {
+                            const subLabel = document.createElement('div');
+                            subLabel.className = 'handout-subfolder-label';
+                            subLabel.textContent = subName;
+                            contentEl.appendChild(subLabel);
+                            subfolders[subName].forEach((ho) => contentEl.appendChild(createHandoutCard(ho)));
+                        });
                 } else {
-                    collapsedFolders.add(folderName);
-                    groupEl.classList.add('collapsed');
+                    folderItems.forEach((ho) => contentEl.appendChild(createHandoutCard(ho)));
                 }
+
+                groupEl.appendChild(headerEl);
+                groupEl.appendChild(contentEl);
+                listEl.appendChild(groupEl);
             });
-
-            if (vtt.role === 'GM') {
-                const actionsEl = document.createElement('div');
-                actionsEl.className = 'handout-folder-actions';
-
-                // Show all in folder
-                const btnShowAll = document.createElement('button');
-                btnShowAll.className = 'btn btn-xxs btn-secondary';
-                btnShowAll.title = 'Show all handouts in folder to players';
-                btnShowAll.innerHTML = '<i class="fa-solid fa-eye"></i>';
-                btnShowAll.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    folderItems.forEach(h => h.isVisible = true);
-                    syncAndRender();
-                });
-
-                // Hide all in folder
-                const btnHideAll = document.createElement('button');
-                btnHideAll.className = 'btn btn-xxs btn-secondary';
-                btnHideAll.title = 'Hide all handouts in folder from players';
-                btnHideAll.innerHTML = '<i class="fa-solid fa-eye-slash"></i>';
-                btnHideAll.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    folderItems.forEach(h => h.isVisible = false);
-                    syncAndRender();
-                });
-
-                // Delete folder
-                const btnDeleteFolder = document.createElement('button');
-                btnDeleteFolder.className = 'btn btn-xxs btn-danger';
-                btnDeleteFolder.title = 'Delete all handouts in folder';
-                btnDeleteFolder.innerHTML = '<i class="fa-solid fa-trash"></i>';
-                btnDeleteFolder.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    if (!confirm(`Delete all ${folderItems.length} handouts in folder "${folderName}"?`)) return;
-                    const idsToDelete = new Set(folderItems.map(h => h.id));
-                    vtt.campaignState.handouts = vtt.campaignState.handouts.filter(h => !idsToDelete.has(h.id));
-                    syncAndRender();
-                });
-
-                actionsEl.appendChild(btnShowAll);
-                actionsEl.appendChild(btnHideAll);
-                actionsEl.appendChild(btnDeleteFolder);
-                headerEl.appendChild(actionsEl);
-            }
-
-            const contentEl = document.createElement('div');
-            contentEl.className = 'handout-folder-content';
-
-            // Check for subfolders within this folder
-            const subfolders = {};
-            const unassigned = [];
-            folderItems.forEach(h => {
-                if (h.subfolder && h.subfolder.trim() && h.subfolder.trim() !== folderName) {
-                    const sub = h.subfolder.trim();
-                    if (!subfolders[sub]) subfolders[sub] = [];
-                    subfolders[sub].push(h);
-                } else {
-                    unassigned.push(h);
-                }
-            });
-
-            if (Object.keys(subfolders).length > 0) {
-                if (unassigned.length > 0) {
-                    unassigned.forEach(ho => contentEl.appendChild(createHandoutCard(ho)));
-                }
-                Object.keys(subfolders).sort().forEach(subName => {
-                    const subLabel = document.createElement('div');
-                    subLabel.className = 'handout-subfolder-label';
-                    subLabel.textContent = subName;
-                    contentEl.appendChild(subLabel);
-                    subfolders[subName].forEach(ho => contentEl.appendChild(createHandoutCard(ho)));
-                });
-            } else {
-                folderItems.forEach(ho => contentEl.appendChild(createHandoutCard(ho)));
-            }
-
-            groupEl.appendChild(headerEl);
-            groupEl.appendChild(contentEl);
-            listEl.appendChild(groupEl);
-        });
     }
 
     // ─── Handout Import Wizard Engine ──────────────────────────────────────────
@@ -525,9 +560,9 @@ export function initVttHandouts(vtt) {
         }
 
         if (filterButtons) {
-            filterButtons.forEach(btn => {
+            filterButtons.forEach((btn) => {
                 btn.addEventListener('click', () => {
-                    filterButtons.forEach(b => b.classList.remove('active'));
+                    filterButtons.forEach((b) => b.classList.remove('active'));
                     btn.classList.add('active');
                     activeFilter = btn.dataset.filter || 'all';
                     renderContentTree();
@@ -545,7 +580,7 @@ export function initVttHandouts(vtt) {
         if (btnSelectAll) {
             btnSelectAll.addEventListener('click', () => {
                 const visibleItems = getFilteredItems();
-                visibleItems.forEach(it => selectedItemIds.add(it.id));
+                visibleItems.forEach((it) => selectedItemIds.add(it.id));
                 updateSelectionState();
                 renderContentTree();
             });
@@ -575,20 +610,22 @@ export function initVttHandouts(vtt) {
     }
 
     async function loadSourceIndexes() {
-        sourceListEl.innerHTML = '<div class="init-empty-state"><i class="fa-solid fa-spinner fa-spin"></i> Loading module catalog...</div>';
+        sourceListEl.innerHTML =
+            '<div class="init-empty-state"><i class="fa-solid fa-spinner fa-spin"></i> Loading module catalog...</div>';
         try {
             let res = await fetch('/api/handouts/catalog');
             if (!res.ok) res = await fetch('data/handouts-catalog.json');
             if (res.ok) {
                 const catalog = await res.json();
-                adventuresIndex = catalog.filter(m => m.type === 'adventure');
-                booksIndex = catalog.filter(m => m.type === 'book');
+                adventuresIndex = catalog.filter((m) => m.type === 'adventure');
+                booksIndex = catalog.filter((m) => m.type === 'book');
             } else {
-                throw new Error("Could not load handouts catalog");
+                throw new Error('Could not load handouts catalog');
             }
         } catch (err) {
-            console.error("Failed to load handouts catalog:", err);
-            sourceListEl.innerHTML = '<div class="init-empty-state text-danger"><i class="fa-solid fa-triangle-exclamation"></i> Error loading module catalog.</div>';
+            console.error('Failed to load handouts catalog:', err);
+            sourceListEl.innerHTML =
+                '<div class="init-empty-state text-danger"><i class="fa-solid fa-triangle-exclamation"></i> Error loading module catalog.</div>';
         }
     }
 
@@ -596,15 +633,17 @@ export function initVttHandouts(vtt) {
         if (!sourceListEl) return;
         sourceListEl.innerHTML = '';
 
-        const list = currentSourceType === 'adventures' ? (adventuresIndex || []) : (booksIndex || []);
+        const list = currentSourceType === 'adventures' ? adventuresIndex || [] : booksIndex || [];
         const query = inputSourceSearch ? inputSourceSearch.value.toLowerCase().trim() : '';
 
-        const filtered = list.filter(item => {
+        const filtered = list.filter((item) => {
             if (!query) return true;
-            return (item.name && item.name.toLowerCase().includes(query)) ||
-                   (item.id && item.id.toLowerCase().includes(query)) ||
-                   (item.author && item.author.toLowerCase().includes(query)) ||
-                   (item.storyline && item.storyline.toLowerCase().includes(query));
+            return (
+                (item.name && item.name.toLowerCase().includes(query)) ||
+                (item.id && item.id.toLowerCase().includes(query)) ||
+                (item.author && item.author.toLowerCase().includes(query)) ||
+                (item.storyline && item.storyline.toLowerCase().includes(query))
+            );
         });
 
         if (filtered.length === 0) {
@@ -612,10 +651,10 @@ export function initVttHandouts(vtt) {
             return;
         }
 
-        filtered.forEach(src => {
+        filtered.forEach((src) => {
             const card = document.createElement('div');
             card.className = `import-source-card ${currentSelectedSource && currentSelectedSource.id === src.id ? 'active' : ''}`;
-            
+
             let coverHtml = '';
             if (src.cover) {
                 coverHtml = `<img src="${src.cover}" class="import-source-card-cover" onerror="this.style.display='none'">`;
@@ -651,7 +690,8 @@ export function initVttHandouts(vtt) {
             activeSourceBadge.title = src.name;
         }
 
-        itemTreeEl.innerHTML = '<div class="init-empty-state"><i class="fa-solid fa-spinner fa-spin"></i> Loading handouts...</div>';
+        itemTreeEl.innerHTML =
+            '<div class="init-empty-state"><i class="fa-solid fa-spinner fa-spin"></i> Loading handouts...</div>';
         selectedItemIds.clear();
         updateSelectionState();
 
@@ -666,7 +706,7 @@ export function initVttHandouts(vtt) {
                 throw new Error(`Failed to load handouts for ${srcKey}`);
             }
         } catch (err) {
-            console.error("Error loading handout partition:", err);
+            console.error('Error loading handout partition:', err);
             itemTreeEl.innerHTML = `<div class="init-empty-state text-danger"><i class="fa-solid fa-triangle-exclamation"></i> Could not load handouts for ${src.name}.</div>`;
             return;
         }
@@ -688,9 +728,9 @@ export function initVttHandouts(vtt) {
         const cSty = document.getElementById('count-filter-story');
 
         const totalAll = currentExtractedItems.length;
-        const totalImg = currentExtractedItems.filter(i => i.type === 'image').length;
-        const totalIns = currentExtractedItems.filter(i => i.type === 'inset').length;
-        const totalSty = currentExtractedItems.filter(i => i.type === 'story').length;
+        const totalImg = currentExtractedItems.filter((i) => i.type === 'image').length;
+        const totalIns = currentExtractedItems.filter((i) => i.type === 'inset').length;
+        const totalSty = currentExtractedItems.filter((i) => i.type === 'story').length;
 
         if (cAll) cAll.textContent = totalAll;
         if (cImg) cImg.textContent = totalImg;
@@ -699,7 +739,7 @@ export function initVttHandouts(vtt) {
     }
 
     function getFilteredItems() {
-        return currentExtractedItems.filter(it => {
+        return currentExtractedItems.filter((it) => {
             // Type filter
             if (activeFilter !== 'all' && it.type !== activeFilter) return false;
             // Search query filter
@@ -719,27 +759,28 @@ export function initVttHandouts(vtt) {
         const visibleItems = getFilteredItems();
 
         if (visibleItems.length === 0) {
-            itemTreeEl.innerHTML = '<div class="init-empty-state">No matching handouts found with current filter.</div>';
+            itemTreeEl.innerHTML =
+                '<div class="init-empty-state">No matching handouts found with current filter.</div>';
             return;
         }
 
         // Group by chapter
         const chapters = {};
-        visibleItems.forEach(it => {
+        visibleItems.forEach((it) => {
             const ch = it.chapter || 'General Content';
             if (!chapters[ch]) chapters[ch] = [];
             chapters[ch].push(it);
         });
 
-        Object.keys(chapters).forEach(chName => {
+        Object.keys(chapters).forEach((chName) => {
             const chItems = chapters[chName];
             const chGroup = document.createElement('div');
             chGroup.className = 'import-chapter-group';
 
             const chHeader = document.createElement('div');
             chHeader.className = 'import-chapter-header';
-            
-            const allChSelected = chItems.every(i => selectedItemIds.has(i.id));
+
+            const allChSelected = chItems.every((i) => selectedItemIds.has(i.id));
             chHeader.innerHTML = `
                 <div style="display:flex; align-items:center; gap:8px;">
                     <input type="checkbox" class="import-chapter-cb" ${allChSelected ? 'checked' : ''} style="cursor:pointer; accent-color:var(--color-gold-base);">
@@ -753,7 +794,7 @@ export function initVttHandouts(vtt) {
             chCb.addEventListener('click', (e) => {
                 e.stopPropagation();
                 const check = chCb.checked;
-                chItems.forEach(i => {
+                chItems.forEach((i) => {
                     if (check) selectedItemIds.add(i.id);
                     else selectedItemIds.delete(i.id);
                 });
@@ -763,7 +804,7 @@ export function initVttHandouts(vtt) {
 
             chGroup.appendChild(chHeader);
 
-            chItems.forEach(item => {
+            chItems.forEach((item) => {
                 const row = document.createElement('div');
                 const isSelected = selectedItemIds.has(item.id);
                 const isPreview = previewedItem && previewedItem.id === item.id;
@@ -799,7 +840,7 @@ export function initVttHandouts(vtt) {
 
                 row.addEventListener('click', () => {
                     previewItem(item);
-                    document.querySelectorAll('.import-item-row').forEach(r => r.classList.remove('preview-active'));
+                    document.querySelectorAll('.import-item-row').forEach((r) => r.classList.remove('preview-active'));
                     row.classList.add('preview-active');
                 });
 
@@ -848,9 +889,11 @@ export function initVttHandouts(vtt) {
         if (item.html) {
             const htmlBox = document.createElement('div');
             htmlBox.className = 'import-preview-html-box';
-            htmlBox.innerHTML = item.html;
+            htmlBox.innerHTML = sanitizeHtmlContent(item.html);
             if (window.Renderer?.dice?.bindRollButtons) {
-                try { window.Renderer.dice.bindRollButtons(htmlBox); } catch (e) {}
+                try {
+                    window.Renderer.dice.bindRollButtons(htmlBox);
+                } catch (e) { }
             }
             previewContainerEl.appendChild(htmlBox);
         } else if (item.desc) {
@@ -869,9 +912,12 @@ export function initVttHandouts(vtt) {
 
         if (importWizardStatus) {
             if (count === 0) {
-                importWizardStatus.innerHTML = '<i class="fa-solid fa-circle-info text-gradient-gold"></i> Select items from the list to import into your campaign.';
+                importWizardStatus.innerHTML =
+                    '<i class="fa-solid fa-circle-info text-gradient-gold"></i> Select items from the list to import into your campaign.';
             } else {
-                const folderName = currentSelectedSource ? (currentSelectedSource.name || currentSelectedSource.id) : 'Imported Handouts';
+                const folderName = currentSelectedSource
+                    ? currentSelectedSource.name || currentSelectedSource.id
+                    : 'Imported Handouts';
                 importWizardStatus.innerHTML = `<i class="fa-solid fa-check text-success"></i> Ready to import <strong>${count}</strong> item(s) into folder <em>"${folderName}"</em>.`;
             }
         }
@@ -880,10 +926,10 @@ export function initVttHandouts(vtt) {
     function executeBatchImport() {
         if (selectedItemIds.size === 0) return;
 
-        const itemsToImport = currentExtractedItems.filter(it => selectedItemIds.has(it.id));
+        const itemsToImport = currentExtractedItems.filter((it) => selectedItemIds.has(it.id));
         if (itemsToImport.length === 0) return;
 
-        itemsToImport.forEach(it => {
+        itemsToImport.forEach((it) => {
             vtt.campaignState.handouts.push({
                 id: generateId(),
                 title: it.title,
@@ -898,7 +944,7 @@ export function initVttHandouts(vtt) {
         });
 
         // Ensure all newly imported folders are expanded
-        itemsToImport.forEach(it => {
+        itemsToImport.forEach((it) => {
             const folderName = it.folder || 'Imported Handouts';
             collapsedFolders.delete(folderName);
         });

@@ -1,4 +1,6 @@
-import { app, BrowserWindow, ipcMain, shell, Tray, Menu, dialog, session } from 'electron';
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+const { app, BrowserWindow, ipcMain, shell, Tray, Menu, dialog, session } = require('electron');
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
@@ -26,6 +28,15 @@ const DEFAULT_PORT = 5050;
 
 // Configuration persistence
 const configFilePath = path.join(app.getPath('userData'), 'forge-config.json');
+
+// Ephemeral internal secret shared with child server process
+const SERVER_INTERNAL_SECRET = crypto.randomBytes(32).toString('hex');
+function internalHeaders(extra = {}) {
+  return {
+    'x-server-secret': SERVER_INTERNAL_SECRET,
+    ...extra
+  };
+}
 
 let appConfig = {
   campaignDataDir: path.join(app.getPath('userData'), '.dndforged-data'),
@@ -164,6 +175,7 @@ let serverProcess = null;
 let tunnelProcess = null;
 
 let isServerRunning = false;
+let isServerManaged = false;
 let isTunnelRunning = false;
 let currentSubdomain = appConfig.subdomain || 'mygame';
 let currentTunnelToken = appConfig.tunnelToken || '';
@@ -197,7 +209,7 @@ async function syncConfigToServer() {
   try {
     await fetch(`http://127.0.0.1:${DEFAULT_PORT}/api/server/sync-config`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: internalHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify({
         gmCredentials: appConfig.gmCredentials,
         campaignDataDir: appConfig.campaignDataDir
@@ -211,12 +223,22 @@ async function syncSourcesToServer() {
   try {
     await fetch(`http://127.0.0.1:${DEFAULT_PORT}/api/server/sync-sources`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: internalHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify({
         disabledSources: sourceManager.config.disabledSources
       })
     });
   } catch (e) {}
+}
+
+async function isServerReady(port) {
+  try {
+    const res = await fetch(`http://127.0.0.1:${port}/api/server/data-dir`, {
+      signal: AbortSignal.timeout(1000)
+    });
+    if (res.ok) return true;
+  } catch (e) {}
+  return false;
 }
 
 async function startServer() {
@@ -227,26 +249,42 @@ async function startServer() {
 
   const active = await isPortActive(DEFAULT_PORT);
   if (active) {
-    appendLog(`Server already active on port ${DEFAULT_PORT}. Attaching...`);
-    isServerRunning = true;
-    await syncConfigToServer();
-    notifyStatusChange();
-    return true;
+    const ready = await isServerReady(DEFAULT_PORT);
+    if (ready) {
+      appendLog(`Server already active on port ${DEFAULT_PORT} (external process). Attaching...`);
+      isServerRunning = true;
+      isServerManaged = false;
+      await syncConfigToServer();
+      notifyStatusChange();
+      return true;
+    }
   }
 
   appendLog('Starting ForgeDVTT local Node server process...');
   const serverScript = path.join(rootDir, 'server.js');
 
-  serverProcess = spawn(process.execPath, [serverScript], {
-    cwd: rootDir,
-    env: {
-      ...process.env,
-      ELECTRON_RUN_AS_NODE: '1',
-      FORGEDVTT_DATA_DIR: appConfig.campaignDataDir,
-      FORGEDVTT_CONFIG_FILE: configFilePath
-    },
-    stdio: ['ignore', 'pipe', 'pipe']
-  });
+  let processExitedEarly = false;
+  let earlyExitCode = null;
+  let spawnError = null;
+
+  try {
+    serverProcess = spawn(process.execPath, [serverScript], {
+      cwd: rootDir,
+      env: {
+        ...process.env,
+        ELECTRON_RUN_AS_NODE: '1',
+        FORGEDVTT_DATA_DIR: appConfig.campaignDataDir,
+        FORGEDVTT_CONFIG_FILE: configFilePath,
+        FORGEDVTT_SERVER_SECRET: SERVER_INTERNAL_SECRET
+      },
+      stdio: ['ignore', 'pipe', 'pipe']
+    });
+  } catch (err) {
+    appendLog(`[Server Err] Failed to spawn process: ${err.message}`);
+    isServerRunning = false;
+    notifyStatusChange();
+    return false;
+  }
 
   serverProcess.stdout.on('data', (data) => {
     const str = data.toString().trim();
@@ -258,29 +296,120 @@ async function startServer() {
     if (str) appendLog(`[Server Err] ${str}`);
   });
 
+  const onEarlyExit = (code) => {
+    processExitedEarly = true;
+    earlyExitCode = code;
+  };
+  const onEarlyError = (err) => {
+    spawnError = err;
+    processExitedEarly = true;
+  };
+
+  serverProcess.once('exit', onEarlyExit);
+  serverProcess.once('error', onEarlyError);
+
+  const startTime = Date.now();
+  const timeoutMs = 10000;
+  let serverConfirmed = false;
+
+  while (Date.now() - startTime < timeoutMs) {
+    if (processExitedEarly) break;
+    const portActive = await isPortActive(DEFAULT_PORT);
+    if (portActive) {
+      const ready = await isServerReady(DEFAULT_PORT);
+      if (ready) {
+        serverConfirmed = true;
+        break;
+      }
+    }
+    await new Promise((r) => setTimeout(r, 150));
+  }
+
+  serverProcess.removeListener('exit', onEarlyExit);
+  serverProcess.removeListener('error', onEarlyError);
+
+  if (!serverConfirmed || processExitedEarly) {
+    const reason = spawnError
+      ? spawnError.message
+      : processExitedEarly
+      ? `Server process exited prematurely with code ${earlyExitCode}`
+      : `Server did not become ready within ${timeoutMs / 1000} seconds`;
+    appendLog(`[Server Error] Startup failed: ${reason}`);
+    if (serverProcess) {
+      try { serverProcess.kill(); } catch (e) {}
+      serverProcess = null;
+    }
+    isServerRunning = false;
+    notifyStatusChange();
+    return false;
+  }
+
+  // Once confirmed running and healthy, attach normal exit handler
   serverProcess.on('exit', (code) => {
     appendLog(`Server process stopped (exit code: ${code})`);
     isServerRunning = false;
+    isServerManaged = false;
     serverProcess = null;
     notifyStatusChange();
   });
 
-  // Give server time to bind
-  await new Promise((r) => setTimeout(r, 1200));
   isServerRunning = true;
+  isServerManaged = true;
   await syncConfigToServer();
   notifyStatusChange();
   return true;
 }
 
-function stopServer() {
+async function stopServer() {
   if (serverProcess) {
-    appendLog('Stopping local server process...');
-    serverProcess.kill();
+    appendLog('Stopping local server process gracefully...');
+    const proc = serverProcess;
+    // 1. Attempt graceful shutdown via local HTTP endpoint
+    try {
+      const shutdownPromise = fetch(`http://127.0.0.1:${DEFAULT_PORT}/api/server/shutdown`, {
+        method: 'POST',
+        headers: internalHeaders({ 'Content-Type': 'application/json' })
+      });
+      await Promise.race([shutdownPromise, new Promise((r) => setTimeout(r, 600))]);
+    } catch {
+      // Ignore network errors if server is already down or unresponsive
+    }
+
+    // 2. Await clean exit before forceful fallback
+    if (proc && !proc.killed) {
+      await new Promise((resolve) => {
+        let isDone = false;
+        const cleanup = () => {
+          if (!isDone) {
+            isDone = true;
+            resolve();
+          }
+        };
+        proc.once('exit', cleanup);
+        proc.once('close', cleanup);
+        setTimeout(() => {
+          if (!isDone) {
+            isDone = true;
+            try { proc.kill(); } catch {}
+            resolve();
+          }
+        }, 1500);
+      });
+    }
     serverProcess = null;
+    isServerRunning = false;
+    isServerManaged = false;
+    notifyStatusChange();
+    return { success: true };
+  } else if (isServerRunning && !isServerManaged) {
+    appendLog('[Server] Server is running as an external process and cannot be terminated by Electron.');
+    notifyStatusChange();
+    return { success: false, external: true, error: 'External server process cannot be stopped from Electron.' };
   }
   isServerRunning = false;
+  isServerManaged = false;
   notifyStatusChange();
+  return { success: true };
 }
 
 async function startTunnel(params = {}) {
@@ -306,9 +435,17 @@ async function startTunnel(params = {}) {
     return { success: false, error: 'cloudflared binary not found' };
   }
 
-  // Ensure server is running
-  if (!isServerRunning) {
-    await startServer();
+  // Ensure server is running and verified healthy
+  const serverHealthy = await isServerReady(DEFAULT_PORT);
+  if (!serverHealthy) {
+    appendLog('[Tunnel] Local server not responding or not started. Attempting to start server...');
+    const started = await startServer();
+    if (!started || !(await isServerReady(DEFAULT_PORT))) {
+      appendLog('[Tunnel Error] Aborting tunnel start because local server failed to start or is not healthy.');
+      return { success: false, error: 'Local server failed to start or is not healthy' };
+    }
+  } else {
+    isServerRunning = true;
   }
 
   if (mode === 'custom' && customDomain) {
@@ -389,6 +526,7 @@ function notifyStatusChange() {
 function getStatusPayload() {
   return {
     isServerRunning,
+    isServerManaged,
     isTunnelRunning,
     port: DEFAULT_PORT,
     subdomain: currentSubdomain,
@@ -471,7 +609,7 @@ function updateTrayMenu() {
     { type: 'separator' },
     {
       label: mainWindow && mainWindow.isVisible() ? 'Hide Dashboard' : 'Show Dashboard',
-      click: () => {
+      click: async () => {
         if (mainWindow.isVisible()) {
           mainWindow.hide();
         } else {
@@ -482,27 +620,27 @@ function updateTrayMenu() {
     },
     {
       label: 'Open VTT in App Window',
-      click: () => {
+      click: async () => {
         openVTTWindow();
       }
     },
     {
       label: 'Open VTT in Default Browser',
-      click: () => {
+      click: async () => {
         shell.openExternal(`http://localhost:${DEFAULT_PORT}/vtt/index.html`);
       }
     },
     { type: 'separator' },
     {
       label: isServerRunning ? 'Stop Local Server' : 'Start Local Server',
-      click: () => {
+      click: async () => {
         if (isServerRunning) stopServer();
         else startServer();
       }
     },
     {
       label: isTunnelRunning ? 'Stop Online Tunnel' : 'Start Online Tunnel',
-      click: () => {
+      click: async () => {
         if (isTunnelRunning) stopTunnel();
         else startTunnel();
       }
@@ -510,13 +648,13 @@ function updateTrayMenu() {
     { type: 'separator' },
     {
       label: 'Open Campaign Data Folder',
-      click: () => {
+      click: async () => {
         shell.openPath(appConfig.campaignDataDir);
       }
     },
     {
       label: 'Open Backups Folder',
-      click: () => {
+      click: async () => {
         shell.openPath(appConfig.backupsDir);
       }
     },
@@ -524,9 +662,6 @@ function updateTrayMenu() {
     {
       label: 'Exit ForgeDVTT',
       click: () => {
-        app.isQuitting = true;
-        stopTunnel();
-        stopServer();
         app.quit();
       }
     }
@@ -558,13 +693,26 @@ function openVTTWindow() {
 ipcMain.handle('get-status', () => getStatusPayload());
 ipcMain.handle('get-logs', () => consoleLogs);
 ipcMain.handle('start-server', async () => await startServer());
-ipcMain.handle('stop-server', () => stopServer());
+ipcMain.handle('stop-server', async () => await stopServer());
 ipcMain.handle('start-tunnel', async (_, params = {}) => {
   return await startTunnel(params);
 });
 ipcMain.handle('stop-tunnel', () => stopTunnel());
 ipcMain.handle('open-vtt-app', () => openVTTWindow());
-ipcMain.handle('open-vtt-browser', (_, url) => shell.openExternal(url || `http://localhost:${DEFAULT_PORT}/vtt/index.html`));
+ipcMain.handle('open-vtt-browser', (_, url) => {
+  const targetUrl = url || `http://localhost:${DEFAULT_PORT}/vtt/index.html`;
+  try {
+    const parsed = new URL(targetUrl);
+    if (parsed.protocol === 'http:' || parsed.protocol === 'https:') {
+      return shell.openExternal(targetUrl);
+    }
+    console.warn(`[Security] Blocked non-http external URL protocol in open-vtt-browser: ${targetUrl}`);
+    return Promise.reject(new Error('Invalid URL protocol: only http: and https: permitted'));
+  } catch (err) {
+    console.warn(`[Security] Malformed external URL in open-vtt-browser: ${targetUrl}`);
+    return Promise.reject(new Error('Malformed URL', { cause: err }));
+  }
+});
 ipcMain.handle('open-data-folder', () => shell.openPath(appConfig.campaignDataDir));
 ipcMain.handle('open-backups-folder', () => shell.openPath(appConfig.backupsDir));
 
@@ -622,6 +770,7 @@ ipcMain.handle('select-data-folder', async () => {
       } catch (err) {
         appendLog(`[Data Migration Error] ${err.message}`);
         await dialog.showErrorBox('Import Error', `Failed to copy data: ${err.message}`);
+        return { success: false, error: `Failed to copy data: ${err.message}` };
       }
     }
   }
@@ -667,7 +816,123 @@ ipcMain.handle('select-backups-folder', async () => {
   return { success: true, path: newDir };
 });
 
-// Backup Campaign to Backups Folder
+// Helper to restore campaigns and assets from backup archive or json
+async function restoreBackupFromFile(targetFile) {
+  if (!fs.existsSync(targetFile)) return { success: false, error: 'Backup file not found' };
+
+  const ext = path.extname(targetFile).toLowerCase();
+  const tempDir = path.join(app.getPath('temp'), `forge-backup-imp-${Date.now()}`);
+  fs.mkdirSync(tempDir, { recursive: true });
+
+  try {
+    let manifest = null;
+    let assetsDir = null;
+
+    if (ext === '.zip') {
+      unpackZipArchive(targetFile, tempDir);
+      const manifestPath = path.join(tempDir, 'manifest.json');
+      if (!fs.existsSync(manifestPath)) {
+        return { success: false, error: 'Invalid ZIP archive: manifest.json not found inside package.' };
+      }
+      manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+      assetsDir = path.join(tempDir, 'assets');
+    } else {
+      manifest = JSON.parse(fs.readFileSync(targetFile, 'utf8'));
+    }
+
+    // Determine campaigns from manifest
+    let campaignsToRestore = {};
+    if (manifest.campaigns && typeof manifest.campaigns === 'object') {
+      campaignsToRestore = manifest.campaigns;
+    } else if (manifest.type === 'campaign' && manifest.campaign) {
+      campaignsToRestore = { [manifest.campaign.id]: manifest.campaign };
+    } else if (manifest.id && manifest.name) {
+      campaignsToRestore = { [manifest.id]: manifest };
+    } else if (typeof manifest === 'object' && Object.values(manifest).every(c => c && typeof c === 'object' && (c.id || c.name))) {
+      campaignsToRestore = manifest;
+    }
+
+    const campaignEntries = Object.entries(campaignsToRestore);
+    if (campaignEntries.length === 0) {
+      return { success: false, error: 'Invalid backup format: no campaign data found.' };
+    }
+
+    // Unpack assets if present
+    if (assetsDir && fs.existsSync(assetsDir)) {
+      const globalUploads = path.join(appConfig.campaignDataDir, 'uploads');
+      if (!fs.existsSync(globalUploads)) fs.mkdirSync(globalUploads, { recursive: true });
+      try {
+        fs.cpSync(assetsDir, globalUploads, { recursive: true });
+      } catch (e) {
+        throw new Error(`Failed restoring assets to global uploads: ${e.message}`, { cause: e });
+      }
+    }
+
+    // Load existing campaigns
+    const campFile = path.join(appConfig.campaignDataDir, 'campaigns.json');
+    let existingCampaigns = {};
+    if (fs.existsSync(campFile)) {
+      try {
+        existingCampaigns = JSON.parse(fs.readFileSync(campFile, 'utf8'));
+      } catch (e) {
+        existingCampaigns = {};
+      }
+    }
+
+    let restoredCount = 0;
+    let firstRestoredCampaign = null;
+
+    for (const [origId, campData] of campaignEntries) {
+      if (!campData || !campData.name) continue;
+
+      let targetId = origId || campData.id;
+      let targetName = campData.name;
+
+      if (!targetId || existingCampaigns[targetId]) {
+        targetId = `${(campData.name || 'camp').toLowerCase().replace(/[^a-z0-9]/gi, '_')}_restored_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+        targetName = `${campData.name} (Restored)`;
+      }
+
+      const mergedCamp = {
+        ...campData,
+        id: targetId,
+        name: targetName
+      };
+
+      existingCampaigns[targetId] = mergedCamp;
+      restoredCount++;
+      if (!firstRestoredCampaign) firstRestoredCampaign = mergedCamp;
+
+      // Also unpack assets into per-campaign uploads if assets exist
+      if (assetsDir && fs.existsSync(assetsDir)) {
+        unpackAssetsToCampaign(assetsDir, targetId, true);
+      }
+    }
+
+    // Save updated campaigns.json
+    fs.writeFileSync(campFile, JSON.stringify(existingCampaigns, null, 2), 'utf8');
+
+    // Notify server to re-read or sync database
+    try {
+      await fetch(`http://127.0.0.1:${DEFAULT_PORT}/api/server/data-dir`, {
+        method: 'POST',
+        headers: internalHeaders({ 'Content-Type': 'application/json' }),
+        body: JSON.stringify({ dataDir: appConfig.campaignDataDir })
+      });
+    } catch (e) {}
+
+    appendLog(`[Restore] Successfully restored ${restoredCount} campaign(s) and assets from ${targetFile}`);
+    notifyStatusChange();
+    return { success: true, count: restoredCount, campaign: firstRestoredCampaign, path: targetFile };
+  } catch (err) {
+    appendLog(`[Restore Error] Failed restoring backup: ${err.message}`);
+    return { success: false, error: err.message };
+  } finally {
+    try { fs.rmSync(tempDir, { recursive: true, force: true }); } catch (e) {}
+  }
+}
+
+// Backup All Campaigns and Uploads to Backups Folder
 ipcMain.handle('backup-campaign', async () => {
   if (!mainWindow) return { success: false };
 
@@ -675,29 +940,119 @@ ipcMain.handle('backup-campaign', async () => {
     fs.mkdirSync(appConfig.backupsDir, { recursive: true });
   }
 
-  const defaultFileName = `ForgeDVTT-Backup-${new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19)}.json`;
+  const campaignsFile = path.join(appConfig.campaignDataDir, 'campaigns.json');
+  if (!fs.existsSync(campaignsFile)) {
+    return { success: false, error: 'No campaign file found in active data folder to backup.' };
+  }
+
+  let campaignsData = {};
+  try {
+    campaignsData = JSON.parse(fs.readFileSync(campaignsFile, 'utf8'));
+  } catch (err) {
+    return { success: false, error: `Failed to read campaigns file: ${err.message}` };
+  }
+
+  const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
+  const defaultFileName = `ForgeDVTT-Backup-${timestamp}.zip`;
   const defaultFilePath = path.join(appConfig.backupsDir, defaultFileName);
 
   const { filePath, canceled } = await dialog.showSaveDialog(mainWindow, {
-    title: 'Backup Campaign Data',
+    title: 'Backup Campaign Data and Uploads',
     defaultPath: defaultFilePath,
-    filters: [{ name: 'JSON Files', extensions: ['json'] }]
+    filters: [
+      { name: 'ForgeDVTT Full Backup Archive (*.zip)', extensions: ['zip'] },
+      { name: 'ForgeDVTT Campaign Data Only - No Uploads (*.json)', extensions: ['json'] },
+      { name: 'All Files', extensions: ['*'] }
+    ]
   });
 
   if (canceled || !filePath) return { success: false, canceled: true };
 
+  const isZip = filePath.toLowerCase().endsWith('.zip');
+  const tempDir = path.join(app.getPath('temp'), `forge-backup-exp-${Date.now()}`);
+  fs.mkdirSync(tempDir, { recursive: true });
+
   try {
-    const campaignsFile = path.join(appConfig.campaignDataDir, 'campaigns.json');
-    if (fs.existsSync(campaignsFile)) {
-      fs.copyFileSync(campaignsFile, filePath);
-      appendLog(`[Backup] Campaign data successfully exported to: ${filePath}`);
-      return { success: true, path: filePath };
+    const manifest = {
+      format: 'forgedvtt-backup',
+      version: 1,
+      type: isZip ? 'full-backup' : 'campaign-data-only',
+      exportedAt: new Date().toISOString(),
+      campaigns: campaignsData
+    };
+
+    if (isZip) {
+      fs.writeFileSync(path.join(tempDir, 'manifest.json'), JSON.stringify(manifest, null, 2), 'utf8');
+      const assetsDir = path.join(tempDir, 'assets');
+      fs.mkdirSync(assetsDir, { recursive: true });
+
+      // Collect global uploads
+      const globalUploadsDir = path.join(appConfig.campaignDataDir, 'uploads');
+      if (fs.existsSync(globalUploadsDir)) {
+        try {
+          fs.cpSync(globalUploadsDir, assetsDir, { recursive: true });
+        } catch (e) {
+          throw new Error(`Failed copying global uploads: ${e.message}`, { cause: e });
+        }
+      }
+
+      // Collect per-campaign uploads
+      const campRootDir = path.join(appConfig.campaignDataDir, 'campaigns');
+      if (fs.existsSync(campRootDir)) {
+        try {
+          const campFolders = fs.readdirSync(campRootDir);
+          for (const cFolder of campFolders) {
+            const cUploads = path.join(campRootDir, cFolder, 'uploads');
+            if (fs.existsSync(cUploads)) {
+              fs.cpSync(cUploads, assetsDir, { recursive: true });
+            }
+          }
+        } catch (e) {
+          throw new Error(`Failed copying campaign uploads: ${e.message}`, { cause: e });
+        }
+      }
+
+      // Collect any other referenced uploads
+      const referenced = findReferencedUploads(campaignsData);
+      if (referenced.length > 0) {
+        collectAssets(referenced, '', assetsDir, true);
+      }
+
+      packZipArchive(tempDir, filePath);
     } else {
-      return { success: false, error: 'No campaign file found in active data folder to backup.' };
+      fs.writeFileSync(filePath, JSON.stringify(manifest, null, 2), 'utf8');
     }
+
+    appendLog(`[Backup] ${isZip ? 'Full backup' : 'Campaign data (no uploads)'} successfully exported to: ${filePath}`);
+    return { success: true, path: filePath, isFullBackup: isZip };
   } catch (err) {
+    appendLog(`[Backup Error] Failed exporting backup: ${err.message}`);
     return { success: false, error: err.message };
+  } finally {
+    try { fs.rmSync(tempDir, { recursive: true, force: true }); } catch (e) {}
   }
+});
+
+// Restore Backup IPC
+ipcMain.handle('restore-backup', async (_, explicitFilePath) => {
+  let targetFile = explicitFilePath;
+  if (!targetFile) {
+    if (!mainWindow) return { canceled: true };
+    const { canceled, filePaths } = await dialog.showOpenDialog(mainWindow, {
+      title: 'Select ForgeDVTT Backup File (*.zip, *.json)',
+      defaultPath: appConfig.backupsDir,
+      filters: [
+        { name: 'ForgeDVTT Backup Archive (*.zip)', extensions: ['zip'] },
+        { name: 'ForgeDVTT Backup JSON (*.json)', extensions: ['json'] },
+        { name: 'All Files', extensions: ['*'] }
+      ],
+      properties: ['openFile']
+    });
+    if (canceled || !filePaths || filePaths.length === 0) return { canceled: true };
+    targetFile = filePaths[0];
+  }
+
+  return await restoreBackupFromFile(targetFile);
 });
 
 // GM Credentials IPC
@@ -733,7 +1088,7 @@ ipcMain.handle('set-gm-credentials', async (_, { username, password }) => {
   try {
     await fetch(`http://127.0.0.1:${DEFAULT_PORT}/api/server/sync-config`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: internalHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify({ gmCredentials: appConfig.gmCredentials })
     });
     appendLog(`[GM Security] Updated master GM credentials for username "${cleanUsername}".`);
@@ -746,7 +1101,9 @@ ipcMain.handle('set-gm-credentials', async (_, { username, password }) => {
 // Campaign Management IPC (for GM Dashboard)
 ipcMain.handle('gm-get-campaigns', async () => {
   try {
-    const res = await fetch(`http://127.0.0.1:${DEFAULT_PORT}/api/campaigns`);
+    const res = await fetch(`http://127.0.0.1:${DEFAULT_PORT}/api/campaigns`, {
+      headers: internalHeaders()
+    });
     if (res.ok) {
       const data = await res.json();
       return { success: true, campaigns: data.campaigns || [] };
@@ -775,7 +1132,9 @@ ipcMain.handle('gm-get-campaigns', async () => {
 
 ipcMain.handle('gm-get-campaign-details', async (_, campId) => {
   try {
-    const res = await fetch(`http://127.0.0.1:${DEFAULT_PORT}/api/campaigns/${campId}`);
+    const res = await fetch(`http://127.0.0.1:${DEFAULT_PORT}/api/campaigns/${campId}`, {
+      headers: internalHeaders()
+    });
     if (res.ok) {
       const data = await res.json();
       return { success: true, campaign: data };
@@ -799,7 +1158,7 @@ ipcMain.handle('gm-save-campaign', async (_, campaignData) => {
   try {
     const res = await fetch(`http://127.0.0.1:${DEFAULT_PORT}/api/campaigns/${campaignData.id}`, {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
+      headers: internalHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify(campaignData)
     });
     if (res.ok) {
@@ -817,7 +1176,7 @@ ipcMain.handle('gm-create-campaign', async (_, newCampData) => {
   try {
     const res = await fetch(`http://127.0.0.1:${DEFAULT_PORT}/api/campaigns`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: internalHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify(newCampData)
     });
     if (res.ok) {
@@ -834,7 +1193,8 @@ ipcMain.handle('gm-create-campaign', async (_, newCampData) => {
 ipcMain.handle('gm-delete-campaign', async (_, campId) => {
   try {
     const res = await fetch(`http://127.0.0.1:${DEFAULT_PORT}/api/campaigns/${campId}`, {
-      method: 'DELETE'
+      method: 'DELETE',
+      headers: internalHeaders()
     });
     if (res.ok) {
       return { success: true, deletedId: campId };
@@ -884,7 +1244,7 @@ function findReferencedUploads(dataObj) {
   return Array.from(fileNames);
 }
 
-function collectAssets(fileNames, campaignId, destAssetsDir) {
+function collectAssets(fileNames, campaignId, destAssetsDir, throwOnFailure = false) {
   const found = [];
   if (!fs.existsSync(destAssetsDir)) fs.mkdirSync(destAssetsDir, { recursive: true });
 
@@ -904,6 +1264,9 @@ function collectAssets(fileNames, campaignId, destAssetsDir) {
         fs.copyFileSync(srcFile, dest);
         found.push(fn);
       } catch (e) {
+        if (throwOnFailure) {
+          throw new Error(`Could not copy asset ${fn}: ${e.message}`, { cause: e });
+        }
         console.warn(`Could not copy asset ${fn}:`, e);
       }
     }
@@ -911,7 +1274,7 @@ function collectAssets(fileNames, campaignId, destAssetsDir) {
   return found;
 }
 
-function unpackAssetsToCampaign(extractedAssetsDir, targetCampaignId) {
+function unpackAssetsToCampaign(extractedAssetsDir, targetCampaignId, throwOnFailure = false) {
   if (!fs.existsSync(extractedAssetsDir)) return 0;
   const targetUploads = path.join(appConfig.campaignDataDir, 'campaigns', targetCampaignId, 'uploads');
   if (!fs.existsSync(targetUploads)) fs.mkdirSync(targetUploads, { recursive: true });
@@ -925,6 +1288,9 @@ function unpackAssetsToCampaign(extractedAssetsDir, targetCampaignId) {
       fs.copyFileSync(src, dst);
       count++;
     } catch (e) {
+      if (throwOnFailure) {
+        throw new Error(`Failed copying imported asset ${f}: ${e.message}`, { cause: e });
+      }
       console.warn(`Failed copying imported asset ${f}:`, e);
     }
   }
@@ -935,7 +1301,8 @@ function unpackAssetsToCampaign(extractedAssetsDir, targetCampaignId) {
 ipcMain.handle('gm-duplicate-campaign', async (_, campId) => {
   try {
     const res = await fetch(`http://127.0.0.1:${DEFAULT_PORT}/api/campaigns/${campId}/duplicate`, {
-      method: 'POST'
+      method: 'POST',
+      headers: internalHeaders()
     });
     if (res.ok) {
       const data = await res.json();
@@ -985,7 +1352,9 @@ ipcMain.handle('gm-export-campaign', async (_, campId) => {
   // 1. Fetch full campaign data
   let campaign = null;
   try {
-    const res = await fetch(`http://127.0.0.1:${DEFAULT_PORT}/api/campaigns/${campId}`);
+    const res = await fetch(`http://127.0.0.1:${DEFAULT_PORT}/api/campaigns/${campId}`, {
+      headers: internalHeaders()
+    });
     if (res.ok) campaign = await res.json();
   } catch (e) {}
 
@@ -1103,6 +1472,11 @@ ipcMain.handle('gm-import-campaign', async (_, explicitFilePath) => {
       manifest = JSON.parse(fs.readFileSync(targetFile, 'utf8'));
     }
 
+    // If target is a full backup archive, seamlessly restore it
+    if (manifest.type === 'full-backup' || manifest.format === 'forgedvtt-backup' || manifest.campaigns || (!manifest.campaign && !manifest.maps && Object.values(manifest).some(v => v && typeof v === 'object' && v.name))) {
+      return await restoreBackupFromFile(targetFile);
+    }
+
     const campData = manifest.campaign || (manifest.maps ? manifest : null);
     if (!campData || !campData.name) {
       return { success: false, error: 'Invalid campaign format: missing campaign data.' };
@@ -1124,7 +1498,7 @@ ipcMain.handle('gm-import-campaign', async (_, explicitFilePath) => {
     try {
       const res = await fetch(`http://127.0.0.1:${DEFAULT_PORT}/api/campaigns/import`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: internalHeaders({ 'Content-Type': 'application/json' }),
         body: JSON.stringify({ campaign: newCamp })
       });
       if (res.ok) saved = true;
@@ -1156,7 +1530,9 @@ ipcMain.handle('gm-export-granular', async (_, { campaignId, entityType, entityI
 
   let campaign = null;
   try {
-    const res = await fetch(`http://127.0.0.1:${DEFAULT_PORT}/api/campaigns/${campaignId}`);
+    const res = await fetch(`http://127.0.0.1:${DEFAULT_PORT}/api/campaigns/${campaignId}`, {
+      headers: internalHeaders()
+    });
     if (res.ok) campaign = await res.json();
   } catch (e) {}
 
@@ -1343,7 +1719,7 @@ ipcMain.handle('gm-import-granular', async (_, { campaignId, explicitFilePath })
     try {
       const res = await fetch(`http://127.0.0.1:${DEFAULT_PORT}/api/campaigns/${campaignId}/import-entity`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: internalHeaders({ 'Content-Type': 'application/json' }),
         body: JSON.stringify({ entityType, entities: items })
       });
       if (res.ok) resData = await res.json();
@@ -1607,8 +1983,9 @@ ipcMain.handle('sources-reset-campaign', async (_, campaignId) => {
   return result;
 });
 
-ipcMain.handle('sources-import-from-url', async (_, { url }) => {
-  const res = await sourceManager.importFromUrl(url);
+ipcMain.handle('sources-import-from-url', async (_, payload) => {
+  const { url, ...metadata } = payload || {};
+  const res = await sourceManager.importFromUrl(url, metadata);
   if (res && res.success) {
     await syncSourcesToServer();
     appendLog(`[Sources] Successfully imported sourcebook from URL: ${url}`);
@@ -1650,10 +2027,15 @@ app.whenReady().then(async () => {
   });
 });
 
-app.on('before-quit', () => {
+let isGracefulQuitDone = false;
+app.on('before-quit', async (e) => {
+  if (isGracefulQuitDone) return;
+  e.preventDefault();
   app.isQuitting = true;
   stopTunnel();
-  stopServer();
+  await stopServer();
+  isGracefulQuitDone = true;
+  app.quit();
 });
 
 app.on('window-all-closed', (e) => {

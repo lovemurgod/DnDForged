@@ -6,6 +6,24 @@
     <title>ForgeD VTT — Tabletop Freedom | Self-Hosted VTT & 5e Manual</title>
     <meta name="description" content="ForgeD VTT is a lightweight, high-performance self-hosted Virtual Tabletop for D&D 5e with 3D physics dice, dynamic fog of war, and zero-config multiplayer.">
 
+    <script>
+        // Emergency Service Worker & Cache Storage Purge
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.getRegistrations().then(registrations => {
+                for (const registration of registrations) {
+                    registration.unregister();
+                }
+            });
+        }
+        if ('caches' in window) {
+            caches.keys().then(keys => {
+                for (const key of keys) {
+                    caches.delete(key);
+                }
+            });
+        }
+    </script>
+
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

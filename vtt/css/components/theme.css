@@ -1,0 +1,371 @@
+/* ForgeD VTT Premium Design Style Sheet */
+
+/* Design Tokens & Theme Variables */
+:root {
+    --font-primary: 'Open Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-heading: 'Open Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    --font-code: 'Consolas', 'Courier New', monospace;
+
+    /* Theme Colors (Curated HSL values for premium visual aesthetics) */
+    --color-bg-base: HSL(220, 25%, 7%);
+    --color-bg-card: HSL(220, 20%, 12%);
+    --color-bg-glass: rgba(18, 22, 33, 0.65);
+    
+    --color-border-subtle: rgba(255, 255, 255, 0.08);
+    --color-border-glow: rgba(212, 175, 55, 0.15);
+    --color-border-active: HSL(43, 65%, 52%);
+
+    --color-text-primary: HSL(210, 25%, 90%);
+    --color-text-secondary: HSL(210, 15%, 65%);
+    --color-text-muted: HSL(210, 10%, 45%);
+
+    --color-gold-light: HSL(43, 85%, 65%);
+    --color-gold-base: HSL(43, 65%, 52%);
+    --color-gold-dark: HSL(36, 65%, 40%);
+
+    --color-danger-base: HSL(354, 70%, 54%);
+    --color-danger-glow: rgba(220, 53, 69, 0.25);
+    --color-success-base: HSL(145, 63%, 42%);
+    --color-success-glow: rgba(40, 167, 69, 0.25);
+    --color-temphp-base: HSL(215, 90%, 55%);
+    --color-temphp-glow: rgba(33, 150, 243, 0.3);
+
+    --vtt-font-scale: 1;
+
+    --glass-blur: blur(12px);
+    --shadow-premium: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    --sidebar-width: 380px;
+}
+
+/* Global Font & UI Typography Scaling */
+html {
+    font-size: calc(15px * var(--vtt-font-scale, 1)) !important;
+}
+
+.token-name-tag {
+    font-size: calc(18px * var(--vtt-font-scale, 1)) !important;
+}
+
+.token-hp-number {
+    font-size: calc(15px * var(--vtt-font-scale, 1)) !important;
+}
+
+/* ==========================================================================
+   ForgeD VTT Thematic Presets (11 Distinct Atmospheric Overhauls)
+   ========================================================================== */
+
+/* 1. Classic Forge (Default Fallback) */
+[data-theme="classic"] {
+    --color-bg-base: HSL(220, 25%, 7%);
+    --color-bg-card: HSL(220, 20%, 12%);
+    --color-bg-glass: rgba(18, 22, 33, 0.72);
+    --color-border-subtle: rgba(255, 255, 255, 0.08);
+    --color-border-glow: rgba(212, 175, 55, 0.2);
+    --color-border-active: HSL(43, 65%, 52%);
+    --color-text-primary: HSL(210, 25%, 90%);
+    --color-text-secondary: HSL(210, 15%, 65%);
+    --color-text-muted: HSL(210, 10%, 45%);
+    --color-gold-light: HSL(43, 85%, 65%);
+    --color-gold-base: HSL(43, 65%, 52%);
+    --color-gold-dark: HSL(36, 65%, 40%);
+    --font-heading: 'Open Sans', 'Segoe UI', Roboto, sans-serif;
+    --theme-ambient-glow: radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.08) 0%, transparent 70%);
+}
+
+/* 2. Jungle Canopy */
+[data-theme="jungle"] {
+    --color-bg-base: HSL(145, 35%, 6%);
+    --color-bg-card: HSL(142, 28%, 10%);
+    --color-bg-glass: rgba(10, 22, 14, 0.75);
+    --color-border-subtle: rgba(72, 187, 120, 0.12);
+    --color-border-glow: rgba(0, 230, 118, 0.25);
+    --color-border-active: HSL(150, 85%, 45%);
+    --color-text-primary: HSL(140, 25%, 92%);
+    --color-text-secondary: HSL(140, 18%, 70%);
+    --color-text-muted: HSL(140, 12%, 48%);
+    --color-gold-light: HSL(148, 80%, 65%);
+    --color-gold-base: HSL(150, 85%, 45%);
+    --color-gold-dark: HSL(152, 90%, 30%);
+    --font-heading: 'MedievalSharp', cursive, serif;
+    --theme-ambient-glow: radial-gradient(circle at 50% 0%, rgba(0, 230, 118, 0.1) 0%, transparent 70%);
+}
+
+/* 3. Gothic Cathedral */
+[data-theme="gothic"] {
+    --color-bg-base: HSL(270, 12%, 6%);
+    --color-bg-card: HSL(265, 14%, 10%);
+    --color-bg-glass: rgba(18, 14, 24, 0.78);
+    --color-border-subtle: rgba(229, 57, 53, 0.15);
+    --color-border-glow: rgba(229, 57, 53, 0.3);
+    --color-border-active: HSL(354, 75%, 52%);
+    --color-text-primary: HSL(260, 20%, 92%);
+    --color-text-secondary: HSL(260, 12%, 68%);
+    --color-text-muted: HSL(260, 10%, 45%);
+    --color-gold-light: HSL(355, 85%, 65%);
+    --color-gold-base: HSL(354, 75%, 52%);
+    --color-gold-dark: HSL(350, 80%, 35%);
+    --font-heading: 'Cinzel Decorative', 'Cinzel', serif;
+    letter-spacing: 0.02em;
+    --theme-ambient-glow: radial-gradient(circle at 50% 0%, rgba(229, 57, 53, 0.12) 0%, transparent 70%);
+}
+
+/* 4. Celestial Astral */
+[data-theme="celestial"] {
+    --color-bg-base: HSL(232, 40%, 6%);
+    --color-bg-card: HSL(230, 35%, 11%);
+    --color-bg-glass: rgba(11, 16, 36, 0.76);
+    --color-border-subtle: rgba(0, 229, 255, 0.15);
+    --color-border-glow: rgba(0, 229, 255, 0.3);
+    --color-border-active: HSL(188, 95%, 55%);
+    --color-text-primary: HSL(210, 35%, 94%);
+    --color-text-secondary: HSL(210, 25%, 72%);
+    --color-text-muted: HSL(210, 18%, 50%);
+    --color-gold-light: HSL(188, 95%, 70%);
+    --color-gold-base: HSL(188, 95%, 55%);
+    --color-gold-dark: HSL(192, 100%, 38%);
+    --font-heading: 'Orbitron', 'Cinzel', sans-serif;
+    --theme-ambient-glow: radial-gradient(circle at 50% 0%, rgba(0, 229, 255, 0.12) 0%, transparent 70%);
+}
+
+/* 5. Hellscape Brimstone */
+[data-theme="hellscape"] {
+    --color-bg-base: HSL(14, 30%, 5%);
+    --color-bg-card: HSL(15, 28%, 10%);
+    --color-bg-glass: rgba(28, 14, 10, 0.78);
+    --color-border-subtle: rgba(255, 87, 34, 0.18);
+    --color-border-glow: rgba(255, 87, 34, 0.35);
+    --color-border-active: HSL(14, 95%, 52%);
+    --color-text-primary: HSL(20, 30%, 93%);
+    --color-text-secondary: HSL(20, 20%, 70%);
+    --color-text-muted: HSL(20, 12%, 48%);
+    --color-gold-light: HSL(25, 95%, 62%);
+    --color-gold-base: HSL(14, 95%, 52%);
+    --color-gold-dark: HSL(8, 90%, 36%);
+    --font-heading: 'Rye', cursive, serif;
+    --theme-ambient-glow: radial-gradient(circle at 50% 0%, rgba(255, 87, 34, 0.15) 0%, transparent 70%);
+}
+
+/* 6. Cyberpunk Arcane */
+[data-theme="cyberpunk"] {
+    --color-bg-base: HSL(265, 45%, 6%);
+    --color-bg-card: HSL(265, 38%, 11%);
+    --color-bg-glass: rgba(18, 10, 35, 0.8);
+    --color-border-subtle: rgba(255, 0, 127, 0.2);
+    --color-border-glow: rgba(0, 240, 255, 0.35);
+    --color-border-active: HSL(330, 100%, 55%);
+    --color-text-primary: HSL(180, 40%, 95%);
+    --color-text-secondary: HSL(310, 25%, 72%);
+    --color-text-muted: HSL(270, 15%, 50%);
+    --color-gold-light: HSL(330, 100%, 68%);
+    --color-gold-base: HSL(330, 100%, 55%);
+    --color-gold-dark: HSL(330, 100%, 38%);
+    --font-heading: 'Rajdhani', sans-serif;
+    --theme-ambient-glow: radial-gradient(circle at 50% 0%, rgba(255, 0, 127, 0.15) 0%, transparent 70%);
+}
+
+/* 7. Vintage Tome / Parchment */
+[data-theme="parchment"] {
+    --color-bg-base: HSL(32, 24%, 8%);
+    --color-bg-card: HSL(32, 22%, 13%);
+    --color-bg-glass: rgba(30, 23, 16, 0.78);
+    --color-border-subtle: rgba(212, 175, 55, 0.15);
+    --color-border-glow: rgba(180, 140, 80, 0.25);
+    --color-border-active: HSL(38, 55%, 50%);
+    --color-text-primary: HSL(36, 30%, 90%);
+    --color-text-secondary: HSL(36, 20%, 70%);
+    --color-text-muted: HSL(36, 12%, 48%);
+    --color-gold-light: HSL(40, 65%, 62%);
+    --color-gold-base: HSL(38, 55%, 50%);
+    --color-gold-dark: HSL(32, 55%, 34%);
+    --font-heading: 'Alegreya', 'Cinzel', serif;
+    --theme-ambient-glow: radial-gradient(circle at 50% 0%, rgba(180, 140, 80, 0.1) 0%, transparent 70%);
+}
+
+/* 8. Abyssal Depths */
+[data-theme="abyssal"] {
+    --color-bg-base: HSL(205, 50%, 5%);
+    --color-bg-card: HSL(204, 42%, 9%);
+    --color-bg-glass: rgba(7, 22, 33, 0.78);
+    --color-border-subtle: rgba(0, 180, 216, 0.15);
+    --color-border-glow: rgba(0, 180, 216, 0.3);
+    --color-border-active: HSL(190, 85%, 48%);
+    --color-text-primary: HSL(195, 35%, 93%);
+    --color-text-secondary: HSL(195, 22%, 70%);
+    --color-text-muted: HSL(195, 15%, 48%);
+    --color-gold-light: HSL(190, 85%, 65%);
+    --color-gold-base: HSL(190, 85%, 48%);
+    --color-gold-dark: HSL(194, 90%, 32%);
+    --font-heading: 'Syne', 'Cinzel', sans-serif;
+    --theme-ambient-glow: radial-gradient(circle at 50% 0%, rgba(0, 180, 216, 0.12) 0%, transparent 70%);
+}
+
+/* 9. Feywild Enclave */
+[data-theme="feywild"] {
+    --color-bg-base: HSL(275, 40%, 6%);
+    --color-bg-card: HSL(274, 32%, 11%);
+    --color-bg-glass: rgba(24, 12, 38, 0.76);
+    --color-border-subtle: rgba(240, 98, 146, 0.18);
+    --color-border-glow: rgba(240, 98, 146, 0.35);
+    --color-border-active: HSL(335, 80%, 62%);
+    --color-text-primary: HSL(280, 30%, 94%);
+    --color-text-secondary: HSL(280, 20%, 72%);
+    --color-text-muted: HSL(280, 14%, 50%);
+    --color-gold-light: HSL(335, 85%, 72%);
+    --color-gold-base: HSL(335, 80%, 62%);
+    --color-gold-dark: HSL(330, 75%, 42%);
+    --font-heading: 'Cinzel', serif;
+    --theme-ambient-glow: radial-gradient(circle at 50% 0%, rgba(240, 98, 146, 0.12) 0%, transparent 70%);
+}
+
+/* 10. Frostpeak Tundra */
+[data-theme="frostpeak"] {
+    --color-bg-base: HSL(210, 35%, 6%);
+    --color-bg-card: HSL(208, 30%, 11%);
+    --color-bg-glass: rgba(12, 24, 36, 0.76);
+    --color-border-subtle: rgba(72, 202, 228, 0.16);
+    --color-border-glow: rgba(72, 202, 228, 0.32);
+    --color-border-active: HSL(192, 80%, 54%);
+    --color-text-primary: HSL(200, 30%, 94%);
+    --color-text-secondary: HSL(200, 20%, 72%);
+    --color-text-muted: HSL(200, 12%, 50%);
+    --color-gold-light: HSL(192, 85%, 68%);
+    --color-gold-base: HSL(192, 80%, 54%);
+    --color-gold-dark: HSL(196, 85%, 36%);
+    --font-heading: 'Exo 2', sans-serif;
+    --theme-ambient-glow: radial-gradient(circle at 50% 0%, rgba(72, 202, 228, 0.12) 0%, transparent 70%);
+}
+
+/* 11. Solaris Citadel */
+[data-theme="solaris"] {
+    --color-bg-base: HSL(38, 45%, 6%);
+    --color-bg-card: HSL(36, 38%, 10%);
+    --color-bg-glass: rgba(32, 22, 8, 0.78);
+    --color-border-subtle: rgba(255, 183, 3, 0.18);
+    --color-border-glow: rgba(255, 183, 3, 0.35);
+    --color-border-active: HSL(42, 95%, 50%);
+    --color-text-primary: HSL(45, 35%, 94%);
+    --color-text-secondary: HSL(45, 22%, 72%);
+    --color-text-muted: HSL(45, 14%, 50%);
+    --color-gold-light: HSL(46, 95%, 64%);
+    --color-gold-base: HSL(42, 95%, 50%);
+    --color-gold-dark: HSL(36, 90%, 35%);
+    --font-heading: 'Cinzel', serif;
+    --theme-ambient-glow: radial-gradient(circle at 50% 0%, rgba(255, 183, 3, 0.15) 0%, transparent 70%);
+}
+
+/* ==========================================================================
+   Colorblind Accessibility Modes (Okabe-Ito / CUD Calibrated Layers)
+   ========================================================================== */
+
+/* Protanopia (Red-Blind / Weak) */
+[data-colorblind="protanopia"] {
+    --color-success-base: #0072b2;
+    --color-success-glow: rgba(0, 114, 178, 0.3);
+    --color-temphp-base: #009e73;
+    --color-temphp-glow: rgba(0, 158, 115, 0.3);
+    --color-gold-base: #f0e442;
+    --color-gold-light: #fdf67a;
+    --color-danger-base: #d55e00;
+    --color-danger-glow: rgba(213, 94, 0, 0.3);
+}
+[data-colorblind="protanopia"] .init-hp-fill,
+[data-colorblind="protanopia"] .cs-hp-bar-fill:not(.cs-temp-hp-bar-fill),
+[data-colorblind="protanopia"] .hp-bar-fill,
+[data-colorblind="protanopia"] .token-hp-bar-fill {
+    background-image: repeating-linear-gradient(45deg, transparent, transparent 4px, rgba(255, 255, 255, 0.22) 4px, rgba(255, 255, 255, 0.22) 8px) !important;
+}
+[data-colorblind="protanopia"] .token-temp-hp-fill,
+[data-colorblind="protanopia"] #pc-temp-hp-bar,
+[data-colorblind="protanopia"] .cs-temp-hp-bar-fill,
+[data-colorblind="protanopia"] .temp-hp-bar-fill {
+    background-color: var(--color-temphp-base, #009e73) !important;
+    background-image: repeating-linear-gradient(-45deg, transparent, transparent 4px, rgba(255, 255, 255, 0.35) 4px, rgba(255, 255, 255, 0.35) 8px) !important;
+}
+
+/* Deuteranopia (Green-Blind / Weak) */
+[data-colorblind="deuteranopia"] {
+    --color-success-base: #56b4e9;
+    --color-success-glow: rgba(86, 180, 233, 0.3);
+    --color-temphp-base: #0072b2;
+    --color-temphp-glow: rgba(0, 114, 178, 0.3);
+    --color-gold-base: #e69f00;
+    --color-gold-light: #f5b938;
+    --color-danger-base: #d55e00;
+    --color-danger-glow: rgba(213, 94, 0, 0.3);
+}
+[data-colorblind="deuteranopia"] .init-hp-fill,
+[data-colorblind="deuteranopia"] .cs-hp-bar-fill:not(.cs-temp-hp-bar-fill),
+[data-colorblind="deuteranopia"] .hp-bar-fill,
+[data-colorblind="deuteranopia"] .token-hp-bar-fill {
+    background-image: repeating-linear-gradient(-45deg, transparent, transparent 5px, rgba(0, 0, 0, 0.25) 5px, rgba(0, 0, 0, 0.25) 10px) !important;
+}
+[data-colorblind="deuteranopia"] .token-temp-hp-fill,
+[data-colorblind="deuteranopia"] #pc-temp-hp-bar,
+[data-colorblind="deuteranopia"] .cs-temp-hp-bar-fill,
+[data-colorblind="deuteranopia"] .temp-hp-bar-fill {
+    background-color: var(--color-temphp-base, #0072b2) !important;
+    background-image: repeating-linear-gradient(45deg, transparent, transparent 4px, rgba(255, 255, 255, 0.35) 4px, rgba(255, 255, 255, 0.35) 8px) !important;
+}
+
+/* Tritanopia (Blue-Blind / Weak) */
+[data-colorblind="tritanopia"] {
+    --color-success-base: #009e73;
+    --color-success-glow: rgba(0, 158, 115, 0.3);
+    --color-temphp-base: #0072b2;
+    --color-temphp-glow: rgba(0, 114, 178, 0.3);
+    --color-gold-base: #e69f00;
+    --color-gold-light: #f5b938;
+    --color-danger-base: #cc79a7;
+    --color-danger-glow: rgba(204, 121, 167, 0.3);
+}
+[data-colorblind="tritanopia"] .init-hp-fill,
+[data-colorblind="tritanopia"] .cs-hp-bar-fill:not(.cs-temp-hp-bar-fill),
+[data-colorblind="tritanopia"] .hp-bar-fill,
+[data-colorblind="tritanopia"] .token-hp-bar-fill {
+    background-image: repeating-linear-gradient(90deg, transparent, transparent 4px, rgba(255, 255, 255, 0.2) 4px, rgba(255, 255, 255, 0.2) 8px) !important;
+}
+[data-colorblind="tritanopia"] .token-temp-hp-fill,
+[data-colorblind="tritanopia"] #pc-temp-hp-bar,
+[data-colorblind="tritanopia"] .cs-temp-hp-bar-fill,
+[data-colorblind="tritanopia"] .temp-hp-bar-fill {
+    background-color: var(--color-temphp-base, #0072b2) !important;
+    background-image: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(255, 255, 255, 0.35) 3px, rgba(255, 255, 255, 0.35) 6px) !important;
+}
+
+/* Achromatopsia / High Contrast (Monochromacy) */
+[data-colorblind="achromatopsia"] {
+    --color-success-base: #ffffff;
+    --color-success-glow: rgba(255, 255, 255, 0.4);
+    --color-temphp-base: #78909c;
+    --color-temphp-glow: rgba(120, 144, 156, 0.4);
+    --color-gold-base: #9e9e9e;
+    --color-gold-light: #d0d0d0;
+    --color-danger-base: #333333;
+    --color-danger-glow: rgba(0, 0, 0, 0.6);
+}
+[data-colorblind="achromatopsia"] .init-hp-fill,
+[data-colorblind="achromatopsia"] .cs-hp-bar-fill:not(.cs-temp-hp-bar-fill),
+[data-colorblind="achromatopsia"] .hp-bar-fill,
+[data-colorblind="achromatopsia"] .token-hp-bar-fill {
+    border: 1px solid #ffffff !important;
+    background-image: repeating-linear-gradient(45deg, transparent, transparent 3px, rgba(255, 255, 255, 0.35) 3px, rgba(255, 255, 255, 0.35) 6px) !important;
+}
+[data-colorblind="achromatopsia"] .token-temp-hp-fill,
+[data-colorblind="achromatopsia"] #pc-temp-hp-bar,
+[data-colorblind="achromatopsia"] .cs-temp-hp-bar-fill,
+[data-colorblind="achromatopsia"] .temp-hp-bar-fill {
+    border: 1px dashed #ffffff !important;
+    background-color: var(--color-temphp-base, #78909c) !important;
+    background-image: repeating-linear-gradient(-45deg, transparent, transparent 3px, rgba(255, 255, 255, 0.45) 3px, rgba(255, 255, 255, 0.45) 6px) !important;
+}
+
+/* Hide specific legacy 5etools header/footer elements that block the screen */
+.page__header,
+.home__stripe-header,
+footer.container,
+.cancer__footer-pad,
+.ve-mobile-sm__hidden {
+    display: none !important;
+}

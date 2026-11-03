@@ -9,9 +9,10 @@ const rootDir = path.join(__dirname, '..');
 
 const isSrdOnly = process.argv.includes('--srd-only');
 const outArgIdx = process.argv.indexOf('--out');
-const targetDataDir = outArgIdx !== -1 && process.argv[outArgIdx + 1]
-    ? path.resolve(rootDir, process.argv[outArgIdx + 1])
-    : path.join(rootDir, '5etools-src', 'data');
+const targetDataDir =
+    outArgIdx !== -1 && process.argv[outArgIdx + 1]
+        ? path.resolve(rootDir, process.argv[outArgIdx + 1])
+        : path.join(rootDir, '5etools-src', 'data');
 
 const dataDir = path.join(rootDir, '5etools-src', 'data');
 const itemsFile = path.join(dataDir, 'items.json');
@@ -23,64 +24,67 @@ const catalogPath = path.join(targetDataDir, 'items-catalog.json');
 const partitionsDir = path.join(targetDataDir, 'items-normalized');
 
 const ITEM_TYPE_MAP = {
-    'M': 'Melee Weapon',
-    'R': 'Ranged Weapon',
-    'LA': 'Light Armor',
-    'MA': 'Medium Armor',
-    'HA': 'Heavy Armor',
-    'S': 'Shield',
-    'W': 'Wondrous Item',
-    'P': 'Potion',
-    'SC': 'Scroll',
-    'RG': 'Ring',
-    'RD': 'Rod',
-    'WD': 'Wand',
-    'ST': 'Staff',
-    'A': 'Ammunition',
-    'EXP': 'Explosive',
-    'G': 'Adventuring Gear',
-    'T': 'Tool',
-    'AT': 'Artisan Tool',
-    'GS': 'Gaming Set',
-    'INS': 'Musical Instrument',
-    'TAH': 'Tack and Harness',
-    'TG': 'Trade Good',
-    'OTH': 'Other'
+    M: 'Melee Weapon',
+    R: 'Ranged Weapon',
+    LA: 'Light Armor',
+    MA: 'Medium Armor',
+    HA: 'Heavy Armor',
+    S: 'Shield',
+    W: 'Wondrous Item',
+    P: 'Potion',
+    SC: 'Scroll',
+    RG: 'Ring',
+    RD: 'Rod',
+    WD: 'Wand',
+    ST: 'Staff',
+    A: 'Ammunition',
+    EXP: 'Explosive',
+    G: 'Adventuring Gear',
+    T: 'Tool',
+    AT: 'Artisan Tool',
+    GS: 'Gaming Set',
+    INS: 'Musical Instrument',
+    TAH: 'Tack and Harness',
+    TG: 'Trade Good',
+    OTH: 'Other'
 };
 
 const PROPERTY_MAP = {
-    'A': 'Ammunition',
-    'F': 'Finesse',
-    'H': 'Heavy',
-    'L': 'Light',
-    'LD': 'Loading',
-    'R': 'Reach',
-    'T': 'Thrown',
+    A: 'Ammunition',
+    F: 'Finesse',
+    H: 'Heavy',
+    L: 'Light',
+    LD: 'Loading',
+    R: 'Reach',
+    T: 'Thrown',
     '2H': 'Two-Handed',
-    'V': 'Versatile',
-    'S': 'Special'
+    V: 'Versatile',
+    S: 'Special'
 };
 
 const DMG_TYPE_MAP = {
-    'S': 'slashing',
-    'P': 'piercing',
-    'B': 'bludgeoning',
-    'C': 'cold',
-    'F': 'fire',
-    'L': 'lightning',
-    'T': 'thunder',
-    'A': 'acid',
-    'I': 'poison',
-    'N': 'necrotic',
-    'R': 'radiant',
-    'O': 'force',
-    'Y': 'psychic'
+    S: 'slashing',
+    P: 'piercing',
+    B: 'bludgeoning',
+    C: 'cold',
+    F: 'fire',
+    L: 'lightning',
+    T: 'thunder',
+    A: 'acid',
+    I: 'poison',
+    N: 'necrotic',
+    R: 'radiant',
+    O: 'force',
+    Y: 'psychic'
 };
 
 function cleanTags(text) {
     if (!text || typeof text !== 'string') return '';
     return text
-        .replace(/\{@(?:spell|item|creature|condition|sense|skill|action|background|race|class|feat|table|hazard)\s+([^}|]+)(?:\|[^}]*)?\}/gi, '$1')
+        .replace(
+            /\{@(?:spell|item|creature|condition|sense|skill|action|background|race|class|feat|table|hazard)\s+([^}|]+)(?:\|[^}]*)?\}/gi,
+            '$1'
+        )
         .replace(/\{@(?:dice|damage|d20)\s+([^}|]+)(?:\|[^}]*)?\}/gi, '$1')
         .replace(/\{@b\s+([^}]+)\}/gi, '**$1**')
         .replace(/\{@i\s+([^}]+)\}/gi, '*$1*')
@@ -95,7 +99,10 @@ function cleanTags(text) {
 function cleanTagsForHtml(text) {
     if (!text || typeof text !== 'string') return '';
     return text
-        .replace(/\{@(?:spell|item|creature|condition|sense|skill|action|background|race|class|feat|table|hazard)\s+([^}|]+)(?:\|[^}]*)?\}/gi, '$1')
+        .replace(
+            /\{@(?:spell|item|creature|condition|sense|skill|action|background|race|class|feat|table|hazard)\s+([^}|]+)(?:\|[^}]*)?\}/gi,
+            '$1'
+        )
         .replace(/\{@(?:dice|damage|d20)\s+([^}|]+)(?:\|[^}]*)?\}/gi, '$1')
         .replace(/\{@b\s+([^}]+)\}/gi, '<strong>$1</strong>')
         .replace(/\{@i\s+([^}]+)\}/gi, '<em>$1</em>')
@@ -119,17 +126,25 @@ function renderEntriesToHtml(entries) {
                 const subText = entry.entries ? renderEntriesToHtml(entry.entries) : '';
                 parts.push(`<div class="item-subentry">${title}${subText}</div>`);
             } else if (entry.type === 'list' && Array.isArray(entry.items)) {
-                const lis = entry.items.map(it => `<li>${typeof it === 'string' ? cleanTagsForHtml(it) : renderEntriesToHtml([it])}</li>`).join('');
+                const lis = entry.items
+                    .map(
+                        (it) => `<li>${typeof it === 'string' ? cleanTagsForHtml(it) : renderEntriesToHtml([it])}</li>`
+                    )
+                    .join('');
                 parts.push(`<ul>${lis}</ul>`);
             } else if (entry.type === 'table' && Array.isArray(entry.rows)) {
                 let ths = '';
                 if (Array.isArray(entry.colLabels)) {
-                    ths = `<tr>${entry.colLabels.map(l => `<th>${cleanTagsForHtml(l)}</th>`).join('')}</tr>`;
+                    ths = `<tr>${entry.colLabels.map((l) => `<th>${cleanTagsForHtml(l)}</th>`).join('')}</tr>`;
                 }
-                const trs = entry.rows.map(row => {
-                    const tds = Array.isArray(row) ? row.map(cell => `<td>${cleanTagsForHtml(cell)}</td>`).join('') : `<td>${cleanTagsForHtml(row)}</td>`;
-                    return `<tr>${tds}</tr>`;
-                }).join('');
+                const trs = entry.rows
+                    .map((row) => {
+                        const tds = Array.isArray(row)
+                            ? row.map((cell) => `<td>${cleanTagsForHtml(cell)}</td>`).join('')
+                            : `<td>${cleanTagsForHtml(row)}</td>`;
+                        return `<tr>${tds}</tr>`;
+                    })
+                    .join('');
                 parts.push(`<table class="item-table"><thead>${ths}</thead><tbody>${trs}</tbody></table>`);
             }
         }
@@ -149,18 +164,22 @@ function renderEntriesToMarkdown(entries) {
                 const subText = entry.entries ? renderEntriesToMarkdown(entry.entries) : '';
                 parts.push(`${title}${subText}`);
             } else if (entry.type === 'list' && Array.isArray(entry.items)) {
-                const lis = entry.items.map(it => `- ${typeof it === 'string' ? cleanTags(it) : renderEntriesToMarkdown([it])}`).join('\n');
+                const lis = entry.items
+                    .map((it) => `- ${typeof it === 'string' ? cleanTags(it) : renderEntriesToMarkdown([it])}`)
+                    .join('\n');
                 parts.push(lis);
             } else if (entry.type === 'table' && Array.isArray(entry.rows)) {
                 let tableMd = '';
                 if (Array.isArray(entry.colLabels)) {
-                    tableMd += '| ' + entry.colLabels.map(l => cleanTags(l)).join(' | ') + ' |\n';
+                    tableMd += '| ' + entry.colLabels.map((l) => cleanTags(l)).join(' | ') + ' |\n';
                     tableMd += '| ' + entry.colLabels.map(() => '---').join(' | ') + ' |\n';
                 }
-                tableMd += entry.rows.map(row => {
-                    const cells = Array.isArray(row) ? row.map(c => cleanTags(c)).join(' | ') : cleanTags(row);
-                    return '| ' + cells + ' |';
-                }).join('\n');
+                tableMd += entry.rows
+                    .map((row) => {
+                        const cells = Array.isArray(row) ? row.map((c) => cleanTags(c)).join(' | ') : cleanTags(row);
+                        return '| ' + cells + ' |';
+                    })
+                    .join('\n');
                 parts.push(tableMd);
             }
         }
@@ -189,7 +208,8 @@ function extractExtraDamage(entries, baseDmgType) {
     // "deals an extra {@damage 2d6} fire damage"
     // "takes an extra {@damage 2d10} radiant damage"
     // "deals an extra 3d6 damage of the weapon's type"
-    const regex = /([^.]+?(?:deals|takes)\s+(?:an\s+)?extra\s+(?:\{@damage\s+([^}|]+)(?:\|[^}]*)?\}|(\d+d\d+(?:\s*[+-]\s*\d+)?))\s+([a-zA-Z]+)?(?:\s+damage)?(?:[^.]*?\.)?)/gi;
+    const regex =
+        /([^.]+?(?:deals|takes)\s+(?:an\s+)?extra\s+(?:\{@damage\s+([^}|]+)(?:\|[^}]*)?\}|(\d+d\d+(?:\s*[+-]\s*\d+)?))\s+([a-zA-Z]+)?(?:\s+damage)?(?:[^.]*?\.)?)/gi;
     let match;
     while ((match = regex.exec(text)) !== null) {
         const sentence = match[1] || '';
@@ -208,10 +228,16 @@ function extractExtraDamage(entries, baseDmgType) {
         else if (sentLower.includes('undead')) label = 'vs Undead';
         else if (sentLower.includes('dragon')) label = 'vs Dragon';
         else if (sentLower.includes('giant')) label = 'vs Giant';
-        else if (sentLower.includes('ablaze') || sentLower.includes('flame') || sentLower.includes('command word')) label = 'Flame Tongue';
+        else if (sentLower.includes('ablaze') || sentLower.includes('flame') || sentLower.includes('command word'))
+            label = 'Flame Tongue';
         else if (sentLower.includes('cold') || sentLower.includes('frost')) label = 'Frost Brand';
 
-        if (formula && !extraRows.some(r => r.formula === formula && r.type.toLowerCase() === niceType.toLowerCase() && r.label === label)) {
+        if (
+            formula &&
+            !extraRows.some(
+                (r) => r.formula === formula && r.type.toLowerCase() === niceType.toLowerCase() && r.label === label
+            )
+        ) {
             extraRows.push({
                 formula,
                 stat: '',
@@ -242,7 +268,7 @@ function parseAttachedSpells(raw) {
     const seenNames = new Set();
     const result = [];
     for (const item of rawList) {
-        const str = typeof item === 'string' ? item : (item.name || String(item));
+        const str = typeof item === 'string' ? item : item.name || String(item);
         const [spellWithUpcast] = str.split('|');
         const [rawName, upcastStr] = spellWithUpcast.split('#');
         const cleanName = rawName.trim();
@@ -252,7 +278,10 @@ function parseAttachedSpells(raw) {
         seenNames.add(key);
 
         result.push({
-            name: cleanName.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '),
+            name: cleanName
+                .split(' ')
+                .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+                .join(' '),
             cleanName: cleanName.toLowerCase(),
             castLevel: castLevel || null
         });
@@ -274,7 +303,9 @@ function matchesCondition(base, req) {
             const isArm = base.type === 'LA' || base.type === 'MA' || base.type === 'HA' || !!base.armor;
             if (val ? !isArm : isArm) return false;
         } else if (k === 'property') {
-            const props = Array.isArray(base.property) ? base.property.map(p => (typeof p === 'string' ? p : (p.name || p.uid || '')).split('|')[0]) : [];
+            const props = Array.isArray(base.property)
+                ? base.property.map((p) => (typeof p === 'string' ? p : p.name || p.uid || '').split('|')[0])
+                : [];
             if (!props.includes(val)) return false;
         } else if (k === 'dmgType') {
             if (base.dmgType !== val) return false;
@@ -353,11 +384,16 @@ export function buildItemsDatabase() {
         let typeDisplay = 'Adventuring Gear';
         if (it.wondrous) typeDisplay = 'Wondrous Item';
         else if (it.type && ITEM_TYPE_MAP[it.type]) typeDisplay = ITEM_TYPE_MAP[it.type];
-        else if (it.weaponCategory) typeDisplay = `${it.weaponCategory.charAt(0).toUpperCase() + it.weaponCategory.slice(1)} Weapon`;
+        else if (it.weaponCategory)
+            typeDisplay = `${it.weaponCategory.charAt(0).toUpperCase() + it.weaponCategory.slice(1)} Weapon`;
         else if (it.armor) typeDisplay = 'Armor';
 
         const rarity = (it.rarity || 'none').toLowerCase();
-        const reqAttune = it.reqAttune ? (typeof it.reqAttune === 'string' ? it.reqAttune : 'Requires Attunement') : false;
+        const reqAttune = it.reqAttune
+            ? typeof it.reqAttune === 'string'
+                ? it.reqAttune
+                : 'Requires Attunement'
+            : false;
         const weight = typeof it.weight === 'number' ? it.weight : null;
         const value = formatValue(it.value);
 
@@ -382,14 +418,22 @@ export function buildItemsDatabase() {
         }
 
         const rawProps = it.property || [];
-        const propertyList = rawProps.map(p => {
-            const pStr = typeof p === 'string' ? p : (p.uid || p.name || '');
+        const propertyList = rawProps.map((p) => {
+            const pStr = typeof p === 'string' ? p : p.uid || p.name || '';
             const baseP = pStr.split('|')[0];
             return PROPERTY_MAP[baseP] || PROPERTY_MAP[pStr] || baseP;
         });
 
         const isWeapon = !!(dmg1 || it.weaponCategory || it.type === 'M' || it.type === 'R');
-        const isArmor = !!(ac !== null || bonusAc || it.armor || it.type === 'LA' || it.type === 'MA' || it.type === 'HA' || it.type === 'S');
+        const isArmor = !!(
+            ac !== null ||
+            bonusAc ||
+            it.armor ||
+            it.type === 'LA' ||
+            it.type === 'MA' ||
+            it.type === 'HA' ||
+            it.type === 'S'
+        );
 
         const packContents = it.packContents || null;
         const attachedSpells = parseAttachedSpells(it.attachedSpells);
@@ -397,7 +441,7 @@ export function buildItemsDatabase() {
         // Clean template tags {=bonusWeapon} etc in entries
         function processEntries(entriesList) {
             if (!entriesList || !Array.isArray(entriesList)) return [];
-            return entriesList.map(entry => {
+            return entriesList.map((entry) => {
                 if (typeof entry === 'string') {
                     let s = entry;
                     if (bonusWeapon) s = s.replace(/\{=bonusWeapon\}/g, bonusWeapon);
@@ -424,7 +468,11 @@ export function buildItemsDatabase() {
 
         // Build complete Markdown description
         const descParts = [];
-        const attuneStr = reqAttune ? (typeof reqAttune === 'string' ? ` (${reqAttune})` : ' (requires attunement)') : '';
+        const attuneStr = reqAttune
+            ? typeof reqAttune === 'string'
+                ? ` (${reqAttune})`
+                : ' (requires attunement)'
+            : '';
         descParts.push(`*${typeDisplay}${rarity !== 'none' ? `, ${rarity}` : ''}${attuneStr}*`);
 
         const metaParts = [];
@@ -466,9 +514,19 @@ export function buildItemsDatabase() {
 
         const descriptionMarkdown = descParts.join('\n\n');
 
-        const isMagic = !!(it.magic === 1 || (rarity && rarity !== 'none' && rarity !== 'unknown') || (bonusWeapon && parseInt(bonusWeapon) > 0) || (name && /\+\d+/.test(name)));
-        const isSilvered = !!(name.toLowerCase().includes('silvered') || propertyList.some(p => p.toLowerCase().includes('silver')));
-        const isAdamantine = !!(name.toLowerCase().includes('adamantine') || propertyList.some(p => p.toLowerCase().includes('adamantine')));
+        const isMagic = !!(
+            it.magic === 1 ||
+            (rarity && rarity !== 'none' && rarity !== 'unknown') ||
+            (bonusWeapon && parseInt(bonusWeapon) > 0) ||
+            (name && /\+\d+/.test(name))
+        );
+        const isSilvered = !!(
+            name.toLowerCase().includes('silvered') || propertyList.some((p) => p.toLowerCase().includes('silver'))
+        );
+        const isAdamantine = !!(
+            name.toLowerCase().includes('adamantine') ||
+            propertyList.some((p) => p.toLowerCase().includes('adamantine'))
+        );
 
         // Pre-compile Zero-Parsing Macro Template for Weapons
         let macroTemplate = null;
@@ -481,13 +539,20 @@ export function buildItemsDatabase() {
                 if (m) bonusVal = parseInt(m[1]) || 0;
             }
 
-            const isFinesse = propertyList.some(p => p.toLowerCase().includes('finesse'));
-            const isRanged = it.type === 'R' || (typeDisplay || '').toLowerCase().includes('ranged') || propertyList.some(p => p.toLowerCase().includes('ammunition'));
+            const isFinesse = propertyList.some((p) => p.toLowerCase().includes('finesse'));
+            const isRanged =
+                it.type === 'R' ||
+                (typeDisplay || '').toLowerCase().includes('ranged') ||
+                propertyList.some((p) => p.toLowerCase().includes('ammunition'));
 
             let rangeStr = '5 ft';
-            const rangeProp = rawProps.find(p => typeof p === 'string' && (p.toLowerCase().startsWith('range') || p.toLowerCase().startsWith('thrown')));
+            const rangeProp = rawProps.find(
+                (p) =>
+                    typeof p === 'string' &&
+                    (p.toLowerCase().startsWith('range') || p.toLowerCase().startsWith('thrown'))
+            );
             if (rangeProp) rangeStr = rangeProp.replace(/^(?:range|thrown)\s*\(([^)]+)\)/i, '$1 ft');
-            else if (propertyList.some(p => p.toLowerCase().includes('reach'))) rangeStr = '10 ft';
+            else if (propertyList.some((p) => p.toLowerCase().includes('reach'))) rangeStr = '10 ft';
 
             const damageRows = [];
             const primaryFormula = dmg1 || '1d6';
@@ -508,7 +573,7 @@ export function buildItemsDatabase() {
 
             macroTemplate = {
                 name,
-                attackStat: isRanged ? 'dex' : (isFinesse ? 'auto' : 'str'),
+                attackStat: isRanged ? 'dex' : isFinesse ? 'auto' : 'str',
                 isFinesse,
                 isRanged,
                 attackProf: true,
@@ -559,26 +624,26 @@ export function buildItemsDatabase() {
     if (fs.existsSync(baseItemsFile)) {
         const baseData = JSON.parse(fs.readFileSync(baseItemsFile, 'utf8'));
         baseItems = baseData.baseitem || [];
-        baseItems.forEach(it => processItem(it));
+        baseItems.forEach((it) => processItem(it));
     }
 
     const brewBaseItems = isSrdOnly ? [] : getBrewEntities('baseitem');
-    brewBaseItems.forEach(it => {
+    brewBaseItems.forEach((it) => {
         baseItems.push(it);
         processItem(it);
     });
 
     if (fs.existsSync(itemsFile)) {
         const itemsData = JSON.parse(fs.readFileSync(itemsFile, 'utf8'));
-        (itemsData.item || []).forEach(it => processItem(it));
-        (itemsData.itemGroup || []).forEach(it => processItem(it));
+        (itemsData.item || []).forEach((it) => processItem(it));
+        (itemsData.itemGroup || []).forEach((it) => processItem(it));
     }
 
     const brewItems = isSrdOnly ? [] : getBrewEntities('item');
-    brewItems.forEach(it => processItem(it));
+    brewItems.forEach((it) => processItem(it));
 
     const brewItemGroups = isSrdOnly ? [] : getBrewEntities('itemGroup');
-    brewItemGroups.forEach(it => processItem(it));
+    brewItemGroups.forEach((it) => processItem(it));
 
     // ─── Expand Magic Variants into standalone entries ───────────────────────
     if (fs.existsSync(magicVariantsFile) && baseItems.length > 0) {
@@ -596,21 +661,21 @@ export function buildItemsDatabase() {
             }
 
             const rawReqs = variant.requires || [];
-            const reqs = Array.isArray(rawReqs) ? rawReqs : (rawReqs ? [rawReqs] : []);
+            const reqs = Array.isArray(rawReqs) ? rawReqs : rawReqs ? [rawReqs] : [];
             if (!reqs.length) continue;
 
             const rawExcludes = variant.excludes || variant.exclude || [];
-            const excludes = Array.isArray(rawExcludes) ? rawExcludes : (rawExcludes ? [rawExcludes] : []);
+            const excludes = Array.isArray(rawExcludes) ? rawExcludes : rawExcludes ? [rawExcludes] : [];
             const inherits = variant.inherits || {};
 
-            const matchingBases = baseItems.filter(base => {
+            const matchingBases = baseItems.filter((base) => {
                 if (isSrdOnly) {
                     const baseSrcUpper = (base.source || 'PHB').trim().toUpperCase();
                     if (!SRD_ITEM_SOURCES.has(baseSrcUpper)) return false;
                     if (base.srd === undefined && base.srd52 === undefined) return false;
                 }
-                if (excludes.length && excludes.some(ex => matchesCondition(base, ex))) return false;
-                return reqs.some(req => matchesCondition(base, req));
+                if (excludes.length && excludes.some((ex) => matchesCondition(base, ex))) return false;
+                return reqs.some((req) => matchesCondition(base, req));
             });
 
             for (const base of matchingBases) {
@@ -640,15 +705,9 @@ export function buildItemsDatabase() {
                 }
 
                 // Merge entries: variant entries first, followed by base item entries
-                const combinedEntries = [
-                    ...(inherits.entries || variant.entries || []),
-                    ...(base.entries || [])
-                ];
+                const combinedEntries = [...(inherits.entries || variant.entries || []), ...(base.entries || [])];
 
-                const combinedProps = [
-                    ...(base.property || []),
-                    ...(inherits.property || [])
-                ];
+                const combinedProps = [...(base.property || []), ...(inherits.property || [])];
 
                 const varItem = {
                     ...base,
@@ -659,8 +718,13 @@ export function buildItemsDatabase() {
                     source: inherits.source || variant.source || base.source || 'DMG',
                     page: inherits.page || variant.page || base.page || 0,
                     rarity: inherits.rarity || variant.rarity || base.rarity || 'rare',
-                    reqAttune: inherits.reqAttune !== undefined ? inherits.reqAttune : (variant.reqAttune !== undefined ? variant.reqAttune : base.reqAttune),
-                    weight: base.weight !== undefined ? base.weight : (inherits.weight || 0),
+                    reqAttune:
+                        inherits.reqAttune !== undefined
+                            ? inherits.reqAttune
+                            : variant.reqAttune !== undefined
+                              ? variant.reqAttune
+                              : base.reqAttune,
+                    weight: base.weight !== undefined ? base.weight : inherits.weight || 0,
                     value: inherits.value !== undefined ? inherits.value : base.value,
                     ac: finalAc,
                     bonusAc: bonusAc,
@@ -687,7 +751,7 @@ export function buildItemsDatabase() {
     if (!fs.existsSync(targetDataDir)) {
         fs.mkdirSync(targetDataDir, { recursive: true });
     }
-    const catalog = allItems.map(it => ({
+    const catalog = allItems.map((it) => ({
         id: it.id,
         name: it.name,
         source: it.source,

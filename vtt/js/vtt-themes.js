@@ -143,7 +143,8 @@ export const COLORBLIND_MODES = {
     protanopia: {
         id: 'protanopia',
         name: 'Protanopia (Red-Blind / Weak)',
-        description: 'Calibrated Blue & Orange/Yellow contrast scale with dual-coded diagonal hatch patterns (HP ///, Temp HP \\\\\\).',
+        description:
+            'Calibrated Blue & Orange/Yellow contrast scale with dual-coded diagonal hatch patterns (HP ///, Temp HP \\\\\\).',
         preview: {
             success: '#0072b2',
             warning: '#f0e442',
@@ -154,7 +155,8 @@ export const COLORBLIND_MODES = {
     deuteranopia: {
         id: 'deuteranopia',
         name: 'Deuteranopia (Green-Blind / Weak)',
-        description: 'Okabe-Ito Sky Blue & Amber contrast scale with high-visibility dual patterns (HP \\\\\\, Temp HP ///).',
+        description:
+            'Okabe-Ito Sky Blue & Amber contrast scale with high-visibility dual patterns (HP \\\\\\, Temp HP ///).',
         preview: {
             success: '#56b4e9',
             warning: '#e69f00',
@@ -300,7 +302,7 @@ export function initVttThemes(vtt) {
         if (!select) return;
 
         select.innerHTML = '';
-        Object.values(THEMES).forEach(theme => {
+        Object.values(THEMES).forEach((theme) => {
             const opt = document.createElement('option');
             opt.value = theme.id;
             opt.textContent = `${theme.name} (${theme.category})`;
@@ -322,7 +324,7 @@ export function initVttThemes(vtt) {
 
         chipContainer.innerHTML = `
             <div class="theme-chip-swatches" title="Theme Color Palette">
-                ${theme.swatches.map(c => `<span class="theme-swatch-dot" style="background:${c};"></span>`).join('')}
+                ${theme.swatches.map((c) => `<span class="theme-swatch-dot" style="background:${c};"></span>`).join('')}
             </div>
             <div class="theme-chip-meta">
                 <span class="theme-chip-font-badge" style="font-family:${theme.font};"><i class="fa-solid fa-font"></i> ${theme.fontBadge}</span>
@@ -337,7 +339,7 @@ export function initVttThemes(vtt) {
         if (!select) return;
 
         select.innerHTML = '';
-        Object.values(COLORBLIND_MODES).forEach(mode => {
+        Object.values(COLORBLIND_MODES).forEach((mode) => {
             const opt = document.createElement('option');
             opt.value = mode.id;
             opt.textContent = mode.name;
@@ -361,17 +363,25 @@ export function initVttThemes(vtt) {
         let tempHpPatternStyle = '';
 
         if (modeId === 'protanopia') {
-            hpPatternStyle = 'background-image: repeating-linear-gradient(45deg, transparent, transparent 4px, rgba(255, 255, 255, 0.25) 4px, rgba(255, 255, 255, 0.25) 8px);';
-            tempHpPatternStyle = 'background-image: repeating-linear-gradient(-45deg, transparent, transparent 4px, rgba(255, 255, 255, 0.35) 4px, rgba(255, 255, 255, 0.35) 8px);';
+            hpPatternStyle =
+                'background-image: repeating-linear-gradient(45deg, transparent, transparent 4px, rgba(255, 255, 255, 0.25) 4px, rgba(255, 255, 255, 0.25) 8px);';
+            tempHpPatternStyle =
+                'background-image: repeating-linear-gradient(-45deg, transparent, transparent 4px, rgba(255, 255, 255, 0.35) 4px, rgba(255, 255, 255, 0.35) 8px);';
         } else if (modeId === 'deuteranopia') {
-            hpPatternStyle = 'background-image: repeating-linear-gradient(-45deg, transparent, transparent 5px, rgba(0, 0, 0, 0.25) 5px, rgba(0, 0, 0, 0.25) 10px);';
-            tempHpPatternStyle = 'background-image: repeating-linear-gradient(45deg, transparent, transparent 4px, rgba(255, 255, 255, 0.35) 4px, rgba(255, 255, 255, 0.35) 8px);';
+            hpPatternStyle =
+                'background-image: repeating-linear-gradient(-45deg, transparent, transparent 5px, rgba(0, 0, 0, 0.25) 5px, rgba(0, 0, 0, 0.25) 10px);';
+            tempHpPatternStyle =
+                'background-image: repeating-linear-gradient(45deg, transparent, transparent 4px, rgba(255, 255, 255, 0.35) 4px, rgba(255, 255, 255, 0.35) 8px);';
         } else if (modeId === 'tritanopia') {
-            hpPatternStyle = 'background-image: repeating-linear-gradient(90deg, transparent, transparent 4px, rgba(255, 255, 255, 0.25) 4px, rgba(255, 255, 255, 0.25) 8px);';
-            tempHpPatternStyle = 'background-image: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(255, 255, 255, 0.35) 3px, rgba(255, 255, 255, 0.35) 6px);';
+            hpPatternStyle =
+                'background-image: repeating-linear-gradient(90deg, transparent, transparent 4px, rgba(255, 255, 255, 0.25) 4px, rgba(255, 255, 255, 0.25) 8px);';
+            tempHpPatternStyle =
+                'background-image: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(255, 255, 255, 0.35) 3px, rgba(255, 255, 255, 0.35) 6px);';
         } else if (modeId === 'achromatopsia') {
-            hpPatternStyle = 'border: 1px solid #ffffff; background-image: repeating-linear-gradient(45deg, transparent, transparent 3px, rgba(255, 255, 255, 0.35) 3px, rgba(255, 255, 255, 0.35) 6px);';
-            tempHpPatternStyle = 'border: 1px dashed #ffffff; background-image: repeating-linear-gradient(-45deg, transparent, transparent 3px, rgba(255, 255, 255, 0.45) 3px, rgba(255, 255, 255, 0.45) 6px);';
+            hpPatternStyle =
+                'border: 1px solid #ffffff; background-image: repeating-linear-gradient(45deg, transparent, transparent 3px, rgba(255, 255, 255, 0.35) 3px, rgba(255, 255, 255, 0.35) 6px);';
+            tempHpPatternStyle =
+                'border: 1px dashed #ffffff; background-image: repeating-linear-gradient(-45deg, transparent, transparent 3px, rgba(255, 255, 255, 0.45) 3px, rgba(255, 255, 255, 0.45) 6px);';
         }
 
         previewContainer.innerHTML = `
@@ -426,7 +436,7 @@ export function initVttThemes(vtt) {
         }
 
         const presets = document.querySelectorAll('.font-scale-preset');
-        presets.forEach(btn => {
+        presets.forEach((btn) => {
             if (parseInt(btn.dataset.scale, 10) === pct) {
                 btn.classList.add('active');
                 btn.style.borderColor = 'var(--color-gold-base)';
@@ -467,7 +477,7 @@ export function initVttThemes(vtt) {
             });
         }
 
-        presets.forEach(btn => {
+        presets.forEach((btn) => {
             btn.addEventListener('click', () => {
                 const targetPct = parseInt(btn.dataset.scale, 10);
                 if (!isNaN(targetPct)) {
@@ -512,7 +522,7 @@ export function initVttThemes(vtt) {
     function broadcastTheme(vtt, themeId) {
         if (vtt.role !== 'GM' || !vtt.socket) {
             if (window.VTT?.chatEngine?.appendSystemMessage) {
-                window.VTT.chatEngine.appendSystemMessage("Only Game Masters can broadcast tabletop themes.");
+                window.VTT.chatEngine.appendSystemMessage('Only Game Masters can broadcast tabletop themes.');
             }
             return;
         }
@@ -523,7 +533,9 @@ export function initVttThemes(vtt) {
 
         const themeName = THEMES[themeId]?.name || themeId;
         if (window.VTT?.chatEngine?.appendSystemMessage) {
-            window.VTT.chatEngine.appendSystemMessage(`Atmospheric Theme <strong>${themeName}</strong> broadcast to all players.`);
+            window.VTT.chatEngine.appendSystemMessage(
+                `Atmospheric Theme <strong>${themeName}</strong> broadcast to all players.`
+            );
         }
     }
 

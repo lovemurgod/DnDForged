@@ -51,14 +51,14 @@ execFileSync('node', [path.join(rootDir, 'scripts', 'build-srd-db.mjs'), '--out'
 const stageTokenDir = path.join(stageDir, 'vtt', 'img', 'bestiary', 'tokens');
 const catalogFile = path.join(stageDataDir, 'bestiary-catalog.json');
 console.log('\n🎨 Step 2: Generating CC0 open-license creature tokens...');
-execFileSync('node', [
-    path.join(rootDir, 'scripts', 'generate-cc0-tokens.mjs'),
-    '--catalog', catalogFile,
-    '--out', stageTokenDir
-], {
-    stdio: 'inherit',
-    cwd: rootDir
-});
+execFileSync(
+    'node',
+    [path.join(rootDir, 'scripts', 'generate-cc0-tokens.mjs'), '--catalog', catalogFile, '--out', stageTokenDir],
+    {
+        stdio: 'inherit',
+        cwd: rootDir
+    }
+);
 
 // 5. Copy Brand & App Assets (Omit copyrighted covers and adventures)
 console.log('\n📁 Step 3: Copying brand assets and client files...');
@@ -68,6 +68,8 @@ copyDirFiltered(path.join(rootDir, 'img'), path.join(stageDir, 'img'));
 copyDirFiltered(path.join(rootDir, 'css'), path.join(stageDir, 'css'));
 // Copy electron
 copyDirFiltered(path.join(rootDir, 'electron'), path.join(stageDir, 'electron'));
+// Copy server
+copyDirFiltered(path.join(rootDir, 'server'), path.join(stageDir, 'server'));
 // Copy resources/bin
 if (fs.existsSync(path.join(rootDir, 'resources'))) {
     copyDirFiltered(path.join(rootDir, 'resources'), path.join(stageDir, 'resources'));
@@ -128,10 +130,10 @@ const mainPkg = JSON.parse(fs.readFileSync(path.join(rootDir, 'package.json'), '
 const stagePkg = {
     name: mainPkg.name || 'forgedvtt',
     version: mainPkg.version || '1.0.0',
-    description: "ForgeDVTT Virtual Tabletop (VTT) - Clean SRD Edition",
+    description: 'ForgeDVTT Virtual Tabletop (VTT) - Clean SRD Edition',
     author: mainPkg.author,
-    main: mainPkg.main || "electron/main.js",
-    type: "module",
+    main: mainPkg.main || 'electron/main.js',
+    type: 'module',
     dependencies: mainPkg.dependencies || {}
 };
 fs.writeFileSync(path.join(stageDir, 'package.json'), JSON.stringify(stagePkg, null, 2), 'utf8');

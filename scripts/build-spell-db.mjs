@@ -9,9 +9,10 @@ const rootDir = path.join(__dirname, '..');
 
 const isSrdOnly = process.argv.includes('--srd-only');
 const outArgIdx = process.argv.indexOf('--out');
-const targetDataDir = outArgIdx !== -1 && process.argv[outArgIdx + 1]
-    ? path.resolve(rootDir, process.argv[outArgIdx + 1])
-    : path.join(rootDir, '5etools-src', 'data');
+const targetDataDir =
+    outArgIdx !== -1 && process.argv[outArgIdx + 1]
+        ? path.resolve(rootDir, process.argv[outArgIdx + 1])
+        : path.join(rootDir, '5etools-src', 'data');
 
 const dataDir = path.join(rootDir, '5etools-src', 'data');
 const spellsDir = path.join(dataDir, 'spells');
@@ -20,51 +21,53 @@ const sourcesPath = path.join(spellsDir, 'sources.json');
 const outputPath = path.join(targetDataDir, 'spells-normalized.json');
 
 const SCHOOL_MAP = {
-    'A': 'Abjuration',
-    'C': 'Conjuration',
-    'D': 'Divination',
-    'E': 'Enchantment',
-    'I': 'Illusion',
-    'N': 'Necromancy',
-    'T': 'Transmutation',
-    'V': 'Evocation'
+    A: 'Abjuration',
+    C: 'Conjuration',
+    D: 'Divination',
+    E: 'Enchantment',
+    I: 'Illusion',
+    N: 'Necromancy',
+    T: 'Transmutation',
+    V: 'Evocation'
 };
 
 const AREA_TAG_MAP = {
-    'S': 'Sphere',
-    'C': 'Cone',
-    'L': 'Line',
-    'N': 'Cylinder',
-    'Q': 'Cube',
-    'H': 'Hemisphere',
-    'W': 'Wall',
-    'MT': 'Multiple Targets',
-    'ST': 'Single Target'
+    S: 'Sphere',
+    C: 'Cone',
+    L: 'Line',
+    N: 'Cylinder',
+    Q: 'Cube',
+    H: 'Hemisphere',
+    W: 'Wall',
+    MT: 'Multiple Targets',
+    ST: 'Single Target'
 };
 
 const MISC_TAG_MAP = {
-    'HL': 'Healing',
-    'THP': 'Temp HP',
-    'TP': 'Teleportation',
-    'SMN': 'Summoning',
-    'PRM': 'Permanent',
-    'MAC': 'Modifies AC',
-    'SCL': 'Scaling Damage',
-    'SGT': 'Sight Required',
-    'FEY': 'Fey',
-    'UD': 'Undead'
+    HL: 'Healing',
+    THP: 'Temp HP',
+    TP: 'Teleportation',
+    SMN: 'Summoning',
+    PRM: 'Permanent',
+    MAC: 'Modifies AC',
+    SCL: 'Scaling Damage',
+    SGT: 'Sight Required',
+    FEY: 'Fey',
+    UD: 'Undead'
 };
 
 function formatTime(timeList) {
     if (!timeList || !Array.isArray(timeList) || timeList.length === 0) return '1 action';
-    return timeList.map(t => {
-        const num = t.number || 1;
-        let unit = t.unit || 'action';
-        if (unit === 'bonus') unit = 'bonus action';
-        else if (num > 1) unit = unit + 's';
-        const cond = t.condition ? ` (${cleanTags(t.condition)})` : '';
-        return `${num} ${unit}${cond}`;
-    }).join(', ');
+    return timeList
+        .map((t) => {
+            const num = t.number || 1;
+            let unit = t.unit || 'action';
+            if (unit === 'bonus') unit = 'bonus action';
+            else if (num > 1) unit = unit + 's';
+            const cond = t.condition ? ` (${cleanTags(t.condition)})` : '';
+            return `${num} ${unit}${cond}`;
+        })
+        .join(', ');
 }
 
 function formatRange(range) {
@@ -76,7 +79,9 @@ function formatRange(range) {
     if (type === 'sight') return 'Sight';
     if (type === 'unlimited') return 'Unlimited';
     if (range.distance) {
-        const dist = range.distance.amount ? `${range.distance.amount} ${range.distance.type || 'feet'}` : (range.distance.type || '');
+        const dist = range.distance.amount
+            ? `${range.distance.amount} ${range.distance.type || 'feet'}`
+            : range.distance.type || '';
         if (type === 'point') return dist;
         return `Self (${dist} ${type})`;
     }
@@ -99,19 +104,21 @@ function formatComponents(comp) {
 
 function formatDuration(durList) {
     if (!durList || !Array.isArray(durList) || durList.length === 0) return 'Instantaneous';
-    return durList.map(d => {
-        if (d.type === 'instant') return 'Instantaneous';
-        if (d.type === 'permanent') return 'Permanent';
-        if (d.type === 'special') return 'Special';
-        if (d.duration) {
-            const conc = d.concentration ? 'Concentration, up to ' : '';
-            const num = d.duration.amount || 1;
-            let unit = d.duration.type || 'minute';
-            if (num > 1) unit = unit + 's';
-            return `${conc}${num} ${unit}`;
-        }
-        return 'Instantaneous';
-    }).join(', ');
+    return durList
+        .map((d) => {
+            if (d.type === 'instant') return 'Instantaneous';
+            if (d.type === 'permanent') return 'Permanent';
+            if (d.type === 'special') return 'Special';
+            if (d.duration) {
+                const conc = d.concentration ? 'Concentration, up to ' : '';
+                const num = d.duration.amount || 1;
+                let unit = d.duration.type || 'minute';
+                if (num > 1) unit = unit + 's';
+                return `${conc}${num} ${unit}`;
+            }
+            return 'Instantaneous';
+        })
+        .join(', ');
 }
 
 function cleanTags(str) {
@@ -143,7 +150,7 @@ function renderEntriesToHtml(entries) {
     if (!Array.isArray(entries)) entries = [entries];
 
     let html = '';
-    entries.forEach(entry => {
+    entries.forEach((entry) => {
         if (typeof entry === 'string') {
             html += `<p>${cleanTags(entry)}</p>`;
         } else if (typeof entry === 'object' && entry !== null) {
@@ -151,22 +158,31 @@ function renderEntriesToHtml(entries) {
                 const nameStr = entry.name ? `<strong><em>${cleanTags(entry.name)}.</em></strong> ` : '';
                 html += `<div>${nameStr}${renderEntriesToHtml(entry.entries)}</div>`;
             } else if (entry.type === 'list') {
-                const items = (entry.items || []).map(item => {
-                    if (typeof item === 'string') return `<li>${cleanTags(item)}</li>`;
-                    if (item.type === 'item') {
-                        const nameStr = item.name ? `<strong><em>${cleanTags(item.name)}.</em></strong> ` : '';
-                        return `<li>${nameStr}${renderEntriesToHtml(item.entry || item.entries)}</li>`;
-                    }
-                    return `<li>${renderEntriesToHtml(item)}</li>`;
-                }).join('');
+                const items = (entry.items || [])
+                    .map((item) => {
+                        if (typeof item === 'string') return `<li>${cleanTags(item)}</li>`;
+                        if (item.type === 'item') {
+                            const nameStr = item.name ? `<strong><em>${cleanTags(item.name)}.</em></strong> ` : '';
+                            return `<li>${nameStr}${renderEntriesToHtml(item.entry || item.entries)}</li>`;
+                        }
+                        return `<li>${renderEntriesToHtml(item)}</li>`;
+                    })
+                    .join('');
                 html += `<ul>${items}</ul>`;
             } else if (entry.type === 'table') {
                 let caption = entry.caption ? `<caption>${cleanTags(entry.caption)}</caption>` : '';
-                let headers = (entry.colLabels || []).map(l => `<th>${cleanTags(l)}</th>`).join('');
-                let rows = (entry.rows || []).map(r => {
-                    let cells = r.map(c => `<td>${cleanTags(typeof c === 'object' ? (c.entry || JSON.stringify(c)) : String(c))}</td>`).join('');
-                    return `<tr>${cells}</tr>`;
-                }).join('');
+                let headers = (entry.colLabels || []).map((l) => `<th>${cleanTags(l)}</th>`).join('');
+                let rows = (entry.rows || [])
+                    .map((r) => {
+                        let cells = r
+                            .map(
+                                (c) =>
+                                    `<td>${cleanTags(typeof c === 'object' ? c.entry || JSON.stringify(c) : String(c))}</td>`
+                            )
+                            .join('');
+                        return `<tr>${cells}</tr>`;
+                    })
+                    .join('');
                 html += `<table style="width:100%; border-collapse:collapse; margin:8px 0;">${caption}<thead><tr>${headers}</tr></thead><tbody>${rows}</tbody></table>`;
             }
         }
@@ -178,11 +194,13 @@ function renderEntriesToHtml(entries) {
 function formatHigherLevel(higherLevelEntries) {
     if (!higherLevelEntries || !Array.isArray(higherLevelEntries) || higherLevelEntries.length === 0) return '';
     let html = '';
-    higherLevelEntries.forEach(entry => {
+    higherLevelEntries.forEach((entry) => {
         if (typeof entry === 'string') {
             html += `<p><strong><em>At Higher Levels.</em></strong> ${cleanTags(entry)}</p>`;
         } else if (typeof entry === 'object' && entry !== null) {
-            const nameStr = entry.name ? `<strong><em>${cleanTags(entry.name)}.</em></strong> ` : '<strong><em>At Higher Levels.</em></strong> ';
+            const nameStr = entry.name
+                ? `<strong><em>${cleanTags(entry.name)}.</em></strong> `
+                : '<strong><em>At Higher Levels.</em></strong> ';
             html += `<div class="spell-entries-higher-level">${nameStr}${renderEntriesToHtml(entry.entries)}</div>`;
         }
     });
@@ -191,12 +209,12 @@ function formatHigherLevel(higherLevelEntries) {
 
 function expandTags(tagArr, tagMap) {
     if (!tagArr || !Array.isArray(tagArr)) return [];
-    return tagArr.map(t => tagMap[t] || (t.charAt(0).toUpperCase() + t.slice(1))).filter(Boolean);
+    return tagArr.map((t) => tagMap[t] || t.charAt(0).toUpperCase() + t.slice(1)).filter(Boolean);
 }
 
 function capitalizeArray(arr) {
     if (!arr || !Array.isArray(arr)) return [];
-    return arr.map(str => typeof str === 'string' ? (str.charAt(0).toUpperCase() + str.slice(1)) : String(str));
+    return arr.map((str) => (typeof str === 'string' ? str.charAt(0).toUpperCase() + str.slice(1) : String(str)));
 }
 
 function extractAttackStat(spell) {
@@ -234,7 +252,9 @@ function extractUpcastInfo(spell) {
         }
     } else if (spell.entriesHigherLevel) {
         const hlText = JSON.stringify(spell.entriesHigherLevel);
-        const diceM = hlText.match(/(?:increases by|gain (?:an additional )?)(?:\{@(?:damage|dice) )?(\d+d\d+(?:\s*[+-]\s*(?:\d+d\d+|\d+))*|\d+)/i);
+        const diceM = hlText.match(
+            /(?:increases by|gain (?:an additional )?)(?:\{@(?:damage|dice) )?(\d+d\d+(?:\s*[+-]\s*(?:\d+d\d+|\d+))*|\d+)/i
+        );
         if (diceM) {
             upcastBonus = diceM[1].trim();
         }
@@ -264,17 +284,21 @@ function extractDamageList(spell) {
         }
     }
 
-    const isHealing = (spell.miscTags && spell.miscTags.includes('HL')) ||
-                      /regains?\s+(?:{@(?:dice|damage)|an additional|\d+|\w+\s+Hit Point)/i.test(JSON.stringify(spell.entries || [])) ||
-                      /restores?\s+(?:{@(?:dice|damage)|\d+)/i.test(JSON.stringify(spell.entries || []));
-    const isTempHp = (spell.miscTags && spell.miscTags.includes('THP')) ||
-                     /temporary hit points?/i.test(JSON.stringify(spell.entries || []));
+    const isHealing =
+        (spell.miscTags && spell.miscTags.includes('HL')) ||
+        /regains?\s+(?:{@(?:dice|damage)|an additional|\d+|\w+\s+Hit Point)/i.test(
+            JSON.stringify(spell.entries || [])
+        ) ||
+        /restores?\s+(?:{@(?:dice|damage)|\d+)/i.test(JSON.stringify(spell.entries || []));
+    const isTempHp =
+        (spell.miscTags && spell.miscTags.includes('THP')) ||
+        /temporary hit points?/i.test(JSON.stringify(spell.entries || []));
 
     // Base entries text (exclude scaling paragraphs for cantrips)
     let entries = spell.entries || [];
     let baseEntries = entries;
     if (isCantrip && Array.isArray(entries) && entries.length > 1) {
-        baseEntries = entries.filter(e => {
+        baseEntries = entries.filter((e) => {
             const str = typeof e === 'string' ? e : JSON.stringify(e);
             return !/(?:damage increases by|creates more than one beam|increases to {@damage)/i.test(str);
         });
@@ -285,12 +309,28 @@ function extractDamageList(spell) {
     // 1. Damage spells
     if (isCantrip && Array.isArray(spell.scalingLevelDice) && spell.scalingLevelDice.length > 0) {
         spell.scalingLevelDice.forEach((sld, idx) => {
-            const formula = sld.scaling?.['1'] || sld.scaling?.['cantrip'] || Object.values(sld.scaling || {})[0] || '1d8';
+            const formula =
+                sld.scaling?.['1'] || sld.scaling?.['cantrip'] || Object.values(sld.scaling || {})[0] || '1d8';
             let type = 'Damage';
             let label = '';
             const rawLabel = (sld.label || '').toLowerCase();
-            
-            const knownTypes = ["slashing", "piercing", "bludgeoning", "fire", "cold", "lightning", "thunder", "poison", "acid", "necrotic", "radiant", "force", "psychic", "healing"];
+
+            const knownTypes = [
+                'slashing',
+                'piercing',
+                'bludgeoning',
+                'fire',
+                'cold',
+                'lightning',
+                'thunder',
+                'poison',
+                'acid',
+                'necrotic',
+                'radiant',
+                'force',
+                'psychic',
+                'healing'
+            ];
             for (const kt of knownTypes) {
                 if (rawLabel.includes(kt)) {
                     type = kt.charAt(0).toUpperCase() + kt.slice(1);
@@ -311,38 +351,52 @@ function extractDamageList(spell) {
             list.push({ formula, type, label, stat: 'none' });
         });
     } else if (spell.damageInflict && spell.damageInflict.length > 0) {
-        const types = spell.damageInflict.map(t => t.charAt(0).toUpperCase() + t.slice(1));
-        
+        const types = spell.damageInflict.map((t) => t.charAt(0).toUpperCase() + t.slice(1));
+
         if (isCantrip) {
             const isMultiAttackCantrip = /eldritch blast/i.test(spell.name || '');
             const dmgMatches = [...baseText.matchAll(/\{@damage\s+([^}|]+)[^}]*\}(?:\s*([a-z]+)\s+damage)?/gi)];
             if (dmgMatches.length > 0) {
                 dmgMatches.forEach((m, idx) => {
                     const formula = m[1].trim();
-                    let type = m[2] ? m[2].charAt(0).toUpperCase() + m[2].slice(1) : (types[idx] || types[0] || 'Damage');
+                    let type = m[2] ? m[2].charAt(0).toUpperCase() + m[2].slice(1) : types[idx] || types[0] || 'Damage';
                     let label = '';
                     if (dmgMatches.length > 1) {
                         label = idx === 0 ? 'Normal' : `Option ${idx + 1}`;
                     }
-                    list.push({ formula, type, label, stat: 'none', cantripScale: isMultiAttackCantrip ? false : true });
+                    list.push({
+                        formula,
+                        type,
+                        label,
+                        stat: 'none',
+                        cantripScale: isMultiAttackCantrip ? false : true
+                    });
                 });
             } else {
                 const m = baseText.match(/\{@damage\s+([^}|]+)[^}]*\}/i) || baseText.match(/(\d+d\d+)/i);
                 if (m) {
                     const formula = (m[1] || m[0]).replace(/{@damage ([^}|]+)[^}]*}/, '$1').trim();
-                    list.push({ formula, type: types[0] || 'Damage', stat: 'none', cantripScale: isMultiAttackCantrip ? false : true });
+                    list.push({
+                        formula,
+                        type: types[0] || 'Damage',
+                        stat: 'none',
+                        cantripScale: isMultiAttackCantrip ? false : true
+                    });
                 }
             }
         } else {
             // For multi-damage-type spells (e.g. Ice Storm: 2d8 bludgeoning and 4d6 cold)
             if (types.length > 1) {
-                types.forEach(t => {
+                types.forEach((t) => {
                     // Match the closest {@damage formula} preceding the damage type without another {@damage} in between
-                    const typeRegex = new RegExp(`\\{@damage\\s+([^}|]+)[^}]*\\}(?:(?!\\{@damage)[\\s\\S])*?${t.toLowerCase()}\\s+damage`, 'i');
+                    const typeRegex = new RegExp(
+                        `\\{@damage\\s+([^}|]+)[^}]*\\}(?:(?!\\{@damage)[\\s\\S])*?${t.toLowerCase()}\\s+damage`,
+                        'i'
+                    );
                     const tm = baseText.match(typeRegex);
                     if (tm) {
                         const formula = tm[1].trim();
-                        if (!list.some(d => d.type === t)) {
+                        if (!list.some((d) => d.type === t)) {
                             list.push({ formula, type: t, stat: 'none' });
                         }
                     }
@@ -354,7 +408,9 @@ function extractDamageList(spell) {
                 if (dmgMatches.length > 0) {
                     dmgMatches.forEach((match, idx) => {
                         let formula = match[1].trim();
-                        let type = match[2] ? match[2].charAt(0).toUpperCase() + match[2].slice(1) : (types[idx] || types[0] || "Damage");
+                        let type = match[2]
+                            ? match[2].charAt(0).toUpperCase() + match[2].slice(1)
+                            : types[idx] || types[0] || 'Damage';
                         let label = dmgMatches.length > 1 ? `Damage ${idx + 1}` : '';
                         list.push({ formula, type, label, stat: 'none' });
                     });
@@ -372,7 +428,9 @@ function extractDamageList(spell) {
     // 2. Healing & Temp HP spells
     if (list.length === 0 && (isHealing || isTempHp)) {
         const type = isHealing ? 'Healing' : 'Temp HP';
-        const hasSpellMod = /plus your spellcasting ability modifier|\+\s*your spellcasting ability modifier/i.test(baseText);
+        const hasSpellMod = /plus your spellcasting ability modifier|\+\s*your spellcasting ability modifier/i.test(
+            baseText
+        );
         const stat = hasSpellMod ? 'spell' : 'none';
 
         // Check for dice matches like {@dice 2d6}, {@damage 1d8}, {@dice 2d4 + 4}
@@ -413,7 +471,7 @@ function extractSpellRefs(obj, spellRefs = []) {
         const source = parts[1] ? parts[1].trim() : '';
         if (name && name.length > 1) spellRefs.push({ name, source });
     } else if (Array.isArray(obj)) {
-        obj.forEach(item => extractSpellRefs(item, spellRefs));
+        obj.forEach((item) => extractSpellRefs(item, spellRefs));
     } else if (typeof obj === 'object') {
         if (obj.spell) {
             extractSpellRefs(obj.spell, spellRefs);
@@ -441,11 +499,11 @@ function loadAdditionalSpellAssociations() {
 
     function processAdditionalSpells(addSpellsArr, targetObj, propName) {
         if (!Array.isArray(addSpellsArr)) return;
-        addSpellsArr.forEach(spGroup => {
+        addSpellsArr.forEach((spGroup) => {
             const refs = extractSpellRefs(spGroup);
-            refs.forEach(r => {
+            refs.forEach((r) => {
                 const a = getAssoc(r.name);
-                if (!a[propName].some(x => x.name === targetObj.name && x.source === targetObj.source)) {
+                if (!a[propName].some((x) => x.name === targetObj.name && x.source === targetObj.source)) {
                     a[propName].push(targetObj);
                 }
             });
@@ -455,11 +513,17 @@ function loadAdditionalSpellAssociations() {
     // 1. Subclasses
     const classDir = path.join(dataDir, 'class');
     if (fs.existsSync(classDir)) {
-        const classFiles = fs.readdirSync(classDir).filter(f => f.startsWith('class-') && f.endsWith('.json'));
-        classFiles.forEach(f => {
+        const classFiles = fs.readdirSync(classDir).filter((f) => f.startsWith('class-') && f.endsWith('.json'));
+        classFiles.forEach((f) => {
             const content = JSON.parse(fs.readFileSync(path.join(classDir, f), 'utf8'));
-            (content.subclass || []).forEach(sc => {
-                const scObj = { name: sc.name, shortName: sc.shortName || sc.name, source: sc.source || 'PHB', className: sc.className, classSource: sc.classSource || 'PHB' };
+            (content.subclass || []).forEach((sc) => {
+                const scObj = {
+                    name: sc.name,
+                    shortName: sc.shortName || sc.name,
+                    source: sc.source || 'PHB',
+                    className: sc.className,
+                    classSource: sc.classSource || 'PHB'
+                };
                 processAdditionalSpells(sc.additionalSpells, scObj, 'subclasses');
             });
         });
@@ -469,7 +533,7 @@ function loadAdditionalSpellAssociations() {
     const racesFile = path.join(dataDir, 'races.json');
     if (fs.existsSync(racesFile)) {
         const content = JSON.parse(fs.readFileSync(racesFile, 'utf8'));
-        (content.race || []).forEach(r => {
+        (content.race || []).forEach((r) => {
             const rObj = { name: r.name, source: r.source || 'PHB' };
             processAdditionalSpells(r.additionalSpells, rObj, 'races');
         });
@@ -479,7 +543,7 @@ function loadAdditionalSpellAssociations() {
     const bgFile = path.join(dataDir, 'backgrounds.json');
     if (fs.existsSync(bgFile)) {
         const content = JSON.parse(fs.readFileSync(bgFile, 'utf8'));
-        (content.background || []).forEach(bg => {
+        (content.background || []).forEach((bg) => {
             const bgObj = { name: bg.name, source: bg.source || 'PHB' };
             processAdditionalSpells(bg.additionalSpells, bgObj, 'backgrounds');
         });
@@ -489,7 +553,7 @@ function loadAdditionalSpellAssociations() {
     const featsFile = path.join(dataDir, 'feats.json');
     if (fs.existsSync(featsFile)) {
         const content = JSON.parse(fs.readFileSync(featsFile, 'utf8'));
-        (content.feat || []).forEach(ft => {
+        (content.feat || []).forEach((ft) => {
             const ftObj = { name: ft.name, source: ft.source || 'PHB' };
             processAdditionalSpells(ft.additionalSpells, ftObj, 'feats');
         });
@@ -513,7 +577,7 @@ function buildNormalizedDatabase() {
         if (!fs.existsSync(filePath)) continue;
 
         const content = JSON.parse(fs.readFileSync(filePath, 'utf8'));
-        (content.spell || []).forEach(sp => {
+        (content.spell || []).forEach((sp) => {
             if (!sp.source) sp.source = sourceKey;
             rawSpells.push(sp);
         });
@@ -522,7 +586,7 @@ function buildNormalizedDatabase() {
     const brewSpells = isSrdOnly ? [] : getBrewEntities('spell');
     rawSpells.push(...brewSpells);
 
-    rawSpells.forEach(sp => {
+    rawSpells.forEach((sp) => {
         if (isSrdOnly) {
             const isSrd = sp.srd !== undefined || sp.srd52 !== undefined;
             if (!isSrd) return;
@@ -535,125 +599,137 @@ function buildNormalizedDatabase() {
         if (seenSet.has(uniqueKey)) return;
         seenSet.add(uniqueKey);
 
-            const schoolFull = SCHOOL_MAP[sp.school] || sp.school || 'Evocation';
-            const castingTime = formatTime(sp.time);
-            const range = formatRange(sp.range);
-            const components = formatComponents(sp.components);
-            const duration = formatDuration(sp.duration);
-            const isConc = Array.isArray(sp.duration) ? sp.duration.some(d => d.concentration) : false;
-            const isRitual = sp.meta?.ritual || false;
-            
-            const baseEntriesHtml = renderEntriesToHtml(sp.entries);
-            const higherLevelHtml = formatHigherLevel(sp.entriesHigherLevel);
-            const descriptionHtml = baseEntriesHtml + (higherLevelHtml ? `<br>${higherLevelHtml}` : '');
+        const schoolFull = SCHOOL_MAP[sp.school] || sp.school || 'Evocation';
+        const castingTime = formatTime(sp.time);
+        const range = formatRange(sp.range);
+        const components = formatComponents(sp.components);
+        const duration = formatDuration(sp.duration);
+        const isConc = Array.isArray(sp.duration) ? sp.duration.some((d) => d.concentration) : false;
+        const isRitual = sp.meta?.ritual || false;
 
-            const damageList = extractDamageList(sp);
-            const saveAbility = extractSaveAbility(sp);
-            const attackStat = extractAttackStat(sp);
-            const { upcastBonus, upcastScaleStep } = extractUpcastInfo(sp);
+        const baseEntriesHtml = renderEntriesToHtml(sp.entries);
+        const higherLevelHtml = formatHigherLevel(sp.entriesHigherLevel);
+        const descriptionHtml = baseEntriesHtml + (higherLevelHtml ? `<br>${higherLevelHtml}` : '');
 
-            // Smart per-row scaling assignment
-            const isCantrip = sp.level === 0;
-            const isMultiAttackCantrip = isCantrip && /eldritch blast/i.test(spellName);
-            const higherLevelText = JSON.stringify(sp.entriesHigherLevel || '').toLowerCase();
+        const damageList = extractDamageList(sp);
+        const saveAbility = extractSaveAbility(sp);
+        const attackStat = extractAttackStat(sp);
+        const { upcastBonus, upcastScaleStep } = extractUpcastInfo(sp);
 
-            damageList.forEach((d, idx) => {
-                d.isMagic = true;
-                if (isCantrip) {
-                    if (isMultiAttackCantrip) {
-                        d.cantripScale = false;
-                    } else if (d.cantripScale === undefined) {
-                        d.cantripScale = true;
-                    }
-                } else {
-                    if (upcastBonus) {
-                        const rowType = (d.type || '').toLowerCase();
-                        const mentionsRowType = rowType && higherLevelText.includes(`${rowType} damage`);
-                        const mentionsBoth = higherLevelText.includes('both damage') || higherLevelText.includes('each damage');
+        // Smart per-row scaling assignment
+        const isCantrip = sp.level === 0;
+        const isMultiAttackCantrip = isCantrip && /eldritch blast/i.test(spellName);
+        const higherLevelText = JSON.stringify(sp.entriesHigherLevel || '').toLowerCase();
 
-                        if (mentionsBoth || mentionsRowType) {
-                            d.upcastBonus = upcastBonus;
-                            d.upcastScaleStep = upcastScaleStep;
-                        } else if (!higherLevelText.includes(' damage increases') && idx === 0) {
-                            d.upcastBonus = upcastBonus;
-                            d.upcastScaleStep = upcastScaleStep;
-                        } else if (damageList.length === 1) {
-                            d.upcastBonus = upcastBonus;
-                            d.upcastScaleStep = upcastScaleStep;
-                        } else if (idx === 0 && !damageList.some(r => higherLevelText.includes((r.type || '').toLowerCase() + ' damage'))) {
-                            d.upcastBonus = upcastBonus;
-                            d.upcastScaleStep = upcastScaleStep;
-                        } else {
-                            d.upcastBonus = '';
-                            d.upcastScaleStep = 1;
-                        }
+        damageList.forEach((d, idx) => {
+            d.isMagic = true;
+            if (isCantrip) {
+                if (isMultiAttackCantrip) {
+                    d.cantripScale = false;
+                } else if (d.cantripScale === undefined) {
+                    d.cantripScale = true;
+                }
+            } else {
+                if (upcastBonus) {
+                    const rowType = (d.type || '').toLowerCase();
+                    const mentionsRowType = rowType && higherLevelText.includes(`${rowType} damage`);
+                    const mentionsBoth =
+                        higherLevelText.includes('both damage') || higherLevelText.includes('each damage');
+
+                    if (mentionsBoth || mentionsRowType) {
+                        d.upcastBonus = upcastBonus;
+                        d.upcastScaleStep = upcastScaleStep;
+                    } else if (!higherLevelText.includes(' damage increases') && idx === 0) {
+                        d.upcastBonus = upcastBonus;
+                        d.upcastScaleStep = upcastScaleStep;
+                    } else if (damageList.length === 1) {
+                        d.upcastBonus = upcastBonus;
+                        d.upcastScaleStep = upcastScaleStep;
+                    } else if (
+                        idx === 0 &&
+                        !damageList.some((r) => higherLevelText.includes((r.type || '').toLowerCase() + ' damage'))
+                    ) {
+                        d.upcastBonus = upcastBonus;
+                        d.upcastScaleStep = upcastScaleStep;
                     } else {
                         d.upcastBonus = '';
                         d.upcastScaleStep = 1;
                     }
-                }
-            });
-
-            // Base class lists from sources.json
-            const srcEntry = (sourcesData[spellSource] && sourcesData[spellSource][spellName]) ? sourcesData[spellSource][spellName] : null;
-            const classesList = srcEntry && srcEntry.class ? srcEntry.class.map(c => c.name) : [];
-            const variantClassesList = srcEntry && srcEntry.classVariant ? srcEntry.classVariant.map(c => c.name) : [];
-            
-            let directClasses = [];
-            if (sp.classes) {
-                if (Array.isArray(sp.classes)) {
-                    directClasses = sp.classes.map(c => typeof c === 'string' ? c : c.name).filter(Boolean);
-                } else if (typeof sp.classes === 'object') {
-                    if (Array.isArray(sp.classes.fromClassList)) {
-                        directClasses.push(...sp.classes.fromClassList.map(c => c.name).filter(Boolean));
-                    }
-                    if (Array.isArray(sp.classes.fromClassListVariant)) {
-                        directClasses.push(...sp.classes.fromClassListVariant.map(c => c.name).filter(Boolean));
-                    }
+                } else {
+                    d.upcastBonus = '';
+                    d.upcastScaleStep = 1;
                 }
             }
-
-            const combinedClasses = Array.from(new Set([...classesList, ...variantClassesList, ...directClasses])).sort();
-
-            // Subclasses, Races, Backgrounds, Feats from additionalAssocMap
-            const assoc = additionalAssocMap.get(spellName.toLowerCase()) || { subclasses: [], races: [], backgrounds: [], feats: [] };
-
-            const normalized = {
-                id: `sp_${spellName.toLowerCase().replace(/[^a-z0-9]/g, '_')}_${spellSource.toLowerCase()}`,
-                name: spellName,
-                source: spellSource,
-                page: sp.page || 0,
-                level: sp.level !== undefined ? sp.level : 0,
-                school: schoolFull,
-                castingTime,
-                range,
-                components,
-                duration,
-                concentration: isConc,
-                ritual: isRitual,
-                descriptionHtml,
-                higherLevelHtml,
-                classes: combinedClasses,
-                subclasses: assoc.subclasses,
-                races: assoc.races,
-                backgrounds: assoc.backgrounds,
-                feats: assoc.feats,
-                damageList,
-                isMagic: true,
-                cantripScale: isCantrip ? damageList.some(d => d.cantripScale) : false,
-                saveAbility,
-                attackStat,
-                upcastBonus,
-                upcastScaleStep,
-                scalingLevelDice: sp.scalingLevelDice || null,
-                conditionInflict: capitalizeArray(sp.conditionInflict),
-                affectsCreatureType: capitalizeArray(sp.affectsCreatureType),
-                areaTags: expandTags(sp.areaTags, AREA_TAG_MAP),
-                miscTags: expandTags(sp.miscTags, MISC_TAG_MAP)
-            };
-
-            allSpells.push(normalized);
         });
+
+        // Base class lists from sources.json
+        const srcEntry =
+            sourcesData[spellSource] && sourcesData[spellSource][spellName]
+                ? sourcesData[spellSource][spellName]
+                : null;
+        const classesList = srcEntry && srcEntry.class ? srcEntry.class.map((c) => c.name) : [];
+        const variantClassesList = srcEntry && srcEntry.classVariant ? srcEntry.classVariant.map((c) => c.name) : [];
+
+        let directClasses = [];
+        if (sp.classes) {
+            if (Array.isArray(sp.classes)) {
+                directClasses = sp.classes.map((c) => (typeof c === 'string' ? c : c.name)).filter(Boolean);
+            } else if (typeof sp.classes === 'object') {
+                if (Array.isArray(sp.classes.fromClassList)) {
+                    directClasses.push(...sp.classes.fromClassList.map((c) => c.name).filter(Boolean));
+                }
+                if (Array.isArray(sp.classes.fromClassListVariant)) {
+                    directClasses.push(...sp.classes.fromClassListVariant.map((c) => c.name).filter(Boolean));
+                }
+            }
+        }
+
+        const combinedClasses = Array.from(new Set([...classesList, ...variantClassesList, ...directClasses])).sort();
+
+        // Subclasses, Races, Backgrounds, Feats from additionalAssocMap
+        const assoc = additionalAssocMap.get(spellName.toLowerCase()) || {
+            subclasses: [],
+            races: [],
+            backgrounds: [],
+            feats: []
+        };
+
+        const normalized = {
+            id: `sp_${spellName.toLowerCase().replace(/[^a-z0-9]/g, '_')}_${spellSource.toLowerCase()}`,
+            name: spellName,
+            source: spellSource,
+            page: sp.page || 0,
+            level: sp.level !== undefined ? sp.level : 0,
+            school: schoolFull,
+            castingTime,
+            range,
+            components,
+            duration,
+            concentration: isConc,
+            ritual: isRitual,
+            descriptionHtml,
+            higherLevelHtml,
+            classes: combinedClasses,
+            subclasses: assoc.subclasses,
+            races: assoc.races,
+            backgrounds: assoc.backgrounds,
+            feats: assoc.feats,
+            damageList,
+            isMagic: true,
+            cantripScale: isCantrip ? damageList.some((d) => d.cantripScale) : false,
+            saveAbility,
+            attackStat,
+            upcastBonus,
+            upcastScaleStep,
+            scalingLevelDice: sp.scalingLevelDice || null,
+            conditionInflict: capitalizeArray(sp.conditionInflict),
+            affectsCreatureType: capitalizeArray(sp.affectsCreatureType),
+            areaTags: expandTags(sp.areaTags, AREA_TAG_MAP),
+            miscTags: expandTags(sp.miscTags, MISC_TAG_MAP)
+        };
+
+        allSpells.push(normalized);
+    });
 
     allSpells.sort((a, b) => a.name.localeCompare(b.name));
 
@@ -662,7 +738,7 @@ function buildNormalizedDatabase() {
         fs.mkdirSync(targetDataDir, { recursive: true });
     }
     const catalogPath = path.join(targetDataDir, 'spells-catalog.json');
-    const catalog = allSpells.map(sp => ({
+    const catalog = allSpells.map((sp) => ({
         id: sp.id,
         name: sp.name,
         source: sp.source,

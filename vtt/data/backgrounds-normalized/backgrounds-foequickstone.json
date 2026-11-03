@@ -95,7 +95,51 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "anyFromCategory": {
+          "category": [
+            "D"
+          ],
+          "count": 1
+        }
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_dragonmarked_foundling_foequickstone",
@@ -195,7 +239,51 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "anyFromCategory": {
+          "category": [
+            "D"
+          ],
+          "count": 1
+        }
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "con",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "con",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_dragonmarked_scion_foequickstone",
@@ -275,7 +363,51 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "anyFromCategory": {
+          "category": [
+            "D"
+          ],
+          "count": 1
+        }
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "int",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "int",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_magewright_foequickstone",
@@ -354,7 +486,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "magic initiate; wizard|xphb": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "con",
+              "int",
+              "wis"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "con",
+              "int",
+              "wis"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_wandslinger_foequickstone",
@@ -440,6 +611,45 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "magic initiate; wizard|xphb": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "int",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "int",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   }
 ]

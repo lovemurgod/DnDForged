@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "checkJs": false,
+    "allowJs": true,
+    "maxNodeModuleJsDepth": 2,
+    "skipLibCheck": true,
+    "noImplicitAny": false,
+    "noImplicitThis": false,
+    "strict": false,
+    "strictNullChecks": false,
+    "noEmit": true
+  },
+  "include": [
+    "server.js",
+    "server/**/*.js",
+    "vtt/**/*.js",
+    "electron/**/*.js",
+    "test/**/*.mjs",
+    "scripts/**/*.mjs"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "5etools-src",
+    ".dndforged-data",
+    ".release-stage"
+  ]
+}
+

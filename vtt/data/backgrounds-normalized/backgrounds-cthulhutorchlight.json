@@ -48,6 +48,51 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "any": 1
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "con",
+              "int",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "con",
+              "int",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   }
 ]

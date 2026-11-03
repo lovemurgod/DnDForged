@@ -91,7 +91,46 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "child of the sun|lfl": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "con",
+              "wis"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "con",
+              "wis"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   },
   {
     "id": "bg_shadowmoor_expert_lfl",
@@ -190,6 +229,45 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "shadowmoor hexer|lfl": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "int",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "int",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   }
 ]

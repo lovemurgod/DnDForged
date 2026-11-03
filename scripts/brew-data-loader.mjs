@@ -22,7 +22,7 @@ export function loadAllBrewFiles({ includePartnered = true, includePrerelease = 
     const files = [];
 
     for (const { dir, type } of dirsToScan) {
-        const fileNames = fs.readdirSync(dir).filter(f => f.endsWith('.json'));
+        const fileNames = fs.readdirSync(dir).filter((f) => f.endsWith('.json'));
         for (const fileName of fileNames) {
             const fullPath = path.join(dir, fileName);
             try {

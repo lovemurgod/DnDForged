@@ -7,14 +7,16 @@ const __dirname = path.dirname(__filename);
 const rootDir = path.join(__dirname, '..');
 
 const outArgIdx = process.argv.indexOf('--out');
-const targetTokenDir = outArgIdx !== -1 && process.argv[outArgIdx + 1]
-    ? path.resolve(rootDir, process.argv[outArgIdx + 1])
-    : path.join(rootDir, '.release-stage', 'vtt', 'img', 'bestiary', 'tokens');
+const targetTokenDir =
+    outArgIdx !== -1 && process.argv[outArgIdx + 1]
+        ? path.resolve(rootDir, process.argv[outArgIdx + 1])
+        : path.join(rootDir, '.release-stage', 'vtt', 'img', 'bestiary', 'tokens');
 
 const catalogPathArg = process.argv.indexOf('--catalog');
-const catalogPath = catalogPathArg !== -1 && process.argv[catalogPathArg + 1]
-    ? path.resolve(rootDir, process.argv[catalogPathArg + 1])
-    : path.join(rootDir, '.release-stage', 'vtt', 'data', 'bestiary-catalog.json');
+const catalogPath =
+    catalogPathArg !== -1 && process.argv[catalogPathArg + 1]
+        ? path.resolve(rootDir, process.argv[catalogPathArg + 1])
+        : path.join(rootDir, '.release-stage', 'vtt', 'data', 'bestiary-catalog.json');
 
 console.log(`\n======================================================`);
 console.log(`🎨 GENERATING CC0 OPEN-LICENSE SRD CREATURE TOKENS`);
@@ -46,11 +48,13 @@ const TYPE_COLORS = {
 function generateSvgToken(name, typeStr) {
     const cleanName = (name || 'Creature').trim();
     const words = cleanName.split(/\s+/).filter(Boolean);
-    let initials = words.length > 1 ? (words[0][0] + words[1][0]) : cleanName.slice(0, 2);
+    let initials = words.length > 1 ? words[0][0] + words[1][0] : cleanName.slice(0, 2);
     initials = (initials || 'C').toUpperCase();
 
-    const cleanType = String(typeStr || 'monstrosity').toLowerCase().trim();
-    const matchedType = Object.keys(TYPE_COLORS).find(t => cleanType.includes(t)) || 'monstrosity';
+    const cleanType = String(typeStr || 'monstrosity')
+        .toLowerCase()
+        .trim();
+    const matchedType = Object.keys(TYPE_COLORS).find((t) => cleanType.includes(t)) || 'monstrosity';
     const palette = TYPE_COLORS[matchedType];
 
     return `<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">

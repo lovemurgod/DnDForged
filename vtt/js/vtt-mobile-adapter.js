@@ -13,7 +13,11 @@
 export function initVttMobileAdapter(vtt) {
     // Detect if device supports touch/coarse pointer input (phones, iPads, tablets, touchscreens)
     const isTouchDevice = () => {
-        return ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (window.matchMedia && window.matchMedia('(pointer: coarse)').matches);
+        return (
+            'ontouchstart' in window ||
+            navigator.maxTouchPoints > 0 ||
+            (window.matchMedia && window.matchMedia('(pointer: coarse)').matches)
+        );
     };
 
     // Support user manual preference: 'true' (force mobile), 'false' (force desktop), or null (auto)
@@ -22,7 +26,11 @@ export function initVttMobileAdapter(vtt) {
         const forced = localStorage.getItem('vtt_force_mobile_ui');
         if (forced === 'true') return true;
         if (forced === 'false') return false;
-        return window.innerWidth <= 900 || ((window.matchMedia && window.matchMedia('(pointer: coarse)').matches || 'ontouchstart' in window) && window.innerWidth <= 1366);
+        return (
+            window.innerWidth <= 900 ||
+            (((window.matchMedia && window.matchMedia('(pointer: coarse)').matches) || 'ontouchstart' in window) &&
+                window.innerWidth <= 1366)
+        );
     };
 
     // Universal touch gestures (pan, pinch-to-zoom, hold-drag) work on any touch-capable screen
@@ -141,8 +149,12 @@ export function initVttMobileAdapter(vtt) {
         if (openCtxMenu) {
             const touch = e.touches[0];
             const menuRect = openCtxMenu.getBoundingClientRect();
-            const isInside = touch && touch.clientX >= menuRect.left && touch.clientX <= menuRect.right &&
-                             touch.clientY >= menuRect.top && touch.clientY <= menuRect.bottom;
+            const isInside =
+                touch &&
+                touch.clientX >= menuRect.left &&
+                touch.clientX <= menuRect.right &&
+                touch.clientY >= menuRect.top &&
+                touch.clientY <= menuRect.bottom;
             if (!isInside) {
                 openCtxMenu.remove();
                 cancelLongPress();
@@ -156,8 +168,12 @@ export function initVttMobileAdapter(vtt) {
         if (openTooltip) {
             const touch = e.touches[0];
             const tipRect = openTooltip.getBoundingClientRect();
-            const isInside = touch && touch.clientX >= tipRect.left && touch.clientX <= tipRect.right &&
-                             touch.clientY >= tipRect.top && touch.clientY <= tipRect.bottom;
+            const isInside =
+                touch &&
+                touch.clientX >= tipRect.left &&
+                touch.clientX <= tipRect.right &&
+                touch.clientY >= tipRect.top &&
+                touch.clientY <= tipRect.bottom;
             if (!isInside) {
                 if (window.VTT?.canvasEngine?.hideGmTokenTooltip) {
                     window.VTT.canvasEngine.hideGmTokenTooltip();
@@ -171,8 +187,12 @@ export function initVttMobileAdapter(vtt) {
         if (mobileRadialDial && !mobileRadialDial.classList.contains('vtt-hidden')) {
             const touch = e.touches[0];
             const dialRect = mobileRadialDial.getBoundingClientRect();
-            const isInside = touch && touch.clientX >= dialRect.left && touch.clientX <= dialRect.right &&
-                             touch.clientY >= dialRect.top && touch.clientY <= dialRect.bottom;
+            const isInside =
+                touch &&
+                touch.clientX >= dialRect.left &&
+                touch.clientX <= dialRect.right &&
+                touch.clientY >= dialRect.top &&
+                touch.clientY <= dialRect.bottom;
             if (!isInside) {
                 hideMobileRadialDial();
             }
@@ -253,7 +273,10 @@ export function initVttMobileAdapter(vtt) {
                 const canvasEngine = window.VTT?.canvasEngine;
                 let touchedToken = null;
                 if (canvasEngine?.getCanvasMouseCoords && canvasEngine?.getTokenAtPoint) {
-                    const mouseCoords = canvasEngine.getCanvasMouseCoords({ clientX: touch.clientX, clientY: touch.clientY });
+                    const mouseCoords = canvasEngine.getCanvasMouseCoords({
+                        clientX: touch.clientX,
+                        clientY: touch.clientY
+                    });
                     const zoom = canvasEngine.getZoom ? canvasEngine.getZoom() : 1;
                     const touchRadius = 24 / Math.max(0.1, zoom);
                     touchedToken = canvasEngine.getTokenAtPoint(mouseCoords, true, true, touchRadius);
@@ -280,7 +303,10 @@ export function initVttMobileAdapter(vtt) {
 
             let touchedToken = null;
             if (canvasEngine?.getCanvasMouseCoords && canvasEngine?.getTokenAtPoint) {
-                const mouseCoords = canvasEngine.getCanvasMouseCoords({ clientX: touch.clientX, clientY: touch.clientY });
+                const mouseCoords = canvasEngine.getCanvasMouseCoords({
+                    clientX: touch.clientX,
+                    clientY: touch.clientY
+                });
                 const zoom = canvasEngine.getZoom ? canvasEngine.getZoom() : 1;
                 // Generous screen touch slop radius (24px in screen units) converted to world coords
                 const touchRadius = 24 / Math.max(0.1, zoom);
@@ -290,7 +316,10 @@ export function initVttMobileAdapter(vtt) {
 
             let touchedDrawing = null;
             if (activeTool === 'select' && !touchedToken && canvasEngine?.getDrawingAtPoint) {
-                const mouseCoords = canvasEngine.getCanvasMouseCoords({ clientX: touch.clientX, clientY: touch.clientY });
+                const mouseCoords = canvasEngine.getCanvasMouseCoords({
+                    clientX: touch.clientX,
+                    clientY: touch.clientY
+                });
                 touchedDrawing = canvasEngine.getDrawingAtPoint(mouseCoords, true);
             }
 
@@ -349,8 +378,13 @@ export function initVttMobileAdapter(vtt) {
                 if (mobileTokenActions) mobileTokenActions.classList.add('vtt-hidden');
                 if (mobileDragPill) mobileDragPill.classList.add('vtt-hidden');
 
-                if (activeTouchedToken?.id && canvasEngine?.showTokenContextMenu) {
-                    canvasEngine.showTokenContextMenu(activeTouchedToken.id, touch.clientX, touch.clientY);
+                if (activeTouchedToken?.id) {
+                    const selIds = canvasEngine?.getSelectedTokenIds?.() || [];
+                    if (selIds.length > 1 && selIds.includes(activeTouchedToken.id) && canvasEngine?.showMassRollContextMenu) {
+                        canvasEngine.showMassRollContextMenu(selIds, touch.clientX, touch.clientY);
+                    } else if (canvasEngine?.showTokenContextMenu) {
+                        canvasEngine.showTokenContextMenu(activeTouchedToken.id, touch.clientX, touch.clientY);
+                    }
                 } else {
                     dispatchSyntheticMouseEvent('contextmenu', touch.clientX, touch.clientY, 2);
                 }
@@ -390,7 +424,7 @@ export function initVttMobileAdapter(vtt) {
                 // 1. Zoom Delta
                 if (initialPinchDist > 0 && Math.abs(newDist - initialPinchDist) > 1) {
                     const zoomRatio = newDist / initialPinchDist;
-                    const currentZoom = (canvasEngine.getZoom ? canvasEngine.getZoom() : 1);
+                    const currentZoom = canvasEngine.getZoom ? canvasEngine.getZoom() : 1;
                     const targetZoom = Math.min(5.0, Math.max(0.1, currentZoom * zoomRatio));
                     if (canvasEngine.setZoom) {
                         canvasEngine.setZoom(targetZoom, newMid.x, newMid.y);
@@ -453,7 +487,12 @@ export function initVttMobileAdapter(vtt) {
 
             if (!didLongPress) {
                 const canvasEngine = window.VTT?.canvasEngine;
-                if (activeTouchedToken && isTokenDragEngaged && canvasEngine?.moveTouchTokenDrag && canvasEngine?.isDraggingToken?.()) {
+                if (
+                    activeTouchedToken &&
+                    isTokenDragEngaged &&
+                    canvasEngine?.moveTouchTokenDrag &&
+                    canvasEngine?.isDraggingToken?.()
+                ) {
                     canvasEngine.moveTouchTokenDrag(touch.clientX, touch.clientY);
                 } else if (!activeTouchedToken) {
                     dispatchSyntheticMouseEvent('mousemove', touch.clientX, touch.clientY, 0);
@@ -473,7 +512,10 @@ export function initVttMobileAdapter(vtt) {
             if (e.cancelable) e.preventDefault();
             const touch = e.changedTouches ? e.changedTouches[0] : null;
             if (touch && window.VTT?.canvasEngine?.getCanvasMouseCoords) {
-                const coords = window.VTT.canvasEngine.getCanvasMouseCoords({ clientX: touch.clientX, clientY: touch.clientY });
+                const coords = window.VTT.canvasEngine.getCanvasMouseCoords({
+                    clientX: touch.clientX,
+                    clientY: touch.clientY
+                });
                 if (coords) {
                     executeTapPlacement(coords.x, coords.y);
                 }
@@ -518,7 +560,12 @@ export function initVttMobileAdapter(vtt) {
 
                 if (!didLongPress && !isDragCancelled) {
                     const canvasEngine = window.VTT?.canvasEngine;
-                    if (activeTouchedToken && isTokenDragEngaged && canvasEngine?.endTouchTokenDrag && canvasEngine?.isDraggingToken?.()) {
+                    if (
+                        activeTouchedToken &&
+                        isTokenDragEngaged &&
+                        canvasEngine?.endTouchTokenDrag &&
+                        canvasEngine?.isDraggingToken?.()
+                    ) {
                         // Token drag completed!
                         canvasEngine.endTouchTokenDrag(changedTouch.clientX, changedTouch.clientY);
                     } else if (activeTouchedToken) {
@@ -575,7 +622,7 @@ export function initVttMobileAdapter(vtt) {
 
     function dispatchSyntheticMouseEvent(type, clientX, clientY, button = 0) {
         if (!canvasInteraction) return;
-        const target = (type === 'mousemove' || type === 'mouseup') ? window : canvasInteraction;
+        const target = type === 'mousemove' || type === 'mouseup' ? window : canvasInteraction;
         const evt = new MouseEvent(type, {
             view: window,
             bubbles: true,
@@ -618,15 +665,27 @@ export function initVttMobileAdapter(vtt) {
         }
 
         // Setup Sheet Mobile Topbars
-        injectSheetMobileTopbar(playerSheetPanel, 'Player Character', () => {
-            closeAllDrawers();
-            setActiveNavTab('map');
-        }, false, true);
+        injectSheetMobileTopbar(
+            playerSheetPanel,
+            'Player Character',
+            () => {
+                closeAllDrawers();
+                setActiveNavTab('map');
+            },
+            false,
+            true
+        );
 
-        injectSheetMobileTopbar(creatureSheetPanel, 'Creature Statblock', () => {
-            closeAllDrawers();
-            setActiveNavTab('map');
-        }, true, false);
+        injectSheetMobileTopbar(
+            creatureSheetPanel,
+            'Creature Statblock',
+            () => {
+                closeAllDrawers();
+                setActiveNavTab('map');
+            },
+            true,
+            false
+        );
 
         // Setup Mobile Drawer Header in Right Sidebar
         injectSidebarMobileHeader();
@@ -637,8 +696,9 @@ export function initVttMobileAdapter(vtt) {
         // Setup Fast Dice Haptics
         setupFastDiceHaptics();
 
-        // Setup Initiative Mobile Header
+        // Setup Initiative Mobile Header & Action Sheet
         injectInitiativeMobileHeader();
+        setupMobileInitiativeActionSheet();
 
         // Setup Floating Tool FAB
         setupMobileToolsFab();
@@ -697,7 +757,7 @@ export function initVttMobileAdapter(vtt) {
             ];
         }
 
-        tabs.forEach(tab => {
+        tabs.forEach((tab) => {
             const btn = document.createElement('button');
             btn.className = `mobile-nav-btn ${tab.id === activeNavTab ? 'active' : ''}`;
             btn.dataset.tab = tab.id;
@@ -761,12 +821,16 @@ export function initVttMobileAdapter(vtt) {
     function setActiveNavTab(tabId) {
         activeNavTab = tabId;
         const btns = mobileNav.querySelectorAll('.mobile-nav-btn');
-        btns.forEach(btn => {
+        btns.forEach((btn) => {
             btn.classList.toggle('active', btn.dataset.tab === tabId);
         });
 
         if (mobileSheetCarousel) {
-            if (tabId === 'map' || playerSheetPanel?.classList.contains('open') || creatureSheetPanel?.classList.contains('open')) {
+            if (
+                tabId === 'map' ||
+                playerSheetPanel?.classList.contains('open') ||
+                creatureSheetPanel?.classList.contains('open')
+            ) {
                 mobileSheetCarousel.classList.remove('vtt-hidden');
             } else {
                 mobileSheetCarousel.classList.add('vtt-hidden');
@@ -807,8 +871,8 @@ export function initVttMobileAdapter(vtt) {
         const tabBtns = sidebar.querySelectorAll('.tab-header');
         const tabPanels = sidebar.querySelectorAll('.tab-panel');
 
-        tabBtns.forEach(btn => btn.classList.toggle('active', btn.dataset.tab === targetTabId));
-        tabPanels.forEach(panel => panel.classList.toggle('active', panel.id === targetTabId));
+        tabBtns.forEach((btn) => btn.classList.toggle('active', btn.dataset.tab === targetTabId));
+        tabPanels.forEach((panel) => panel.classList.toggle('active', panel.id === targetTabId));
 
         // Update drawer header title & icon
         const drawerTitle = document.getElementById('mobile-drawer-title-text');
@@ -887,7 +951,8 @@ export function initVttMobileAdapter(vtt) {
                     <span style="font-weight: 600;">Handouts</span>
                     <span style="font-size: 0.75rem; color: #94a3b8;">Campaign lore & notes</span>
                 </div>
-                ${isGM ? `
+                ${isGM
+                ? `
                 <div class="mobile-more-card" data-action="maps">
                     <i class="fa-solid fa-map-location-dot" style="font-size: 1.8rem; color: #f5c242;"></i>
                     <span style="font-weight: 600;">Map Manager</span>
@@ -908,13 +973,15 @@ export function initVttMobileAdapter(vtt) {
                     <span style="font-weight: 600;">Map Tools</span>
                     <span style="font-size: 0.75rem; color: #94a3b8;">Traps & Portals</span>
                 </div>
-                ` : `
+                `
+                : `
                 <div class="mobile-more-card" data-action="characters">
                     <i class="fa-solid fa-users" style="font-size: 1.8rem; color: #f5c242;"></i>
                     <span style="font-weight: 600;">Characters</span>
                     <span style="font-size: 0.75rem; color: #94a3b8;">Party members</span>
                 </div>
-                `}
+                `
+            }
                 <div class="mobile-more-card" data-action="paint">
                     <i class="fa-solid fa-palette" style="font-size: 1.8rem; color: #f5c242;"></i>
                     <span style="font-weight: 600;">Paint Tools</span>
@@ -950,7 +1017,7 @@ export function initVttMobileAdapter(vtt) {
             </div>
         `;
 
-        morePanel.querySelectorAll('.mobile-more-card').forEach(card => {
+        morePanel.querySelectorAll('.mobile-more-card').forEach((card) => {
             card.addEventListener('click', () => {
                 const action = card.dataset.action;
                 if (action === 'maps') {
@@ -1003,7 +1070,7 @@ export function initVttMobileAdapter(vtt) {
     }
 
     function setupFastDiceHaptics() {
-        document.querySelectorAll('.fast-dice').forEach(btn => {
+        document.querySelectorAll('.fast-dice').forEach((btn) => {
             btn.addEventListener('click', () => {
                 if (navigator.vibrate) navigator.vibrate(25);
             });
@@ -1026,12 +1093,15 @@ export function initVttMobileAdapter(vtt) {
                 </div>
             </div>
             <div style="display: flex; align-items: center; gap: 8px;">
-                ${showSpawn ? `
+                ${showSpawn
+                ? `
                 <button class="mobile-sheet-spawn-btn" title="Spawn Token on Canvas">
                     <i class="fa-solid fa-plus"></i>
                     <span>Spawn</span>
                 </button>
-                ` : ''}
+                `
+                : ''
+            }
                 <button class="mobile-sheet-close-btn" title="Close Sheet (Return to Map)">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
@@ -1043,7 +1113,9 @@ export function initVttMobileAdapter(vtt) {
             if (spawnBtn) {
                 spawnBtn.addEventListener('click', () => {
                     if (isCreature) {
-                        const monster = window.VTT?.creatureSheet?.getCurrentMonster?.() || window.vttCreatureSheetAPI?.getCurrentMonster?.();
+                        const monster =
+                            window.VTT?.creatureSheet?.getCurrentMonster?.() ||
+                            window.vttCreatureSheetAPI?.getCurrentMonster?.();
                         if (monster && window.VTT?.spawnMonsterAtCenter) {
                             window.VTT.spawnMonsterAtCenter(monster);
                         }
@@ -1072,7 +1144,8 @@ export function initVttMobileAdapter(vtt) {
         const nameEl = playerSheetPanel.querySelector('.ps-hero-name') || playerSheetPanel.querySelector('h2');
         const hpEl = playerSheetPanel.querySelector('.ps-hp-current');
         const maxHpEl = playerSheetPanel.querySelector('.ps-hp-max');
-        const avatarEl = playerSheetPanel.querySelector('.ps-hero-avatar') || playerSheetPanel.querySelector('.token-avatar');
+        const avatarEl =
+            playerSheetPanel.querySelector('.ps-hero-avatar') || playerSheetPanel.querySelector('.token-avatar');
 
         if (nameEl) {
             const nameSpan = topbar.querySelector('.mobile-sheet-name');
@@ -1080,7 +1153,8 @@ export function initVttMobileAdapter(vtt) {
         }
         if (hpEl && maxHpEl) {
             const hpSpan = topbar.querySelector('.mobile-sheet-hp-pill');
-            if (hpSpan) hpSpan.textContent = `HP: ${hpEl.value || hpEl.textContent} / ${maxHpEl.value || maxHpEl.textContent}`;
+            if (hpSpan)
+                hpSpan.textContent = `HP: ${hpEl.value || hpEl.textContent} / ${maxHpEl.value || maxHpEl.textContent}`;
         }
         if (avatarEl && avatarEl.src) {
             const topbarAvatar = topbar.querySelector('.mobile-sheet-avatar');
@@ -1092,13 +1166,14 @@ export function initVttMobileAdapter(vtt) {
         if (!creatureSheetPanel) return;
         const topbar = creatureSheetPanel.querySelector('.mobile-sheet-topbar');
         if (!topbar) return;
-        const monster = window.VTT?.creatureSheet?.getCurrentMonster?.() || window.vttCreatureSheetAPI?.getCurrentMonster?.();
+        const monster =
+            window.VTT?.creatureSheet?.getCurrentMonster?.() || window.vttCreatureSheetAPI?.getCurrentMonster?.();
         if (monster) {
             const nameSpan = topbar.querySelector('.mobile-sheet-name');
             if (nameSpan) nameSpan.textContent = monster.name || 'Creature Statblock';
             const hpSpan = topbar.querySelector('.mobile-sheet-hp-pill');
             if (hpSpan && monster.hp) {
-                const hpVal = typeof monster.hp === 'object' ? (monster.hp.average || monster.hp.formula) : monster.hp;
+                const hpVal = typeof monster.hp === 'object' ? monster.hp.average || monster.hp.formula : monster.hp;
                 hpSpan.textContent = `HP: ${hpVal}`;
             }
             const avatarImg = topbar.querySelector('.mobile-sheet-avatar');
@@ -1109,7 +1184,9 @@ export function initVttMobileAdapter(vtt) {
                     img = monster.tokenImages[idx]?.url;
                 }
                 if (!img) {
-                    img = (window.VTT?.dataBridge?.getMonsterImageUrl ? window.VTT.dataBridge.getMonsterImageUrl(monster) : 'favicon.svg');
+                    img = window.VTT?.dataBridge?.getMonsterImageUrl
+                        ? window.VTT.dataBridge.getMonsterImageUrl(monster)
+                        : 'favicon.svg';
                 }
                 avatarImg.src = img || 'favicon.svg';
             }
@@ -1177,6 +1254,181 @@ export function initVttMobileAdapter(vtt) {
         initContainer.insertBefore(header, initContainer.firstChild);
     }
 
+    function setupMobileInitiativeActionSheet() {
+        if (!initContainer) return;
+        if (document.getElementById('vtt-mobile-init-action-sheet')) return;
+
+        const sheetEl = document.createElement('div');
+        sheetEl.id = 'vtt-mobile-init-action-sheet';
+        sheetEl.className = 'vtt-mobile-init-sheet vtt-hidden';
+        sheetEl.innerHTML = `
+            <div class="mobile-init-sheet-backdrop"></div>
+            <div class="mobile-init-sheet-panel">
+                <div class="mobile-init-sheet-handle"></div>
+                <div class="mobile-init-sheet-header">
+                    <div class="mobile-init-sheet-avatar-slot"></div>
+                    <div class="mobile-init-sheet-info">
+                        <div class="mobile-init-sheet-name">Combatant</div>
+                        <div class="mobile-init-sheet-meta">
+                            <span class="mobile-init-sheet-hp vtt-hidden">HP: --</span>
+                            <span class="mobile-init-sheet-score">Initiative: <strong class="mobile-init-sheet-score-val">--</strong></span>
+                        </div>
+                    </div>
+                    <button class="mobile-init-sheet-close" title="Close"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <div class="mobile-init-sheet-actions">
+                    <button class="mobile-init-sheet-btn" id="mobile-init-action-pan">
+                        <i class="fa-solid fa-crosshairs"></i> Pan to Token
+                    </button>
+                    <button class="mobile-init-sheet-btn" id="mobile-init-action-edit">
+                        <i class="fa-solid fa-pen-to-square"></i> Edit Score
+                    </button>
+                    <button class="mobile-init-sheet-btn mobile-init-sheet-btn--danger" id="mobile-init-action-del">
+                        <i class="fa-solid fa-trash-can"></i> Remove
+                    </button>
+                </div>
+                <div class="mobile-init-sheet-edit-row vtt-hidden">
+                    <input type="number" step="any" class="mobile-init-sheet-input" placeholder="New Score">
+                    <button class="mobile-init-sheet-save-btn">Save</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(sheetEl);
+
+        let currentCombatantId = null;
+        let currentCard = null;
+
+        const backdrop = sheetEl.querySelector('.mobile-init-sheet-backdrop');
+        const closeBtn = sheetEl.querySelector('.mobile-init-sheet-close');
+        const btnPan = sheetEl.querySelector('#mobile-init-action-pan');
+        const btnEdit = sheetEl.querySelector('#mobile-init-action-edit');
+        const btnDel = sheetEl.querySelector('#mobile-init-action-del');
+        const editRow = sheetEl.querySelector('.mobile-init-sheet-edit-row');
+        const editInput = sheetEl.querySelector('.mobile-init-sheet-input');
+        const saveBtn = sheetEl.querySelector('.mobile-init-sheet-save-btn');
+
+        const closeSheet = () => {
+            sheetEl.classList.add('vtt-hidden');
+            editRow.classList.add('vtt-hidden');
+            currentCombatantId = null;
+            currentCard = null;
+        };
+
+        backdrop.addEventListener('click', closeSheet);
+        closeBtn.addEventListener('click', closeSheet);
+
+        // Pan to token
+        btnPan.addEventListener('click', () => {
+            if (currentCombatantId && window.VTT?.canvasEngine) {
+                const token = window.VTT.canvasEngine.getTokens()?.[currentCombatantId];
+                if (token) {
+                    window.VTT.canvasEngine.panTo(token.x, token.y);
+                    const isGM = (vtt.role || window.VTT?.role) === 'GM';
+                    if (isGM || token.isPlayer || token.characterId === window.VTT?.activeCharacterId) {
+                        window.VTT.canvasEngine.selectToken(token.id);
+                    }
+                }
+            }
+            closeSheet();
+            closeAllDrawers();
+            setActiveNavTab('map');
+        });
+
+        // Edit score toggle
+        btnEdit.addEventListener('click', () => {
+            editRow.classList.toggle('vtt-hidden');
+            if (!editRow.classList.contains('vtt-hidden')) {
+                const currentScore = parseFloat(sheetEl.querySelector('.mobile-init-sheet-score-val').textContent) || 0;
+                editInput.value = currentScore;
+                editInput.focus();
+            }
+        });
+
+        // Save score
+        saveBtn.addEventListener('click', () => {
+            const newScore = parseFloat(editInput.value);
+            if (!isNaN(newScore) && currentCombatantId) {
+                const chatEngine = window.VTT?.chatEngine;
+                if (chatEngine && typeof chatEngine.updateCombatantScore === 'function') {
+                    chatEngine.updateCombatantScore(currentCombatantId, newScore);
+                } else if (currentCard) {
+                    const scoreEl = currentCard.querySelector('.init-card-score');
+                    if (scoreEl) {
+                        currentCard.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true, cancelable: true }));
+                        const input = scoreEl.querySelector('input');
+                        if (input) {
+                            input.value = newScore;
+                            input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+                        }
+                    }
+                }
+            }
+            closeSheet();
+        });
+
+        // Remove combatant
+        btnDel.addEventListener('click', () => {
+            if (currentCombatantId) {
+                const delBtn = currentCard?.querySelector('.init-card-del-btn');
+                if (delBtn) {
+                    delBtn.click();
+                } else if (typeof window.VTT?.chatEngine?.removeFromInitiative === 'function') {
+                    window.VTT.chatEngine.removeFromInitiative(currentCombatantId);
+                }
+            }
+            closeSheet();
+        });
+
+        // Delegate tap on init-list cards when mobile drawer is open or screen is narrow
+        const initList = document.getElementById('init-list');
+        if (initList) {
+            initList.addEventListener('click', (e) => {
+                if (!initContainer.classList.contains('mobile-init-open') && window.innerWidth > 768) return;
+                const card = e.target.closest('.init-carousel-card');
+                if (!card) return;
+
+                // Stop default pan/dblclick logic when opening mobile sheet
+                e.stopPropagation();
+
+                currentCard = card;
+                currentCombatantId = card.dataset.id;
+
+                const isGM = (vtt.role || window.VTT?.role) === 'GM';
+                const nameEl = card.querySelector('.init-card-hover-tooltip-name') || card.querySelector('.init-card-name');
+                const name = nameEl ? nameEl.textContent.trim() : 'Combatant';
+                const hpEl = card.querySelector('.init-card-hover-tooltip-hp') || card.querySelector('.init-card-hp-pill');
+                const scoreEl = card.querySelector('.init-card-score');
+                const score = scoreEl ? scoreEl.textContent.trim() : '—';
+                const avatarSlot = card.querySelector('.init-card-img');
+
+                sheetEl.querySelector('.mobile-init-sheet-name').textContent = name;
+                sheetEl.querySelector('.mobile-init-sheet-score-val').textContent = score;
+
+                const sheetHp = sheetEl.querySelector('.mobile-init-sheet-hp');
+                if (hpEl && hpEl.textContent.trim()) {
+                    sheetHp.textContent = `HP: ${hpEl.textContent.trim()}`;
+                    sheetHp.style.color = hpEl.style.color || '#22c55e';
+                    sheetHp.classList.remove('vtt-hidden');
+                } else {
+                    sheetHp.classList.add('vtt-hidden');
+                }
+
+                const sheetAvatar = sheetEl.querySelector('.mobile-init-sheet-avatar-slot');
+                if (avatarSlot) {
+                    sheetAvatar.innerHTML = avatarSlot.innerHTML;
+                } else {
+                    sheetAvatar.innerHTML = '';
+                }
+
+                // Show/hide GM actions
+                btnDel.style.display = isGM ? 'inline-flex' : 'none';
+                btnEdit.style.display = isGM ? 'inline-flex' : 'none';
+
+                sheetEl.classList.remove('vtt-hidden');
+            });
+        }
+    }
+
     // ========================================================================
     // 4. FLOATING TABLETOP TOOLS FAB & PALETTE
     // ========================================================================
@@ -1207,12 +1459,12 @@ export function initVttMobileAdapter(vtt) {
 
         // Attach Tool Actions to Desktop Toolbar equivalents
         const toolButtons = mobileToolsMenu.querySelectorAll('.mobile-tool-item');
-        toolButtons.forEach(btn => {
+        toolButtons.forEach((btn) => {
             btn.addEventListener('click', () => {
                 const toolKey = btn.dataset.tool;
                 activateTool(toolKey);
                 if (toolKey !== 'fit' && toolKey !== 'zoom-in' && toolKey !== 'zoom-out') {
-                    toolButtons.forEach(b => b.classList.toggle('active', b === btn));
+                    toolButtons.forEach((b) => b.classList.toggle('active', b === btn));
                 }
                 mobileToolsMenu.classList.remove('active');
                 mobileFab.classList.remove('active');
@@ -1223,7 +1475,7 @@ export function initVttMobileAdapter(vtt) {
     function updateMobileToolsRoleVisibility(role) {
         if (!mobileToolsMenu) return;
         const isGM = role === 'GM';
-        mobileToolsMenu.querySelectorAll('.mobile-tool-item.gm-only').forEach(el => {
+        mobileToolsMenu.querySelectorAll('.mobile-tool-item.gm-only').forEach((el) => {
             if (isGM) {
                 el.classList.remove('vtt-hidden');
                 el.style.removeProperty('display');
@@ -1232,7 +1484,7 @@ export function initVttMobileAdapter(vtt) {
                 el.style.display = 'none';
             }
         });
-        mobileToolsMenu.querySelectorAll('.mobile-tool-item.player-only').forEach(el => {
+        mobileToolsMenu.querySelectorAll('.mobile-tool-item.player-only').forEach((el) => {
             if (!isGM) {
                 el.classList.remove('vtt-hidden');
                 el.style.removeProperty('display');
@@ -1246,20 +1498,27 @@ export function initVttMobileAdapter(vtt) {
     function activateTool(toolKey) {
         // Enforce player parity: players cannot activate lighting, switch layers, or access GM map tools
         const isGM = (vtt.role || 'Player') === 'GM';
-        if ((toolKey === 'lighting' || toolKey === 'layers' || toolKey === 'map' || toolKey === 'maptools' || toolKey === 'pause') && !isGM) {
+        if (
+            (toolKey === 'lighting' ||
+                toolKey === 'layers' ||
+                toolKey === 'map' ||
+                toolKey === 'maptools' ||
+                toolKey === 'pause') &&
+            !isGM
+        ) {
             return;
         }
 
         const desktopToolMap = {
-            'select': 'tool-select',
-            'measure': 'tool-measure',
-            'shape': 'tool-shape',
-            'ping': 'tool-ping',
-            'lighting': 'tool-lighting',
-            'paint': 'tool-paint',
-            'maptools': 'tool-map-tools',
-            'layers': 'btn-layers',
-            'map': 'btn-change-map'
+            select: 'tool-select',
+            measure: 'tool-measure',
+            shape: 'tool-shape',
+            ping: 'tool-ping',
+            lighting: 'tool-lighting',
+            paint: 'tool-paint',
+            maptools: 'tool-map-tools',
+            layers: 'btn-layers',
+            map: 'btn-change-map'
         };
 
         if (toolKey === 'pause') {
@@ -1348,27 +1607,27 @@ export function initVttMobileAdapter(vtt) {
         const pillColor = document.getElementById('vtt-mobile-shape-pill-color');
 
         const shapeIconMap = {
-            'line': 'fa-solid fa-ruler',
-            'circle': 'fa-regular fa-circle',
-            'square': 'fa-regular fa-square',
-            'cone': 'fa-solid fa-pizza-slice',
-            'beam': 'fa-solid fa-grip-lines-vertical'
+            line: 'fa-solid fa-ruler',
+            circle: 'fa-regular fa-circle',
+            square: 'fa-regular fa-square',
+            cone: 'fa-solid fa-pizza-slice',
+            beam: 'fa-solid fa-grip-lines-vertical'
         };
 
         const shapeNameMap = {
-            'line': 'Line',
-            'circle': 'Circle',
-            'square': 'Square',
-            'cone': 'Cone',
-            'beam': 'Beam'
+            line: 'Line',
+            circle: 'Circle',
+            square: 'Square',
+            cone: 'Cone',
+            beam: 'Beam'
         };
 
         const colorHexMap = {
-            'gold': '#eab308',
-            'red': '#ef4444',
-            'blue': '#3b82f6',
-            'green': '#22c55e',
-            'purple': '#a855f7'
+            gold: '#eab308',
+            red: '#ef4444',
+            blue: '#3b82f6',
+            green: '#22c55e',
+            purple: '#a855f7'
         };
 
         function minimizeShapeSheet(defaultToLine = false) {
@@ -1378,7 +1637,7 @@ export function initVttMobileAdapter(vtt) {
                         desktopShapeSelect.value = 'line';
                         desktopShapeSelect.dispatchEvent(new Event('change', { bubbles: true }));
                     }
-                    shapeOpts.forEach(b => b.classList.toggle('active', b.dataset.shape === 'line'));
+                    shapeOpts.forEach((b) => b.classList.toggle('active', b.dataset.shape === 'line'));
                     if (pillText) pillText.textContent = 'Line';
                     if (pillIcon) pillIcon.className = shapeIconMap['line'];
                 }
@@ -1394,10 +1653,10 @@ export function initVttMobileAdapter(vtt) {
             if (mobileBackdrop) mobileBackdrop.classList.add('active');
         }
 
-        shapeOpts.forEach(btn => {
+        shapeOpts.forEach((btn) => {
             btn.addEventListener('click', () => {
                 const shape = btn.dataset.shape;
-                shapeOpts.forEach(b => b.classList.toggle('active', b === btn));
+                shapeOpts.forEach((b) => b.classList.toggle('active', b === btn));
                 if (desktopShapeSelect) {
                     desktopShapeSelect.value = shape;
                     desktopShapeSelect.dispatchEvent(new Event('change', { bubbles: true }));
@@ -1409,10 +1668,10 @@ export function initVttMobileAdapter(vtt) {
             });
         });
 
-        colorSwatches.forEach(swatch => {
+        colorSwatches.forEach((swatch) => {
             swatch.addEventListener('click', () => {
                 const color = swatch.dataset.color;
-                colorSwatches.forEach(s => s.classList.toggle('active', s === swatch));
+                colorSwatches.forEach((s) => s.classList.toggle('active', s === swatch));
                 if (desktopColorSelect) {
                     desktopColorSelect.value = color;
                     desktopColorSelect.dispatchEvent(new Event('change', { bubbles: true }));
@@ -1455,6 +1714,8 @@ export function initVttMobileAdapter(vtt) {
     function setupMobilePaintDrawer() {
         const modal = document.getElementById('modal-mobile-paint-drawer');
         if (!modal) return;
+        if (modal.dataset.initialized === 'true') return;
+        modal.dataset.initialized = 'true';
 
         const subtoolBtns = modal.querySelectorAll('.mobile-paint-tool-btn');
         const sizeSlider = document.getElementById('mobile-paint-size-slider');
@@ -1463,9 +1724,9 @@ export function initVttMobileAdapter(vtt) {
         const closeBtn = document.getElementById('btn-close-mobile-paint');
         const startBtn = document.getElementById('btn-mobile-start-drawing');
 
-        subtoolBtns.forEach(btn => {
+        subtoolBtns.forEach((btn) => {
             btn.addEventListener('click', () => {
-                subtoolBtns.forEach(b => b.classList.remove('active'));
+                subtoolBtns.forEach((b) => b.classList.remove('active'));
                 btn.classList.add('active');
                 const subtool = btn.dataset.subtool;
                 if (window.VTT?.canvasEngine?.setPaintSubTool) {
@@ -1484,9 +1745,9 @@ export function initVttMobileAdapter(vtt) {
             });
         }
 
-        swatches.forEach(sw => {
+        swatches.forEach((sw) => {
             sw.addEventListener('click', () => {
-                swatches.forEach(s => s.classList.remove('active'));
+                swatches.forEach((s) => s.classList.remove('active'));
                 sw.classList.add('active');
                 const color = sw.dataset.color;
                 if (window.VTT?.canvasEngine?.setPaintColor) {
@@ -1507,6 +1768,8 @@ export function initVttMobileAdapter(vtt) {
     function setupMobileMapToolsUI() {
         const sheet = document.getElementById('vtt-mobile-maptools-sheet');
         if (!sheet) return;
+        if (sheet.dataset.initialized === 'true') return;
+        sheet.dataset.initialized = 'true';
 
         const closeBtn = document.getElementById('btn-close-maptools-sheet');
         const modeBtns = sheet.querySelectorAll('.mobile-maptools-mode-btn');
@@ -1574,7 +1837,7 @@ export function initVttMobileAdapter(vtt) {
             if (deleteBtn) deleteBtn.classList.remove('vtt-hidden');
             if (headerTitle) headerTitle.textContent = 'Configure Trap';
 
-            modeBtns.forEach(b => b.classList.toggle('active', b.dataset.mode === 'traps'));
+            modeBtns.forEach((b) => b.classList.toggle('active', b.dataset.mode === 'traps'));
 
             // Sync from desktop inputs
             if (desktopTrapName && trapNameInput) trapNameInput.value = desktopTrapName.value;
@@ -1593,7 +1856,7 @@ export function initVttMobileAdapter(vtt) {
             if (deleteBtn) deleteBtn.classList.remove('vtt-hidden');
             if (headerTitle) headerTitle.textContent = 'Configure Portal';
 
-            modeBtns.forEach(b => b.classList.toggle('active', b.dataset.mode === 'portals'));
+            modeBtns.forEach((b) => b.classList.toggle('active', b.dataset.mode === 'portals'));
 
             // Sync dropdown options from desktop
             if (desktopPortalTargetMap && portalTargetMapSelect) {
@@ -1620,9 +1883,9 @@ export function initVttMobileAdapter(vtt) {
         }
 
         // Mode buttons (Traps / Portals)
-        modeBtns.forEach(btn => {
+        modeBtns.forEach((btn) => {
             btn.addEventListener('click', () => {
-                modeBtns.forEach(b => b.classList.remove('active'));
+                modeBtns.forEach((b) => b.classList.remove('active'));
                 btn.classList.add('active');
                 const mode = btn.dataset.mode;
                 if (window.VTT?.canvasEngine?.setMapToolSubmode) {
@@ -1633,9 +1896,9 @@ export function initVttMobileAdapter(vtt) {
         });
 
         // Shape buttons (tap to set shape & minimize sheet to canvas so user can draw)
-        shapeBtns.forEach(btn => {
+        shapeBtns.forEach((btn) => {
             btn.addEventListener('click', () => {
-                shapeBtns.forEach(b => b.classList.remove('active'));
+                shapeBtns.forEach((b) => b.classList.remove('active'));
                 btn.classList.add('active');
                 const shape = btn.dataset.shape;
                 if (window.VTT?.canvasEngine?.setMapToolShape) {
@@ -1673,7 +1936,7 @@ export function initVttMobileAdapter(vtt) {
         }
 
         // Trap Damage Quick Chips
-        damageChips.forEach(chip => {
+        damageChips.forEach((chip) => {
             chip.addEventListener('click', () => {
                 const dmg = chip.dataset.damage;
                 if (dmg) {
@@ -1686,23 +1949,35 @@ export function initVttMobileAdapter(vtt) {
 
         // Two-way sync: mobile inputs to desktop
         if (trapNameInput && desktopTrapName) {
-            trapNameInput.addEventListener('input', () => { desktopTrapName.value = trapNameInput.value; });
+            trapNameInput.addEventListener('input', () => {
+                desktopTrapName.value = trapNameInput.value;
+            });
         }
         if (trapAbilitySelect && desktopTrapAbility) {
-            trapAbilitySelect.addEventListener('change', () => { desktopTrapAbility.value = trapAbilitySelect.value; });
+            trapAbilitySelect.addEventListener('change', () => {
+                desktopTrapAbility.value = trapAbilitySelect.value;
+            });
         }
         if (trapDamageInput && desktopTrapDamage) {
-            trapDamageInput.addEventListener('input', () => { desktopTrapDamage.value = trapDamageInput.value; });
+            trapDamageInput.addEventListener('input', () => {
+                desktopTrapDamage.value = trapDamageInput.value;
+            });
         }
         if (trapAutoCheck && desktopTrapAuto) {
-            trapAutoCheck.addEventListener('change', () => { desktopTrapAuto.checked = trapAutoCheck.checked; });
+            trapAutoCheck.addEventListener('change', () => {
+                desktopTrapAuto.checked = trapAutoCheck.checked;
+            });
         }
         if (trapRepeatCheck && desktopTrapRepeat) {
-            trapRepeatCheck.addEventListener('change', () => { desktopTrapRepeat.checked = trapRepeatCheck.checked; });
+            trapRepeatCheck.addEventListener('change', () => {
+                desktopTrapRepeat.checked = trapRepeatCheck.checked;
+            });
         }
 
         if (portalNameInput && desktopPortalName) {
-            portalNameInput.addEventListener('input', () => { desktopPortalName.value = portalNameInput.value; });
+            portalNameInput.addEventListener('input', () => {
+                desktopPortalName.value = portalNameInput.value;
+            });
         }
         if (portalTargetMapSelect && desktopPortalTargetMap) {
             portalTargetMapSelect.addEventListener('change', () => {
@@ -1722,10 +1997,14 @@ export function initVttMobileAdapter(vtt) {
             });
         }
         if (portalWalkCheck && desktopPortalWalk) {
-            portalWalkCheck.addEventListener('change', () => { desktopPortalWalk.checked = portalWalkCheck.checked; });
+            portalWalkCheck.addEventListener('change', () => {
+                desktopPortalWalk.checked = portalWalkCheck.checked;
+            });
         }
         if (portalRevealCheck && desktopPortalReveal) {
-            portalRevealCheck.addEventListener('change', () => { desktopPortalReveal.checked = portalRevealCheck.checked; });
+            portalRevealCheck.addEventListener('change', () => {
+                desktopPortalReveal.checked = portalRevealCheck.checked;
+            });
         }
 
         // Done button: Save changes & dismiss sheet
@@ -2050,7 +2329,7 @@ export function initVttMobileAdapter(vtt) {
                         name: tab.tabName || 'Creature',
                         avatar: tab.tabAvatar || 'img/logo.png',
                         type: isPc ? 'player' : 'creature',
-                        roleCategory: isPc ? 'pc' : (isNpc ? 'npc' : 'creature'),
+                        roleCategory: isPc ? 'pc' : isNpc ? 'npc' : 'creature',
                         characterId: tab.characterId,
                         monsterData: tab.monsterData,
                         tokenId: tab.activeTokenId || tab.tokenId,
@@ -2063,9 +2342,9 @@ export function initVttMobileAdapter(vtt) {
         // 3. Gather active canvas tokens for creatures / NPCs
         const canvasEngine = window.VTT?.canvasEngine;
         if (canvasEngine?.tokens) {
-            Object.values(canvasEngine.tokens).forEach(t => {
+            Object.values(canvasEngine.tokens).forEach((t) => {
                 if (!t) return;
-                const tKey = t.characterId ? t.characterId : (t.monsterData?.name || t.name || t.id);
+                const tKey = t.characterId ? t.characterId : t.monsterData?.name || t.name || t.id;
                 if (tKey && !seenKeys.has(tKey) && (t.characterId || t.monsterData || t.isNpc)) {
                     seenKeys.add(tKey);
                     const isPc = !!t.characterId;
@@ -2075,7 +2354,7 @@ export function initVttMobileAdapter(vtt) {
                         name: t.name || 'Token',
                         avatar: t.image || t.avatar || 'img/logo.png',
                         type: isPc ? 'player' : 'creature',
-                        roleCategory: isPc ? 'pc' : (isNpc ? 'npc' : 'creature'),
+                        roleCategory: isPc ? 'pc' : isNpc ? 'npc' : 'creature',
                         characterId: t.characterId,
                         monsterData: t.monsterData,
                         tokenId: t.id
@@ -2089,14 +2368,18 @@ export function initVttMobileAdapter(vtt) {
             return;
         }
 
-        if (activeNavTab === 'map' || playerSheetPanel?.classList.contains('open') || creatureSheetPanel?.classList.contains('open')) {
+        if (
+            activeNavTab === 'map' ||
+            playerSheetPanel?.classList.contains('open') ||
+            creatureSheetPanel?.classList.contains('open')
+        ) {
             mobileSheetCarousel.classList.remove('vtt-hidden');
         }
 
         let lastChipTapTime = 0;
         let lastChipTapId = null;
 
-        items.forEach(item => {
+        items.forEach((item) => {
             const chip = document.createElement('div');
             chip.className = `mobile-sheet-chip chip-${item.roleCategory || 'creature'}`;
             chip.dataset.id = item.id;
@@ -2116,7 +2399,7 @@ export function initVttMobileAdapter(vtt) {
             chip.addEventListener('click', (e) => {
                 e.stopPropagation();
                 const now = Date.now();
-                const isDoubleTap = (lastChipTapId === item.id) && (now - lastChipTapTime < 350);
+                const isDoubleTap = lastChipTapId === item.id && now - lastChipTapTime < 350;
                 lastChipTapTime = now;
                 lastChipTapId = item.id;
 
@@ -2124,7 +2407,9 @@ export function initVttMobileAdapter(vtt) {
                     // Double-tap: Center map on token!
                     let tokId = item.tokenId;
                     if (!tokId && item.characterId && canvasEngine?.tokens) {
-                        const match = Object.values(canvasEngine.tokens).find(tok => tok.characterId === item.characterId);
+                        const match = Object.values(canvasEngine.tokens).find(
+                            (tok) => tok.characterId === item.characterId
+                        );
                         if (match) tokId = match.id;
                     }
                     if (tokId && canvasEngine?.selectToken) {
@@ -2148,7 +2433,9 @@ export function initVttMobileAdapter(vtt) {
                 }
 
                 // Single tap: Open corresponding sheet
-                mobileSheetTrack.querySelectorAll('.mobile-sheet-chip').forEach(c => c.classList.remove('chip-active'));
+                mobileSheetTrack
+                    .querySelectorAll('.mobile-sheet-chip')
+                    .forEach((c) => c.classList.remove('chip-active'));
                 chip.classList.add('chip-active');
                 if (navigator.vibrate) navigator.vibrate(20);
 
@@ -2213,10 +2500,12 @@ export function initVttMobileAdapter(vtt) {
         const weather = vtt.weatherEngine || window.VTT?.weatherEngine;
         if (weather) {
             if (isEcoModeActive) {
-                previousWeatherQuality = weather.getQuality?.() || localStorage.getItem('vtt_weather_quality') || 'high';
+                previousWeatherQuality =
+                    weather.getQuality?.() || localStorage.getItem('vtt_weather_quality') || 'high';
                 weather.setQuality('off');
             } else {
-                const restoreQ = previousWeatherQuality && previousWeatherQuality !== 'off' ? previousWeatherQuality : 'high';
+                const restoreQ =
+                    previousWeatherQuality && previousWeatherQuality !== 'off' ? previousWeatherQuality : 'high';
                 weather.setQuality(restoreQ);
             }
         }
@@ -2276,7 +2565,8 @@ export function initVttMobileAdapter(vtt) {
             if (!badge) return;
 
             const round = roundNumEl ? roundNumEl.textContent.trim() : '1';
-            const hasCombatants = initListEl && !initListEl.querySelector('.init-empty-state') && initListEl.children.length > 0;
+            const hasCombatants =
+                initListEl && !initListEl.querySelector('.init-empty-state') && initListEl.children.length > 0;
 
             if (hasCombatants && round) {
                 badge.textContent = `R${round}`;
@@ -2334,16 +2624,18 @@ export function initVttMobileAdapter(vtt) {
 
             const initList = document.getElementById('init-list');
             const roundNumEl = document.getElementById('init-round-num');
-            const hasCombatants = initList && !initList.querySelector('.init-empty-state') && initList.children.length > 0;
+            const hasCombatants =
+                initList && !initList.querySelector('.init-empty-state') && initList.children.length > 0;
 
             if (!hasCombatants) {
                 combatPill.classList.add('vtt-hidden');
                 return;
             }
 
-            const activeCard = initList.querySelector('.init-carousel-card--active') ||
-                               initList.querySelector('.init-carousel-card.active') ||
-                               initList.querySelector('.init-carousel-card');
+            const activeCard =
+                initList.querySelector('.init-carousel-card--active') ||
+                initList.querySelector('.init-carousel-card.active') ||
+                initList.querySelector('.init-carousel-card');
 
             if (!activeCard) {
                 combatPill.classList.add('vtt-hidden');
@@ -2351,7 +2643,7 @@ export function initVttMobileAdapter(vtt) {
             }
 
             // Name
-            const nameEl = activeCard.querySelector('.init-card-name');
+            const nameEl = activeCard.querySelector('.init-card-hover-tooltip-name') || activeCard.querySelector('.init-card-name');
             const name = nameEl ? nameEl.textContent.trim() : 'Combatant';
             if (pillName) pillName.textContent = name;
 
@@ -2360,7 +2652,7 @@ export function initVttMobileAdapter(vtt) {
             if (pillRound) pillRound.textContent = `Round ${round}`;
 
             // HP
-            const hpPill = activeCard.querySelector('.init-card-hp-pill');
+            const hpPill = activeCard.querySelector('.init-card-hover-tooltip-hp') || activeCard.querySelector('.init-card-hp-pill');
             if (pillHp) {
                 if (hpPill && hpPill.textContent.trim()) {
                     pillHp.textContent = `HP: ${hpPill.textContent.trim()}`;
@@ -2372,7 +2664,7 @@ export function initVttMobileAdapter(vtt) {
             }
 
             // Avatar
-            const avatarImg = activeCard.querySelector('.init-card-img img');
+            const avatarImg = activeCard.querySelector('.init-card-img img') || activeCard.querySelector('.init-token-avatar');
             if (pillAvatar) {
                 if (avatarImg && avatarImg.src && !avatarImg.src.endsWith('favicon.svg')) {
                     pillAvatar.src = avatarImg.src;
@@ -2385,7 +2677,7 @@ export function initVttMobileAdapter(vtt) {
             const role = vtt.role || 'Player';
             const actionsWrap = combatPill.querySelector('.mobile-combat-pill-actions');
             if (actionsWrap) {
-                actionsWrap.style.display = (role === 'GM') ? 'flex' : 'none';
+                actionsWrap.style.display = role === 'GM' ? 'flex' : 'none';
             }
 
             combatPill.classList.remove('vtt-hidden');
@@ -2397,7 +2689,12 @@ export function initVttMobileAdapter(vtt) {
         const initList = document.getElementById('init-list');
         if (initList) {
             const observer = new MutationObserver(() => updateFloatingCombatPill());
-            observer.observe(initList, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] });
+            observer.observe(initList, {
+                childList: true,
+                subtree: true,
+                attributes: true,
+                attributeFilter: ['class']
+            });
         }
 
         // Periodic fallback sync
@@ -2418,16 +2715,20 @@ export function initVttMobileAdapter(vtt) {
         try {
             if (p.type === 'monster') {
                 if (window.VTT?.spawnMonsterAtCoords) window.VTT.spawnMonsterAtCoords(p.monster, x, y);
-                else if (window.VTT?.dataBridge?.spawnMonsterAtCoords) window.VTT.dataBridge.spawnMonsterAtCoords(p.monster, x, y);
+                else if (window.VTT?.dataBridge?.spawnMonsterAtCoords)
+                    window.VTT.dataBridge.spawnMonsterAtCoords(p.monster, x, y);
             } else if (p.type === 'customNpc') {
                 if (window.VTT?.spawnCustomNpcAtCoords) window.VTT.spawnCustomNpcAtCoords(p.npc, x, y);
-                else if (window.VTT?.dataBridge?.spawnCustomNpcAtCoords) window.VTT.dataBridge.spawnCustomNpcAtCoords(p.npc, x, y);
+                else if (window.VTT?.dataBridge?.spawnCustomNpcAtCoords)
+                    window.VTT.dataBridge.spawnCustomNpcAtCoords(p.npc, x, y);
             } else if (p.type === 'character') {
                 if (window.VTT?.spawnCharacterAtCoords) window.VTT.spawnCharacterAtCoords(p.char, x, y);
-                else if (window.VTT?.dataBridge?.spawnCharacterAtCoords) window.VTT.dataBridge.spawnCharacterAtCoords(p.char, x, y);
+                else if (window.VTT?.dataBridge?.spawnCharacterAtCoords)
+                    window.VTT.dataBridge.spawnCharacterAtCoords(p.char, x, y);
             } else if (p.type === 'asset') {
                 if (window.VTT?.spawnAssetAtCoords) window.VTT.spawnAssetAtCoords(p.asset, x, y);
-                else if (window.VTT?.dataBridge?.spawnAssetAtCoords) window.VTT.dataBridge.spawnAssetAtCoords(p.asset, x, y);
+                else if (window.VTT?.dataBridge?.spawnAssetAtCoords)
+                    window.VTT.dataBridge.spawnAssetAtCoords(p.asset, x, y);
             }
             if (navigator.vibrate) navigator.vibrate(35);
         } catch (err) {
@@ -2468,19 +2769,26 @@ export function initVttMobileAdapter(vtt) {
         if (!canvasInteraction) return;
 
         // Also intercept direct clicks for touch emulation / hybrid tablets
-        canvasInteraction.addEventListener('click', (e) => {
-            if (isTapToPlaceActive && pendingPlacementPayload) {
-                e.stopPropagation();
-                e.preventDefault();
-                if (window.VTT?.canvasEngine?.getCanvasMouseCoords) {
-                    const coords = window.VTT.canvasEngine.getCanvasMouseCoords({ clientX: e.clientX, clientY: e.clientY });
-                    if (coords) {
-                        executeTapPlacement(coords.x, coords.y);
+        canvasInteraction.addEventListener(
+            'click',
+            (e) => {
+                if (isTapToPlaceActive && pendingPlacementPayload) {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    if (window.VTT?.canvasEngine?.getCanvasMouseCoords) {
+                        const coords = window.VTT.canvasEngine.getCanvasMouseCoords({
+                            clientX: e.clientX,
+                            clientY: e.clientY
+                        });
+                        if (coords) {
+                            executeTapPlacement(coords.x, coords.y);
+                        }
                     }
+                    cancelTapToPlaceMode();
                 }
-                cancelTapToPlaceMode();
-            }
-        }, true);
+            },
+            true
+        );
 
         const cancelPlacementBtn = document.getElementById('btn-mobile-placement-cancel');
         if (cancelPlacementBtn) {
@@ -2496,67 +2804,76 @@ export function initVttMobileAdapter(vtt) {
     // 6. DRAWER EDGE-SWIPE & SWIPE-DOWN DISMISSAL
     // ========================================================================
     function setupDrawerSwipeDismiss() {
-        const panels = [
-            sidebar,
-            playerSheetPanel,
-            creatureSheetPanel,
-            initContainer
-        ].filter(Boolean);
+        const panels = [sidebar, playerSheetPanel, creatureSheetPanel, initContainer].filter(Boolean);
 
-        panels.forEach(panel => {
+        panels.forEach((panel) => {
             let startY = 0;
             let startX = 0;
             let startTime = 0;
             let isTracking = false;
 
-            panel.addEventListener('touchstart', (e) => {
-                if (!isMobileViewport()) return;
-                if (e.touches.length !== 1) {
+            panel.addEventListener(
+                'touchstart',
+                (e) => {
+                    if (!isMobileViewport()) return;
+                    if (e.touches.length !== 1) {
+                        isTracking = false;
+                        return;
+                    }
+
+                    const touch = e.touches[0];
+                    startY = touch.clientY;
+                    startX = touch.clientX;
+                    startTime = Date.now();
+
+                    // Check if touch starts on header bar, or scrollable area is at top, or near screen edges
+                    const target = e.target;
+                    const isHeader =
+                        target.closest('.mobile-drawer-header') ||
+                        target.closest('.mobile-sheet-topbar') ||
+                        target.closest('.init-controls-top');
+                    const scrollableAncestor = target.closest(
+                        '.scroll-styled, .tab-panel, .sidebar-content, #chat-messages, .ps-tabs-body'
+                    );
+                    const isAtScrollTop = !scrollableAncestor || scrollableAncestor.scrollTop <= 2;
+                    const isEdge =
+                        touch.clientY <= 100 || touch.clientX <= 25 || touch.clientX >= window.innerWidth - 25;
+
+                    if (isHeader || isAtScrollTop || isEdge) {
+                        isTracking = true;
+                    } else {
+                        isTracking = false;
+                    }
+                },
+                { passive: true }
+            );
+
+            panel.addEventListener(
+                'touchend',
+                (e) => {
+                    if (!isTracking || !isMobileViewport()) return;
                     isTracking = false;
-                    return;
-                }
 
-                const touch = e.touches[0];
-                startY = touch.clientY;
-                startX = touch.clientX;
-                startTime = Date.now();
+                    const touch = e.changedTouches[0];
+                    if (!touch) return;
 
-                // Check if touch starts on header bar, or scrollable area is at top, or near screen edges
-                const target = e.target;
-                const isHeader = target.closest('.mobile-drawer-header') || target.closest('.mobile-sheet-topbar') || target.closest('.init-controls-top');
-                const scrollableAncestor = target.closest('.scroll-styled, .tab-panel, .sidebar-content, #chat-messages, .ps-tabs-body');
-                const isAtScrollTop = !scrollableAncestor || scrollableAncestor.scrollTop <= 2;
-                const isEdge = touch.clientY <= 100 || touch.clientX <= 25 || touch.clientX >= (window.innerWidth - 25);
+                    const deltaY = touch.clientY - startY;
+                    const deltaX = touch.clientX - startX;
+                    const elapsed = Date.now() - startTime;
 
-                if (isHeader || isAtScrollTop || isEdge) {
-                    isTracking = true;
-                } else {
-                    isTracking = false;
-                }
-            }, { passive: true });
+                    // Detect swipe down (pulling down to close)
+                    const isSwipeDown = deltaY > 65 && deltaY > Math.abs(deltaX) * 1.25;
+                    // Detect fast flick down
+                    const isFlickDown = deltaY > 40 && elapsed < 250 && deltaY > Math.abs(deltaX) * 1.5;
 
-            panel.addEventListener('touchend', (e) => {
-                if (!isTracking || !isMobileViewport()) return;
-                isTracking = false;
-
-                const touch = e.changedTouches[0];
-                if (!touch) return;
-
-                const deltaY = touch.clientY - startY;
-                const deltaX = touch.clientX - startX;
-                const elapsed = Date.now() - startTime;
-
-                // Detect swipe down (pulling down to close)
-                const isSwipeDown = deltaY > 65 && deltaY > Math.abs(deltaX) * 1.25;
-                // Detect fast flick down
-                const isFlickDown = deltaY > 40 && elapsed < 250 && deltaY > Math.abs(deltaX) * 1.5;
-
-                if (isSwipeDown || isFlickDown) {
-                    closeAllDrawers();
-                    setActiveNavTab('map');
-                    if (navigator.vibrate) navigator.vibrate(30);
-                }
-            }, { passive: true });
+                    if (isSwipeDown || isFlickDown) {
+                        closeAllDrawers();
+                        setActiveNavTab('map');
+                        if (navigator.vibrate) navigator.vibrate(30);
+                    }
+                },
+                { passive: true }
+            );
         });
     }
 
@@ -2589,8 +2906,6 @@ export function initVttMobileAdapter(vtt) {
     setupMobileNavigation();
     setupDrawerSwipeDismiss();
     setupMobileUiToggle();
-    setupMobilePaintDrawer();
-    setupMobileMapToolsUI();
 
     // Re-check role and refresh sheet carousel on socket campaign ready
     if (vtt.socket) {

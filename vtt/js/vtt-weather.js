@@ -86,7 +86,11 @@ export function initVttWeather(vtt) {
     function hexToRgba(hex, alpha) {
         if (!hex || typeof hex !== 'string') return `rgba(255, 255, 255, ${alpha.toFixed(3)})`;
         let clean = hex.replace('#', '').trim();
-        if (clean.length === 3) clean = clean.split('').map(c => c + c).join('');
+        if (clean.length === 3)
+            clean = clean
+                .split('')
+                .map((c) => c + c)
+                .join('');
         const r = parseInt(clean.substring(0, 2), 16) || 255;
         const g = parseInt(clean.substring(2, 4), 16) || 255;
         const b = parseInt(clean.substring(4, 6), 16) || 255;
@@ -96,8 +100,16 @@ export function initVttWeather(vtt) {
     function blendColorRgb(hex1, hex2, ratio) {
         let c1 = (hex1 || '#ffffff').replace('#', '').trim();
         let c2 = (hex2 || '#ffffff').replace('#', '').trim();
-        if (c1.length === 3) c1 = c1.split('').map(c => c + c).join('');
-        if (c2.length === 3) c2 = c2.split('').map(c => c + c).join('');
+        if (c1.length === 3)
+            c1 = c1
+                .split('')
+                .map((c) => c + c)
+                .join('');
+        if (c2.length === 3)
+            c2 = c2
+                .split('')
+                .map((c) => c + c)
+                .join('');
         const r1 = parseInt(c1.substring(0, 2), 16) || 255;
         const g1 = parseInt(c1.substring(2, 4), 16) || 255;
         const b1 = parseInt(c1.substring(4, 6), 16) || 255;
@@ -165,7 +177,7 @@ export function initVttWeather(vtt) {
         const effectiveStrength = Math.max(0, Math.min(1, tintStrength || 0));
 
         // 1. Fog / Volumetric Mist Clouds (256px and 512px for lush, dense billowing)
-        [256, 512].forEach(sz => {
+        [256, 512].forEach((sz) => {
             const c = createOffscreen(sz, sz);
             const cx = c.getContext('2d');
             const half = sz / 2;
@@ -187,7 +199,7 @@ export function initVttWeather(vtt) {
         });
 
         // 2. Snow Flakes (Soft glowing circles & faceted flakes)
-        [16, 28].forEach(sz => {
+        [16, 28].forEach((sz) => {
             const c = createOffscreen(sz, sz);
             const cx = c.getContext('2d');
             const half = sz / 2;
@@ -207,7 +219,7 @@ export function initVttWeather(vtt) {
         });
 
         // 3. Embers (Fiery glowing particles with incandescent cores)
-        [16, 24].forEach(sz => {
+        [16, 24].forEach((sz) => {
             const c = createOffscreen(sz, sz);
             const cx = c.getContext('2d');
             const half = sz / 2;
@@ -240,7 +252,7 @@ export function initVttWeather(vtt) {
 
         // 4. Autumn Leaves (Autumn colors: Crimson, Amber, Russet)
         const leafColors = ['#c0392b', '#d35400', '#f39c12', '#a04000'];
-        leafColors.forEach(col => {
+        leafColors.forEach((col) => {
             const sz = 28;
             const c = createOffscreen(sz, sz);
             const cx = c.getContext('2d');
@@ -262,7 +274,7 @@ export function initVttWeather(vtt) {
         });
 
         // 5. Underwater Bubbles / Spores
-        [20, 32].forEach(sz => {
+        [20, 32].forEach((sz) => {
             const c = createOffscreen(sz, sz);
             const cx = c.getContext('2d');
             const half = sz / 2;
@@ -288,7 +300,7 @@ export function initVttWeather(vtt) {
         });
 
         // 6. Sandstorm specks (soft dusty ovals)
-        [16, 24].forEach(sz => {
+        [16, 24].forEach((sz) => {
             const c = createOffscreen(sz, sz);
             const cx = c.getContext('2d');
             const half = sz / 2;
@@ -307,7 +319,7 @@ export function initVttWeather(vtt) {
         });
 
         // 7. Hail (Faceted translucent ice pellets)
-        [12, 20].forEach(sz => {
+        [12, 20].forEach((sz) => {
             const c = createOffscreen(sz, sz);
             const cx = c.getContext('2d');
             const half = sz / 2;
@@ -325,7 +337,7 @@ export function initVttWeather(vtt) {
         });
 
         // 8. Sunlight Dust Motes (Warm golden glow)
-        [16, 24].forEach(sz => {
+        [16, 24].forEach((sz) => {
             const c = createOffscreen(sz, sz);
             const cx = c.getContext('2d');
             const half = sz / 2;
@@ -343,7 +355,7 @@ export function initVttWeather(vtt) {
         });
 
         // 9. Fireflies (Bioluminescent chartreuse glowing bodies with soft radiant bloom)
-        [20, 32].forEach(sz => {
+        [20, 32].forEach((sz) => {
             const c = createOffscreen(sz, sz);
             const cx = c.getContext('2d');
             const half = sz / 2;
@@ -361,7 +373,7 @@ export function initVttWeather(vtt) {
         });
 
         // 10. Underdark Fungal Spores (Bioluminescent teal/green spore disks)
-        [16, 26].forEach(sz => {
+        [16, 26].forEach((sz) => {
             const c = createOffscreen(sz, sz);
             const cx = c.getContext('2d');
             const half = sz / 2;
@@ -379,7 +391,7 @@ export function initVttWeather(vtt) {
         });
 
         // 11. Volcanic Ash (Dark jagged soot flakes + incandescent micro-cinders)
-        [16, 24].forEach(sz => {
+        [16, 24].forEach((sz) => {
             const c = createOffscreen(sz, sz);
             const cx = c.getContext('2d');
             const half = sz / 2;
@@ -413,7 +425,7 @@ export function initVttWeather(vtt) {
         }
 
         // 12. Arcane Wisps (Mystic violet/cyan motes with outer shimmer aura)
-        [24, 44].forEach(sz => {
+        [24, 44].forEach((sz) => {
             const c = createOffscreen(sz, sz);
             const cx = c.getContext('2d');
             const half = sz / 2;
@@ -430,17 +442,18 @@ export function initVttWeather(vtt) {
             spr.arcane.push(c);
         });
 
-        // 13. Void Wisps (Feathered obsidian gloom smoke)
-        [96, 160].forEach(sz => {
+        // 13. Void Wisps (Eerie violet luminescence with feathered obsidian fringe)
+        [96, 160].forEach((sz) => {
             const c = createOffscreen(sz, sz);
             const cx = c.getContext('2d');
             const half = sz / 2;
-            const vRgb = blendColorRgb('#140c20', tintColor, effectiveStrength);
+            const coreColor = blendColorRgb('#a855f7', tintColor, effectiveStrength);
+            const gloomColor = blendColorRgb('#140728', tintColor, effectiveStrength);
             const grad = cx.createRadialGradient(half, half, 0, half, half, half);
-            grad.addColorStop(0, `rgba(${vRgb.r}, ${vRgb.g}, ${vRgb.b}, 0.85)`);
-            grad.addColorStop(0.4, `rgba(${vRgb.r}, ${vRgb.g}, ${vRgb.b}, 0.5)`);
-            grad.addColorStop(0.8, `rgba(${vRgb.r}, ${vRgb.g}, ${vRgb.b}, 0.15)`);
-            grad.addColorStop(1, `rgba(${vRgb.r}, ${vRgb.g}, ${vRgb.b}, 0)`);
+            grad.addColorStop(0, `rgba(${coreColor.r}, ${coreColor.g}, ${coreColor.b}, 0.75)`);
+            grad.addColorStop(0.3, `rgba(${gloomColor.r}, ${gloomColor.g}, ${gloomColor.b}, 0.6)`);
+            grad.addColorStop(0.65, `rgba(${gloomColor.r}, ${gloomColor.g}, ${gloomColor.b}, 0.25)`);
+            grad.addColorStop(1, `rgba(${gloomColor.r}, ${gloomColor.g}, ${gloomColor.b}, 0)`);
             cx.fillStyle = grad;
             cx.beginPath();
             cx.arc(half, half, half, 0, Math.PI * 2);
@@ -475,7 +488,7 @@ export function initVttWeather(vtt) {
 
     function updateLightning(dt) {
         if (!lightningState.active) {
-            const hasStorm = activeConfig.effects.some(e => e.preset === 'storm');
+            const hasStorm = activeConfig.effects.some((e) => e.preset === 'storm');
             if (hasStorm && Date.now() >= lightningState.nextTrigger) {
                 triggerLightning();
             }
@@ -602,7 +615,7 @@ export function initVttWeather(vtt) {
                 // Cross-sectional flux through vertical border = |vx| * height
                 const fluxH = absVy * (width + 120);
                 const fluxV = absVx * (height + 120);
-                const totalFlux = (fluxH + fluxV) || 1.0;
+                const totalFlux = fluxH + fluxV || 1.0;
                 const pHorizontal = fluxH / totalFlux;
 
                 const margin = 40 + Math.random() * 50;
@@ -674,7 +687,7 @@ export function initVttWeather(vtt) {
                 p.vx = Math.cos(rad) * spd;
                 p.vy = Math.sin(rad) * spd * 0.4;
                 p.size = (450 + Math.random() * 400) * zoomScale;
-                p.maxAlpha = (0.40 + Math.random() * 0.35) * intensityMultiplier;
+                p.maxAlpha = (0.4 + Math.random() * 0.35) * intensityMultiplier;
                 p.alpha = 0;
                 p.life = 0;
                 p.maxLife = 16 + Math.random() * 14;
@@ -805,11 +818,12 @@ export function initVttWeather(vtt) {
                 const spd = (20 + Math.random() * 28) * speedMultiplier;
                 p.vx = Math.cos(rad) * spd;
                 p.vy = Math.sin(rad) * spd * 0.5;
-                p.size = (130 + Math.random() * 150) * zoomScale;
-                p.maxAlpha = (0.45 + Math.random() * 0.35) * intensityMultiplier;
-                p.alpha = 0;
-                p.life = 0;
-                p.maxLife = 10 + Math.random() * 8;
+                p.size = (110 + Math.random() * 120) * zoomScale;
+                p.maxAlpha = (0.55 + Math.random() * 0.35) * intensityMultiplier;
+                p.maxLife = 8 + Math.random() * 8;
+                p.life = isInitial ? Math.random() * p.maxLife : 0;
+                const halfLife = p.maxLife / 2;
+                p.alpha = isInitial ? (p.life < halfLife ? p.life / halfLife : Math.max(0, 1 - (p.life - halfLife) / halfLife)) * p.maxAlpha : 0;
                 p.rot = Math.random() * Math.PI * 2;
                 p.vRot = (Math.random() - 0.5) * 0.25;
                 p.spriteIdx = sprColl.void.length > 0 ? Math.floor(Math.random() * sprColl.void.length) : 0;
@@ -838,7 +852,7 @@ export function initVttWeather(vtt) {
             const budget = PARTICLE_BUDGETS[layer.preset] || { high: 100, low: 40 };
             const base = currentQuality === 'low' ? budget.low : budget.high;
             const intensity = Math.max(0.1, Math.min(1.0, layer.intensity || 0.7));
-            const multiScale = numLayers === 1 ? 1.0 : (numLayers === 2 ? 0.75 : 0.6);
+            const multiScale = numLayers === 1 ? 1.0 : numLayers === 2 ? 0.75 : 0.6;
             const layerBudget = Math.max(5, Math.round(base * intensity * multiScale));
 
             for (let i = 0; i < layerBudget && currentIdx < MAX_POOL; i++, currentIdx++) {
@@ -860,7 +874,13 @@ export function initVttWeather(vtt) {
     // =========================================================================
     // Core Animation & Render Loop
     // =========================================================================
+    let isPaused = false;
+
     function step(timestamp) {
+        if (isPaused) {
+            animFrameId = null;
+            return;
+        }
         if (!lastTime) lastTime = timestamp;
         const dt = Math.min((timestamp - lastTime) / 1000, 0.1);
         lastTime = timestamp;
@@ -933,7 +953,7 @@ export function initVttWeather(vtt) {
                     break;
                 case 'underwater':
                     washColor = '#0d4775';
-                    washAlpha = 0.20 * intensity;
+                    washAlpha = 0.2 * intensity;
                     break;
                 case 'embers':
                     washColor = '#5e1d0c';
@@ -1069,7 +1089,7 @@ export function initVttWeather(vtt) {
     // --- Rain & Storm Renderer ---
     function renderRainStorm(dt, layerIdx, layer, isStorm) {
         ctx.save();
-        const baseColor = layer.colorStrength > 0.05 ? layer.color : (isStorm ? '#d7ebff' : '#c8e1ff');
+        const baseColor = layer.colorStrength > 0.05 ? layer.color : isStorm ? '#d7ebff' : '#c8e1ff';
         ctx.lineCap = 'round';
         ctx.beginPath();
 
@@ -1187,7 +1207,13 @@ export function initVttWeather(vtt) {
                 ctx.restore();
             }
 
-            if (p.life >= p.maxLife || p.x > width + p.size || p.x < -p.size || p.y > height + p.size || p.y < -p.size) {
+            if (
+                p.life >= p.maxLife ||
+                p.x > width + p.size ||
+                p.x < -p.size ||
+                p.y > height + p.size ||
+                p.y < -p.size
+            ) {
                 initParticle(p, false);
             }
         }
@@ -1208,7 +1234,7 @@ export function initVttWeather(vtt) {
 
             const progress = p.life / p.maxLife;
             const flicker = 0.85 + Math.sin(p.phase * 2) * 0.15;
-            p.alpha = Math.max(0, (1 - progress)) * p.maxAlpha * flicker;
+            p.alpha = Math.max(0, 1 - progress) * p.maxAlpha * flicker;
 
             const spr = sprColl.embers[p.spriteIdx] || sprColl.embers[0];
             if (spr && p.alpha > 0.01) {
@@ -1574,7 +1600,7 @@ export function initVttWeather(vtt) {
             ribbons[1].col = layer.color;
         }
 
-        ribbons.forEach(rib => {
+        ribbons.forEach((rib) => {
             ctx.beginPath();
             const stepX = 30;
             ctx.moveTo(-50, rib.yBase);
@@ -1603,8 +1629,96 @@ export function initVttWeather(vtt) {
     }
 
     // --- Void Tendrils & Shadowfell Gloom Renderer ---
+    let voidAnimTimer = 0;
     function renderVoid(dt, layerIdx, layer) {
         const sprColl = spritesByLayer[layerIdx] || spritesByLayer[0];
+        const intensity = Math.max(0.1, Math.min(1.0, layer.intensity || 0.7));
+        const speedMultiplier = Math.max(0.2, layer.speed || 1.0);
+        const zoomScale = Math.max(0.5, Math.min(3.0, layer.zoom || 1.0));
+        const rad = ((layer.direction !== undefined ? layer.direction : 65) * Math.PI) / 180;
+
+        voidAnimTimer += dt * speedMultiplier;
+
+        // 1. Procedural Writhing Void Tendrils
+        const tendrilCount = currentQuality === 'low' ? Math.max(2, Math.round(4 * intensity)) : Math.max(3, Math.round(7 * intensity));
+
+        // Colors: ethereal violet glow outer, obsidian shadow core inner
+        let glowRgb = { r: 168, g: 85, b: 247 }; // #a855f7
+        let coreRgb = { r: 10, g: 3, b: 20 };   // #0a0314
+        if (layer.colorStrength > 0.05 && layer.color) {
+            glowRgb = blendColorRgb('#a855f7', layer.color, layer.colorStrength);
+            coreRgb = blendColorRgb('#0a0314', layer.color, layer.colorStrength * 0.4);
+        }
+
+        ctx.save();
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+
+        // Animate multiple serpentine tendrils creeping through the realm
+        for (let t = 0; t < tendrilCount; t++) {
+            const phase = t * 1.618;
+            // Lissajous organic drift across viewport
+            const driftX = (width * 0.15) + ((width * 0.7) * (0.5 + 0.45 * Math.sin(voidAnimTimer * 0.25 + phase * 2)));
+            const driftY = (height * 0.15) + ((height * 0.7) * (0.5 + 0.45 * Math.cos(voidAnimTimer * 0.2 + phase * 1.5)));
+
+            const tendrilLen = (200 + (t % 4) * 85) * zoomScale;
+            const segments = 12;
+            const stepLen = tendrilLen / segments;
+
+            // Generate points along the writhing spline
+            const points = [];
+            let curX = driftX;
+            let curY = driftY;
+            points.push({ x: curX, y: curY });
+
+            let heading = rad + Math.sin(voidAnimTimer * 0.6 + phase) * 0.5;
+
+            for (let s = 1; s <= segments; s++) {
+                const sFrac = s / segments;
+                // Harmonic undulating sine waves
+                const wave1 = Math.sin(sFrac * 4.5 + voidAnimTimer * 2.2 + phase) * (0.45 * intensity);
+                const wave2 = Math.cos(sFrac * 2.5 - voidAnimTimer * 1.3 + phase * 0.7) * (0.35 * intensity);
+                heading += wave1 + wave2;
+
+                curX += Math.cos(heading) * stepLen;
+                curY += Math.sin(heading) * stepLen;
+                points.push({ x: curX, y: curY });
+            }
+
+            // Draw Tendril Pass 1: Outer Luminous Violet Glow
+            ctx.beginPath();
+            ctx.moveTo(points[0].x, points[0].y);
+            for (let pIdx = 1; pIdx < points.length; pIdx++) {
+                ctx.lineTo(points[pIdx].x, points[pIdx].y);
+            }
+            const glowAlpha = Math.min(0.65, 0.42 * intensity);
+            ctx.strokeStyle = `rgba(${glowRgb.r}, ${glowRgb.g}, ${glowRgb.b}, ${glowAlpha})`;
+            ctx.lineWidth = (10 + (t % 3) * 4) * zoomScale;
+            ctx.stroke();
+
+            // Draw Tendril Pass 2: Obsidian Shadow Core
+            ctx.beginPath();
+            ctx.moveTo(points[0].x, points[0].y);
+            for (let pIdx = 1; pIdx < points.length; pIdx++) {
+                ctx.lineTo(points[pIdx].x, points[pIdx].y);
+            }
+            const coreAlpha = Math.min(0.9, 0.75 * intensity);
+            ctx.strokeStyle = `rgba(${coreRgb.r}, ${coreRgb.g}, ${coreRgb.b}, ${coreAlpha})`;
+            ctx.lineWidth = (4 + (t % 2) * 2) * zoomScale;
+            ctx.stroke();
+
+            // Tip motes / pulsating ethereal beads at the tip of each tendril
+            const tip = points[points.length - 1];
+            const pulse = 0.5 + 0.5 * Math.sin(voidAnimTimer * 3 + phase);
+            ctx.beginPath();
+            ctx.arc(tip.x, tip.y, (3 + pulse * 4) * zoomScale, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(${glowRgb.r}, ${glowRgb.g}, ${glowRgb.b}, ${0.6 * intensity})`;
+            ctx.fill();
+        }
+
+        ctx.restore();
+
+        // 2. Drifting Shadow Wisps & Gloom Smoke Particles
         for (let i = 0; i < MAX_POOL; i++) {
             const p = particles[i];
             if (!p.active || p.layerIdx !== layerIdx) continue;
@@ -1634,7 +1748,13 @@ export function initVttWeather(vtt) {
                 ctx.restore();
             }
 
-            if (p.life >= p.maxLife || p.x > width + p.size || p.x < -p.size || p.y > height + p.size || p.y < -p.size) {
+            if (
+                p.life >= p.maxLife ||
+                p.x > width + p.size ||
+                p.x < -p.size ||
+                p.y > height + p.size ||
+                p.y < -p.size
+            ) {
                 initParticle(p, false);
             }
         }
@@ -1655,19 +1775,21 @@ export function initVttWeather(vtt) {
             if (Array.isArray(config.effects)) {
                 normalizedEffects = config.effects;
             } else if (config.preset && config.preset !== 'none') {
-                normalizedEffects = [{
-                    id: 'layer_0',
-                    preset: config.preset,
-                    intensity: config.intensity,
-                    speed: config.speed,
-                    direction: config.direction,
-                    zoom: config.zoom,
-                    color: config.color,
-                    colorStrength: config.colorStrength,
-                    tint: config.tint,
-                    tintOpacity: config.tintOpacity,
-                    ambientWash: config.ambientWash !== false
-                }];
+                normalizedEffects = [
+                    {
+                        id: 'layer_0',
+                        preset: config.preset,
+                        intensity: config.intensity,
+                        speed: config.speed,
+                        direction: config.direction,
+                        zoom: config.zoom,
+                        color: config.color,
+                        colorStrength: config.colorStrength,
+                        tint: config.tint,
+                        tintOpacity: config.tintOpacity,
+                        ambientWash: config.ambientWash !== false
+                    }
+                ];
             }
             if (config.saturation !== undefined) {
                 const s = parseFloat(config.saturation);
@@ -1694,9 +1816,9 @@ export function initVttWeather(vtt) {
                 speed: !isNaN(rawSpeed) ? Math.max(0.1, Math.min(3.0, rawSpeed)) : 1.0,
                 direction: !isNaN(rawDir) ? rawDir : 65,
                 zoom: !isNaN(rawZoom) ? Math.max(0.5, Math.min(3.0, rawZoom)) : 1.0,
-                color: (typeof eff.color === 'string' && eff.color.trim()) ? eff.color : (eff.tint || '#ffffff'),
-                colorStrength: !isNaN(rawColorStr) ? Math.max(0.0, Math.min(1.0, rawColorStr)) : (rawTintOp || 0.0),
-                tint: (typeof eff.tint === 'string' && eff.tint.trim()) ? eff.tint : '#000000',
+                color: typeof eff.color === 'string' && eff.color.trim() ? eff.color : eff.tint || '#ffffff',
+                colorStrength: !isNaN(rawColorStr) ? Math.max(0.0, Math.min(1.0, rawColorStr)) : rawTintOp || 0.0,
+                tint: typeof eff.tint === 'string' && eff.tint.trim() ? eff.tint : '#000000',
                 tintOpacity: !isNaN(rawTintOp) ? Math.max(0.0, Math.min(0.85, rawTintOp)) : 0.0,
                 ambientWash: eff.ambientWash !== false
             });
@@ -1741,14 +1863,38 @@ export function initVttWeather(vtt) {
         return currentQuality;
     }
 
-    // Handle container resize
-    const resizeObserver = new ResizeObserver(() => {
-        resize();
-    });
-    if (canvas.parentElement) {
-        resizeObserver.observe(canvas.parentElement);
+    function pause() {
+        if (isPaused) return;
+        isPaused = true;
+        if (animFrameId) {
+            cancelAnimationFrame(animFrameId);
+            animFrameId = null;
+        }
     }
-    window.addEventListener('resize', () => resize());
+
+    function resume() {
+        if (!isPaused) return;
+        isPaused = false;
+        if (currentQuality !== 'off' && activeConfig.effects.length > 0 && width > 0 && height > 0) {
+            if (!animFrameId) {
+                lastTime = 0;
+                animFrameId = requestAnimationFrame(step);
+            }
+        }
+    }
+
+    // Handle container resize
+    let resizeObserver = null;
+    if (typeof ResizeObserver !== 'undefined') {
+        resizeObserver = new ResizeObserver(() => {
+            resize();
+        });
+        if (canvas.parentElement) {
+            resizeObserver.observe(canvas.parentElement);
+        }
+    }
+    const onWindowResize = () => resize();
+    window.addEventListener('resize', onWindowResize);
     resize();
 
     // Initial check
@@ -1762,10 +1908,13 @@ export function initVttWeather(vtt) {
         setQuality,
         getQuality,
         resize,
+        pause,
+        resume,
+        isPaused: () => isPaused,
         destroy: () => {
             if (animFrameId) cancelAnimationFrame(animFrameId);
-            resizeObserver.disconnect();
-            window.removeEventListener('resize', resize);
+            if (resizeObserver) resizeObserver.disconnect();
+            window.removeEventListener('resize', onWindowResize);
         }
     };
 }

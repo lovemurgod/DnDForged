@@ -87,6 +87,49 @@
     "usesMax": null,
     "resetType": null,
     "formula": "",
-    "formulaConfig": null
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "anyFromCategory": {
+          "category": [
+            "PPact"
+          ]
+        }
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "con",
+              "int",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "con",
+              "int",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
   }
 ]
