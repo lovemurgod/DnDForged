@@ -1026,6 +1026,7 @@ export function renderNotePins(ctx, context = {}) {
     const isRectInViewport = context.isRectInViewport || (() => true);
     const hoveredNoteId = context.hoveredNoteId;
     const selectedNoteId = context.selectedNoteId;
+    const zoom = (ctx.getTransform ? ctx.getTransform()?.a : 1) || 1;
 
     notes.forEach((note) => {
         const isPlayer = vtt.role !== 'GM';
@@ -1038,11 +1039,13 @@ export function renderNotePins(ctx, context = {}) {
         const r = isHovered ? (isPlayer ? 15 : 17) : isPlayer ? 12 : 14;
 
         ctx.save();
+        ctx.translate(note.x, note.y);
+        ctx.scale(1 / zoom, 1 / zoom);
 
         // Selection glow ring (GM only)
         if (isSelected && !isPlayer) {
             ctx.beginPath();
-            ctx.arc(note.x, note.y, r + 6, 0, Math.PI * 2);
+            ctx.arc(0, 0, r + 6, 0, Math.PI * 2);
             ctx.strokeStyle = 'rgba(212, 175, 55, 0.9)';
             ctx.lineWidth = 2.5;
             ctx.stroke();
@@ -1050,7 +1053,7 @@ export function renderNotePins(ctx, context = {}) {
 
         // Pin circle
         ctx.beginPath();
-        ctx.arc(note.x, note.y, r, 0, Math.PI * 2);
+        ctx.arc(0, 0, r, 0, Math.PI * 2);
 
         if (isPlayer) {
             ctx.fillStyle = isHovered ? '#5c90ff' : 'rgba(60, 120, 255, 0.85)';
@@ -1068,12 +1071,12 @@ export function renderNotePins(ctx, context = {}) {
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillStyle = '#ffffff';
-        ctx.fillText('📍', note.x, note.y);
+        ctx.fillText('📍', 0, 0);
 
         // Visibility badge (GM only, if shared)
         if (!isPlayer && note.visibleToPlayers) {
             ctx.font = '10px serif';
-            ctx.fillText('👁', note.x + r - 2, note.y - r + 2);
+            ctx.fillText('👁', r - 2, -r + 2);
         }
 
         // Name label below pin
@@ -1083,7 +1086,7 @@ export function renderNotePins(ctx, context = {}) {
         ctx.shadowBlur = 4;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'top';
-        ctx.fillText(note.name || (note.areaId ? `Area ${note.areaId}` : 'Note'), note.x, note.y + r + 4);
+        ctx.fillText(note.name || (note.areaId ? `Area ${note.areaId}` : 'Note'), 0, r + 4);
 
         ctx.restore();
     });

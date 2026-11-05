@@ -7,7 +7,19 @@ import { createCampaignTemplate, isValidAssetPath } from '../utils.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-export const rootDir = path.join(__dirname, '..');
+
+function resolveRootDir() {
+    let base = path.join(__dirname, '..');
+    // In packaged Electron ASAR builds, ensure rootDir resolves to app.asar.unpacked where static assets are extracted
+    if (base.includes('.asar') && !base.includes('.asar.unpacked')) {
+        const unpacked = base.replace('.asar', '.asar.unpacked');
+        if (fs.existsSync(unpacked)) {
+            return unpacked;
+        }
+    }
+    return base;
+}
+export const rootDir = resolveRootDir();
 
 function resolveDefaultDataDir() {
     if (process.env.FORGEDVTT_DATA_DIR) return process.env.FORGEDVTT_DATA_DIR;

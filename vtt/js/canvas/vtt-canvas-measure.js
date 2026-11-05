@@ -204,11 +204,18 @@ export function drawMeasurementTemplate(
     }
 
     // Distance label — shown only during live drawing
+    const zoom = (ctx.getTransform ? ctx.getTransform()?.a : 1) || 1;
     if (showDistance && distancePx > 0) {
         const distInfo = calcDistanceFormatted(distancePx, activeGrid);
         const label = distInfo.label;
         ctx.save();
         ctx.globalAlpha = 1.0;
+        const pillX = labelAtX + 14;
+        const pillY = labelAtY - 22;
+
+        ctx.translate(pillX, pillY);
+        ctx.scale(1 / zoom, 1 / zoom);
+
         ctx.font = 'bold 13px Inter, Arial, sans-serif';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
@@ -217,17 +224,15 @@ export function drawMeasurementTemplate(
         const padY = 4;
         const pillW = tw + padX * 2;
         const pillH = 22;
-        const pillX = labelAtX + 14;
-        const pillY = labelAtY - 22;
         const r = pillH / 2;
 
         ctx.fillStyle = 'rgba(15, 15, 20, 0.82)';
         ctx.beginPath();
-        ctx.moveTo(pillX - pillW / 2 + r, pillY - pillH / 2);
-        ctx.arcTo(pillX + pillW / 2, pillY - pillH / 2, pillX + pillW / 2, pillY + pillH / 2, r);
-        ctx.arcTo(pillX + pillW / 2, pillY + pillH / 2, pillX - pillW / 2, pillY + pillH / 2, r);
-        ctx.arcTo(pillX - pillW / 2, pillY + pillH / 2, pillX - pillW / 2, pillY - pillH / 2, r);
-        ctx.arcTo(pillX - pillW / 2, pillY - pillH / 2, pillX + pillW / 2, pillY - pillH / 2, r);
+        ctx.moveTo(-pillW / 2 + r, -pillH / 2);
+        ctx.arcTo(pillW / 2, -pillH / 2, pillW / 2, pillH / 2, r);
+        ctx.arcTo(pillW / 2, pillH / 2, -pillW / 2, pillH / 2, r);
+        ctx.arcTo(-pillW / 2, pillH / 2, -pillW / 2, -pillH / 2, r);
+        ctx.arcTo(-pillW / 2, -pillH / 2, pillW / 2, -pillH / 2, r);
         ctx.closePath();
         ctx.fill();
 
@@ -236,22 +241,27 @@ export function drawMeasurementTemplate(
         ctx.stroke();
 
         ctx.fillStyle = '#ffffff';
-        ctx.fillText(label, pillX, pillY);
+        ctx.fillText(label, 0, 0);
         ctx.restore();
     }
 
     // Owner label
     if (ownerUsername) {
+        const lx = (startPoint.x + endPoint.x) / 2;
+        const ly = Math.min(startPoint.y, endPoint.y) - 2;
+        ctx.save();
+        ctx.translate(lx, ly);
+        ctx.scale(1 / zoom, 1 / zoom);
+
         ctx.font = '11px Inter, Arial, sans-serif';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'bottom';
         ctx.fillStyle = 'rgba(0,0,0,0.6)';
-        const lx = (startPoint.x + endPoint.x) / 2;
-        const ly = Math.min(startPoint.y, endPoint.y) - 2;
         const tw = ctx.measureText(ownerUsername).width + 8;
-        ctx.fillRect(lx - tw / 2, ly - 13, tw, 14);
+        ctx.fillRect(-tw / 2, -13, tw, 14);
         ctx.fillStyle = fillColor;
-        ctx.fillText(ownerUsername, lx, ly);
+        ctx.fillText(ownerUsername, 0, 0);
+        ctx.restore();
     }
 
     ctx.restore();

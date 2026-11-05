@@ -587,7 +587,8 @@ export function initVttCanvas(vtt) {
             } else {
                 if (note.visibleToPlayers) isInteractable = true;
             }
-            if (isInteractable && Math.hypot(note.x - x, note.y - y) < 24) {
+            const hitThreshold = Math.max(16, 24 / Math.max(0.1, zoom || 1));
+            if (isInteractable && Math.hypot(note.x - x, note.y - y) < hitThreshold) {
                 return note.id;
             }
         }

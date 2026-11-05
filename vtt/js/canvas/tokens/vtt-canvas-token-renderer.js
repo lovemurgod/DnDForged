@@ -1217,19 +1217,24 @@ export function renderTokensLayer(context = {}) {
                     // 1. Position Container using hardware-accelerated transform
                     const { drawW, drawH } = getTokenDrawDimensions(token);
                     const currentZoom = Math.max(0.1, zoom || 1);
-                    const tokenScreenW = drawW * currentZoom;
-                    const isFarZoomLOD = tokenScreenW < 24;
 
-                    // Clamped hybrid sizing helper: guarantees minimum physical display pixels
-                    const getClampedWorldPx = (baseWorldPx, minScreenPx) =>
-                        Math.max(baseWorldPx, minScreenPx / currentZoom);
+                    // Billboard Screen-Space sizing helper: guarantees exact physical display pixels on screen
+                    const getScreenPx = (targetScreenPx) => targetScreenPx / currentZoom;
 
                     uiNode.style.transform = `translate3d(${renderPos.x}px, ${renderPos.y}px, 0)`;
                     uiNode.style.width = `${drawW}px`;
                     uiNode.style.height = `${drawH}px`;
-                    uiNode.style.display = 'block';
 
                     const isHovered = id === hoverTokenId;
+
+                    // Smooth Macro-Zoom Opacity Fade (zoom < 0.25 smoothly fades to 0.10, reveals 100% on hover)
+                    let overlayOpacity = 1.0;
+                    if (currentZoom < 0.25) {
+                        overlayOpacity = isHovered ? 1.0 : Math.max(0, Math.min(1, (currentZoom - 0.1) / (0.25 - 0.1)));
+                    }
+                    uiNode.style.opacity = `${overlayOpacity}`;
+                    uiNode.style.display = overlayOpacity > 0.02 ? 'block' : 'none';
+
                     const isGM = vtt.role === 'GM';
                     const targetType = token.isPlayer ? 'Player' : 'Monster';
                     const activePrefs = isGM ? gmTokenPrefs : playerTokenPrefs;
@@ -1317,61 +1322,52 @@ export function renderTokensLayer(context = {}) {
                     if (nameNode.textContent !== token.name) {
                         nameNode.textContent = token.name;
                     }
-                    const effectiveNameFontSize = Math.round(getClampedWorldPx(12, 11));
-                    const effectiveNameMaxWidth = Math.round(getClampedWorldPx(260, 120));
+                    const effectiveNameFontSize = Math.round(getScreenPx(12));
+                    const effectiveNameMaxWidth = Math.round(getScreenPx(180));
                     nameNode.style.fontSize = `${effectiveNameFontSize}px`;
+                    nameNode.style.left = '50%';
+                    nameNode.style.right = 'auto';
+                    nameNode.style.width = 'max-content';
+                    nameNode.style.maxWidth = `${effectiveNameMaxWidth}px`;
+                    nameNode.style.transform = 'translateX(-50%)';
+                    nameNode.style.overflow = 'hidden';
+                    nameNode.style.textOverflow = 'ellipsis';
+                    nameNode.style.whiteSpace = 'nowrap';
+                    nameNode.style.padding = `${Math.round(getScreenPx(2))}px ${Math.round(getScreenPx(6))}px`;
+                    nameNode.style.borderRadius = `${Math.round(getScreenPx(4))}px`;
 
-                    if (nameplateFitWidth && tokenScreenW >= 60) {
-                        nameNode.style.left = '4px';
-                        nameNode.style.right = '4px';
-                        nameNode.style.width = 'auto';
-                        nameNode.style.maxWidth = 'calc(100% - 8px)';
-                        nameNode.style.transform = 'none';
-                        nameNode.style.overflow = 'hidden';
-                        nameNode.style.textOverflow = 'ellipsis';
-                        nameNode.style.whiteSpace = 'nowrap';
-                    } else {
-                        nameNode.style.left = '50%';
-                        nameNode.style.right = 'auto';
-                        nameNode.style.width = 'max-content';
-                        nameNode.style.maxWidth = `${effectiveNameMaxWidth}px`;
-                        nameNode.style.transform = 'translateX(-50%)';
-                        nameNode.style.overflow = 'hidden';
-                        nameNode.style.textOverflow = 'ellipsis';
-                        nameNode.style.whiteSpace = 'nowrap';
-                    }
-
-                    const effectiveBarHeight = Math.round(getClampedWorldPx(barHeight, 6));
+                    const effectiveBarHeight = Math.round(getScreenPx(7));
+                    const nameGap = Math.round(getScreenPx(4));
 
                     if (namePos === 'above' && barPos === 'above') {
-                        nameNode.style.top = `-${effectiveBarHeight + 26}px`;
+                        nameNode.style.top = `-${effectiveBarHeight + Math.round(getScreenPx(24))}px`;
                         nameNode.style.bottom = 'auto';
                     } else if (namePos === 'below' && barPos === 'below') {
-                        nameNode.style.top = `calc(100% + ${effectiveBarHeight + 7}px)`;
+                        nameNode.style.top = `calc(100% + ${effectiveBarHeight + Math.round(getScreenPx(7))}px)`;
                         nameNode.style.bottom = 'auto';
                     } else if (namePos === 'top' && barPos === 'top') {
-                        nameNode.style.top = '4px';
+                        nameNode.style.top = `${Math.round(getScreenPx(22))}px`;
                         nameNode.style.bottom = 'auto';
                     } else if (namePos === 'bottom' && barPos === 'bottom') {
                         nameNode.style.top = 'auto';
-                        nameNode.style.bottom = `${effectiveBarHeight + 7}px`;
+                        nameNode.style.bottom = `${effectiveBarHeight + Math.round(getScreenPx(7))}px`;
                     } else {
                         if (namePos === 'above') {
-                            nameNode.style.top = '-22px';
+                            nameNode.style.top = `-${Math.round(getScreenPx(20))}px`;
                             nameNode.style.bottom = 'auto';
                         } else if (namePos === 'top') {
-                            nameNode.style.top = '4px';
+                            nameNode.style.top = `${nameGap}px`;
                             nameNode.style.bottom = 'auto';
                         } else if (namePos === 'bottom') {
                             nameNode.style.top = 'auto';
-                            nameNode.style.bottom = '4px';
+                            nameNode.style.bottom = `${nameGap}px`;
                         } else if (namePos === 'below') {
-                            nameNode.style.top = 'calc(100% + 4px)';
+                            nameNode.style.top = `calc(100% + ${nameGap}px)`;
                             nameNode.style.bottom = 'auto';
                         }
                     }
 
-                    if (showName && (!isFarZoomLOD || isHovered)) {
+                    if (showName) {
                         nameNode.style.display = 'block';
                     } else {
                         nameNode.style.display = 'none';
@@ -1407,30 +1403,33 @@ export function renderTokensLayer(context = {}) {
                             let barBottomStyle = 'auto';
 
                             if (namePos === 'above' && barPos === 'above') {
-                                barTopStyle = `-${effectiveBarHeight + 4}px`;
+                                barTopStyle = `-${effectiveBarHeight + Math.round(getScreenPx(4))}px`;
                             } else if (namePos === 'below' && barPos === 'below') {
-                                barTopStyle = 'calc(100% + 4px)';
+                                barTopStyle = `calc(100% + ${Math.round(getScreenPx(4))}px)`;
                             } else if (namePos === 'top' && barPos === 'top') {
-                                barTopStyle = '24px';
+                                barTopStyle = `${Math.round(getScreenPx(22))}px`;
                             } else if (namePos === 'bottom' && barPos === 'bottom') {
-                                barBottomStyle = '4px';
+                                barBottomStyle = `${Math.round(getScreenPx(4))}px`;
                             } else {
-                                if (barPos === 'above') barTopStyle = `-${effectiveBarHeight + 4}px`;
-                                else if (barPos === 'top') barTopStyle = '4px';
-                                else if (barPos === 'bottom') barBottomStyle = '4px';
-                                else if (barPos === 'below') barTopStyle = 'calc(100% + 4px)';
+                                if (barPos === 'above')
+                                    barTopStyle = `-${effectiveBarHeight + Math.round(getScreenPx(4))}px`;
+                                else if (barPos === 'top') barTopStyle = `${Math.round(getScreenPx(4))}px`;
+                                else if (barPos === 'bottom') barBottomStyle = `${Math.round(getScreenPx(4))}px`;
+                                else if (barPos === 'below')
+                                    barTopStyle = `calc(100% + ${Math.round(getScreenPx(4))}px)`;
                             }
 
-                            hpContainer.style.left = '4px';
-                            hpContainer.style.right = '4px';
+                            const barSidePad = Math.round(getScreenPx(4));
+                            hpContainer.style.left = `${barSidePad}px`;
+                            hpContainer.style.right = `${barSidePad}px`;
                             hpContainer.style.width = 'auto';
                             hpContainer.style.top = barTopStyle;
                             hpContainer.style.bottom = barBottomStyle;
                             hpContainer.style.height = `${effectiveBarHeight}px`;
                             hpContainer.style.borderRadius = `${Math.min(4, Math.floor(effectiveBarHeight / 2))}px`;
 
-                            tempHpWrapper.style.left = '4px';
-                            tempHpWrapper.style.right = '4px';
+                            tempHpWrapper.style.left = `${barSidePad}px`;
+                            tempHpWrapper.style.right = `${barSidePad}px`;
                             tempHpWrapper.style.width = 'auto';
                             tempHpWrapper.style.top = barTopStyle;
                             tempHpWrapper.style.bottom = barBottomStyle;
@@ -1507,7 +1506,7 @@ export function renderTokensLayer(context = {}) {
                             }
 
                             // HP Text
-                            if ((showNum || (tempHp > 0 && showTempNum)) && (!isFarZoomLOD || isHovered)) {
+                            if (showNum || (tempHp > 0 && showTempNum)) {
                                 hpText.style.display = 'block';
                                 let hpString = '';
                                 if (showNum) {
@@ -1520,9 +1519,7 @@ export function renderTokensLayer(context = {}) {
                                 if (hpText.textContent !== hpString) {
                                     hpText.textContent = hpString;
                                 }
-                                const effectiveHpFontSize = Math.round(
-                                    getClampedWorldPx(Math.min(10, Math.max(8, barHeight - 1)), 9)
-                                );
+                                const effectiveHpFontSize = Math.round(getScreenPx(10));
                                 hpText.style.top = barTopStyle;
                                 hpText.style.bottom = barBottomStyle;
                                 hpText.style.lineHeight = `${effectiveBarHeight}px`;
@@ -1545,9 +1542,9 @@ export function renderTokensLayer(context = {}) {
                     // 4. Conditions
                     const condContainer = uiNode.querySelector('.token-condition-container');
                     const hasConditions = token.conditions && token.conditions.length > 0;
-                    if (hasConditions && (!isFarZoomLOD || isHovered)) {
-                        const condBadgeSize = Math.round(getClampedWorldPx(20, 16));
-                        const condFontSize = Math.round(getClampedWorldPx(11, 10));
+                    if (hasConditions) {
+                        const condBadgeSize = Math.round(getScreenPx(20));
+                        const condFontSize = Math.round(getScreenPx(11));
 
                         const maxVisibleConditions = 3;
                         let visibleConditions = token.conditions;
@@ -1580,24 +1577,27 @@ export function renderTokensLayer(context = {}) {
                         if (condContainer.innerHTML !== iconsHtml) condContainer.innerHTML = iconsHtml;
                         condContainer.style.display = 'flex';
 
+                        const condOffsetOutside = `-${Math.round(getScreenPx(18))}px`;
+                        const condOffsetInside = `${Math.round(getScreenPx(4))}px`;
+
                         if (condPos === 'outside-tr') {
-                            condContainer.style.top = '-18px';
-                            condContainer.style.right = '-18px';
+                            condContainer.style.top = condOffsetOutside;
+                            condContainer.style.right = condOffsetOutside;
                             condContainer.style.bottom = 'auto';
                             condContainer.style.left = 'auto';
                             condContainer.style.flexDirection = condOrientation === 'vertical' ? 'column' : 'row';
                             condContainer.style.alignItems = 'flex-start';
                         } else if (condPos === 'outside-br') {
-                            condContainer.style.bottom = '-18px';
-                            condContainer.style.right = '-18px';
+                            condContainer.style.bottom = condOffsetOutside;
+                            condContainer.style.right = condOffsetOutside;
                             condContainer.style.top = 'auto';
                             condContainer.style.left = 'auto';
                             condContainer.style.flexDirection = condOrientation === 'vertical' ? 'column' : 'row';
                             condContainer.style.alignItems = 'flex-end';
                         } else {
                             // 'inside-tr'
-                            condContainer.style.top = '4px';
-                            condContainer.style.right = '4px';
+                            condContainer.style.top = condOffsetInside;
+                            condContainer.style.right = condOffsetInside;
                             condContainer.style.bottom = 'auto';
                             condContainer.style.left = 'auto';
                             condContainer.style.flexDirection = condOrientation === 'vertical' ? 'column' : 'row';
@@ -1610,10 +1610,10 @@ export function renderTokensLayer(context = {}) {
                     // 5. Flight
                     const flightContainer = uiNode.querySelector('.token-flight-container');
                     const altitude = token.flightHeight || token.altitude || 0;
-                    if (altitude !== 0 && (!isFarZoomLOD || isHovered)) {
-                        const flightBadgeSize = Math.round(getClampedWorldPx(24, 18));
-                        const flightIconSize = Math.round(getClampedWorldPx(10, 9));
-                        const flightFontSize = Math.round(getClampedWorldPx(9, 8));
+                    if (altitude !== 0) {
+                        const flightBadgeSize = Math.round(getScreenPx(24));
+                        const flightIconSize = Math.round(getScreenPx(10));
+                        const flightFontSize = Math.round(getScreenPx(9));
                         flightContainer.style.width = `${flightBadgeSize}px`;
                         flightContainer.style.height = `${flightBadgeSize}px`;
 
@@ -1628,20 +1628,23 @@ export function renderTokensLayer(context = {}) {
                         }
                         flightContainer.style.display = 'flex';
 
+                        const flightOffsetOutside = `-${Math.round(getScreenPx(18))}px`;
+                        const flightOffsetInside = `${Math.round(getScreenPx(4))}px`;
+
                         if (flightPos === 'outside-tl') {
-                            flightContainer.style.top = '-18px';
-                            flightContainer.style.left = '-18px';
+                            flightContainer.style.top = flightOffsetOutside;
+                            flightContainer.style.left = flightOffsetOutside;
                             flightContainer.style.bottom = 'auto';
                             flightContainer.style.right = 'auto';
                         } else if (flightPos === 'outside-bl') {
-                            flightContainer.style.bottom = '-18px';
-                            flightContainer.style.left = '-18px';
+                            flightContainer.style.bottom = flightOffsetOutside;
+                            flightContainer.style.left = flightOffsetOutside;
                             flightContainer.style.top = 'auto';
                             flightContainer.style.right = 'auto';
                         } else {
                             // 'inside-tl'
-                            flightContainer.style.top = '4px';
-                            flightContainer.style.left = '4px';
+                            flightContainer.style.top = flightOffsetInside;
+                            flightContainer.style.left = flightOffsetInside;
                             flightContainer.style.bottom = 'auto';
                             flightContainer.style.right = 'auto';
                         }
