@@ -5,7 +5,8 @@ import {
     _hasResistanceType,
     applyCardDamageToToken,
     applyCompositeDamageToTokens,
-    changeMassTokenZOrder
+    changeMassTokenZOrder,
+    syncTokensHpToCharacters
 } from '../vtt/js/canvas/tokens/vtt-canvas-mass-actions.js';
 
 import { getPcRollFormula, getTokenSaveMod, rollFromToken } from '../vtt/js/canvas/tokens/vtt-canvas-token-rollers.js';
@@ -224,5 +225,36 @@ describe('Canvas Token Z-Ordering: Stack Manipulation', () => {
         assert.strictEqual(tokens.t1.zIndex, 11);
         assert.strictEqual(tokens.t2.zIndex, 12);
         assert.strictEqual(tokens.t1.zIndex < tokens.t2.zIndex, true);
+    });
+
+    it('syncTokensHpToCharacters correctly synchronizes character via sourceCharacterId and characterId', () => {
+        const charA = { id: 'char_a', hpCurrent: 50, hpMax: 50, tempHp: 0 };
+        const charB = { id: 'char_b', hpCurrent: 30, hpMax: 30, tempHp: 0 };
+        const vtt = {
+            campaignState: {
+                characters: {
+                    char_a: charA,
+                    char_b: charB
+                }
+            }
+        };
+
+        const tokens = {
+            tok_1: { id: 'tok_1', characterId: 'char_a', hp: 35, maxHp: 50, tempHp: 5 },
+            tok_2: { id: 'tok_2', sourceCharacterId: 'char_b', hp: 12, maxHp: 30, tempHp: 0 },
+            tok_3: { id: 'tok_3', characterId: 'char_a', hp: 50, maxHp: 50, tempHp: 0 } // clone token of char_a
+        };
+
+        syncTokensHpToCharacters([tokens.tok_1, tokens.tok_2], { vtt, tokens });
+
+        // charA should be updated from tok_1, and other char_a clone tok_3 should be synced
+        assert.strictEqual(charA.hpCurrent, 35);
+        assert.strictEqual(charA.tempHp, 5);
+        assert.strictEqual(tokens.tok_3.hp, 35);
+        assert.strictEqual(tokens.tok_3.tempHp, 5);
+
+        // charB should be updated via sourceCharacterId from tok_2
+        assert.strictEqual(charB.hpCurrent, 12);
+        assert.strictEqual(charB.hpMax, 30);
     });
 });

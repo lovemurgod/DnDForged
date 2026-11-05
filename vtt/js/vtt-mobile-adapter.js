@@ -829,16 +829,9 @@ export function initVttMobileAdapter(vtt) {
             btn.classList.toggle('active', btn.dataset.tab === tabId);
         });
 
+        // Bottom sheet carousel strip is disabled in favor of top-left Token Locator
         if (mobileSheetCarousel) {
-            if (
-                tabId === 'map' ||
-                playerSheetPanel?.classList.contains('open') ||
-                creatureSheetPanel?.classList.contains('open')
-            ) {
-                mobileSheetCarousel.classList.remove('vtt-hidden');
-            } else {
-                mobileSheetCarousel.classList.add('vtt-hidden');
-            }
+            mobileSheetCarousel.classList.add('vtt-hidden');
         }
     }
 
@@ -852,15 +845,18 @@ export function initVttMobileAdapter(vtt) {
             creatureSheetPanel.classList.remove('open');
             creatureSheetPanel.classList.add('minimized');
         }
-        if (initContainer) initContainer.classList.remove('mobile-init-open');
+        if (initContainer) {
+            initContainer.classList.remove('mobile-init-open');
+            initContainer.classList.add('vtt-hidden');
+        }
         if (mobileBackdrop) mobileBackdrop.classList.remove('active');
         if (mobileToolsMenu) mobileToolsMenu.classList.remove('active');
         if (mobileFab) mobileFab.classList.remove('active');
         if (mobileShapeSheet) mobileShapeSheet.classList.add('vtt-hidden');
         if (mobileTokenActions) mobileTokenActions.classList.add('vtt-hidden');
         hideMobileRadialDial();
-        if (activeNavTab === 'map' && mobileSheetCarousel) {
-            mobileSheetCarousel.classList.remove('vtt-hidden');
+        if (mobileSheetCarousel) {
+            mobileSheetCarousel.classList.add('vtt-hidden');
         }
         const mobilePaintModal = document.getElementById('modal-mobile-paint-drawer');
         if (mobilePaintModal) mobilePaintModal.classList.add('vtt-hidden');
@@ -917,7 +913,7 @@ export function initVttMobileAdapter(vtt) {
         playerSheetPanel.classList.remove('minimized');
         playerSheetPanel.classList.add('open');
         if (mobileBackdrop) mobileBackdrop.classList.add('active');
-        if (mobileSheetCarousel) mobileSheetCarousel.classList.remove('vtt-hidden');
+        if (mobileSheetCarousel) mobileSheetCarousel.classList.add('vtt-hidden');
 
         // Update mobile topbar data from current character if present
         syncPlayerSheetTopbar();
@@ -928,7 +924,6 @@ export function initVttMobileAdapter(vtt) {
 
         initContainer.classList.remove('vtt-hidden');
         initContainer.classList.add('mobile-init-open');
-        if (mobileBackdrop) mobileBackdrop.classList.add('active');
         if (mobileSheetCarousel) mobileSheetCarousel.classList.add('vtt-hidden');
     }
 
@@ -1764,13 +1759,43 @@ export function initVttMobileAdapter(vtt) {
             });
         });
 
+        const gridSnapBtn = document.getElementById('btn-mobile-paint-gridsnap');
+        if (gridSnapBtn) {
+            gridSnapBtn.addEventListener('click', () => {
+                const nextState = !gridSnapBtn.classList.contains('active');
+                if (window.VTT?.canvasEngine?.setPaintGridSnap) {
+                    window.VTT.canvasEngine.setPaintGridSnap(nextState);
+                } else {
+                    gridSnapBtn.classList.toggle('active', nextState);
+                }
+            });
+        }
+
+        const fillmodeBtns = modal.querySelectorAll('.mobile-paint-fillmode-btn');
+        fillmodeBtns.forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const mode = btn.dataset.fillmode;
+                if (window.VTT?.canvasEngine?.setPaintFillMode) {
+                    window.VTT.canvasEngine.setPaintFillMode(mode);
+                } else {
+                    fillmodeBtns.forEach((b) => b.classList.remove('active'));
+                    btn.classList.add('active');
+                }
+            });
+        });
+
         const hideDrawer = () => {
             modal.classList.add('vtt-hidden');
             if (mobileBackdrop) mobileBackdrop.classList.remove('active');
         };
 
         if (closeBtn) closeBtn.addEventListener('click', hideDrawer);
-        if (startBtn) startBtn.addEventListener('click', hideDrawer);
+        if (startBtn) {
+            startBtn.addEventListener('click', () => {
+                hideDrawer();
+                activateTool('paint');
+            });
+        }
     }
 
     function setupMobileMapToolsUI() {
@@ -2293,190 +2318,14 @@ export function initVttMobileAdapter(vtt) {
     }
 
     // ========================================================================
-    // 4C. MOBILE SHEET SWITCHER CAROUSEL (PERSISTENT AVATAR DOCK)
+    // 4C. MOBILE SHEET SWITCHER CAROUSEL (PERSISTENT AVATAR DOCK) - DISABLED
     // ========================================================================
     function setupMobileSheetCarousel() {
-        if (!mobileSheetCarousel || !mobileSheetTrack) return;
-        renderMobileSheetCarousel();
+        if (mobileSheetCarousel) mobileSheetCarousel.classList.add('vtt-hidden');
     }
 
     function renderMobileSheetCarousel() {
-        if (!mobileSheetTrack || !mobileSheetCarousel) return;
-        mobileSheetTrack.innerHTML = '';
-
-        const items = [];
-        const seenKeys = new Set();
-
-        // 1. Gather party characters from campaignState
-        if (vtt.campaignState?.characters) {
-            Object.entries(vtt.campaignState.characters).forEach(([charId, c]) => {
-                if (c && !seenKeys.has(charId)) {
-                    seenKeys.add(charId);
-                    items.push({
-                        id: charId,
-                        name: c.name || 'Hero',
-                        avatar: c.avatar || c.tokenImage || 'img/logo.png',
-                        type: 'player',
-                        roleCategory: 'pc',
-                        characterId: charId
-                    });
-                }
-            });
-        }
-
-        // 2. Gather docked sheets from sheetDock tabs
-        if (vtt.sheetDock?.tabs) {
-            vtt.sheetDock.tabs.forEach((tab, key) => {
-                const id = tab.characterId || tab.id || key;
-                if (!seenKeys.has(id)) {
-                    seenKeys.add(id);
-                    const isPc = tab.roleCategory === 'player' || tab.type === 'player';
-                    const isNpc = tab.roleCategory === 'companion' || tab.isCustomNpc;
-                    items.push({
-                        id: id,
-                        name: tab.tabName || 'Creature',
-                        avatar: tab.tabAvatar || 'img/logo.png',
-                        type: isPc ? 'player' : 'creature',
-                        roleCategory: isPc ? 'pc' : isNpc ? 'npc' : 'creature',
-                        characterId: tab.characterId,
-                        monsterData: tab.monsterData,
-                        tokenId: tab.activeTokenId || tab.tokenId,
-                        tabKey: key
-                    });
-                }
-            });
-        }
-
-        // 3. Gather active canvas tokens for creatures / NPCs
-        const canvasEngine = window.VTT?.canvasEngine;
-        if (canvasEngine?.tokens) {
-            Object.values(canvasEngine.tokens).forEach((t) => {
-                if (!t) return;
-                const tKey = t.characterId ? t.characterId : t.monsterData?.name || t.name || t.id;
-                if (tKey && !seenKeys.has(tKey) && (t.characterId || t.monsterData || t.isNpc)) {
-                    seenKeys.add(tKey);
-                    const isPc = !!t.characterId;
-                    const isNpc = !!t.isNpc;
-                    items.push({
-                        id: t.id,
-                        name: t.name || 'Token',
-                        avatar: t.image || t.avatar || 'img/logo.png',
-                        type: isPc ? 'player' : 'creature',
-                        roleCategory: isPc ? 'pc' : isNpc ? 'npc' : 'creature',
-                        characterId: t.characterId,
-                        monsterData: t.monsterData,
-                        tokenId: t.id
-                    });
-                }
-            });
-        }
-
-        if (items.length === 0) {
-            mobileSheetCarousel.classList.add('vtt-hidden');
-            return;
-        }
-
-        if (
-            activeNavTab === 'map' ||
-            playerSheetPanel?.classList.contains('open') ||
-            creatureSheetPanel?.classList.contains('open')
-        ) {
-            mobileSheetCarousel.classList.remove('vtt-hidden');
-        }
-
-        let lastChipTapTime = 0;
-        let lastChipTapId = null;
-
-        items.forEach((item) => {
-            const chip = document.createElement('div');
-            chip.className = `mobile-sheet-chip chip-${item.roleCategory || 'creature'}`;
-            chip.dataset.id = item.id;
-            chip.title = `${item.name} (Tap: open sheet | Double-tap: focus token)`;
-
-            const isPlayerOpen = playerSheetPanel && playerSheetPanel.classList.contains('open');
-            if (item.type === 'player' && isPlayerOpen) {
-                chip.classList.add('chip-active');
-            }
-
-            const initial = item.name ? item.name.charAt(0).toUpperCase() : '?';
-            chip.innerHTML = `
-                <img src="${item.avatar}" alt="${item.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
-                <span class="chip-monogram" style="display: none;">${initial}</span>
-            `;
-
-            chip.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const now = Date.now();
-                const isDoubleTap = lastChipTapId === item.id && now - lastChipTapTime < 350;
-                lastChipTapTime = now;
-                lastChipTapId = item.id;
-
-                if (isDoubleTap) {
-                    // Double-tap: Center map on token!
-                    let tokId = item.tokenId;
-                    if (!tokId && item.characterId && canvasEngine?.tokens) {
-                        const match = Object.values(canvasEngine.tokens).find(
-                            (tok) => tok.characterId === item.characterId
-                        );
-                        if (match) tokId = match.id;
-                    }
-                    if (tokId && canvasEngine?.selectToken) {
-                        canvasEngine.selectToken(tokId);
-                    }
-                    if (canvasEngine?.centerOnToken) {
-                        canvasEngine.centerOnToken();
-                    }
-                    // Close open sheets so player sees the centered token
-                    if (playerSheetPanel) {
-                        playerSheetPanel.classList.remove('open');
-                        playerSheetPanel.classList.add('minimized');
-                    }
-                    if (creatureSheetPanel) {
-                        creatureSheetPanel.classList.remove('open');
-                        creatureSheetPanel.classList.add('minimized');
-                    }
-                    if (mobileBackdrop) mobileBackdrop.classList.remove('active');
-                    if (navigator.vibrate) navigator.vibrate(35);
-                    return;
-                }
-
-                // Single tap: Open corresponding sheet
-                mobileSheetTrack
-                    .querySelectorAll('.mobile-sheet-chip')
-                    .forEach((c) => c.classList.remove('chip-active'));
-                chip.classList.add('chip-active');
-                if (navigator.vibrate) navigator.vibrate(20);
-
-                if (item.tabKey && vtt.sheetDock?.activateTab) {
-                    vtt.sheetDock.activateTab(item.tabKey);
-                    if (item.type === 'player') {
-                        openMobilePlayerSheet();
-                    } else if (creatureSheetPanel) {
-                        creatureSheetPanel.classList.remove('minimized');
-                        creatureSheetPanel.classList.add('open');
-                        if (mobileBackdrop) mobileBackdrop.classList.add('active');
-                    }
-                } else if (item.type === 'player') {
-                    if (window.VTT?.playerSheet?.openSheet) {
-                        window.VTT.playerSheet.openSheet(item.characterId || item.id);
-                    }
-                    openMobilePlayerSheet();
-                } else {
-                    if (item.monsterData && window.VTT?.creatureSheet?.openSheet) {
-                        window.VTT.creatureSheet.openSheet(item.monsterData, item.tokenId, item.characterId);
-                    } else if (item.monsterData && window.VTT?.creatureSheet?.loadMonster) {
-                        window.VTT.creatureSheet.loadMonster(item.monsterData);
-                    }
-                    if (creatureSheetPanel) {
-                        creatureSheetPanel.classList.remove('minimized');
-                        creatureSheetPanel.classList.add('open');
-                        if (mobileBackdrop) mobileBackdrop.classList.add('active');
-                    }
-                }
-            });
-
-            mobileSheetTrack.appendChild(chip);
-        });
+        if (mobileSheetCarousel) mobileSheetCarousel.classList.add('vtt-hidden');
     }
 
     // ========================================================================

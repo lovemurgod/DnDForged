@@ -725,7 +725,7 @@ export function setupSocketSync(ctx = {}) {
         // Push HP to any linked ctx.tokens on the current map
         let changed = false;
         Object.values(ctx.tokens).forEach((token) => {
-            if (token.characterId === char.id) {
+            if (token.characterId === char.id || token.sourceCharacterId === char.id) {
                 token.hp = char.hpCurrent ?? char.hp ?? token.hp;
                 token.maxHp = char.hpMax ?? token.maxHp;
                 token.tempHp = char.tempHp ?? 0;

@@ -1218,20 +1218,49 @@ export function initVttCanvas(vtt) {
     function setupPaintRibbonControls() {
         setupPaintRibbonControlsExt(
             {
+                get paintSubTool() {
+                    return paintSubTool;
+                },
                 set paintSubTool(v) {
                     paintSubTool = v;
+                },
+                get paintStrokeColor() {
+                    return paintStrokeColor;
                 },
                 set paintStrokeColor(v) {
                     paintStrokeColor = v;
                 },
+                get paintFillColor() {
+                    return paintFillColor;
+                },
+                set paintFillColor(v) {
+                    paintFillColor = v;
+                },
+                get paintFillMode() {
+                    return paintFillMode;
+                },
+                set paintFillMode(v) {
+                    paintFillMode = v;
+                },
+                get paintStrokeWidth() {
+                    return paintStrokeWidth;
+                },
                 set paintStrokeWidth(v) {
                     paintStrokeWidth = v;
+                },
+                get paintGridSnap() {
+                    return paintGridSnap;
+                },
+                set paintGridSnap(v) {
+                    paintGridSnap = v;
                 }
             },
             {
                 onSubToolChange: () => {
                     polygonPoints = [];
-                }
+                },
+                onUndo: () => paintUndo(),
+                onRedo: () => paintRedo()
             }
         );
     }
@@ -1805,10 +1834,6 @@ export function initVttCanvas(vtt) {
     let pingAnimFrame = null;
     let pingForceSelectTimeout = null;
 
-    // 200ms Damage Visual Animation State
-    let activeDamageFX = [];
-    let damageFXAnimFrame = null;
-
     // Grid alignment settings
     let grid = { size: 50, offsetX: 0, offsetY: 0, scale: 1.0, feetPerSquare: 5 };
     let isGridDirty = true;
@@ -2009,8 +2034,17 @@ export function initVttCanvas(vtt) {
         if (mapData.mapImage && mapData.mapImage.trim() !== '') {
             const imgUrl = mapData.mapImage.trim();
             if (!mapData.tokens) mapData.tokens = {};
-            const alreadyHasAsset = Object.values(mapData.tokens).some((t) => t.layer === 'map' && t.img === imgUrl);
-            if (!alreadyHasAsset) {
+            const cleanUrl = (u) =>
+                (u || '')
+                    .trim()
+                    .replace(/^[/\\]+/, '')
+                    .split('?')[0]
+                    .toLowerCase();
+            const normImgUrl = cleanUrl(imgUrl);
+            const existingAsset = Object.values(mapData.tokens).find(
+                (t) => t.layer === 'map' && (t.isBackground || t.isAsset || cleanUrl(t.img) === normImgUrl)
+            );
+            if (!existingAsset) {
                 const isVideo = !!imgUrl.match(/\.(mp4|webm|ogg)(\?.*)?$/i) || imgUrl.includes('pinimg.com/videos');
                 const isYoutube = imgUrl.includes('youtube.com') || imgUrl.includes('youtu.be');
                 const gSize = mapData.grid?.size || 50;
@@ -2040,8 +2074,10 @@ export function initVttCanvas(vtt) {
                 };
                 if (!mapData.gridWidth) mapData.gridWidth = gWidth;
                 if (!mapData.gridHeight) mapData.gridHeight = gHeight;
+            } else if (!existingAsset.img) {
+                existingAsset.img = imgUrl;
             }
-            mapData.thumbnail = imgUrl;
+            if (!mapData.thumbnail) mapData.thumbnail = imgUrl;
             // Retain mapData.mapImage as the permanent anchor!
         } else if (
             mapData.thumbnail &&
@@ -2695,7 +2731,7 @@ export function initVttCanvas(vtt) {
 
         // Render active visual pings & damage FX animations
         renderActivePingsPassExt(ctxInteraction, activePings);
-        renderActiveDamageFXPassExt(ctxInteraction, activeDamageFX, renderDamageFXBurst);
+        renderActiveDamageFXPassExt(ctxInteraction);
         cleanupOrphanedTokenOverlaysExt(tokens);
 
         // Draw in-progress live Paint stroke / shape preview
@@ -3535,6 +3571,22 @@ export function initVttCanvas(vtt) {
             const ind = document.getElementById('paint-active-indicator');
             if (ind) ind.style.background = c;
         },
+        setPaintGridSnap: (snap) => {
+            paintGridSnap = !!snap;
+            const btn = document.getElementById('btn-paint-gridsnap');
+            if (btn) btn.classList.toggle('active', paintGridSnap);
+            const mBtn = document.getElementById('btn-mobile-paint-gridsnap');
+            if (mBtn) mBtn.classList.toggle('active', paintGridSnap);
+        },
+        setPaintFillMode: (mode) => {
+            paintFillMode = mode;
+            document.querySelectorAll('#panel-paint-ribbon .paint-opt-btn[data-fillmode]').forEach((b) => {
+                b.classList.toggle('active', b.dataset.fillmode === mode);
+            });
+            document.querySelectorAll('.mobile-paint-fillmode-btn').forEach((b) => {
+                b.classList.toggle('active', b.dataset.fillmode === mode);
+            });
+        },
         getPaintState: () => ({
             subTool: paintSubTool,
             strokeColor: paintStrokeColor,
@@ -3774,6 +3826,9 @@ export function initVttCanvas(vtt) {
             vtt,
             renderAll,
             syncTokensHpToCharacters,
+            getTokenDrawDimensions,
+            triggerDamageFXAnimation,
+            triggerHealingFXAnimation,
             ...opts
         });
     const getTokenSaveMod = (tok, ab, opts = {}) => getTokenSaveModExt(tok, ab, { vtt, ...opts });
@@ -3806,6 +3861,7 @@ export function initVttCanvas(vtt) {
             tokens,
             vtt,
             processMassAttackFromChat,
+            getTokenAC: (t) => getTokenAC(t) ?? 10,
             ...opts
         });
     const processMassAttackFromChat = (massAttackCard, msgId = null, opts = {}) =>
@@ -3817,6 +3873,11 @@ export function initVttCanvas(vtt) {
             vtt,
             renderAll,
             syncTokensHpToCharacters,
+            getTokenAC: (t) => getTokenAC(t) ?? 10,
+            getTokenDrawDimensions,
+            triggerDamageFXAnimation,
+            triggerHealingFXAnimation,
+            getResolvedCreatureMonsterData,
             ...opts
         });
     const processCardFullResolution = (cardData, selectedIds = null, opts = {}) =>
@@ -3826,7 +3887,7 @@ export function initVttCanvas(vtt) {
             vtt,
             renderAll,
             syncTokensHpToCharacters,
-            getTokenAC: (t) => t?.ac ?? 10,
+            getTokenAC: (t) => getTokenAC(t) ?? 10,
             getTokenDrawDimensions,
             triggerDamageFXAnimation,
             triggerHealingFXAnimation,
@@ -3848,7 +3909,7 @@ export function initVttCanvas(vtt) {
             getTokenDrawDimensions,
             triggerDamageFXAnimation,
             triggerHealingFXAnimation,
-            getTokenAC: (t) => t?.ac ?? 10,
+            getTokenAC: (t) => getTokenAC(t) ?? 10,
             getResolvedCreatureMonsterData
         });
     const rollFromToken = (f, l, id, e) => rollFromTokenExt(f, l, id, e, { vtt });
@@ -4812,6 +4873,42 @@ export function initVttCanvas(vtt) {
             set paintRedoStack(v) {
                 paintRedoStack = v;
             },
+            get paintSubTool() {
+                return paintSubTool;
+            },
+            set paintSubTool(v) {
+                paintSubTool = v;
+            },
+            get paintStrokeColor() {
+                return paintStrokeColor;
+            },
+            set paintStrokeColor(v) {
+                paintStrokeColor = v;
+            },
+            get paintFillColor() {
+                return paintFillColor;
+            },
+            set paintFillColor(v) {
+                paintFillColor = v;
+            },
+            get paintFillMode() {
+                return paintFillMode;
+            },
+            set paintFillMode(v) {
+                paintFillMode = v;
+            },
+            get paintStrokeWidth() {
+                return paintStrokeWidth;
+            },
+            set paintStrokeWidth(v) {
+                paintStrokeWidth = v;
+            },
+            get paintGridSnap() {
+                return paintGridSnap;
+            },
+            set paintGridSnap(v) {
+                paintGridSnap = v;
+            },
             get loadedImages() {
                 return vttImageCache;
             },
@@ -5284,6 +5381,42 @@ export function initVttCanvas(vtt) {
             },
             set paintRedoStack(v) {
                 paintRedoStack = v;
+            },
+            get paintSubTool() {
+                return paintSubTool;
+            },
+            set paintSubTool(v) {
+                paintSubTool = v;
+            },
+            get paintStrokeColor() {
+                return paintStrokeColor;
+            },
+            set paintStrokeColor(v) {
+                paintStrokeColor = v;
+            },
+            get paintFillColor() {
+                return paintFillColor;
+            },
+            set paintFillColor(v) {
+                paintFillColor = v;
+            },
+            get paintFillMode() {
+                return paintFillMode;
+            },
+            set paintFillMode(v) {
+                paintFillMode = v;
+            },
+            get paintStrokeWidth() {
+                return paintStrokeWidth;
+            },
+            set paintStrokeWidth(v) {
+                paintStrokeWidth = v;
+            },
+            get paintGridSnap() {
+                return paintGridSnap;
+            },
+            set paintGridSnap(v) {
+                paintGridSnap = v;
             },
             emitDrawingsUpdate: () => emitDrawingsUpdate(),
             get vttClipboard() {

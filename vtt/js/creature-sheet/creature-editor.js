@@ -1469,15 +1469,27 @@ export function openEditModal(m, charId, ctx = {}) {
         uploadBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
         uploadBtn.disabled = true;
 
+        const authHeaders =
+            typeof window !== 'undefined' && typeof window.vttAuthHeaders === 'function'
+                ? window.vttAuthHeaders()
+                : window.VTT?.gmSessionToken
+                  ? { 'x-gm-token': window.VTT.gmSessionToken }
+                  : {};
+
         try {
-            const res = await fetch('/api/assets/upload', { method: 'POST', body: formData });
+            const res = await fetch('/api/assets/upload', {
+                method: 'POST',
+                headers: authHeaders,
+                body: formData
+            });
             if (res.ok) {
                 const data = await res.json();
                 char.tokenImages.push({ url: data.url, name: file.name });
                 char.activeTokenIndex = char.tokenImages.length - 1;
                 renderCompanionTokenGallery();
             } else {
-                alert('Upload failed.');
+                const errData = await res.json().catch(() => null);
+                alert('Upload failed: ' + (errData?.error || res.statusText || 'Server error'));
             }
         } catch (err) {
             alert('Error: ' + err.message);
@@ -1953,10 +1965,26 @@ export function saveCompanionEdits(m, charId = null, ctx = {}) {
     if (vtt?.canvasEngine) {
         const tokens = vtt.canvasEngine.getTokens();
         let changed = false;
+        const activeImg =
+            char.tokenImages && char.activeTokenIndex !== -1 && char.tokenImages[char.activeTokenIndex]?.url
+                ? char.tokenImages[char.activeTokenIndex].url
+                : null;
+
         Object.values(tokens).forEach((t) => {
-            if (t.characterId === char.id || (t.name === char.name && !t.isPlayer)) {
+            const isMatch =
+                t.characterId === char.id || t.sourceCharacterId === char.id || (t.name === char.name && !t.isPlayer);
+            if (isMatch) {
                 if (char.tokenSight !== undefined) {
                     t.sightRange = char.tokenSight;
+                    changed = true;
+                }
+                if (activeImg) {
+                    t.img = activeImg;
+                    const cleanUrl = activeImg.split('?')[0].toLowerCase();
+                    t.isGif = cleanUrl.endsWith('.gif');
+                    t.isVideo =
+                        !t.isGif &&
+                        (cleanUrl.endsWith('.mp4') || cleanUrl.endsWith('.webm') || cleanUrl.endsWith('.ogg'));
                     changed = true;
                 }
             }
@@ -1965,13 +1993,21 @@ export function saveCompanionEdits(m, charId = null, ctx = {}) {
             const curMapId = vtt.canvasEngine.getCurrentMapId();
             if (curMapId && vtt.socket) {
                 Object.values(tokens).forEach((t) => {
-                    if (t.characterId === char.id || (t.name === char.name && !t.isPlayer)) {
+                    const isMatch =
+                        t.characterId === char.id ||
+                        t.sourceCharacterId === char.id ||
+                        (t.name === char.name && !t.isPlayer);
+                    if (isMatch) {
                         vtt.socket.emit('token:update', { mapId: curMapId, token: t });
                     }
                 });
             }
             vtt.canvasEngine.renderAll();
         }
+    }
+
+    if (window.VTT?.renderCustomNpcList) {
+        window.VTT.renderCustomNpcList();
     }
 
     if (overlay) overlay.remove();

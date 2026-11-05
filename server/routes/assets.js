@@ -2,7 +2,7 @@ import express from 'express';
 import path from 'path';
 import fs from 'fs';
 import multer from 'multer';
-import { ASSETS_DIR, isValidAssetPath, verifyGmOrSecret } from '../state.js';
+import { ASSETS_DIR, isAuthorizedGmOrSecret, isValidAssetPath, verifyGmOrSecret } from '../state.js';
 import { processMediaUrl } from './media.js';
 
 export const assetsRouter = express.Router();
@@ -10,17 +10,22 @@ export const assetsRouter = express.Router();
 // Custom storage for assets to support subfolders, nested hierarchies, and batch uploads
 const assetStorage = multer.diskStorage({
     destination: (req, file, cb) => {
+        const isGm = isAuthorizedGmOrSecret(req);
         let targetPath = ASSETS_DIR;
-        const folderPath = req.query.folderPath || (req.body && req.body.folderPath);
-        const relPath = req.query.relativePath || (req.body && req.body.relativePath);
+        if (!isGm) {
+            targetPath = path.join(ASSETS_DIR, 'players');
+        } else {
+            const folderPath = req.query.folderPath || (req.body && req.body.folderPath);
+            const relPath = req.query.relativePath || (req.body && req.body.relativePath);
 
-        if (folderPath) {
-            targetPath = path.join(ASSETS_DIR, folderPath);
-        }
-        if (relPath) {
-            const relDir = path.dirname(relPath);
-            if (relDir && relDir !== '.') {
-                targetPath = path.join(targetPath, relDir);
+            if (folderPath) {
+                targetPath = path.join(ASSETS_DIR, folderPath);
+            }
+            if (relPath) {
+                const relDir = path.dirname(relPath);
+                if (relDir && relDir !== '.') {
+                    targetPath = path.join(targetPath, relDir);
+                }
             }
         }
 
@@ -34,8 +39,9 @@ const assetStorage = multer.diskStorage({
         cb(null, targetPath);
     },
     filename: (req, file, cb) => {
+        const isGm = isAuthorizedGmOrSecret(req);
         let originalName = file.originalname;
-        if (req.query.relativePath || (req.body && req.body.relativePath)) {
+        if (isGm && (req.query.relativePath || (req.body && req.body.relativePath))) {
             originalName = path.basename(req.query.relativePath || req.body.relativePath);
         }
         const safeName = originalName.replace(/[\/\\?%*:|"<>]/g, '_');
@@ -118,8 +124,8 @@ assetsRouter.post('/assets/folder', verifyGmOrSecret, (req, res) => {
     res.json({ success: true, path: folderPath });
 });
 
-// Upload batch assets
-assetsRouter.post('/assets/upload', verifyGmOrSecret, assetUpload.any(), (req, res) => {
+// Upload batch assets (GMs upload to chosen folder; non-GMs/players are safely sandboxed into /players)
+assetsRouter.post('/assets/upload', assetUpload.any(), (req, res) => {
     const files = req.files || (req.file ? [req.file] : []);
     if (files.length === 0) return res.status(400).json({ error: 'No file provided' });
 

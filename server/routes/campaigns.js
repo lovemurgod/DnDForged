@@ -135,7 +135,12 @@ campaignsRouter.post('/campaigns/:id/duplicate', verifyGmOrSecret, (req, res) =>
     const cloned = JSON.parse(JSON.stringify(origCamp));
     cloned.id = newId;
     cloned.name = newName;
-    cloned.initiative = [];
+    cloned.initiative = {
+        combatants: [],
+        currentRound: 1,
+        activeTurnIndex: -1,
+        isVisible: false
+    };
 
     // Copy campaign uploads folder if it exists
     const origUploads = path.join(DATA_DIR, 'campaigns', origId, 'uploads');
@@ -171,11 +176,18 @@ campaignsRouter.post('/campaigns/import', verifyGmOrSecret, (req, res) => {
         campId = (campaign.name || 'imported').toLowerCase().replace(/[^a-z0-9]/gi, '_') + '_' + Date.now();
     }
 
+    const targetGm = (req.body.gmUsername || req.body.username || '').trim();
     const importedCamp = {
         ...createCampaignTemplate(campId, campaign.name || 'Imported Campaign'),
         ...campaign,
         id: campId
     };
+
+    if (targetGm) {
+        importedCamp.gmUsername = targetGm;
+    } else if (!importedCamp.gmUsername) {
+        importedCamp.gmUsername = 'DungeonMaster';
+    }
 
     campaigns[campId] = importedCamp;
     saveCampaigns(true);

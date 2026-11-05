@@ -57,6 +57,7 @@ export function initVttHandouts(vtt) {
     const previewTitleEl = document.getElementById('import-preview-title');
     const previewTypePill = document.getElementById('import-preview-type-pill');
     const previewContainerEl = document.getElementById('import-preview-container');
+    const btnPreviewSelect = document.getElementById('btn-import-preview-toggle-select');
 
     let editingHandoutId = null;
     const collapsedFolders = new Set();
@@ -71,6 +72,55 @@ export function initVttHandouts(vtt) {
     let activeFilter = 'all'; // 'all', 'image', 'inset', 'story'
     let itemSearchQuery = '';
     let previewedItem = null;
+    let mobileImportStep = 1; // 1: Source, 2: Content, 3: Preview
+
+    const btnImportBack = document.getElementById('btn-import-handout-back');
+    const importBackText = document.getElementById('import-back-text');
+    const sourcePane = document.getElementById('import-source-pane');
+    const contentPane = document.getElementById('import-content-pane');
+    const previewPane = document.getElementById('import-preview-pane');
+
+    function isMobileImportView() {
+        return (
+            window.innerWidth <= 900 ||
+            document.documentElement.classList.contains('force-mobile-ui') ||
+            (window.matchMedia && window.matchMedia('(pointer: coarse)').matches)
+        );
+    }
+
+    function setMobileImportStep(step) {
+        mobileImportStep = step;
+        if (!isMobileImportView()) {
+            if (sourcePane) sourcePane.style.display = '';
+            if (contentPane) contentPane.style.display = '';
+            if (previewPane) previewPane.style.display = '';
+            if (btnImportBack) btnImportBack.classList.add('vtt-hidden');
+            return;
+        }
+
+        if (step === 1) {
+            if (sourcePane) sourcePane.style.display = 'flex';
+            if (contentPane) contentPane.style.display = 'none';
+            if (previewPane) previewPane.style.display = 'none';
+            if (btnImportBack) btnImportBack.classList.add('vtt-hidden');
+        } else if (step === 2) {
+            if (sourcePane) sourcePane.style.display = 'none';
+            if (contentPane) contentPane.style.display = 'flex';
+            if (previewPane) previewPane.style.display = 'none';
+            if (btnImportBack) {
+                btnImportBack.classList.remove('vtt-hidden');
+                if (importBackText) importBackText.textContent = 'Sources';
+            }
+        } else if (step === 3) {
+            if (sourcePane) sourcePane.style.display = 'none';
+            if (contentPane) contentPane.style.display = 'none';
+            if (previewPane) previewPane.style.display = 'flex';
+            if (btnImportBack) {
+                btnImportBack.classList.remove('vtt-hidden');
+                if (importBackText) importBackText.textContent = 'Items';
+            }
+        }
+    }
 
     // Ensure handouts array exists
     if (vtt.campaignState && !vtt.campaignState.handouts) {
@@ -603,10 +653,41 @@ export function initVttHandouts(vtt) {
                 executeBatchImport();
             });
         }
+
+        if (btnPreviewSelect) {
+            btnPreviewSelect.addEventListener('click', () => {
+                if (!previewedItem) return;
+                if (selectedItemIds.has(previewedItem.id)) {
+                    selectedItemIds.delete(previewedItem.id);
+                } else {
+                    selectedItemIds.add(previewedItem.id);
+                }
+                updateSelectionState();
+                renderContentTree();
+                previewItem(previewedItem);
+            });
+        }
+
+        if (btnImportBack) {
+            btnImportBack.addEventListener('click', () => {
+                if (mobileImportStep === 3) {
+                    setMobileImportStep(2);
+                } else if (mobileImportStep === 2) {
+                    setMobileImportStep(1);
+                }
+            });
+        }
+
+        window.addEventListener('resize', () => {
+            if (modalImport && !modalImport.classList.contains('vtt-hidden')) {
+                setMobileImportStep(mobileImportStep);
+            }
+        });
     }
 
     async function openImportWizard() {
         modalImport.classList.remove('vtt-hidden');
+        setMobileImportStep(1);
         if (!adventuresIndex || !booksIndex) {
             await loadSourceIndexes();
         }
@@ -718,6 +799,10 @@ export function initVttHandouts(vtt) {
         currentExtractedItems = items || [];
         updateFilterCounts();
         renderContentTree();
+
+        if (isMobileImportView()) {
+            setMobileImportStep(2);
+        }
 
         // Auto preview first item if available
         if (currentExtractedItems.length > 0) {
@@ -846,6 +931,9 @@ export function initVttHandouts(vtt) {
                     previewItem(item);
                     document.querySelectorAll('.import-item-row').forEach((r) => r.classList.remove('preview-active'));
                     row.classList.add('preview-active');
+                    if (isMobileImportView()) {
+                        setMobileImportStep(3);
+                    }
                 });
 
                 chGroup.appendChild(row);
@@ -876,6 +964,16 @@ export function initVttHandouts(vtt) {
                 previewTypePill.classList.add('badge-type-story');
                 previewTypePill.textContent = 'Story Section';
             }
+        }
+
+        if (btnPreviewSelect) {
+            btnPreviewSelect.classList.remove('vtt-hidden');
+            const isSelected = selectedItemIds.has(item.id);
+            btnPreviewSelect.classList.toggle('btn-primary', isSelected);
+            btnPreviewSelect.classList.toggle('btn-secondary', !isSelected);
+            btnPreviewSelect.innerHTML = isSelected
+                ? '<i class="fa-solid fa-check"></i> <span>Included in Import</span>'
+                : '<i class="fa-solid fa-plus"></i> <span>Include in Import</span>';
         }
 
         previewContainerEl.innerHTML = '';

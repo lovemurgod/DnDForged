@@ -26,7 +26,12 @@ export function createCampaignTemplate(id, name) {
         portals: []
       }
     },
-    initiative: [],
+    initiative: {
+      combatants: [],
+      currentRound: 1,
+      activeTurnIndex: -1,
+      isVisible: false
+    },
     characters: {},
     settings: {
       monsterHpBarVisible: 'hover',

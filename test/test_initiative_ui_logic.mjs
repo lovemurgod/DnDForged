@@ -149,7 +149,7 @@ test('Initiative Tracker Logic: Off-layer filtering and player privacy rules', (
     );
     assert.ok(
         tokenMenuJs.includes('window.VTT?.chatEngine?.updateCombatantLayer(id, targetLayer)') ||
-            tokenMenuJs.includes('window.VTT?.chatEngine?.updateCombatantLayer?.(id, targetLayer)'),
+        tokenMenuJs.includes('window.VTT?.chatEngine?.updateCombatantLayer?.(id, targetLayer)'),
         'Layer change must notify chatEngine.updateCombatantLayer'
     );
 
@@ -205,7 +205,7 @@ test('Audit Optimizations: Ghost Combatants, Video HUD, Selection Guard, and Mob
     // 3. Selection permission guard on double click
     assert.match(
         chatJs,
-        /const canSelect = vtt\.role === 'GM' \|\| token\.isPlayer \|\| token\.characterId === window\.VTT\?\.activeCharacterId;/,
+        /const canSelect\s*=\s*vtt\.role === 'GM'\s*\|\|\s*token\.isPlayer\s*\|\|\s*token\.characterId === window\.VTT\?\.activeCharacterId;/,
         'Double-click token selection must verify player ownership/GM role'
     );
 

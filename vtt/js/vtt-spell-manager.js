@@ -1400,16 +1400,19 @@ export function rollSpell(sp, slKey, casterObj = {}, options = {}) {
         }
     }
 
-    // 3. Save DC (ONLY IF SPELL HAS A SAVE)
-    if (
-        (type === 'roll' || type === 'save') &&
-        (sp.saveAbility || (sp.saveDcStat && sp.saveDcStat !== 'none') || sp.saveDcCustom || sp.dc !== undefined)
-    ) {
+    // 3. Save DC (ONLY IF SPELL HAS A VALID SAVE ABILITY AND DC SOURCE)
+    const hasSaveAbility = typeof sp.saveAbility === 'string' && sp.saveAbility.trim() !== '';
+    const hasSaveDcSource =
+        (sp.saveDcStat && sp.saveDcStat !== 'none') ||
+        sp.saveDcCustom ||
+        (sp.dc !== undefined && sp.dc !== null && !isNaN(parseInt(sp.dc)));
+
+    if ((type === 'roll' || type === 'save') && hasSaveAbility && hasSaveDcSource) {
         let dc = 10;
         if (sp.saveDcCustom) {
             dc = parseInt(sp.saveDcCustom) || 10;
-        } else if (sp.dc !== undefined) {
-            dc = parseInt(sp.dc) || 10;
+        } else if (sp.dc !== undefined && sp.dc !== null && !isNaN(parseInt(sp.dc))) {
+            dc = parseInt(sp.dc);
         } else {
             const isSpellStat = sp.saveDcStat === 'spell' || !sp.saveDcStat;
             const statKey = isSpellStat ? abilityToUse : (sp.saveDcStat || 'int').toLowerCase();
@@ -1417,7 +1420,7 @@ export function rollSpell(sp, slKey, casterObj = {}, options = {}) {
             const prof = sp.saveDcProf !== false ? pb : 0;
             dc = 8 + prof + stat + (parseInt(sp.saveDcExtra) || 0) + globalDcMod;
         }
-        const saveAb = sp.saveAbility ? sp.saveAbility.toUpperCase() : 'SAVE';
+        const saveAb = sp.saveAbility.trim().substring(0, 3).toUpperCase();
         saveInfo = { ability: saveAb, dc: dc };
     }
 
@@ -1614,6 +1617,8 @@ export function rollSpell(sp, slKey, casterObj = {}, options = {}) {
             socket.emit('chat:msg', payload);
         }
     }
+
+    return card;
 }
 
 let activeVtt = null;

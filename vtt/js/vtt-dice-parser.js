@@ -33,22 +33,52 @@ export class VTTDiceParser {
         let isCritSuccess = false;
         let isCritFail = false;
 
-        // Tokenize terms: sign, dice expression / number, and optional bracketed label [LABEL]
-        const termRegex =
-            /([+\-*/]?)\s*([0-9]*d[0-9]+(?:(?:kh|kl|dl|dh)[0-9]*)?(?:ro(?:<=|>=|<|>|=)?[0-9]+)?!?|[0-9]+(?:\.[0-9]+)?)\s*(?:\[([^\]]*)\])?/gi;
+        // Tokenize terms: parentheses, operators, dice expressions, numbers, and optional bracketed label [LABEL]
+        const tokenRegex =
+            /\s*(\(|\)|[+\-*/]|[0-9]*d[0-9]+(?:(?:kh|kl|dl|dh)[0-9]*)?(?:ro(?:<=|>=|<|>|=)?[0-9]+)?!?|[0-9]+(?:\.[0-9]+)?)(?:\s*\[([^\]]*)\])?/gi;
 
         let evalExpression = '';
         let match;
-        let matchCount = 0;
+        let prevType = 'start'; // 'start', 'op', 'val', 'open_paren', 'close_paren'
 
-        while ((match = termRegex.exec(trimmedFormula)) !== null) {
-            if (match.index === termRegex.lastIndex) {
-                termRegex.lastIndex++;
+        while ((match = tokenRegex.exec(trimmedFormula)) !== null) {
+            if (match.index === tokenRegex.lastIndex) {
+                tokenRegex.lastIndex++;
             }
-            matchCount++;
-            const op = match[1] || (matchCount === 1 ? '' : '+');
-            const token = match[2];
-            const label = match[3] ? match[3].trim() : '';
+            const token = match[1];
+            if (!token) continue;
+            const label = match[2] ? match[2].trim() : '';
+
+            if (token === '(') {
+                detailedParts.push('(');
+                compactParts.push('(');
+                evalExpression += '(';
+                prevType = 'open_paren';
+                continue;
+            }
+
+            if (token === ')') {
+                detailedParts.push(')');
+                compactParts.push(')');
+                evalExpression += ')';
+                prevType = 'close_paren';
+                continue;
+            }
+
+            if (['+', '-', '*', '/'].includes(token)) {
+                const isUnary = prevType === 'start' || prevType === 'op' || prevType === 'open_paren';
+                if (isUnary) {
+                    detailedParts.push(token);
+                    compactParts.push(token);
+                    evalExpression += token;
+                } else {
+                    detailedParts.push(token);
+                    compactParts.push(token);
+                    evalExpression += ` ${token} `;
+                }
+                prevType = 'op';
+                continue;
+            }
 
             // Check if token is a dice expression
             const diceMatch = token.match(/^(\d*)d(\d+)(?:(kh|kl|dl|dh)(\d*))?(?:ro(<=|>=|<|>|=)?(\d+))?(!)?$/i);
@@ -138,31 +168,20 @@ export class VTTDiceParser {
                 let detailedTerm = `${diceName} ${diceRollVal}`;
                 if (label) detailedTerm += ` [${label}]`;
 
-                if (op && matchCount > 1) {
-                    detailedParts.push(`${op} ${detailedTerm}`);
-                    compactParts.push(`${op}[${subtotal}]`);
-                    evalExpression += ` ${op} ${subtotal}`;
-                } else {
-                    detailedParts.push(detailedTerm);
-                    compactParts.push(`[${subtotal}]`);
-                    evalExpression += `${subtotal}`;
-                }
+                detailedParts.push(detailedTerm);
+                compactParts.push(`[${subtotal}]`);
+                evalExpression += `${subtotal}`;
+                prevType = 'val';
             } else {
                 // Flat number
                 const numVal = parseFloat(token) || 0;
                 let detailedTerm = `${numVal}`;
                 if (label) detailedTerm += ` [${label}]`;
 
-                if (op && matchCount > 1) {
-                    detailedParts.push(`${op} ${detailedTerm}`);
-                    compactParts.push(`${op}${numVal}`);
-                    evalExpression += ` ${op} ${numVal}`;
-                } else {
-                    const sign = op === '-' ? '-' : '';
-                    detailedParts.push(`${sign}${detailedTerm}`);
-                    compactParts.push(`${sign}${numVal}`);
-                    evalExpression += `${sign}${numVal}`;
-                }
+                detailedParts.push(detailedTerm);
+                compactParts.push(`${numVal}`);
+                evalExpression += `${numVal}`;
+                prevType = 'val';
             }
         }
 

@@ -2,6 +2,11 @@
   "appId": "com.forgedvtt.desktop",
   "productName": "ForgeDVTT",
   "asar": true,
+  "asarUnpack": [
+    "server/**/*",
+    "server.js",
+    "utils.js"
+  ],
   "directories": {
     "app": ".release-stage",
     "output": "dist-srd"

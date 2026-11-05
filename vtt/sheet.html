@@ -327,10 +327,12 @@
                 let monster = null;
                 const storageKey = dataKey || `forgedvtt_popout_data_${sheetKey}`;
                 try {
-                    const raw = localStorage.getItem(storageKey) || sessionStorage.getItem(storageKey);
-                    if (raw) monster = JSON.parse(raw);
+                    const raw = sessionStorage.getItem(storageKey) || localStorage.getItem(storageKey);
+                    if (raw) {
+                        monster = JSON.parse(raw);
+                        sessionStorage.setItem(storageKey, raw);
+                    }
                     localStorage.removeItem(storageKey);
-                    sessionStorage.removeItem(storageKey);
                 } catch (e) {}
 
                 if (!monster && monsterName) {
@@ -384,8 +386,12 @@
                 let monster = null;
                 const storageKey = dataKey || `forgedvtt_popout_data_${sheetKey}`;
                 try {
-                    const raw = localStorage.getItem(storageKey) || sessionStorage.getItem(storageKey);
-                    if (raw) monster = JSON.parse(raw);
+                    const raw = sessionStorage.getItem(storageKey) || localStorage.getItem(storageKey);
+                    if (raw) {
+                        monster = JSON.parse(raw);
+                        sessionStorage.setItem(storageKey, raw);
+                    }
+                    localStorage.removeItem(storageKey);
                 } catch (e) {}
 
                 // 2. Check if linked character exists in campaign

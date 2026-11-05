@@ -93,6 +93,7 @@ export function applyLongRest(char) {
     const restoredHp = Math.max(0, hpMax - hpPrev);
     cloned.hpCurrent = hpMax;
     cloned.tempHp = 0;
+    cloned.deathSaves = { successes: 0, failures: 0 };
 
     // 2. Spell Slots Restoration
     if (cloned.spellSlots) {

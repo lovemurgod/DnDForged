@@ -981,3 +981,232 @@ canvas.locator-map-thumb.gm-viewing {
         filter: drop-shadow(0 0 50px rgba(239, 68, 68, 0.95)) drop-shadow(0 0 100px rgba(220, 38, 38, 0.6));
     }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/* Procedural Vector Graphics (13 Damage Signatures + Heal / Temp HP)         */
+/* Enhanced: Two-Tone Vector Lines, Zero Filters, Snappy Real-time Tracing    */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+.vtt-procedural-fx-container {
+    position: absolute;
+    pointer-events: none;
+    user-select: none;
+    z-index: 2490;
+    transform: translate(-50%, -50%);
+    will-change: transform, opacity;
+    contain: layout paint;
+    animation: vttProceduralFXFade 0.5s cubic-bezier(0.05, 0.9, 0.1, 1.0) forwards;
+}
+
+.vtt-procedural-vector-fx {
+    display: block;
+    overflow: visible;
+}
+
+@keyframes vttProceduralFXFade {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.35);
+    }
+    15% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.15);
+    }
+    40% {
+        transform: translate(-50%, -50%) scale(1.0);
+    }
+    75% {
+        opacity: 0.95;
+    }
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(1.12);
+    }
+}
+
+.vtt-slash-cut {
+    animation: vttSlashAnimation 0.45s cubic-bezier(0.05, 0.9, 0.1, 1.0) forwards;
+}
+
+.vtt-slash-trail {
+    animation: vttSlashAnimation 0.48s cubic-bezier(0.05, 0.9, 0.1, 1.0) forwards;
+}
+
+@keyframes vttSlashAnimation {
+    0% {
+        stroke-dasharray: 100;
+        stroke-dashoffset: 100;
+        opacity: 1;
+    }
+    25% {
+        stroke-dashoffset: 0;
+        opacity: 1;
+    }
+    70% {
+        stroke-dashoffset: 0;
+        opacity: 0.95;
+    }
+    100% {
+        stroke-dashoffset: 0;
+        opacity: 0;
+    }
+}
+
+.vtt-lightning-bolt {
+    animation: vttBoltStrike 0.45s ease-out forwards;
+}
+
+@keyframes vttBoltStrike {
+    0% {
+        stroke-dasharray: 100;
+        stroke-dashoffset: 100;
+        opacity: 1;
+    }
+    20% {
+        stroke-dashoffset: 0;
+        opacity: 1;
+    }
+    45% {
+        opacity: 0.6;
+    }
+    60% {
+        opacity: 1;
+    }
+    80% {
+        opacity: 0.8;
+    }
+    100% {
+        stroke-dashoffset: 0;
+        opacity: 0;
+    }
+}
+
+.vtt-concussive-pop {
+    animation: vttConcussivePop 0.5s cubic-bezier(0.05, 0.9, 0.1, 1.0) forwards;
+}
+
+@keyframes vttConcussivePop {
+    0% {
+        transform: scale(0.3);
+        opacity: 0;
+    }
+    25% {
+        transform: scale(1.14);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(0.98);
+        opacity: 0.9;
+    }
+    100% {
+        transform: scale(1.08);
+        opacity: 0;
+    }
+}
+
+.vtt-star-flare {
+    transform-origin: center;
+    animation: vttStarFlarePulse 0.5s cubic-bezier(0.05, 0.9, 0.1, 1.0) forwards;
+}
+
+@keyframes vttStarFlarePulse {
+    0% {
+        transform: scale(0.3) rotate(0deg);
+        opacity: 0;
+    }
+    30% {
+        transform: scale(1.25) rotate(15deg);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1.05) rotate(30deg);
+        opacity: 0;
+    }
+}
+
+.vtt-ember-rise {
+    animation: vttEmberFloat 0.5s ease-out forwards;
+}
+
+@keyframes vttEmberFloat {
+    0% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-16px) scale(0.4);
+        opacity: 0;
+    }
+}
+
+.vtt-sparkle-float {
+    animation: vttSparkleFloat 0.5s ease-out forwards;
+}
+
+@keyframes vttSparkleFloat {
+    0% {
+        transform: translateY(0) scale(0.8);
+        opacity: 0.8;
+    }
+    50% {
+        transform: translateY(-8px) scale(1.2);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-20px) scale(0.3);
+        opacity: 0;
+    }
+}
+
+.vtt-bubble-pop {
+    animation: vttBubblePopAnim 0.5s cubic-bezier(0.05, 0.9, 0.1, 1.0) forwards;
+}
+
+@keyframes vttBubblePopAnim {
+    0% {
+        transform: scale(0.5);
+        opacity: 0.8;
+    }
+    50% {
+        transform: scale(1.2);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1.6);
+        opacity: 0;
+    }
+}
+
+.vtt-fx-expand {
+    animation: vttSubRingExpand 0.5s cubic-bezier(0.05, 0.9, 0.1, 1.0) forwards;
+}
+
+@keyframes vttSubRingExpand {
+    0% {
+        transform: scale(0.5);
+        opacity: 0.9;
+    }
+    100% {
+        transform: scale(1.25);
+        opacity: 0;
+    }
+}
+
+.vtt-fx-bloom {
+    animation: vttCoreBloom 0.5s cubic-bezier(0.05, 0.9, 0.1, 1.0) forwards;
+}
+
+@keyframes vttCoreBloom {
+    0% {
+        transform: scale(0.3);
+        opacity: 1;
+    }
+    60% {
+        transform: scale(1.05);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(1.2);
+        opacity: 0;
+    }
+}

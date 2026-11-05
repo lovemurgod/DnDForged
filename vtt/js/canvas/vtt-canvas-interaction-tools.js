@@ -302,14 +302,20 @@ export function setupToolControls(context = {}) {
                 } else if (context.activeTool === 'measure' || context.activeTool === 'shape') {
                     document.getElementById('panel-measure-config')?.classList.remove('vtt-hidden');
                 } else if (context.activeTool === 'paint') {
-                    const ribbon = document.getElementById('panel-paint-ribbon');
-                    if (ribbon) {
-                        ribbon.classList.remove('vtt-hidden');
-                        const lName =
-                            (context.activeLayer || 'token').charAt(0).toUpperCase() +
-                            (context.activeLayer || 'token').slice(1);
-                        const lEl = document.getElementById('paint-active-layer-name');
-                        if (lEl) lEl.textContent = `${lName} Layer`;
+                    const isMobile =
+                        (typeof window !== 'undefined' && window.innerWidth <= 768) ||
+                        (typeof document !== 'undefined' &&
+                            document.documentElement.classList.contains('force-mobile-ui'));
+                    if (!isMobile) {
+                        const ribbon = document.getElementById('panel-paint-ribbon');
+                        if (ribbon) {
+                            ribbon.classList.remove('vtt-hidden');
+                            const lName =
+                                (context.activeLayer || 'token').charAt(0).toUpperCase() +
+                                (context.activeLayer || 'token').slice(1);
+                            const lEl = document.getElementById('paint-active-layer-name');
+                            if (lEl) lEl.textContent = `${lName} Layer`;
+                        }
                     }
                 } else if (context.activeTool === 'maptools' || context.activeTool === 'map-tools') {
                     document.getElementById('panel-map-tools')?.classList.remove('vtt-hidden');

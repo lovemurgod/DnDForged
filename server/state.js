@@ -414,7 +414,7 @@ export function loadDatabase() {
                         const isYoutube = imgUrl.includes('youtube.com') || imgUrl.includes('youtu.be');
 
                         const hasExistingBg = Object.values(map.tokens).some(
-                            (t) => t.layer === 'map' && t.isAsset && t.img === imgUrl
+                            (t) => t.layer === 'map' && (t.isBackground || t.isAsset)
                         );
 
                         if (!hasExistingBg) {
@@ -433,6 +433,7 @@ export function loadDatabase() {
                                 y: 0,
                                 layer: 'map',
                                 isAsset: true,
+                                isBackground: true,
                                 img: imgUrl,
                                 isVideo: isVideo || isYoutube,
                                 pixelWidth: pixelWidth,
@@ -445,7 +446,7 @@ export function loadDatabase() {
                             if (!map.gridHeight) map.gridHeight = gHeight;
                         }
 
-                        map.thumbnail = imgUrl;
+                        map.thumbnail = map.thumbnail || imgUrl;
                         map.mapImage = '';
                         migrated = true;
                         console.log(`[Database] Migrated map "${map.name}" (${map.id}) to Freeform Asset.`);

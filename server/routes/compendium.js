@@ -13,6 +13,18 @@ import {
 
 export const compendiumRouter = express.Router();
 
+/**
+ * Validates that a compendium route parameter contains only safe alphanumeric/hyphen/underscore characters
+ * and prevents directory traversal attacks.
+ */
+export function isValidCompendiumParam(param) {
+    if (!param || typeof param !== 'string') return false;
+    if (param.includes('\0') || param.includes('..') || param.includes('/') || param.includes('\\')) {
+        return false;
+    }
+    return /^[a-zA-Z0-9_\-]+$/.test(param);
+}
+
 // --- Spells Caches & Handlers ---
 let gzippedSpellsCatalogBuf = null;
 let spellsCatalogEtag = null;
@@ -56,12 +68,13 @@ loadGzippedSpellsCatalog();
 const spellPartitionCache = new Map();
 
 function getSpellPartition(source) {
+    if (!isValidCompendiumParam(source)) return null;
     const srcKey = (source || 'phb').toLowerCase();
     if (spellPartitionCache.has(srcKey)) {
         return spellPartitionCache.get(srcKey);
     }
     const partPath = path.join(VTT_DATA_DIR, 'spells-normalized', `spells-${srcKey}.json`);
-    if (fs.existsSync(partPath)) {
+    if (path.resolve(partPath).startsWith(path.resolve(VTT_DATA_DIR)) && fs.existsSync(partPath)) {
         try {
             const data = JSON.parse(fs.readFileSync(partPath, 'utf8'));
             spellPartitionCache.set(srcKey, data);
@@ -71,7 +84,7 @@ function getSpellPartition(source) {
         }
     }
     const customPartPath = path.join(DATA_DIR, 'sources', 'spells', `${srcKey}.json`);
-    if (fs.existsSync(customPartPath)) {
+    if (path.resolve(customPartPath).startsWith(path.resolve(DATA_DIR)) && fs.existsSync(customPartPath)) {
         try {
             const parsed = JSON.parse(fs.readFileSync(customPartPath, 'utf8'));
             const list = extractEntityArray(parsed, 'spells');
@@ -138,6 +151,9 @@ compendiumRouter.get(
 
 compendiumRouter.get('/api/spell/:source/:id', (req, res) => {
     const { source, id } = req.params;
+    if (!isValidCompendiumParam(source)) {
+        return res.status(400).json({ error: 'Invalid source parameter' });
+    }
     const partition = getSpellPartition(source);
     if (!partition) {
         return res.status(404).json({ error: `Spell source '${source}' not found` });
@@ -162,6 +178,9 @@ compendiumRouter.get('/api/spell/:source/:id', (req, res) => {
 
 compendiumRouter.get('/api/spell/partition/:source', (req, res) => {
     const { source } = req.params;
+    if (!isValidCompendiumParam(source)) {
+        return res.status(400).json({ error: 'Invalid source parameter' });
+    }
     const partition = getSpellPartition(source);
     if (!partition) {
         return res.status(404).json({ error: `Spell partition '${source}' not found` });
@@ -214,12 +233,13 @@ loadGzippedItemsCatalog();
 const itemPartitionCache = new Map();
 
 function getItemPartition(source) {
+    if (!isValidCompendiumParam(source)) return null;
     const srcKey = (source || 'phb').toLowerCase();
     if (itemPartitionCache.has(srcKey)) {
         return itemPartitionCache.get(srcKey);
     }
     const partPath = path.join(VTT_DATA_DIR, 'items-normalized', `items-${srcKey}.json`);
-    if (fs.existsSync(partPath)) {
+    if (path.resolve(partPath).startsWith(path.resolve(VTT_DATA_DIR)) && fs.existsSync(partPath)) {
         try {
             const data = JSON.parse(fs.readFileSync(partPath, 'utf8'));
             itemPartitionCache.set(srcKey, data);
@@ -229,7 +249,7 @@ function getItemPartition(source) {
         }
     }
     const customPartPath = path.join(DATA_DIR, 'sources', 'items', `${srcKey}.json`);
-    if (fs.existsSync(customPartPath)) {
+    if (path.resolve(customPartPath).startsWith(path.resolve(DATA_DIR)) && fs.existsSync(customPartPath)) {
         try {
             const parsed = JSON.parse(fs.readFileSync(customPartPath, 'utf8'));
             const list = extractEntityArray(parsed, 'items');
@@ -294,6 +314,9 @@ compendiumRouter.get(
 
 compendiumRouter.get('/api/item/:source/:id', (req, res) => {
     const { source, id } = req.params;
+    if (!isValidCompendiumParam(source)) {
+        return res.status(400).json({ error: 'Invalid source parameter' });
+    }
     const partition = getItemPartition(source);
     if (!partition) {
         return res.status(404).json({ error: `Item source '${source}' not found` });
@@ -320,6 +343,7 @@ compendiumRouter.get('/api/item/:source/:id', (req, res) => {
 const compendiumPartitionCache = new Map();
 
 function getCompendiumPartition(type, source) {
+    if (!isValidCompendiumParam(type) || !isValidCompendiumParam(source)) return null;
     let cleanType = (type || '').toLowerCase();
     if (cleanType === 'optionalfeature') cleanType = 'optionalfeatures';
     const srcKey = (source || 'phb').toLowerCase();
@@ -328,7 +352,7 @@ function getCompendiumPartition(type, source) {
         return compendiumPartitionCache.get(cacheKey);
     }
     const partPath = path.join(VTT_DATA_DIR, `${cleanType}-normalized`, `${cleanType}-${srcKey}.json`);
-    if (fs.existsSync(partPath)) {
+    if (path.resolve(partPath).startsWith(path.resolve(VTT_DATA_DIR)) && fs.existsSync(partPath)) {
         try {
             const data = JSON.parse(fs.readFileSync(partPath, 'utf8'));
             compendiumPartitionCache.set(cacheKey, data);
@@ -338,7 +362,7 @@ function getCompendiumPartition(type, source) {
         }
     }
     const customPartPath = path.join(DATA_DIR, 'sources', cleanType, `${srcKey}.json`);
-    if (fs.existsSync(customPartPath)) {
+    if (path.resolve(customPartPath).startsWith(path.resolve(DATA_DIR)) && fs.existsSync(customPartPath)) {
         try {
             const parsed = JSON.parse(fs.readFileSync(customPartPath, 'utf8'));
             const list = extractEntityArray(parsed, cleanType);
@@ -593,6 +617,9 @@ compendiumRouter.get(
 
 compendiumRouter.get('/api/compendium/:type/:source/:id', (req, res) => {
     const { type, source, id } = req.params;
+    if (!isValidCompendiumParam(type) || !isValidCompendiumParam(source)) {
+        return res.status(400).json({ error: 'Invalid type or source parameter' });
+    }
     const partition = getCompendiumPartition(type, source);
     if (!partition) {
         return res.status(404).json({ error: `Compendium partition '${type}-${source}' not found` });
@@ -629,12 +656,13 @@ function getRawHandoutsCatalog() {
 }
 
 function getHandoutPartition(source) {
+    if (!isValidCompendiumParam(source)) return null;
     const srcKey = (source || '').toLowerCase();
     if (handoutPartitionCache.has(srcKey)) {
         return handoutPartitionCache.get(srcKey);
     }
     const partPath = path.join(VTT_DATA_DIR, 'handouts-normalized', `handouts-${srcKey}.json`);
-    if (fs.existsSync(partPath)) {
+    if (path.resolve(partPath).startsWith(path.resolve(VTT_DATA_DIR)) && fs.existsSync(partPath)) {
         try {
             const data = JSON.parse(fs.readFileSync(partPath, 'utf8'));
             handoutPartitionCache.set(srcKey, data);
@@ -658,6 +686,9 @@ compendiumRouter.get(
 
 compendiumRouter.get('/api/handouts/:source', (req, res) => {
     const { source } = req.params;
+    if (!isValidCompendiumParam(source)) {
+        return res.status(400).json({ error: 'Invalid source parameter' });
+    }
     const partition = getHandoutPartition(source);
     if (!partition) {
         return res.status(404).json({ error: `Handout source partition '${source}' not found` });
@@ -782,12 +813,13 @@ compendiumRouter.get(
 const creaturePartitionCache = new Map();
 
 function getCreaturePartition(source) {
+    if (!isValidCompendiumParam(source)) return null;
     const srcKey = (source || 'mm').toLowerCase();
     if (creaturePartitionCache.has(srcKey)) {
         return creaturePartitionCache.get(srcKey);
     }
     const partPath = path.join(VTT_DATA_DIR, 'bestiary-normalized', `bestiary-${srcKey}.json`);
-    if (fs.existsSync(partPath)) {
+    if (path.resolve(partPath).startsWith(path.resolve(VTT_DATA_DIR)) && fs.existsSync(partPath)) {
         try {
             const data = JSON.parse(fs.readFileSync(partPath, 'utf8'));
             creaturePartitionCache.set(srcKey, data);
@@ -797,7 +829,7 @@ function getCreaturePartition(source) {
         }
     }
     const customPartPath = path.join(DATA_DIR, 'sources', 'bestiary', `${srcKey}.json`);
-    if (fs.existsSync(customPartPath)) {
+    if (path.resolve(customPartPath).startsWith(path.resolve(DATA_DIR)) && fs.existsSync(customPartPath)) {
         try {
             const parsed = JSON.parse(fs.readFileSync(customPartPath, 'utf8'));
             const list = extractEntityArray(parsed, 'bestiary');
@@ -812,6 +844,9 @@ function getCreaturePartition(source) {
 
 compendiumRouter.get('/api/creature/:source/:id', (req, res) => {
     const { source, id } = req.params;
+    if (!isValidCompendiumParam(source)) {
+        return res.status(400).json({ error: 'Invalid source parameter' });
+    }
     const partition = getCreaturePartition(source);
     if (!partition) {
         return res.status(404).json({ error: `Bestiary source '${source}' not found` });

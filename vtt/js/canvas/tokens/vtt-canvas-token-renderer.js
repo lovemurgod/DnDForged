@@ -7,6 +7,7 @@
 import { CONDITION_ICONS } from './vtt-canvas-token-rollers.js';
 import { getSafeVttUrl } from '../../vtt-utils.js';
 import { loadPlayerTokenPrefs } from './vtt-canvas-token-config.js';
+import { spawnProceduralCombatFX } from './vtt-canvas-procedural-fx.js';
 
 // Module-level context for animation loops and renderer utilities
 const tokenRendererContext = {
@@ -1215,6 +1216,14 @@ export function renderTokensLayer(context = {}) {
 
                     // 1. Position Container using hardware-accelerated transform
                     const { drawW, drawH } = getTokenDrawDimensions(token);
+                    const currentZoom = Math.max(0.1, zoom || 1);
+                    const tokenScreenW = drawW * currentZoom;
+                    const isFarZoomLOD = tokenScreenW < 24;
+
+                    // Clamped hybrid sizing helper: guarantees minimum physical display pixels
+                    const getClampedWorldPx = (baseWorldPx, minScreenPx) =>
+                        Math.max(baseWorldPx, minScreenPx / currentZoom);
+
                     uiNode.style.transform = `translate3d(${renderPos.x}px, ${renderPos.y}px, 0)`;
                     uiNode.style.width = `${drawW}px`;
                     uiNode.style.height = `${drawH}px`;
@@ -1308,7 +1317,11 @@ export function renderTokensLayer(context = {}) {
                     if (nameNode.textContent !== token.name) {
                         nameNode.textContent = token.name;
                     }
-                    if (nameplateFitWidth) {
+                    const effectiveNameFontSize = Math.round(getClampedWorldPx(12, 11));
+                    const effectiveNameMaxWidth = Math.round(getClampedWorldPx(260, 120));
+                    nameNode.style.fontSize = `${effectiveNameFontSize}px`;
+
+                    if (nameplateFitWidth && tokenScreenW >= 60) {
                         nameNode.style.left = '4px';
                         nameNode.style.right = '4px';
                         nameNode.style.width = 'auto';
@@ -1321,25 +1334,27 @@ export function renderTokensLayer(context = {}) {
                         nameNode.style.left = '50%';
                         nameNode.style.right = 'auto';
                         nameNode.style.width = 'max-content';
-                        nameNode.style.maxWidth = '260px';
+                        nameNode.style.maxWidth = `${effectiveNameMaxWidth}px`;
                         nameNode.style.transform = 'translateX(-50%)';
-                        nameNode.style.overflow = 'visible';
-                        nameNode.style.textOverflow = 'clip';
+                        nameNode.style.overflow = 'hidden';
+                        nameNode.style.textOverflow = 'ellipsis';
                         nameNode.style.whiteSpace = 'nowrap';
                     }
 
+                    const effectiveBarHeight = Math.round(getClampedWorldPx(barHeight, 6));
+
                     if (namePos === 'above' && barPos === 'above') {
-                        nameNode.style.top = `-${barHeight + 26}px`;
+                        nameNode.style.top = `-${effectiveBarHeight + 26}px`;
                         nameNode.style.bottom = 'auto';
                     } else if (namePos === 'below' && barPos === 'below') {
-                        nameNode.style.top = `calc(100% + ${barHeight + 7}px)`;
+                        nameNode.style.top = `calc(100% + ${effectiveBarHeight + 7}px)`;
                         nameNode.style.bottom = 'auto';
                     } else if (namePos === 'top' && barPos === 'top') {
                         nameNode.style.top = '4px';
                         nameNode.style.bottom = 'auto';
                     } else if (namePos === 'bottom' && barPos === 'bottom') {
                         nameNode.style.top = 'auto';
-                        nameNode.style.bottom = `${barHeight + 7}px`;
+                        nameNode.style.bottom = `${effectiveBarHeight + 7}px`;
                     } else {
                         if (namePos === 'above') {
                             nameNode.style.top = '-22px';
@@ -1356,7 +1371,7 @@ export function renderTokensLayer(context = {}) {
                         }
                     }
 
-                    if (showName) {
+                    if (showName && (!isFarZoomLOD || isHovered)) {
                         nameNode.style.display = 'block';
                     } else {
                         nameNode.style.display = 'none';
@@ -1392,7 +1407,7 @@ export function renderTokensLayer(context = {}) {
                             let barBottomStyle = 'auto';
 
                             if (namePos === 'above' && barPos === 'above') {
-                                barTopStyle = `-${barHeight + 4}px`;
+                                barTopStyle = `-${effectiveBarHeight + 4}px`;
                             } else if (namePos === 'below' && barPos === 'below') {
                                 barTopStyle = 'calc(100% + 4px)';
                             } else if (namePos === 'top' && barPos === 'top') {
@@ -1400,7 +1415,7 @@ export function renderTokensLayer(context = {}) {
                             } else if (namePos === 'bottom' && barPos === 'bottom') {
                                 barBottomStyle = '4px';
                             } else {
-                                if (barPos === 'above') barTopStyle = `-${barHeight + 4}px`;
+                                if (barPos === 'above') barTopStyle = `-${effectiveBarHeight + 4}px`;
                                 else if (barPos === 'top') barTopStyle = '4px';
                                 else if (barPos === 'bottom') barBottomStyle = '4px';
                                 else if (barPos === 'below') barTopStyle = 'calc(100% + 4px)';
@@ -1411,22 +1426,22 @@ export function renderTokensLayer(context = {}) {
                             hpContainer.style.width = 'auto';
                             hpContainer.style.top = barTopStyle;
                             hpContainer.style.bottom = barBottomStyle;
-                            hpContainer.style.height = `${barHeight}px`;
-                            hpContainer.style.borderRadius = `${Math.min(4, Math.floor(barHeight / 2))}px`;
+                            hpContainer.style.height = `${effectiveBarHeight}px`;
+                            hpContainer.style.borderRadius = `${Math.min(4, Math.floor(effectiveBarHeight / 2))}px`;
 
                             tempHpWrapper.style.left = '4px';
                             tempHpWrapper.style.right = '4px';
                             tempHpWrapper.style.width = 'auto';
                             tempHpWrapper.style.top = barTopStyle;
                             tempHpWrapper.style.bottom = barBottomStyle;
-                            tempHpWrapper.style.height = `${barHeight}px`;
-                            tempHpWrapper.style.borderRadius = `${Math.min(4, Math.floor(barHeight / 2))}px`;
+                            tempHpWrapper.style.height = `${effectiveBarHeight}px`;
+                            tempHpWrapper.style.borderRadius = `${Math.min(4, Math.floor(effectiveBarHeight / 2))}px`;
 
                             let style = activePrefs.tempHpBarStyle || campaignSettings.tempHpBarStyle || 'stacked';
                             if (style !== 'stacked' && showTempBar && tempHp > 0) {
                                 tempHpWrapper.style.background = 'rgba(0,0,0,0.85)';
                                 tempHpWrapper.style.border = '1px solid var(--color-border-subtle)';
-                                tempHpWrapper.style.borderRadius = `${Math.min(4, Math.floor(barHeight / 2))}px`;
+                                tempHpWrapper.style.borderRadius = `${Math.min(4, Math.floor(effectiveBarHeight / 2))}px`;
                             } else {
                                 tempHpWrapper.style.background = 'none';
                                 tempHpWrapper.style.border = 'none';
@@ -1465,14 +1480,14 @@ export function renderTokensLayer(context = {}) {
 
                                 if (barBottomStyle !== 'auto') {
                                     const baseBottom = parseInt(barBottomStyle, 10) || 4;
-                                    tempHpWrapper.style.bottom = `${baseBottom + barHeight + 3}px`;
+                                    tempHpWrapper.style.bottom = `${baseBottom + effectiveBarHeight + 3}px`;
                                     tempHpWrapper.style.top = 'auto';
                                 } else {
                                     if (barTopStyle.includes('calc')) {
-                                        tempHpWrapper.style.top = `calc(100% + ${barHeight + 7}px)`;
+                                        tempHpWrapper.style.top = `calc(100% + ${effectiveBarHeight + 7}px)`;
                                     } else {
                                         const baseTop = parseInt(barTopStyle, 10) || 4;
-                                        tempHpWrapper.style.top = `${baseTop - barHeight - 3}px`;
+                                        tempHpWrapper.style.top = `${baseTop - effectiveBarHeight - 3}px`;
                                     }
                                     tempHpWrapper.style.bottom = 'auto';
                                 }
@@ -1492,7 +1507,7 @@ export function renderTokensLayer(context = {}) {
                             }
 
                             // HP Text
-                            if (showNum || (tempHp > 0 && showTempNum)) {
+                            if ((showNum || (tempHp > 0 && showTempNum)) && (!isFarZoomLOD || isHovered)) {
                                 hpText.style.display = 'block';
                                 let hpString = '';
                                 if (showNum) {
@@ -1505,10 +1520,13 @@ export function renderTokensLayer(context = {}) {
                                 if (hpText.textContent !== hpString) {
                                     hpText.textContent = hpString;
                                 }
+                                const effectiveHpFontSize = Math.round(
+                                    getClampedWorldPx(Math.min(10, Math.max(8, barHeight - 1)), 9)
+                                );
                                 hpText.style.top = barTopStyle;
                                 hpText.style.bottom = barBottomStyle;
-                                hpText.style.lineHeight = `${barHeight}px`;
-                                hpText.style.fontSize = `${Math.min(10, Math.max(8, barHeight - 1))}px`;
+                                hpText.style.lineHeight = `${effectiveBarHeight}px`;
+                                hpText.style.fontSize = `${effectiveHpFontSize}px`;
                                 hpText.style.textShadow = '0 0 2px black, 0 0 3px black, 0 0 4px black';
                             } else {
                                 hpText.style.display = 'none';
@@ -1527,18 +1545,38 @@ export function renderTokensLayer(context = {}) {
                     // 4. Conditions
                     const condContainer = uiNode.querySelector('.token-condition-container');
                     const hasConditions = token.conditions && token.conditions.length > 0;
-                    if (hasConditions) {
-                        const iconsHtml = token.conditions
+                    if (hasConditions && (!isFarZoomLOD || isHovered)) {
+                        const condBadgeSize = Math.round(getClampedWorldPx(20, 16));
+                        const condFontSize = Math.round(getClampedWorldPx(11, 10));
+
+                        const maxVisibleConditions = 3;
+                        let visibleConditions = token.conditions;
+                        let overflowCount = 0;
+                        if (token.conditions.length > maxVisibleConditions) {
+                            visibleConditions = token.conditions.slice(0, maxVisibleConditions - 1);
+                            overflowCount = token.conditions.length - (maxVisibleConditions - 1);
+                        }
+
+                        let iconsHtml = visibleConditions
                             .map((c) => {
                                 if (c.isCustom) {
-                                    return `<div title="${c.name}" style="background: ${c.color || 'var(--color-gold-base)'}; border: 2px solid white; border-radius: 50%; width: 20px; height: 20px; min-width: 20px; min-height: 20px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 4px black; cursor: help; pointer-events: auto;">&nbsp;</div>`;
+                                    return `<div title="${c.name}" style="background: ${c.color || 'var(--color-gold-base)'}; border: 2px solid white; border-radius: 50%; width: ${condBadgeSize}px; height: ${condBadgeSize}px; min-width: ${condBadgeSize}px; min-height: ${condBadgeSize}px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 4px black; cursor: help; pointer-events: auto;">&nbsp;</div>`;
                                 }
                                 const iconClass = CONDITION_ICONS[c.name] || 'fa-circle-exclamation';
-                                return `<div title="${c.name}" style="background: rgba(0,0,0,0.85); border: 1px solid var(--color-gold-base); border-radius: 50%; width: 20px; height: 20px; min-width: 20px; min-height: 20px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; color: white; font-size: 11px; text-shadow: 1px 1px 2px black; pointer-events: auto; cursor: help;">
+                                return `<div title="${c.name}" style="background: rgba(0,0,0,0.85); border: 1px solid var(--color-gold-base); border-radius: 50%; width: ${condBadgeSize}px; height: ${condBadgeSize}px; min-width: ${condBadgeSize}px; min-height: ${condBadgeSize}px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; color: white; font-size: ${condFontSize}px; text-shadow: 1px 1px 2px black; pointer-events: auto; cursor: help;">
                                         <i class="fa-solid ${iconClass}"></i>
                                     </div>`;
                             })
                             .join('');
+
+                        if (overflowCount > 0) {
+                            const remainingNames = token.conditions
+                                .slice(maxVisibleConditions - 1)
+                                .map((c) => c.name)
+                                .join(', ');
+                            iconsHtml += `<div title="${remainingNames}" style="background: rgba(0,0,0,0.85); border: 1px solid var(--color-gold-base); border-radius: 50%; width: ${condBadgeSize}px; height: ${condBadgeSize}px; min-width: ${condBadgeSize}px; min-height: ${condBadgeSize}px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; color: var(--color-gold-base); font-size: ${condFontSize}px; font-weight: bold; pointer-events: auto; cursor: help;">+${overflowCount}</div>`;
+                        }
+
                         if (condContainer.innerHTML !== iconsHtml) condContainer.innerHTML = iconsHtml;
                         condContainer.style.display = 'flex';
 
@@ -1572,10 +1610,22 @@ export function renderTokensLayer(context = {}) {
                     // 5. Flight
                     const flightContainer = uiNode.querySelector('.token-flight-container');
                     const altitude = token.flightHeight || token.altitude || 0;
-                    if (altitude !== 0) {
+                    if (altitude !== 0 && (!isFarZoomLOD || isHovered)) {
+                        const flightBadgeSize = Math.round(getClampedWorldPx(24, 18));
+                        const flightIconSize = Math.round(getClampedWorldPx(10, 9));
+                        const flightFontSize = Math.round(getClampedWorldPx(9, 8));
+                        flightContainer.style.width = `${flightBadgeSize}px`;
+                        flightContainer.style.height = `${flightBadgeSize}px`;
+
+                        const flightIcon = flightContainer.querySelector('i');
+                        if (flightIcon) flightIcon.style.fontSize = `${flightIconSize}px`;
+
                         const altSpan = flightContainer.querySelector('.flight-altitude');
-                        const altStr = altitude > 0 ? `+${altitude}` : `${altitude}`;
-                        if (altSpan && altSpan.textContent !== altStr) altSpan.textContent = altStr;
+                        if (altSpan) {
+                            altSpan.style.fontSize = `${flightFontSize}px`;
+                            const altStr = altitude > 0 ? `+${altitude}` : `${altitude}`;
+                            if (altSpan.textContent !== altStr) altSpan.textContent = altStr;
+                        }
                         flightContainer.style.display = 'flex';
 
                         if (flightPos === 'outside-tl') {
@@ -1682,14 +1732,12 @@ export function renderActivePingsPass(ctxInteraction, pings = activePings) {
     }
 }
 
-export function renderActiveDamageFXPass(
-    ctxInteraction,
-    fxList = activeDamageFX,
-    renderDamageFXBurstFn = renderDamageFXBurst
-) {
-    if (!ctxInteraction || !fxList || fxList.length === 0) return;
+export function renderActiveDamageFXPass(ctxInteraction, fxList = null, renderDamageFXBurstFn = renderDamageFXBurst) {
+    const list = fxList && fxList.length > 0 ? fxList : activeDamageFX;
+    if (!ctxInteraction || !list || list.length === 0) return;
     const now = Date.now();
-    fxList.forEach((fx) => {
+    const burstFn = typeof renderDamageFXBurstFn === 'function' ? renderDamageFXBurstFn : renderDamageFXBurst;
+    list.forEach((fx) => {
         const elapsed = now - fx.startTime;
         if (elapsed >= fx.duration) return;
         const progress = elapsed / fx.duration;
@@ -1697,13 +1745,8 @@ export function renderActiveDamageFXPass(
 
         ctxInteraction.save();
         (fx.types || ['untyped']).forEach((type, idx) => {
-            renderDamageFXBurstFn(ctxInteraction, fx.x, fx.y, fx.radius, progress, opacity, type, idx);
+            burstFn(ctxInteraction, fx.x, fx.y, fx.radius, progress, opacity, type, idx);
         });
-
-        // Floating combat text (Thematic Icon + Number)
-        if (fx.amount !== null && fx.amount !== undefined) {
-            renderFloatingDamageText(ctxInteraction, fx, progress, opacity);
-        }
         ctxInteraction.restore();
     });
 }
@@ -1797,7 +1840,16 @@ function getTokenShudderOffset(tokenId) {
 
 function triggerDamageFXAnimation(x, y, radius, damageTypes, meta = {}) {
     if (!isDamageFxPrefEnabled()) return;
+    if (meta && meta.delayMs > 0) {
+        const delayedMeta = { ...meta, delayMs: 0 };
+        setTimeout(() => triggerDamageFXAnimation(x, y, radius, damageTypes, delayedMeta), meta.delayMs);
+        return;
+    }
     const types = Array.isArray(damageTypes) && damageTypes.length > 0 ? damageTypes : ['untyped'];
+
+    // Spawn distinct procedural vector graphics directly on #vtt-html-overlays (500ms Hyper-Snappy)
+    spawnProceduralCombatFX(x, y, radius, types, meta, false, false);
+
     activeDamageFX.push({
         x,
         y,
@@ -1806,7 +1858,7 @@ function triggerDamageFXAnimation(x, y, radius, damageTypes, meta = {}) {
         amount: meta && meta.amount !== undefined && meta.amount !== null ? meta.amount : null,
         tokenId: meta && meta.tokenId ? meta.tokenId : null,
         startTime: Date.now(),
-        duration: 650 // 650ms duration per design spec for dramatic visual breathing room
+        duration: 500 // 500ms duration per user specification for hyper-snappy mass combat
     });
     if (meta && meta.tokenId) {
         triggerTokenShudder(meta.tokenId);
@@ -1818,18 +1870,35 @@ function triggerDamageFXAnimation(x, y, radius, damageTypes, meta = {}) {
 
 function triggerHealingFXAnimation(x, y, radius, amount, meta = {}) {
     if (!isDamageFxPrefEnabled()) return;
+    if (meta && meta.delayMs > 0) {
+        const delayedMeta = { ...meta, delayMs: 0 };
+        setTimeout(() => triggerHealingFXAnimation(x, y, radius, amount, delayedMeta), meta.delayMs);
+        return;
+    }
     const isTempHp = Boolean(meta && meta.isTempHp);
-    activeDamageFX.push({
-        x,
-        y,
-        radius: Math.max(18, radius || 25),
-        types: [isTempHp ? 'temphp' : 'heal'],
+    const resolvedTypes = [isTempHp ? 'temphp' : 'heal'];
+    const resolvedMeta = {
         amount: amount !== undefined && amount !== null ? amount : meta.amount || 0,
         tokenId: meta && meta.tokenId ? meta.tokenId : null,
         isHeal: !isTempHp,
         isTempHp: isTempHp,
+        ...meta
+    };
+
+    // Spawn distinct procedural vector graphics directly on #vtt-html-overlays (500ms Hyper-Snappy)
+    spawnProceduralCombatFX(x, y, radius, resolvedTypes, resolvedMeta, !isTempHp, isTempHp);
+
+    activeDamageFX.push({
+        x,
+        y,
+        radius: Math.max(18, radius || 25),
+        types: resolvedTypes,
+        amount: resolvedMeta.amount,
+        tokenId: resolvedMeta.tokenId,
+        isHeal: !isTempHp,
+        isTempHp: isTempHp,
         startTime: Date.now(),
-        duration: 650
+        duration: 500
     });
     // Healing and Temp HP do NOT shake the token (keeps positive feedback soothing)
     if (!damageFXAnimFrame) {
@@ -1857,103 +1926,6 @@ function animateDamageFX() {
     } else {
         damageFXAnimFrame = null;
     }
-}
-
-const DAMAGE_TYPE_ICONS = {
-    fire: '🔥',
-    cold: '❄️',
-    ice: '❄️',
-    lightning: '⚡',
-    electric: '⚡',
-    thunder: '💥',
-    acid: '🧪',
-    poison: '☠️',
-    radiant: '✨',
-    necrotic: '💀',
-    force: '🔮',
-    psychic: '🧠',
-    slashing: '🗡️',
-    piercing: '🎯',
-    bludgeoning: '🔨'
-};
-
-const DAMAGE_TYPE_COLORS = {
-    fire: '#f97316',
-    cold: '#38bdf8',
-    ice: '#38bdf8',
-    lightning: '#facc15',
-    electric: '#facc15',
-    thunder: '#7dd3fc',
-    acid: '#a3e635',
-    poison: '#4ade80',
-    radiant: '#fef08a',
-    necrotic: '#c084fc',
-    force: '#e879f9',
-    psychic: '#f472b6',
-    slashing: '#ef4444',
-    piercing: '#f87171',
-    bludgeoning: '#fb7185'
-};
-
-function renderFloatingDamageText(ctx, fx, progress, opacity) {
-    const rawType = (fx.types && fx.types[0] ? String(fx.types[0]) : 'untyped').trim().toLowerCase();
-    let icon = '⚔️';
-    let color = '#ef4444';
-    let isPositive = false;
-
-    if (fx.isHeal || rawType.includes('heal')) {
-        icon = '💚';
-        color = '#22c55e';
-        isPositive = true;
-    } else if (fx.isTempHp || rawType.includes('temphp') || rawType.includes('temp_hp')) {
-        icon = '🛡️';
-        color = '#38bdf8';
-        isPositive = true;
-    } else {
-        for (const [key, ic] of Object.entries(DAMAGE_TYPE_ICONS)) {
-            if (rawType.includes(key)) {
-                icon = ic;
-                color = DAMAGE_TYPE_COLORS[key] || '#ef4444';
-                break;
-            }
-        }
-    }
-
-    const amountNum = Number(fx.amount);
-    let amountStr;
-    if (isPositive) {
-        amountStr = isNaN(amountNum) ? String(fx.amount) : amountNum > 0 ? `+${amountNum}` : `${amountNum}`;
-    } else {
-        amountStr = isNaN(amountNum) ? String(fx.amount) : amountNum > 0 ? `-${amountNum}` : `${amountNum}`;
-    }
-    const text = `${icon} ${amountStr}`;
-
-    // Motion curve: snappy pop up during first 150ms then gentle slow drift upward
-    const startY = fx.y - fx.radius * 0.7;
-    const floatDistance = Math.pow(progress, 0.65) * 38;
-    const currentY = startY - floatDistance;
-
-    // Text opacity stays bright for the first 45% then fades smoothly
-    const textAlpha = progress < 0.45 ? 1.0 : Math.max(0, (1.0 - progress) / 0.55);
-    const finalAlpha = Math.min(1.0, textAlpha * 1.15);
-
-    ctx.save();
-    ctx.font = '800 16px "Cinzel", "Cinzel Decorative", "Segoe UI", Roboto, sans-serif';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'bottom';
-
-    // Dark high-contrast stroke outline guarantees readability on any background
-    ctx.lineWidth = 3.5;
-    ctx.lineJoin = 'round';
-    ctx.strokeStyle = `rgba(0, 0, 0, ${finalAlpha * 0.95})`;
-    ctx.strokeText(text, fx.x, currentY);
-
-    // Subtle drop shadow matching the damage/heal color
-    ctx.shadowColor = color;
-    ctx.shadowBlur = 6;
-    ctx.fillStyle = `rgba(255, 255, 255, ${finalAlpha})`;
-    ctx.fillText(text, fx.x, currentY);
-    ctx.restore();
 }
 
 function renderDamageFXBurst(ctx, x, y, baseRadius, progress, opacity, damageType, index = 0) {
@@ -2528,10 +2500,10 @@ export {
     activeTokenShudders,
     triggerTokenShudder,
     getTokenShudderOffset,
+    spawnProceduralCombatFX,
     triggerDamageFXAnimation,
     triggerHealingFXAnimation,
     animateDamageFX,
-    renderFloatingDamageText,
     renderDamageFXBurst,
     processTokenAnimReqs,
     animateTokens,

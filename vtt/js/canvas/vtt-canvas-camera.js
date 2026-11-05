@@ -293,14 +293,16 @@ export function updateCoordinateDisplay(mouse, grid) {
 export async function setMapBackground(url, context = {}) {
     if (typeof document === 'undefined') return;
     const bgContainer = document.getElementById('vtt-map-bg-container');
-    if (!bgContainer) return;
-
-    if (!url) {
+    if (bgContainer) {
+        // Permanently neutralize legacy background container so squashed DOM images never appear
         bgContainer.querySelectorAll?.('video, iframe')?.forEach((el) => cleanupMediaElement(el));
         bgContainer.innerHTML = '';
         bgContainer.classList.add('vtt-hidden');
         bgContainer.removeAttribute('data-natural-width');
         bgContainer.removeAttribute('data-natural-height');
+    }
+
+    if (!url) {
         context.renderAll?.();
         return;
     }
@@ -316,88 +318,64 @@ export async function setMapBackground(url, context = {}) {
         }
     }
 
-    const viewport = context.viewport || document.getElementById('vtt-canvas-viewport');
-    const setBackgroundDimensions = (width, height) => {
-        if (!width || !height) return;
-        bgContainer.dataset.naturalWidth = String(width);
-        bgContainer.dataset.naturalHeight = String(height);
-        if (viewport) {
-            const w = viewport.clientWidth;
-            const h = viewport.clientHeight;
-            context.panX = (w - width) / 2;
-            context.panY = (h - height) / 2;
-            context.zoom = 1.0;
-            context.updateContainerTransform?.();
-            context.renderAll?.();
-        }
-    };
+    const vtt = context.vtt || (typeof window !== 'undefined' ? window.VTT : null) || {};
+    const mapId = context.currentMapId || vtt.campaignState?.activeGMMapId || vtt.campaignState?.activeMapId;
+    const currentMap = vtt.campaignState?.maps?.[mapId];
 
-    bgContainer.querySelectorAll?.('video, iframe')?.forEach((el) => cleanupMediaElement(el));
-    bgContainer.innerHTML = '';
-    bgContainer.classList.remove('vtt-hidden');
-    bgContainer.style.pointerEvents = 'none';
-    bgContainer.removeAttribute('data-natural-width');
-    bgContainer.removeAttribute('data-natural-height');
+    if (currentMap) {
+        currentMap.mapImage = url;
+        currentMap.thumbnail = currentMap.thumbnail || url;
+        if (!currentMap.tokens) currentMap.tokens = {};
 
-    if (url.trim().startsWith('<iframe')) {
-        bgContainer.innerHTML = url;
-        const iframe = bgContainer.querySelector('iframe');
-        if (iframe) {
-            iframe.style.width = '100%';
-            iframe.style.height = '100%';
-            iframe.style.pointerEvents = 'none';
-            iframe.style.border = 'none';
+        const isVideo = !!url.match(/\.(mp4|webm|ogg)(\?.*)?$/i) || url.includes('pinimg.com/videos');
+        const isYoutube = url.includes('youtube.com') || url.includes('youtu.be');
+
+        // Find existing background token on the map layer
+        let bgToken = Object.values(currentMap.tokens).find((t) => t.layer === 'map' && (t.isBackground || t.isAsset));
+
+        if (bgToken) {
+            bgToken.img = url;
+            bgToken.isVideo = isVideo || isYoutube;
+        } else {
+            const gSize = currentMap.grid?.size || 50;
+            const gScale = currentMap.grid?.scale || 1.0;
+            const gWidth = currentMap.gridWidth ? Math.ceil(currentMap.gridWidth) : 40;
+            const gHeight = currentMap.gridHeight ? Math.ceil(currentMap.gridHeight) : 30;
+            const pixelWidth = currentMap.gridWidth ? currentMap.gridWidth * gSize * gScale : 2000;
+            const pixelHeight = currentMap.gridHeight ? currentMap.gridHeight * gSize * gScale : 1500;
+            const assetId = `asset_${mapId}_bg`;
+            currentMap.tokens[assetId] = {
+                id: assetId,
+                name: `${currentMap.name || 'Map'} (Artwork)`,
+                x: 0,
+                y: 0,
+                layer: 'map',
+                isAsset: true,
+                isBackground: true,
+                locked: true,
+                img: url,
+                isVideo: isVideo || isYoutube,
+                pixelWidth,
+                pixelHeight,
+                size: 1,
+                zIndex: 0,
+                isPlayer: false
+            };
         }
-        setTimeout(() => setBackgroundDimensions(1000, 1000), 500);
-        return;
+
+        if (context.tokens && currentMap.tokens) {
+            Object.assign(context.tokens, currentMap.tokens);
+        }
+
+        const updatedBgToken = bgToken || currentMap.tokens[`asset_${mapId}_bg`];
+        if (typeof context.emitTokenUpdates === 'function') {
+            context.emitTokenUpdates(context.tokens || currentMap.tokens);
+        } else if (typeof window !== 'undefined' && typeof window.emitTokenUpdates === 'function') {
+            window.emitTokenUpdates(context.tokens || currentMap.tokens);
+        } else if (vtt?.socket && mapId && updatedBgToken) {
+            vtt.socket.emit('token:update', { mapId, token: updatedBgToken });
+        }
     }
 
-    const isVideo = url.match(/\.(mp4|webm|ogg)(\?.*)?$/i) || url.includes('pinimg.com/videos');
-    const isYoutube = url.includes('youtube.com') || url.includes('youtu.be');
-
-    let mediaEl;
-    if (isYoutube) {
-        mediaEl = document.createElement('iframe');
-        let ytUrl = url;
-        const ytMatch = url.match(
-            /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i
-        );
-        if (ytMatch) {
-            const videoId = ytMatch[1];
-            ytUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&controls=0&disablekb=1&fs=0&modestbranding=1&playsinline=1&playlist=${videoId}`;
-        }
-        mediaEl.src = ytUrl;
-        mediaEl.style.width = '100%';
-        mediaEl.style.height = '100%';
-        mediaEl.style.border = 'none';
-        mediaEl.style.pointerEvents = 'none';
-        bgContainer.appendChild(mediaEl);
-        setTimeout(() => setBackgroundDimensions(1000, 1000), 500);
-    } else if (isVideo) {
-        mediaEl = document.createElement('video');
-        mediaEl.src = url;
-        mediaEl.autoplay = true;
-        mediaEl.loop = true;
-        mediaEl.muted = true;
-        mediaEl.playsInline = true;
-        mediaEl.style.width = '100%';
-        mediaEl.style.height = '100%';
-        mediaEl.style.objectFit = 'fill';
-        bgContainer.appendChild(mediaEl);
-        mediaEl.play().catch(() => {});
-        mediaEl.onloadedmetadata = () => {
-            setBackgroundDimensions(mediaEl.videoWidth, mediaEl.videoHeight);
-        };
-    } else {
-        mediaEl = document.createElement('img');
-        mediaEl.src = url;
-        mediaEl.draggable = false;
-        mediaEl.style.width = '100%';
-        mediaEl.style.height = '100%';
-        mediaEl.style.objectFit = 'fill';
-        bgContainer.appendChild(mediaEl);
-        mediaEl.onload = () => {
-            setBackgroundDimensions(mediaEl.naturalWidth || mediaEl.width, mediaEl.naturalHeight || mediaEl.height);
-        };
-    }
+    context.renderAll?.();
 }

@@ -224,6 +224,7 @@ export function initVttChat(vtt, chatHistory) {
             // Apply visibility filtering for socket event handling
             if (msg.hidden && vtt.role !== 'GM') return;
             if (msg.whisperToGM && vtt.role !== 'GM' && msg.username !== vtt.username) return;
+            if (msg.whisperTo && vtt.role !== 'GM' && msg.username !== vtt.username && (!vtt.username || msg.whisperTo.toLowerCase() !== vtt.username.toLowerCase())) return;
 
             appendMessageToDom(msg);
 
@@ -596,6 +597,19 @@ export function initVttChat(vtt, chatHistory) {
         if (!text) return;
 
         chatInput.value = '';
+
+        // Check if message is a whisper command: /w or /whisper
+        const whisperMatch = text.match(/^(?:\/w|\/whisper)\s+(?:"([^"]+)"|'([^']+)'|(\S+))\s+([\s\S]+)$/i);
+        if (whisperMatch) {
+            const target = whisperMatch[1] || whisperMatch[2] || whisperMatch[3];
+            const whisperText = whisperMatch[4].trim();
+            if (target.toLowerCase() === 'gm') {
+                vtt.socket.emit('chat:msg', { text: whisperText, whisperToGM: true });
+            } else {
+                vtt.socket.emit('chat:msg', { text: whisperText, whisperTo: target });
+            }
+            return;
+        }
 
         // Check if message is a dice roll command
         if (text.startsWith('/roll ') || text.startsWith('/r ')) {
@@ -1010,10 +1024,25 @@ export function initVttChat(vtt, chatHistory) {
 
         // Save DC row
         let saveSection = '';
-        const saveObj =
+        const validAbilities = [
+            'STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA',
+            'STRENGTH', 'DEXTERITY', 'CONSTITUTION', 'INTELLIGENCE', 'WISDOM', 'CHARISMA'
+        ];
+        const rawSaveObj =
             mc.saveInfo || (mc.saveDc && mc.saveAbility ? { ability: mc.saveAbility, dc: mc.saveDc } : null);
+        const saveObj =
+            rawSaveObj &&
+            rawSaveObj.ability &&
+            validAbilities.includes(rawSaveObj.ability.trim().toUpperCase()) &&
+            !isNaN(parseInt(rawSaveObj.dc)) &&
+            parseInt(rawSaveObj.dc) > 0
+                ? {
+                      ...rawSaveObj,
+                      ability: rawSaveObj.ability.trim().substring(0, 3).toUpperCase()
+                  }
+                : null;
         if (saveObj) {
-            const abLabel = saveObj.ability && saveObj.ability !== 'Save' ? `${saveObj.ability} Save DC` : 'Save DC';
+            const abLabel = `${saveObj.ability} Save DC`;
             saveSection = `
                 <div class="macro-card-row">
                     <div class="macro-row-label"><i class="fa-solid fa-shield-halved macro-row-icon" style="color:#a5d6a7;"></i> ${escapeHtml(abLabel)}</div>
@@ -1392,6 +1421,7 @@ export function initVttChat(vtt, chatHistory) {
     function appendMessageToDom(msg, isHistorical = false) {
         if (msg.hidden && vtt.role !== 'GM') return;
         if (msg.whisperToGM && vtt.role !== 'GM' && msg.username !== vtt.username) return;
+        if (msg.whisperTo && vtt.role !== 'GM' && msg.username !== vtt.username && (!vtt.username || msg.whisperTo.toLowerCase() !== vtt.username.toLowerCase())) return;
 
         const isSelf = msg.username === vtt.username;
         const messageDiv = document.createElement('div');
@@ -1399,7 +1429,7 @@ export function initVttChat(vtt, chatHistory) {
         if (msg.hidden) {
             messageDiv.classList.add('msg-hidden');
         }
-        if (msg.whisperToGM) {
+        if (msg.whisperToGM || msg.whisperTo) {
             messageDiv.classList.add('gm-whisper-card');
         }
         if (msg.id) {
@@ -1428,7 +1458,16 @@ export function initVttChat(vtt, chatHistory) {
         }
 
         const safeUsername = escapeHtml(msg.username || 'Anonymous');
-        let headerText = `<div class="chat-message-header"><span class="username">${safeUsername}${msg.whisperToGM ? ' <span class="whisper-label" style="font-size:0.8rem; opacity:0.8; font-style:italic;">(Whisper to GM)</span>' : ''}</span><span class="timestamp">${time}</span>${actionsHtml}</div>`;
+        let whisperLabel = '';
+        if (msg.whisperToGM) {
+            whisperLabel = ' <span class="whisper-label" style="font-size:0.8rem; opacity:0.8; font-style:italic;">(Whisper to GM)</span>';
+        } else if (msg.whisperTo) {
+            const isTarget = vtt.username && msg.whisperTo.toLowerCase() === vtt.username.toLowerCase();
+            whisperLabel = isTarget
+                ? ` <span class="whisper-label" style="font-size:0.8rem; opacity:0.8; font-style:italic;">(Whisper from ${safeUsername})</span>`
+                : ` <span class="whisper-label" style="font-size:0.8rem; opacity:0.8; font-style:italic;">(Whisper to ${escapeHtml(msg.whisperTo)})</span>`;
+        }
+        let headerText = `<div class="chat-message-header"><span class="username">${safeUsername}${whisperLabel}</span><span class="timestamp">${time}</span>${actionsHtml}</div>`;
         let bodyText = msg.text ? `<span class="message-text">${parseSimpleMarkdown(msg.text)}</span>` : '';
 
         // Structured ability card from creature sheet

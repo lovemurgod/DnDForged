@@ -411,8 +411,19 @@ export function setupPlayerTokenEditListeners(options = {}) {
         const btn = document.getElementById('btn-pc-token-upload');
         const originalText = btn.innerHTML;
         btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+        const authHeaders =
+            typeof window !== 'undefined' && typeof window.vttAuthHeaders === 'function'
+                ? window.vttAuthHeaders()
+                : window.VTT?.gmSessionToken
+                  ? { 'x-gm-token': window.VTT.gmSessionToken }
+                  : {};
+
         try {
-            const res = await fetch('/api/assets/upload', { method: 'POST', body: formData });
+            const res = await fetch('/api/assets/upload', {
+                method: 'POST',
+                headers: authHeaders,
+                body: formData
+            });
             if (res.ok) {
                 const data = await res.json();
                 if (!currentChar.tokenImages) currentChar.tokenImages = [];
@@ -420,7 +431,8 @@ export function setupPlayerTokenEditListeners(options = {}) {
                 currentChar.activeTokenIndex = currentChar.tokenImages.length - 1;
                 renderPlayerTokenGallery(options);
             } else {
-                alert('Upload failed.');
+                const errData = await res.json().catch(() => null);
+                alert('Upload failed: ' + (errData?.error || res.statusText || 'Server error'));
             }
         } catch (e) {
             alert('Error: ' + e.message);

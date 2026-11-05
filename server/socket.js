@@ -356,7 +356,16 @@ export function initSocketServer(io) {
             // Welcome user and send current state (sanitized to avoid 1MB websocket limit)
             const rawChat = (chatLogs[activeCampId] || []).slice(-50);
             const sanitizedChat =
-                finalRole === 'GM' ? rawChat : rawChat.filter((m) => !m.whisperToGM || m.username === username);
+                finalRole === 'GM'
+                    ? rawChat
+                    : rawChat.filter((m) => {
+                          if (m.whisperToGM) return m.username === username;
+                          if (m.whisperTo) {
+                              const tLower = String(m.whisperTo).toLowerCase().trim();
+                              return m.username === username || (username && username.toLowerCase().trim() === tLower);
+                          }
+                          return true;
+                      });
 
             let gmSessionToken = null;
             if (finalRole === 'GM') {
@@ -916,6 +925,46 @@ export function initSocketServer(io) {
             io.to(campaignId).emit('walls:updated', {
                 mapId: targetMapId || data.mapId || campaigns[campaignId].activeMapId,
                 walls: data.walls
+            });
+        });
+
+        // Dedicated door/window toggle handler (permitted for non-GMs when unlocked)
+        socket.on('door:toggle', (data) => {
+            const { campaignId } = socket;
+            if (!campaignId || !campaigns[campaignId] || !data) return;
+
+            const camp = campaigns[campaignId];
+            const targetMapId =
+                data.mapId ||
+                (socket.role === 'GM'
+                    ? camp.activeGMMapId || camp.activeMapId
+                    : getPlayerMapOverride(camp, socket.username) || camp.activeMapId);
+
+            const map = camp.maps?.[targetMapId];
+            if (!map || !Array.isArray(map.walls)) return;
+
+            // Find wall by wallId or wallIdx
+            let targetWall = null;
+            if (data.wallId) {
+                targetWall = map.walls.find((w) => w && w.id === data.wallId);
+            }
+            if (!targetWall && typeof data.wallIdx === 'number' && map.walls[data.wallIdx]) {
+                targetWall = map.walls[data.wallIdx];
+            }
+            if (!targetWall) return;
+
+            // Validate that the wall is a door or window
+            if (targetWall.type !== 'door' && targetWall.type !== 'window') return;
+
+            // Locked doors can only be toggled by the GM
+            if (targetWall.isLocked && socket.role !== 'GM') return;
+
+            targetWall.isOpen = !targetWall.isOpen;
+            saveCampaigns();
+
+            io.to(campaignId).emit('walls:updated', {
+                mapId: targetMapId,
+                walls: map.walls
             });
         });
 
@@ -1695,11 +1744,19 @@ export function initSocketServer(io) {
             if (!campaignId || !campaigns[campaignId]) return;
             if (socket.role !== 'GM') return;
 
-            const { mapId } = data;
+            const { mapId } = data || {};
             const camp = campaigns[campaignId];
             if (camp.maps && camp.maps[mapId]) {
-                // Safety block: Do not delete active player map
-                if (camp.activeMapId === mapId) return;
+                // Strictly block deletion if map is active party map or viewed via player override
+                const isPartyActive = camp.activeMapId === mapId;
+                const hasPlayerOverride = Object.values(camp.playerMapOverrides || {}).includes(mapId);
+                if (isPartyActive || hasPlayerOverride) {
+                    socket.emit(
+                        'error',
+                        'Cannot delete map while players are actively viewing it. Move players to another map first.'
+                    );
+                    return;
+                }
 
                 delete camp.maps[mapId];
                 if (camp.mapOrder) {
@@ -1929,7 +1986,8 @@ export function initSocketServer(io) {
                 massAttackCard: safeMsg.massAttackCard || null,
                 timestamp: Date.now(),
                 hidden: false,
-                whisperToGM: safeMsg.whisperToGM || false
+                whisperToGM: safeMsg.whisperToGM || false,
+                whisperTo: safeMsg.whisperTo ? stripTags(safeMsg.whisperTo) : null
             };
 
             if (!chatLogs[campaignId]) chatLogs[campaignId] = [];
@@ -1943,6 +2001,22 @@ export function initSocketServer(io) {
                     for (const sId of room) {
                         const clientSocket = io.sockets.sockets.get(sId);
                         if (clientSocket && clientSocket.role === 'GM' && clientSocket.id !== socket.id) {
+                            clientSocket.emit('chat:msg', chatMsg);
+                        }
+                    }
+                }
+            } else if (chatMsg.whisperTo) {
+                // Targeted player whisper: delivered to sender, recipient, and table GM
+                socket.emit('chat:msg', chatMsg);
+                const targetLower = String(chatMsg.whisperTo).toLowerCase().trim();
+                const room = io.sockets.adapter.rooms.get(campaignId);
+                if (room) {
+                    for (const sId of room) {
+                        const clientSocket = io.sockets.sockets.get(sId);
+                        if (!clientSocket || clientSocket.id === socket.id) continue;
+                        const uMatch = (clientSocket.username || '').toLowerCase().trim() === targetLower;
+                        const isGm = clientSocket.role === 'GM';
+                        if (uMatch || isGm) {
                             clientSocket.emit('chat:msg', chatMsg);
                         }
                     }

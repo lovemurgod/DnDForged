@@ -68,12 +68,22 @@ document.addEventListener('DOMContentLoaded', () => {
     let activeMoveDestination = '';
     let isUploading = false;
 
-    // View mode and zoom from preferences
-    let viewMode = localStorage.getItem('vtt_asset_view_mode') || 'grid';
-    let zoomSize = parseInt(localStorage.getItem('vtt_asset_zoom_size') || '80', 10);
+    const isMobileClient = () => {
+        return (
+            window.innerWidth <= 900 ||
+            document.documentElement.classList.contains('force-mobile-ui') ||
+            (window.matchMedia && window.matchMedia('(pointer: coarse)').matches)
+        );
+    };
+
+    // View mode and zoom from preferences (defaults to list view on mobile)
+    let savedViewMode = localStorage.getItem('vtt_asset_view_mode');
+    let viewMode = savedViewMode || (isMobileClient() ? 'list' : 'grid');
+    let zoomSize = parseInt(localStorage.getItem('vtt_asset_zoom_size') || (isMobileClient() ? '110' : '80'), 10);
 
     function applyViewPreferences() {
         if (galleryList) {
+            const isMobile = isMobileClient();
             if (viewMode === 'list') {
                 galleryList.classList.add('list-view');
                 if (btnViewToggle) btnViewToggle.innerHTML = '<i class="fa-solid fa-grip"></i>';
@@ -82,9 +92,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 galleryList.classList.remove('list-view');
                 if (btnViewToggle) btnViewToggle.innerHTML = '<i class="fa-solid fa-list"></i>';
                 if (btnViewToggle) btnViewToggle.title = 'Switch to List View';
-                galleryList.style.gridTemplateColumns = `repeat(auto-fill, minmax(${zoomSize}px, 1fr))`;
+                const effectiveMin = isMobile ? Math.max(110, zoomSize) : zoomSize;
+                galleryList.style.gridTemplateColumns = `repeat(auto-fill, minmax(${effectiveMin}px, 1fr))`;
             }
-            galleryList.style.setProperty('--asset-thumb-size', `${Math.max(40, zoomSize - 20)}px`);
+            const thumbSz = isMobile ? Math.max(64, zoomSize - 16) : Math.max(40, zoomSize - 20);
+            galleryList.style.setProperty('--asset-thumb-size', `${thumbSz}px`);
         }
         if (zoomSlider) {
             zoomSlider.value = zoomSize;

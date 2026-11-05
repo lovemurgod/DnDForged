@@ -121,17 +121,22 @@ export function computeVisibilityPolygon(
 
     const processedWalls = [];
     const indexToUse = spatialIndex || (wallsOverride && wallsOverride.spatialIndex);
-    const wallsToUse =
+    const rawWalls =
         indexToUse && typeof indexToUse.querySightRadius === 'function' && !wallsOverride
             ? indexToUse.querySightRadius(cx, cy, sightRadius)
             : Array.isArray(wallsOverride)
               ? wallsOverride
               : walls;
+    const wallsToUse = Array.isArray(rawWalls) ? rawWalls : [];
 
     wallsToUse.forEach((w) => {
-        if (typeof ignoreWallFilter === 'function' && ignoreWallFilter(w)) return;
+        if (!w || (typeof ignoreWallFilter === 'function' && ignoreWallFilter(w))) return;
         const coords = getWallCoordinatesForRaycasting(w, cx, cy);
         if (coords) {
+            // Filter out degenerate zero-length wall segments (points)
+            if (coords.x1 === coords.x2 && coords.y1 === coords.y2) {
+                return;
+            }
             if (shouldPrune) {
                 const wMinX = Math.min(coords.x1, coords.x2);
                 const wMaxX = Math.max(coords.x1, coords.x2);

@@ -610,7 +610,7 @@ export function createMapCard(map, allFolderNames, managerState, options = {}, f
                 </button>
                 <button class="btn-duplicate-map btn btn-secondary btn-xxs" title="Duplicate Map" style="padding: 4px 6px;"><i class="fa-solid fa-clone"></i></button>
                 <button class="btn-edit-map btn btn-secondary btn-xxs" title="Edit Map" style="padding: 4px 6px;"><i class="fa-solid fa-pen"></i></button>
-                <button class="btn-delete-map btn btn-danger btn-xxs" ${isPlayerActive ? 'disabled' : ''} title="${isPlayerActive ? 'Cannot delete live party map' : 'Delete Map'}" style="padding: 4px 6px; ${isPlayerActive ? 'opacity: 0.35; cursor: not-allowed;' : ''}"><i class="fa-solid fa-trash"></i></button>
+                <button class="btn-delete-map btn btn-danger btn-xxs" ${isPlayerActive ? 'disabled' : ''} title="${isPlayerActive ? 'Cannot delete map while players are actively viewing it' : 'Delete Map'}" style="padding: 4px 6px; ${isPlayerActive ? 'opacity: 0.35; cursor: not-allowed;' : ''}"><i class="fa-solid fa-trash"></i></button>
             </div>
         `;
     } else {
@@ -635,7 +635,7 @@ export function createMapCard(map, allFolderNames, managerState, options = {}, f
                     <div style="display: flex; gap: 3px; flex-shrink: 0;">
                         <button class="btn-duplicate-map btn btn-secondary btn-xxs" title="Duplicate Map" style="padding: 2px 5px;"><i class="fa-solid fa-clone"></i></button>
                         <button class="btn-edit-map btn btn-secondary btn-xxs" title="Edit Map" style="padding: 2px 5px;"><i class="fa-solid fa-pen"></i></button>
-                        <button class="btn-delete-map btn btn-danger btn-xxs" ${isPlayerActive ? 'disabled' : ''} title="${isPlayerActive ? 'Cannot delete live party map' : 'Delete Map'}" style="padding: 2px 5px; ${isPlayerActive ? 'opacity: 0.35; cursor: not-allowed;' : ''}"><i class="fa-solid fa-trash"></i></button>
+                        <button class="btn-delete-map btn btn-danger btn-xxs" ${isPlayerActive ? 'disabled' : ''} title="${isPlayerActive ? 'Cannot delete map while players are actively viewing it' : 'Delete Map'}" style="padding: 2px 5px; ${isPlayerActive ? 'opacity: 0.35; cursor: not-allowed;' : ''}"><i class="fa-solid fa-trash"></i></button>
                     </div>
                 </div>
                 <!-- Interactive Folder Dropdown on Card -->
@@ -1113,6 +1113,15 @@ export function setupEditMapModal(managerState, options = {}) {
         const urlVal = document.getElementById('edit-map-url')?.value?.trim() || '';
         map.thumbnail = urlVal;
         map.mapImage = urlVal;
+        if (map.tokens) {
+            const bgToken = Object.values(map.tokens).find((t) => t.layer === 'map' && (t.isBackground || t.isAsset));
+            if (bgToken && urlVal) {
+                bgToken.img = urlVal;
+                const isVideo = !!urlVal.match(/\.(mp4|webm|ogg)(\?.*)?$/i) || urlVal.includes('pinimg.com/videos');
+                const isYoutube = urlVal.includes('youtube.com') || urlVal.includes('youtu.be');
+                bgToken.isVideo = isVideo || isYoutube;
+            }
+        }
 
         // 3. Grid dimensions (top-level properties on map)
         const gwRaw = document.getElementById('edit-map-grid-width')?.value;
@@ -1355,7 +1364,9 @@ export function openEditMapModal(map, managerState, options = {}) {
         `;
         editFolderEl.value = map.folder || '';
     }
-    document.getElementById('edit-map-url').value = map.thumbnail || map.mapImage || '';
+    const bgToken = Object.values(map.tokens || {}).find((t) => t.layer === 'map' && (t.isBackground || t.isAsset));
+    const effectiveMapUrl = bgToken?.img || map.mapImage || map.thumbnail || '';
+    document.getElementById('edit-map-url').value = effectiveMapUrl;
     document.getElementById('edit-map-grid-width').value = map.gridWidth || '';
     document.getElementById('edit-map-grid-height').value = map.gridHeight || '';
 

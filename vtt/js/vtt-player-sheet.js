@@ -4777,44 +4777,35 @@ export function initVttPlayerSheet(vtt) {
                 </div>
             </div>
             
-            <div class="cs-hp-container" style="margin-bottom:16px;">
-                <div style="display: flex; gap: 4px; margin-bottom: 8px; align-items: center;">
-                    <div class="cs-hp-bar-wrap" style="flex: 1; height: 10px; background: rgba(0,0,0,0.3); border-radius: 4px; overflow: hidden;">
-                        <div class="cs-hp-bar-fill" id="pc-hp-bar" style="height: 100%; background-color: var(--color-success-base, #4caf50); width: ${char.hpMax > 0 ? Math.round((char.hpCurrent / char.hpMax) * 100) : 100}%"></div>
-                    </div>
-                    ${
-                        char.tempHp > 0
-                            ? `
-                    <div class="cs-hp-bar-wrap" style="flex: 0 0 20%; height: 10px; background: rgba(0,0,0,0.3); border-radius: 4px; overflow: hidden;" title="Temp HP">
-                        <div class="cs-hp-bar-fill cs-temp-hp-bar-fill" id="pc-temp-hp-bar" style="height: 100%; background-color: var(--color-temphp-base, #2196f3); width: 100%;"></div>
-                    </div>`
-                            : ''
-                    }
+            <div class="cs-hp-container">
+                <div class="cs-hp-bar-wrap" id="pc-hp-bar-wrap">
+                    <div class="cs-hp-bar-fill" id="pc-hp-bar" style="width: ${char.hpMax > 0 ? Math.round((char.hpCurrent / char.hpMax) * 100) : 100}%"></div>
+                    <div class="cs-temp-hp-bar-fill" id="pc-temp-hp-bar" style="width: ${char.hpMax > 0 && char.tempHp > 0 ? Math.min(100, Math.round((char.tempHp / char.hpMax) * 100)) : 0}%; display: ${char.tempHp > 0 ? 'block' : 'none'};" title="Temp HP"></div>
                 </div>
-                <div class="cs-hp-row" style="display:flex; align-items:center; justify-content:space-between; gap:16px;">
-                    <div style="display:flex; align-items:center; gap:8px;">
-                        <div class="cs-hp-label" style="font-size:0.85rem; font-weight:600; margin-bottom:0; display:flex; align-items:center; gap:6px;">
+                <div class="cs-hp-controls-wrap">
+                    <div class="cs-hp-unit cs-hp-unit-main">
+                        <div class="cs-hp-label">
                             <button class="btn btn-xs pc-hp-settings-btn" style="background:transparent; border:none; color:var(--color-text-muted); cursor:pointer; padding:0;" title="Configure HP Settings & Toggles"><i class="fa-solid fa-cog"></i></button>
                             <i class="fa-solid fa-heart" style="color:#e53935; font-size:0.95rem;"></i> HP
                         </div>
-                        <div class="cs-hp-controls" style="margin-bottom:0;">
+                        <div class="cs-hp-controls">
                             <button class="cs-hp-btn" id="pc-hp-minus" title="Damage">−</button>
-                            <div class="cs-hp-display" style="display:flex; align-items:center;">
-                                <input type="text" inputmode="numeric" pattern="[0-9]*" id="pc-hp-current-input" value="${char.hpCurrent}" style="width:32px; background:transparent; border:none; color:var(--color-text-primary); text-align:right; font-family:var(--font-heading); font-size:1rem; font-weight:700; padding:0;">
-                                <span class="cs-hp-divider" style="margin:0 2px;">/</span>
-                                <span id="pc-hp-max" style="font-size:1rem; font-weight:700;">${char.hpMax}</span>
+                            <div class="cs-hp-display">
+                                <input type="text" inputmode="numeric" pattern="[0-9]*" class="cs-hp-input" id="pc-hp-current-input" value="${char.hpCurrent}" title="Current HP (click to edit)">
+                                <span class="cs-hp-divider">/</span>
+                                <span id="pc-hp-max">${char.hpMax}</span>
                             </div>
                             <button class="cs-hp-btn" id="pc-hp-plus" title="Heal">+</button>
                         </div>
                     </div>
-                    <div style="display:flex; align-items:center; gap:8px;">
-                        <div class="cs-hp-label" style="font-size:0.85rem; font-weight:600; margin-bottom:0; display:flex; align-items:center; gap:4px;">
-                            <i class="fa-solid fa-shield" style="color:#2196f3; font-size:0.95rem;"></i> Temp
+                    <div class="cs-hp-unit cs-hp-unit-temp">
+                        <div class="cs-hp-label">
+                            <i class="fa-solid fa-shield" style="color:var(--color-temphp-base, #2196f3); font-size:0.95rem;"></i> Temp
                         </div>
-                        <div class="cs-hp-controls" style="margin-bottom:0;">
+                        <div class="cs-hp-controls">
                             <button class="cs-hp-btn" id="pc-temp-hp-minus" title="Reduce Temp HP">−</button>
-                            <div class="cs-hp-display" style="display:flex; align-items:center; justify-content:center;">
-                                <input type="text" inputmode="numeric" pattern="[0-9]*" id="pc-temp-hp-current" value="${char.tempHp || 0}" style="width:32px; background:transparent; border:none; color:var(--color-text-primary); text-align:center; font-family:var(--font-heading); font-size:1rem; font-weight:700; padding:0;">
+                            <div class="cs-hp-display">
+                                <input type="text" inputmode="numeric" pattern="[0-9]*" class="cs-hp-input temp-input" id="pc-temp-hp-current" value="${char.tempHp || 0}" title="Temp HP (click to edit)">
                             </div>
                             <button class="cs-hp-btn" id="pc-temp-hp-plus" title="Add Temp HP">+</button>
                         </div>
@@ -7475,7 +7466,21 @@ export function initVttPlayerSheet(vtt) {
 
         const hpBar = document.getElementById('pc-hp-bar');
         if (hpBar && currentChar.hpMax > 0) {
-            hpBar.style.width = `${Math.round((hpCurrent / currentChar.hpMax) * 100)}%`;
+            const pct = Math.max(0, Math.min(100, Math.round((hpCurrent / currentChar.hpMax) * 100)));
+            hpBar.style.width = `${pct}%`;
+            hpBar.className = 'cs-hp-bar-fill' + (pct <= 25 ? ' danger' : pct <= 50 ? ' injured' : '');
+        }
+
+        const tempBar = document.getElementById('pc-temp-hp-bar');
+        if (tempBar && currentChar.hpMax > 0) {
+            if (tempHp > 0) {
+                const tempPct = Math.max(0, Math.min(100, Math.round((tempHp / currentChar.hpMax) * 100)));
+                tempBar.style.width = `${tempPct}%`;
+                tempBar.style.display = 'block';
+            } else {
+                tempBar.style.width = '0%';
+                tempBar.style.display = 'none';
+            }
         }
 
         const tempInput = document.getElementById('pc-temp-hp-current');
@@ -7537,9 +7542,21 @@ export function initVttPlayerSheet(vtt) {
             if (e.target.closest('#pc-hp-minus')) {
                 showVttPrompt('Damage amount:', '1', (val) => {
                     if (val === null) return;
-                    const dmg = parseInt(val || '1');
-                    if (!isNaN(dmg)) {
-                        currentChar.hpCurrent = Math.max(0, currentChar.hpCurrent - dmg);
+                    let dmg = parseInt(val || '1');
+                    if (!isNaN(dmg) && dmg > 0) {
+                        const tempHp = currentChar.tempHp || 0;
+                        if (tempHp > 0) {
+                            if (dmg <= tempHp) {
+                                currentChar.tempHp -= dmg;
+                                dmg = 0;
+                            } else {
+                                dmg -= tempHp;
+                                currentChar.tempHp = 0;
+                            }
+                        }
+                        if (dmg > 0) {
+                            currentChar.hpCurrent = Math.max(0, currentChar.hpCurrent - dmg);
+                        }
                         saveAndEmit(currentChar);
                         debouncedRenderSheetData(currentChar);
                     }

@@ -25,8 +25,7 @@
             } catch (e) { }
         })();
     </script>
-    <meta name="viewport"
-        content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>ForgeD VTT - Self-Hosted Virtual Tabletop</title>
 
     <!-- Favicons -->
@@ -1735,10 +1734,14 @@
                                             </div>
 
                                             <!-- Combat Damage FX Animation -->
-                                            <div class="config-setting" style="margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--color-border-subtle);">
-                                                <label for="token-pref-damage-fx-enabled" style="cursor: pointer; margin: 0; display: flex; flex-direction: column;">
+                                            <div class="config-setting"
+                                                style="margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--color-border-subtle);">
+                                                <label for="token-pref-damage-fx-enabled"
+                                                    style="cursor: pointer; margin: 0; display: flex; flex-direction: column;">
                                                     <span>Damage Visual FX</span>
-                                                    <span style="font-size: 0.7rem; color: var(--text-muted); font-weight: normal;">Token shudder, floating numbers & bursts</span>
+                                                    <span
+                                                        style="font-size: 0.7rem; color: var(--text-muted); font-weight: normal;">Token
+                                                        shudder, floating numbers & bursts</span>
                                                 </label>
                                                 <input type="checkbox" id="token-pref-damage-fx-enabled" checked
                                                     style="cursor: pointer; width: 14px; height: 14px;">
@@ -2683,7 +2686,13 @@
     <div id="modal-import-handout" class="vtt-modal vtt-hidden" style="z-index: 2100;">
         <div class="modal-content glassmorphism import-handout-modal-content">
             <div class="import-handout-header">
-                <h3><i class="fa-solid fa-file-import text-gradient-gold"></i> Campaign Handouts Importer</h3>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <button id="btn-import-handout-back" class="btn btn-secondary btn-xs vtt-hidden" type="button"
+                        title="Back to Previous Step">
+                        <i class="fa-solid fa-arrow-left"></i> <span id="import-back-text">Back</span>
+                    </button>
+                    <h3><i class="fa-solid fa-file-import text-gradient-gold"></i> Campaign Handouts Importer</h3>
+                </div>
                 <button id="btn-import-handout-close" class="import-close-btn" title="Close Importer"><i
                         class="fa-solid fa-xmark"></i></button>
             </div>
@@ -2748,9 +2757,17 @@
 
                 <!-- Column 3: Live Preview Pane -->
                 <div class="import-pane import-pane-preview" id="import-preview-pane">
-                    <div class="import-pane-header">
-                        <h4><i class="fa-solid fa-eye text-gradient-gold"></i> 3. Live Preview</h4>
-                        <span id="import-preview-type-pill" class="import-preview-type-pill vtt-hidden">Image</span>
+                    <div class="import-pane-header"
+                        style="display: flex; align-items: center; justify-content: space-between;">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <h4><i class="fa-solid fa-eye text-gradient-gold"></i> 3. Live Preview</h4>
+                            <span id="import-preview-type-pill" class="import-preview-type-pill vtt-hidden">Image</span>
+                        </div>
+                        <button type="button" id="btn-import-preview-toggle-select"
+                            class="btn btn-xxs btn-secondary vtt-hidden">
+                            <i class="fa-solid fa-plus"></i> <span id="import-preview-select-text">Include in
+                                Import</span>
+                        </button>
                     </div>
                     <div id="import-preview-title" class="import-preview-title">Select an item to view live preview
                     </div>
@@ -3149,6 +3166,8 @@
                         class="fa-solid fa-rotate-left"></i></button>
                 <button type="button" id="btn-paint-redo" class="paint-icon-btn" title="Redo (Ctrl+Y)"><i
                         class="fa-solid fa-rotate-right"></i></button>
+                <button type="button" id="btn-paint-ribbon-close" class="paint-icon-btn" title="Close Panel"><i
+                        class="fa-solid fa-xmark"></i></button>
             </div>
         </div>
 
@@ -3285,6 +3304,27 @@
                 <div class="mobile-paint-slider-row">
                     <label>Stroke Size: <span id="mobile-paint-size-val">4px</span></label>
                     <input type="range" id="mobile-paint-size-slider" min="1" max="40" value="4">
+                </div>
+                <div class="mobile-paint-opt-row"
+                    style="display: flex; justify-content: space-between; align-items: center; margin: 10px 0 6px 0;">
+                    <label style="font-size: 0.85rem; font-weight: 600; color: #d1d5db; margin: 0;">Grid
+                        Snapping</label>
+                    <button type="button" id="btn-mobile-paint-gridsnap" class="btn btn-xxs btn-secondary"
+                        title="Snap to Grid (Toggle)">
+                        <i class="fa-solid fa-magnet"></i> <span>Snap to Grid</span>
+                    </button>
+                </div>
+                <div class="mobile-paint-opt-row"
+                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                    <label style="font-size: 0.85rem; font-weight: 600; color: #d1d5db; margin: 0;">Style Mode</label>
+                    <div class="mobile-paint-fillmode-btns" style="display: flex; gap: 4px;">
+                        <button type="button" class="btn btn-xxs btn-secondary active mobile-paint-fillmode-btn"
+                            data-fillmode="stroke">Outline</button>
+                        <button type="button" class="btn btn-xxs btn-secondary mobile-paint-fillmode-btn"
+                            data-fillmode="both">Outline + Fill</button>
+                        <button type="button" class="btn btn-xxs btn-secondary mobile-paint-fillmode-btn"
+                            data-fillmode="fill">Fill</button>
+                    </div>
                 </div>
                 <div class="mobile-paint-colors-section">
                     <label>Color Palette</label>

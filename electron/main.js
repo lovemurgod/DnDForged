@@ -263,7 +263,15 @@ async function startServer() {
     }
 
     appendLog('Starting ForgeDVTT local Node server process...');
-    const serverScript = path.join(rootDir, 'server.js');
+    let serverScript = path.join(rootDir, 'server.js');
+    let workingDir = rootDir;
+
+    // In packaged ASAR builds, files in asarUnpack reside in app.asar.unpacked
+    const unpackedScript = serverScript.replace('app.asar', 'app.asar.unpacked');
+    if (fs.existsSync(unpackedScript)) {
+        serverScript = unpackedScript;
+        workingDir = path.dirname(unpackedScript);
+    }
 
     let processExitedEarly = false;
     let earlyExitCode = null;
@@ -271,7 +279,7 @@ async function startServer() {
 
     try {
         serverProcess = spawn(process.execPath, [serverScript], {
-            cwd: rootDir,
+            cwd: workingDir,
             env: {
                 ...process.env,
                 ELECTRON_RUN_AS_NODE: '1',

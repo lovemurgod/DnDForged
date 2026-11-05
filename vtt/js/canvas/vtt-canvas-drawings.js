@@ -911,20 +911,84 @@ export function setupPaintRibbonControls(state, callbacks = {}) {
         });
     });
 
-    const colorPicker = document.getElementById('paint-color-picker');
-    if (colorPicker) {
-        colorPicker.addEventListener('input', (e) => {
-            if (state) state.paintStrokeColor = e.target.value;
-            if (callbacks.onColorChange) callbacks.onColorChange(e.target.value);
+    ribbon.querySelectorAll('.paint-size-dot').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            ribbon.querySelectorAll('.paint-size-dot').forEach((b) => b.classList.remove('active'));
+            btn.classList.add('active');
+            const size = parseInt(btn.dataset.size) || 4;
+            if (state) state.paintStrokeWidth = size;
+            const lbl = document.getElementById('paint-size-label');
+            if (lbl) lbl.textContent = `${size}px`;
+            if (callbacks.onSizeChange) callbacks.onSizeChange(size);
+        });
+    });
+
+    ribbon.querySelectorAll('.paint-opt-btn[data-fillmode]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            ribbon.querySelectorAll('.paint-opt-btn[data-fillmode]').forEach((b) => b.classList.remove('active'));
+            btn.classList.add('active');
+            if (state) state.paintFillMode = btn.dataset.fillmode;
+        });
+    });
+
+    const gridSnapBtn = document.getElementById('btn-paint-gridsnap');
+    if (gridSnapBtn) {
+        gridSnapBtn.addEventListener('click', () => {
+            gridSnapBtn.classList.toggle('active');
+            if (state) state.paintGridSnap = gridSnapBtn.classList.contains('active');
         });
     }
 
-    const sizeInput = document.getElementById('paint-size-input');
-    if (sizeInput) {
-        sizeInput.addEventListener('input', (e) => {
-            const val = parseInt(e.target.value) || 5;
-            if (state) state.paintStrokeWidth = val;
-            if (callbacks.onSizeChange) callbacks.onSizeChange(val);
+    const swatches = ribbon.querySelectorAll('.paint-swatch');
+    const customColor = document.getElementById('paint-custom-color');
+    const indicator = document.getElementById('paint-active-indicator');
+
+    swatches.forEach((sw) => {
+        sw.addEventListener('click', () => {
+            swatches.forEach((s) => s.classList.remove('active'));
+            sw.classList.add('active');
+            const color = sw.dataset.color;
+            if (state) {
+                state.paintStrokeColor = color;
+                state.paintFillColor = color;
+            }
+            if (customColor) customColor.value = color;
+            if (indicator) indicator.style.background = color;
+            if (callbacks.onColorChange) callbacks.onColorChange(color);
+        });
+    });
+
+    if (customColor) {
+        customColor.addEventListener('input', (e) => {
+            const color = e.target.value;
+            swatches.forEach((s) => s.classList.remove('active'));
+            if (state) {
+                state.paintStrokeColor = color;
+                state.paintFillColor = color;
+            }
+            if (indicator) indicator.style.background = color;
+            if (callbacks.onColorChange) callbacks.onColorChange(color);
+        });
+    }
+
+    const closeBtn = document.getElementById('btn-paint-ribbon-close');
+    if (closeBtn) {
+        closeBtn.addEventListener('click', () => {
+            ribbon.classList.add('vtt-hidden');
+        });
+    }
+
+    const undoBtn = document.getElementById('btn-paint-undo');
+    if (undoBtn) {
+        undoBtn.addEventListener('click', () => {
+            if (callbacks.onUndo) callbacks.onUndo();
+        });
+    }
+
+    const redoBtn = document.getElementById('btn-paint-redo');
+    if (redoBtn) {
+        redoBtn.addEventListener('click', () => {
+            if (callbacks.onRedo) callbacks.onRedo();
         });
     }
 }

@@ -1,41 +1,60 @@
-import { app, BrowserWindow } from 'electron';
+import electronPkg from 'electron';
+import { spawn } from 'child_process';
+import { resolve, dirname } from 'path';
+import { fileURLToPath } from 'url';
 
-app.whenReady().then(async () => {
-    const win = new BrowserWindow({
-        show: false,
-        width: 1400,
-        height: 900,
-        webPreferences: {
-            nodeIntegration: false,
-            contextIsolation: true,
-            partition: 'ephemeral-' + Date.now()
-        }
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+// If executed directly with standard Node.js, delegate to the E2E runner which launches Electron
+if (typeof electronPkg === 'string' || !electronPkg?.app) {
+    const runner = resolve(__dirname, 'run_canvas_interactions_e2e.cjs');
+    const child = spawn('node', [runner], {
+        stdio: 'inherit',
+        shell: true
     });
-    await win.webContents.session.clearCache();
-
-    const consoleLogs = [];
-    win.webContents.on('console-message', (e, level, msg, line, sourceId) => {
-        const str = `[CONSOLE ${level}] ${msg} (${sourceId}:${line})`;
-        consoleLogs.push(str);
-        if (level >= 2 || msg.toLowerCase().includes('error')) {
-            console.log(str);
-        }
+    child.on('close', (code) => {
+        process.exit(code ?? 0);
     });
+} else {
+    const { app, BrowserWindow } = electronPkg;
 
-    try {
-        await win.loadURL('http://localhost:5050/vtt.html');
-        await new Promise((r) => setTimeout(r, 2000));
+    app.whenReady().then(async () => {
+        const win = new BrowserWindow({
+            show: false,
+            width: 1400,
+            height: 900,
+            webPreferences: {
+                nodeIntegration: false,
+                contextIsolation: true,
+                partition: 'ephemeral-' + Date.now()
+            }
+        });
+        await win.webContents.session.clearCache();
 
-        // Join as GM
-        await win.webContents.executeJavaScript(`
-            if (document.getElementById('login-role')) document.getElementById('login-role').value = 'GM';
-            if (document.getElementById('login-username')) document.getElementById('login-username').value = 'GMCosmic';
-            document.getElementById('btn-join-game').click();
-        `);
+        const consoleLogs = [];
+        win.webContents.on('console-message', (e, level, msg, line, sourceId) => {
+            const str = `[CONSOLE ${level}] ${msg} (${sourceId}:${line})`;
+            consoleLogs.push(str);
+            if (level >= 2 || msg.toLowerCase().includes('error')) {
+                console.log(str);
+            }
+        });
 
-        await new Promise((r) => setTimeout(r, 3000));
+        try {
+            await win.loadURL('http://localhost:5050/vtt.html');
+            await new Promise((r) => setTimeout(r, 2000));
 
-        const results = await win.webContents.executeJavaScript(`
+            // Join as GM using default campaign GM username
+            await win.webContents.executeJavaScript(`
+                if (document.getElementById('login-role')) document.getElementById('login-role').value = 'GM';
+                if (document.getElementById('login-username')) document.getElementById('login-username').value = 'DungeonMaster';
+                document.getElementById('btn-join-game').click();
+            `);
+
+            await new Promise((r) => setTimeout(r, 3000));
+
+            const results = await win.webContents.executeJavaScript(`
             (() => {
                 const ce = window.VTT.canvasEngine;
                 const canvasInteraction = document.getElementById('vtt-canvas-interaction');
@@ -243,29 +262,30 @@ app.whenReady().then(async () => {
             })()
         `);
 
-        console.log('=== FULL INTERACTION TEST RESULTS ===');
-        console.log(JSON.stringify(results, null, 2));
+            console.log('=== FULL INTERACTION TEST RESULTS ===');
+            console.log(JSON.stringify(results, null, 2));
 
-        const errors = [];
-        if (!results.selectedOnMouseDown) errors.push('Failed: Token was not selected on mousedown');
-        if (!results.tokenDragMoved) errors.push('Failed: Token position did not change during drag');
-        if (!results.panSuccess) errors.push('Failed: Canvas pan delta did not match mouse movement');
-        if (!results.zoomSuccess) errors.push('Failed: Canvas zoom did not change on wheel');
-        if (!results.editModalOpened) errors.push('Failed: Double-click token edit modal did not open');
-        if (!results.tokenContextMenuOpened) errors.push('Failed: Right-click token context menu did not open');
-        if (!results.tokenSpawnedFromDrop) errors.push('Failed: Monster token did not spawn from bestiary drop');
+            const errors = [];
+            if (!results.selectedOnMouseDown) errors.push('Failed: Token was not selected on mousedown');
+            if (!results.tokenDragMoved) errors.push('Failed: Token position did not change during drag');
+            if (!results.panSuccess) errors.push('Failed: Canvas pan delta did not match mouse movement');
+            if (!results.zoomSuccess) errors.push('Failed: Canvas zoom did not change on wheel');
+            if (!results.editModalOpened) errors.push('Failed: Double-click token edit modal did not open');
+            if (!results.tokenContextMenuOpened) errors.push('Failed: Right-click token context menu did not open');
+            if (!results.tokenSpawnedFromDrop) errors.push('Failed: Monster token did not spawn from bestiary drop');
 
-        if (errors.length > 0) {
-            console.error('\nE2E Failures:\n' + errors.join('\n'));
+            if (errors.length > 0) {
+                console.error('\nE2E Failures:\n' + errors.join('\n'));
+                process.exitCode = 1;
+            } else {
+                console.log('\n✓ All 7 Live Electron Canvas Interactions Passed with 0 Failures!');
+                process.exitCode = 0;
+            }
+        } catch (err) {
+            console.error('Test error:', err);
             process.exitCode = 1;
-        } else {
-            console.log('\n✓ All 7 Live Electron Canvas Interactions Passed with 0 Failures!');
-            process.exitCode = 0;
+        } finally {
+            app.quit();
         }
-    } catch (err) {
-        console.error('Test error:', err);
-        process.exitCode = 1;
-    } finally {
-        app.quit();
-    }
-});
+    });
+}

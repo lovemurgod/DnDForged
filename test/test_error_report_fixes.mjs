@@ -96,7 +96,7 @@ test('7. server/socket.js enforces ownership on shapes:update, drawings:update, 
 test('8. vtt-canvas-token-renderer.js culls off-screen tokens before sorting zIndex', () => {
     const file = readFileSync(resolve('vtt/js/canvas/tokens/vtt-canvas-token-renderer.js'), 'utf-8');
     const sortPos = file.indexOf('visibleTokens\n        .sort');
-    const cullPos = file.indexOf('visibleTokens.push(entry);');
+    const cullPos = file.indexOf('visibleTokens.push(');
     assert.ok(sortPos > -1, 'visibleTokens.sort exists');
     assert.ok(cullPos > -1, 'visibleTokens.push exists');
     assert.ok(cullPos < sortPos, 'culling must happen before sorting');

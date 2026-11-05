@@ -951,6 +951,107 @@
     white-space: nowrap;
 }
 
+/* 4-Card Quick Distribution Selection */
+.distribute-modes-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 4px;
+}
+
+@media (max-width: 480px) {
+    .distribute-modes-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.distribute-mode-card {
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 8px;
+    padding: 12px 14px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    cursor: pointer;
+    text-align: left;
+    color: #e0e0e0;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.distribute-mode-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3px;
+    height: 100%;
+    background: rgba(255, 215, 0, 0.4);
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.distribute-mode-card:hover {
+    background: linear-gradient(145deg, rgba(255, 215, 0, 0.12), rgba(255, 215, 0, 0.04));
+    border-color: rgba(255, 215, 0, 0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45), 0 0 12px rgba(255, 215, 0, 0.15);
+}
+
+.distribute-mode-card:hover::before {
+    opacity: 1;
+}
+
+.distribute-mode-card:active {
+    transform: translateY(0);
+}
+
+.distribute-mode-card-icon {
+    font-size: 1.4rem;
+    color: var(--color-gold-light, #ffd54f);
+    padding-top: 2px;
+    flex-shrink: 0;
+}
+
+.distribute-mode-card[data-mode="attacks_equal"] .distribute-mode-card-icon {
+    color: #64b5f6;
+}
+
+.distribute-mode-card[data-mode="attacks_random"] .distribute-mode-card-icon {
+    color: #ce93d8;
+}
+
+.distribute-mode-card[data-mode="damage_equal"] .distribute-mode-card-icon {
+    color: #81c784;
+}
+
+.distribute-mode-card[data-mode="damage_random"] .distribute-mode-card-icon {
+    color: #ffb74d;
+}
+
+.distribute-mode-card-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+}
+
+.distribute-mode-card-title {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #fff;
+    font-family: var(--font-heading, inherit);
+    letter-spacing: 0.3px;
+}
+
+.distribute-mode-card-desc {
+    font-size: 0.74rem;
+    color: #aaa;
+    line-height: 1.35;
+}
+
 /* Mass Attack Summary Chat Card */
 .mass-attack-chat-card {
     background: linear-gradient(135deg, rgba(28, 32, 44, 0.95), rgba(18, 20, 28, 0.98));

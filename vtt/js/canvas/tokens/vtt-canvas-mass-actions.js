@@ -68,8 +68,10 @@ export function syncTokensHpToCharacters(affectedTokens, options = {}) {
     const updatedChars = new Set();
 
     affectedTokens.forEach((token) => {
-        if (!token || !token.characterId) return;
-        const char = vtt.campaignState.characters[token.characterId];
+        if (!token) return;
+        const charId = token.characterId || token.sourceCharacterId;
+        if (!charId) return;
+        const char = vtt.campaignState.characters[charId];
         if (!char) return;
 
         let modified = false;
@@ -89,7 +91,7 @@ export function syncTokensHpToCharacters(affectedTokens, options = {}) {
         if (modified) {
             updatedChars.add(char);
             Object.values(tokens).forEach((t) => {
-                if (t.id !== token.id && t.characterId === char.id) {
+                if (t.id !== token.id && (t.characterId === char.id || t.sourceCharacterId === char.id)) {
                     t.hp = char.hpCurrent;
                     t.maxHp = char.hpMax;
                     t.tempHp = char.tempHp;
@@ -207,7 +209,11 @@ export function applyDamageToTokens(tokenIds, amount, type, mode, attackMeta = {
                         token.y + drawH / 2,
                         Math.max(drawW, drawH) / 2,
                         [type || 'untyped'],
-                        { amount: totalDeducted > 0 ? totalDeducted : amount, tokenId: token.id }
+                        {
+                            amount: totalDeducted > 0 ? totalDeducted : amount,
+                            tokenId: token.id,
+                            delayMs: Math.min(200, Math.max(0, appliedCount - 1) * 20)
+                        }
                     );
                 }
             }
@@ -315,7 +321,7 @@ export function applyCompositeDamageToTokens(tokenIds, dmgRolls, multiplier = 1.
     let anyApplied = false;
     const affectedTokens = [];
 
-    tokenIds.forEach((tokenId) => {
+    tokenIds.forEach((tokenId, index) => {
         const token = tokens[tokenId];
         if (!token) return;
 
@@ -331,7 +337,11 @@ export function applyCompositeDamageToTokens(tokenIds, dmgRolls, multiplier = 1.
             token.y + drawH / 2,
             Math.max(drawW, drawH) / 2,
             damageTypes.length > 0 ? damageTypes : ['untyped'],
-            { amount: deducted, tokenId: token.id }
+            {
+                amount: deducted,
+                tokenId: token.id,
+                delayMs: Math.min(200, index * 20)
+            }
         );
     });
 
@@ -362,38 +372,58 @@ function escapeTokenHtml(str) {
         .replace(/'/g, '&#39;');
 }
 
+export function resolveTokenAC(token, options = {}) {
+    if (!token) return 10;
+    if (typeof options.getTokenAC === 'function') {
+        const val = options.getTokenAC(token);
+        if (typeof val === 'number') return val;
+    }
+    if (typeof token.ac === 'number') return token.ac;
+    const md =
+        token.monsterData ||
+        (typeof options.getResolvedCreatureMonsterData === 'function'
+            ? options.getResolvedCreatureMonsterData(token)
+            : null);
+    if (md) {
+        if (md.primaryAc !== undefined && md.primaryAc !== null && md.primaryAc !== '') {
+            const p = parseInt(md.primaryAc, 10);
+            if (!isNaN(p)) return p;
+        }
+        if (typeof md.ac === 'number') return md.ac;
+        if (Array.isArray(md.ac) && md.ac.length > 0) {
+            const entry = md.ac[0];
+            if (typeof entry === 'object' && entry !== null) {
+                const val = entry.ac ?? entry.value;
+                if (typeof val === 'number') return val;
+            }
+            if (typeof entry === 'number') return entry;
+        }
+    }
+    const vtt = options.vtt || (typeof window !== 'undefined' ? window.VTT : null);
+    const charId = token.characterId || token.sourceCharacterId;
+    if (charId && vtt?.campaignState?.characters) {
+        const char = vtt.campaignState.characters[charId];
+        if (typeof char?.ac === 'number') return char.ac;
+        if (char?.ac !== undefined && char?.ac !== null && !isNaN(parseInt(char.ac, 10))) {
+            return parseInt(char.ac, 10);
+        }
+    }
+    return 10;
+}
+
 export function promptMassAttackDistribution(massAttackCard, selectedIds, onConfirm, onCancel, options = {}) {
     if (typeof document === 'undefined') return;
-    const { tokens = {}, getTokenAC = (t) => t?.ac ?? 10 } = options;
+    const { tokens = {} } = options;
 
     const existing = document.getElementById('vtt-distribute-attacks-backdrop');
     if (existing) existing.remove();
 
     const attacks = massAttackCard.attacks || [];
     const targetTokens = selectedIds.map((id) => tokens[id]).filter(Boolean);
-    if (targetTokens.length === 0) return;
-
-    function calcDistribution() {
-        const indices = attacks.map((a) => a.index);
-        for (let i = indices.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [indices[i], indices[j]] = [indices[j], indices[i]];
-        }
-        const map = {};
-        targetTokens.forEach((t) => {
-            map[t.id] = [];
-        });
-        indices.forEach((atkIdx, idx) => {
-            const tId = targetTokens[idx % targetTokens.length].id;
-            map[tId].push(atkIdx);
-        });
-        return targetTokens.map((t) => ({
-            tokenId: t.id,
-            attackIndices: map[t.id]
-        }));
+    if (targetTokens.length === 0) {
+        if (typeof onCancel === 'function') onCancel();
+        return;
     }
-
-    let currentDist = calcDistribution();
 
     const backdrop = document.createElement('div');
     backdrop.id = 'vtt-distribute-attacks-backdrop';
@@ -401,57 +431,55 @@ export function promptMassAttackDistribution(massAttackCard, selectedIds, onConf
 
     const dialog = document.createElement('div');
     dialog.className = 'vtt-mass-roll-dialog';
-    dialog.style.width = '420px';
+    dialog.style.width = '480px';
 
-    function renderRows() {
-        return currentDist
-            .map((d) => {
-                const token = tokens[d.tokenId];
-                if (!token) return '';
-                const ac = getTokenAC(token) ?? 10;
-                const avatar = token.img || token.avatar || 'img/tokens/unknown.png';
-                const count = d.attackIndices.length;
-                const badges = d.attackIndices.map((i) => `#${i}`).join(', ');
-                return `
-                <div class="distribute-token-row">
-                    <div class="distribute-token-info">
-                        <img src="${avatar}" class="distribute-token-avatar" alt="${escapeTokenHtml(token.name || 'Token')}">
-                        <span class="distribute-token-name" title="${escapeTokenHtml(token.name || 'Token')}">${escapeTokenHtml(token.name || 'Token')}</span>
-                        <span class="distribute-token-ac">AC ${ac}</span>
-                    </div>
-                    <span class="distribute-count-badge" title="Attacks: ${badges}">
-                        ${count} Attack${count === 1 ? '' : 's'} (${badges})
-                    </span>
-                </div>
-            `;
-            })
-            .join('');
-    }
+    const targetNames = targetTokens.map((t) => escapeTokenHtml(t.name || 'Token')).join(', ');
 
     dialog.innerHTML = `
         <div class="mass-roll-header">
             <div class="mass-roll-title">
                 <i class="fa-solid fa-crosshairs"></i>
-                <span>Distribute Attacks?</span>
+                <span>Distribute Mass Attacks</span>
             </div>
             <button type="button" class="mass-roll-close" id="btn-distribute-close" title="Close"><i class="fa-solid fa-xmark"></i></button>
         </div>
         <div class="mass-roll-body">
             <div class="mass-roll-creature-info">
-                ${attacks.length} attacks distributed randomly and evenly across ${targetTokens.length} selected targets.
+                <strong>${attacks.length}</strong> attacks targeting <strong>${targetTokens.length}</strong> creatures (${targetNames}). Choose how to distribute:
             </div>
-            <div class="distribute-token-list scroll-styled" id="distribute-token-list-container">
-                ${renderRows()}
+            <div class="distribute-modes-grid">
+                <button type="button" class="distribute-mode-card" data-mode="attacks_equal">
+                    <div class="distribute-mode-card-icon"><i class="fa-solid fa-crosshairs"></i></div>
+                    <div class="distribute-mode-card-content">
+                        <div class="distribute-mode-card-title">Distribute Attacks Equally</div>
+                        <div class="distribute-mode-card-desc">Evenly splits attacks across targets. Evaluates each attack against that target's AC.</div>
+                    </div>
+                </button>
+                <button type="button" class="distribute-mode-card" data-mode="attacks_random">
+                    <div class="distribute-mode-card-icon"><i class="fa-solid fa-shuffle"></i></div>
+                    <div class="distribute-mode-card-content">
+                        <div class="distribute-mode-card-title">Distribute Attacks Randomly</div>
+                        <div class="distribute-mode-card-desc">Assigns each attack to a random target. Evaluates against that target's AC.</div>
+                    </div>
+                </button>
+                <button type="button" class="distribute-mode-card" data-mode="damage_equal">
+                    <div class="distribute-mode-card-icon"><i class="fa-solid fa-scale-balanced"></i></div>
+                    <div class="distribute-mode-card-content">
+                        <div class="distribute-mode-card-title">Distribute Damage Equally</div>
+                        <div class="distribute-mode-card-desc">Evaluates hits, pools total hit damage, and divides it equally among all targets.</div>
+                    </div>
+                </button>
+                <button type="button" class="distribute-mode-card" data-mode="damage_random">
+                    <div class="distribute-mode-card-icon"><i class="fa-solid fa-dice"></i></div>
+                    <div class="distribute-mode-card-content">
+                        <div class="distribute-mode-card-title">Distribute Damage Randomly</div>
+                        <div class="distribute-mode-card-desc">Evaluates hits, and randomly assigns each hitting attack's full damage to a target.</div>
+                    </div>
+                </button>
             </div>
         </div>
         <div class="mass-roll-footer">
-            <button type="button" class="btn-mass-roll-cancel" id="btn-distribute-reroll" title="Shuffle attack assignments">
-                <i class="fa-solid fa-shuffle"></i> Shuffle
-            </button>
             <button type="button" class="btn-mass-roll-cancel" id="btn-distribute-cancel">Cancel</button>
-            <button type="button" class="btn-mass-roll-confirm" id="btn-distribute-confirm">
-                <i class="fa-solid fa-play"></i> Apply & Process
-            </button>
         </div>
     `;
 
@@ -463,21 +491,18 @@ export function promptMassAttackDistribution(massAttackCard, selectedIds, onConf
         backdrop.remove();
     }
 
+    function doSelectMode(mode) {
+        closeDialog();
+        if (typeof onConfirm === 'function') {
+            onConfirm(mode);
+        }
+    }
+
     function onKeyDown(e) {
         if (e.key === 'Escape') {
             e.preventDefault();
             closeDialog();
             if (typeof onCancel === 'function') onCancel();
-        } else if (e.key === 'Enter') {
-            e.preventDefault();
-            doConfirm();
-        }
-    }
-
-    function doConfirm() {
-        closeDialog();
-        if (typeof onConfirm === 'function') {
-            onConfirm(currentDist);
         }
     }
 
@@ -490,11 +515,12 @@ export function promptMassAttackDistribution(massAttackCard, selectedIds, onConf
         closeDialog();
         if (typeof onCancel === 'function') onCancel();
     });
-    dialog.querySelector('#btn-distribute-reroll').addEventListener('click', () => {
-        currentDist = calcDistribution();
-        dialog.querySelector('#distribute-token-list-container').innerHTML = renderRows();
+    dialog.querySelectorAll('.distribute-mode-card').forEach((card) => {
+        card.addEventListener('click', () => {
+            const mode = card.dataset.mode;
+            doSelectMode(mode);
+        });
     });
-    dialog.querySelector('#btn-distribute-confirm').addEventListener('click', doConfirm);
     backdrop.addEventListener('click', (e) => {
         if (e.target === backdrop) {
             closeDialog();
@@ -533,22 +559,21 @@ export function processMassAttackFromChat(massAttackCard, msgId, options = {}) {
     if (attacks.length === 0) return;
 
     if (selectedIds.length === 1) {
-        const singleTokenId = selectedIds[0];
-        const distribution = [
-            {
-                tokenId: singleTokenId,
-                attackIndices: attacks.map((a) => a.index)
-            }
-        ];
-        executeMassAttackResolutionFn(massAttackCard, distribution, msgId, options);
+        executeMassAttackResolutionFn(massAttackCard, 'attacks_equal', msgId, {
+            ...options,
+            targetTokenIds: selectedIds
+        });
         return;
     }
 
     promptMassAttackDistributionFn(
         massAttackCard,
         selectedIds,
-        (distribution) => {
-            executeMassAttackResolutionFn(massAttackCard, distribution, msgId, options);
+        (modeOrDist) => {
+            executeMassAttackResolutionFn(massAttackCard, modeOrDist, msgId, {
+                ...options,
+                targetTokenIds: selectedIds
+            });
         },
         () => {
             if (msgId && typeof document !== 'undefined') {
@@ -566,7 +591,6 @@ export function executeMassAttackResolution(massAttackCard, distribution, msgId,
         vtt = (typeof window !== 'undefined' ? window.VTT : null) || {},
         tokens = {},
         currentMapId = null,
-        getTokenAC = (t) => t?.ac ?? 10,
         getTokenDrawDimensions = () => ({ drawW: 50, drawH: 50 }),
         triggerDamageFXAnimation = () => {},
         syncHpFn = syncTokensHpToCharacters,
@@ -575,31 +599,115 @@ export function executeMassAttackResolution(massAttackCard, distribution, msgId,
     } = options;
 
     const attacks = massAttackCard.attacks || [];
-    const attackMap = {};
-    attacks.forEach((a) => {
-        attackMap[a.index] = a;
+    if (attacks.length === 0) return;
+
+    let targetTokens = [];
+    if (Array.isArray(options.targetTokenIds) && options.targetTokenIds.length > 0) {
+        targetTokens = options.targetTokenIds.map((id) => tokens[id]).filter(Boolean);
+    } else if (Array.isArray(distribution)) {
+        targetTokens = distribution.map((d) => tokens[d.tokenId]).filter(Boolean);
+    }
+    if (targetTokens.length === 0) {
+        targetTokens = Object.values(tokens);
+    }
+    const uniqueTokensMap = new Map();
+    targetTokens.forEach((t) => {
+        if (t && t.id && !uniqueTokensMap.has(t.id)) {
+            uniqueTokensMap.set(t.id, t);
+        }
     });
+    targetTokens = Array.from(uniqueTokensMap.values());
+    if (targetTokens.length === 0) return;
 
     let anyChanged = false;
     const affectedIds = [];
     const affectedTokens = [];
     const allDamageTypes = new Set();
     const saveRiderTokens = [];
+    const tokenDamageAccumulator = {};
 
-    distribution.forEach((d) => {
-        const token = tokens[d.tokenId];
-        if (!token) return;
-        const targetAC = getTokenAC(token) ?? 10;
-        let tokenTookDamage = false;
-        let totalDeductedForToken = 0;
+    function recordTokenDamage(token, hitDamages) {
+        if (!token || !hitDamages || hitDamages.length === 0) return 0;
+        hitDamages.forEach((dr) => {
+            if (dr.type) allDamageTypes.add(dr.type);
+        });
+        const deducted = applyCardDamageToToken(token, hitDamages, 1.0, { vtt });
+        if (deducted > 0) {
+            anyChanged = true;
+            if (!tokenDamageAccumulator[token.id]) {
+                tokenDamageAccumulator[token.id] = { token, deducted: 0, damageTypes: new Set() };
+            }
+            tokenDamageAccumulator[token.id].deducted += deducted;
+            hitDamages.forEach((dr) => {
+                if (dr.type) tokenDamageAccumulator[token.id].damageTypes.add(dr.type);
+            });
+        }
+        return deducted;
+    }
 
-        d.attackIndices.forEach((atkIdx) => {
-            const attack = attackMap[atkIdx];
-            if (!attack) return;
+    const isLegacyArray = Array.isArray(distribution);
+    const mode = isLegacyArray ? 'custom' : distribution || 'attacks_equal';
+
+    if (isLegacyArray) {
+        const attackMap = {};
+        attacks.forEach((a) => {
+            attackMap[a.index] = a;
+        });
+
+        distribution.forEach((d) => {
+            const token = tokens[d.tokenId];
+            if (!token) return;
+            const targetAC = resolveTokenAC(token, options);
+
+            d.attackIndices.forEach((atkIdx) => {
+                const attack = attackMap[atkIdx];
+                if (!attack) return;
+
+                let hit = false;
+                if (attack.atkRoll) {
+                    hit =
+                        attack.atkRoll.isCritSuccess ||
+                        (!attack.atkRoll.isCritFail && attack.atkRoll.total >= targetAC);
+                } else {
+                    hit = true;
+                }
+
+                let deducted = 0;
+                if (hit) {
+                    const dmgRolls = attack.dmgRolls || [];
+                    const hitDamages = dmgRolls.filter((dr) => !dr.saveRider);
+                    const riderDamages = dmgRolls.filter((dr) => dr.saveRider);
+
+                    deducted = recordTokenDamage(token, hitDamages);
+
+                    if (attack.saveInfo && attack.saveInfo.dc) {
+                        saveRiderTokens.push({
+                            token,
+                            attackIndex: attack.index,
+                            saveInfo: attack.saveInfo,
+                            riderDamages
+                        });
+                    }
+                }
+
+                attack.resolution = {
+                    tokenId: token.id,
+                    tokenName: token.name || 'Token',
+                    hit,
+                    damageDealt: deducted
+                };
+            });
+        });
+    } else if (mode === 'attacks_equal') {
+        attacks.forEach((attack, idx) => {
+            const token = targetTokens[idx % targetTokens.length];
+            const targetAC = resolveTokenAC(token, options);
 
             let hit = false;
             if (attack.atkRoll) {
-                hit = attack.atkRoll.isCritSuccess || (!attack.atkRoll.isCritFail && attack.atkRoll.total >= targetAC);
+                hit =
+                    attack.atkRoll.isCritSuccess ||
+                    (!attack.atkRoll.isCritFail && attack.atkRoll.total >= targetAC);
             } else {
                 hit = true;
             }
@@ -610,25 +718,14 @@ export function executeMassAttackResolution(massAttackCard, distribution, msgId,
                 const hitDamages = dmgRolls.filter((dr) => !dr.saveRider);
                 const riderDamages = dmgRolls.filter((dr) => dr.saveRider);
 
-                hitDamages.forEach((dr) => {
-                    if (dr.type) allDamageTypes.add(dr.type);
-                });
-
-                if (hitDamages.length > 0) {
-                    deducted = applyCardDamageToToken(token, hitDamages, 1.0, { vtt });
-                    if (deducted > 0) {
-                        anyChanged = true;
-                        tokenTookDamage = true;
-                        totalDeductedForToken += deducted;
-                    }
-                }
+                deducted = recordTokenDamage(token, hitDamages);
 
                 if (attack.saveInfo && attack.saveInfo.dc) {
                     saveRiderTokens.push({
                         token,
                         attackIndex: attack.index,
                         saveInfo: attack.saveInfo,
-                        riderDamages: riderDamages
+                        riderDamages
                     });
                 }
             }
@@ -636,23 +733,221 @@ export function executeMassAttackResolution(massAttackCard, distribution, msgId,
             attack.resolution = {
                 tokenId: token.id,
                 tokenName: token.name || 'Token',
-                hit: hit,
+                hit,
                 damageDealt: deducted
             };
         });
+    } else if (mode === 'attacks_random') {
+        attacks.forEach((attack) => {
+            const token = targetTokens[Math.floor(Math.random() * targetTokens.length)];
+            const targetAC = resolveTokenAC(token, options);
 
-        if (tokenTookDamage) {
-            affectedTokens.push(token);
-            affectedIds.push(token.id);
-            const { drawW, drawH } = getTokenDrawDimensions(token);
-            triggerDamageFXAnimation(
-                token.x + drawW / 2,
-                token.y + drawH / 2,
-                Math.max(drawW, drawH) / 2,
-                allDamageTypes.size > 0 ? Array.from(allDamageTypes) : ['untyped'],
-                { amount: totalDeductedForToken, tokenId: token.id }
-            );
+            let hit = false;
+            if (attack.atkRoll) {
+                hit =
+                    attack.atkRoll.isCritSuccess ||
+                    (!attack.atkRoll.isCritFail && attack.atkRoll.total >= targetAC);
+            } else {
+                hit = true;
+            }
+
+            let deducted = 0;
+            if (hit) {
+                const dmgRolls = attack.dmgRolls || [];
+                const hitDamages = dmgRolls.filter((dr) => !dr.saveRider);
+                const riderDamages = dmgRolls.filter((dr) => dr.saveRider);
+
+                deducted = recordTokenDamage(token, hitDamages);
+
+                if (attack.saveInfo && attack.saveInfo.dc) {
+                    saveRiderTokens.push({
+                        token,
+                        attackIndex: attack.index,
+                        saveInfo: attack.saveInfo,
+                        riderDamages
+                    });
+                }
+            }
+
+            attack.resolution = {
+                tokenId: token.id,
+                tokenName: token.name || 'Token',
+                hit,
+                damageDealt: deducted
+            };
+        });
+    } else if (mode === 'damage_random') {
+        attacks.forEach((attack, idx) => {
+            const testTarget = targetTokens[idx % targetTokens.length];
+            const targetAC = resolveTokenAC(testTarget, options);
+
+            let hit = false;
+            if (attack.atkRoll) {
+                hit =
+                    attack.atkRoll.isCritSuccess ||
+                    (!attack.atkRoll.isCritFail && attack.atkRoll.total >= targetAC);
+            } else {
+                hit = true;
+            }
+
+            let deducted = 0;
+            let assignedToken = testTarget;
+
+            if (hit) {
+                assignedToken = targetTokens[Math.floor(Math.random() * targetTokens.length)];
+                const dmgRolls = attack.dmgRolls || [];
+                const hitDamages = dmgRolls.filter((dr) => !dr.saveRider);
+                const riderDamages = dmgRolls.filter((dr) => dr.saveRider);
+
+                deducted = recordTokenDamage(assignedToken, hitDamages);
+
+                if (attack.saveInfo && attack.saveInfo.dc) {
+                    saveRiderTokens.push({
+                        token: assignedToken,
+                        attackIndex: attack.index,
+                        saveInfo: attack.saveInfo,
+                        riderDamages
+                    });
+                }
+            }
+
+            attack.resolution = {
+                tokenId: assignedToken.id,
+                tokenName: assignedToken.name || 'Token',
+                hit,
+                damageDealt: deducted
+            };
+        });
+    } else if (mode === 'damage_equal') {
+        const hittingAttacks = [];
+
+        attacks.forEach((attack, idx) => {
+            const testTarget = targetTokens[idx % targetTokens.length];
+            const targetAC = resolveTokenAC(testTarget, options);
+
+            let hit = false;
+            if (attack.atkRoll) {
+                hit =
+                    attack.atkRoll.isCritSuccess ||
+                    (!attack.atkRoll.isCritFail && attack.atkRoll.total >= targetAC);
+            } else {
+                hit = true;
+            }
+
+            if (hit) {
+                hittingAttacks.push({ attack, testTarget });
+            } else {
+                attack.resolution = {
+                    tokenId: testTarget.id,
+                    tokenName: testTarget.name || 'Token',
+                    hit: false,
+                    damageDealt: 0
+                };
+            }
+        });
+
+        if (hittingAttacks.length > 0) {
+            const typeDamagePool = {};
+            const saveRiderAttacks = [];
+
+            hittingAttacks.forEach(({ attack }) => {
+                const dmgRolls = attack.dmgRolls || [];
+                const hitDamages = dmgRolls.filter((dr) => !dr.saveRider);
+                const riderDamages = dmgRolls.filter((dr) => dr.saveRider);
+
+                hitDamages.forEach((dr) => {
+                    const type = dr.type || 'untyped';
+                    const key = `${type}_${!!dr.isMagic}_${!!dr.isSilvered}_${!!dr.isAdamantine}_${!!dr.isSpell}`;
+                    const amount = dr.roll ? dr.roll.total : parseInt(dr.formula) || 0;
+                    if (!typeDamagePool[key]) {
+                        typeDamagePool[key] = {
+                            type,
+                            isMagic: !!dr.isMagic,
+                            isSilvered: !!dr.isSilvered,
+                            isAdamantine: !!dr.isAdamantine,
+                            isSpell: !!dr.isSpell,
+                            total: 0
+                        };
+                    }
+                    typeDamagePool[key].total += amount;
+                });
+
+                if (attack.saveInfo && attack.saveInfo.dc) {
+                    saveRiderAttacks.push({ attack, riderDamages });
+                }
+            });
+
+            const numTargets = targetTokens.length;
+            const targetSlices = targetTokens.map(() => []);
+
+            Object.values(typeDamagePool).forEach((pool) => {
+                const base = Math.floor(pool.total / numTargets);
+                const remainder = pool.total % numTargets;
+
+                targetTokens.forEach((_, tIdx) => {
+                    const share = base + (tIdx < remainder ? 1 : 0);
+                    if (share > 0) {
+                        targetSlices[tIdx].push({
+                            type: pool.type,
+                            formula: `${share}`,
+                            isMagic: pool.isMagic,
+                            isSilvered: pool.isSilvered,
+                            isAdamantine: pool.isAdamantine,
+                            isSpell: pool.isSpell,
+                            roll: { total: share, formula: `${share}` }
+                        });
+                    }
+                });
+            });
+
+            let grandTotalDeducted = 0;
+            targetTokens.forEach((token, tIdx) => {
+                const sliceDamages = targetSlices[tIdx];
+                if (sliceDamages.length > 0) {
+                    const deducted = recordTokenDamage(token, sliceDamages);
+                    grandTotalDeducted += deducted;
+
+                    saveRiderAttacks.forEach(({ attack, riderDamages }) => {
+                        saveRiderTokens.push({
+                            token,
+                            attackIndex: attack.index,
+                            saveInfo: attack.saveInfo,
+                            riderDamages
+                        });
+                    });
+                }
+            });
+
+            const hitDamagePerAttack = Math.floor(grandTotalDeducted / hittingAttacks.length);
+            const hitRemainder = grandTotalDeducted % hittingAttacks.length;
+
+            hittingAttacks.forEach(({ attack, testTarget }, hIdx) => {
+                const share = hitDamagePerAttack + (hIdx < hitRemainder ? 1 : 0);
+                attack.resolution = {
+                    tokenId: testTarget.id,
+                    tokenName: `${targetTokens.length} Targets`,
+                    hit: true,
+                    damageDealt: share
+                };
+            });
         }
+    }
+
+    Object.values(tokenDamageAccumulator).forEach(({ token, deducted, damageTypes }, index) => {
+        affectedTokens.push(token);
+        affectedIds.push(token.id);
+        const { drawW, drawH } = getTokenDrawDimensions(token);
+        triggerDamageFXAnimation(
+            token.x + drawW / 2,
+            token.y + drawH / 2,
+            Math.max(drawW, drawH) / 2,
+            damageTypes.size > 0 ? Array.from(damageTypes) : ['untyped'],
+            {
+                amount: deducted,
+                tokenId: token.id,
+                delayMs: Math.min(200, index * 20)
+            }
+        );
     });
 
     if (anyChanged) {
@@ -767,7 +1062,6 @@ export function processCardFullResolution(cardData, selectedIds, options = {}) {
         vtt = (typeof window !== 'undefined' ? window.VTT : null) || {},
         tokens = {},
         currentMapId = null,
-        getTokenAC = (t) => t?.ac ?? 10,
         getTokenDrawDimensions = () => ({ drawW: 50, drawH: 50 }),
         triggerDamageFXAnimation = () => {},
         syncHpFn = syncTokensHpToCharacters,
@@ -777,8 +1071,23 @@ export function processCardFullResolution(cardData, selectedIds, options = {}) {
 
     const dmgRolls = cardData.dmgRolls || [];
     const hasAttack = !!cardData.atkRoll;
-    const saveObj =
+    const rawSaveObj =
         cardData.saveInfo || (cardData.saveDc ? { dc: cardData.saveDc, ability: cardData.saveAbility } : null);
+    const validAbilities = [
+        'STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA',
+        'STRENGTH', 'DEXTERITY', 'CONSTITUTION', 'INTELLIGENCE', 'WISDOM', 'CHARISMA'
+    ];
+    const saveObj =
+        rawSaveObj &&
+        rawSaveObj.ability &&
+        validAbilities.includes(rawSaveObj.ability.trim().toUpperCase()) &&
+        !isNaN(parseInt(rawSaveObj.dc)) &&
+        parseInt(rawSaveObj.dc) > 0
+            ? {
+                  ...rawSaveObj,
+                  ability: rawSaveObj.ability.trim().substring(0, 3).toUpperCase()
+              }
+            : null;
 
     const atkHitMap = {};
     if (hasAttack) {
@@ -786,7 +1095,7 @@ export function processCardFullResolution(cardData, selectedIds, options = {}) {
         selectedIds.forEach((id) => {
             const token = tokens[id];
             if (!token) return;
-            const ac = getTokenAC(token) ?? 10;
+            const ac = resolveTokenAC(token, options);
             const hit = atkRoll.isCritSuccess || (!atkRoll.isCritFail && atkRoll.total >= ac);
             atkHitMap[id] = hit;
         });
@@ -812,7 +1121,7 @@ export function processCardFullResolution(cardData, selectedIds, options = {}) {
             const affectedTokens = [];
             const hitDamageTypes = hitDmgRolls.map((dr) => dr.type || 'untyped').filter(Boolean);
 
-            hitTargetIds.forEach((id) => {
+            hitTargetIds.forEach((id, index) => {
                 const token = tokens[id];
                 if (!token) return;
                 const deducted = applyCardDamageToToken(token, hitDmgRolls, 1.0, { vtt });
@@ -828,7 +1137,11 @@ export function processCardFullResolution(cardData, selectedIds, options = {}) {
                     token.y + drawH / 2,
                     Math.max(drawW, drawH) / 2,
                     hitDamageTypes.length > 0 ? hitDamageTypes : ['untyped'],
-                    { amount: deducted, tokenId: token.id }
+                    {
+                        amount: deducted,
+                        tokenId: token.id,
+                        delayMs: Math.min(200, index * 20)
+                    }
                 );
             });
 
@@ -1598,6 +1911,16 @@ export function showMassRollContextMenu(tokenIds, clientX, clientY, options = {}
         });
     });
 
+    const emitUpdates = () => {
+        if (typeof options.emitTokenUpdates === 'function') {
+            options.emitTokenUpdates(tokens);
+        } else if (typeof window !== 'undefined' && typeof window.emitTokenUpdates === 'function') {
+            window.emitTokenUpdates(tokens);
+        } else if (vtt.socket) {
+            vtt.socket.emit('tokens:update', { tokens });
+        }
+    };
+
     // Mass Elevation
     const updateMassFlight = (newHeight) => {
         let updated = false;
@@ -1606,9 +1929,7 @@ export function showMassRollContextMenu(tokenIds, clientX, clientY, options = {}
             updated = true;
         });
         if (updated) {
-            if (vtt.socket && typeof window !== 'undefined' && typeof window.emitTokenUpdates === 'function') {
-                window.emitTokenUpdates(tokens);
-            }
+            emitUpdates();
             renderAll();
         }
     };
@@ -1662,9 +1983,7 @@ export function showMassRollContextMenu(tokenIds, clientX, clientY, options = {}
                 item.classList.add('is-active');
             }
 
-            if (vtt.socket && typeof window !== 'undefined' && typeof window.emitTokenUpdates === 'function') {
-                window.emitTokenUpdates(tokens);
-            }
+            emitUpdates();
             renderAll();
         });
     });
@@ -1678,9 +1997,7 @@ export function showMassRollContextMenu(tokenIds, clientX, clientY, options = {}
                 t.conditions = [];
             });
             menu.querySelectorAll('.menu-toggle-mass-condition').forEach((t) => t.classList.remove('is-active'));
-            if (vtt.socket && typeof window !== 'undefined' && typeof window.emitTokenUpdates === 'function') {
-                window.emitTokenUpdates(tokens);
-            }
+            emitUpdates();
             renderAll();
         });
     }
@@ -1702,9 +2019,7 @@ export function showMassRollContextMenu(tokenIds, clientX, clientY, options = {}
             targetTokens.forEach((t) => {
                 t.flipX = !t.flipX;
             });
-            if (vtt.socket && typeof window !== 'undefined' && typeof window.emitTokenUpdates === 'function') {
-                window.emitTokenUpdates(tokens);
-            }
+            emitUpdates();
             renderAll();
             menu.remove();
         });
@@ -1716,9 +2031,7 @@ export function showMassRollContextMenu(tokenIds, clientX, clientY, options = {}
             targetTokens.forEach((t) => {
                 t.flipY = !t.flipY;
             });
-            if (vtt.socket && typeof window !== 'undefined' && typeof window.emitTokenUpdates === 'function') {
-                window.emitTokenUpdates(tokens);
-            }
+            emitUpdates();
             renderAll();
             menu.remove();
         });
@@ -1730,9 +2043,7 @@ export function showMassRollContextMenu(tokenIds, clientX, clientY, options = {}
             targetTokens.forEach((t) => {
                 t.rotation = 0;
             });
-            if (vtt.socket && typeof window !== 'undefined' && typeof window.emitTokenUpdates === 'function') {
-                window.emitTokenUpdates(tokens);
-            }
+            emitUpdates();
             renderAll();
             menu.remove();
         });
@@ -1765,9 +2076,7 @@ export function showMassRollContextMenu(tokenIds, clientX, clientY, options = {}
                         window.VTT.chatEngine.updateCombatantLayer(t.id, targetLayer);
                     }
                 });
-                if (vtt.socket && typeof window !== 'undefined' && typeof window.emitTokenUpdates === 'function') {
-                    window.emitTokenUpdates(tokens);
-                }
+                emitUpdates();
                 renderAll();
                 menu.remove();
             });
@@ -1784,9 +2093,7 @@ export function showMassRollContextMenu(tokenIds, clientX, clientY, options = {}
                     t.pixelHeight = drawH;
                     t.imgRadius = '0';
                 });
-                if (vtt.socket && typeof window !== 'undefined' && typeof window.emitTokenUpdates === 'function') {
-                    window.emitTokenUpdates(tokens);
-                }
+                emitUpdates();
                 renderAll();
                 menu.remove();
             });
@@ -1806,9 +2113,7 @@ export function showMassRollContextMenu(tokenIds, clientX, clientY, options = {}
                         t.imgRadius = '50%';
                     }
                 });
-                if (vtt.socket && typeof window !== 'undefined' && typeof window.emitTokenUpdates === 'function') {
-                    window.emitTokenUpdates(tokens);
-                }
+                emitUpdates();
                 renderAll();
                 menu.remove();
             });
@@ -1828,9 +2133,7 @@ export function showMassRollContextMenu(tokenIds, clientX, clientY, options = {}
                         t.imgRadius = '50%';
                     }
                 });
-                if (vtt.socket && typeof window !== 'undefined' && typeof window.emitTokenUpdates === 'function') {
-                    window.emitTokenUpdates(tokens);
-                }
+                emitUpdates();
                 renderAll();
                 menu.remove();
             });
@@ -1843,9 +2146,7 @@ export function showMassRollContextMenu(tokenIds, clientX, clientY, options = {}
                     delete tokens[id];
                     selectedTokenIds.delete(id);
                 });
-                if (vtt.socket && typeof window !== 'undefined' && typeof window.emitTokenUpdates === 'function') {
-                    window.emitTokenUpdates(tokens);
-                }
+                emitUpdates();
                 renderAll();
                 menu.remove();
             });

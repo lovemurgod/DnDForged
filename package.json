@@ -1,119 +1,124 @@
 {
-  "name": "forgedvtt",
-  "productName": "ForgeDVTT",
-  "version": "1.4.0",
-  "description": "ForgeDVTT Virtual Tabletop (VTT) Desktop App & Server",
-  "author": "ForgeDVTT Team <lovemurgod92@gmail.com>",
-  "main": "electron/main.js",
-  "type": "module",
-  "scripts": {
-    "lint": "eslint server/ vtt/js/ electron/ test/ scripts/",
-    "lint:fix": "eslint server/ vtt/js/ electron/ test/ scripts/ --fix",
-    "format:check": "prettier --check \"server/**/*.js\" \"vtt/js/**/*.js\" \"electron/**/*.js\" \"test/**/*.mjs\" \"scripts/**/*.mjs\"",
-    "format": "prettier --write \"server/**/*.js\" \"vtt/js/**/*.js\" \"electron/**/*.js\" \"test/**/*.mjs\" \"scripts/**/*.mjs\"",
-    "typecheck": "tsc -p jsconfig.json",
-    "test": "node test/test_character_builder_fixes.mjs && node test/test_character_builder_multiclass.mjs && node test/test_animated_map_thumbnails.mjs && node test/test_security_p0_fixes.mjs && node test/test_server_modular_integration.mjs && node test/test_mobile_vtt_fixes.mjs && node test/test_player_sheet_calc.mjs && node test/test_player_sheet_modular_integration.mjs && node test/test_canvas_portals_traps.mjs && node test/test_canvas_visibility_raycasting.mjs && node test/test_canvas_mass_actions.mjs && node test/test_canvas_map_manager_weather.mjs && node test/test_canvas_modular_integration.mjs && node test/test_bootstrap_modular_integration.mjs && node test/test_creature_sheet_modular_integration.mjs && node test/test_css_modular_integration.mjs && node test/test_performance_memory_leaks.mjs && node test/test_tooling_ci_integration.mjs && node test/test_spatial_eventbus_utils_integration.mjs && node test/test_es_module_exports_integrity.mjs && node test/test_tdz_integrity.mjs && node test/test_vtt_initialization_simulation.mjs && node test/test_socket_event_parity.mjs && node test/test_canvas_interaction_integrity.mjs && node test/test_canvas_reconnected_bridges.mjs && node test/test_builder_feats_spells_fixes.mjs && node test/test_character_builder_feat_bg_spells.mjs && node test/test_map_switching_and_push_players.mjs && node test/test_character_builder_manual_hp_ac_stats_speed.mjs && node test/test_character_builder_expertise_features_spells.mjs && node test/test_character_builder_equipment_hp_ac_modifiers.mjs && node test/test_character_builder_comprehensive_engine.mjs && node test/test_lighting_los_and_map_manager.mjs && node test/test_regression_reconnection_sync.mjs && node test/test_token_reveal_and_map_sync.mjs && node test/test_homebrew_studio_integration.mjs && node test/test_comprehensive_editor_fixes.mjs && node test/test_security_codex_fixes.mjs",
-    "test:e2e": "node test/run_canvas_interactions_e2e.cjs",
-    "start": "node server.js",
-    "dev": "nodemon server.js",
-    "online": "node launcher.js",
-    "build:creatures": "node scripts/build-creature-db.mjs",
-    "build:spells": "node scripts/build-spell-db.mjs",
-    "build:items": "node scripts/build-item-db.mjs",
-    "build:compendium": "node scripts/build-compendium-db.mjs",
-    "build:handouts": "node scripts/build-handout-db.mjs",
-    "build:dbs": "node scripts/build-spell-db.mjs && node scripts/build-creature-db.mjs && node scripts/build-item-db.mjs && node scripts/build-compendium-db.mjs && node scripts/build-handout-db.mjs",
-    "build:srd": "node scripts/build-srd-db.mjs",
-    "release:stage": "node scripts/prepare-clean-release.mjs",
-    "sync:content": "node scripts/sync-partnered-brew.mjs",
-    "sync:partnered": "node scripts/sync-partnered-brew.mjs --partnered-only",
-    "app": "electron .",
-    "push": "electron-builder --dir",
-    "dist": "node scripts/prepare-clean-release.mjs && electron-builder --config electron-builder-srd.json",
-    "dist:portable": "node scripts/prepare-clean-release.mjs && electron-builder --config electron-builder-srd.json --win portable",
-    "dist:full": "electron-builder",
-    "dist:full:portable": "electron-builder --win portable"
-  },
-  "dependencies": {
-    "compression": "^1.8.2",
-    "cors": "^2.8.5",
-    "dompurify": "^3.4.17",
-    "express": "^4.19.2",
-    "multer": "^1.4.5-lts.1",
-    "socket.io": "^4.7.5"
-  },
-  "devDependencies": {
-    "@eslint/js": "^10.0.1",
-    "electron": "^30.0.0",
-    "electron-builder": "^24.13.3",
-    "eslint": "^10.13.0",
-    "globals": "^17.13.0",
-    "jsdom": "^29.1.1",
-    "nodemon": "^3.1.0",
-    "prettier": "^3.9.10",
-    "typescript": "^7.0.2"
-  },
-  "build": {
-    "appId": "com.forgedvtt.desktop",
+    "name": "forgedvtt",
     "productName": "ForgeDVTT",
-    "executableName": "ForgeDVTT",
-    "asar": true,
-    "directories": {
-      "output": "dist"
+    "version": "1.4.0",
+    "description": "ForgeDVTT Virtual Tabletop (VTT) Desktop App & Server",
+    "author": "ForgeDVTT Team <lovemurgod92@gmail.com>",
+    "main": "electron/main.js",
+    "type": "module",
+    "scripts": {
+        "lint": "eslint server/ vtt/js/ electron/ test/ scripts/",
+        "lint:fix": "eslint server/ vtt/js/ electron/ test/ scripts/ --fix",
+        "format:check": "prettier --check \"server/**/*.js\" \"vtt/js/**/*.js\" \"electron/**/*.js\" \"test/**/*.mjs\" \"scripts/**/*.mjs\"",
+        "format": "prettier --write \"server/**/*.js\" \"vtt/js/**/*.js\" \"electron/**/*.js\" \"test/**/*.mjs\" \"scripts/**/*.mjs\"",
+        "typecheck": "tsc -p jsconfig.json",
+        "test": "node test/test_character_builder_fixes.mjs && node test/test_character_builder_multiclass.mjs && node test/test_animated_map_thumbnails.mjs && node test/test_security_p0_fixes.mjs && node test/test_server_modular_integration.mjs && node test/test_mobile_vtt_fixes.mjs && node test/test_player_sheet_calc.mjs && node test/test_player_sheet_modular_integration.mjs && node test/test_canvas_portals_traps.mjs && node test/test_canvas_visibility_raycasting.mjs && node test/test_canvas_mass_actions.mjs && node test/test_canvas_map_manager_weather.mjs && node test/test_canvas_modular_integration.mjs && node test/test_bootstrap_modular_integration.mjs && node test/test_creature_sheet_modular_integration.mjs && node test/test_css_modular_integration.mjs && node test/test_performance_memory_leaks.mjs && node test/test_tooling_ci_integration.mjs && node test/test_spatial_eventbus_utils_integration.mjs && node test/test_es_module_exports_integrity.mjs && node test/test_tdz_integrity.mjs && node test/test_vtt_initialization_simulation.mjs && node test/test_socket_event_parity.mjs && node test/test_canvas_interaction_integrity.mjs && node test/test_canvas_reconnected_bridges.mjs && node test/test_builder_feats_spells_fixes.mjs && node test/test_character_builder_feat_bg_spells.mjs && node test/test_map_switching_and_push_players.mjs && node test/test_character_builder_manual_hp_ac_stats_speed.mjs && node test/test_character_builder_expertise_features_spells.mjs && node test/test_character_builder_equipment_hp_ac_modifiers.mjs && node test/test_character_builder_comprehensive_engine.mjs && node test/test_lighting_los_and_map_manager.mjs && node test/test_regression_reconnection_sync.mjs && node test/test_token_reveal_and_map_sync.mjs && node test/test_homebrew_studio_integration.mjs && node test/test_comprehensive_editor_fixes.mjs && node test/test_security_codex_fixes.mjs && node test/test_active_map_deletion_and_rendering.mjs && node test/test_all_bursts.mjs && node test/test_damage_fx_integration.mjs && node test/test_damage_fx_procedural_svg.mjs && node test/test_error_discovery_fixes.mjs && node test/test_mass_attack_distribution.mjs && node test/test_round_2_fixes.mjs && node test/test_spell_save_dc_guard.mjs && node test/test_token_clamped_hud.mjs",
+        "test:e2e": "node test/run_canvas_interactions_e2e.cjs",
+        "start": "node server.js",
+        "dev": "nodemon server.js",
+        "online": "node launcher.js",
+        "build:creatures": "node scripts/build-creature-db.mjs",
+        "build:spells": "node scripts/build-spell-db.mjs",
+        "build:items": "node scripts/build-item-db.mjs",
+        "build:compendium": "node scripts/build-compendium-db.mjs",
+        "build:handouts": "node scripts/build-handout-db.mjs",
+        "build:dbs": "node scripts/build-spell-db.mjs && node scripts/build-creature-db.mjs && node scripts/build-item-db.mjs && node scripts/build-compendium-db.mjs && node scripts/build-handout-db.mjs",
+        "build:srd": "node scripts/build-srd-db.mjs",
+        "release:stage": "node scripts/prepare-clean-release.mjs",
+        "sync:content": "node scripts/sync-partnered-brew.mjs",
+        "sync:partnered": "node scripts/sync-partnered-brew.mjs --partnered-only",
+        "app": "electron .",
+        "push": "electron-builder --dir",
+        "dist": "node scripts/prepare-clean-release.mjs && electron-builder --config electron-builder-srd.json",
+        "dist:portable": "node scripts/prepare-clean-release.mjs && electron-builder --config electron-builder-srd.json --win portable",
+        "dist:full": "electron-builder",
+        "dist:full:portable": "electron-builder --win portable"
     },
-    "files": [
-      "server.js",
-      "launcher.js",
-      "utils.js",
-      "index.html",
-      "matto.json",
-      "LEGAL.md",
-      "electron/**/*",
-      "server/**/*",
-      "vtt/**/*",
-      "img/**/*",
-      "css/**/*",
-      "package.json"
-    ],
-    "extraResources": [
-      {
-        "from": "resources/bin",
-        "to": "bin",
-        "filter": [
-          "**/*"
-        ]
-      }
-    ],
-    "win": {
-      "executableName": "ForgeDVTT",
-      "target": [
-        {
-          "target": "nsis",
-          "arch": [
-            "x64"
-          ]
+    "dependencies": {
+        "compression": "^1.8.2",
+        "cors": "^2.8.5",
+        "dompurify": "^3.4.17",
+        "express": "^4.19.2",
+        "multer": "^1.4.5-lts.1",
+        "socket.io": "^4.7.5"
+    },
+    "devDependencies": {
+        "@eslint/js": "^10.0.1",
+        "electron": "^30.0.0",
+        "electron-builder": "^24.13.3",
+        "eslint": "^10.13.0",
+        "globals": "^17.13.0",
+        "jsdom": "^29.1.1",
+        "nodemon": "^3.1.0",
+        "prettier": "^3.9.10",
+        "typescript": "^7.0.2"
+    },
+    "build": {
+        "appId": "com.forgedvtt.desktop",
+        "productName": "ForgeDVTT",
+        "executableName": "ForgeDVTT",
+        "asar": true,
+        "asarUnpack": [
+            "server/**/*",
+            "server.js",
+            "utils.js"
+        ],
+        "directories": {
+            "output": "dist"
         },
-        {
-          "target": "dir",
-          "arch": [
-            "x64"
-          ]
+        "files": [
+            "server.js",
+            "launcher.js",
+            "utils.js",
+            "index.html",
+            "matto.json",
+            "LEGAL.md",
+            "electron/**/*",
+            "server/**/*",
+            "vtt/**/*",
+            "img/**/*",
+            "css/**/*",
+            "package.json"
+        ],
+        "extraResources": [
+            {
+                "from": "resources/bin",
+                "to": "bin",
+                "filter": [
+                    "**/*"
+                ]
+            }
+        ],
+        "win": {
+            "executableName": "ForgeDVTT",
+            "target": [
+                {
+                    "target": "nsis",
+                    "arch": [
+                        "x64"
+                    ]
+                },
+                {
+                    "target": "dir",
+                    "arch": [
+                        "x64"
+                    ]
+                }
+            ],
+            "icon": "electron/icon.ico",
+            "forceCodeSigning": false,
+            "sign": null
+        },
+        "nsis": {
+            "oneClick": false,
+            "allowToChangeInstallationDirectory": true,
+            "createDesktopShortcut": true,
+            "createStartMenuShortcut": true,
+            "shortcutName": "ForgeDVTT",
+            "installerIcon": "electron/icon.ico",
+            "uninstallerIcon": "electron/icon.ico",
+            "installerHeaderIcon": "electron/icon.ico",
+            "artifactName": "ForgeDVTT-Setup-${version}.${ext}"
         }
-      ],
-      "icon": "electron/icon.ico",
-      "forceCodeSigning": false,
-      "sign": null
-    },
-    "nsis": {
-      "oneClick": false,
-      "allowToChangeInstallationDirectory": true,
-      "createDesktopShortcut": true,
-      "createStartMenuShortcut": true,
-      "shortcutName": "ForgeDVTT",
-      "installerIcon": "electron/icon.ico",
-      "uninstallerIcon": "electron/icon.ico",
-      "installerHeaderIcon": "electron/icon.ico",
-      "artifactName": "ForgeDVTT-Setup-${version}.${ext}"
     }
-  }
 }

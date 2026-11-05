@@ -183,4 +183,24 @@ describe('Canvas Visibility: Performance & Memory Leak Benchmark', () => {
         assert.ok(duration < 2500, `500 drag raycasts must complete in < 2500ms (actual: ${duration.toFixed(2)}ms)`);
         assert.ok(heapDeltaMB < 25, `Heap growth must be constrained < 25MB (actual: ${heapDeltaMB.toFixed(2)}MB)`);
     });
+
+    it('safely handles empty walls, null entries, and degenerate zero-length wall segments', () => {
+        // Degenerate walls: zero-length points, null objects, and empty list
+        const degenerateWalls = [
+            null,
+            { x1: 200, y1: 200, x2: 200, y2: 200, type: 'wall' }, // 0-length
+            undefined,
+            { x1: 300, y1: 100, x2: 300, y2: 400, type: 'wall' } // valid wall
+        ];
+
+        // Should execute cleanly without throwing
+        const poly = computeVisibilityPolygon(100, 200, 300, 1000, 1000, 360, 0, null, degenerateWalls);
+        assert.ok(Array.isArray(poly));
+        assert.ok(poly.length > 3, 'Must produce valid visibility polygon despite degenerate input');
+
+        // Test with null wallsOverride and null spatial index
+        const emptyPoly = computeVisibilityPolygon(100, 200, 300, 1000, 1000, 360, 0, null, null, null);
+        assert.ok(Array.isArray(emptyPoly));
+        assert.ok(emptyPoly.length > 3, 'Must handle null walls parameter safely');
+    });
 });

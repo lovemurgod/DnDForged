@@ -125,14 +125,12 @@ export function setupPointerInteraction(ctx = {}) {
     let tokenTooltipPendingId = null;
     let pendingFocusTokenId = null;
     let pendingFocusTokenExpiry = 0;
-    let paintFillColor = '#ffffff';
-    let paintFillMode = 'fill';
-    let paintGridSnap = false;
-    let paintStrokeColor = '#ff0000';
-    let paintStrokeWidth = 3;
-    let paintSubTool = 'brush';
-    let polygonPoints = [];
-    let currentPaintStroke = null;
+    const getPaintSubTool = () => ctx.paintSubTool || 'pencil';
+    const getPaintStrokeColor = () => ctx.paintStrokeColor || '#eab308';
+    const getPaintFillColor = () => ctx.paintFillColor || '#eab308';
+    const getPaintFillMode = () => ctx.paintFillMode || 'stroke';
+    const getPaintStrokeWidth = () => ctx.paintStrokeWidth || 4;
+    const getPaintGridSnap = () => !!ctx.paintGridSnap;
 
     const traps = new Proxy([], {
         get(target, prop) {
@@ -427,7 +425,14 @@ export function setupPointerInteraction(ctx = {}) {
                             }
                         } else {
                             wall.isOpen = !wall.isOpen;
-                            vtt.socket.emit('walls:update', { mapId: ctx.currentMapId, walls: ctx.walls });
+                            vtt.socket.emit('door:toggle', {
+                                mapId: ctx.currentMapId,
+                                wallIdx: doorAction.wallIdx,
+                                wallId: wall.id
+                            });
+                            if (vtt.role === 'GM') {
+                                vtt.socket.emit('walls:update', { mapId: ctx.currentMapId, walls: ctx.walls });
+                            }
                             wallsVersion++;
                             renderAll();
                         }
@@ -1106,16 +1111,23 @@ export function setupPointerInteraction(ctx = {}) {
                     renderAll();
                 }
             } else if (ctx.activeTool === 'paint') {
-                if (paintSubTool === 'text') {
+                const subTool = getPaintSubTool();
+                const strokeColor = getPaintStrokeColor();
+                const fillColor = getPaintFillColor();
+                const fillMode = getPaintFillMode();
+                const strokeWidth = getPaintStrokeWidth();
+                const gridSnap = getPaintGridSnap();
+
+                if (subTool === 'text') {
                     openDrawingTextInput(mouse.x, mouse.y);
                     return;
                 }
-                if (paintSubTool === 'fill') {
+                if (subTool === 'fill') {
                     performCanvasFloodFill(mouse.x, mouse.y);
                     return;
                 }
-                if (paintSubTool === 'polygon') {
-                    const pt = paintGridSnap ? snapToGridCenter(mouse.x, mouse.y) : mouse;
+                if (subTool === 'polygon') {
+                    const pt = gridSnap ? snapToGridCenter(mouse.x, mouse.y) : mouse;
                     if (ctx.polygonPoints.length >= 2) {
                         const startPt = ctx.polygonPoints[0];
                         if (Math.hypot(pt.x - startPt.x, pt.y - startPt.y) <= 14 / ctx.zoom) {
@@ -1123,11 +1135,11 @@ export function setupPointerInteraction(ctx = {}) {
                             const newD = {
                                 id: 'draw_' + Date.now() + Math.random().toString(36).substr(2, 5),
                                 type: 'polygon',
-                                points: [...polygonPoints],
-                                strokeColor: paintStrokeColor,
-                                fillColor: paintFillColor,
-                                strokeWidth: paintStrokeWidth,
-                                fillMode: paintFillMode,
+                                points: [...ctx.polygonPoints],
+                                strokeColor: strokeColor,
+                                fillColor: fillColor,
+                                strokeWidth: strokeWidth,
+                                fillMode: fillMode,
                                 layer:
                                     ctx.activeLayer === 'lighting' || ctx.activeLayer === 'ctx.notes'
                                         ? 'token'
@@ -1149,13 +1161,13 @@ export function setupPointerInteraction(ctx = {}) {
                     renderAll();
                     return;
                 }
-                if (paintSubTool === 'eraser') {
+                if (subTool === 'eraser') {
                     ctx.isDrawingPaint = true;
                     ctx.currentPaintStroke = {
                         id: 'draw_' + Date.now() + Math.random().toString(36).substr(2, 5),
                         type: 'eraser',
                         points: [{ x: mouse.x, y: mouse.y }],
-                        strokeWidth: Math.max(16, paintStrokeWidth * 3),
+                        strokeWidth: Math.max(16, strokeWidth * 3),
                         layer:
                             ctx.activeLayer === 'lighting' || ctx.activeLayer === 'ctx.notes'
                                 ? 'token'
@@ -1166,17 +1178,15 @@ export function setupPointerInteraction(ctx = {}) {
                     renderAll();
                     return;
                 }
-                if (paintSubTool === 'pencil' || paintSubTool === 'brush') {
+                if (subTool === 'pencil' || subTool === 'brush') {
                     ctx.isDrawingPaint = true;
                     const w =
-                        paintSubTool === 'pencil'
-                            ? Math.max(1, Math.min(3, Math.round(paintStrokeWidth / 2)))
-                            : paintStrokeWidth;
+                        subTool === 'pencil' ? Math.max(1, Math.min(3, Math.round(strokeWidth / 2))) : strokeWidth;
                     ctx.currentPaintStroke = {
                         id: 'draw_' + Date.now() + Math.random().toString(36).substr(2, 5),
-                        type: paintSubTool,
+                        type: subTool,
                         points: [{ x: mouse.x, y: mouse.y }],
-                        strokeColor: paintStrokeColor,
+                        strokeColor: strokeColor,
                         strokeWidth: w,
                         layer:
                             ctx.activeLayer === 'lighting' || ctx.activeLayer === 'ctx.notes'
@@ -1188,23 +1198,18 @@ export function setupPointerInteraction(ctx = {}) {
                     renderAll();
                     return;
                 }
-                if (
-                    paintSubTool === 'line' ||
-                    paintSubTool === 'arrow' ||
-                    paintSubTool === 'rect' ||
-                    paintSubTool === 'circle'
-                ) {
+                if (subTool === 'line' || subTool === 'arrow' || subTool === 'rect' || subTool === 'circle') {
                     ctx.isDrawingPaint = true;
-                    const startPt = paintGridSnap ? snapToGridCenter(mouse.x, mouse.y) : { x: mouse.x, y: mouse.y };
+                    const startPt = gridSnap ? snapToGridCenter(mouse.x, mouse.y) : { x: mouse.x, y: mouse.y };
                     ctx.currentPaintStroke = {
                         id: 'draw_' + Date.now() + Math.random().toString(36).substr(2, 5),
-                        type: paintSubTool,
+                        type: subTool,
                         startPoint: startPt,
                         endPoint: { ...startPt },
-                        strokeColor: paintStrokeColor,
-                        fillColor: paintFillColor,
-                        strokeWidth: paintStrokeWidth,
-                        fillMode: paintFillMode,
+                        strokeColor: strokeColor,
+                        fillColor: fillColor,
+                        strokeWidth: strokeWidth,
+                        fillMode: fillMode,
                         layer:
                             ctx.activeLayer === 'lighting' || ctx.activeLayer === 'ctx.notes'
                                 ? 'token'
@@ -1902,8 +1907,80 @@ export function setupPointerInteraction(ctx = {}) {
                         }
                     }
 
-                    const deltaX = nx - sourceOriginal.x;
-                    const deltaY = ny - sourceOriginal.y;
+                    let deltaX = nx - sourceOriginal.x;
+                    let deltaY = ny - sourceOriginal.y;
+
+                    // DEFECT-09: Formation preservation & group minimum collision clamping
+                    if (
+                        vtt.role !== 'GM' &&
+                        currentMap?.lightingSettings?.restrictMovement &&
+                        ctx.selectedTokenIds.has(ctx.dragTargetId) &&
+                        ctx.selectedTokenIds.size > 1
+                    ) {
+                        let groupClampT = 1.0;
+                        const moveDist = Math.hypot(deltaX, deltaY);
+
+                        if (moveDist > 0) {
+                            ctx.selectedTokenIds.forEach((secId) => {
+                                if (secId === ctx.dragTargetId) return;
+                                const secTok = ctx.tokens[secId];
+                                const secOrig = ctx.tokenDragOriginalPositions[secId];
+                                if (!secTok || !secOrig || !isTokenControlledByPlayer(secTok)) return;
+
+                                const { drawW: secW, drawH: secH } = getTokenDrawDimensions(secTok);
+                                const secRadius = Math.min(secW, secH) / 2;
+                                const secStart = { x: secOrig.x + secW / 2, y: secOrig.y + secH / 2 };
+                                const secEnd = { x: secOrig.x + deltaX + secW / 2, y: secOrig.y + deltaY + secH / 2 };
+
+                                ctx.walls.forEach((wall) => {
+                                    if (wall.isOpen) return;
+                                    if (
+                                        Array.isArray(portals) &&
+                                        portals.some((po) => {
+                                            if (!po.walkThrough) return false;
+                                            const pRad =
+                                                po.shape === 'circle' && po.geom?.r
+                                                    ? po.geom.r
+                                                    : po.shape === 'rect' && po.geom
+                                                      ? Math.max(po.geom.w, po.geom.h) / 2
+                                                      : 45;
+                                            const threshSq = Math.max(pRad * pRad * 1.5, 55 * 55);
+                                            return (
+                                                distToSegmentSq(
+                                                    calcPortalCenter(po),
+                                                    { x: wall.x1, y: wall.y1 },
+                                                    { x: wall.x2, y: wall.y2 }
+                                                ) <= threshSq
+                                            );
+                                        })
+                                    )
+                                        return;
+
+                                    const intersect = getLineIntersection(
+                                        secStart.x,
+                                        secStart.y,
+                                        secEnd.x,
+                                        secEnd.y,
+                                        wall.x1,
+                                        wall.y1,
+                                        wall.x2,
+                                        wall.y2
+                                    );
+                                    if (intersect && intersect.t < 1.0) {
+                                        const backupT = Math.max(0, intersect.t - (secRadius - 2) / moveDist);
+                                        if (backupT < groupClampT) {
+                                            groupClampT = backupT;
+                                        }
+                                    }
+                                });
+                            });
+                        }
+
+                        if (groupClampT < 1.0) {
+                            deltaX *= groupClampT;
+                            deltaY *= groupClampT;
+                        }
+                    }
 
                     if (ctx.selectedTokenIds.has(ctx.dragTargetId) && ctx.selectedTokenIds.size > 1) {
                         ctx.selectedTokenIds.forEach((id) => {
@@ -2092,15 +2169,18 @@ export function setupPointerInteraction(ctx = {}) {
                     renderAll();
                 }
             } else if (ctx.activeTool === 'paint') {
-                if (paintSubTool === 'text') {
+                const subTool = getPaintSubTool();
+                const gridSnap = getPaintGridSnap();
+
+                if (subTool === 'text') {
                     canvasInteraction.style.cursor = 'text';
-                } else if (paintSubTool === 'eraser') {
+                } else if (subTool === 'eraser') {
                     canvasInteraction.style.cursor = 'cell';
                 } else {
                     canvasInteraction.style.cursor = 'crosshair';
                 }
                 const mouse = getCanvasMouseCoords(e);
-                if (paintSubTool === 'eraser' && !ctx.isDrawingPaint) {
+                if (subTool === 'eraser' && !ctx.isDrawingPaint) {
                     renderAll();
                 }
                 if (ctx.isDrawingPaint && ctx.currentPaintStroke) {
@@ -2121,7 +2201,7 @@ export function setupPointerInteraction(ctx = {}) {
                         ctx.currentPaintStroke.type === 'rect' ||
                         ctx.currentPaintStroke.type === 'circle'
                     ) {
-                        let endPt = paintGridSnap ? snapToGridCenter(mouse.x, mouse.y) : { x: mouse.x, y: mouse.y };
+                        let endPt = gridSnap ? snapToGridCenter(mouse.x, mouse.y) : { x: mouse.x, y: mouse.y };
                         if (e.shiftKey) {
                             const sp = ctx.currentPaintStroke.startPoint;
                             const dx = endPt.x - sp.x;

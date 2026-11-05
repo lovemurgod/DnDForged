@@ -778,8 +778,12 @@ export function showTokenContextMenu(tokenId, clientX, clientY, options = {}) {
         const activeToken = tokens[tokenId];
         if (!activeToken) return;
         activeToken.flightHeight = newHeight;
-        if (vtt.socket && typeof window !== 'undefined' && typeof window.emitTokenUpdates === 'function') {
+        if (typeof options.emitTokenUpdates === 'function') {
+            options.emitTokenUpdates(tokens);
+        } else if (typeof window !== 'undefined' && typeof window.emitTokenUpdates === 'function') {
             window.emitTokenUpdates(tokens);
+        } else if (vtt.socket) {
+            vtt.socket.emit('tokens:update', { tokens });
         }
         renderAll();
     };

@@ -267,6 +267,9 @@ export function wireHpControls(panel, m, initial, max, ctx = {}, initialTemp = 0
     const tempEl = contentEl.querySelector
         ? contentEl.querySelector('#cs-temp-hp-current')
         : document.getElementById('cs-temp-hp-current');
+    const tempBarEl = contentEl.querySelector
+        ? contentEl.querySelector('#cs-temp-hp-bar')
+        : document.getElementById('cs-temp-hp-bar');
     const tempBarWrap = contentEl.querySelector
         ? contentEl.querySelector('#cs-temp-hp-bar-wrap')
         : document.getElementById('cs-temp-hp-bar-wrap');
@@ -276,8 +279,20 @@ export function wireHpControls(panel, m, initial, max, ctx = {}, initialTemp = 0
     const vtt = ctx.getVtt ? ctx.getVtt() : typeof window !== 'undefined' ? window.VTT : null;
 
     function updateDOMOnly() {
-        if (currentEl) currentEl.textContent = current;
-        if (tempEl) tempEl.textContent = tempHp;
+        if (currentEl) {
+            if ('value' in currentEl && document.activeElement !== currentEl) {
+                currentEl.value = current;
+            } else if (!('value' in currentEl)) {
+                currentEl.textContent = current;
+            }
+        }
+        if (tempEl) {
+            if ('value' in tempEl && document.activeElement !== tempEl) {
+                tempEl.value = tempHp;
+            } else if (!('value' in tempEl)) {
+                tempEl.textContent = tempHp;
+            }
+        }
         if (tempBarWrap) {
             tempBarWrap.style.display = tempHp > 0 ? 'block' : 'none';
         }
@@ -285,6 +300,16 @@ export function wireHpControls(panel, m, initial, max, ctx = {}, initialTemp = 0
             const pct = Math.max(0, Math.min(100, Math.round((current / maxHp) * 100)));
             barEl.style.width = `${pct}%`;
             barEl.className = 'cs-hp-bar-fill' + (pct <= 25 ? ' danger' : pct <= 50 ? ' injured' : '');
+        }
+        if (tempBarEl) {
+            if (tempHp > 0 && maxHp > 0) {
+                const tempPct = Math.max(0, Math.min(100, Math.round((tempHp / maxHp) * 100)));
+                tempBarEl.style.width = `${tempPct}%`;
+                tempBarEl.style.display = 'block';
+            } else {
+                tempBarEl.style.width = '0%';
+                tempBarEl.style.display = 'none';
+            }
         }
     }
 
@@ -440,6 +465,44 @@ export function wireHpControls(panel, m, initial, max, ctx = {}, initialTemp = 0
                     updateDisplay();
                 }
             });
+        });
+    }
+
+    if (currentEl && currentEl.tagName === 'INPUT') {
+        const handleHpInput = () => {
+            const parsed = parseInt(currentEl.value);
+            if (!isNaN(parsed)) {
+                current = Math.max(0, parsed);
+                updateDisplay();
+            } else {
+                currentEl.value = current;
+            }
+        };
+        currentEl.addEventListener('change', handleHpInput);
+        currentEl.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                currentEl.blur();
+            }
+        });
+    }
+
+    if (tempEl && tempEl.tagName === 'INPUT') {
+        const handleTempInput = () => {
+            const parsed = parseInt(tempEl.value);
+            if (!isNaN(parsed)) {
+                tempHp = Math.max(0, parsed);
+                updateDisplay();
+            } else {
+                tempEl.value = tempHp;
+            }
+        };
+        tempEl.addEventListener('change', handleTempInput);
+        tempEl.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                tempEl.blur();
+            }
         });
     }
 
@@ -1027,37 +1090,33 @@ export function renderStatBlock(m, panel = null, ctx = {}) {
         <div id="cs-tab-stats" class="cs-tab-content active">
             <!-- HP Row -->
             <div class="cs-hp-row">
-                <div style="display: flex; gap: 4px; margin-bottom: 8px; align-items: center; width: 100%;">
-                    <div class="cs-hp-bar-wrap" style="flex: 1;">
-                        <div class="cs-hp-bar-fill" id="cs-hp-bar" style="width: ${hpMax > 0 ? Math.round((hpCurrent / hpMax) * 100) : 100}%"></div>
-                    </div>
-                    <div class="cs-hp-bar-wrap cs-temp-hp-bar-wrap" id="cs-temp-hp-bar-wrap" style="flex: 0 0 20%; display: ${hpTemp > 0 ? 'block' : 'none'};" title="Temp HP">
-                        <div class="cs-hp-bar-fill cs-temp-hp-bar-fill" id="cs-temp-hp-bar" style="width: 100%;"></div>
-                    </div>
+                <div class="cs-hp-bar-wrap" id="cs-hp-bar-wrap">
+                    <div class="cs-hp-bar-fill" id="cs-hp-bar" style="width: ${hpMax > 0 ? Math.round((hpCurrent / hpMax) * 100) : 100}%"></div>
+                    <div class="cs-temp-hp-bar-fill" id="cs-temp-hp-bar" style="width: ${hpMax > 0 && hpTemp > 0 ? Math.min(100, Math.round((hpTemp / hpMax) * 100)) : 0}%; display: ${hpTemp > 0 ? 'block' : 'none'};" title="Temp HP"></div>
                 </div>
-                <div style="display: flex; align-items: center; justify-content: space-between; width: 100%; gap: 12px;">
-                    <div style="display: flex; align-items: center; gap: 6px;">
-                        <div class="cs-hp-label" style="font-size: 0.8rem; font-weight: 600; display: flex; align-items: center; gap: 4px; color: var(--color-text-secondary); margin-bottom: 0;">
+                <div class="cs-hp-controls-wrap">
+                    <div class="cs-hp-unit cs-hp-unit-main">
+                        <div class="cs-hp-label">
                             <i class="fa-solid fa-heart" style="color: #e53935; font-size: 0.85rem;"></i> HP
                         </div>
-                        <div class="cs-hp-controls" style="margin-bottom: 0;">
+                        <div class="cs-hp-controls">
                             <button class="cs-hp-btn" id="cs-hp-minus" title="Damage">−</button>
-                            <div class="cs-hp-display" style="min-width: 60px;">
-                                <span id="cs-hp-current">${hpCurrent}</span>
+                            <div class="cs-hp-display">
+                                <input type="text" inputmode="numeric" pattern="[0-9]*" class="cs-hp-input" id="cs-hp-current" value="${hpCurrent}" title="Current HP (click to edit)">
                                 <span class="cs-hp-divider">/</span>
                                 <span id="cs-hp-max">${hpMax}</span>
                             </div>
                             <button class="cs-hp-btn" id="cs-hp-plus" title="Heal">+</button>
                         </div>
                     </div>
-                    <div style="display: flex; align-items: center; gap: 6px;">
-                        <div class="cs-hp-label" style="font-size: 0.8rem; font-weight: 600; display: flex; align-items: center; gap: 4px; color: var(--color-text-secondary); margin-bottom: 0;">
+                    <div class="cs-hp-unit cs-hp-unit-temp">
+                        <div class="cs-hp-label">
                             <i class="fa-solid fa-shield" style="color: var(--color-temphp-base, #2196f3); font-size: 0.85rem;"></i> Temp
                         </div>
-                        <div class="cs-hp-controls" style="margin-bottom: 0;">
+                        <div class="cs-hp-controls">
                             <button class="cs-hp-btn" id="cs-temp-hp-minus" title="Reduce Temp HP">−</button>
-                            <div class="cs-hp-display" style="min-width: 28px;">
-                                <span id="cs-temp-hp-current">${hpTemp}</span>
+                            <div class="cs-hp-display">
+                                <input type="text" inputmode="numeric" pattern="[0-9]*" class="cs-hp-input temp-input" id="cs-temp-hp-current" value="${hpTemp}" title="Temp HP (click to edit)">
                             </div>
                             <button class="cs-hp-btn" id="cs-temp-hp-plus" title="Add Temp HP">+</button>
                         </div>
