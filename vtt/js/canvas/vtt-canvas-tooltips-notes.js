@@ -127,8 +127,9 @@ export function getResolvedCreatureMonsterData(token, context = {}) {
     if (!token) return null;
     if (token.monsterData) return token.monsterData;
     const campaignState = context.campaignState || (typeof window !== 'undefined' ? window.VTT?.campaignState : null);
-    if (token.characterId && campaignState?.characters) {
-        const char = campaignState.characters[token.characterId];
+    const charId = token.characterId || token.sourceCharacterId;
+    if (charId && campaignState?.characters) {
+        const char = campaignState.characters[charId];
         if (char?.monsterData) return char.monsterData;
     }
     return null;
@@ -137,24 +138,34 @@ export function getResolvedCreatureMonsterData(token, context = {}) {
 // Resolve AC for a token (monster or player character)
 export function getTokenAC(token, context = {}) {
     if (!token) return null;
+    if (token.ac !== undefined && token.ac !== null && token.ac !== '' && !isNaN(parseInt(token.ac, 10))) {
+        return parseInt(token.ac, 10);
+    }
     const m = getResolvedCreatureMonsterData(token, context);
     if (m) {
-        if (m.primaryAc !== undefined && m.primaryAc !== null && m.primaryAc !== '') return m.primaryAc;
+        if (m.primaryAc !== undefined && m.primaryAc !== null && m.primaryAc !== '' && !isNaN(parseInt(m.primaryAc, 10))) {
+            return parseInt(m.primaryAc, 10);
+        }
         if (typeof m.ac === 'number') return m.ac;
+        if (typeof m.ac === 'string' && !isNaN(parseInt(m.ac, 10))) return parseInt(m.ac, 10);
         if (Array.isArray(m.ac) && m.ac.length > 0) {
             const entry = m.ac[0];
             if (typeof entry === 'object' && entry !== null) {
-                return entry.ac ?? entry.value ?? null;
+                const val = entry.ac ?? entry.value ?? null;
+                if (val !== null && !isNaN(parseInt(val, 10))) return parseInt(val, 10);
             }
             if (typeof entry === 'number') return entry;
+            if (typeof entry === 'string' && !isNaN(parseInt(entry, 10))) return parseInt(entry, 10);
         }
     }
     const campaignState = context.campaignState || (typeof window !== 'undefined' ? window.VTT?.campaignState : null);
-    if (token.characterId && campaignState?.characters) {
-        const char = campaignState.characters[token.characterId];
-        if (char?.ac !== undefined && char.ac !== null && char.ac !== '') return char.ac;
+    const charId = token.characterId || token.sourceCharacterId;
+    if (charId && campaignState?.characters) {
+        const char = campaignState.characters[charId];
+        if (char?.ac !== undefined && char.ac !== null && char.ac !== '' && !isNaN(parseInt(char.ac, 10))) {
+            return parseInt(char.ac, 10);
+        }
     }
-    if (token.ac !== undefined && token.ac !== null && token.ac !== '') return token.ac;
     return null;
 }
 

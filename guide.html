@@ -7,12 +7,13 @@
   <meta name="theme-color" content="#090d16">
   <meta property="og:type" content="website"><meta property="og:site_name" content="ForgeD VTT">
   <meta property="og:title" content="ForgeD Guide — Learn the Tabletop"><meta property="og:description" content="Search ForgeD instructions for hosting with Cloudflare, using maps, rolling dice, and managing characters.">
-  <meta property="og:url" content="https://forgedvtt.com/guide.html"><meta property="og:image" content="https://forgedvtt.com/img/logo.png">
+  <meta property="og:url" content="https://forgedvtt.com/guide.html"><meta property="og:image" content="https://forgedvtt.com/img/social-preview.jpg">
+  <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="ForgeD Guide — Learn the Tabletop">
-  <meta name="twitter:description" content="Search ForgeD instructions for hosting with Cloudflare, using maps, rolling dice, and managing characters."><meta name="twitter:image" content="https://forgedvtt.com/img/logo.png">
+  <meta name="twitter:description" content="Search ForgeD instructions for hosting with Cloudflare, using maps, rolling dice, and managing characters."><meta name="twitter:image" content="https://forgedvtt.com/img/social-preview.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&amp;family=Inter:wght@400;500;600;700;800&amp;family=Consolas&amp;display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer">
   <link rel="stylesheet" href="css/website.css">
   <link rel="icon" type="image/x-icon" href="favicon.ico"><link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="icon" type="image/png" sizes="96x96" href="favicon-96x96.png"><link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
@@ -41,7 +42,15 @@
                     <div class="manual-search-box">
                         <i class="fa-solid fa-magnifying-glass"></i>
                         <input type="text" id="manual-search-input" name="manual-search" aria-label="Search ForgeD guide" placeholder="Search a task, tool, or shortcut…" autocomplete="off">
+                        <button type="button" class="manual-search-clear" id="manual-search-clear" aria-label="Clear search">✕</button>
                         <p id="manual-search-status" role="status" aria-live="polite">All guide sections shown</p>
+                    </div>
+
+                    <div class="mobile-toc-toggle-wrap">
+                        <button type="button" id="mobile-toc-toggle" class="mobile-toc-btn" aria-expanded="false" aria-controls="manual-toc-list">
+                            <span><i class="fa-solid fa-list-ul"></i> Table of Contents</span>
+                            <i class="fa-solid fa-chevron-down" id="mobile-toc-arrow"></i>
+                        </button>
                     </div>
 
                     <nav class="manual-toc" id="manual-toc-list">
@@ -65,7 +74,7 @@
                         <div class="manual-toc-group">
                             <div class="manual-toc-title">Manage characters</div>
                             <a href="#guide-char-builder" class="manual-toc-link"><i class="fa-solid fa-wand-magic-sparkles"></i> Create or level up a character</a>
-                            <a href="#guide-player-sheets" class="manual-toc-link"><i class="fa-solid fa-boxes-stacked"></i> Manage equipment</a>
+                            <a href="#guide-player-sheets" class="manual-toc-link"><i class="fa-solid fa-user-shield"></i> Play your character &amp; manage gear</a>
                             <a href="#guide-spells-magic" class="manual-toc-link"><i class="fa-solid fa-hat-wizard"></i> Manage and cast spells</a>
                             <a href="#guide-features-counters" class="manual-toc-link"><i class="fa-solid fa-award"></i> Track class features</a>
                             <a href="#guide-sheet-dock" class="manual-toc-link"><i class="fa-solid fa-table-columns"></i> Keep character sheets handy</a>
@@ -1084,13 +1093,55 @@
                     <section class="manual-section" id="guide-player-sheets">
                         <div class="manual-section-header">
                             <div class="manual-section-title-wrap">
-                                <div class="manual-section-icon"><i class="fa-solid fa-boxes-stacked"></i></div>
-                                <h2 class="manual-section-title">Manage equipment</h2>
+                                <div class="manual-section-icon"><i class="fa-solid fa-user-shield"></i></div>
+                                <h2 class="manual-section-title">Play your character &amp; manage gear</h2>
                             </div>
-                            <span class="manual-section-badge player">Inventory &amp; Defense</span>
+                            <span class="manual-section-badge player">Character Sheet &amp; Combat</span>
                         </div>
 
-                        <p class="doc-section-lead">Add equipment, manage what your character carries, and update its gear.</p>
+                        <p class="doc-section-lead">Roll attacks, checks, and saves from your sheet, track health and rests, and manage your inventory and equipment.</p>
+
+                        <div class="doc-section-subtitle">
+                            <i class="fa-solid fa-dice-d20"></i> Core Character Sheet Gameplay &amp; Rolls
+                        </div>
+
+                        <div class="doc-feature-group">
+                            <div class="doc-feature-card" data-keywords="roll attack check save skill ability click d20 chat multiplayer modifier advantage disadvantage">
+                                <div class="doc-feature-card-header">
+                                    <div class="doc-feature-title">
+                                        <i class="fa-solid fa-crosshairs red"></i> Click-to-Roll Attacks, Checks &amp; Saves
+                                    </div>
+                                    <span class="btn-inspector-action"><i class="fa-solid fa-dice"></i> 1-Click Roll</span>
+                                </div>
+                                <div class="doc-feature-body">
+                                    <p>Interact directly with your character sheet to roll 3D dice into the shared chat:</p>
+                                    <ul>
+                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Ability Checks &amp; Skills:</strong> Click any ability score (STR, DEX, etc.) or proficient skill name (e.g. Athletics, Stealth, Perception) to roll a d20 with your exact modifiers calculated automatically.</li>
+                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Saving Throws:</strong> Click any saving throw badge to roll with your proficiency bonus and active spell or magic item modifiers.</li>
+                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Weapon Attacks &amp; Damage:</strong> Click weapon names in your Actions list to roll attack accuracy; click the damage badge to roll damage with matching damage types.</li>
+                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Advantage &amp; Disadvantage:</strong> Toggle the <strong>ADV</strong>, <strong>DIS</strong>, or <strong>NORM</strong> pills before rolling to roll two d20s and automatically take the higher or lower result.</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="doc-feature-card" data-keywords="health hit points hp temp damage heal death saves inspiration conditions exhaustion">
+                                <div class="doc-feature-card-header">
+                                    <div class="doc-feature-title">
+                                        <i class="fa-solid fa-heart-pulse green"></i> Health, Death Saves &amp; Status Tracking
+                                    </div>
+                                    <span class="btn-inspector-action"><i class="fa-solid fa-skull-crossbones"></i> Live Sync</span>
+                                </div>
+                                <div class="doc-feature-body">
+                                    <p>Monitor your character's vitality and combat state during encounters:</p>
+                                    <ul>
+                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Current &amp; Temp HP:</strong> Enter damage or healing amounts in the health bar. Temporary HP is consumed first and cleared on a Long Rest.</li>
+                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Death Saving Throws:</strong> When reduced to 0 HP, clicking the death save counter rolls a d20 directly: marking successes (DC 10), failures, critical failures (nat 1 marks 2 failures), and critical successes (nat 20 heals 1 HP and revives you!).</li>
+                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Heroic Inspiration:</strong> Click the d20 inspiration badge in the sheet header to indicate your character has inspiration ready to spend.</li>
+                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Conditions:</strong> Toggle conditions (Blinded, Charmed, Poisoned, Prone, Stunned, etc.) to show status badges on your canvas token and track ongoing effects.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
 
                         <div class="doc-section-subtitle">
                             <i class="fa-solid fa-shield-halved"></i> Dynamic Armor Class (AC) Calculation Engine
@@ -1440,7 +1491,7 @@
                         <!-- Sheet Partitioning Architecture -->
                         <div class="manual-subgrid" style="margin-top: 16px;">
                             <div class="manual-subcard">
-                                <h3 class=""><i class="fa-solid fa-users-gear"></i> Partitioning Architecture</h3>
+                                <h3 class=""><i class="fa-solid fa-users-gear"></i> Multi-Tab Split View &amp; Dock Organization</h3>
                                 <p>How the Sheet Dock organizes actors automatically:</p>
                                 <ul>
                                     <li><i class="fa-solid fa-circle-dot"></i> <strong>Player Characters:</strong> Every player character opens into its own dedicated slideout tab with custom class crests, avatar portraits, and HP gauges.</li>
@@ -1619,7 +1670,7 @@
                                 <p>Click the map button on the left toolbar to open the Map Manager:</p>
                                 <ul>
                                     <li><i class="fa-solid fa-check"></i> <strong>Blank Tactical Grid:</strong> Create a battlemap with customizable width, height, and cell size.</li>
-                                    <li><i class="fa-solid fa-check"></i> <strong>Import 5eTools Maps:</strong> Select any official D&amp;D 5e adventure (e.g. Curse of Strahd, Phandelver) and import hi-res dungeon maps with 1 click.</li>
+                                    <li><i class="fa-solid fa-check"></i> <strong>Import Adventure Maps:</strong> Connect your personal 5eTools data source to import maps and handouts from official 5e adventures (e.g. Curse of Strahd, Phandelver) with 1 click.</li>
                                     <li><i class="fa-solid fa-check"></i> <strong>Upload File:</strong> Upload local JPG/PNG/WEBP files directly to your server.</li>
                                     <li><i class="fa-solid fa-check"></i> <strong>External URL:</strong> Paste any web link, GIF, or video stream.</li>
                                 </ul>
@@ -1868,7 +1919,7 @@
                             <div class="doc-workflow-item" data-keywords="fog of war raycasting lighting presets torch lantern bullseye darkvision">
                                 <div class="doc-workflow-badge">4</div>
                                 <div class="doc-workflow-content">
-                                    <h3 class="">Dynamic 2D Raycast Fog of War &amp; Lighting Presets</h3>
+                                    <h3 class="">Real-Time Line of Sight &amp; Dynamic Darkness</h3>
                                     <p>Enable <strong>Fog of War</strong> to shroud unexplored areas in darkness. Tokens automatically clear visibility polygons around themselves up to their sight radius. Use the token lighting menu to equip realistic 5e light presets: <strong>Torch</strong> (20ft bright / 20ft dim, flicker), <strong>Lantern</strong> (30ft / 30ft, pulse), <strong>Bullseye Lantern</strong> (60ft 60° directional cone), <strong>Candle</strong> (5ft / 5ft), <strong>Campfire</strong>, or <strong>Darkvision (Self)</strong> (60ft dim light).</p>
                                 </div>
                             </div>
@@ -1964,7 +2015,7 @@
                                     </div>
                                     <span class="kbd-badge">1-Click Import</span>
                                 </div>
-                                <p class="btn-inspector-desc">1-click extract artwork, NPC portraits, maps, read-aloud boxed text, and story insets from official 5e modules (Curse of Strahd, Tomb of Annihilation, Phandelver, etc.) directly into your campaign.</p>
+                                <p class="btn-inspector-desc">When connected to your personal 5eTools adventure source, 1-click extract artwork, NPC portraits, maps, read-aloud boxed text, and story insets from adventures (Curse of Strahd, Tomb of Annihilation, Phandelver, etc.) directly into your campaign.</p>
                                 <div class="btn-inspector-action"><i class="fa-solid fa-crown"></i> Bulk Extraction Wizard</div>
                             </div>
 
@@ -2031,6 +2082,11 @@
                         </div>
 
                         <p class="doc-section-lead">Choose which supported rules and compendium content your game uses.</p>
+
+                        <div class="trouble-note" style="margin-bottom: 20px;">
+                            <h4 style="margin-bottom: 5px; color: #fff;"><i class="fa-solid fa-circle-info" style="color: var(--color-gold-bright);"></i> Clean SRD vs. Personal Content</h4>
+                            <p>ForgeD is distributed as a clean open-source application with official SRD 5.1 and 2024 Free Rules included. You can seamlessly expand your compendium with official adventures or third-party settings by connecting your own personal 5eTools sources or homebrew JSON files in the Source Control settings.</p>
+                        </div>
 
                         <div class="doc-section-subtitle">
                             <i class="fa-solid fa-sliders"></i> Master Source Control Features
@@ -2178,7 +2234,7 @@
                                     <p>Import character portraits and fantasy tokens directly using share links from Pinterest:</p>
                                     <ul>
                                         <li><i class="fa-solid fa-circle-dot"></i> <strong>Direct Share Links:</strong> Paste standard Pinterest URLs or mobile app shortlinks (e.g. <code>https://pin.it/xxxxx</code>) directly into the URL import box.</li>
-                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Server-Side Unshortening:</strong> The backend resolver endpoint (<code>/api/resolve-media-url</code>) follows redirect chains and extracts direct media sources, cleanly bypassing browser CORS restrictions.</li>
+                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Automatic Full-Resolution Link Resolution:</strong> When you paste Pinterest links or shortlinks, ForgeD automatically follows redirects and pulls the high-resolution artwork directly onto your canvas.</li>
                                         <li><i class="fa-solid fa-circle-dot"></i> <strong>Automatic <code>/originals/</code> Master Upscaling:</strong> Pinterest URLs containing downscaled thumbnails (such as <code>/236x/</code> or <code>/736x/</code>) are automatically converted into full-resolution <code>/originals/</code> master art.</li>
                                         <li><i class="fa-solid fa-circle-dot"></i> <strong>Animated Pins &amp; Video Support:</strong> Fully supports animated GIF and MP4 video pins with live loop playback on the canvas.</li>
                                     </ul>
@@ -2716,15 +2772,26 @@
                 </div>
             </div>
         </main>
+  <a href="#manual-search-input" id="guide-back-to-top" class="guide-back-to-top" aria-label="Back to top of guide">
+    <i class="fa-solid fa-arrow-up" aria-hidden="true"></i>
+  </a>
   <footer class="footer-vtt">
         <p>© 2026 ForgeD VTT — Self-Hosted Virtual Tabletop System. Designed for Tabletop Freedom.</p>
-        <p style="margin-top: 0.5rem; font-size: 0.8rem; opacity: 0.85;">This work includes material from the System Reference Document 5.1 (SRD 5.1) by Wizards of the Coast LLC, available under the Creative Commons Attribution 4.0 International License (CC-BY-4.0). 2024 Free Rules and SRD 5.2 content are used under the Wizards of the Coast Fan Content Policy. • <a href="LEGAL.md" target="_blank" style="color: #d4af37; text-decoration: underline;">Legal Notices &amp; OGC Disclaimers</a></p>
+        <p style="margin-top: 0.5rem; font-size: 0.8rem; opacity: 0.85;">This work includes material from the System Reference Document 5.1 (SRD 5.1) by Wizards of the Coast LLC, available under the Creative Commons Attribution 4.0 International License (CC-BY-4.0). 2024 Free Rules and SRD 5.2 content are used under the Wizards of the Coast Fan Content Policy. • <a href="legal.html" style="color: #d4af37; text-decoration: underline;">Legal Notices &amp; OGC Disclaimers</a></p>
     </footer>
   <script>
 const searchInput = document.getElementById('manual-search-input');
-const searchableCards = '.btn-inspector-card, .manual-subcard, .doc-feature-card, .doc-workflow-item';
+const searchClearBtn = document.getElementById('manual-search-clear');
+const searchableCards = '.btn-inspector-card, .manual-subcard, .doc-feature-card, .doc-workflow-item, .trouble-note, .cloudflare-steps';
+const mobileTocToggle = document.getElementById('mobile-toc-toggle');
+const manualSidebar = document.querySelector('.manual-sidebar');
+const mobileTocArrow = document.getElementById('mobile-toc-arrow');
+const backToTopBtn = document.getElementById('guide-back-to-top');
+
 function filterManualTopics() {
   const query = searchInput.value.trim().toLowerCase();
+  if (searchClearBtn) searchClearBtn.style.display = query ? 'block' : 'none';
+
   const sections = [...document.querySelectorAll('.manual-section')];
   document.querySelectorAll(searchableCards).forEach((item) => {
     const text = (item.textContent + ' ' + (item.getAttribute('data-keywords') || '')).toLowerCase();
@@ -2738,10 +2805,64 @@ function filterManualTopics() {
     if (match) count++;
   });
   document.getElementById('manual-search-status').textContent = query ? count + ' matching guide section' + (count === 1 ? '' : 's') : 'All guide sections shown';
+
+  // Sync sidebar TOC links with search state
+  document.querySelectorAll('.manual-toc-link').forEach((link) => {
+    const targetId = link.hash ? link.hash.slice(1) : '';
+    const targetSection = document.getElementById(targetId);
+    if (!query || !targetSection) {
+      link.classList.remove('search-dimmed', 'search-highlight');
+    } else if (targetSection.hidden) {
+      link.classList.add('search-dimmed');
+      link.classList.remove('search-highlight');
+    } else {
+      link.classList.add('search-highlight');
+      link.classList.remove('search-dimmed');
+    }
+  });
 }
+
 searchInput.addEventListener('input', filterManualTopics);
 searchInput.addEventListener('keydown', (event) => { if (event.key === 'Escape') { searchInput.value = ''; filterManualTopics(); } });
+if (searchClearBtn) {
+  searchClearBtn.addEventListener('click', () => {
+    searchInput.value = '';
+    filterManualTopics();
+    searchInput.focus();
+  });
+}
+
+// Reset search and close mobile TOC on clicking any topic
+document.querySelectorAll('.manual-toc-link').forEach((link) => {
+  link.addEventListener('click', () => {
+    if (searchInput.value) {
+      searchInput.value = '';
+      filterManualTopics();
+    }
+    if (manualSidebar && manualSidebar.classList.contains('toc-expanded')) {
+      manualSidebar.classList.remove('toc-expanded');
+      if (mobileTocToggle) mobileTocToggle.setAttribute('aria-expanded', 'false');
+      if (mobileTocArrow) mobileTocArrow.className = 'fa-solid fa-chevron-down';
+    }
+  });
+});
+
+// Mobile TOC toggle
+if (mobileTocToggle && manualSidebar) {
+  mobileTocToggle.addEventListener('click', () => {
+    const expanded = manualSidebar.classList.toggle('toc-expanded');
+    mobileTocToggle.setAttribute('aria-expanded', String(expanded));
+    if (mobileTocArrow) {
+      mobileTocArrow.className = expanded ? 'fa-solid fa-chevron-up' : 'fa-solid fa-chevron-down';
+    }
+  });
+}
+
+// Scroll spy & Back-to-Top visibility
 window.addEventListener('scroll', () => {
+  if (backToTopBtn) {
+    backToTopBtn.classList.toggle('visible', window.scrollY > 400);
+  }
   const sections = [...document.querySelectorAll('.manual-section')].filter((section) => !section.hidden);
   let active = null;
   for (const section of sections) {
@@ -2751,6 +2872,5 @@ window.addEventListener('scroll', () => {
   if (!active) return;
   document.querySelectorAll('.manual-toc-link').forEach((link) => link.classList.toggle('active', link.hash === '#' + active.id));
 }, { passive: true });
-</script>
 
 </body></html>

@@ -3,7 +3,7 @@
  */
 
 import { getMod, getClassHitDie } from '../calc/stats.js';
-import { extractTextFromEntries } from '../vtt-sheet-rolls.js';
+import { extractTextFromEntries, normalizeSkill } from '../vtt-sheet-rolls.js';
 
 export const POINT_BUY_COSTS = { 8: 0, 9: 1, 10: 2, 11: 3, 12: 4, 13: 5, 14: 7, 15: 9 };
 
@@ -441,6 +441,173 @@ export function extractGrantedSpells(baseRace, subrace, bg, totalLvl, allSpells)
     }
 
     return results;
+}
+
+/**
+ * Official 5e Multiclass Proficiencies granted when gaining 1st level in a non-primary class.
+ */
+export const MULTICLASS_PROFICIENCIES = {
+    barbarian: {
+        armor: ['Shields'],
+        weapons: ['Simple Weapons', 'Martial Weapons'],
+        skills: { count: 0, from: [] },
+        tools: []
+    },
+    bard: {
+        armor: ['Light Armor'],
+        weapons: [],
+        skills: { count: 1, from: ['any'] },
+        tools: ['One musical instrument of your choice']
+    },
+    cleric: {
+        armor: ['Light Armor', 'Medium Armor', 'Shields'],
+        weapons: [],
+        skills: { count: 0, from: [] },
+        tools: []
+    },
+    druid: {
+        armor: ['Light Armor', 'Medium Armor', 'Shields'],
+        weapons: [],
+        skills: { count: 0, from: [] },
+        tools: ['Herbalism kit']
+    },
+    fighter: {
+        armor: ['Light Armor', 'Medium Armor', 'Shields'],
+        weapons: ['Simple Weapons', 'Martial Weapons'],
+        skills: { count: 0, from: [] },
+        tools: []
+    },
+    monk: {
+        armor: [],
+        weapons: ['Simple Weapons', 'Shortswords'],
+        skills: { count: 0, from: [] },
+        tools: ['One type of artisan\'s tools or one musical instrument']
+    },
+    paladin: {
+        armor: ['Light Armor', 'Medium Armor', 'Shields'],
+        weapons: ['Simple Weapons', 'Martial Weapons'],
+        skills: { count: 0, from: [] },
+        tools: []
+    },
+    ranger: {
+        armor: ['Light Armor', 'Medium Armor', 'Shields'],
+        weapons: ['Simple Weapons', 'Martial Weapons'],
+        skills: {
+            count: 1,
+            from: ['Animal Handling', 'Athletics', 'Insight', 'Investigation', 'Nature', 'Perception', 'Stealth', 'Survival']
+        },
+        tools: []
+    },
+    rogue: {
+        armor: ['Light Armor'],
+        weapons: [],
+        skills: {
+            count: 1,
+            from: ['Acrobatics', 'Athletics', 'Deception', 'Insight', 'Intimidation', 'Investigation', 'Perception', 'Performance', 'Persuasion', 'Sleight of Hand', 'Stealth']
+        },
+        tools: ['Thieves\' tools']
+    },
+    sorcerer: {
+        armor: [],
+        weapons: [],
+        skills: { count: 0, from: [] },
+        tools: []
+    },
+    warlock: {
+        armor: ['Light Armor'],
+        weapons: ['Simple Weapons'],
+        skills: { count: 0, from: [] },
+        tools: []
+    },
+    wizard: {
+        armor: [],
+        weapons: [],
+        skills: { count: 0, from: [] },
+        tools: []
+    }
+};
+
+/**
+ * Extracts innate species skills, languages, and tools from race/subrace objects.
+ */
+export function extractSpeciesProficiencies(baseRace, subrace) {
+    const skills = new Set();
+    const languages = new Set();
+    const tools = new Set();
+
+    const rObjs = [baseRace, subrace].filter(Boolean);
+    rObjs.forEach((r) => {
+        // Direct skills array or property
+        if (Array.isArray(r.skills)) {
+            r.skills.forEach((s) => typeof s === 'string' && skills.add(normalizeSkill(s)));
+        } else if (typeof r.skills === 'string') {
+            r.skills.split(',').forEach((s) => skills.add(normalizeSkill(s.trim())));
+        }
+        if (r.startingProficiencies?.skills) {
+            const spSkills = Array.isArray(r.startingProficiencies.skills)
+                ? r.startingProficiencies.skills
+                : [r.startingProficiencies.skills];
+            spSkills.forEach((s) => {
+                if (typeof s === 'string') skills.add(normalizeSkill(s));
+            });
+        }
+
+        // Common racial trait scan for skill grants (e.g. Keen Senses, Menacing, Cat's Talent)
+        const allTraits = Array.isArray(r.traits) ? r.traits : [];
+        allTraits.forEach((t) => {
+            const tName = (t.name || '').toLowerCase();
+            const tDesc = (t.description || (Array.isArray(t.rawEntries) ? t.rawEntries.join(' ') : '')).toLowerCase();
+
+            if (tName.includes('keen senses')) skills.add('Perception');
+            if (tName.includes('menacing')) skills.add('Intimidation');
+            if (tName.includes("cat's talent")) {
+                skills.add('Perception');
+                skills.add('Stealth');
+            }
+            if (tName.includes('natural tracker')) skills.add('Survival');
+            if (tName.includes('reveler')) skills.add('Performance');
+
+            // Regex match "proficiency in the [Skill] skill" or "proficient in [Skill]"
+            const profMatches = tDesc.matchAll(/proficien(?:cy|t)\s+(?:in|with)\s+(?:the\s+)?([A-Za-z\s]+?)\s+skill/gi);
+            for (const pm of profMatches) {
+                const skNorm = normalizeSkill(pm[1].trim());
+                if (skNorm) skills.add(skNorm);
+            }
+        });
+
+        // Languages
+        if (Array.isArray(r.languages)) {
+            r.languages.forEach((l) => typeof l === 'string' && languages.add(l.trim()));
+        } else if (typeof r.languages === 'string') {
+            r.languages.split(',').forEach((l) => languages.add(l.trim()));
+        }
+        if (r.languageProficiencies) {
+            const lp = Array.isArray(r.languageProficiencies) ? r.languageProficiencies : [r.languageProficiencies];
+            lp.forEach((entry) => {
+                if (typeof entry === 'object') {
+                    Object.keys(entry).forEach((k) => {
+                        if (entry[k] === true) languages.add(k.charAt(0).toUpperCase() + k.slice(1));
+                    });
+                }
+            });
+        }
+
+        // Tools
+        if (Array.isArray(r.toolProficiencies)) {
+            r.toolProficiencies.forEach((tp) => {
+                if (typeof tp === 'string') tools.add(tp);
+                else if (typeof tp === 'object') {
+                    Object.keys(tp).forEach((k) => tools.add(k));
+                }
+            });
+        }
+    });
+
+    return {
+        skills: Array.from(skills).filter(Boolean),
+        languages: Array.from(languages).filter(Boolean),
+        tools: Array.from(tools).filter(Boolean)
+    };
 }
 
 export function parseEquipmentTextToData(rawEquip) {

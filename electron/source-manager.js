@@ -2058,7 +2058,8 @@ export class SourceManager {
                         );
                         fs.mkdirSync(extractDir, { recursive: true });
                         try {
-                            execFileSync('tar.exe', ['-xf', targetPath, '-C', extractDir], { stdio: 'ignore' });
+                            const tarBin = process.platform === 'win32' ? 'tar.exe' : 'tar';
+                            execFileSync(tarBin, ['-xf', targetPath, '-C', extractDir], { stdio: 'ignore' });
                             collectJsonFiles(extractDir);
                         } catch (err) {
                             console.warn('[SourceManager] Failed to extract zip with tar:', err);

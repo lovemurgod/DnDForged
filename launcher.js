@@ -175,9 +175,12 @@ async function main() {
     console.log(`\nℹ️  ForgeDVTT server is already active on port ${DEFAULT_PORT}. Reusing existing instance.`);
   } else {
     console.log('\n🚀 Starting local ForgeDVTT Node server...');
-    serverProcess = spawn('node', ['server.js'], {
+    serverProcess = spawn(process.execPath, ['server.js'], {
       cwd: __dirname,
       stdio: 'inherit'
+    });
+    serverProcess.on('error', (err) => {
+      console.error('\n❌ [Server Error] Failed to start server:', err.message);
     });
     // Wait for server to initialize
     await new Promise(r => setTimeout(r, 1500));
@@ -195,9 +198,14 @@ async function main() {
     tunnelArgs.push('tunnel', '--url', `http://127.0.0.1:${DEFAULT_PORT}`);
   }
 
+  const tunnelCwd = path.dirname(cloudflaredBin);
   const tunnelProcess = spawn(cloudflaredBin, tunnelArgs, {
-    cwd: __dirname,
+    cwd: tunnelCwd,
     stdio: 'inherit'
+  });
+
+  tunnelProcess.on('error', (err) => {
+    console.error('\n❌ [Tunnel Error] Failed to run cloudflared process:', err.message);
   });
 
   console.log('\n======================================================');

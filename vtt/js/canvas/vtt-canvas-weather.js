@@ -64,8 +64,8 @@ export function parseWeatherSettings(ws = {}) {
                     typeof ws.colorStrength === 'number'
                         ? ws.colorStrength
                         : typeof ws.tintOpacity === 'number'
-                          ? ws.tintOpacity
-                          : 0.0,
+                            ? ws.tintOpacity
+                            : 0.0,
                 ambientWash: true
             }
         ];
@@ -75,20 +75,31 @@ export function parseWeatherSettings(ws = {}) {
 }
 
 export function emitWeatherUpdate(weatherState, options = {}, immediate = false) {
-    const { vtt = (typeof window !== 'undefined' ? window.VTT : null) || {}, currentMapId = null } = options;
+    const {
+        vtt = (typeof window !== 'undefined' ? window.VTT : null) || {},
+        currentMapId = null,
+        draftOnly = false
+    } = options;
 
     if (!weatherState.editingMapId || !vtt.campaignState?.maps?.[weatherState.editingMapId]) return;
     const map = vtt.campaignState.maps[weatherState.editingMapId];
 
-    map.weather = {
+    const weatherDraft = {
         effects: (weatherState.currentEditingWeatherLayers || []).map((l) => ({ ...l })),
         saturation: weatherState.currentEditingWeatherSaturation ?? 100
     };
 
-    // Update local weather immediately for instant, smooth visual response
+    // Update local weather preview immediately for instant, smooth visual response
     if (currentMapId === weatherState.editingMapId && vtt.weatherEngine) {
-        vtt.weatherEngine.setWeather(map.weather);
+        vtt.weatherEngine.setWeather(weatherDraft);
     }
+
+    // In draft mode, keep changes strictly in local draft state; do not emit to socket or alter stored map
+    if (draftOnly || weatherState.isDraft) {
+        return;
+    }
+
+    map.weather = weatherDraft;
 
     // Debounce socket emit to prevent network and disk write flooding during drag
     if (weatherState.weatherEmitTimer) clearTimeout(weatherState.weatherEmitTimer);
@@ -157,12 +168,12 @@ export function renderWeatherLayersUI(weatherState, options = {}) {
                     <label style="font-size: 0.78rem;">Preset Type</label>
                     <select class="layer-preset-select" style="width: 100%; padding: 5px 8px; font-size: 0.8rem; background: var(--color-bg-card); color: var(--color-text-primary); border: 1px solid var(--color-gold-base); border-radius: 4px;">
                         ${WEATHER_CATEGORIES.map(
-                            (cat) => `
+            (cat) => `
                             <optgroup label="${cat.name}">
                                 ${cat.options.map((o) => `<option value="${o.id}" ${o.id === layer.preset ? 'selected' : ''}>${o.label}</option>`).join('')}
                             </optgroup>
                         `
-                        ).join('')}
+        ).join('')}
                     </select>
                 </div>
                 <div style="display: flex; gap: 8px; flex-wrap: wrap;">

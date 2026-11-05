@@ -228,36 +228,28 @@ screen and (pointer: coarse) and (max-width: 1366px) {
     flex-wrap: wrap;
 }
 
-/* ── HP Row & Responsive Layout ── */
+/* ── HP Row & Responsive Scaling Layout ── */
 .cs-hp-row {
     padding: 10px 16px;
     border-bottom: 1px solid var(--color-border-subtle);
 }
 
-.cs-hp-controls-wrap {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 8px 16px;
-    width: 100%;
-}
-
-.cs-hp-unit {
+.cs-hp-controls-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    max-width: 440px;
+    width: 100%;
+}
+
+.cs-hp-group,
+.cs-temp-hp-group {
+    display: flex;
+    align-items: center;
     gap: 8px;
-    flex: 1 1 150px;
-    min-width: 0;
-}
-
-.cs-hp-unit-main {
-    flex: 1 1 175px;
-}
-
-.cs-hp-unit-temp {
-    flex: 1 1 130px;
+    flex-shrink: 0;
 }
 
 .cs-hp-label {
@@ -315,48 +307,15 @@ screen and (pointer: coarse) and (max-width: 1366px) {
     font-weight: 700;
     font-size: 1rem;
     color: var(--color-text-primary);
-}
-
-.cs-hp-input {
-    width: 36px;
-    background: transparent;
-    border: none;
-    border-bottom: 1px solid transparent;
-    color: var(--color-text-primary);
-    text-align: right;
-    font-family: var(--font-heading);
-    font-size: 1rem;
-    font-weight: 700;
-    padding: 1px 2px;
-    transition: border-color 0.2s, background 0.2s;
-    border-radius: 2px;
-}
-
-.cs-hp-input:focus {
-    outline: none;
-    border-bottom-color: var(--color-gold-base);
-    background: rgba(0, 0, 0, 0.35);
-    color: var(--color-gold-light);
-}
-
-.cs-hp-input.temp-input {
+    min-width: 45px;
     text-align: center;
-    width: 32px;
-    color: var(--color-temphp-base, #2196f3);
 }
 
-.cs-hp-input.temp-input:focus {
-    border-bottom-color: var(--color-temphp-base, #2196f3);
-    color: #90caf9;
-}
-
-#cs-hp-current,
-#cs-hp-current-input {
+#cs-hp-current {
     color: var(--color-success-base);
 }
 
-#cs-temp-hp-current,
-#cs-temp-hp-current-input {
+#cs-temp-hp-current {
     color: var(--color-temphp-base, #2196f3);
 }
 
@@ -375,27 +334,19 @@ screen and (pointer: coarse) and (max-width: 1366px) {
     margin-top: 4px;
 }
 
-/* ── Unified Stacked Health Bar ── */
+/* ── HP Bars ── */
 .cs-hp-bar-wrap {
     height: 8px;
-    background: rgba(0, 0, 0, 0.45);
+    background: rgba(0, 0, 0, 0.4);
     border-radius: 4px;
     overflow: hidden;
-    position: relative;
-    width: 100%;
-    margin-bottom: 8px;
-    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.6);
 }
 
 .cs-hp-bar-fill {
-    position: absolute;
-    left: 0;
-    top: 0;
     height: 100%;
     background: var(--color-success-base);
     border-radius: 4px;
     transition: width 0.4s ease, background 0.3s ease;
-    z-index: 1;
 }
 
 .cs-hp-bar-fill.injured {
@@ -407,17 +358,10 @@ screen and (pointer: coarse) and (max-width: 1366px) {
 }
 
 .cs-temp-hp-bar-fill {
-    position: absolute;
-    left: 0;
-    top: 0;
     height: 100%;
     background: var(--color-temphp-base, #2196f3);
-    opacity: 0.75;
-    box-shadow: 0 0 8px var(--color-temphp-glow, rgba(33, 150, 243, 0.4));
     border-radius: 4px;
-    transition: width 0.4s ease, opacity 0.3s ease;
-    z-index: 2;
-    pointer-events: none;
+    transition: width 0.4s ease;
 }
 
 /* ── Combat Stats Row (AC & Initiative) ── */

@@ -665,10 +665,19 @@ export function wireInitiativeRoll(panel, m, ctx = {}) {
             }
 
             if (typeof window !== 'undefined' && window.VTT && window.VTT.socket) {
-                window.VTT.socket.emit('chat:msg', {
-                    text: `[${m.name}] rolls **Initiative**`,
-                    roll: rollData
-                });
+                const visibility = ctx.getVisibilitySetting ? ctx.getVisibilitySetting() : getVisibilitySetting();
+                if (visibility === 'private' || visibility === 'gm') {
+                    window.VTT.socket.emit('chat:whisper', {
+                        to: window.VTT.username,
+                        text: `[${m.name}] rolls **Initiative**`,
+                        roll: rollData
+                    });
+                } else {
+                    window.VTT.socket.emit('chat:msg', {
+                        text: `[${m.name}] rolls **Initiative**`,
+                        roll: rollData
+                    });
+                }
             }
 
             if (typeof window !== 'undefined' && window.VTT && window.VTT.chatEngine) {

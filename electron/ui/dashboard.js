@@ -425,11 +425,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         currentCampaigns.forEach((c) => {
+            const mapsCount = (c.mapsCount !== undefined && c.mapsCount !== null) ? c.mapsCount : 0;
             const item = document.createElement('div');
             item.className = 'campaign-item' + (selectedCampaign && selectedCampaign.id === c.id ? ' active' : '');
             item.innerHTML = `
         <span class="camp-item-name">${c.name || 'Untitled Campaign'}</span>
-        <span class="camp-item-meta">ID: ${c.id} • ${c.mapsCount || 1} maps</span>
+        <span class="camp-item-meta">ID: ${c.id} • ${mapsCount} map${mapsCount === 1 ? '' : 's'}</span>
       `;
             item.addEventListener('click', () => selectCampaign(c));
             gmCampaignList.appendChild(item);
@@ -448,7 +449,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         currentAllowlist = Array.isArray(c.allowedUsers) ? [...c.allowedUsers] : [];
         renderAllowlistPills();
 
-        statMapsCount.textContent = c.mapsCount || 1;
+        statMapsCount.textContent = (c.mapsCount !== undefined && c.mapsCount !== null) ? c.mapsCount : 0;
         statPlayersCount.textContent = c.playersCount || (c.knownPlayers ? c.knownPlayers.length : 0);
         refreshSelectedCampaignEntities();
     }
@@ -597,6 +598,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (res && res.success && res.campaign) {
                 selectedCampaignFull = res.campaign;
                 renderCampaignEntities(selectedCampaignFull);
+                if (selectedCampaign) {
+                    selectedCampaign.mapsCount = Object.keys(selectedCampaignFull.maps || {}).length;
+                    selectedCampaign.playersCount = Object.keys(selectedCampaignFull.characters || {}).length;
+                    renderCampaignList();
+                }
             }
         } catch (err) {
             console.error('Failed refreshing campaign entities:', err);
@@ -618,6 +624,23 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (statEntitiesCount) statEntitiesCount.textContent = '0';
     }
 
+    function resolveMediaUrl(url) {
+        if (!url || typeof url !== 'string') return '';
+        if (
+            url.startsWith('http://') ||
+            url.startsWith('https://') ||
+            url.startsWith('data:') ||
+            url.startsWith('blob:')
+        ) {
+            return url;
+        }
+        if (url.startsWith('/')) {
+            const base = currentStatus?.localUrl || 'http://127.0.0.1:3000';
+            return `${base}${url}`;
+        }
+        return url;
+    }
+
     function renderCampaignEntities(camp) {
         const maps = camp.maps || {};
         const chars = Object.values(camp.characters || {});
@@ -629,12 +652,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                 (c.id && c.id.startsWith('npc_')) ||
                 (c.monsterData && !c.isPlayer && !c.isCompanion && !(c.id && c.id.startsWith('char_')))
             );
-        const isPlayer = (c) =>
-            !isCompanion(c) && !isCustomNpc(c) && Boolean(c.isPlayer || (c.id && c.id.startsWith('char_')));
+        const isPlayer = (c) => !isCompanion(c) && !isCustomNpc(c);
 
         const playerChars = chars.filter(isPlayer);
         const companionChars = chars.filter(isCompanion);
-        const npcChars = chars.filter((c) => isCustomNpc(c) && !isCompanion(c) && !isPlayer(c));
+        const npcChars = chars.filter((c) => isCustomNpc(c) && !isCompanion(c));
 
         const mapList = Object.values(maps);
         if (entityCountMaps) entityCountMaps.textContent = mapList.length;
@@ -654,7 +676,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 mapList.forEach((m) => {
                     const card = document.createElement('div');
                     card.className = 'entity-card';
-                    const thumb = m.thumbnail || m.mapImage || '';
+                    const rawThumb = m.thumbnail || m.mapImage || '';
+                    const thumb = resolveMediaUrl(rawThumb);
                     const tokenCount = Object.keys(m.tokens || {}).length;
                     card.innerHTML = `
             <div class="entity-card-thumb" style="${thumb ? `background-image: url('${thumb}')` : ''}">
@@ -672,6 +695,9 @@ document.addEventListener('DOMContentLoaded', async () => {
               <button class="btn btn-xs btn-outline btn-export-item" title="Export this map package">
                 📤 Export
               </button>
+              <button class="btn btn-xs btn-outline btn-danger-hover btn-delete-item" title="Delete this map">
+                🗑️
+              </button>
             </div>
           `;
                     card.querySelector('.btn-export-item').addEventListener('click', async (e) => {
@@ -685,9 +711,36 @@ document.addEventListener('DOMContentLoaded', async () => {
                             });
                             if (res && res.success) {
                                 alert(`Map "${m.name}" successfully exported to:\n${res.filePath}`);
+                            } else if (!res?.canceled) {
+                                alert(`Export failed: ${res?.error || 'Unknown error'}`);
                             }
                         } catch (err) {
                             alert(`Export failed: ${err.message}`);
+                        }
+                    });
+                    card.querySelector('.btn-delete-item').addEventListener('click', async (e) => {
+                        e.stopPropagation();
+                        if (
+                            !confirm(
+                                `Are you sure you want to delete map "${m.name || 'Untitled Map'}" from this campaign?\nThis removes the map from the campaign but preserves files on disk.`
+                            )
+                        ) {
+                            return;
+                        }
+                        try {
+                            const res = await api.gmDeleteEntity({
+                                campaignId: camp.id,
+                                entityType: 'map',
+                                entityId: m.id
+                            });
+                            if (res && res.success) {
+                                appendLogLine(`[Campaigns] Deleted map "${m.name || m.id}" from "${camp.name}"`);
+                                await refreshSelectedCampaignEntities();
+                            } else {
+                                alert(`Failed to delete map: ${res?.error || 'Unknown error'}`);
+                            }
+                        } catch (err) {
+                            alert(`Error deleting map: ${err.message}`);
                         }
                     });
                     gridCampaignMaps.appendChild(card);
@@ -706,7 +759,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             charList.forEach((ch) => {
                 const card = document.createElement('div');
                 card.className = 'entity-card';
-                const img = ch.tokenImage || ch.avatar || ch.img || '';
+                const rawImg = ch.tokenImage || ch.avatar || ch.img || '';
+                const img = resolveMediaUrl(rawImg);
                 const subtitle =
                     ch.class ||
                     ch.race ||
@@ -732,6 +786,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             <button class="btn btn-xs btn-outline btn-export-item" title="Export this ${typeKey}">
               📤 Export
             </button>
+            <button class="btn btn-xs btn-outline btn-danger-hover btn-delete-item" title="Delete this ${typeKey}">
+              🗑️
+            </button>
           </div>
         `;
                 card.querySelector('.btn-export-item').addEventListener('click', async (e) => {
@@ -745,9 +802,38 @@ document.addEventListener('DOMContentLoaded', async () => {
                         });
                         if (res && res.success) {
                             alert(`${ch.name || 'Item'} successfully exported to:\n${res.filePath}`);
+                        } else if (!res?.canceled) {
+                            alert(`Export failed: ${res?.error || 'Unknown error'}`);
                         }
                     } catch (err) {
                         alert(`Export failed: ${err.message}`);
+                    }
+                });
+                card.querySelector('.btn-delete-item').addEventListener('click', async (e) => {
+                    e.stopPropagation();
+                    const label =
+                        typeKey === 'player' ? 'player sheet' : typeKey === 'companion' ? 'companion' : 'custom NPC';
+                    if (
+                        !confirm(
+                            `Are you sure you want to delete ${label} "${ch.name || 'Unnamed'}" from this campaign?\nThis removes the character from the campaign but preserves files on disk.`
+                        )
+                    ) {
+                        return;
+                    }
+                    try {
+                        const res = await api.gmDeleteEntity({
+                            campaignId: camp.id,
+                            entityType: typeKey,
+                            entityId: ch.id
+                        });
+                        if (res && res.success) {
+                            appendLogLine(`[Campaigns] Deleted ${label} "${ch.name || ch.id}" from "${camp.name}"`);
+                            await refreshSelectedCampaignEntities();
+                        } else {
+                            alert(`Failed to delete ${label}: ${res?.error || 'Unknown error'}`);
+                        }
+                    } catch (err) {
+                        alert(`Error deleting ${label}: ${err.message}`);
                     }
                 });
                 container.appendChild(card);
@@ -918,7 +1004,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         for (let i = 0; i < files.length; i++) {
             const file = files[i];
-            const filePath = file.path;
+            const filePath = (api.getPathForFile ? api.getPathForFile(file) : file.path) || file.path;
             if (!filePath) continue;
             const lower = filePath.toLowerCase();
             if (!lower.endsWith('.zip') && !lower.endsWith('.json')) continue;
@@ -1088,12 +1174,17 @@ document.addEventListener('DOMContentLoaded', async () => {
             btnToggleTunnel.disabled = true;
             btnToggleTunnel.textContent = 'Connecting...';
             try {
-                await api.startTunnel({
+                const res = await api.startTunnel({
                     mode: activeHostingMode,
                     subdomain,
                     customDomain,
                     token
                 });
+                if (res && res.success === false) {
+                    alert(`Failed to start tunnel: ${res.error || 'Unknown error'}`);
+                }
+            } catch (err) {
+                alert(`Tunnel error: ${err.message}`);
             } finally {
                 btnToggleTunnel.disabled = false;
             }
@@ -1109,12 +1200,24 @@ document.addEventListener('DOMContentLoaded', async () => {
         }, 2000);
     });
 
-    btnLaunchAppVtt.addEventListener('click', () => {
-        api.openVttApp();
+    btnLaunchAppVtt.addEventListener('click', async () => {
+        if (!currentStatus?.isServerRunning) {
+            const confirmed = confirm(
+                'The local game server is currently stopped. Start the server and launch the desktop tabletop?'
+            );
+            if (!confirmed) return;
+        }
+        await api.openVttApp();
     });
 
-    btnLaunchBrowserVtt.addEventListener('click', () => {
-        api.openVttBrowser(shareUrlInput.value);
+    btnLaunchBrowserVtt.addEventListener('click', async () => {
+        if (!currentStatus?.isServerRunning) {
+            const confirmed = confirm(
+                'The local game server is currently stopped. Start the server and open in browser?'
+            );
+            if (!confirmed) return;
+        }
+        await api.openVttBrowser(shareUrlInput.value);
     });
 
     // Folders handlers
@@ -1425,6 +1528,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     let activeEntityIndex = -1;
     let activeStudioMode = 'visual'; // 'visual' | 'json'
     let activeEditModalTab = 'entities'; // 'entities' | 'meta' | 'json'
+    let initialSourceSnapshot = null;
     let activeClassLevel = 1;
     let expandedCategories = new Set();
     let globalSearchResults = null;
@@ -1955,15 +2059,14 @@ document.addEventListener('DOMContentLoaded', async () => {
                 <button class="btn btn-xs btn-outline btn-source-edit" data-action="edit" data-cat="${src.category}" data-code="${src.code}" title="Edit metadata or entries">
                   ✏️ Edit
                 </button>
-                ${
-                    src.isCustom
-                        ? `
+                ${src.isCustom
+                            ? `
                   <button class="btn btn-xs btn-outline btn-source-delete text-danger" data-action="delete" data-cat="${src.category}" data-code="${src.code}" title="Delete this custom source">
                     🗑️
                   </button>
                 `
-                        : ''
-                }
+                            : ''
+                        }
               </div>
             </td>
           `;
@@ -2069,39 +2172,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         renderCategoriesAccordion();
     }
 
-    // Global search input events
-    if (globalCompendiumSearchInput) {
-        globalCompendiumSearchInput.addEventListener('input', () => {
-            clearTimeout(globalSearchDebounceTimer);
-            globalSearchDebounceTimer = setTimeout(triggerGlobalSearch, 220);
-        });
-        globalCompendiumSearchInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') {
-                clearTimeout(globalSearchDebounceTimer);
-                triggerGlobalSearch();
-            }
-        });
-    }
 
-    if (btnClearGlobalSearch) {
-        btnClearGlobalSearch.addEventListener('click', () => {
-            if (globalCompendiumSearchInput) globalCompendiumSearchInput.value = '';
-            clearTimeout(globalSearchDebounceTimer);
-            globalSearchResults = null;
-            renderCategoriesAccordion();
-        });
-    }
-
-    if (globalSearchCategoryChips) {
-        globalSearchCategoryChips.querySelectorAll('.cat-chip').forEach((chip) => {
-            chip.addEventListener('click', () => {
-                globalSearchCategoryChips.querySelectorAll('.cat-chip').forEach((c) => c.classList.remove('active'));
-                chip.classList.add('active');
-                activeGlobalCatFilter = chip.getAttribute('data-cat') || '';
-                triggerGlobalSearch();
-            });
-        });
-    }
 
     // =========================================================================
     // 5E COMPENDIUM INSPECT MODAL
@@ -2214,7 +2285,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             sourcesDropzoneOverlay.classList.add('vtt-hidden');
             if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
                 const filePaths = Array.from(e.dataTransfer.files)
-                    .map((f) => f.path)
+                    .map((f) => ((api.getPathForFile ? api.getPathForFile(f) : f.path) || f.path))
                     .filter(Boolean);
                 if (filePaths.length > 0) {
                     openBulkImportWizard();
@@ -2347,7 +2418,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 api.sourcesSaveUiState({
                     lastPreset: sourcesPresetSelect?.value,
                     lastScope: activeCampaignScope
-                }).catch(() => {});
+                }).catch(() => { });
             }
             loadAllSources();
         });
@@ -2386,7 +2457,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 if (api && api.sourcesSyncToServer) {
                     await api.sourcesSyncToServer();
                 } else {
-                    await fetch('/api/server/sync-sources', { method: 'POST' }).catch(() => {});
+                    await fetch('/api/server/sync-sources', { method: 'POST' }).catch(() => { });
                 }
                 await loadAllSources();
                 showSystemToast(
@@ -2450,7 +2521,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 api.sourcesSaveUiState({
                     lastPreset: sourcesPresetSelect.value,
                     lastScope: activeCampaignScope
-                }).catch(() => {});
+                }).catch(() => { });
             }
         });
     }
@@ -2480,7 +2551,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                         api.sourcesSaveUiState({
                             lastPreset: preset,
                             lastScope: activeCampaignScope
-                        }).catch(() => {});
+                        }).catch(() => { });
                     }
                     await loadAllSources();
                 } else {
@@ -2543,6 +2614,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 ...res.source,
                 rawJson: res.rawJson
             };
+            initialSourceSnapshot = typeof res.rawJson === 'string' ? res.rawJson.trim() : '';
 
             // Populate header
             modalEditSourceTitle.textContent = res.source.name || res.source.code;
@@ -2605,6 +2677,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             // Populate JSON tab
             editSourceJsonEditor.value = res.rawJson || '';
+            editSourceJsonEditor.readOnly = !isCustom;
             validateJsonEditor();
 
             // Parse entities for Master-Detail Studio
@@ -2613,8 +2686,17 @@ document.addEventListener('DOMContentLoaded', async () => {
             // Default to Studio Entities tab
             switchEditModalTab('entities');
 
-            btnEditModalSave.disabled = false;
-            editSaveStatus.textContent = '';
+            if (!isCustom) {
+                btnEditModalSave.disabled = true;
+                btnEditModalSave.title = 'Official built-in sourcebooks are read-only and cannot be modified.';
+                btnEditModalSave.innerHTML = '<span class="icon">🔒</span> Built-in (Read-Only)';
+                editSaveStatus.textContent = 'Official sourcebook is read-only. Create a Custom Book to author homebrew.';
+            } else {
+                btnEditModalSave.disabled = false;
+                btnEditModalSave.title = '';
+                btnEditModalSave.innerHTML = '<span class="icon">💾</span> Save Changes';
+                editSaveStatus.textContent = '';
+            }
         } catch (e) {
             alert(`Error loading source details: ${e.message}`);
             modalEditSource.classList.add('vtt-hidden');
@@ -2729,7 +2811,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                         if (prov.attribution && editSourceAttribution) editSourceAttribution.value = prov.attribution;
                     }
                 }
-            } catch (_) {}
+            } catch (_) { }
         }
 
         if (tabKey === 'entities') {
@@ -2845,7 +2927,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             else if (cat === 'backgrounds') pillText = 'Background';
             else if (cat === 'adventures') pillText = 'Adventure';
 
-            card.innerHTML = `
+            const isCustomSource = Boolean(activeEditingSource?.isCustom);
+        card.innerHTML = `
         <div class="entity-card-info">
           <div class="entity-card-title">${entity.name || 'Untitled Entry'}</div>
           <div class="entity-card-meta">
@@ -2854,8 +2937,10 @@ document.addEventListener('DOMContentLoaded', async () => {
           </div>
         </div>
         <div class="entity-card-actions">
+          ${isCustomSource ? `
           <button type="button" class="btn-card-action btn-duplicate" title="Duplicate entry">📋</button>
           <button type="button" class="btn-card-action btn-delete" title="Delete entry">🗑️</button>
+          ` : '<span class="text-muted" style="font-size: 11px;">🔒 Read-Only</span>'}
         </div>
       `;
 
@@ -2865,16 +2950,20 @@ document.addEventListener('DOMContentLoaded', async () => {
             });
 
             const btnDup = card.querySelector('.btn-duplicate');
-            btnDup.addEventListener('click', (e) => {
-                e.stopPropagation();
-                duplicateEntity(index);
-            });
+            if (btnDup) {
+                btnDup.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    duplicateEntity(index);
+                });
+            }
 
             const btnDel = card.querySelector('.btn-delete');
-            btnDel.addEventListener('click', (e) => {
-                e.stopPropagation();
-                deleteEntity(index);
-            });
+            if (btnDel) {
+                btnDel.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    deleteEntity(index);
+                });
+            }
 
             entityListContainer.appendChild(card);
         });
@@ -3347,9 +3436,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         const rawClasses = getVal('bf-spell-classes');
         const classes = rawClasses
             ? rawClasses
-                  .split(',')
-                  .map((s) => s.trim())
-                  .filter(Boolean)
+                .split(',')
+                .map((s) => s.trim())
+                .filter(Boolean)
             : [];
 
         return {
@@ -3481,9 +3570,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             weaponProperties: weaponProps,
             properties: weaponProps
                 ? weaponProps
-                      .split(',')
-                      .map((s) => s.trim())
-                      .filter(Boolean)
+                    .split(',')
+                    .map((s) => s.trim())
+                    .filter(Boolean)
                 : [],
             isMagic: getCheck('bf-item-is-magic'),
             isSilvered: getCheck('bf-item-is-silvered'),
@@ -3689,9 +3778,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         const rawSaves = getVal('bf-class-saves');
         const savingThrows = rawSaves
             ? rawSaves
-                  .split(',')
-                  .map((s) => s.trim().toUpperCase())
-                  .filter(Boolean)
+                .split(',')
+                .map((s) => s.trim().toUpperCase())
+                .filter(Boolean)
             : ['STR', 'CON'];
 
         const scContainer = document.getElementById('class-subclasses-container');
@@ -4561,12 +4650,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         btnBrowseToken.addEventListener('click', async () => {
             try {
                 const res = await api.sourcesSelectAsset();
-                if (res && res.success && res.filePath) {
+                const chosenPath = res?.webPath || res?.filePath || res?.localPath;
+                if (res && res.success && chosenPath) {
                     const input = document.getElementById('bf-beast-token-url');
                     const preview = document.getElementById('bf-beast-token-preview');
-                    if (input) input.value = res.filePath;
+                    if (input) input.value = chosenPath;
                     if (preview) {
-                        preview.innerHTML = `<img src="${res.filePath}" alt="Token" onerror="this.parentElement.textContent='🐉'" />`;
+                        const resolvedUrl = resolveMediaUrl(chosenPath);
+                        preview.innerHTML = `<img src="${resolvedUrl}" alt="Token" onerror="this.parentElement.textContent='🐉'" />`;
                     }
                 }
             } catch (err) {
@@ -4583,7 +4674,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             const val = tokenUrlInput.value.trim();
             if (preview) {
                 if (val) {
-                    preview.innerHTML = `<img src="${val}" alt="Token" onerror="this.parentElement.textContent='🐉'" />`;
+                    const resolvedUrl = resolveMediaUrl(val);
+                    preview.innerHTML = `<img src="${resolvedUrl}" alt="Token" onerror="this.parentElement.textContent='🐉'" />`;
                 } else {
                     preview.textContent = '🐉';
                 }
@@ -4595,6 +4687,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // SAVING & ENTITY LIFECYCLE
     // =========================================================================
     function saveActiveEntity(showFeedback = true) {
+        if (!activeEditingSource?.isCustom) return;
         if (activeEntityIndex < 0 || !activeSourceEntities[activeEntityIndex]) return;
 
         const cat = activeEditingSource?.category || 'bestiary';
@@ -4755,10 +4848,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                 entity.primaryAc !== undefined
                     ? entity.primaryAc
                     : Array.isArray(entity.ac)
-                      ? typeof entity.ac[0] === 'object'
-                          ? entity.ac[0]?.value || entity.ac[0]?.ac || 10
-                          : entity.ac[0]
-                      : entity.ac || 10;
+                        ? typeof entity.ac[0] === 'object'
+                            ? entity.ac[0]?.value || entity.ac[0]?.ac || 10
+                            : entity.ac[0]
+                        : entity.ac || 10;
             const acCond =
                 entity.acCondition ||
                 (Array.isArray(entity.ac) && entity.ac[0]?.condition ? entity.ac[0].condition : '');
@@ -4768,10 +4861,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                 entity.hpAvg !== undefined
                     ? entity.hpAvg
                     : entity.hp && typeof entity.hp === 'object'
-                      ? entity.hp.average || 10
-                      : typeof entity.hp === 'number'
-                        ? entity.hp
-                        : 10;
+                        ? entity.hp.average || 10
+                        : typeof entity.hp === 'number'
+                            ? entity.hp
+                            : 10;
             const hpFormula = entity.hpFormula || (entity.hp && typeof entity.hp === 'object' ? entity.hp.formula : '');
 
             // Speeds
@@ -4780,10 +4873,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                 entity.speedWalk !== undefined
                     ? entity.speedWalk
                     : speedObj.walk !== undefined
-                      ? speedObj.walk
-                      : typeof entity.speed === 'number'
-                        ? entity.speed
-                        : 30;
+                        ? speedObj.walk
+                        : typeof entity.speed === 'number'
+                            ? entity.speed
+                            : 30;
             const flySpeed = entity.speedFly !== undefined ? entity.speedFly : speedObj.fly || 0;
             const swimSpeed = entity.speedSwim !== undefined ? entity.speedSwim : speedObj.swim || 0;
             const climbSpeed = entity.speedClimb !== undefined ? entity.speedClimb : speedObj.climb || 0;
@@ -4806,8 +4899,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                     ? entity.senses
                     : toCommaSeparatedString(entity.senses)
                 : entity.passivePerception
-                  ? `passive Perception ${entity.passivePerception}`
-                  : '';
+                    ? `passive Perception ${entity.passivePerception}`
+                    : '';
             const languagesStr = entity.languages
                 ? typeof entity.languages === 'string'
                     ? entity.languages
@@ -4883,19 +4976,19 @@ document.addEventListener('DOMContentLoaded', async () => {
                             : '';
                         const scSpells = sc.spells
                             ? Object.entries(sc.spells)
-                                  .map(([lvl, info]) => {
-                                      const lvlLabel =
-                                          lvl === '0'
-                                              ? 'Cantrips (at will)'
-                                              : `Level ${lvl} (${info.slots || 1} slots)`;
-                                      const spellsList = Array.isArray(info.spells)
-                                          ? info.spells
-                                                .map((s) => VTTEntryResolver.resolveTags(`{@spell ${s}}`))
-                                                .join(', ')
-                                          : '';
-                                      return `<div style="font-size: 13px; margin-bottom: 4px;"><strong>${lvlLabel}:</strong> ${spellsList}</div>`;
-                                  })
-                                  .join('')
+                                .map(([lvl, info]) => {
+                                    const lvlLabel =
+                                        lvl === '0'
+                                            ? 'Cantrips (at will)'
+                                            : `Level ${lvl} (${info.slots || 1} slots)`;
+                                    const spellsList = Array.isArray(info.spells)
+                                        ? info.spells
+                                            .map((s) => VTTEntryResolver.resolveTags(`{@spell ${s}}`))
+                                            .join(', ')
+                                        : '';
+                                    return `<div style="font-size: 13px; margin-bottom: 4px;"><strong>${lvlLabel}:</strong> ${spellsList}</div>`;
+                                })
+                                .join('')
                             : '';
                         return `<div class="statblock-spellcasting-block">${scName}${scHeader}${scSpells}</div>`;
                     })
@@ -4956,8 +5049,8 @@ document.addEventListener('DOMContentLoaded', async () => {
           <div class="vtt-statblock-special-section vtt-variants-box" style="margin-top: 16px; border: 1px solid rgba(96, 165, 250, 0.3); background: rgba(96, 165, 250, 0.04); border-radius: 6px; padding: 12px;">
             <div class="statblock-section-heading" style="color: #60a5fa; border-bottom: 1px solid rgba(96, 165, 250, 0.4); margin-top: 0; padding-bottom: 4px;">🔄 Variants & Customizations</div>
             ${variants
-                .map(
-                    (v) => `
+                        .map(
+                            (v) => `
               <div style="margin-top: 10px;">
                 <div style="font-weight: 700; color: #93c5fd; font-size: 13px;">${escapeHtml(v.name || 'Variant')}</div>
                 <div style="font-size: 13px; line-height: 1.5; color: #e2e8f0; margin-top: 4px;">
@@ -4965,8 +5058,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 </div>
               </div>
             `
-                )
-                .join('')}
+                        )
+                        .join('')}
           </div>
         `;
             }
@@ -5046,8 +5139,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             const classesArr = Array.isArray(entity.classes)
                 ? entity.classes.map((c) => (typeof c === 'string' ? c : c.name))
                 : entity.classes
-                  ? [entity.classes]
-                  : [];
+                    ? [entity.classes]
+                    : [];
 
             const subclassesArr = Array.isArray(entity.subclasses)
                 ? entity.subclasses.map((s) => (typeof s === 'string' ? s : s.name || s.shortName))
@@ -5101,49 +5194,45 @@ document.addEventListener('DOMContentLoaded', async () => {
           <div class="statblock-prop-row"><strong>Components:</strong> ${VTTEntryResolver.resolveTags(components)}</div>
           <div class="statblock-prop-row"><strong>Duration:</strong> ${escapeHtml(duration)}</div>
 
-          ${
-              damageChipsHtml || saveBadgeHtml
-                  ? `
+          ${damageChipsHtml || saveBadgeHtml
+                    ? `
             <div class="statblock-prop-row" style="margin-top: 6px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
               ${damageChipsHtml} ${saveBadgeHtml}
             </div>
           `
-                  : ''
-          }
+                    : ''
+                }
 
-          ${
-              classesArr.length > 0
-                  ? `
+          ${classesArr.length > 0
+                    ? `
             <div class="statblock-prop-row" style="margin-top: 4px;">
               <strong>Classes:</strong> ${classesArr.map((c) => `<span class="badge" style="background: rgba(99, 102, 241, 0.15); border: 1px solid rgba(99, 102, 241, 0.3); font-size: 11px; margin: 2px;">${escapeHtml(c)}</span>`).join(' ')}
             </div>
           `
-                  : ''
-          }
+                    : ''
+                }
 
-          ${
-              subclassesArr.length > 0
-                  ? `
+          ${subclassesArr.length > 0
+                    ? `
             <div class="statblock-prop-row" style="font-size: 11px; color: #a5b4fc;">
               <strong>Subclasses:</strong> ${escapeHtml(subclassesArr.join(', '))}
             </div>
           `
-                  : ''
-          }
+                    : ''
+                }
 
           <hr class="tapered-rule" style="margin: 12px 0;" />
           <div style="font-size: 13px; line-height: 1.6; color: #e2e8f0;">
             ${descHtml}
           </div>
-          ${
-              higherHtml
-                  ? `
+          ${higherHtml
+                    ? `
             <div style="margin-top: 14px; padding-top: 8px; border-top: 1px solid rgba(255, 255, 255, 0.1); font-size: 13px; line-height: 1.5; color: #cbd5e1;">
               <strong style="color: #ffd700;">At Higher Levels.</strong> ${higherHtml}
             </div>
           `
-                  : ''
-          }
+                    : ''
+                }
         </div>
       `;
         }
@@ -5186,8 +5275,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 entity.weight !== undefined
                     ? `${entity.weight} lbs.`
                     : entity.weightLbs
-                      ? `${entity.weightLbs} lbs.`
-                      : '';
+                        ? `${entity.weightLbs} lbs.`
+                        : '';
 
             let descHtml = '';
             if (entity.descriptionHtml) descHtml = VTTEntryResolver.resolveTags(entity.descriptionHtml);
@@ -5229,11 +5318,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             </div>
             <hr class="tapered-rule" style="margin: 12px 0;" />
             <div class="statblock-section-heading" style="color: #818cf8;">Subclass Features</div>
-            ${
-                features.length > 0
-                    ? features
-                          .map(
-                              (f) => `
+            ${features.length > 0
+                        ? features
+                            .map(
+                                (f) => `
               <div style="margin-top: 12px; padding: 10px 14px; background: rgba(99, 102, 241, 0.06); border-left: 3px solid #818cf8; border-radius: 4px;">
                 <div style="display: flex; justify-content: space-between; align-items: baseline;">
                   <strong style="color: #c7d2fe; font-size: 14px;">${escapeHtml(f.name || 'Feature')}</strong>
@@ -5244,10 +5332,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                 </div>
               </div>
             `
-                          )
-                          .join('')
-                    : '<div class="text-muted" style="margin-top: 8px;">No feature details defined.</div>'
-            }
+                            )
+                            .join('')
+                        : '<div class="text-muted" style="margin-top: 8px;">No feature details defined.</div>'
+                    }
           </div>
         `;
             }
@@ -5257,9 +5345,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             const saves = Array.isArray(entity.savingThrows)
                 ? entity.savingThrows.join(', ')
                 : entity.savingThrows ||
-                  (Array.isArray(entity.proficiency)
-                      ? entity.proficiency.map((p) => p.toUpperCase()).join(', ')
-                      : 'None');
+                (Array.isArray(entity.proficiency)
+                    ? entity.proficiency.map((p) => p.toUpperCase()).join(', ')
+                    : 'None');
 
             // Aggregate features by level (1 to 20)
             const featuresByLevel = {};
@@ -5302,15 +5390,15 @@ document.addEventListener('DOMContentLoaded', async () => {
             <div class="statblock-section-heading" style="color: #818cf8;">Available Subclasses (${entity.subclasses.length})</div>
             <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px;">
               ${entity.subclasses
-                  .map(
-                      (sc) => `
+                        .map(
+                            (sc) => `
                 <div style="padding: 6px 10px; background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.3); border-radius: 4px; font-size: 12px; color: #c7d2fe;">
                   <strong>${escapeHtml(sc.name || sc.shortName)}</strong>
                   <span style="font-size: 10px; color: #818cf8; margin-left: 4px;">(${escapeHtml(sc.source || entity.source || '')})</span>
                 </div>
               `
-                  )
-                  .join('')}
+                        )
+                        .join('')}
             </div>
           </div>
         `;
@@ -5362,15 +5450,15 @@ document.addEventListener('DOMContentLoaded', async () => {
             const benefitsHtml =
                 Array.isArray(entity.benefits) && entity.benefits.length > 0
                     ? entity.benefits
-                          .map(
-                              (b) => `
+                        .map(
+                            (b) => `
         <li style="margin-bottom: 6px; font-size: 13px; line-height: 1.5; color: #fef3c7;">
           ${b.name ? `<strong style="color: #fbbf24;">${escapeHtml(b.name)}:</strong> ` : ''}
           ${formatPreviewTextWithRollables(b.text || b, b.name)}
         </li>
       `
-                          )
-                          .join('')
+                        )
+                        .join('')
                     : '';
 
             return `
@@ -5466,13 +5554,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             const traits = Array.isArray(entity.traits)
                 ? entity.traits
                 : Array.isArray(entity.entries)
-                  ? entity.entries
-                  : [];
+                    ? entity.entries
+                    : [];
             const traitsHtml =
                 traits.length > 0
                     ? traits
-                          .map(
-                              (t) => `
+                        .map(
+                            (t) => `
         <div class="statblock-entry-item" style="margin-top: 10px;">
           <strong style="color: #34d399;"><em>${escapeHtml(t.name || 'Trait')}.</em></strong>
           <div style="font-size: 13px; line-height: 1.5; color: #d1fae5; margin-top: 2px;">
@@ -5480,8 +5568,8 @@ document.addEventListener('DOMContentLoaded', async () => {
           </div>
         </div>
       `
-                          )
-                          .join('')
+                        )
+                        .join('')
                     : '<div class="text-muted" style="font-size: 12px; margin-top: 6px;">No racial traits defined.</div>';
 
             return `
@@ -5583,8 +5671,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const critNotice = isCrit
                     ? ' <strong style="color: #10b981;">(CRIT! 🌟)</strong>'
                     : isFumble
-                      ? ' <strong style="color: #ef4444;">(FUMBLE! 💀)</strong>'
-                      : '';
+                        ? ' <strong style="color: #ef4444;">(FUMBLE! 💀)</strong>'
+                        : '';
 
                 entryHtml = `
           <span><strong>${label}</strong> (${rollExpr}): ${rollsStr}${modStr}${critNotice}</span>
@@ -5639,6 +5727,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     function addNewBlankEntity() {
         if (!activeEditingSource) return;
+        if (!activeEditingSource.isCustom) {
+            alert('Built-in official sourcebooks are read-only. Create a Custom Book to author homebrew.');
+            return;
+        }
         const cat = activeEditingSource.category;
         const newEntity = createBlankEntity(cat, activeEditingSource.code);
         activeSourceEntities.push(newEntity);
@@ -5648,6 +5740,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     function duplicateEntity(index) {
         if (index < 0 || index >= activeSourceEntities.length) return;
+        if (!activeEditingSource?.isCustom) {
+            alert('Built-in official sourcebooks are read-only and cannot be modified.');
+            return;
+        }
         const orig = activeSourceEntities[index];
         const dup = JSON.parse(JSON.stringify(orig));
         dup.id = `${catPrefix(activeEditingSource?.category)}_${Date.now()}`;
@@ -5682,6 +5778,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     function deleteEntity(index) {
         if (index < 0 || index >= activeSourceEntities.length) return;
+        if (!activeEditingSource?.isCustom) {
+            alert('Built-in official sourcebooks are read-only and cannot be modified.');
+            return;
+        }
         const entity = activeSourceEntities[index];
         const confirmed = confirm(`Are you sure you want to delete "${entity.name || 'this entry'}"?`);
         if (!confirmed) return;
@@ -6132,7 +6232,7 @@ Shortbow. Ranged Weapon Attack: +4 to hit, range 80/320 ft., one target. Hit: 5 
                             parsed._meta.provenance.attribution = editSourceAttribution.value.trim();
                         editSourceJsonEditor.value = JSON.stringify(parsed, null, 2);
                     }
-                } catch (_) {}
+                } catch (_) { }
             } else {
                 // 1. Commit active entity form changes
                 saveActiveEntity(false);
@@ -6168,8 +6268,14 @@ Shortbow. Ranged Weapon Attack: +4 to hit, range 80/320 ft., one target. Hit: 5 
                 const res = await api.sourcesSaveDetails(savePayload);
                 if (res && res.success) {
                     editSaveStatus.textContent = 'Saved successfully!';
+                    initialSourceSnapshot = editSourceJsonEditor?.value ? editSourceJsonEditor.value.trim() : '';
                     setTimeout(() => {
                         modalEditSource.classList.add('vtt-hidden');
+                        activeEditingSource = null;
+                        activeSourceEntities = [];
+                        activeSourceRawData = null;
+                        activeEntityIndex = -1;
+                        initialSourceSnapshot = null;
                         loadAllSources();
                     }, 400);
                 } else {
@@ -6369,16 +6475,42 @@ Shortbow. Ranged Weapon Attack: +4 to hit, range 80/320 ft., one target. Hit: 5 
         });
     }
 
+    function isEditModalDirty() {
+        if (!activeEditingSource || initialSourceSnapshot === null) return false;
+        try {
+            if (activeEditModalTab === 'entities') {
+                saveActiveEntity(false);
+                syncSourceEntitiesToJsonEditor();
+            }
+            const currentContent = editSourceJsonEditor?.value ? editSourceJsonEditor.value.trim() : '';
+            return currentContent !== initialSourceSnapshot;
+        } catch (_) {
+            return false;
+        }
+    }
+
     const dismissEditModal = () => {
+        if (isEditModalDirty()) {
+            const discard = confirm('You have unsaved changes in this sourcebook. Discard changes and close?');
+            if (!discard) return;
+        }
         if (modalEditSource) modalEditSource.classList.add('vtt-hidden');
         activeEditingSource = null;
         activeSourceEntities = [];
         activeSourceRawData = null;
         activeEntityIndex = -1;
+        initialSourceSnapshot = null;
     };
 
     if (btnEditModalClose) btnEditModalClose.addEventListener('click', dismissEditModal);
     if (btnEditModalCancel) btnEditModalCancel.addEventListener('click', dismissEditModal);
+    window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' || e.keyCode === 27) {
+            if (modalEditSource && !modalEditSource.classList.contains('vtt-hidden')) {
+                dismissEditModal();
+            }
+        }
+    });
 
     // =========================================================================
     // CREATE CUSTOM SOURCE MODAL LOGIC
@@ -6471,9 +6603,9 @@ Shortbow. Ranged Weapon Attack: +4 to hit, range 80/320 ft., one target. Hit: 5 
     };
 
     if (globalSearchCategoryChips) {
-        globalSearchCategoryChips.querySelectorAll('.chip-filter').forEach((chip) => {
+        globalSearchCategoryChips.querySelectorAll('.cat-chip, .chip-filter').forEach((chip) => {
             chip.addEventListener('click', () => {
-                globalSearchCategoryChips.querySelectorAll('.chip-filter').forEach((c) => c.classList.remove('active'));
+                globalSearchCategoryChips.querySelectorAll('.cat-chip, .chip-filter').forEach((c) => c.classList.remove('active'));
                 chip.classList.add('active');
                 activeGlobalCatFilter = chip.getAttribute('data-cat') || '';
                 performGlobalSearch();
@@ -6568,8 +6700,8 @@ Shortbow. Ranged Weapon Attack: +4 to hit, range 80/320 ft., one target. Hit: 5 
                 const typeInfo = item.cr
                     ? `CR ${item.cr}`
                     : item.level !== undefined
-                      ? `Level ${item.level}`
-                      : item.type || '—';
+                        ? `Level ${item.level}`
+                        : item.type || '—';
                 html += `
           <tr class="search-result-row" data-category="${escapeHtml(item.category)}" data-name="${escapeHtml(item.name)}" data-source="${escapeHtml(item.source)}">
             <td><span class="result-cat-badge">${icon} ${escapeHtml(item.category)}</span></td>
@@ -6889,8 +7021,9 @@ Shortbow. Ranged Weapon Attack: +4 to hit, range 80/320 ft., one target. Hit: 5 
             if (!dt || !dt.files || dt.files.length === 0) return;
             const paths = [];
             for (let i = 0; i < dt.files.length; i++) {
-                if (dt.files[i].path) {
-                    paths.push(dt.files[i].path);
+                const fPath = ((api.getPathForFile ? api.getPathForFile(dt.files[i]) : dt.files[i].path) || dt.files[i].path);
+                if (fPath) {
+                    paths.push(fPath);
                 }
             }
             if (paths.length > 0) {

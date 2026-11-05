@@ -16,7 +16,9 @@ import {
     getBaseScores,
     extractGrantedSpells,
     calculateEffectiveSpeed,
-    parseEquipmentTextToData
+    parseEquipmentTextToData,
+    MULTICLASS_PROFICIENCIES,
+    extractSpeciesProficiencies
 } from './builder-state.js';
 import { renderStep1 } from './step1-identity.js';
 import { renderStep2 } from './step2-abilities.js';
@@ -74,9 +76,13 @@ export function ensureCharacterBuilderModalExists() {
                 <div style="display:flex; align-items:center; gap:12px;">
                     <i class="fa-solid fa-wand-magic-sparkles text-gradient-gold" style="font-size:1.35rem;"></i>
                     <div>
-                        <div style="display:flex; align-items:center; gap:10px;">
+                        <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
                             <h3 style="margin:0; color:var(--color-gold-base); font-size:1.15rem; font-family:var(--font-heading);">Character Builder & Level Up Wizard</h3>
                             <span id="pc-builder-audit-badge" class="badge" style="background:rgba(46,204,113,0.15); border:1px solid rgba(46,204,113,0.4); color:#2ecc71; font-size:0.75rem; padding:2px 8px; border-radius:4px;">Wizard Active</span>
+                            <div id="pc-builder-mode-toggle" style="display:inline-flex; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); border-radius:14px; padding:2px; gap:2px;">
+                                <button type="button" id="pc-builder-mode-create" style="border:none; background:transparent; color:var(--color-text-muted); font-size:0.72rem; padding:2px 8px; border-radius:12px; cursor:pointer;">New Character</button>
+                                <button type="button" id="pc-builder-mode-levelup" style="border:none; background:transparent; color:var(--color-text-muted); font-size:0.72rem; padding:2px 8px; border-radius:12px; cursor:pointer;">Level-Up Mode</button>
+                            </div>
                         </div>
                         <div id="pc-builder-char-summary" style="font-size:0.8rem; color:var(--color-text-secondary); margin-top:2px;">
                             Loading character builder...
@@ -273,7 +279,22 @@ export async function openCharacterBuilderModal(char, options = {}) {
         useStartingWealth: false,
         startingGoldAmount: 0,
         autoWeaponMacros: true,
-        _manualSpeedCustomized: false
+        _manualSpeedCustomized: false,
+        _manualSensesCustomized: false,
+        tokenImages:
+            Array.isArray(char.tokenImages) && char.tokenImages.length > 0
+                ? [...char.tokenImages]
+                : char.avatar
+                  ? [{ url: char.avatar, name: 'Default Token' }]
+                  : [],
+        activeTokenIndex: typeof char.activeTokenIndex === 'number' ? char.activeTokenIndex : 0,
+        builderMode:
+            (char.level && char.level > 1) ||
+            (Array.isArray(char.equipment) && char.equipment.length > 0) ||
+            (Array.isArray(char.features) && char.features.length > 0)
+                ? 'levelup'
+                : 'create',
+        allowLevelUpRebuildEquip: false
     };
 
     // Helper: Automatically create attack macro for weapons
@@ -368,7 +389,7 @@ export async function openCharacterBuilderModal(char, options = {}) {
                   }))
                 : [
                       {
-                          id: 'dmg_' + Date.now(),
+                          id: 'dmg_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
                           formula: cat.dmg1 || '1d6',
                           stat: chosenStat,
                           extra: bonusVal,
@@ -393,6 +414,15 @@ export async function openCharacterBuilderModal(char, options = {}) {
             ? tmpl.isAdamantine
             : cat.isAdamantine || (item.name && /adamant/i.test(item.name)));
 
+        const hasProf = candidateProficiencies?.some((p) => {
+            const pLow = (p.label || p.name || '').toLowerCase();
+            if (pLow.includes('all weapons')) return true;
+            if (pLow.includes('simple') && (cat.weaponCategory === 'simple' || SIMPLE_WEAPONS.some((w) => itemLow.includes(w.toLowerCase())))) return true;
+            if (pLow.includes('martial') && (cat.weaponCategory === 'martial' || MARTIAL_WEAPONS.some((w) => itemLow.includes(w.toLowerCase())))) return true;
+            if (pLow.includes(itemLow)) return true;
+            return false;
+        }) ?? true;
+
         targetChar.macros.push({
             id: 'mac_' + Date.now() + Math.random().toString(36).substr(2, 5),
             name: item.name,
@@ -401,7 +431,7 @@ export async function openCharacterBuilderModal(char, options = {}) {
             range: rangeVal,
             target: targetVal,
             attackStat: chosenStat,
-            attackProf: true,
+            attackProf: hasProf,
             attackExtra: bonusVal,
             critRange: 20,
             attackBonus: '',
@@ -483,6 +513,9 @@ export async function openCharacterBuilderModal(char, options = {}) {
     let matchedSubrace = null;
     let matchedBg = null;
     let candidateRacialTraits = [];
+    let candidateSpeciesSkills = [];
+    let candidateLanguages = [];
+    let candidateTools = [];
     let candidateBgFeatures = [];
     let candidateBgItems = [];
     let candidateBgSkills = [];
@@ -493,6 +526,8 @@ export async function openCharacterBuilderModal(char, options = {}) {
     let availableClassSkills = [];
     let selectedClassSkills = new Set();
     let classSkillLimit = 2;
+    let multiclassSkillSections = [];
+    let selectedMulticlassSkills = new Map(); // cIdx -> Set of skills
     let optFeatureSections = [];
     let candidateInnateSpells = [];
     let candidateBgExpandedSpells = [];
@@ -502,10 +537,15 @@ export async function openCharacterBuilderModal(char, options = {}) {
         : [];
     let allCandidateAbilities = [];
 
+    const baselineCharacterLevel = parseInt(char.level) || 1;
+    const baselineMaxHp = parseInt(char.hpMax) || 10;
+
     const allArmorOptions = [{ id: 'none', name: 'Unarmored Defense / No Armor (10 + DEX)', type: 'None', baseAc: 10 }];
 
     const builderState = {
         hpMode: 'average',
+        preserveExistingHp: workingChar.builderMode === 'levelup',
+        hpRolledDice: new Map(), // key: `${cIdx}_${lvl}` -> rollVal
         calculatedHp: 10,
         hpRolls: [],
         hpBreakdown: {
@@ -529,6 +569,32 @@ export async function openCharacterBuilderModal(char, options = {}) {
         const classes = workingChar.classes;
         const primaryCls = classes[0] || { name: 'Fighter', subclass: '', level: 1 };
         const totalLevel = classes.reduce((sum, c) => sum + (parseInt(c.level) || 1), 0);
+        const is2024Char = typeof getCharIs2024 === 'function' ? getCharIs2024(workingChar) : false;
+
+        // Preserve checklist selections across recomputes
+        const userSelectedAbilities = new Map();
+        allCandidateAbilities.forEach((a) => {
+            if (a && a.name) {
+                userSelectedAbilities.set(a.name.toLowerCase().trim(), a.checked);
+            }
+        });
+
+        const userSelectedEquipChoices = new Map();
+        classEquipChoiceSets.forEach((cSet, idx) => {
+            userSelectedEquipChoices.set(idx, {
+                selectedOption: cSet.selectedOption,
+                selectedWeapon: cSet.selectedWeapon,
+                selectedWeapon1: cSet.selectedWeapon1,
+                selectedWeapon2: cSet.selectedWeapon2
+            });
+        });
+
+        const userSelectedBgEquip = new Map();
+        candidateBgItems.forEach((item) => {
+            if (item && item.name) {
+                userSelectedBgEquip.set(item.name.toLowerCase().trim(), item.checked);
+            }
+        });
 
         // 1. Match Race & Subrace
         const rawRaceName = (workingChar.race || '')
@@ -579,8 +645,9 @@ export async function openCharacterBuilderModal(char, options = {}) {
             if (Array.isArray(rObj.traits)) {
                 rObj.traits.forEach((t) => {
                     const tName = t.name || '';
-                    if (seenTraits.has(tName.toLowerCase().trim())) return;
-                    seenTraits.add(tName.toLowerCase().trim());
+                    const tKey = tName.toLowerCase().trim();
+                    if (seenTraits.has(tKey)) return;
+                    seenTraits.add(tKey);
                     candidateRacialTraits.push({
                         id: t.id || 'trait_' + Math.random().toString(36).substr(2, 6),
                         name: tName,
@@ -594,7 +661,9 @@ export async function openCharacterBuilderModal(char, options = {}) {
                         resetType: t.resetType || 'short',
                         category: `${rObj.name} Traits`,
                         type: 'race',
-                        checked: !existingAbilities.has(tName.toLowerCase().trim())
+                        checked: userSelectedAbilities.has(tKey)
+                            ? !!userSelectedAbilities.get(tKey)
+                            : !existingAbilities.has(tKey)
                     });
                 });
             }
@@ -608,12 +677,19 @@ export async function openCharacterBuilderModal(char, options = {}) {
             workingChar.speed.fly = effectiveSpeed.fly;
             workingChar.speed.burrow = effectiveSpeed.burrow;
         }
-        if (matchedSubrace?.senses?.darkvision || matchedBaseRace?.senses?.darkvision) {
-            workingChar.senses.darkvision = Math.max(
-                workingChar.senses.darkvision,
-                matchedSubrace?.senses?.darkvision || matchedBaseRace?.senses?.darkvision || 0
-            );
+        if (!workingChar._manualSensesCustomized) {
+            workingChar.senses.darkvision =
+                matchedSubrace?.senses?.darkvision || matchedBaseRace?.senses?.darkvision || 0;
         }
+
+        // Extract innate Species Skills, Languages & Tools
+        candidateSpeciesSkills = [];
+        candidateLanguages = [];
+        candidateTools = [];
+        const speciesProfs = extractSpeciesProficiencies(matchedBaseRace, matchedSubrace);
+        candidateSpeciesSkills = speciesProfs.skills;
+        candidateLanguages = [...speciesProfs.languages];
+        candidateTools = [...speciesProfs.tools];
 
         // 2. Match Background
         const rawBgName = (workingChar.background || '')
@@ -641,6 +717,7 @@ export async function openCharacterBuilderModal(char, options = {}) {
         if (matchedBg) {
             if (Array.isArray(matchedBg.features) && matchedBg.features.length > 0) {
                 matchedBg.features.forEach((f) => {
+                    const fKey = (f.name || `Feature: ${matchedBg.name}`).toLowerCase().trim();
                     candidateBgFeatures.push({
                         id: 'bg_feat_' + Math.random().toString(36).substr(2, 6),
                         name: f.name || `Feature: ${matchedBg.name}`,
@@ -649,10 +726,13 @@ export async function openCharacterBuilderModal(char, options = {}) {
                         description: f.description || '',
                         category: 'Background Features',
                         type: 'background',
-                        checked: !existingAbilities.has((f.name || '').toLowerCase().trim())
+                        checked: userSelectedAbilities.has(fKey)
+                            ? !!userSelectedAbilities.get(fKey)
+                            : !existingAbilities.has(fKey)
                     });
                 });
             } else if (matchedBg.description) {
+                const fKey = `feature: ${matchedBg.name}`.toLowerCase();
                 candidateBgFeatures.push({
                     id: 'bg_feat_' + Math.random().toString(36).substr(2, 6),
                     name: `Feature: ${matchedBg.name}`,
@@ -661,7 +741,9 @@ export async function openCharacterBuilderModal(char, options = {}) {
                     description: matchedBg.description,
                     category: 'Background Features',
                     type: 'background',
-                    checked: !existingAbilities.has(`feature: ${matchedBg.name}`.toLowerCase())
+                    checked: userSelectedAbilities.has(fKey)
+                        ? !!userSelectedAbilities.get(fKey)
+                        : !existingAbilities.has(fKey)
                 });
             }
 
@@ -679,6 +761,46 @@ export async function openCharacterBuilderModal(char, options = {}) {
                 });
             }
 
+            // Extract background languages & tools
+            if (Array.isArray(matchedBg.languageProficiencies)) {
+                matchedBg.languageProficiencies.forEach((lp) => {
+                    if (typeof lp === 'object') {
+                        Object.keys(lp).forEach((k) => {
+                            if (lp[k] === true) {
+                                const lName = k.charAt(0).toUpperCase() + k.slice(1);
+                                if (!candidateLanguages.includes(lName)) candidateLanguages.push(lName);
+                            }
+                        });
+                    }
+                });
+            }
+            if (matchedBg.languages) {
+                const bgLangs = Array.isArray(matchedBg.languages) ? matchedBg.languages : matchedBg.languages.split(',');
+                bgLangs.forEach((l) => {
+                    const cleanL = typeof l === 'string' ? l.trim() : '';
+                    if (cleanL && !candidateLanguages.includes(cleanL)) candidateLanguages.push(cleanL);
+                });
+            }
+
+            if (matchedBg.toolProficiencies) {
+                const bgTools = Array.isArray(matchedBg.toolProficiencies) ? matchedBg.toolProficiencies : [matchedBg.toolProficiencies];
+                bgTools.forEach((tp) => {
+                    if (typeof tp === 'string' && !candidateTools.includes(tp)) {
+                        candidateTools.push(tp);
+                    } else if (typeof tp === 'object') {
+                        Object.keys(tp).forEach((k) => {
+                            if (!candidateTools.includes(k)) candidateTools.push(k);
+                        });
+                    }
+                });
+            } else if (matchedBg.tools) {
+                const bgTools = Array.isArray(matchedBg.tools) ? matchedBg.tools : matchedBg.tools.split(',');
+                bgTools.forEach((tp) => {
+                    const cleanT = typeof tp === 'string' ? tp.trim() : '';
+                    if (cleanT && !candidateTools.includes(cleanT)) candidateTools.push(cleanT);
+                });
+            }
+
             let hasBgEquipItems = false;
             if (matchedBg.equipmentData) {
                 if (
@@ -687,6 +809,7 @@ export async function openCharacterBuilderModal(char, options = {}) {
                 ) {
                     matchedBg.equipmentData.fixedItems.forEach((it) => {
                         hasBgEquipItems = true;
+                        const itKey = (it.name || '').toLowerCase().trim();
                         candidateBgItems.push({
                             id: 'bg_it_' + Math.random().toString(36).substr(2, 6),
                             name: it.name || 'Item',
@@ -694,7 +817,9 @@ export async function openCharacterBuilderModal(char, options = {}) {
                             weight: parseFloat(it.weight) || 0,
                             type: 'Gear',
                             source: 'Background',
-                            checked: !existingEquip.has((it.name || '').toLowerCase().trim())
+                            checked: userSelectedBgEquip.has(itKey)
+                                ? !!userSelectedBgEquip.get(itKey)
+                                : !existingEquip.has(itKey)
                         });
                     });
                 }
@@ -702,6 +827,7 @@ export async function openCharacterBuilderModal(char, options = {}) {
                     const bgGold = parseInt(matchedBg.equipmentData.fixedGold) || 0;
                     if (bgGold > 0) {
                         hasBgEquipItems = true;
+                        const goldKey = `${bgGold} gp (starting gold)`.toLowerCase();
                         candidateBgItems.push({
                             id: 'bg_gold_' + Math.random().toString(36).substr(2, 6),
                             name: `${bgGold} GP (Starting Gold)`,
@@ -711,7 +837,9 @@ export async function openCharacterBuilderModal(char, options = {}) {
                             source: 'Background',
                             isGold: true,
                             goldAmount: bgGold,
-                            checked: (parseInt(char.currency?.gp) || 0) === 0
+                            checked: userSelectedBgEquip.has(goldKey)
+                                ? !!userSelectedBgEquip.get(goldKey)
+                                : (parseInt(char.currency?.gp) || 0) === 0
                         });
                     }
                 }
@@ -723,6 +851,7 @@ export async function openCharacterBuilderModal(char, options = {}) {
                 const parsedBgEq = parseEquipmentTextToData(rawBgEquip);
                 if (Array.isArray(parsedBgEq.fixedItems)) {
                     parsedBgEq.fixedItems.forEach((it) => {
+                        const itKey = (it.name || '').toLowerCase().trim();
                         candidateBgItems.push({
                             id: 'bg_it_' + Math.random().toString(36).substr(2, 6),
                             name: it.name || 'Item',
@@ -730,12 +859,15 @@ export async function openCharacterBuilderModal(char, options = {}) {
                             weight: parseFloat(it.weight) || 0,
                             type: 'Gear',
                             source: 'Background',
-                            checked: !existingEquip.has((it.name || '').toLowerCase().trim())
+                            checked: userSelectedBgEquip.has(itKey)
+                                ? !!userSelectedBgEquip.get(itKey)
+                                : !existingEquip.has(itKey)
                         });
                     });
                 }
                 if (parsedBgEq.fixedGold > 0) {
                     const bgGold = parsedBgEq.fixedGold;
+                    const goldKey = `${bgGold} gp (starting gold)`.toLowerCase();
                     candidateBgItems.push({
                         id: 'bg_gold_' + Math.random().toString(36).substr(2, 6),
                         name: `${bgGold} GP (Starting Gold)`,
@@ -745,7 +877,9 @@ export async function openCharacterBuilderModal(char, options = {}) {
                         source: 'Background',
                         isGold: true,
                         goldAmount: bgGold,
-                        checked: (parseInt(char.currency?.gp) || 0) === 0
+                        checked: userSelectedBgEquip.has(goldKey)
+                            ? !!userSelectedBgEquip.get(goldKey)
+                            : (parseInt(char.currency?.gp) || 0) === 0
                     });
                 }
             }
@@ -757,6 +891,7 @@ export async function openCharacterBuilderModal(char, options = {}) {
         classFixedItems = [];
         candidateProficiencies = [];
         availableClassSkills = [];
+        multiclassSkillSections = [];
 
         // Primary class saves & skills
         const rawPrimary = (primaryCls.name || '')
@@ -812,6 +947,15 @@ export async function openCharacterBuilderModal(char, options = {}) {
                 });
             });
 
+            // Primary class tool proficiencies (e.g. Rogue Thieves' Tools, Artificer, Monk)
+            if (startingProfs.tools) {
+                const stTools = Array.isArray(startingProfs.tools) ? startingProfs.tools : [startingProfs.tools];
+                stTools.forEach((t) => {
+                    const cleanT = typeof t === 'string' ? t.trim() : '';
+                    if (cleanT && !candidateTools.includes(cleanT)) candidateTools.push(cleanT);
+                });
+            }
+
             if (startingProfs.skills) {
                 const skArr = Array.isArray(startingProfs.skills) ? startingProfs.skills : [startingProfs.skills];
                 const skData = skArr[0] || {};
@@ -845,6 +989,77 @@ export async function openCharacterBuilderModal(char, options = {}) {
                 });
             }
 
+            // Multiclass Proficiencies for Secondary Classes (Classes 1+)
+            if (classes.length > 1) {
+                classes.slice(1).forEach((secCls, secIdx) => {
+                    const cIdx = secIdx + 1;
+                    const rawSec = (secCls.name || '').toLowerCase().replace(/\s*\[.*?\]$/, '').trim();
+                    const mcRule = MULTICLASS_PROFICIENCIES[rawSec];
+                    if (!mcRule) return;
+
+                    // Armor
+                    (mcRule.armor || []).forEach((arm) => {
+                        let cand = candidateProficiencies.find((p) => p.type === 'armor' && p.label.toLowerCase() === arm.toLowerCase());
+                        if (cand) {
+                            cand.checked = true;
+                        } else {
+                            candidateProficiencies.push({
+                                id: 'armor_mc_' + arm.replace(/\W+/g, '_').toLowerCase(),
+                                type: 'armor',
+                                label: arm,
+                                checked: true,
+                                sourceClass: secCls.name
+                            });
+                        }
+                    });
+
+                    // Weapons
+                    (mcRule.weapons || []).forEach((wp) => {
+                        let cand = candidateProficiencies.find((p) => p.type === 'weapon' && p.label.toLowerCase() === wp.toLowerCase());
+                        if (cand) {
+                            cand.checked = true;
+                        } else {
+                            candidateProficiencies.push({
+                                id: 'weapon_mc_' + wp.replace(/\W+/g, '_').toLowerCase(),
+                                type: 'weapon',
+                                label: wp,
+                                checked: true,
+                                sourceClass: secCls.name
+                            });
+                        }
+                    });
+
+                    // Tools
+                    (mcRule.tools || []).forEach((tp) => {
+                        if (!candidateTools.includes(tp)) candidateTools.push(tp);
+                    });
+
+                    // Skills (Bard: 1 of any, Ranger: 1 from list, Rogue: 1 from list)
+                    if (mcRule.skills && mcRule.skills.count > 0) {
+                        const fromList = mcRule.skills.from.includes('any')
+                            ? ['Acrobatics', 'Animal Handling', 'Arcana', 'Athletics', 'Deception', 'History', 'Insight', 'Intimidation', 'Investigation', 'Medicine', 'Nature', 'Perception', 'Performance', 'Persuasion', 'Religion', 'Sleight of Hand', 'Stealth', 'Survival']
+                            : mcRule.skills.from;
+                        if (!selectedMulticlassSkills.has(cIdx)) {
+                            selectedMulticlassSkills.set(cIdx, new Set());
+                        }
+                        const curSet = selectedMulticlassSkills.get(cIdx);
+                        if (char.skills && typeof char.skills === 'object') {
+                            fromList.forEach((sk) => {
+                                if (char.skills[sk] && !selectedClassSkills.has(sk) && !candidateSpeciesSkills.includes(sk) && !candidateBgSkills.includes(sk)) {
+                                    if (curSet.size < mcRule.skills.count) curSet.add(sk);
+                                }
+                            });
+                        }
+                        multiclassSkillSections.push({
+                            classIdx: cIdx,
+                            className: secCls.name,
+                            limit: mcRule.skills.count,
+                            from: fromList
+                        });
+                    }
+                });
+            }
+
             const startEquipData =
                 primaryFullData?.class?.[0]?.startingEquipment || matchedPrimaryCls.startingEquipment;
             if (startEquipData?.default) {
@@ -866,11 +1081,14 @@ export async function openCharacterBuilderModal(char, options = {}) {
                         const firstOpt = options[0]?.label || '';
                         const isMartial = firstOpt.toLowerCase().includes('martial weapon');
                         const isSimple = firstOpt.toLowerCase().includes('simple weapon');
+                        const savedChoice = userSelectedEquipChoices.get(eqIdx);
                         classEquipChoiceSets.push({
                             id: 'eq_choice_' + eqIdx,
                             title: `Choice ${eqIdx + 1}`,
-                            selectedOption: 'a',
-                            selectedWeapon: isMartial ? 'Longsword' : isSimple ? 'Quarterstaff' : '',
+                            selectedOption: savedChoice?.selectedOption || 'a',
+                            selectedWeapon: savedChoice?.selectedWeapon || (isMartial ? 'Longsword' : isSimple ? 'Quarterstaff' : ''),
+                            selectedWeapon1: savedChoice?.selectedWeapon1 || '',
+                            selectedWeapon2: savedChoice?.selectedWeapon2 || '',
                             options
                         });
                     } else {
@@ -967,7 +1185,9 @@ export async function openCharacterBuilderModal(char, options = {}) {
                                 resetType: cf.resetType || 'short',
                                 formula: cf.formula || '',
                                 formulaConfig: cf.formulaConfig || null,
-                                checked: !existingAbilities.has(key)
+                                checked: userSelectedAbilities.has(key)
+                                    ? !!userSelectedAbilities.get(key)
+                                    : !existingAbilities.has(key)
                             });
                         }
                     });
@@ -1052,7 +1272,9 @@ export async function openCharacterBuilderModal(char, options = {}) {
                                     resetType: scf.resetType || 'short',
                                     formula: scf.formula || '',
                                     formulaConfig: scf.formulaConfig || null,
-                                    checked: !existingAbilities.has(key)
+                                    checked: userSelectedAbilities.has(key)
+                                    ? !!userSelectedAbilities.get(key)
+                                    : !existingAbilities.has(key)
                                 });
                             }
                         }
@@ -1122,7 +1344,9 @@ export async function openCharacterBuilderModal(char, options = {}) {
                         actionType: of.actionType || 'passive',
                         description: extractTextFromEntries(of.entries) || of.description || '',
                         prerequisite: of.prerequisite || '',
-                        checked: existingAbilities.has(of.name.toLowerCase().trim()),
+                        checked: userSelectedAbilities.has(of.name.toLowerCase().trim())
+                            ? !!userSelectedAbilities.get(of.name.toLowerCase().trim())
+                            : existingAbilities.has(of.name.toLowerCase().trim()),
                         formula: of.formula || '',
                         formulaConfig: of.formulaConfig || null,
                         hasCounter: !!of.hasCounter,
@@ -1214,7 +1438,6 @@ export async function openCharacterBuilderModal(char, options = {}) {
             }
         }
 
-        const is2024Char = typeof getCharIs2024 === 'function' ? getCharIs2024(workingChar) : false;
         const isVariantHuman = (workingChar.race || '').toLowerCase().includes('variant human');
         const hasBgFeat =
             matchedBg &&
@@ -1495,14 +1718,19 @@ export async function openCharacterBuilderModal(char, options = {}) {
                 isCaster = true;
                 maxSlot = Math.min(9, Math.ceil(l / 2));
                 maxCantrips = l >= 10 ? 5 : l >= 4 ? 4 : 3;
-                const intMod = getMod(
-                    getEffectiveStats(workingChar, matchedBaseRace, matchedSubrace, asiTiers, racialChoiceDefs).int
-                );
-                maxSpells = Math.max(1, intMod + l);
-            } else if (raw === 'cleric' || raw === 'druid') {
+                maxSpells = Math.max(1, 6 + (l - 1) * 2);
+            } else if (raw === 'cleric') {
                 isCaster = true;
                 maxSlot = Math.min(9, Math.ceil(l / 2));
                 maxCantrips = l >= 10 ? 5 : l >= 4 ? 4 : 3;
+                const wisMod = getMod(
+                    getEffectiveStats(workingChar, matchedBaseRace, matchedSubrace, asiTiers, racialChoiceDefs).wis
+                );
+                maxSpells = Math.max(1, wisMod + l);
+            } else if (raw === 'druid') {
+                isCaster = true;
+                maxSlot = Math.min(9, Math.ceil(l / 2));
+                maxCantrips = l >= 10 ? 4 : l >= 4 ? 3 : 2;
                 const wisMod = getMod(
                     getEffectiveStats(workingChar, matchedBaseRace, matchedSubrace, asiTiers, racialChoiceDefs).wis
                 );
@@ -1526,7 +1754,9 @@ export async function openCharacterBuilderModal(char, options = {}) {
                 const known = [2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 11, 11, 12, 12, 13, 13, 14, 14, 15, 15];
                 maxSpells = known[l - 1] || 2;
             } else if (raw === 'paladin' || raw === 'ranger') {
-                if (l >= 2) {
+                const is2024 = is2024Char || (c.source && c.source.includes('2024')) || (char.ruleset === '2024');
+                const minLvl = is2024 ? 1 : 2;
+                if (l >= minLvl) {
                     isCaster = true;
                     maxSlot = Math.min(5, Math.ceil(l / 4));
                     maxCantrips = 0;
@@ -1537,8 +1767,11 @@ export async function openCharacterBuilderModal(char, options = {}) {
                         );
                         maxSpells = Math.max(1, chaMod + Math.floor(l / 2));
                     } else {
-                        const known = [0, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 11, 11];
-                        maxSpells = known[l - 1] || Math.max(1, Math.floor(l / 2));
+                        const known = [2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 11, 11];
+                        maxSpells = is2024
+                            ? known[l - 1] || 2
+                            : [0, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 11, 11][l - 1] ||
+                              Math.max(1, Math.floor(l / 2));
                     }
                 }
             } else if (raw === 'artificer') {
@@ -1561,7 +1794,10 @@ export async function openCharacterBuilderModal(char, options = {}) {
             }
 
             if (isCaster && spellList.length > 0) {
-                const isPreparedFullList = ['paladin', 'artificer', 'cleric', 'druid'].includes(raw);
+                const isPrepared = ['paladin', 'artificer', 'cleric', 'druid'].includes(raw);
+                const isWizard = raw === 'wizard';
+                const casterType = isPrepared ? 'prepared' : isWizard ? 'wizard' : 'known';
+
                 const matchedSpells = spellList
                     .filter((sp) => {
                         const spLvl = parseInt(sp.level) || 0;
@@ -1578,6 +1814,14 @@ export async function openCharacterBuilderModal(char, options = {}) {
                     .map((sp) => {
                         const spKey = (sp.name || '').toLowerCase().trim();
                         const sLvl = parseInt(sp.level) || 0;
+                        let isChecked = false;
+                        if (userSelectedSpellMap.has(spKey)) {
+                            isChecked = !!userSelectedSpellMap.get(spKey);
+                        } else if (existingSpells.has(spKey)) {
+                            isChecked = true;
+                        } else if (isPrepared && sLvl > 0) {
+                            isChecked = true;
+                        }
                         return {
                             id: 'sp_' + sp.name.replace(/\W+/g, '_') + '_' + cIdx,
                             name: sp.name,
@@ -1590,9 +1834,7 @@ export async function openCharacterBuilderModal(char, options = {}) {
                             description: sp.descriptionMarkdown || sp.description || '',
                             className: c.name,
                             classIdx: cIdx,
-                            checked: userSelectedSpellMap.has(spKey)
-                                ? !!userSelectedSpellMap.get(spKey)
-                                : existingSpells.has(spKey),
+                            checked: isChecked,
                             isCantrip: sLvl === 0
                         };
                     });
@@ -1600,6 +1842,9 @@ export async function openCharacterBuilderModal(char, options = {}) {
                 classSpellSections.push({
                     classIdx: cIdx,
                     className: c.name,
+                    casterType,
+                    isPrepared,
+                    isWizard,
                     maxSlot,
                     maxCantrips,
                     maxSpells,
@@ -1923,11 +2168,21 @@ export async function openCharacterBuilderModal(char, options = {}) {
         }
     }
 
-    function runHpCalculation() {
+    function runHpCalculation(forceReroll = false) {
         const stats = getEffectiveStats(workingChar, matchedBaseRace, matchedSubrace, asiTiers, racialChoiceDefs);
         const conMod = getMod(stats.con);
         let total = 0;
         const rolls = [];
+        const isLevelUp = workingChar.builderMode === 'levelup';
+        const preserveHp = isLevelUp && !!builderState.preserveExistingHp;
+
+        if (forceReroll) {
+            builderState.hpRolledDice.clear();
+        }
+
+        // If preserving existing HP in level-up mode, we start with baselineMaxHp
+        // and only calculate dice for newly added levels across classes
+        let levelsAccountedFor = 0;
 
         workingChar.classes.forEach((c, cIdx) => {
             const hd = parseInt(getClassHitDie(c.name).replace('d', '')) || 8;
@@ -1935,19 +2190,38 @@ export async function openCharacterBuilderModal(char, options = {}) {
             const avg = Math.floor(hd / 2) + 1;
 
             for (let i = 1; i <= lvl; i++) {
+                levelsAccountedFor++;
                 const isFirstLevel = cIdx === 0 && i === 1;
+                const rollKey = `${cIdx}_${i}`;
+
                 let roll = avg;
                 if (isFirstLevel) {
                     roll = hd;
                 } else {
-                    if (builderState.hpMode === 'max') roll = hd;
-                    else if (builderState.hpMode === 'average') roll = avg;
-                    else if (builderState.hpMode === 'roll') roll = Math.floor(Math.random() * hd) + 1;
-                    else if (builderState.hpMode === 'roll_avg_min')
-                        roll = Math.max(avg, Math.floor(Math.random() * hd) + 1);
+                    if (builderState.hpMode === 'max') {
+                        roll = hd;
+                    } else if (builderState.hpMode === 'average') {
+                        roll = avg;
+                    } else if (builderState.hpMode === 'roll') {
+                        if (!builderState.hpRolledDice.has(rollKey) || forceReroll) {
+                            builderState.hpRolledDice.set(rollKey, Math.floor(Math.random() * hd) + 1);
+                        }
+                        roll = builderState.hpRolledDice.get(rollKey);
+                    } else if (builderState.hpMode === 'roll_avg_min') {
+                        if (!builderState.hpRolledDice.has(rollKey) || forceReroll) {
+                            builderState.hpRolledDice.set(rollKey, Math.max(avg, Math.floor(Math.random() * hd) + 1));
+                        }
+                        roll = builderState.hpRolledDice.get(rollKey);
+                    }
                 }
+
                 const subTot = Math.max(1, roll + conMod);
-                total += subTot;
+                const isPriorLevel = preserveHp && levelsAccountedFor <= baselineCharacterLevel;
+
+                if (!isPriorLevel) {
+                    total += subTot;
+                }
+
                 rolls.push({
                     level: i,
                     className: c.name,
@@ -1955,7 +2229,8 @@ export async function openCharacterBuilderModal(char, options = {}) {
                     val: roll,
                     con: conMod,
                     total: subTot,
-                    isMax: isFirstLevel
+                    isMax: isFirstLevel,
+                    isPreserved: isPriorLevel
                 });
             }
         });
@@ -1964,13 +2239,20 @@ export async function openCharacterBuilderModal(char, options = {}) {
         const is2024Char = typeof getCharIs2024 === 'function' ? getCharIs2024(workingChar) : false;
         const raceStr = `${workingChar.race || ''} ${workingChar.subrace || ''}`.toLowerCase();
 
+        // If preserveHp is active, base total starts with the baselineMaxHp
+        const effectiveBaseHp = preserveHp ? baselineMaxHp + total : total;
+
         const hpBreakdown = {
-            base: total,
+            base: effectiveBaseHp,
             tough: 0,
             dwarvenToughness: 0,
             draconicResilience: 0,
             totalBonus: 0
         };
+
+        // If not preserving HP, compute bonuses from level 1 to totalLvl;
+        // if preserving HP, baselineMaxHp already contains bonuses from prior levels, so only apply for added levels
+        const bonusLevelMultiplier = preserveHp ? Math.max(0, totalLvl - baselineCharacterLevel) : totalLvl;
 
         // 1. Tough Feat: +2 HP per character level
         const allSelectedFeats = [
@@ -1994,7 +2276,7 @@ export async function openCharacterBuilderModal(char, options = {}) {
             (typeof f === 'string' ? f : f.name || '').toLowerCase().includes('tough')
         );
         if (hasTough) {
-            hpBreakdown.tough = 2 * totalLvl;
+            hpBreakdown.tough = 2 * bonusLevelMultiplier;
         }
 
         // 2. Dwarven Toughness:
@@ -2004,7 +2286,7 @@ export async function openCharacterBuilderModal(char, options = {}) {
             ? raceStr.includes('dwarf')
             : raceStr.includes('hill dwarf') || (raceStr.includes('dwarf') && raceStr.includes('hill'));
         if (hasDwarfToughness) {
-            hpBreakdown.dwarvenToughness = 1 * totalLvl;
+            hpBreakdown.dwarvenToughness = 1 * bonusLevelMultiplier;
         }
 
         // 3. Draconic Sorcerer (Draconic Resilience): +1 HP per Sorcerer level
@@ -2015,7 +2297,8 @@ export async function openCharacterBuilderModal(char, options = {}) {
         );
         if (sorcClass) {
             const sorcLvl = parseInt(sorcClass.level) || 1;
-            hpBreakdown.draconicResilience = 1 * sorcLvl;
+            const sorcMult = preserveHp ? Math.max(0, totalLvl - baselineCharacterLevel) : sorcLvl;
+            hpBreakdown.draconicResilience = 1 * sorcMult;
         }
 
         hpBreakdown.totalBonus = hpBreakdown.tough + hpBreakdown.dwarvenToughness + hpBreakdown.draconicResilience;
@@ -2024,7 +2307,7 @@ export async function openCharacterBuilderModal(char, options = {}) {
         if (builderState.hpManualOverride && parseInt(builderState.hpManualOverride) > 0) {
             builderState.calculatedHp = parseInt(builderState.hpManualOverride);
         } else {
-            builderState.calculatedHp = Math.max(1, total + hpBreakdown.totalBonus);
+            builderState.calculatedHp = Math.max(1, effectiveBaseHp + hpBreakdown.totalBonus);
         }
         builderState.hpRolls = rolls;
     }
@@ -2271,6 +2554,9 @@ export async function openCharacterBuilderModal(char, options = {}) {
                 }
             });
 
+            const nameInput = document.getElementById('pc-wizard-char-name');
+            if (nameInput) workingChar.name = nameInput.value.trim() || 'Hero';
+
             const spdWalk = document.getElementById('pc-wiz-spd-walk');
             if (spdWalk) workingChar.speed.walk = parseInt(spdWalk.value) || 30;
             const spdClimb = document.getElementById('pc-wiz-spd-climb');
@@ -2281,7 +2567,13 @@ export async function openCharacterBuilderModal(char, options = {}) {
             if (spdBurrow) workingChar.speed.burrow = parseInt(spdBurrow.value) || 0;
 
             const snsDark = document.getElementById('pc-wiz-sns-darkvision');
-            if (snsDark) workingChar.senses.darkvision = parseInt(snsDark.value) || 0;
+            if (snsDark) {
+                const val = parseInt(snsDark.value) || 0;
+                if (workingChar.senses.darkvision !== val) {
+                    workingChar._manualSensesCustomized = true;
+                }
+                workingChar.senses.darkvision = val;
+            }
             const snsDevil = document.getElementById('pc-wiz-sns-devilsight');
             if (snsDevil) workingChar.senses.devilSight = parseInt(snsDevil.value) || 0;
             const snsBlind = document.getElementById('pc-wiz-sns-blindsight');
@@ -2410,6 +2702,7 @@ export async function openCharacterBuilderModal(char, options = {}) {
             workingChar,
             recomputeCandidates,
             harvestCurrentStepInputs,
+            updateTopSummary,
             getEffectiveStats: () =>
                 getEffectiveStats(workingChar, matchedBaseRace, matchedSubrace, asiTiers, racialChoiceDefs),
             getEffectiveRacialBonuses: () =>
@@ -2419,10 +2712,15 @@ export async function openCharacterBuilderModal(char, options = {}) {
             POINT_BUY_COSTS,
             racialChoiceDefs,
             candidateProficiencies,
+            candidateSpeciesSkills,
+            candidateLanguages,
+            candidateTools,
             candidateBgSkills,
             availableClassSkills,
             selectedClassSkills,
             classSkillLimit,
+            multiclassSkillSections,
+            selectedMulticlassSkills,
             classExpertiseLimit: (() => {
                 let limit = 0;
                 (workingChar.classes || []).forEach((c) => {
@@ -2473,6 +2771,40 @@ export async function openCharacterBuilderModal(char, options = {}) {
         else if (currentStep === 7) renderStepSpells(ctx);
         else if (currentStep === 8) renderStep8(ctx);
     }
+
+    // Mode Toggle Controls
+    function updateBuilderModeUI() {
+        const createBtn = document.getElementById('pc-builder-mode-create');
+        const levelupBtn = document.getElementById('pc-builder-mode-levelup');
+        if (!createBtn || !levelupBtn) return;
+        if (workingChar.builderMode === 'create') {
+            createBtn.style.background = 'var(--color-gold-base)';
+            createBtn.style.color = '#000';
+            createBtn.style.fontWeight = 'bold';
+            levelupBtn.style.background = 'transparent';
+            levelupBtn.style.color = 'var(--color-text-muted)';
+            levelupBtn.style.fontWeight = 'normal';
+        } else {
+            levelupBtn.style.background = '#3b82f6';
+            levelupBtn.style.color = '#fff';
+            levelupBtn.style.fontWeight = 'bold';
+            createBtn.style.background = 'transparent';
+            createBtn.style.color = 'var(--color-text-muted)';
+            createBtn.style.fontWeight = 'normal';
+        }
+    }
+
+    document.getElementById('pc-builder-mode-create')?.addEventListener('click', () => {
+        workingChar.builderMode = 'create';
+        updateBuilderModeUI();
+        renderCurrentStep();
+    });
+    document.getElementById('pc-builder-mode-levelup')?.addEventListener('click', () => {
+        workingChar.builderMode = 'levelup';
+        updateBuilderModeUI();
+        renderCurrentStep();
+    });
+    updateBuilderModeUI();
 
     // Navigation Controls
     backBtn.onclick = async () => {
@@ -2534,6 +2866,13 @@ export async function openCharacterBuilderModal(char, options = {}) {
             });
 
             // 1. Commit Identity & Multiclassing
+            char.name = workingChar.name || char.name || 'Hero';
+            char.tokenImages = Array.isArray(workingChar.tokenImages) ? [...workingChar.tokenImages] : [];
+            char.activeTokenIndex = typeof workingChar.activeTokenIndex === 'number' ? workingChar.activeTokenIndex : 0;
+            const activeTok = char.tokenImages[char.activeTokenIndex] || char.tokenImages[0];
+            if (activeTok) {
+                char.avatar = typeof activeTok === 'string' ? activeTok : activeTok.url;
+            }
             char.race = workingChar.race;
             char.subrace = workingChar.subrace;
             char.background = workingChar.background;
@@ -2614,6 +2953,14 @@ export async function openCharacterBuilderModal(char, options = {}) {
             candidateBgSkills.forEach((s) => {
                 char.skills[s] = true;
             });
+            candidateSpeciesSkills.forEach((s) => {
+                char.skills[s] = true;
+            });
+            selectedMulticlassSkills.forEach((mcSet) => {
+                mcSet.forEach((s) => {
+                    char.skills[s] = true;
+                });
+            });
             char.expertise = { ...(workingChar.expertise || {}) };
 
             char.proficiencies = char.proficiencies || { languages: '', weapons: '', armor: '', tools: '' };
@@ -2633,6 +2980,29 @@ export async function openCharacterBuilderModal(char, options = {}) {
                 .filter((p) => p.type === 'save' && p.checked)
                 .map((p) => p.stat);
 
+            // Commit languages & tools
+            if (candidateLanguages.length > 0) {
+                const existingLangs = (char.proficiencies.languages || '')
+                    .split(',')
+                    .map((s) => s.trim())
+                    .filter(Boolean);
+                candidateLanguages.forEach((l) => {
+                    if (!existingLangs.includes(l)) existingLangs.push(l);
+                });
+                char.proficiencies.languages = existingLangs.join(', ');
+            }
+
+            if (candidateTools.length > 0) {
+                const existingTools = (char.proficiencies.tools || '')
+                    .split(',')
+                    .map((s) => s.trim())
+                    .filter(Boolean);
+                candidateTools.forEach((t) => {
+                    if (!existingTools.includes(t)) existingTools.push(t);
+                });
+                char.proficiencies.tools = existingTools.join(', ');
+            }
+
             // 5. Commit HP and AC
             char.hpManualOverride = builderState.hpManualOverride || null;
             char.acManualOverride = builderState.acManualOverride || null;
@@ -2647,6 +3017,8 @@ export async function openCharacterBuilderModal(char, options = {}) {
                 char.hpCurrent = char.hpMax;
             } else if (char.hpMax > oldHp) {
                 char.hpCurrent = Math.min(char.hpMax, (parseInt(char.hpCurrent) || 0) + (char.hpMax - oldHp));
+            } else {
+                char.hpCurrent = Math.min(char.hpMax, parseInt(char.hpCurrent) || 1);
             }
             char.ac = builderState.calculatedAc || parseInt(char.ac) || 10;
 
@@ -2896,6 +3268,7 @@ export async function openCharacterBuilderModal(char, options = {}) {
                                         description: spObj
                                             ? spObj.descriptionMarkdown || spObj.descriptionHtml || ''
                                             : '',
+                                        ability: sub.abilityScore || sub.ability || '',
                                         prepared: true
                                     });
                                 }
@@ -3371,64 +3744,69 @@ export async function openCharacterBuilderModal(char, options = {}) {
                 }
             }
 
-            if (workingChar.useStartingWealth) {
-                char.currency = char.currency || { cp: 0, sp: 0, ep: 0, gp: 0, pp: 0 };
-                char.currency.gp = (parseInt(char.currency.gp) || 0) + workingChar.startingGoldAmount;
-            } else {
-                const checkedItems = candidateBgItems.filter((i) => i.checked);
-                checkedItems.forEach((it) => {
-                    if (it.isGold || it.type === 'Currency') {
-                        char.currency = char.currency || { cp: 0, sp: 0, ep: 0, gp: 0, pp: 0 };
-                        char.currency.gp = (parseInt(char.currency.gp) || 0) + (it.goldAmount || it.qty || 0);
-                    } else {
-                        importCleanEquipmentItem(it.name, it.qty, it.type);
-                    }
-                });
+            const shouldImportStartingEquip =
+                workingChar.builderMode === 'create' || workingChar.allowLevelUpRebuildEquip;
 
-                classEquipChoiceSets.forEach((cs) => {
-                    const chosenOpt = cs.options.find((o) => o.key === cs.selectedOption) || cs.options[0];
-                    if (chosenOpt && chosenOpt.label) {
-                        let labelText = chosenOpt.label;
-                        const isDual = /two\s+(martial|simple)\s+weapons/i.test(labelText);
-                        if (isDual) {
-                            const isMartial = /martial/i.test(labelText);
-                            const defW = isMartial ? 'Longsword' : 'Shortsword';
-                            const w1 = cs.selectedWeapon1 || defW;
-                            const w2 = cs.selectedWeapon2 || defW;
-                            importCleanEquipmentItem(w1);
-                            importCleanEquipmentItem(w2);
-                            return;
+            if (shouldImportStartingEquip) {
+                if (workingChar.useStartingWealth) {
+                    char.currency = char.currency || { cp: 0, sp: 0, ep: 0, gp: 0, pp: 0 };
+                    char.currency.gp = (parseInt(char.currency.gp) || 0) + workingChar.startingGoldAmount;
+                } else {
+                    const checkedItems = candidateBgItems.filter((i) => i.checked);
+                    checkedItems.forEach((it) => {
+                        if (it.isGold || it.type === 'Currency') {
+                            char.currency = char.currency || { cp: 0, sp: 0, ep: 0, gp: 0, pp: 0 };
+                            char.currency.gp = (parseInt(char.currency.gp) || 0) + (it.goldAmount || it.qty || 0);
+                        } else {
+                            importCleanEquipmentItem(it.name, it.qty, it.type);
                         }
-                        if (cs.selectedWeapon) {
-                            labelText = labelText
-                                .replace(/any martial weapon/i, cs.selectedWeapon)
-                                .replace(/any simple weapon/i, cs.selectedWeapon)
-                                .replace(/a martial weapon/i, cs.selectedWeapon)
-                                .replace(/a simple weapon/i, cs.selectedWeapon);
-                        }
-                        const labelItems = labelText
-                            .split(/,\s*(?:and\s+)?|\s+and\s+/i)
-                            .map((s) => s.trim())
-                            .filter(Boolean);
-                        labelItems.forEach((itName) => {
-                            importCleanEquipmentItem(itName);
-                        });
-                    }
-                });
-
-                classFixedItems
-                    .filter((f) => f.checked)
-                    .forEach((fit) => {
-                        let itemName = fit.name;
-                        if (
-                            fit.selectedWeapon &&
-                            (itemName.toLowerCase().includes('simple weapon') ||
-                                itemName.toLowerCase().includes('martial weapon'))
-                        ) {
-                            itemName = fit.selectedWeapon;
-                        }
-                        importCleanEquipmentItem(itemName, fit.qty, fit.type);
                     });
+
+                    classEquipChoiceSets.forEach((cs) => {
+                        const chosenOpt = cs.options.find((o) => o.key === cs.selectedOption) || cs.options[0];
+                        if (chosenOpt && chosenOpt.label) {
+                            let labelText = chosenOpt.label;
+                            const isDual = /two\s+(martial|simple)\s+weapons/i.test(labelText);
+                            if (isDual) {
+                                const isMartial = /martial/i.test(labelText);
+                                const defW = isMartial ? 'Longsword' : 'Shortsword';
+                                const w1 = cs.selectedWeapon1 || defW;
+                                const w2 = cs.selectedWeapon2 || defW;
+                                importCleanEquipmentItem(w1);
+                                importCleanEquipmentItem(w2);
+                                return;
+                            }
+                            if (cs.selectedWeapon) {
+                                labelText = labelText
+                                    .replace(/any martial weapon/i, cs.selectedWeapon)
+                                    .replace(/any simple weapon/i, cs.selectedWeapon)
+                                    .replace(/a martial weapon/i, cs.selectedWeapon)
+                                    .replace(/a simple weapon/i, cs.selectedWeapon);
+                            }
+                            const labelItems = labelText
+                                .split(/,\s*(?:and\s+)?|\s+and\s+/i)
+                                .map((s) => s.trim())
+                                .filter(Boolean);
+                            labelItems.forEach((itName) => {
+                                importCleanEquipmentItem(itName);
+                            });
+                        }
+                    });
+
+                    classFixedItems
+                        .filter((f) => f.checked)
+                        .forEach((fit) => {
+                            let itemName = fit.name;
+                            if (
+                                fit.selectedWeapon &&
+                                (itemName.toLowerCase().includes('simple weapon') ||
+                                    itemName.toLowerCase().includes('martial weapon'))
+                            ) {
+                                itemName = fit.selectedWeapon;
+                            }
+                            importCleanEquipmentItem(itemName, fit.qty, fit.type);
+                        });
+                }
             }
 
             // 8a. Import Candidate Innate Spells
@@ -3464,6 +3842,8 @@ export async function openCharacterBuilderModal(char, options = {}) {
 
             // 8b. Import Selected Class Spells
             classSpellSections.forEach((sec) => {
+                const isPreparedCaster = sec.casterType === 'prepared' || sec.isPrepared;
+                const isWizard = sec.casterType === 'wizard' || sec.isWizard;
                 sec.spells
                     .filter((s) => s && s.checked && s.name)
                     .forEach((sp) => {
@@ -3474,6 +3854,7 @@ export async function openCharacterBuilderModal(char, options = {}) {
                             (existing) => (existing.name || '').toLowerCase() === sp.name.toLowerCase()
                         );
                         if (!exists) {
+                            const defaultPrepared = spLvl === 0 ? true : (!isPreparedCaster && !isWizard);
                             char.spells[key].push({
                                 id: 'sp_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
                                 name: sp.name,
@@ -3484,7 +3865,7 @@ export async function openCharacterBuilderModal(char, options = {}) {
                                 range: sp.range || 'Self',
                                 duration: sp.duration || 'Instantaneous',
                                 description: sp.description || '',
-                                prepared: spLvl === 0 || sec.isDivinePrepared
+                                prepared: defaultPrepared
                             });
                         }
                     });

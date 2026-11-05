@@ -560,7 +560,7 @@ export function formatDefenseEntry(item) {
             } else if (hasSilver) {
                 parts.push("from attacks that aren't silvered");
             } else if (hasAdamantine) {
-                parts.push("from attacks that aren't silvered");
+                parts.push("from attacks that aren't adamantine");
             } else {
                 parts.push(`except ${item.bypasses.join(', ')}`);
             }

@@ -69,10 +69,12 @@ export function syncTokensHpToCharacters(affectedTokens, options = {}) {
 
     affectedTokens.forEach((token) => {
         if (!token) return;
+        // Generic tokens must never sync HP back to character templates or sibling tokens!
+        if (token.isGeneric === true) return;
         const charId = token.characterId || token.sourceCharacterId;
         if (!charId) return;
         const char = vtt.campaignState.characters[charId];
-        if (!char) return;
+        if (!char || char.isGeneric === true) return;
 
         let modified = false;
         if (token.hp !== undefined && char.hpCurrent !== token.hp) {
@@ -91,7 +93,11 @@ export function syncTokensHpToCharacters(affectedTokens, options = {}) {
         if (modified) {
             updatedChars.add(char);
             Object.values(tokens).forEach((t) => {
-                if (t.id !== token.id && (t.characterId === char.id || t.sourceCharacterId === char.id)) {
+                if (
+                    t.id !== token.id &&
+                    (t.characterId === char.id || t.sourceCharacterId === char.id) &&
+                    t.isGeneric !== true
+                ) {
                     t.hp = char.hpCurrent;
                     t.maxHp = char.hpMax;
                     t.tempHp = char.tempHp;
@@ -117,7 +123,7 @@ export function applyDamageToTokens(tokenIds, amount, type, mode, attackMeta = {
         tokens = {},
         currentMapId = null,
         syncHpFn = syncTokensHpToCharacters,
-        renderAll = () => {},
+        renderAll = () => { },
         getTokenDrawDimensions = () => ({ drawW: 50, drawH: 50 }),
         triggerDamageFXAnimation = null,
         triggerHealingFXAnimation = null
@@ -311,15 +317,16 @@ export function applyCompositeDamageToTokens(tokenIds, dmgRolls, multiplier = 1.
         tokens = {},
         currentMapId = null,
         getTokenDrawDimensions = () => ({ drawW: 50, drawH: 50 }),
-        triggerDamageFXAnimation = () => {},
+        triggerDamageFXAnimation = () => { },
         syncHpFn = syncTokensHpToCharacters,
-        renderAll = () => {}
+        renderAll = () => { }
     } = options;
 
-    if (!tokenIds || tokenIds.length === 0 || !tokens) return;
+    if (!tokenIds || tokenIds.length === 0 || !tokens) return { anyApplied: false, affectedTokens: [], totalDeducted: 0 };
     const damageTypes = (dmgRolls || []).map((dr) => dr.type || 'untyped').filter(Boolean);
     let anyApplied = false;
     const affectedTokens = [];
+    let totalDeducted = 0;
 
     tokenIds.forEach((tokenId, index) => {
         const token = tokens[tokenId];
@@ -329,6 +336,7 @@ export function applyCompositeDamageToTokens(tokenIds, dmgRolls, multiplier = 1.
         if (deducted > 0) {
             anyApplied = true;
             affectedTokens.push(token);
+            totalDeducted += deducted;
         }
 
         const { drawW, drawH } = getTokenDrawDimensions(token);
@@ -360,6 +368,8 @@ export function applyCompositeDamageToTokens(tokenIds, dmgRolls, multiplier = 1.
             damageTypes: damageTypes.length > 0 ? damageTypes : ['untyped']
         });
     }
+
+    return { anyApplied, affectedTokens, totalDeducted };
 }
 
 function escapeTokenHtml(str) {
@@ -376,9 +386,13 @@ export function resolveTokenAC(token, options = {}) {
     if (!token) return 10;
     if (typeof options.getTokenAC === 'function') {
         const val = options.getTokenAC(token);
-        if (typeof val === 'number') return val;
+        if (val !== null && val !== undefined && val !== '' && !isNaN(parseInt(val, 10))) {
+            return parseInt(val, 10);
+        }
     }
-    if (typeof token.ac === 'number') return token.ac;
+    if (token.ac !== undefined && token.ac !== null && token.ac !== '' && !isNaN(parseInt(token.ac, 10))) {
+        return parseInt(token.ac, 10);
+    }
     const md =
         token.monsterData ||
         (typeof options.getResolvedCreatureMonsterData === 'function'
@@ -390,13 +404,17 @@ export function resolveTokenAC(token, options = {}) {
             if (!isNaN(p)) return p;
         }
         if (typeof md.ac === 'number') return md.ac;
+        if (typeof md.ac === 'string' && !isNaN(parseInt(md.ac, 10))) return parseInt(md.ac, 10);
         if (Array.isArray(md.ac) && md.ac.length > 0) {
             const entry = md.ac[0];
             if (typeof entry === 'object' && entry !== null) {
                 const val = entry.ac ?? entry.value;
-                if (typeof val === 'number') return val;
+                if (val !== undefined && val !== null && !isNaN(parseInt(val, 10))) {
+                    return parseInt(val, 10);
+                }
             }
             if (typeof entry === 'number') return entry;
+            if (typeof entry === 'string' && !isNaN(parseInt(entry, 10))) return parseInt(entry, 10);
         }
     }
     const vtt = options.vtt || (typeof window !== 'undefined' ? window.VTT : null);
@@ -592,9 +610,9 @@ export function executeMassAttackResolution(massAttackCard, distribution, msgId,
         tokens = {},
         currentMapId = null,
         getTokenDrawDimensions = () => ({ drawW: 50, drawH: 50 }),
-        triggerDamageFXAnimation = () => {},
+        triggerDamageFXAnimation = () => { },
         syncHpFn = syncTokensHpToCharacters,
-        renderAll = () => {},
+        renderAll = () => { },
         getResolvedCreatureMonsterData = (t) => t?.monsterData || null
     } = options;
 
@@ -1057,16 +1075,17 @@ export function executeMassAttackResolution(massAttackCard, distribution, msgId,
 }
 
 export function processCardFullResolution(cardData, selectedIds, options = {}) {
-    if (!selectedIds || selectedIds.length === 0) return;
+    if (!selectedIds || selectedIds.length === 0) return false;
     const {
         vtt = (typeof window !== 'undefined' ? window.VTT : null) || {},
         tokens = {},
         currentMapId = null,
         getTokenDrawDimensions = () => ({ drawW: 50, drawH: 50 }),
-        triggerDamageFXAnimation = () => {},
+        triggerDamageFXAnimation = () => { },
         syncHpFn = syncTokensHpToCharacters,
-        renderAll = () => {},
-        getResolvedCreatureMonsterData = (t) => t?.monsterData || null
+        renderAll = () => { },
+        getResolvedCreatureMonsterData = (t) => t?.monsterData || null,
+        msgId = options.msgId || null
     } = options;
 
     const dmgRolls = cardData.dmgRolls || [];
@@ -1079,15 +1098,20 @@ export function processCardFullResolution(cardData, selectedIds, options = {}) {
     ];
     const saveObj =
         rawSaveObj &&
-        rawSaveObj.ability &&
-        validAbilities.includes(rawSaveObj.ability.trim().toUpperCase()) &&
-        !isNaN(parseInt(rawSaveObj.dc)) &&
-        parseInt(rawSaveObj.dc) > 0
+            rawSaveObj.ability &&
+            validAbilities.includes(rawSaveObj.ability.trim().toUpperCase()) &&
+            !isNaN(parseInt(rawSaveObj.dc)) &&
+            parseInt(rawSaveObj.dc) > 0
             ? {
-                  ...rawSaveObj,
-                  ability: rawSaveObj.ability.trim().substring(0, 3).toUpperCase()
-              }
+                ...rawSaveObj,
+                ability: rawSaveObj.ability.trim().substring(0, 3).toUpperCase()
+            }
             : null;
+
+    const targetNames = selectedIds
+        .map((id) => tokens[id]?.name || 'Target')
+        .slice(0, 3)
+        .join(', ') + (selectedIds.length > 3 ? ` +${selectedIds.length - 3} more` : '');
 
     const atkHitMap = {};
     if (hasAttack) {
@@ -1104,15 +1128,19 @@ export function processCardFullResolution(cardData, selectedIds, options = {}) {
     const hitTargetIds = hasAttack ? selectedIds.filter((id) => atkHitMap[id]) : selectedIds;
 
     if (hasAttack && hitTargetIds.length === 0) {
-        if (typeof JqueryUtil !== 'undefined' && JqueryUtil.doToast) {
-            JqueryUtil.doToast({
-                type: 'info',
-                content: `Attack (${cardData.atkRoll.total}) missed selected token(s).`
+        const summary = `Attack (${cardData.atkRoll.total}) missed selected token(s)`;
+        cardData.resolved = { summary, timestamp: Date.now() };
+        if (vtt.socket && msgId) {
+            vtt.socket.emit('chat:macro_resolved', {
+                id: msgId,
+                macroCard: cardData,
+                resolution: cardData.resolved
             });
         }
-        return;
+        return true;
     }
 
+    let grandTotalDeducted = 0;
     if (hasAttack) {
         const hitDmgRolls = dmgRolls.filter((dr) => !dr.saveRider);
         if (hitDmgRolls.length > 0) {
@@ -1128,6 +1156,7 @@ export function processCardFullResolution(cardData, selectedIds, options = {}) {
                 if (deducted > 0) {
                     anyChanged = true;
                     affectedTokens.push(token);
+                    grandTotalDeducted += deducted;
                 }
                 affectedIds.push(token.id);
 
@@ -1168,6 +1197,22 @@ export function processCardFullResolution(cardData, selectedIds, options = {}) {
         const dc = parseInt(saveObj.dc) || 10;
         const abKey = ability.toLowerCase();
         const targetIds = hitTargetIds;
+
+        const hitNames = hitTargetIds
+            .map((id) => tokens[id]?.name || 'Target')
+            .slice(0, 3)
+            .join(', ') + (hitTargetIds.length > 3 ? ` +${hitTargetIds.length - 3} more` : '');
+        const summary = hasAttack
+            ? `Hit! Dealt ${grandTotalDeducted} DMG to ${hitNames} (Saving Throw triggered)`
+            : `Saving Throw triggered for ${targetNames}`;
+        cardData.resolved = { summary, timestamp: Date.now() };
+        if (vtt.socket && msgId) {
+            vtt.socket.emit('chat:macro_resolved', {
+                id: msgId,
+                macroCard: cardData,
+                resolution: cardData.resolved
+            });
+        }
 
         let riderDmgRolls = dmgRolls.filter((dr) => dr.saveRider);
         if (!hasAttack && riderDmgRolls.length === 0) {
@@ -1233,15 +1278,42 @@ export function processCardFullResolution(cardData, selectedIds, options = {}) {
         }
 
         rollNextToken();
+        return true;
     } else if (!hasAttack) {
-        applyCompositeDamageToTokens(selectedIds, dmgRolls, 1.0, options);
+        const res = applyCompositeDamageToTokens(selectedIds, dmgRolls, 1.0, options);
+        grandTotalDeducted = res?.totalDeducted ?? 0;
+        const summary = `Applied ${grandTotalDeducted} DMG to ${targetNames}`;
+        cardData.resolved = { summary, timestamp: Date.now() };
+        if (vtt.socket && msgId) {
+            vtt.socket.emit('chat:macro_resolved', {
+                id: msgId,
+                macroCard: cardData,
+                resolution: cardData.resolved
+            });
+        }
+        return true;
+    } else {
+        const hitNames = hitTargetIds
+            .map((id) => tokens[id]?.name || 'Target')
+            .slice(0, 3)
+            .join(', ') + (hitTargetIds.length > 3 ? ` +${hitTargetIds.length - 3} more` : '');
+        const summary = `Hit! Dealt ${grandTotalDeducted} DMG to ${hitNames}`;
+        cardData.resolved = { summary, timestamp: Date.now() };
+        if (vtt.socket && msgId) {
+            vtt.socket.emit('chat:macro_resolved', {
+                id: msgId,
+                macroCard: cardData,
+                resolution: cardData.resolved
+            });
+        }
+        return true;
     }
 }
 
 export function handleCardAction(cardData, action, options = {}) {
     const { vtt = (typeof window !== 'undefined' ? window.VTT : null) || {}, selectedTokenIds = new Set() } = options;
 
-    if (vtt.role !== 'GM') return;
+    if (vtt.role !== 'GM') return false;
     const selectedIds = Array.from(selectedTokenIds);
     if (selectedIds.length === 0) {
         if (typeof JqueryUtil !== 'undefined' && JqueryUtil.doToast) {
@@ -1250,25 +1322,54 @@ export function handleCardAction(cardData, action, options = {}) {
                 content: 'No tokens selected. Select target token(s) first.'
             });
         }
-        return;
+        return false;
     }
 
+    const msgId = options.msgId || null;
     const dmgRolls = cardData.dmgRolls || [];
+    const tokens = options.tokens || {};
+    const targetNames = selectedIds
+        .map((id) => tokens[id]?.name || 'Target')
+        .slice(0, 3)
+        .join(', ') + (selectedIds.length > 3 ? ` +${selectedIds.length - 3} more` : '');
 
     if (action === 'full') {
-        applyCompositeDamageToTokens(selectedIds, dmgRolls, 1.0, options);
+        const res = applyCompositeDamageToTokens(selectedIds, dmgRolls, 1.0, options);
+        const totalDmg = res?.totalDeducted ?? 0;
+        const summary = `Full Damage (${totalDmg} HP) applied to ${targetNames}`;
+        cardData.resolved = { summary, timestamp: Date.now() };
+        if (vtt.socket && msgId) {
+            vtt.socket.emit('chat:macro_resolved', {
+                id: msgId,
+                macroCard: cardData,
+                resolution: cardData.resolved
+            });
+        }
+        return true;
     } else if (action === 'half') {
-        applyCompositeDamageToTokens(selectedIds, dmgRolls, 0.5, options);
+        const res = applyCompositeDamageToTokens(selectedIds, dmgRolls, 0.5, options);
+        const totalDmg = res?.totalDeducted ?? 0;
+        const summary = `Half Damage (${totalDmg} HP) applied to ${targetNames}`;
+        cardData.resolved = { summary, timestamp: Date.now() };
+        if (vtt.socket && msgId) {
+            vtt.socket.emit('chat:macro_resolved', {
+                id: msgId,
+                macroCard: cardData,
+                resolution: cardData.resolved
+            });
+        }
+        return true;
     } else if (action === 'process') {
-        processCardFullResolution(cardData, selectedIds, options);
+        return processCardFullResolution(cardData, selectedIds, { ...options, msgId });
     }
+    return false;
 }
 
 export function changeMassTokenZOrder(tokenIds, action, options = {}) {
     const {
         vtt = (typeof window !== 'undefined' ? window.VTT : null) || {},
         tokens = {},
-        renderAll = () => {}
+        renderAll = () => { }
     } = options;
 
     const tokenList = Object.values(tokens);
@@ -1407,10 +1508,10 @@ export function showMassRollContextMenu(tokenIds, clientX, clientY, options = {}
         selectedTokenIds = new Set(),
         campaignSettings = {},
         isMobileViewport = () => false,
-        triggerSplashForSelection = () => {},
+        triggerSplashForSelection = () => { },
         getTokenDrawDimensions = () => ({ drawW: 50, drawH: 50 }),
         snapToGrid = (x, y) => ({ x, y }),
-        renderAll = () => {},
+        renderAll = () => { },
         getResolvedCreatureMonsterData = (t) => t?.monsterData || null
     } = options;
 

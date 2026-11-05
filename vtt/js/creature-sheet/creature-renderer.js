@@ -83,7 +83,7 @@ export function setupPanelResizing(panel) {
             if (resizeHandle.hasPointerCapture(e.pointerId)) {
                 resizeHandle.releasePointerCapture(e.pointerId);
             }
-        } catch (err) {}
+        } catch (err) { }
         const currentComputed = Math.round(panel.getBoundingClientRect().width);
         if (currentComputed >= 280) {
             localStorage.setItem('vtt_cs_panel_width', currentComputed);
@@ -232,10 +232,19 @@ export function getMonsterImageUrl(m, ctx = {}) {
 }
 
 export function getLinkedTokenHp(m, ctx = {}) {
+    const linkedCharacterId = ctx.getLinkedCharacterId ? ctx.getLinkedCharacterId() : null;
+    if (linkedCharacterId && typeof window !== 'undefined' && window.VTT?.campaignState?.characters) {
+        const char = window.VTT.campaignState.characters[linkedCharacterId];
+        if (char && char.isGeneric !== true && char.hpCurrent !== undefined) {
+            return char.hpCurrent;
+        }
+    }
     const linkedTokenId = ctx.getLinkedTokenId ? ctx.getLinkedTokenId() : null;
-    if (!linkedTokenId || typeof window === 'undefined' || !window.VTT?.canvasEngine) return null;
-    const tokens = window.VTT.canvasEngine.getTokens();
-    return tokens[linkedTokenId]?.hp ?? null;
+    if (linkedTokenId && typeof window !== 'undefined' && window.VTT?.canvasEngine) {
+        const tokens = window.VTT.canvasEngine.getTokens();
+        if (tokens[linkedTokenId]?.hp !== undefined) return tokens[linkedTokenId].hp;
+    }
+    return null;
 }
 
 export function getLinkedTokenTempHp(m, ctx = {}) {
@@ -267,9 +276,6 @@ export function wireHpControls(panel, m, initial, max, ctx = {}, initialTemp = 0
     const tempEl = contentEl.querySelector
         ? contentEl.querySelector('#cs-temp-hp-current')
         : document.getElementById('cs-temp-hp-current');
-    const tempBarEl = contentEl.querySelector
-        ? contentEl.querySelector('#cs-temp-hp-bar')
-        : document.getElementById('cs-temp-hp-bar');
     const tempBarWrap = contentEl.querySelector
         ? contentEl.querySelector('#cs-temp-hp-bar-wrap')
         : document.getElementById('cs-temp-hp-bar-wrap');
@@ -279,20 +285,8 @@ export function wireHpControls(panel, m, initial, max, ctx = {}, initialTemp = 0
     const vtt = ctx.getVtt ? ctx.getVtt() : typeof window !== 'undefined' ? window.VTT : null;
 
     function updateDOMOnly() {
-        if (currentEl) {
-            if ('value' in currentEl && document.activeElement !== currentEl) {
-                currentEl.value = current;
-            } else if (!('value' in currentEl)) {
-                currentEl.textContent = current;
-            }
-        }
-        if (tempEl) {
-            if ('value' in tempEl && document.activeElement !== tempEl) {
-                tempEl.value = tempHp;
-            } else if (!('value' in tempEl)) {
-                tempEl.textContent = tempHp;
-            }
-        }
+        if (currentEl) currentEl.textContent = current;
+        if (tempEl) tempEl.textContent = tempHp;
         if (tempBarWrap) {
             tempBarWrap.style.display = tempHp > 0 ? 'block' : 'none';
         }
@@ -300,16 +294,6 @@ export function wireHpControls(panel, m, initial, max, ctx = {}, initialTemp = 0
             const pct = Math.max(0, Math.min(100, Math.round((current / maxHp) * 100)));
             barEl.style.width = `${pct}%`;
             barEl.className = 'cs-hp-bar-fill' + (pct <= 25 ? ' danger' : pct <= 50 ? ' injured' : '');
-        }
-        if (tempBarEl) {
-            if (tempHp > 0 && maxHp > 0) {
-                const tempPct = Math.max(0, Math.min(100, Math.round((tempHp / maxHp) * 100)));
-                tempBarEl.style.width = `${tempPct}%`;
-                tempBarEl.style.display = 'block';
-            } else {
-                tempBarEl.style.width = '0%';
-                tempBarEl.style.display = 'none';
-            }
         }
     }
 
@@ -409,106 +393,114 @@ export function wireHpControls(panel, m, initial, max, ctx = {}, initialTemp = 0
         ? contentEl.querySelector('#cs-temp-hp-plus')
         : document.getElementById('cs-temp-hp-plus');
 
-    if (minusBtn) {
-        minusBtn.addEventListener('click', () => {
-            showVttPrompt('Damage amount:', '1', (val) => {
-                if (val === null) return;
-                const dmg = parseInt(val || '1');
-                if (!isNaN(dmg) && dmg > 0) {
-                    if (tempHp > 0) {
-                        if (dmg <= tempHp) {
-                            tempHp -= dmg;
+    const isGm = vtt?.role === 'GM';
+    const activeChar =
+        linkedCharacterId && vtt?.campaignState?.characters
+            ? vtt.campaignState.characters[linkedCharacterId]
+            : null;
+    const isAssigned = Boolean(
+        activeChar &&
+        activeChar.assignedPlayers &&
+        (activeChar.assignedPlayers.includes(vtt?.username) ||
+            activeChar.assignedPlayers.includes('*') ||
+            activeChar.owner === vtt?.username)
+    );
+    const currentCanvasToken =
+        linkedTokenId && vtt?.canvasEngine ? vtt.canvasEngine.getTokens()?.[linkedTokenId] : null;
+    const isTokenOwner = Boolean(
+        currentCanvasToken &&
+        (currentCanvasToken.ownerUsername === vtt?.username ||
+            currentCanvasToken.playerOwner === vtt?.username ||
+            (currentCanvasToken.assignedPlayers &&
+                currentCanvasToken.assignedPlayers.includes(vtt?.username)))
+    );
+    const isGenericEntity = Boolean(activeChar ? activeChar.isGeneric === true : m.isGeneric === true);
+    const isGenericTemplateWithoutToken = Boolean(isGenericEntity && !linkedTokenId);
+    const canModifyHp = (isGm || isAssigned || isTokenOwner) && !isGenericTemplateWithoutToken;
+
+    if (!canModifyHp) {
+        const lockReason = isGenericTemplateWithoutToken
+            ? 'Template view: select a token instance on the canvas or dock to modify HP'
+            : "You do not have permission to modify this creature's HP";
+        [minusBtn, plusBtn, tempMinusBtn, tempPlusBtn].forEach((btn) => {
+            if (btn) {
+                btn.disabled = true;
+                btn.style.opacity = '0.4';
+                btn.style.cursor = 'not-allowed';
+                btn.title = lockReason;
+            }
+        });
+    } else {
+        if (minusBtn) {
+            minusBtn.addEventListener('click', () => {
+                showVttPrompt('Damage amount:', '1', (val) => {
+                    if (val === null) return;
+                    const dmg = parseInt(val || '1');
+                    if (!isNaN(dmg) && dmg > 0) {
+                        if (tempHp > 0) {
+                            if (dmg <= tempHp) {
+                                tempHp -= dmg;
+                            } else {
+                                const leftover = dmg - tempHp;
+                                tempHp = 0;
+                                current = Math.max(0, current - leftover);
+                            }
                         } else {
-                            const leftover = dmg - tempHp;
-                            tempHp = 0;
-                            current = Math.max(0, current - leftover);
+                            current = Math.max(0, current - dmg);
                         }
-                    } else {
-                        current = Math.max(0, current - dmg);
+                        updateDisplay();
                     }
-                    updateDisplay();
-                }
+                });
             });
-        });
-    }
-    if (plusBtn) {
-        plusBtn.addEventListener('click', () => {
-            showVttPrompt('Heal amount:', '1', (val) => {
-                if (val === null) return;
-                const heal = parseInt(val || '1');
-                if (!isNaN(heal) && heal > 0) {
-                    current = Math.min(maxHp, current + heal);
-                    updateDisplay();
-                }
+        }
+        if (plusBtn) {
+            plusBtn.addEventListener('click', () => {
+                showVttPrompt('Heal amount:', '1', (val) => {
+                    if (val === null) return;
+                    const heal = parseInt(val || '1');
+                    if (!isNaN(heal) && heal > 0) {
+                        current = Math.min(maxHp, current + heal);
+                        updateDisplay();
+                    }
+                });
             });
-        });
-    }
-    if (tempMinusBtn) {
-        tempMinusBtn.addEventListener('click', () => {
-            showVttPrompt('Reduce Temp HP by:', '1', (val) => {
-                if (val === null) return;
-                const reduce = parseInt(val || '1');
-                if (!isNaN(reduce) && reduce > 0) {
-                    tempHp = Math.max(0, tempHp - reduce);
-                    updateDisplay();
-                }
+        }
+        if (tempMinusBtn) {
+            tempMinusBtn.addEventListener('click', () => {
+                showVttPrompt('Reduce Temp HP by:', '1', (val) => {
+                    if (val === null) return;
+                    const reduce = parseInt(val || '1');
+                    if (!isNaN(reduce) && reduce > 0) {
+                        tempHp = Math.max(0, tempHp - reduce);
+                        updateDisplay();
+                    }
+                });
             });
-        });
-    }
-    if (tempPlusBtn) {
-        tempPlusBtn.addEventListener('click', () => {
-            showVttPrompt('Add Temp HP:', '1', (val) => {
-                if (val === null) return;
-                const add = parseInt(val || '1');
-                if (!isNaN(add) && add > 0) {
-                    tempHp = Math.max(0, tempHp + add);
-                    updateDisplay();
-                }
+        }
+        if (tempPlusBtn) {
+            tempPlusBtn.addEventListener('click', () => {
+                showVttPrompt('Add Temp HP:', '1', (val) => {
+                    if (val === null) return;
+                    const add = parseInt(val || '1');
+                    if (!isNaN(add) && add > 0) {
+                        tempHp = Math.max(0, tempHp + add);
+                        updateDisplay();
+                    }
+                });
             });
-        });
+        }
     }
 
-    if (currentEl && currentEl.tagName === 'INPUT') {
-        const handleHpInput = () => {
-            const parsed = parseInt(currentEl.value);
-            if (!isNaN(parsed)) {
-                current = Math.max(0, parsed);
-                updateDisplay();
-            } else {
-                currentEl.value = current;
-            }
-        };
-        currentEl.addEventListener('change', handleHpInput);
-        currentEl.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                currentEl.blur();
-            }
-        });
-    }
-
-    if (tempEl && tempEl.tagName === 'INPUT') {
-        const handleTempInput = () => {
-            const parsed = parseInt(tempEl.value);
-            if (!isNaN(parsed)) {
-                tempHp = Math.max(0, parsed);
-                updateDisplay();
-            } else {
-                tempEl.value = tempHp;
-            }
-        };
-        tempEl.addEventListener('change', handleTempInput);
-        tempEl.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                tempEl.blur();
-            }
-        });
-    }
-
-    // Listen for external token HP updates
+    // Listen for external token HP updates with listener cleanup
     if (vtt && vtt.socket) {
-        vtt.socket.on('token:updated', (data) => {
+        if (vtt._csHpTokenListener) {
+            vtt.socket.off('token:updated', vtt._csHpTokenListener);
+        }
+        if (vtt._csHpCharListener) {
+            vtt.socket.off('character:updated', vtt._csHpCharListener);
+        }
+
+        vtt._csHpTokenListener = (data) => {
             if (linkedTokenId && data.tokens && data.tokens[linkedTokenId]) {
                 const incomingHp = data.tokens[linkedTokenId].hp;
                 const incomingTemp = data.tokens[linkedTokenId].tempHp ?? 0;
@@ -523,9 +515,9 @@ export function wireHpControls(panel, m, initial, max, ctx = {}, initialTemp = 0
                 }
                 if (changed) updateDOMOnly();
             }
-        });
+        };
 
-        vtt.socket.on('character:updated', (data) => {
+        vtt._csHpCharListener = (data) => {
             if (linkedCharacterId && data.character && data.character.id === linkedCharacterId) {
                 const incomingHp = data.character.hpCurrent;
                 const incomingTemp = data.character.tempHp ?? 0;
@@ -540,7 +532,10 @@ export function wireHpControls(panel, m, initial, max, ctx = {}, initialTemp = 0
                 }
                 if (changed) updateDOMOnly();
             }
-        });
+        };
+
+        vtt.socket.on('token:updated', vtt._csHpTokenListener);
+        vtt.socket.on('character:updated', vtt._csHpCharListener);
     }
 }
 
@@ -738,10 +733,10 @@ export function buildLegendarySection(m) {
     const legEntries = Array.isArray(m.legendaryActions)
         ? m.legendaryActions
         : Array.isArray(m.legendaryActions?.entries)
-          ? m.legendaryActions.entries
-          : Array.isArray(m.legendary)
-            ? m.legendary
-            : [];
+            ? m.legendaryActions.entries
+            : Array.isArray(m.legendary)
+                ? m.legendary
+                : [];
     if (legEntries && legEntries.length > 0) {
         const lairBadge = m.legendaryActionsLair
             ? ` <span class="badge" style="font-size:0.75rem; background:rgba(255,215,0,0.15); color:#ffd700; border:1px solid rgba(255,215,0,0.4); border-radius:3px; padding:1px 5px; margin-left:6px;">${m.legendaryActions?.count || 3} (${m.legendaryActionsLair} in Lair)</span>`
@@ -749,8 +744,8 @@ export function buildLegendarySection(m) {
         const legDesc = m.legendaryActions?.description
             ? `<p class="cs-legendary-desc">${m.legendaryActions.description}</p>`
             : m.legendaryHeader
-              ? `<p class="cs-legendary-desc">${cleanTags(flattenEntriesToText(m.legendaryHeader))}</p>`
-              : '';
+                ? `<p class="cs-legendary-desc">${cleanTags(flattenEntriesToText(m.legendaryHeader))}</p>`
+                : '';
         const rows = legEntries.map((entry) => buildAbilityEntryHtml(entry)).join('');
         html += `
             <div class="cs-section cs-legendary-section">
@@ -766,16 +761,16 @@ export function buildLegendarySection(m) {
     const mythicEntries = Array.isArray(m.mythicActions)
         ? m.mythicActions
         : Array.isArray(m.mythicActions?.entries)
-          ? m.mythicActions.entries
-          : Array.isArray(m.mythic)
-            ? m.mythic
-            : [];
+            ? m.mythicActions.entries
+            : Array.isArray(m.mythic)
+                ? m.mythic
+                : [];
     if (mythicEntries && mythicEntries.length > 0) {
         const mythicDesc = m.mythicActions?.description
             ? `<p class="cs-legendary-desc">${m.mythicActions.description}</p>`
             : m.mythicHeader
-              ? `<p class="cs-legendary-desc">${cleanTags(flattenEntriesToText(m.mythicHeader))}</p>`
-              : '';
+                ? `<p class="cs-legendary-desc">${cleanTags(flattenEntriesToText(m.mythicHeader))}</p>`
+                : '';
         const rows = mythicEntries.map((entry) => buildAbilityEntryHtml(entry)).join('');
         html += `
             <div class="cs-section cs-mythic-section" style="margin-top:12px;">
@@ -791,10 +786,10 @@ export function buildLegendarySection(m) {
     const lairEntries = Array.isArray(m.lairActions)
         ? m.lairActions
         : Array.isArray(m.lairActions?.entries)
-          ? m.lairActions.entries
-          : Array.isArray(m.lair)
-            ? m.lair
-            : [];
+            ? m.lairActions.entries
+            : Array.isArray(m.lair)
+                ? m.lair
+                : [];
     if (lairEntries && lairEntries.length > 0) {
         const lairDesc =
             m.lairHeader ||
@@ -869,12 +864,6 @@ export function saveMonsterData(m, ctx = {}) {
                 window.VTT?.canvasEngine?.getCurrentMapId?.() || window.VTT?.canvasEngine?.currentMap?.id || null;
             window.VTT.socket?.emit('token:update', { mapId: curMapId, token: token });
         }
-    } else if (typeof window !== 'undefined' && window.VTT?.currentToken) {
-        window.VTT.currentToken.monsterData = curM;
-        if (curM.spells) window.VTT.currentToken.spells = curM.spells;
-        const curMapId =
-            window.VTT?.canvasEngine?.getCurrentMapId?.() || window.VTT?.canvasEngine?.currentMap?.id || null;
-        window.VTT.socket?.emit('token:update', { mapId: curMapId, token: window.VTT.currentToken });
     }
 }
 
@@ -887,10 +876,47 @@ export function renderStatBlock(m, panel = null, ctx = {}) {
     const linkedCharacterId = ctx.getLinkedCharacterId ? ctx.getLinkedCharacterId() : null;
     const vtt = ctx.getVtt ? ctx.getVtt() : typeof window !== 'undefined' ? window.VTT : null;
 
-    const crStr = m.cr ? (typeof m.cr === 'object' ? m.cr.cr : m.cr) : '0';
+    const activeCharId =
+        linkedCharacterId ||
+        (linkedTokenId &&
+            typeof window !== 'undefined' &&
+            window.VTT?.canvasEngine?.getTokens()?.[linkedTokenId]?.sourceCharacterId);
+    const char =
+        activeCharId && typeof window !== 'undefined' && window.VTT?.campaignState?.characters
+            ? window.VTT.campaignState.characters[activeCharId]
+            : null;
+
+    const isGeneric = char ? char.isGeneric === true : m.isGeneric === true;
+    let hpCurrent = 0;
+    let hpMax = 0;
+
+    if (isGeneric) {
+        if (linkedTokenId) {
+            hpCurrent = getLinkedTokenHp(m, ctx) ?? (m.hp?.average || (typeof m.hp === 'number' ? m.hp : 0));
+            const token = window.VTT?.canvasEngine?.getTokens()?.[linkedTokenId];
+            hpMax = (token && token.maxHp !== undefined) ? token.maxHp : (m.hp?.average || (typeof m.hp === 'number' ? m.hp : 0));
+        } else {
+            // Generic template view without token context
+            hpCurrent = typeof m.hp === 'number' ? m.hp : (m.hp?.average || char?.hpCurrent || char?.hpMax || 0);
+            hpMax = char?.hpMax ?? (typeof m.hp === 'number' ? m.hp : (m.hp?.average || hpCurrent));
+        }
+    } else {
+        // Named Entity: campaign character is ground truth
+        if (char) {
+            hpCurrent = char.hpCurrent ?? (typeof m.hp === 'number' ? m.hp : (m.hp?.average || 0));
+            hpMax = char.hpMax ?? (typeof m.hp === 'number' ? m.hp : (m.hp?.average || 0));
+        } else if (linkedTokenId) {
+            hpCurrent = getLinkedTokenHp(m, ctx) ?? (m.hp?.average || (typeof m.hp === 'number' ? m.hp : 0));
+            const token = window.VTT?.canvasEngine?.getTokens()?.[linkedTokenId];
+            hpMax = (token && token.maxHp !== undefined) ? token.maxHp : (m.hp?.average || (typeof m.hp === 'number' ? m.hp : 0));
+        } else {
+            hpCurrent = typeof m.hp === 'number' ? m.hp : (m.hp?.average || 0);
+            hpMax = hpCurrent;
+        }
+    }
+
+    const crStr = m.cr ? (typeof m.cr === 'object' ? (m.cr.cr || m.cr.coven || m.cr.lair || '0') : m.cr) : '0';
     const typeStr = buildTypeString(m);
-    const hpCurrent = linkedTokenId ? (getLinkedTokenHp(m, ctx) ?? (m.hp?.average || 0)) : m.hp?.average || 0;
-    const hpMax = m.hp?.average || 0;
     const hpFormula = m.hp?.formula || '';
     const hpTemp = getLinkedTokenTempHp(m, ctx) || 0;
     const ac = Array.isArray(m.ac) ? m.ac[0] : m.ac;
@@ -967,15 +993,6 @@ export function renderStatBlock(m, panel = null, ctx = {}) {
     }
 
     let editBtnHtml = '';
-    const activeCharId =
-        linkedCharacterId ||
-        (linkedTokenId &&
-            typeof window !== 'undefined' &&
-            window.VTT?.canvasEngine?.getTokens()?.[linkedTokenId]?.sourceCharacterId);
-    const char =
-        activeCharId && typeof window !== 'undefined' && window.VTT?.campaignState?.characters
-            ? window.VTT.campaignState.characters[activeCharId]
-            : null;
     if (char && char.name && m.name !== char.name) {
         m.name = char.name;
     }
@@ -1002,7 +1019,6 @@ export function renderStatBlock(m, panel = null, ctx = {}) {
         window.VTT?.role === 'GM' &&
         ((activeCharId && char) || m.isCustomNpc || m.isCompanion)
     );
-    const isGeneric = char ? char.isGeneric === true : m.isGeneric === true;
 
     const genericNamedToggleHtml = showGenericNamedToggle
         ? `
@@ -1090,33 +1106,37 @@ export function renderStatBlock(m, panel = null, ctx = {}) {
         <div id="cs-tab-stats" class="cs-tab-content active">
             <!-- HP Row -->
             <div class="cs-hp-row">
-                <div class="cs-hp-bar-wrap" id="cs-hp-bar-wrap">
-                    <div class="cs-hp-bar-fill" id="cs-hp-bar" style="width: ${hpMax > 0 ? Math.round((hpCurrent / hpMax) * 100) : 100}%"></div>
-                    <div class="cs-temp-hp-bar-fill" id="cs-temp-hp-bar" style="width: ${hpMax > 0 && hpTemp > 0 ? Math.min(100, Math.round((hpTemp / hpMax) * 100)) : 0}%; display: ${hpTemp > 0 ? 'block' : 'none'};" title="Temp HP"></div>
+                <div style="display: flex; gap: 4px; margin-bottom: 8px; align-items: center; width: 100%;">
+                    <div class="cs-hp-bar-wrap" style="flex: 1;">
+                        <div class="cs-hp-bar-fill" id="cs-hp-bar" style="width: ${hpMax > 0 ? Math.round((hpCurrent / hpMax) * 100) : 100}%"></div>
+                    </div>
+                    <div class="cs-hp-bar-wrap cs-temp-hp-bar-wrap" id="cs-temp-hp-bar-wrap" style="flex: 0 0 20%; display: ${hpTemp > 0 ? 'block' : 'none'};" title="Temp HP">
+                        <div class="cs-hp-bar-fill cs-temp-hp-bar-fill" id="cs-temp-hp-bar" style="width: 100%;"></div>
+                    </div>
                 </div>
-                <div class="cs-hp-controls-wrap">
-                    <div class="cs-hp-unit cs-hp-unit-main">
+                <div class="cs-hp-controls-row">
+                    <div class="cs-hp-group">
                         <div class="cs-hp-label">
                             <i class="fa-solid fa-heart" style="color: #e53935; font-size: 0.85rem;"></i> HP
                         </div>
                         <div class="cs-hp-controls">
                             <button class="cs-hp-btn" id="cs-hp-minus" title="Damage">−</button>
                             <div class="cs-hp-display">
-                                <input type="text" inputmode="numeric" pattern="[0-9]*" class="cs-hp-input" id="cs-hp-current" value="${hpCurrent}" title="Current HP (click to edit)">
+                                <span id="cs-hp-current">${hpCurrent}</span>
                                 <span class="cs-hp-divider">/</span>
                                 <span id="cs-hp-max">${hpMax}</span>
                             </div>
                             <button class="cs-hp-btn" id="cs-hp-plus" title="Heal">+</button>
                         </div>
                     </div>
-                    <div class="cs-hp-unit cs-hp-unit-temp">
+                    <div class="cs-temp-hp-group">
                         <div class="cs-hp-label">
                             <i class="fa-solid fa-shield" style="color: var(--color-temphp-base, #2196f3); font-size: 0.85rem;"></i> Temp
                         </div>
                         <div class="cs-hp-controls">
                             <button class="cs-hp-btn" id="cs-temp-hp-minus" title="Reduce Temp HP">−</button>
-                            <div class="cs-hp-display">
-                                <input type="text" inputmode="numeric" pattern="[0-9]*" class="cs-hp-input temp-input" id="cs-temp-hp-current" value="${hpTemp}" title="Temp HP (click to edit)">
+                            <div class="cs-hp-display" style="min-width: 28px;">
+                                <span id="cs-temp-hp-current">${hpTemp}</span>
                             </div>
                             <button class="cs-hp-btn" id="cs-temp-hp-plus" title="Add Temp HP">+</button>
                         </div>

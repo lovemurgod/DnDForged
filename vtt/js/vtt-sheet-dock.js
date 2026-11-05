@@ -75,17 +75,20 @@ export class SheetDockManager {
             }
         };
 
-        const observer = new MutationObserver(this.updatePosition);
-        const creaturePanel = document.getElementById('creature-sheet-panel');
-        const playerPanel = document.getElementById('player-sheet-panel');
-        if (creaturePanel) observer.observe(creaturePanel, { attributes: true, attributeFilter: ['class', 'style'] });
-        if (playerPanel) observer.observe(playerPanel, { attributes: true, attributeFilter: ['class', 'style'] });
+        if (typeof MutationObserver !== 'undefined') {
+            const observer = new MutationObserver(this.updatePosition);
+            const creaturePanel = document.getElementById('creature-sheet-panel');
+            const playerPanel = document.getElementById('player-sheet-panel');
+            if (creaturePanel) observer.observe(creaturePanel, { attributes: true, attributeFilter: ['class', 'style'] });
+            if (playerPanel) observer.observe(playerPanel, { attributes: true, attributeFilter: ['class', 'style'] });
+        }
 
         window.addEventListener('resize', this.updatePosition);
     }
 
     loadSavedOrder() {
         try {
+            if (typeof localStorage === 'undefined') return;
             const raw = localStorage.getItem(this.orderStorageKey);
             if (raw) {
                 const parsed = JSON.parse(raw);
@@ -100,6 +103,7 @@ export class SheetDockManager {
 
     saveOrder() {
         try {
+            if (typeof localStorage === 'undefined') return;
             localStorage.setItem(this.orderStorageKey, JSON.stringify(this.tabOrder));
         } catch (e) {
             console.warn('[SheetDock] Failed to save tab order:', e);
@@ -120,13 +124,18 @@ export class SheetDockManager {
             characterId = null,
             isCompanion = false,
             isCustomNpc = false,
-            isGeneric = false
+            isGeneric = undefined
         } = params;
 
         let roleCategory = 'generic';
         let tabKey = '';
         let tabName = name;
         let tabAvatar = avatar || 'img/logo.png';
+
+        const charRef =
+            (characterId && this.vtt.campaignState?.characters?.[characterId]) ||
+            (id && this.vtt.campaignState?.characters?.[id]) ||
+            null;
 
         // 1. Player Character -> Individual Tab
         if (type === 'player' && !isCompanion && !isCustomNpc) {
@@ -180,6 +189,14 @@ export class SheetDockManager {
             tabAvatar = monsterData?.tokenUrl || monsterData?.img || tabAvatar;
         }
 
+        const effectiveIsGeneric = Boolean(
+            isGeneric !== undefined
+                ? isGeneric
+                : charRef?.isGeneric !== undefined
+                    ? charRef.isGeneric
+                    : roleCategory === 'generic'
+        );
+
         let tab = this.tabs.get(tabKey);
         if (!tab) {
             tab = {
@@ -191,7 +208,7 @@ export class SheetDockManager {
                 name: tabName,
                 avatar: tabAvatar,
                 monsterData,
-                isGeneric: roleCategory === 'generic',
+                isGeneric: effectiveIsGeneric,
                 activeTokenId: tokenId,
                 linkedTokenIds: tokenId ? [tokenId] : [],
                 isTurnActive: false,
@@ -210,6 +227,7 @@ export class SheetDockManager {
                 tab.isVideo = Boolean(params.isVideo || isVideoMedia(tabAvatar));
             }
             if (tabName) tab.name = tabName;
+            tab.isGeneric = effectiveIsGeneric;
         }
 
         this.updateLinkedTokens(tab);
@@ -475,7 +493,7 @@ export class SheetDockManager {
                 instanceChipsHtml = '<div class="tooltip-instance-row">';
                 tab.linkedTokenIds.forEach((tId, idx) => {
                     const tok = allTokens[tId];
-                    const tokHp = tok ? (tok.hpCurrent ?? tok.hp ?? tab.monsterData?.hp ?? '') : '';
+                    const tokHp = tok ? (tok.hpCurrent ?? tok.hp ?? (typeof tab.monsterData?.hp === 'number' ? tab.monsterData.hp : tab.monsterData?.hp?.average ?? '')) : '';
                     const isChipActive = tId === tab.activeTokenId;
                     instanceChipsHtml += `
                         <button class="tab-instance-chip ${isChipActive ? 'active' : ''}" 

@@ -9,9 +9,12 @@ export function hasMapManagerDataChanged(camp, lastFingerprint = '') {
     if (!camp || !camp.maps) return false;
     const mapsList = Object.values(camp.maps);
     const mapOrderStr = Array.isArray(camp.mapOrder) ? camp.mapOrder.join(',') : '';
+    const foldersStr = Array.isArray(camp.mapFolders) ? camp.mapFolders.join(',') : '';
     const overridesStr = JSON.stringify(camp.playerMapOverrides || {});
-    const mapsDigest = mapsList.map((m) => `${m.id}:${m.name}:${m.folder || ''}`).join('|');
-    const fp = `${mapsList.length}_${mapOrderStr}_${camp.activeMapId || ''}_${camp.activeGMMapId || ''}_${overridesStr}_${mapsDigest}`;
+    const mapsDigest = mapsList
+        .map((m) => `${m.id}:${m.name}:${m.folder || ''}:${m.thumbnail || m.mapImage || ''}`)
+        .join('|');
+    const fp = `${mapsList.length}_${mapOrderStr}_${foldersStr}_${camp.activeMapId || ''}_${camp.activeGMMapId || ''}_${overridesStr}_${mapsDigest}`;
     if (fp === lastFingerprint) return false;
     return fp;
 }
@@ -25,6 +28,60 @@ export function escapeMapHtml(str) {
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&#039;');
 }
+
+export function getPlayerMapOverride(camp, username) {
+    if (!camp?.playerMapOverrides || !username) return null;
+    if (camp.playerMapOverrides[username]) return camp.playerMapOverrides[username];
+    const uLower = String(username).toLowerCase();
+    for (const key in camp.playerMapOverrides) {
+        if (key.toLowerCase() === uLower) return camp.playerMapOverrides[key];
+    }
+    return null;
+}
+
+export async function probeMediaDimensions(src, isVideoHint = false) {
+    const isVideo = isVideoHint || !!String(src || '').match(/\.(mp4|webm|ogg)(\?.*)?$/i) || String(src || '').includes('pinimg.com/videos');
+    if (typeof document === 'undefined') {
+        return { width: isVideo ? 1920 : 2000, height: isVideo ? 1080 : 1500 };
+    }
+    if (isVideo) {
+        return new Promise((resolve) => {
+            const video = document.createElement('video');
+            video.preload = 'metadata';
+            let resolved = false;
+            const finish = () => {
+                if (resolved) return;
+                resolved = true;
+                const width = video.videoWidth || 1920;
+                const height = video.videoHeight || 1080;
+                video.src = '';
+                resolve({ width, height });
+            };
+            video.onloadedmetadata = finish;
+            video.onerror = finish;
+            setTimeout(finish, 3500);
+            video.src = src;
+        });
+    }
+
+    return new Promise((resolve) => {
+        const img = new Image();
+        let resolved = false;
+        const finish = () => {
+            if (resolved) return;
+            resolved = true;
+            const width = img.naturalWidth || 2000;
+            const height = img.naturalHeight || 1500;
+            resolve({ width, height });
+        };
+        img.onload = finish;
+        img.onerror = finish;
+        setTimeout(finish, 3500);
+        img.src = src;
+    });
+}
+
+let activeReorderMenuCleanup = null;
 
 export function detectMapMediaType(map = {}, safeThumb = '') {
     const rawThumb =
@@ -153,7 +210,7 @@ export function attachThumbnailHoverPreview(thumbWrap) {
         const setInitialFrame = () => {
             try {
                 if (video.currentTime === 0) video.currentTime = 0.001;
-            } catch (_) {}
+            } catch (_) { }
         };
         if (video.readyState >= 1) {
             setInitialFrame();
@@ -170,7 +227,7 @@ export function attachThumbnailHoverPreview(thumbWrap) {
             ensureVideoSource();
             playPromise = video.play();
             if (playPromise !== undefined) {
-                playPromise.catch(() => {});
+                playPromise.catch(() => { });
             }
         });
 
@@ -183,20 +240,20 @@ export function attachThumbnailHoverPreview(thumbWrap) {
                             video.pause();
                             try {
                                 video.currentTime = 0.001;
-                            } catch (_) {}
+                            } catch (_) { }
                         }
                     })
                     .catch(() => {
                         video.pause();
                         try {
                             video.currentTime = 0.001;
-                        } catch (_) {}
+                        } catch (_) { }
                     });
             } else {
                 video.pause();
                 try {
                     video.currentTime = 0.001;
-                } catch (_) {}
+                } catch (_) { }
             }
         });
     }
@@ -320,6 +377,10 @@ export function initMapManagerControls(managerState, options = {}) {
                 hideInlineCreator();
                 return;
             }
+            if (val === '__ALL__' || val === '__UNCATEGORIZED__') {
+                alert('Folder name is reserved. Please choose another name.');
+                return;
+            }
             const camp = effectiveOptions.vtt?.campaignState || window.VTT?.campaignState;
             if (!camp) return;
             if (!Array.isArray(camp.mapFolders)) camp.mapFolders = [];
@@ -409,24 +470,26 @@ export function renderMapSidebar(allMaps, allFolders, activeFolder, managerState
             renderMapGrid(managerState, options);
         });
 
-        // Drop target to move maps into this folder
+        // Drop target to move maps into this folder (All Maps is an aggregate view, not a destination)
         itemEl.addEventListener('dragover', (e) => {
-            if (!managerState.draggedMapId) return;
+            if (!managerState.draggedMapId || folderKey === '__ALL__') return;
             e.preventDefault();
             e.dataTransfer.dropEffect = 'move';
             itemEl.classList.add('drag-target-over');
         });
-        itemEl.addEventListener('dragleave', () => {
+        itemEl.addEventListener('dragleave', (e) => {
+            if (e.relatedTarget && itemEl.contains(e.relatedTarget)) return;
             itemEl.classList.remove('drag-target-over');
         });
         itemEl.addEventListener('drop', (e) => {
             if (!managerState.draggedMapId) return;
             e.preventDefault();
             itemEl.classList.remove('drag-target-over');
+            if (folderKey === '__ALL__') return;
             const targetMap = camp.maps && camp.maps[managerState.draggedMapId];
             if (!targetMap) return;
 
-            const destFolder = folderKey === '__ALL__' || folderKey === '__UNCATEGORIZED__' ? '' : folderKey;
+            const destFolder = folderKey === '__UNCATEGORIZED__' ? '' : folderKey;
             if (targetMap.folder !== destFolder) {
                 targetMap.folder = destFolder;
                 if (options.vtt?.socket) {
@@ -470,39 +533,138 @@ export function renderMapSidebar(allMaps, allFolders, activeFolder, managerState
         const folderMaps = allMaps.filter((m) => (m.folder || '').trim() === fName);
         const folderLive = hasLivePlayers(folderMaps);
         const count = folderMaps.length;
-        const delBtnHtml =
-            count === 0
-                ? `<button type="button" class="btn btn-icon btn-xxs map-folder-delete-btn" title="Delete empty folder" style="background: none; border: none; padding: 2px;"><i class="fa-solid fa-trash-can"></i></button>`
-                : '';
+        const renameBtnHtml = `<button type="button" class="btn btn-icon btn-xxs map-folder-rename-btn" title="Rename folder" style="background: none; border: none; padding: 2px 3px; color: var(--color-text-muted); cursor: pointer;"><i class="fa-solid fa-pen" style="font-size: 0.65rem;"></i></button>`;
+        const delBtnHtml = `<button type="button" class="btn btn-icon btn-xxs map-folder-delete-btn" title="Delete folder" style="background: none; border: none; padding: 2px 3px; color: var(--color-text-muted); cursor: pointer;"><i class="fa-solid fa-trash-can" style="font-size: 0.65rem;"></i></button>`;
+        const actionsHtml = `<div class="map-folder-actions" style="display: flex; gap: 2px; align-items: center;">${renameBtnHtml}${delBtnHtml}</div>`;
+
         const itemEl = createSidebarItem(
             fName,
             `<i class="fa-solid fa-folder text-gradient-gold"></i> <span title="${escapeMapHtml(fName)}" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1;">${escapeMapHtml(fName)}</span>`,
             count,
             folderLive,
-            delBtnHtml
+            actionsHtml
         );
 
-        if (count === 0) {
-            const delBtn = itemEl.querySelector('.map-folder-delete-btn');
-            if (delBtn) {
-                delBtn.addEventListener('click', (e) => {
-                    e.stopPropagation();
+        const renameBtn = itemEl.querySelector('.map-folder-rename-btn');
+        if (renameBtn) {
+            renameBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const newName = prompt(`Rename folder "${fName}" to:`, fName);
+                if (newName === null) return;
+                const trimmed = newName.trim();
+                if (!trimmed || trimmed === fName) return;
+                if (trimmed === '__ALL__' || trimmed === '__UNCATEGORIZED__') {
+                    alert('Folder name is reserved. Please choose another name.');
+                    return;
+                }
+                if (camp.mapFolders) {
+                    const idx = camp.mapFolders.indexOf(fName);
+                    if (idx !== -1) {
+                        camp.mapFolders[idx] = trimmed;
+                        camp.mapFolders.sort();
+                    }
+                }
+                if (camp.maps) {
+                    Object.values(camp.maps).forEach((m) => {
+                        if (m.folder === fName) m.folder = trimmed;
+                    });
+                }
+                if (options.vtt?.socket) {
+                    options.vtt.socket.emit('map:folder-rename', { oldFolder: fName, newFolder: trimmed });
+                }
+                if (managerState.activeMapFolder === fName) managerState.activeMapFolder = trimmed;
+                renderMapGrid(managerState, options);
+            });
+        }
+
+        const delBtn = itemEl.querySelector('.map-folder-delete-btn');
+        if (delBtn) {
+            delBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (count === 0) {
                     if (confirm(`Delete empty folder "${fName}"?`)) {
                         if (camp.mapFolders) {
                             camp.mapFolders = camp.mapFolders.filter((f) => f !== fName);
                         }
                         if (options.vtt?.socket) {
-                            options.vtt.socket.emit('map:folder-delete', { folder: fName });
+                            options.vtt.socket.emit('map:folder-delete', { folder: fName, mode: 'uncategorize' });
                         }
                         if (managerState.activeMapFolder === fName) managerState.activeMapFolder = '__ALL__';
                         renderMapGrid(managerState, options);
                     }
-                });
-            }
+                } else {
+                    const choice = prompt(
+                        `Folder "${fName}" contains ${count} map(s).\n\nType "uncategorize" to keep maps and delete folder.\nType "delete all" to permanently delete the folder AND its ${count} maps:`,
+                        'uncategorize'
+                    );
+                    if (choice === null) return;
+                    const mode = choice.trim().toLowerCase() === 'delete all' ? 'cascade' : 'uncategorize';
+                    if (mode === 'cascade') {
+                        const totalMaps = Object.keys(camp.maps || {}).length;
+                        if (totalMaps - count < 1) {
+                            alert('Cannot delete all maps in this folder: a campaign must retain at least one map.');
+                            return;
+                        }
+                    }
+                    if (camp.mapFolders) {
+                        camp.mapFolders = camp.mapFolders.filter((f) => f !== fName);
+                    }
+                    if (camp.maps) {
+                        if (mode === 'cascade') {
+                            folderMaps.forEach((m) => {
+                                delete camp.maps[m.id];
+                                if (camp.mapOrder) camp.mapOrder = camp.mapOrder.filter((id) => id !== m.id);
+                            });
+                        } else {
+                            folderMaps.forEach((m) => {
+                                m.folder = '';
+                            });
+                        }
+                    }
+                    if (options.vtt?.socket) {
+                        options.vtt.socket.emit('map:folder-delete', { folder: fName, mode });
+                    }
+                    if (managerState.activeMapFolder === fName) managerState.activeMapFolder = '__ALL__';
+                    renderMapGrid(managerState, options);
+                }
+            });
         }
 
         sidebarList.appendChild(itemEl);
     });
+}
+
+export function executeMapReorder(mapId, action, camp, managerState, options) {
+    if (!camp || !camp.maps || !camp.maps[mapId]) return;
+    let currentOrder = Array.isArray(camp.mapOrder) ? [...camp.mapOrder] : Object.keys(camp.maps);
+    Object.keys(camp.maps).forEach((id) => {
+        if (!currentOrder.includes(id)) currentOrder.push(id);
+    });
+    const curIdx = currentOrder.indexOf(mapId);
+    if (curIdx === -1) return;
+
+    currentOrder.splice(curIdx, 1);
+    if (action === 'top') {
+        currentOrder.unshift(mapId);
+    } else if (action === 'bottom') {
+        currentOrder.push(mapId);
+    } else if (action === 'up') {
+        const newIdx = Math.max(0, curIdx - 1);
+        currentOrder.splice(newIdx, 0, mapId);
+    } else if (action === 'down') {
+        const newIdx = Math.min(currentOrder.length, curIdx + 1);
+        currentOrder.splice(newIdx, 0, mapId);
+    }
+
+    camp.mapOrder = currentOrder;
+    if (options.vtt?.socket) {
+        options.vtt.socket.emit('map:reorder', {
+            mapOrder: currentOrder,
+            mapId,
+            folder: camp.maps[mapId].folder
+        });
+    }
+    renderMapGrid(managerState, options);
 }
 
 export function createMapCard(map, allFolderNames, managerState, options = {}, folderOptionsHtml = '') {
@@ -514,13 +676,20 @@ export function createMapCard(map, allFolderNames, managerState, options = {}, f
     const playersOnMap = Object.entries(camp.playerMapOverrides || {})
         .filter(([p, mId]) => mId === map.id)
         .map(([p]) => p);
+    const onlinePlayersList = Array.isArray(camp.onlinePlayers) ? camp.onlinePlayers : [];
+    const onlineOnThisMap = playersOnMap.filter((p) => {
+        const pLower = p.toLowerCase();
+        return onlinePlayersList.some((op) => op.toLowerCase() === pLower);
+    });
     const isPlayerActive = isGlobalActive || playersOnMap.length > 0;
+    // Map is strictly locked from deletion only if it's the global active map or has online players
+    const cannotDelete = isGlobalActive || onlineOnThisMap.length > 0;
     let activeText = 'Live';
     let activeClass = 'var(--color-success-base)';
 
     if (playersOnMap.length > 0 && !isGlobalActive) {
         activeText = playersOnMap.length === 1 ? `Live (${playersOnMap[0]})` : `Live (${playersOnMap.length} Players)`;
-        activeClass = 'var(--color-blue-base)';
+        activeClass = onlineOnThisMap.length > 0 ? 'var(--color-blue-base)' : 'rgba(255,255,255,0.25)';
     } else if (isGlobalActive && Object.keys(camp.playerMapOverrides || {}).length > 0) {
         activeText = `Live (Global)`;
         activeClass = 'var(--color-orange-base)';
@@ -596,21 +765,21 @@ export function createMapCard(map, allFolderNames, managerState, options = {}, f
                 ${isGmViewing ? '<span style="font-size: 0.65rem; background: var(--color-gold-base); color: #111; padding: 2px 7px; border-radius: 10px; font-weight: bold; flex-shrink: 0;"><i class="fa-solid fa-eye"></i> Viewing</span>' : ''}
             </div>
             <div style="display: flex; gap: 4px; align-items: center; flex-shrink: 0;">
-                ${
-                    !isGmViewing
-                        ? `
+                ${!isGmViewing
+                ? `
                     <button class="btn-view-map btn btn-secondary btn-xxs" title="GM View" style="padding: 4px 7px; font-size: 0.72rem;"><i class="fa-solid fa-eye"></i> View</button>
                 `
-                        : `
+                : `
                     <button class="btn btn-secondary btn-xxs" disabled style="padding: 4px 7px; font-size: 0.72rem; opacity: 0.5;"><i class="fa-solid fa-check"></i> Viewing</button>
                 `
-                }
+            }
                 <button class="btn-activate-map btn btn-primary btn-xxs" title="${isPlayerActive ? 'Push more players' : 'Push players to map'}" style="padding: 4px 7px; font-size: 0.72rem; ${isPlayerActive ? `background: ${activeClass}; border-color: transparent;` : ''}">
                     <i class="fa-solid fa-bullhorn"></i> ${isPlayerActive ? 'Push +' : 'Push'}
                 </button>
+                <button class="btn-reorder-map btn btn-secondary btn-xxs" title="Reorder Map" style="padding: 4px 6px;"><i class="fa-solid fa-arrows-up-down"></i></button>
                 <button class="btn-duplicate-map btn btn-secondary btn-xxs" title="Duplicate Map" style="padding: 4px 6px;"><i class="fa-solid fa-clone"></i></button>
                 <button class="btn-edit-map btn btn-secondary btn-xxs" title="Edit Map" style="padding: 4px 6px;"><i class="fa-solid fa-pen"></i></button>
-                <button class="btn-delete-map btn btn-danger btn-xxs" ${isPlayerActive ? 'disabled' : ''} title="${isPlayerActive ? 'Cannot delete map while players are actively viewing it' : 'Delete Map'}" style="padding: 4px 6px; ${isPlayerActive ? 'opacity: 0.35; cursor: not-allowed;' : ''}"><i class="fa-solid fa-trash"></i></button>
+                <button class="btn-delete-map btn btn-danger btn-xxs" ${cannotDelete ? 'disabled' : ''} title="${cannotDelete ? 'Cannot delete map while players are actively viewing it' : 'Delete Map'}" style="padding: 4px 6px; ${cannotDelete ? 'opacity: 0.35; cursor: not-allowed;' : ''}"><i class="fa-solid fa-trash"></i></button>
             </div>
         `;
     } else {
@@ -633,9 +802,10 @@ export function createMapCard(map, allFolderNames, managerState, options = {}, f
                 <div style="display: flex; align-items: center; justify-content: space-between; gap: 4px; min-width: 0;">
                     <span class="map-name-txt" title="${escapeMapHtml(map.name)}" style="font-family: var(--font-heading); font-weight: 600; font-size: 0.82rem; color: #fff; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; flex: 1; min-width: 0; cursor: pointer;">${escapeMapHtml(map.name)}</span>
                     <div style="display: flex; gap: 3px; flex-shrink: 0;">
+                        <button class="btn-reorder-map btn btn-secondary btn-xxs" title="Reorder Map" style="padding: 2px 5px;"><i class="fa-solid fa-arrows-up-down"></i></button>
                         <button class="btn-duplicate-map btn btn-secondary btn-xxs" title="Duplicate Map" style="padding: 2px 5px;"><i class="fa-solid fa-clone"></i></button>
                         <button class="btn-edit-map btn btn-secondary btn-xxs" title="Edit Map" style="padding: 2px 5px;"><i class="fa-solid fa-pen"></i></button>
-                        <button class="btn-delete-map btn btn-danger btn-xxs" ${isPlayerActive ? 'disabled' : ''} title="${isPlayerActive ? 'Cannot delete map while players are actively viewing it' : 'Delete Map'}" style="padding: 2px 5px; ${isPlayerActive ? 'opacity: 0.35; cursor: not-allowed;' : ''}"><i class="fa-solid fa-trash"></i></button>
+                        <button class="btn-delete-map btn btn-danger btn-xxs" ${cannotDelete ? 'disabled' : ''} title="${cannotDelete ? 'Cannot delete map while players are actively viewing it' : 'Delete Map'}" style="padding: 2px 5px; ${cannotDelete ? 'opacity: 0.35; cursor: not-allowed;' : ''}"><i class="fa-solid fa-trash"></i></button>
                     </div>
                 </div>
                 <!-- Interactive Folder Dropdown on Card -->
@@ -647,15 +817,14 @@ export function createMapCard(map, allFolderNames, managerState, options = {}, f
                 </div>
                 <!-- Tight Button Row (No huge gap) -->
                 <div class="map-card-compact-buttons">
-                    ${
-                        !isGmViewing
-                            ? `
+                    ${!isGmViewing
+                ? `
                         <button class="btn-view-map btn btn-secondary btn-xxs" style="flex: 1; min-width: 0; justify-content: center; font-size: 0.72rem; padding: 4px 6px;"><i class="fa-solid fa-eye"></i> View</button>
                     `
-                            : `
+                : `
                         <button class="btn btn-secondary btn-xxs" disabled style="flex: 1; min-width: 0; justify-content: center; font-size: 0.72rem; opacity: 0.5; padding: 4px 6px;"><i class="fa-solid fa-check"></i> Viewing</button>
                     `
-                    }
+            }
                     <button class="btn-activate-map btn btn-primary btn-xxs" style="flex: 1; min-width: 0; justify-content: center; font-size: 0.72rem; padding: 4px 6px; ${isPlayerActive ? `background: ${activeClass}; border-color: transparent;` : ''}">
                         <i class="fa-solid fa-bullhorn"></i> ${isPlayerActive ? 'Push +' : 'Push'}
                     </button>
@@ -688,6 +857,62 @@ export function createMapCard(map, allFolderNames, managerState, options = {}, f
     }
 
     // Actions
+    const btnReorder = el.querySelector('.btn-reorder-map');
+    if (btnReorder) {
+        btnReorder.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (activeReorderMenuCleanup) {
+                activeReorderMenuCleanup();
+            }
+            document.querySelectorAll('.map-reorder-dropdown-menu').forEach((m) => m.remove());
+            const menu = document.createElement('div');
+            menu.className = 'map-reorder-dropdown-menu glassmorphism';
+            menu.style.cssText =
+                'position: fixed; z-index: 10000; display: flex; flex-direction: column; gap: 3px; padding: 6px; background: rgba(22, 22, 28, 0.96); border: 1px solid var(--color-border-subtle); border-radius: 6px; box-shadow: 0 6px 18px rgba(0,0,0,0.6); min-width: 135px; font-size: 0.75rem;';
+
+            const rect = btnReorder.getBoundingClientRect();
+            menu.style.top = `${rect.bottom + 4}px`;
+            menu.style.left = `${Math.max(10, rect.left - 50)}px`;
+
+            const onDocClick = (ev) => {
+                if (!menu.contains(ev.target) && ev.target !== btnReorder) {
+                    closeMenu();
+                }
+            };
+            const closeMenu = () => {
+                menu.remove();
+                document.removeEventListener('click', onDocClick);
+                if (activeReorderMenuCleanup === closeMenu) {
+                    activeReorderMenuCleanup = null;
+                }
+            };
+            activeReorderMenuCleanup = closeMenu;
+
+            const makeActionBtn = (lbl, icon, act) => {
+                const b = document.createElement('button');
+                b.type = 'button';
+                b.className = 'btn btn-secondary btn-xxs';
+                b.style.cssText =
+                    'display: flex; align-items: center; gap: 6px; justify-content: flex-start; padding: 4px 8px; width: 100%; border: none; text-align: left; cursor: pointer;';
+                b.innerHTML = `<i class="fa-solid ${icon}" style="width: 14px; text-align: center;"></i> <span>${lbl}</span>`;
+                b.addEventListener('click', (ev) => {
+                    ev.stopPropagation();
+                    closeMenu();
+                    executeMapReorder(map.id, act, camp, managerState, options);
+                });
+                return b;
+            };
+
+            menu.appendChild(makeActionBtn('Send to Top', 'fa-angles-up', 'top'));
+            menu.appendChild(makeActionBtn('Move Up', 'fa-arrow-up', 'up'));
+            menu.appendChild(makeActionBtn('Move Down', 'fa-arrow-down', 'down'));
+            menu.appendChild(makeActionBtn('Send to Bottom', 'fa-angles-down', 'bottom'));
+
+            document.body.appendChild(menu);
+            setTimeout(() => document.addEventListener('click', onDocClick), 10);
+        });
+    }
+
     const btnDup = el.querySelector('.btn-duplicate-map');
     if (btnDup) {
         btnDup.addEventListener('click', (e) => {
@@ -710,16 +935,29 @@ export function createMapCard(map, allFolderNames, managerState, options = {}, f
     if (btnDel) {
         btnDel.addEventListener('click', (e) => {
             e.stopPropagation();
-            if (isPlayerActive) {
+            if (isGlobalActive) {
+                alert(`Cannot delete map "${map.name}" while it is the active party map.`);
+                return;
+            }
+            if (onlineOnThisMap.length > 0) {
                 alert(
-                    `Cannot delete map "${map.name}" while it is the active party map or has live players. Move players to another map first.`
+                    `Cannot delete map "${map.name}" while online player(s) (${onlineOnThisMap.join(', ')}) are actively viewing it. Move players to another map first.`
                 );
                 return;
             }
-            if (confirm(`Are you absolutely sure you want to delete map "${map.name}"? This action is permanent.`)) {
-                if (options.vtt?.socket) {
-                    options.vtt.socket.emit('map:delete', { mapId: map.id });
+            if (playersOnMap.length > 0) {
+                const confirmed = confirm(
+                    `${playersOnMap.length} player(s) (${playersOnMap.join(', ')}) are currently assigned to "${map.name}". Deleting this map will reset their saved position to the main map. Proceed with deletion?`
+                );
+                if (!confirmed) return;
+            } else {
+                if (!confirm(`Are you absolutely sure you want to delete map "${map.name}"? This action is permanent.`)) {
+                    return;
                 }
+            }
+
+            if (options.vtt?.socket) {
+                options.vtt.socket.emit('map:delete', { mapId: map.id });
             }
         });
     }
@@ -790,7 +1028,8 @@ export function createMapCard(map, allFolderNames, managerState, options = {}, f
         }
     });
 
-    el.addEventListener('dragleave', () => {
+    el.addEventListener('dragleave', (e) => {
+        if (e.relatedTarget && el.contains(e.relatedTarget)) return;
         el.classList.remove('drop-insert-before', 'drop-insert-after');
     });
 
@@ -953,9 +1192,19 @@ export function renderMapGrid(managerState, options = {}) {
             <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 180px; color: var(--color-text-muted); font-size: 0.85rem; gap: 10px; grid-column: 1 / -1;">
                 <i class="fa-solid fa-magnifying-glass" style="font-size: 2rem; color: var(--color-text-muted); opacity: 0.4;"></i>
                 <span>No maps found matching "<strong>${escapeMapHtml(managerState.mapSearchQuery)}</strong>"</span>
-                <button type="button" class="btn btn-secondary btn-xs" onclick="const input = document.getElementById('map-search-input'); if(input) { input.value=''; input.dispatchEvent(new Event('input')); }">Clear Search</button>
+                <button type="button" id="btn-clear-map-search" class="btn btn-secondary btn-xs">Clear Search</button>
             </div>
         `;
+        const btnClear = container.querySelector('#btn-clear-map-search');
+        if (btnClear) {
+            btnClear.addEventListener('click', () => {
+                const input = document.getElementById('map-search-input');
+                if (input) {
+                    input.value = '';
+                    input.dispatchEvent(new Event('input'));
+                }
+            });
+        }
         return;
     }
 
@@ -1016,7 +1265,7 @@ export function renderMapGrid(managerState, options = {}) {
                             renderNextBatch();
                         }
                     },
-                    { rootMargin: '400px' }
+                    { root: container, rootMargin: '200px' }
                 );
                 obs.observe(sentinel);
                 managerState._batchScrollObserver = obs;
@@ -1049,26 +1298,8 @@ export function setupEditMapModal(managerState, options = {}) {
         const mapId = managerState.editingMapId;
         if (mapId && managerState.editingMapInitialSnapshot && options.vtt?.campaignState?.maps?.[mapId]) {
             const original = managerState.editingMapInitialSnapshot;
-            // Restore map object properties from snapshot
+            // Restore local map object properties from snapshot
             Object.assign(options.vtt.campaignState.maps[mapId], original);
-
-            // Revert server state if live socket updates occurred
-            if (options.vtt?.socket) {
-                options.vtt.socket.emit('map:edit', {
-                    mapId,
-                    updates: {
-                        name: original.name,
-                        folder: original.folder,
-                        thumbnail: original.thumbnail,
-                        mapImage: original.mapImage,
-                        gridWidth: original.gridWidth,
-                        gridHeight: original.gridHeight,
-                        grid: original.grid,
-                        lightingSettings: original.lightingSettings,
-                        weather: original.weather
-                    }
-                });
-            }
 
             // Revert active canvas if currently loaded
             const currentMapId = options.getCurrentMapId ? options.getCurrentMapId() : null;
@@ -1088,6 +1319,7 @@ export function setupEditMapModal(managerState, options = {}) {
         }
 
         modal.classList.add('vtt-hidden');
+        managerState.isDraft = false;
         managerState.editingMapId = null;
         managerState.editingMapInitialSnapshot = null;
     };
@@ -1096,6 +1328,7 @@ export function setupEditMapModal(managerState, options = {}) {
         const mapId = managerState.editingMapId;
         if (!mapId || !options.vtt?.campaignState?.maps?.[mapId]) {
             modal.classList.add('vtt-hidden');
+            managerState.isDraft = false;
             managerState.editingMapId = null;
             managerState.editingMapInitialSnapshot = null;
             return;
@@ -1109,18 +1342,39 @@ export function setupEditMapModal(managerState, options = {}) {
         const folderVal = document.getElementById('edit-map-folder')?.value || '';
         map.folder = folderVal;
 
-        // 2. Media URL (sets both thumbnail and mapImage)
+        // 2. Media URL (sets both thumbnail and mapImage, and updates artwork token)
         const urlVal = document.getElementById('edit-map-url')?.value?.trim() || '';
         map.thumbnail = urlVal;
         map.mapImage = urlVal;
-        if (map.tokens) {
-            const bgToken = Object.values(map.tokens).find((t) => t.layer === 'map' && (t.isBackground || t.isAsset));
-            if (bgToken && urlVal) {
-                bgToken.img = urlVal;
-                const isVideo = !!urlVal.match(/\.(mp4|webm|ogg)(\?.*)?$/i) || urlVal.includes('pinimg.com/videos');
-                const isYoutube = urlVal.includes('youtube.com') || urlVal.includes('youtu.be');
-                bgToken.isVideo = isVideo || isYoutube;
-            }
+        if (!map.tokens) map.tokens = {};
+        let bgToken = Object.values(map.tokens).find((t) => t.layer === 'map' && (t.isBackground || t.isAsset));
+        if (bgToken && urlVal) {
+            bgToken.img = urlVal;
+            const isVideo = !!urlVal.match(/\.(mp4|webm|ogg)(\?.*)?$/i) || urlVal.includes('pinimg.com/videos');
+            const isYoutube = urlVal.includes('youtube.com') || urlVal.includes('youtu.be');
+            bgToken.isVideo = isVideo || isYoutube;
+        } else if (urlVal && !bgToken) {
+            const assetId = `asset_${mapId}_map`;
+            map.tokens[assetId] = {
+                id: assetId,
+                name: `${map.name || 'Map'} (Map Artwork)`,
+                x: 0,
+                y: 0,
+                layer: 'map',
+                isAsset: true,
+                isBackground: true,
+                locked: true,
+                img: urlVal,
+                isVideo:
+                    !!urlVal.match(/\.(mp4|webm|ogg)(\?.*)?$/i) ||
+                    urlVal.includes('youtube.com') ||
+                    urlVal.includes('youtu.be'),
+                pixelWidth: 2000,
+                pixelHeight: 1500,
+                size: 1,
+                zIndex: 0,
+                isPlayer: false
+            };
         }
 
         // 3. Grid dimensions (top-level properties on map)
@@ -1187,10 +1441,11 @@ export function setupEditMapModal(managerState, options = {}) {
             gridHeight: map.gridHeight,
             grid: map.grid,
             lightingSettings: map.lightingSettings,
-            weather: map.weather
+            weather: map.weather,
+            tokens: map.tokens
         };
 
-        // Sync to server via WebSocket
+        // Sync to server via WebSocket in a single consolidated payload
         if (options.vtt?.socket) {
             options.vtt.socket.emit('map:edit', { mapId, updates });
         }
@@ -1213,6 +1468,7 @@ export function setupEditMapModal(managerState, options = {}) {
         renderMapGrid(managerState, options);
 
         modal.classList.add('vtt-hidden');
+        managerState.isDraft = false;
         managerState.editingMapId = null;
         managerState.editingMapInitialSnapshot = null;
     };
@@ -1221,104 +1477,6 @@ export function setupEditMapModal(managerState, options = {}) {
     if (closeIcon) closeIcon.addEventListener('click', cancelAction);
     if (doneBtn) doneBtn.addEventListener('click', saveAndCloseAction);
 
-    const updateMapField = (field, type) => {
-        if (!managerState.editingMapId || !options.vtt?.campaignState?.maps?.[managerState.editingMapId]) return;
-        const map = options.vtt.campaignState.maps[managerState.editingMapId];
-        let val;
-
-        if (type === 'string') {
-            val = document.getElementById(`edit-map-${field}`).value.trim();
-        } else if (type === 'number') {
-            const raw = document.getElementById(`edit-map-${field}`).value;
-            val = raw === '' ? '' : parseFloat(raw);
-        } else if (type === 'boolean') {
-            val = document.getElementById(`edit-map-${field}`).checked;
-        }
-
-        const updates = {};
-        if (field === 'grid-width' || field === 'grid-height') {
-            const prop = field === 'grid-width' ? 'gridWidth' : 'gridHeight';
-            map[prop] = val;
-            updates[prop] = val;
-        } else if (field === 'url') {
-            map.thumbnail = val;
-            map.mapImage = val;
-            updates.thumbnail = val;
-            updates.mapImage = val;
-        } else if (field.startsWith('grid-')) {
-            const gridProp = field.replace('grid-', '');
-            if (!map.grid)
-                map.grid = { size: 50, offsetX: 0, offsetY: 0, scale: 1.0, feetPerSquare: 5, type: 'square' };
-            map.grid[gridProp] = val;
-            updates.grid = map.grid;
-        } else if (field.startsWith('offset-')) {
-            const axis = field === 'offset-x' ? 'offsetX' : 'offsetY';
-            if (!map.grid)
-                map.grid = { size: 50, offsetX: 0, offsetY: 0, scale: 1.0, feetPerSquare: 5, type: 'square' };
-            map.grid[axis] = val;
-            updates.grid = map.grid;
-        } else if (field === 'dist-val' || field === 'dist-unit' || field === 'dist-unit-custom') {
-            if (!map.grid)
-                map.grid = { size: 50, offsetX: 0, offsetY: 0, scale: 1.0, feetPerSquare: 5, type: 'square' };
-            const rawVal = parseFloat(document.getElementById('edit-map-dist-val')?.value);
-            const chosenVal = !isNaN(rawVal) && rawVal > 0 ? rawVal : 5;
-            const chosenUnit = document.getElementById('edit-map-dist-unit')?.value || 'ft';
-            const customUnit = document.getElementById('edit-map-dist-unit-custom')?.value?.trim();
-            const chosenFinalUnit = chosenUnit === 'custom' ? customUnit || 'custom' : chosenUnit;
-
-            map.grid.feetPerSquare = chosenVal;
-            map.grid.distancePerSquare = chosenVal;
-            map.grid.distanceUnit = chosenFinalUnit;
-            updates.grid = map.grid;
-        } else if (['fog-of-war', 'daylight-mode', 'restrict-movement', 'update-on-drop'].includes(field)) {
-            if (!map.lightingSettings)
-                map.lightingSettings = {
-                    fogOfWar: true,
-                    daylightMode: false,
-                    restrictMovement: false,
-                    updateOnDrop: true
-                };
-            const camelMap = {
-                'fog-of-war': 'fogOfWar',
-                'daylight-mode': 'daylightMode',
-                'restrict-movement': 'restrictMovement',
-                'update-on-drop': 'updateOnDrop'
-            };
-            map.lightingSettings[camelMap[field]] = val;
-            updates.lightingSettings = map.lightingSettings;
-        } else {
-            const camelProp = field.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
-            map[camelProp] = val;
-            updates[camelProp] = val;
-        }
-
-        if (options.vtt?.socket) {
-            options.vtt.socket.emit('map:edit', { mapId: managerState.editingMapId, updates });
-        }
-        const currentMapId = options.getCurrentMapId ? options.getCurrentMapId() : null;
-        if (currentMapId === managerState.editingMapId && options.renderAll) {
-            options.renderAll();
-        }
-    };
-
-    const bindField = (id, field, type, eventName = 'change') => {
-        const el = document.getElementById(id);
-        if (el) el.addEventListener(eventName, () => updateMapField(field, type));
-    };
-
-    bindField('edit-map-name', 'name', 'string', 'blur');
-    bindField('edit-map-folder', 'folder', 'string');
-    bindField('edit-map-url', 'url', 'string', 'blur');
-    bindField('edit-map-grid-width', 'grid-width', 'number');
-    bindField('edit-map-grid-height', 'grid-height', 'number');
-    bindField('edit-map-grid-type', 'grid-type', 'string');
-    bindField('edit-map-grid-size', 'grid-size', 'number');
-    bindField('edit-map-offset-x', 'offset-x', 'number');
-    bindField('edit-map-offset-y', 'offset-y', 'number');
-    bindField('edit-map-grid-color', 'grid-color', 'string');
-    bindField('edit-map-grid-opacity', 'grid-opacity', 'number', 'input');
-
-    bindField('edit-map-dist-val', 'dist-val', 'number', 'blur');
     const editDistUnitEl = document.getElementById('edit-map-dist-unit');
     const editDistCustomWrap = document.getElementById('edit-map-dist-unit-custom-wrap');
     const editDistCustomInput = document.getElementById('edit-map-dist-unit-custom');
@@ -1330,19 +1488,9 @@ export function setupEditMapModal(managerState, options = {}) {
                 if (editDistCustomInput) editDistCustomInput.focus();
             } else {
                 if (editDistCustomWrap) editDistCustomWrap.classList.add('vtt-hidden');
-                updateMapField('dist-unit', 'string');
             }
         });
     }
-
-    if (editDistCustomInput) {
-        editDistCustomInput.addEventListener('blur', () => updateMapField('dist-unit-custom', 'string'));
-    }
-
-    bindField('edit-map-fog-of-war', 'fog-of-war', 'boolean');
-    bindField('edit-map-daylight-mode', 'daylight-mode', 'boolean');
-    bindField('edit-map-restrict-movement', 'restrict-movement', 'boolean');
-    bindField('edit-map-update-on-drop', 'update-on-drop', 'boolean');
 }
 
 export function openEditMapModal(map, managerState, options = {}) {
@@ -1414,6 +1562,7 @@ export function openEditMapModal(map, managerState, options = {}) {
     document.getElementById('edit-map-update-on-drop').checked = ls.updateOnDrop !== false;
 
     // Weather settings initialization
+    managerState.isDraft = true;
     if (options.parseWeatherSettings) {
         const parsedWeather = options.parseWeatherSettings(map.weather);
         managerState.currentEditingWeatherLayers = parsedWeather.effects;
@@ -1514,15 +1663,14 @@ export function setupMapUploadControls(managerState, options = {}) {
 
     const updateFolderDatalist = () => {
         const datalist = document.getElementById('map-existing-folders-datalist');
-        if (!datalist || !options.vtt?.campaignState?.maps) return;
-        const folders = [
-            ...new Set(
-                Object.values(options.vtt.campaignState.maps)
-                    .map((m) => m.folder)
-                    .filter((f) => f && f.trim())
-            )
-        ].sort();
-        datalist.innerHTML = folders.map((f) => `<option value="${f}"></option>`).join('');
+        const camp = options.vtt?.campaignState;
+        if (!datalist || !camp) return;
+        const fromMaps = Object.values(camp.maps || {})
+            .map((m) => m.folder)
+            .filter((f) => f && f.trim());
+        const fromFolders = (camp.mapFolders || []).filter((f) => f && f.trim());
+        const folders = [...new Set([...fromMaps, ...fromFolders])].sort();
+        datalist.innerHTML = folders.map((f) => `<option value="${escapeMapHtml(f)}"></option>`).join('');
     };
 
     if (btnChangeMap) {
@@ -1531,6 +1679,34 @@ export function setupMapUploadControls(managerState, options = {}) {
             if (createPanel) createPanel.classList.add('vtt-hidden');
             updateFolderDatalist();
             renderMapGrid(managerState, options);
+        });
+    }
+
+    if (!window._vttMapManagerEscapeBound) {
+        window._vttMapManagerEscapeBound = true;
+        document.addEventListener('keydown', (e) => {
+            if (e.key !== 'Escape') return;
+            const pushModal = document.getElementById('modal-push-players');
+            if (pushModal && !pushModal.classList.contains('vtt-hidden')) {
+                pushModal.classList.add('vtt-hidden');
+                return;
+            }
+            const editModal = document.getElementById('modal-edit-map');
+            if (editModal && !editModal.classList.contains('vtt-hidden')) {
+                const cancelBtn = document.getElementById('btn-edit-map-cancel');
+                if (cancelBtn) cancelBtn.click();
+                else editModal.classList.add('vtt-hidden');
+                return;
+            }
+            const uploadModal = document.getElementById('modal-upload-map');
+            if (uploadModal && !uploadModal.classList.contains('vtt-hidden')) {
+                const createDrawer = document.getElementById('map-creation-drawer');
+                if (createDrawer && !createDrawer.classList.contains('vtt-hidden')) {
+                    createDrawer.classList.add('vtt-hidden');
+                } else {
+                    uploadModal.classList.add('vtt-hidden');
+                }
+            }
         });
     }
 
@@ -1658,11 +1834,12 @@ export function setupMapUploadControls(managerState, options = {}) {
             if (btnCreateSubmit) btnCreateSubmit.disabled = true;
             const originalText = btnBulkImport.innerHTML;
 
+            const importedMaps = [];
             for (let i = 0; i < mapOptions.length; i++) {
                 const mapId = mapOptions[i].value;
                 const mapName = mapOptions[i].textContent;
 
-                btnBulkImport.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Importing ${i + 1}/${mapOptions.length}...`;
+                btnBulkImport.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Parsing ${i + 1}/${mapOptions.length}...`;
 
                 try {
                     if (window.VTT?.dataBridge?.import5etoolsMap) {
@@ -1672,16 +1849,20 @@ export function setupMapUploadControls(managerState, options = {}) {
                             if (targetFolder.trim()) {
                                 importedMap.folder = targetFolder.trim();
                             }
-                            if (options.vtt?.socket) {
-                                options.vtt.socket.emit('map:create', importedMap);
-                            }
+                            importedMaps.push(importedMap);
                         }
                     }
                 } catch (e) {
                     console.error(`Error importing map ${mapName}:`, e);
                 }
+            }
 
-                await new Promise((resolve) => setTimeout(resolve, 800));
+            if (importedMaps.length > 0 && options.vtt?.socket) {
+                btnBulkImport.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Saving ${importedMaps.length} maps...`;
+                options.vtt.socket.emit('map:bulk-create', {
+                    maps: importedMaps,
+                    targetFolder: targetFolder.trim()
+                });
             }
 
             btnBulkImport.innerHTML = originalText;
@@ -1816,6 +1997,8 @@ export function setupMapUploadControls(managerState, options = {}) {
                     let gWidth = !isNaN(rawGridWidth) && rawGridWidth > 0 ? rawGridWidth : Math.ceil(nw / gSize);
                     let gHeight = !isNaN(rawGridHeight) && rawGridHeight > 0 ? rawGridHeight : Math.ceil(nh / gSize);
 
+                    const isVideoUrl =
+                        isYt || !!url.match(/\.(mp4|webm|ogg)(\?.*)?$/i) || url.includes('pinimg.com/videos');
                     if (isYt) {
                         embedUrl = `https://www.youtube.com/embed/${ytVideoId}?autoplay=1&mute=1&loop=1&controls=0&disablekb=1&fs=0&modestbranding=1&playsinline=1&playlist=${ytVideoId}`;
                         thumbUrl = `https://img.youtube.com/vi/${ytVideoId}/hqdefault.jpg`;
@@ -1824,16 +2007,12 @@ export function setupMapUploadControls(managerState, options = {}) {
                         nw = gWidth * gSize;
                         nh = gHeight * gSize;
                     } else {
-                        const img = new Image();
-                        await new Promise((resolve) => {
-                            img.onload = () => resolve();
-                            img.onerror = () => resolve();
-                            img.src = getSafeVttUrl(url);
-                            setTimeout(resolve, 3000);
-                        });
-
-                        nw = img.naturalWidth || 2000;
-                        nh = img.naturalHeight || 1500;
+                        const { width: probedW, height: probedH } = await probeMediaDimensions(
+                            getSafeVttUrl(url),
+                            isVideoUrl
+                        );
+                        nw = probedW;
+                        nh = probedH;
                         gWidth = !isNaN(rawGridWidth) && rawGridWidth > 0 ? rawGridWidth : Math.ceil(nw / gSize);
                         gHeight = !isNaN(rawGridHeight) && rawGridHeight > 0 ? rawGridHeight : Math.ceil(nh / gSize);
                     }
@@ -1850,8 +2029,7 @@ export function setupMapUploadControls(managerState, options = {}) {
                             isBackground: true,
                             locked: true,
                             img: isYt ? embedUrl : url,
-                            isVideo:
-                                isYt || !!url.match(/\.(mp4|webm|ogg)(\?.*)?$/i) || url.includes('pinimg.com/videos'),
+                            isVideo: isVideoUrl,
                             pixelWidth: nw,
                             pixelHeight: nh,
                             size: 1,
@@ -1866,6 +2044,7 @@ export function setupMapUploadControls(managerState, options = {}) {
                             folder,
                             mapImage: isYt ? '' : url,
                             thumbnail: thumbUrl,
+                            isVideo: isVideoUrl,
                             gridWidth: gWidth,
                             gridHeight: gHeight,
                             grid: {
@@ -1966,6 +2145,7 @@ export function setupMapUploadControls(managerState, options = {}) {
                 // File upload via REST api
                 if (fileInput.files.length === 0) return alert('Select a file first');
                 const file = fileInput.files[0];
+                const isVideoFile = !!file.type.match(/^video\//i) || !!file.name.match(/\.(mp4|webm|ogg)$/i);
                 const formData = new FormData();
                 formData.append('image', file);
 
@@ -1981,16 +2161,11 @@ export function setupMapUploadControls(managerState, options = {}) {
                         const data = await res.json();
                         const uploadedUrl = data.url;
 
-                        const img = new Image();
-                        await new Promise((resolve) => {
-                            img.onload = () => resolve();
-                            img.onerror = () => resolve();
-                            img.src = getSafeVttUrl(uploadedUrl);
-                            setTimeout(resolve, 3000);
-                        });
+                        const { width: nw, height: nh } = await probeMediaDimensions(
+                            getSafeVttUrl(uploadedUrl),
+                            isVideoFile
+                        );
 
-                        const nw = img.naturalWidth || 2000;
-                        const nh = img.naturalHeight || 1500;
                         const gSize = chosenGridSize;
                         const gWidth = !isNaN(rawGridWidth) && rawGridWidth > 0 ? rawGridWidth : Math.ceil(nw / gSize);
                         const gHeight =
@@ -2007,6 +2182,7 @@ export function setupMapUploadControls(managerState, options = {}) {
                                 isBackground: true,
                                 locked: true,
                                 img: uploadedUrl,
+                                isVideo: isVideoFile,
                                 pixelWidth: nw,
                                 pixelHeight: nh,
                                 size: 1,
@@ -2021,6 +2197,7 @@ export function setupMapUploadControls(managerState, options = {}) {
                                 folder,
                                 mapImage: uploadedUrl,
                                 thumbnail: uploadedUrl,
+                                isVideo: isVideoFile,
                                 gridWidth: gWidth,
                                 gridHeight: gHeight,
                                 grid: {
@@ -2078,6 +2255,7 @@ export function setupMapUploadControls(managerState, options = {}) {
 
 let mapToPushId = null;
 let latestPushModalOptions = {};
+let pushPlayersModalInitialized = false;
 
 export function setupPushPlayersModal(options = {}) {
     if (typeof document === 'undefined') return;
@@ -2086,6 +2264,7 @@ export function setupPushPlayersModal(options = {}) {
     }
     const modal = document.getElementById('modal-push-players');
     if (!modal) return;
+    if (pushPlayersModalInitialized) return;
 
     const cancelBtn = document.getElementById('btn-push-players-cancel');
     if (cancelBtn) {
@@ -2135,13 +2314,19 @@ export function setupPushPlayersModal(options = {}) {
 
             // 1. Optimistically synchronize GM local state & immediately switch GM view to pushed map
             if (opts.vtt?.campaignState) {
-                opts.vtt.campaignState.activeMapId = targetMapId;
                 opts.vtt.campaignState.activeGMMapId = targetMapId;
                 if (targetPlayers === 'all') {
+                    opts.vtt.campaignState.activeMapId = targetMapId;
                     opts.vtt.campaignState.playerMapOverrides = {};
                 } else if (Array.isArray(targetPlayers)) {
                     if (!opts.vtt.campaignState.playerMapOverrides) opts.vtt.campaignState.playerMapOverrides = {};
                     targetPlayers.forEach((p) => {
+                        const pLower = p.toLowerCase();
+                        for (const k in opts.vtt.campaignState.playerMapOverrides) {
+                            if (k.toLowerCase() === pLower && k !== p) {
+                                delete opts.vtt.campaignState.playerMapOverrides[k];
+                            }
+                        }
                         opts.vtt.campaignState.playerMapOverrides[p] = targetMapId;
                     });
                 }
@@ -2177,6 +2362,8 @@ export function setupPushPlayersModal(options = {}) {
             mapToPushId = null;
         });
     }
+
+    pushPlayersModalInitialized = true;
 }
 
 export function openPushPlayersModal(mapId, options = {}) {
@@ -2197,7 +2384,7 @@ export function openPushPlayersModal(mapId, options = {}) {
 
     list.innerHTML = '';
     allPotentialPlayers.forEach((p) => {
-        const currentMapId = camp.playerMapOverrides?.[p] || camp.activeMapId;
+        const currentMapId = getPlayerMapOverride(camp, p) || camp.activeMapId;
         const isAlreadyHere = currentMapId === mapId;
         const currentMapName = camp.maps?.[currentMapId]?.name || 'Unknown Map';
 
@@ -2206,11 +2393,11 @@ export function openPushPlayersModal(mapId, options = {}) {
 
         div.innerHTML = `
             <div class="push-player-left">
-                <input type="checkbox" value="${p}" checked>
-                <span class="push-player-name">${p}</span>
+                <input type="checkbox" value="${escapeMapHtml(p)}" checked>
+                <span class="push-player-name">${escapeMapHtml(p)}</span>
             </div>
             <span class="push-player-map-tag ${isAlreadyHere ? 'already-here' : 'other-map'}">
-                ${isAlreadyHere ? 'Already Here' : `on "${currentMapName}"`}
+                ${isAlreadyHere ? 'Already Here' : `on &quot;${escapeMapHtml(currentMapName)}&quot;`}
             </span>
         `;
         list.appendChild(div);

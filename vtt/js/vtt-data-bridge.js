@@ -1172,7 +1172,7 @@ export function initVttDataBridge(vtt) {
                                   : data.monsterData
                                     ? JSON.parse(JSON.stringify(data.monsterData))
                                     : {},
-                              { isCustomNpc: true, isGeneric: true }
+                              { isCustomNpc: isCustomNpc, isGeneric: true }
                           )
                         : charRef?.monsterData || data.monsterData || null,
                     layer: canvasEngine.getActiveLayer(),
@@ -2019,7 +2019,14 @@ export function initVttDataBridge(vtt) {
         modal.querySelector('#npc-import-save').addEventListener('click', async () => {
             const nickname = modal.querySelector('#npc-nickname').value.trim() || monster.name;
 
-            let hp = monster.hp || calculateMonsterHp(monster);
+            let hp = 20;
+            if (typeof monster.hp === 'number') {
+                hp = monster.hp;
+            } else if (monster.hp && typeof monster.hp.average === 'number') {
+                hp = monster.hp.average;
+            } else {
+                hp = calculateMonsterHp(monster);
+            }
 
             // Hydrate full normalized creature before saving custom NPC
             let fullMonster = null;

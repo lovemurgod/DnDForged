@@ -1,8 +1,29 @@
 // ForgeDVTT Creature Sheet — Editor Subsystem
 // Handles companion editing, creature stat customization, token gallery, and defense configurations.
 
-import { STANDARD_DAMAGE_TYPES, formatDamageList, entryToPlainText, calcDiceAverage } from './creature-parser.js';
+import { STANDARD_DAMAGE_TYPES, formatDamageList, entryToPlainText, calcDiceAverage, getProfBonus } from './creature-parser.js';
 import { resolveSpellcastingType, get5eSlotsForCaster } from './creature-spells.js';
+
+export const DND_5E_SKILLS = [
+    { key: 'acrobatics', name: 'Acrobatics', ability: 'dex' },
+    { key: 'animalHandling', name: 'Animal Handling', ability: 'wis' },
+    { key: 'arcana', name: 'Arcana', ability: 'int' },
+    { key: 'athletics', name: 'Athletics', ability: 'str' },
+    { key: 'deception', name: 'Deception', ability: 'cha' },
+    { key: 'history', name: 'History', ability: 'int' },
+    { key: 'insight', name: 'Insight', ability: 'wis' },
+    { key: 'intimidation', name: 'Intimidation', ability: 'cha' },
+    { key: 'investigation', name: 'Investigation', ability: 'int' },
+    { key: 'medicine', name: 'Medicine', ability: 'wis' },
+    { key: 'nature', name: 'Nature', ability: 'int' },
+    { key: 'perception', name: 'Perception', ability: 'wis' },
+    { key: 'performance', name: 'Performance', ability: 'cha' },
+    { key: 'persuasion', name: 'Persuasion', ability: 'cha' },
+    { key: 'religion', name: 'Religion', ability: 'int' },
+    { key: 'sleightOfHand', name: 'Sleight of Hand', ability: 'dex' },
+    { key: 'stealth', name: 'Stealth', ability: 'dex' },
+    { key: 'survival', name: 'Survival', ability: 'wis' }
+];
 
 let currentEditCharId = null;
 let currentEditDefenses = null;
@@ -688,8 +709,9 @@ export function openEditModal(m, charId, ctx = {}) {
     const header = document.createElement('div');
     header.style.cssText =
         'padding:12px; border-bottom:1px solid var(--color-border); display:flex; justify-content:space-between; align-items:center; background:var(--color-bg-dark); border-radius: 8px 8px 0 0;';
+    const modalTitle = char.isCustomNpc ? 'Edit Custom NPC' : char.isCompanion ? 'Edit Companion' : 'Edit Creature';
     header.innerHTML = `
-        <h3 style="margin:0; font-family:var(--font-heading); color:var(--color-gold-base);">Edit Companion</h3>
+        <h3 style="margin:0; font-family:var(--font-heading); color:var(--color-gold-base);">${modalTitle}</h3>
         <div>
             <button class="btn btn-sm btn-primary" id="cs-edit-save-btn">Save</button>
             <button class="btn btn-sm btn-secondary" id="cs-edit-cancel-btn">Cancel</button>
@@ -718,8 +740,8 @@ export function openEditModal(m, charId, ctx = {}) {
             typeof t === 'string'
                 ? { url: t, name: 'Imported Token' }
                 : t && typeof t === 'object'
-                  ? t
-                  : { url: '', name: 'Unknown' }
+                    ? t
+                    : { url: '', name: 'Unknown' }
         );
     } else {
         char.tokenImages = [];
@@ -731,7 +753,7 @@ export function openEditModal(m, charId, ctx = {}) {
     if (!defaultTokenUrl && typeof window !== 'undefined' && window.Renderer?.monster?.getTokenUrl) {
         try {
             defaultTokenUrl = window.Renderer.monster.getTokenUrl(m);
-        } catch (e) {}
+        } catch (e) { }
     }
     if (!defaultTokenUrl && (m.source || m.name)) {
         const cleanName =
@@ -753,9 +775,50 @@ export function openEditModal(m, charId, ctx = {}) {
     const acObj = Array.isArray(m.ac) ? m.ac[0] : m.ac;
     const ac =
         typeof acObj === 'object' ? (acObj.value ?? acObj.ac ?? m.primaryAc ?? 10) : (acObj ?? m.primaryAc ?? 10);
-    const hpAvg = m.hp?.average || 0;
+    const hpAvg = (typeof m.hp === 'number' ? m.hp : m.hp?.average) || char.hpMax || 0;
     const hpForm = m.hp?.formula || '';
     const saves = m.save || {};
+
+    const existingSkills = m.skill || m.skills || {};
+    const crStr = m.cr ? (typeof m.cr === 'object' ? (m.cr.cr || m.cr.coven || m.cr.lair || '0') : m.cr) : '0';
+    const pb = getProfBonus(crStr);
+
+    const getSkillVal = (k) => {
+        const normKey = k.toLowerCase().replace(/[\s_-]/g, '');
+        for (const [sk, sv] of Object.entries(existingSkills)) {
+            if (sk.toLowerCase().replace(/[\s_-]/g, '') === normKey) {
+                return typeof sv === 'string' ? sv.trim() : String(sv);
+            }
+        }
+        return '';
+    };
+
+    const skillsGridHtml = DND_5E_SKILLS.map((s) => {
+        const statScore = m[s.ability] ?? 10;
+        const statMod = Math.floor((statScore - 10) / 2);
+        const curVal = getSkillVal(s.key);
+        const curNum = curVal ? parseInt(curVal.replace(/^\+/, '')) : NaN;
+        const isProf = !isNaN(curNum) && curNum === statMod + pb;
+        const isExp = !isNaN(curNum) && curNum === statMod + 2 * pb;
+
+        return `
+            <div class="cs-edit-skill-row" data-skill="${s.key}" data-ability="${s.ability}" style="display:flex; align-items:center; justify-content:space-between; background:rgba(0,0,0,0.25); border:1px solid rgba(255,255,255,0.06); padding:4px 8px; border-radius:4px; gap:6px;">
+                <div style="flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+                    <span style="font-size:0.8rem; font-weight:600; color:var(--color-text-primary);">${s.name}</span>
+                    <span style="font-size:0.65rem; color:var(--color-text-muted); text-transform:uppercase; margin-left:3px;">(${s.ability})</span>
+                </div>
+                <div style="display:flex; align-items:center; gap:6px;">
+                    <label style="display:inline-flex; align-items:center; gap:2px; font-size:0.7rem; color:var(--color-text-secondary); cursor:pointer;" title="Proficient (+${pb})">
+                        <input type="checkbox" class="cs-edit-skill-prof" data-skill="${s.key}" ${isProf ? 'checked' : ''}> P
+                    </label>
+                    <label style="display:inline-flex; align-items:center; gap:2px; font-size:0.7rem; color:var(--color-gold-base); cursor:pointer;" title="Expertise (+${pb * 2})">
+                        <input type="checkbox" class="cs-edit-skill-exp" data-skill="${s.key}" ${isExp ? 'checked' : ''}> E
+                    </label>
+                    <input type="text" class="vtt-input cs-edit-skill-val" data-skill="${s.key}" style="width:44px; text-align:center; padding:2px 4px; font-size:0.8rem; height:24px;" value="${curVal}" placeholder="${statMod >= 0 ? '+' + statMod : statMod}">
+                </div>
+            </div>
+        `;
+    }).join('');
 
     const rawSize = Array.isArray(m.size) ? m.size[0] : m.size || 'M';
     const sizeMap = { T: 'Tiny', S: 'Small', M: 'Medium', L: 'Large', H: 'Huge', G: 'Gargantuan' };
@@ -961,15 +1024,15 @@ export function openEditModal(m, charId, ctx = {}) {
                 <h4 style="margin:0 0 8px 0; color:var(--color-text-secondary);">Core Stats</h4>
                 <div style="display:grid; grid-template-columns:repeat(6, 1fr); gap:8px;">
                     ${['str', 'dex', 'con', 'int', 'wis', 'cha']
-                        .map(
-                            (ab) => `
+            .map(
+                (ab) => `
                         <div>
                             <label style="display:block; font-size:0.8rem; margin-bottom:4px; text-transform:uppercase;">${ab}</label>
                             <input type="number" class="vtt-input cs-edit-stat" data-stat="${ab}" style="width:100%;" value="${m[ab] || 10}">
                         </div>
                     `
-                        )
-                        .join('')}
+            )
+            .join('')}
                 </div>
             </div>
 
@@ -1061,15 +1124,25 @@ export function openEditModal(m, charId, ctx = {}) {
                 <h4 style="margin:0 0 8px 0; color:var(--color-text-secondary);">Saving Throws (Modifiers)</h4>
                 <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:8px;">
                     ${['str', 'dex', 'con', 'int', 'wis', 'cha']
-                        .map(
-                            (ab) => `
+            .map(
+                (ab) => `
                         <div>
                             <label style="display:block; font-size:0.8rem; margin-bottom:4px; text-transform:uppercase;">${ab}</label>
                             <input type="text" class="vtt-input cs-edit-save" data-ability="${ab}" style="width:100%;" value="${saves[ab] || ''}" placeholder="+0">
                         </div>
                     `
-                        )
-                        .join('')}
+            )
+            .join('')}
+                </div>
+            </div>
+
+            <div style="background:var(--color-bg-light); padding:12px; border-radius:4px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                    <h4 style="margin:0; color:var(--color-text-secondary);">Skills (Proficiency +${pb})</h4>
+                    <span style="font-size:0.7rem; color:var(--color-text-muted);">P = Proficient, E = Expertise</span>
+                </div>
+                <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(230px, 1fr)); gap:6px;">
+                    ${skillsGridHtml}
                 </div>
             </div>
 
@@ -1122,6 +1195,87 @@ export function openEditModal(m, charId, ctx = {}) {
     `;
     content.innerHTML = html;
 
+    // Wire Skills grid interactions
+    function getStatMod(ability) {
+        const statInput = content.querySelector(`.cs-edit-stat[data-stat="${ability}"]`);
+        const score = statInput ? parseInt(statInput.value) || 10 : (m[ability] || 10);
+        return Math.floor((score - 10) / 2);
+    }
+
+    content.querySelectorAll('.cs-edit-skill-row').forEach((row) => {
+        const skill = row.dataset.skill;
+        const ability = row.dataset.ability;
+        const profCb = row.querySelector('.cs-edit-skill-prof');
+        const expCb = row.querySelector('.cs-edit-skill-exp');
+        const valInput = row.querySelector('.cs-edit-skill-val');
+
+        const updateValFromBoxes = () => {
+            const statMod = getStatMod(ability);
+            if (expCb.checked) {
+                const total = statMod + 2 * pb;
+                valInput.value = (total >= 0 ? '+' : '') + total;
+            } else if (profCb.checked) {
+                const total = statMod + pb;
+                valInput.value = (total >= 0 ? '+' : '') + total;
+            } else {
+                valInput.value = '';
+            }
+        };
+
+        profCb.addEventListener('change', () => {
+            if (profCb.checked) expCb.checked = false;
+            updateValFromBoxes();
+        });
+
+        expCb.addEventListener('change', () => {
+            if (expCb.checked) profCb.checked = false;
+            updateValFromBoxes();
+        });
+
+        valInput.addEventListener('input', () => {
+            const trimmed = valInput.value.trim();
+            if (!trimmed) {
+                profCb.checked = false;
+                expCb.checked = false;
+                return;
+            }
+            const num = parseInt(trimmed.replace(/^\+/, ''));
+            const statMod = getStatMod(ability);
+            if (!isNaN(num)) {
+                if (num === statMod + 2 * pb) {
+                    expCb.checked = true;
+                    profCb.checked = false;
+                } else if (num === statMod + pb) {
+                    profCb.checked = true;
+                    expCb.checked = false;
+                } else {
+                    profCb.checked = false;
+                    expCb.checked = false;
+                }
+            }
+        });
+    });
+
+    content.querySelectorAll('.cs-edit-stat').forEach((statInput) => {
+        statInput.addEventListener('input', () => {
+            const ability = statInput.dataset.stat;
+            const statMod = getStatMod(ability);
+            content.querySelectorAll(`.cs-edit-skill-row[data-ability="${ability}"]`).forEach((row) => {
+                const profCb = row.querySelector('.cs-edit-skill-prof');
+                const expCb = row.querySelector('.cs-edit-skill-exp');
+                const valInput = row.querySelector('.cs-edit-skill-val');
+                valInput.placeholder = statMod >= 0 ? `+${statMod}` : `${statMod}`;
+                if (expCb.checked) {
+                    const total = statMod + 2 * pb;
+                    valInput.value = (total >= 0 ? '+' : '') + total;
+                } else if (profCb.checked) {
+                    const total = statMod + pb;
+                    valInput.value = (total >= 0 ? '+' : '') + total;
+                }
+            });
+        });
+    });
+
     function renderAbilityList(containerId, dataArray) {
         const container = content.querySelector('#' + containerId);
         if (!container) return;
@@ -1146,8 +1300,8 @@ export function openEditModal(m, charId, ctx = {}) {
         Array.isArray(m.lairActions)
             ? m.lairActions
             : Array.isArray(m.lairActions?.entries)
-              ? m.lairActions.entries
-              : []
+                ? m.lairActions.entries
+                : []
     );
 
     // Render Spellcasting Blocks in Modal
@@ -1375,8 +1529,8 @@ export function openEditModal(m, charId, ctx = {}) {
                 typeof window !== 'undefined' && typeof window.getSafeVttUrl === 'function'
                     ? window.getSafeVttUrl(url)
                     : url && (url.includes('discordapp.com') || url.includes('discordapp.net'))
-                      ? '/api/proxy-discord?url=' + encodeURIComponent(url)
-                      : url;
+                        ? '/api/proxy-discord?url=' + encodeURIComponent(url)
+                        : url;
             let mediaEl;
             if (isVideo) {
                 mediaEl = document.createElement('video');
@@ -1438,7 +1592,7 @@ export function openEditModal(m, charId, ctx = {}) {
             });
 
             gal.appendChild(wrapper);
-            if (isVideo) mediaEl.play().catch(() => {});
+            if (isVideo) mediaEl.play().catch(() => { });
         });
     }
     renderCompanionTokenGallery();
@@ -1473,8 +1627,8 @@ export function openEditModal(m, charId, ctx = {}) {
             typeof window !== 'undefined' && typeof window.vttAuthHeaders === 'function'
                 ? window.vttAuthHeaders()
                 : window.VTT?.gmSessionToken
-                  ? { 'x-gm-token': window.VTT.gmSessionToken }
-                  : {};
+                    ? { 'x-gm-token': window.VTT.gmSessionToken }
+                    : {};
 
         try {
             const res = await fetch('/api/assets/upload', {
@@ -1596,9 +1750,9 @@ export function saveCompanionEdits(m, charId = null, ctx = {}) {
     let finalTypeStr = typeSel === 'custom' ? typeCustom || 'humanoid' : typeSel;
     let tagsArr = tagsRaw
         ? tagsRaw
-              .split(',')
-              .map((s) => s.trim())
-              .filter(Boolean)
+            .split(',')
+            .map((s) => s.trim())
+            .filter(Boolean)
         : [];
 
     if (tagsArr.length > 0) {
@@ -1774,6 +1928,22 @@ export function saveCompanionEdits(m, charId = null, ctx = {}) {
     } else {
         delete m.save;
     }
+
+    // Skills
+    const newSkills = {};
+    content.querySelectorAll('.cs-edit-skill-val').forEach((input) => {
+        const val = input.value.trim();
+        if (val) {
+            const formattedVal = /^[+-]/.test(val) ? val : `+${val}`;
+            newSkills[input.dataset.skill] = formattedVal;
+        }
+    });
+    if (Object.keys(newSkills).length > 0) {
+        m.skill = newSkills;
+    } else {
+        delete m.skill;
+    }
+    delete m.skills;
 
     function extractAbilityList(containerId) {
         const rows = content.querySelectorAll('#' + containerId + ' > div');

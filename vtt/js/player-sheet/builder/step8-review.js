@@ -6,6 +6,7 @@
 export function renderStep8(ctx) {
     const {
         bodyEl,
+        workingChar,
         builderState,
         refreshArmorOptionsFromCandidates,
         runHpCalculation,
@@ -16,9 +17,10 @@ export function renderStep8(ctx) {
     } = ctx;
 
     refreshArmorOptionsFromCandidates();
-    runHpCalculation();
+    runHpCalculation(false);
     runAcCalculation();
     const stats = getEffectiveStats();
+    const isLevelUp = workingChar?.builderMode === 'levelup';
 
     bodyEl.innerHTML = `
         <!-- HP Calculation Box -->
@@ -33,11 +35,22 @@ export function renderStep8(ctx) {
                     <span id="pc-wiz-hp-preview" style="font-size:1.15rem; font-weight:bold; color:#4fc3f7; background:rgba(79,195,247,0.15); border:1px solid rgba(79,195,247,0.4); padding:2px 10px; border-radius:4px;">${builderState.calculatedHp}</span>
                 </div>
             </div>
-            <div style="display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap;">
+            <div style="display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap; align-items:center;">
                 <button type="button" class="btn ${builderState.hpMode === 'average' ? 'btn-primary' : 'btn-secondary'} btn-xs pc-wiz-hp-mode-btn" data-mode="average">Average (Fixed)</button>
                 <button type="button" class="btn ${builderState.hpMode === 'max' ? 'btn-primary' : 'btn-secondary'} btn-xs pc-wiz-hp-mode-btn" data-mode="max">Maximum</button>
                 <button type="button" class="btn ${builderState.hpMode === 'roll' ? 'btn-primary' : 'btn-secondary'} btn-xs pc-wiz-hp-mode-btn" data-mode="roll">Hit Dice Roll</button>
                 <button type="button" class="btn ${builderState.hpMode === 'roll_avg_min' ? 'btn-primary' : 'btn-secondary'} btn-xs pc-wiz-hp-mode-btn" data-mode="roll_avg_min">Roll (Avg Min)</button>
+                ${
+                    isLevelUp
+                        ? `
+                <div style="margin-left:auto; display:flex; align-items:center;">
+                    <button type="button" id="pc-wiz-toggle-preserve-hp" class="btn ${builderState.preserveExistingHp ? 'btn-primary' : 'btn-secondary'} btn-xs" title="Keep prior level hit points intact and only add HP for newly gained levels">
+                        <i class="fa-solid ${builderState.preserveExistingHp ? 'fa-lock' : 'fa-lock-open'}"></i> Preserve Prior HP (${builderState.preserveExistingHp ? 'ON' : 'OFF'})
+                    </button>
+                </div>
+                `
+                        : ''
+                }
             </div>
 
             <!-- Rolls Breakdown -->
@@ -45,9 +58,12 @@ export function renderStep8(ctx) {
                 ${builderState.hpRolls
                     .map(
                         (r) => `
-                    <div style="display:flex; justify-content:space-between; font-size:0.8rem; padding:3px 0; border-bottom:1px solid rgba(255,255,255,0.05);">
-                        <span>${r.className} Lv ${r.level}: [1d${r.hd} -> ${r.val}] + CON (${r.con >= 0 ? '+' + r.con : r.con})</span>
-                        <strong style="color:#4fc3f7;">+${r.total} HP</strong>
+                    <div style="display:flex; justify-content:space-between; font-size:0.8rem; padding:3px 0; border-bottom:1px solid rgba(255,255,255,0.05); opacity:${r.isPreserved ? '0.65' : '1'};">
+                        <span>
+                            ${r.className} Lv ${r.level}: [1d${r.hd} -> ${r.val}] + CON (${r.con >= 0 ? '+' + r.con : r.con})
+                            ${r.isPreserved ? '<span class="badge" style="font-size:0.65rem; background:rgba(79,195,247,0.2); color:#4fc3f7; margin-left:4px;">Prior Level</span>' : ''}
+                        </span>
+                        <strong style="color:${r.isPreserved ? '#90caf9' : '#4fc3f7'};">+${r.total} HP</strong>
                     </div>
                 `
                     )
@@ -208,13 +224,19 @@ export function renderStep8(ctx) {
     bodyEl.querySelectorAll('.pc-wiz-hp-mode-btn').forEach((btn) => {
         btn.addEventListener('click', () => {
             builderState.hpMode = btn.dataset.mode;
-            runHpCalculation();
+            runHpCalculation(false);
             renderStep8(ctx);
         });
     });
 
+    document.getElementById('pc-wiz-toggle-preserve-hp')?.addEventListener('click', () => {
+        builderState.preserveExistingHp = !builderState.preserveExistingHp;
+        runHpCalculation(false);
+        renderStep8(ctx);
+    });
+
     document.getElementById('pc-wiz-reroll-hp')?.addEventListener('click', () => {
-        runHpCalculation();
+        runHpCalculation(true);
         renderStep8(ctx);
     });
 

@@ -41,7 +41,7 @@ export function initVttChat(vtt, chatHistory) {
     let savedRollMode = 'normal';
     try {
         savedRollMode = localStorage.getItem('vtt_current_roll_mode') || 'normal';
-    } catch (e) {}
+    } catch (e) { }
     vtt.currentRollMode = savedRollMode;
     window.VTT = window.VTT || {};
     window.VTT.currentRollMode = savedRollMode;
@@ -201,8 +201,8 @@ export function initVttChat(vtt, chatHistory) {
                     dr.roll && Array.isArray(dr.roll.diceList)
                         ? dr.roll.diceList
                         : Array.isArray(dr.diceList)
-                          ? dr.diceList
-                          : null;
+                            ? dr.diceList
+                            : null;
                 if (Array.isArray(dmgDice) && dmgDice.length > 0) {
                     dmgDice.forEach((d) => allDice.push({ ...d, damageType: dr.type || null }));
                 } else {
@@ -268,7 +268,7 @@ export function initVttChat(vtt, chatHistory) {
                     if (row && row.dataset.cardData) {
                         try {
                             msgEl._saveResolveCardData = JSON.parse(decodeURIComponent(row.dataset.cardData));
-                        } catch (e) {}
+                        } catch (e) { }
                     }
                 }
                 if (msgEl._saveResolveCardData) {
@@ -294,7 +294,7 @@ export function initVttChat(vtt, chatHistory) {
                     if (row && row.dataset.cardData) {
                         try {
                             msgEl._massAttackCardData = JSON.parse(decodeURIComponent(row.dataset.cardData));
-                        } catch (e) {}
+                        } catch (e) { }
                     }
                 }
                 if (data.massAttackCard) {
@@ -308,6 +308,37 @@ export function initVttChat(vtt, chatHistory) {
                     const cardContainer = msgEl.querySelector('.mass-attack-chat-card');
                     if (cardContainer) {
                         const newHtml = renderMassAttackCardHtml(msgEl._massAttackCardData, false, data.id);
+                        const tempDiv = document.createElement('div');
+                        tempDiv.innerHTML = newHtml;
+                        cardContainer.replaceWith(tempDiv.firstElementChild);
+                    }
+                }
+            }
+        });
+
+        vtt.socket.on('chat:macro_resolved', (data) => {
+            if (!data || !data.id) return;
+            const msgEl = chatMessages.querySelector(`[data-msg-id="${data.id}"]`);
+            if (msgEl) {
+                if (!msgEl._macroCardData) {
+                    const row = msgEl.querySelector('.macro-card-actions-row');
+                    if (row && row.dataset.cardData) {
+                        try {
+                            msgEl._macroCardData = JSON.parse(decodeURIComponent(row.dataset.cardData));
+                        } catch (e) { }
+                    }
+                }
+                if (data.macroCard) {
+                    msgEl._macroCardData = data.macroCard;
+                } else if (msgEl._macroCardData) {
+                    msgEl._macroCardData.resolved = data.resolution || true;
+                    if (data.results) msgEl._macroCardData.results = data.results;
+                    if (data.summary) msgEl._macroCardData.summary = data.summary;
+                }
+                if (msgEl._macroCardData) {
+                    const cardContainer = msgEl.querySelector('.macro-chat-card');
+                    if (cardContainer) {
+                        const newHtml = renderMacroCardHtml(msgEl._macroCardData, false, data.id);
                         const tempDiv = document.createElement('div');
                         tempDiv.innerHTML = newHtml;
                         cardContainer.replaceWith(tempDiv.firstElementChild);
@@ -368,7 +399,7 @@ export function initVttChat(vtt, chatHistory) {
                 window.VTT.currentRollMode = newMode;
                 try {
                     localStorage.setItem('vtt_current_roll_mode', newMode);
-                } catch (e) {}
+                } catch (e) { }
                 updateRollModeButtonsUI(newMode);
             });
         });
@@ -458,20 +489,26 @@ export function initVttChat(vtt, chatHistory) {
             // Macro chatcard resolution & damage buttons (GM only)
             const actionBtn = e.target.closest('.macro-btn-action');
             if (actionBtn) {
+                if (vtt.role !== 'GM') return;
                 const msgEl = actionBtn.closest('.chat-message');
                 let cardData = msgEl?._macroCardData;
-                if (!cardData) {
-                    const rowEl = actionBtn.closest('.macro-card-actions-row');
-                    if (rowEl && rowEl.dataset.cardData) {
-                        try {
-                            cardData = JSON.parse(decodeURIComponent(rowEl.dataset.cardData));
-                        } catch (err) {}
-                    }
+                const rowEl = actionBtn.closest('.macro-card-actions-row');
+                const msgId = msgEl?.dataset?.msgId || rowEl?.dataset?.msgId;
+                if (!cardData && rowEl && rowEl.dataset.cardData) {
+                    try {
+                        cardData = JSON.parse(decodeURIComponent(rowEl.dataset.cardData));
+                    } catch (err) { }
                 }
                 const action = actionBtn.dataset.action;
                 if (cardData && action) {
+                    const rowButtons = rowEl ? Array.from(rowEl.querySelectorAll('.macro-btn-action')) : [actionBtn];
+                    rowButtons.forEach((b) => (b.disabled = true));
+
                     if (window.VTT?.canvasEngine?.handleCardAction) {
-                        window.VTT.canvasEngine.handleCardAction(cardData, action);
+                        const handled = window.VTT.canvasEngine.handleCardAction(cardData, action, msgId);
+                        if (handled === false) {
+                            rowButtons.forEach((b) => (b.disabled = false));
+                        }
                     }
                 }
                 e.stopPropagation();
@@ -489,7 +526,7 @@ export function initVttChat(vtt, chatHistory) {
                 if (!cardData && rowEl && rowEl.dataset.cardData) {
                     try {
                         cardData = JSON.parse(decodeURIComponent(rowEl.dataset.cardData));
-                    } catch (err) {}
+                    } catch (err) { }
                 }
                 const action = saveResolveBtn.dataset.action;
                 if (cardData && action && window.VTT?.canvasEngine?.resolveSaveFromChat) {
@@ -513,7 +550,7 @@ export function initVttChat(vtt, chatHistory) {
                 if (!cardData && rowEl && rowEl.dataset.cardData) {
                     try {
                         cardData = JSON.parse(decodeURIComponent(rowEl.dataset.cardData));
-                    } catch (err) {}
+                    } catch (err) { }
                 }
                 if (cardData && window.VTT?.canvasEngine?.processMassAttackFromChat) {
                     massAttackBtn.disabled = true;
@@ -948,7 +985,7 @@ export function initVttChat(vtt, chatHistory) {
         return text;
     }
 
-    function renderMacroCardHtml(mc, isHistorical = false) {
+    function renderMacroCardHtml(mc, isHistorical = false, msgId = null) {
         // Damage type color map
         const dmgColors = {
             Fire: '#ff6b35',
@@ -1032,14 +1069,14 @@ export function initVttChat(vtt, chatHistory) {
             mc.saveInfo || (mc.saveDc && mc.saveAbility ? { ability: mc.saveAbility, dc: mc.saveDc } : null);
         const saveObj =
             rawSaveObj &&
-            rawSaveObj.ability &&
-            validAbilities.includes(rawSaveObj.ability.trim().toUpperCase()) &&
-            !isNaN(parseInt(rawSaveObj.dc)) &&
-            parseInt(rawSaveObj.dc) > 0
+                rawSaveObj.ability &&
+                validAbilities.includes(rawSaveObj.ability.trim().toUpperCase()) &&
+                !isNaN(parseInt(rawSaveObj.dc)) &&
+                parseInt(rawSaveObj.dc) > 0
                 ? {
-                      ...rawSaveObj,
-                      ability: rawSaveObj.ability.trim().substring(0, 3).toUpperCase()
-                  }
+                    ...rawSaveObj,
+                    ability: rawSaveObj.ability.trim().substring(0, 3).toUpperCase()
+                }
                 : null;
         if (saveObj) {
             const abLabel = `${saveObj.ability} Save DC`;
@@ -1062,7 +1099,7 @@ export function initVttChat(vtt, chatHistory) {
                 const icon = dmgIcons[normalizedType] || dmgIcons[dr.type] || 'fa-solid fa-droplet';
                 const bd = dr.roll
                     ? dr.roll.breakdownStr ||
-                      (dr.roll.diceList ? `[${dr.roll.diceList.map((d) => d.val).join(', ')}]` : '')
+                    (dr.roll.diceList ? `[${dr.roll.diceList.map((d) => d.val).join(', ')}]` : '')
                     : '';
                 const total = dr.roll ? dr.roll.total : 0;
                 const formulaText = (dr.formula || '').toUpperCase();
@@ -1089,17 +1126,32 @@ export function initVttChat(vtt, chatHistory) {
             })
             .join('');
 
+        const isResolved = !!mc.resolved;
         let actionsRow = '';
-        if (
+        if (isResolved) {
+            let summaryText =
+                typeof mc.resolved === 'object' && mc.resolved.summary
+                    ? mc.resolved.summary
+                    : 'Resolved';
+            if (summaryText.startsWith('Resolved:')) {
+                summaryText = summaryText.replace(/^Resolved:\s*/, '');
+            }
+            actionsRow = `
+                <div class="macro-card-resolved-badge">
+                    <i class="fa-solid fa-circle-check"></i> Resolved: ${escapeHtml(summaryText)}
+                </div>
+            `;
+        } else if (
             vtt.role === 'GM' &&
             (mc.atkRoll || mc.saveInfo || (mc.saveDc && mc.saveAbility) || (mc.dmgRolls && mc.dmgRolls.length > 0))
         ) {
             let encodedData = '';
             try {
                 encodedData = encodeURIComponent(JSON.stringify(mc));
-            } catch (err) {}
+            } catch (err) { }
+            const dataMsgAttr = msgId ? ` data-msg-id="${escapeHtml(msgId)}"` : '';
             actionsRow = `
-                <div class="macro-card-actions-row" data-card-data="${encodedData}">
+                <div class="macro-card-actions-row" data-card-data="${encodedData}"${dataMsgAttr}>
                     <button type="button" class="macro-btn-action macro-btn-process" data-action="process" title="Automatically resolve attack roll / saving throw & apply damage to selected tokens">
                         <i class="fa-solid fa-play"></i> Process
                     </button>
@@ -1114,7 +1166,7 @@ export function initVttChat(vtt, chatHistory) {
         }
 
         return `
-            <div class="macro-chat-card">
+            <div class="macro-chat-card ${isResolved ? 'is-resolved' : ''}">
                 <div class="macro-card-header">
                     <div class="macro-card-header-left">
                         <i class="fa-solid fa-dice-d20 macro-card-icon"></i>
@@ -1209,7 +1261,7 @@ export function initVttChat(vtt, chatHistory) {
             let encodedData = '';
             try {
                 encodedData = encodeURIComponent(JSON.stringify(src));
-            } catch (err) {}
+            } catch (err) { }
             footerHtml = `
                 <div class="save-resolve-prompt">Apply half damage to tokens that succeeded on the save?</div>
                 <div class="save-resolve-actions-row" data-card-data="${encodedData}" data-msg-id="${msgId}">
@@ -1383,7 +1435,7 @@ export function initVttChat(vtt, chatHistory) {
             let encodedData = '';
             try {
                 encodedData = encodeURIComponent(JSON.stringify(mac));
-            } catch (err) {}
+            } catch (err) { }
             footerHtml = `
                 <div class="mass-attack-prompt">Select target token(s) on canvas and click Process</div>
                 <div class="mass-attack-actions-row" data-card-data="${encodedData}" data-msg-id="${msgId}">
@@ -1502,27 +1554,25 @@ export function initVttChat(vtt, chatHistory) {
                     </div>
                     <div class="trap-chat-details">
                         ${tc.saveAbility && tc.saveAbility !== 'NONE' ? `<span class="trap-chat-badge"><i class="fa-solid fa-shield"></i> DC ${escapeHtml(tc.saveDc)} ${escapeHtml(tc.saveAbility)} Save</span>` : ''}
-                        ${
-                            tc.damageRoll
-                                ? `
+                        ${tc.damageRoll
+                    ? `
                             <span class="trap-chat-badge" style="background: rgba(239, 68, 68, 0.25); border-color: rgba(239, 68, 68, 0.6); color: #fca5a5;">
                                 <i class="fa-solid fa-burst"></i> Damage: <strong>${escapeHtml(tc.damageRoll.total)}</strong> <span style="font-size: 0.85em; opacity: 0.85;">(${escapeHtml(tc.damageRoll.breakdownStr || tc.damageRoll.formula || tc.damage || '')})</span>
                             </span>
                         `
-                                : tc.damage
-                                  ? `<span class="trap-chat-badge"><i class="fa-solid fa-burst"></i> ${escapeHtml(tc.damage)}</span>`
-                                  : ''
-                        }
+                    : tc.damage
+                        ? `<span class="trap-chat-badge"><i class="fa-solid fa-burst"></i> ${escapeHtml(tc.damage)}</span>`
+                        : ''
+                }
                     </div>
-                    ${
-                        tc.saveAbility && tc.saveAbility !== 'NONE'
-                            ? `
+                    ${tc.saveAbility && tc.saveAbility !== 'NONE'
+                    ? `
                         <button type="button" class="trap-chat-save-btn" data-trap-id="${escapeHtml(tc.trapId)}" data-token-id="${escapeHtml(tc.tokenId)}" data-ability="${escapeHtml(tc.saveAbility)}" data-dc="${escapeHtml(tc.saveDc)}">
                             <i class="fa-solid fa-dice-d20"></i> Roll ${escapeHtml(tc.saveAbility)} Save (DC ${escapeHtml(tc.saveDc)})
                         </button>
                     `
-                            : ''
-                    }
+                    : ''
+                }
                 </div>
             `;
         }
@@ -1584,7 +1634,7 @@ export function initVttChat(vtt, chatHistory) {
         // Combined macro card: attack + save + per-type damage rows
         else if (msg.macroCard) {
             messageDiv._macroCardData = msg.macroCard;
-            bodyText = renderMacroCardHtml(msg.macroCard, isHistorical);
+            bodyText = renderMacroCardHtml(msg.macroCard, isHistorical, msg.id);
         }
         // Stylized item card for pinging inventory items
         else if (msg.itemCard) {
@@ -1666,8 +1716,8 @@ export function initVttChat(vtt, chatHistory) {
                     ? canvasEngine.getSelectedTokenIds
                         ? canvasEngine.getSelectedTokenIds()
                         : canvasEngine.getSelectedTokens
-                          ? canvasEngine.getSelectedTokens()
-                          : []
+                            ? canvasEngine.getSelectedTokens()
+                            : []
                     : [];
                 if (selectedTokenIds.length > 0) {
                     const canvasTokens = canvasEngine.getTokens ? canvasEngine.getTokens() : {};
@@ -1892,7 +1942,7 @@ export function initVttChat(vtt, chatHistory) {
                 if (!finalCoords) {
                     try {
                         finalCoords = JSON.parse(localStorage.getItem('vtt_initiative_custom_coords'));
-                    } catch (e) {}
+                    } catch (e) { }
                 }
                 if (!finalCoords) {
                     const rect = initContainer.getBoundingClientRect();
@@ -2107,7 +2157,7 @@ export function initVttChat(vtt, chatHistory) {
                 if (e.target.setPointerCapture && e.pointerId !== undefined) {
                     try {
                         e.target.setPointerCapture(e.pointerId);
-                    } catch (err) {}
+                    } catch (err) { }
                 }
 
                 document.addEventListener('pointermove', onResizeMove);
@@ -2142,7 +2192,7 @@ export function initVttChat(vtt, chatHistory) {
                 if (e && e.target && e.target.releasePointerCapture && e.pointerId !== undefined) {
                     try {
                         e.target.releasePointerCapture(e.pointerId);
-                    } catch (err) {}
+                    } catch (err) { }
                 }
                 document.removeEventListener('pointermove', onResizeMove);
                 document.removeEventListener('pointerup', onResizeUp);
@@ -2175,7 +2225,7 @@ export function initVttChat(vtt, chatHistory) {
                 let savedSize = null;
                 try {
                     savedSize = JSON.parse(localStorage.getItem('vtt_initiative_custom_size'));
-                } catch (e) {}
+                } catch (e) { }
 
                 if (savedCoords) {
                     [configPosition, hudPosition].forEach((sel) => {
@@ -2570,8 +2620,8 @@ export function initVttChat(vtt, chatHistory) {
                         typeof window.getSafeVttUrl === 'function'
                             ? window.getSafeVttUrl(actTargetImg)
                             : actTargetImg.includes('discordapp.com') || actTargetImg.includes('discordapp.net')
-                              ? '/api/proxy-discord?url=' + encodeURIComponent(actTargetImg)
-                              : actTargetImg;
+                                ? '/api/proxy-discord?url=' + encodeURIComponent(actTargetImg)
+                                : actTargetImg;
                     const cleanTarget = actTargetImg.split('?')[0].toLowerCase();
                     const isTargetVideo = (actToken && actToken.isVideo) || !!cleanTarget.match(/\.(mp4|webm|ogg)$/i);
                     const isTargetYt = actTargetImg.includes('youtube.com') || actTargetImg.includes('youtu.be');
@@ -2701,8 +2751,8 @@ export function initVttChat(vtt, chatHistory) {
                     typeof window.getSafeVttUrl === 'function'
                         ? window.getSafeVttUrl(targetImg)
                         : targetImg.includes('discordapp.com') || targetImg.includes('discordapp.net')
-                          ? '/api/proxy-discord?url=' + encodeURIComponent(targetImg)
-                          : targetImg;
+                            ? '/api/proxy-discord?url=' + encodeURIComponent(targetImg)
+                            : targetImg;
 
                 if (isTargetYt) {
                     avatarHtml = `<div class="init-token-avatar init-avatar-yt" title="YouTube Token">📺</div>`;
@@ -2826,7 +2876,7 @@ export function initVttChat(vtt, chatHistory) {
             // Video hover listeners
             const videoEl = row.querySelector('video');
             if (videoEl) {
-                row.addEventListener('mouseenter', () => videoEl.play().catch(() => {}));
+                row.addEventListener('mouseenter', () => videoEl.play().catch(() => { }));
                 row.addEventListener('mouseleave', () => videoEl.pause());
             }
 
@@ -2866,7 +2916,7 @@ export function initVttChat(vtt, chatHistory) {
         // Structured macro card (private)
         if (msg.macroCard) {
             messageDiv._macroCardData = msg.macroCard;
-            bodyText = renderMacroCardHtml(msg.macroCard, isHistorical);
+            bodyText = renderMacroCardHtml(msg.macroCard, isHistorical, msg.id);
             if (!isHistorical) {
                 const dice = extractDiceFromMessage(msg);
                 if (dice.length > 0) trigger3dDiceRoll(dice);
@@ -2970,14 +3020,14 @@ export function initVttChat(vtt, chatHistory) {
                 <div class="dice-menu-header">Roll d${targetFaces}</div>
                 <div class="dice-menu-options">
                     ${Array.from({ length: 10 }, (_, i) => i + 1)
-                        .map(
-                            (num) => `
+                    .map(
+                        (num) => `
                         <div class="dice-menu-option" data-count="${num}">
                             Roll ${num}d${targetFaces}
                         </div>
                     `
-                        )
-                        .join('')}
+                    )
+                    .join('')}
                 </div>
                 <div class="dice-menu-divider"></div>
                 <div class="dice-menu-custom">

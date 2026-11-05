@@ -432,6 +432,28 @@
     box-shadow: 0 0 12px rgba(59, 130, 246, 0.35);
 }
 
+.macro-card-resolved-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 7px 12px;
+    margin: 6px 8px 8px;
+    border-radius: 6px;
+    background: rgba(129, 199, 132, 0.12);
+    border: 1px solid rgba(129, 199, 132, 0.35);
+    color: #81c784;
+    font-size: 0.86rem;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    text-align: center;
+}
+
+.macro-chat-card.is-resolved {
+    border-color: rgba(129, 199, 132, 0.4);
+    box-shadow: 0 0 14px rgba(129, 199, 132, 0.12), 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
 /* ── Save Resolution Chat Card (GM-Only Save Half/Zero Resolution) ── */
 .save-resolve-chat-card {
     background: linear-gradient(135deg, rgba(22, 27, 44, 0.96), rgba(12, 15, 26, 0.98));

@@ -60,7 +60,11 @@ import {
     processTokenAnimReqs as processTokenAnimReqsExt,
     animateTokens as animateTokensExt,
     getTokenCategory as getTokenCategoryExt,
-    getCategoryColor as getCategoryColorExt
+    getCategoryColor as getCategoryColorExt,
+    isTokenResizableAsset as isTokenResizableAssetExt,
+    getTokenResizeHandles as getTokenResizeHandlesExt,
+    getTokenResizeHandleAt as getTokenResizeHandleAtExt,
+    applyTokenResize as applyTokenResizeExt
 } from './canvas/tokens/vtt-canvas-token-renderer.js';
 
 import {
@@ -361,14 +365,14 @@ export function initVttCanvas(vtt) {
                     ?.forEach((v) => {
                         try {
                             v.pause();
-                        } catch (e) {}
+                        } catch (e) { }
                     });
             }
             if (typeof ytPingPongControllers !== 'undefined' && ytPingPongControllers) {
                 Object.values(ytPingPongControllers).forEach((c) => {
                     try {
                         c?.pause?.();
-                    } catch (e) {}
+                    } catch (e) { }
                 });
             }
         },
@@ -500,7 +504,9 @@ export function initVttCanvas(vtt) {
     let processedAnimKeys = new Set();
 
     let activeResizeTokenId = null;
+    let activeResizeTokenHandle = null;
     let hoveredResizeTokenId = null;
+    let hoveredResizeTokenHandle = null;
     let resizeDragStartMouse = null;
     let resizeDragStartDims = null;
     let activeRotateTokenId = null;
@@ -534,6 +540,7 @@ export function initVttCanvas(vtt) {
         hoverTokenId = null;
         activeDragTokenId = null;
         activeResizeTokenId = null;
+        activeResizeTokenHandle = null;
         activeRotateTokenId = null;
         activeDragShapeId = null;
         activeDragShapeComponent = null;
@@ -650,14 +657,14 @@ export function initVttCanvas(vtt) {
                 Number.isFinite(token.pixelWidth) && token.pixelWidth > 0
                     ? token.pixelWidth
                     : (parseTokenDimension(token.customWidth) ?? parseTokenDimension(token.size) ?? 1) *
-                      grid.size *
-                      grid.scale;
+                    grid.size *
+                    grid.scale;
             drawH =
                 Number.isFinite(token.pixelHeight) && token.pixelHeight > 0
                     ? token.pixelHeight
                     : (parseTokenDimension(token.customHeight) ?? parseTokenDimension(token.size) ?? 1) *
-                      grid.size *
-                      grid.scale;
+                    grid.size *
+                    grid.scale;
         } else {
             const widthUnits = parseTokenDimension(token.customWidth) ?? parseTokenDimension(token.size) ?? 1;
             const heightUnits = parseTokenDimension(token.customHeight) ?? parseTokenDimension(token.size) ?? 1;
@@ -689,29 +696,17 @@ export function initVttCanvas(vtt) {
         return { x: worldX, y: worldY, cx, cy, rad, topCenterX, topCenterY };
     }
 
+    function getTokenResizeHandles(token) {
+        return getTokenResizeHandlesExt(token, getTokenDrawDimensions);
+    }
+
+    function getTokenResizeHandleAt(token, mouse, z = zoom) {
+        return getTokenResizeHandleAtExt(token, mouse, z, getTokenDrawDimensions);
+    }
+
     function getTokenResizeHandlePos(token) {
-        if (!token || !token.isAsset) return null;
-        const { drawW, drawH } = getTokenDrawDimensions(token);
-        const renderPos = tokenAnimations[token.id]?.currentPos || { x: token.x, y: token.y };
-        const cx = renderPos.x + drawW / 2;
-        const cy = renderPos.y + drawH / 2;
-        if (token.rotation) {
-            const rad = ((token.rotation || 0) * Math.PI) / 180;
-            const rx = (drawW / 2) * Math.cos(rad) - (drawH / 2) * Math.sin(rad);
-            const ry = (drawW / 2) * Math.sin(rad) + (drawH / 2) * Math.cos(rad);
-            return {
-                x: cx + rx,
-                y: cy + ry,
-                cx,
-                cy
-            };
-        }
-        return {
-            x: renderPos.x + drawW,
-            y: renderPos.y + drawH,
-            cx,
-            cy
-        };
+        const handles = getTokenResizeHandles(token);
+        return handles ? handles.se : null;
     }
 
     // Line-of-sight vision polygons for players
@@ -1729,8 +1724,8 @@ export function initVttCanvas(vtt) {
                         filterType === 'pc'
                             ? 'player character(s)'
                             : filterType === 'npc'
-                              ? 'monster/NPC(s)'
-                              : 'creature(s)';
+                                ? 'monster/NPC(s)'
+                                : 'creature(s)';
                     if (vtt.chatEngine?.appendSystemMessage) {
                         vtt.chatEngine.appendSystemMessage(
                             `Selected ${targetIds.length} ${label} within ${s.shape || 'shape'}.`
@@ -2177,8 +2172,8 @@ export function initVttCanvas(vtt) {
             const destCenter = destPortal
                 ? calcPortalCenter(destPortal)
                 : tok
-                  ? { x: tok.x + drawW / 2, y: tok.y + drawH / 2 }
-                  : { x: mapW / 2, y: mapH / 2 };
+                    ? { x: tok.x + drawW / 2, y: tok.y + drawH / 2 }
+                    : { x: mapW / 2, y: mapH / 2 };
 
             // Initialize camera directly aligned with destination portal threshold
             panX = w / 2 - destCenter.x;
@@ -3419,12 +3414,12 @@ export function initVttCanvas(vtt) {
                     ?.forEach((v) => {
                         try {
                             v.pause();
-                        } catch (e) {}
+                        } catch (e) { }
                     });
                 Object.values(ytPingPongControllers).forEach((c) => {
                     try {
                         c?.pause?.();
-                    } catch (e) {}
+                    } catch (e) { }
                 });
             }
             renderAll();
@@ -3624,7 +3619,7 @@ export function initVttCanvas(vtt) {
         cancelMapToolDrawing: () => cancelMapToolDrawing(),
         rollTrapSave: (trapId, tokenId, ability, dc) => rollTrapSave(trapId, tokenId, ability, dc),
         switchMapTo: (mapId, tokenId = null) => switchMapTo(mapId, tokenId),
-        handleCardAction: (cardData, action) => handleCardAction(cardData, action),
+        handleCardAction: (cardData, action, msgId = null) => handleCardAction(cardData, action, msgId),
         resolveSaveFromChat: (cardData, applyHalf, msgId) => resolveSaveFromChat(cardData, applyHalf, msgId),
         processMassAttackFromChat: (massAttackCard, msgId) => processMassAttackFromChat(massAttackCard, msgId),
         triggerDamageFXAnimation: (x, y, radius, damageTypes, meta) =>
@@ -3739,7 +3734,7 @@ export function initVttCanvas(vtt) {
             currentMapId,
             renderAll,
             openTokenConfigModal: (tokenId) => openTokenEditModal(tokenId),
-            openTokenBulkConfigModal: () => {},
+            openTokenBulkConfigModal: () => { },
             showAddCustomConditionModal,
             showApplyDamageModal,
             showMassRollContextMenu,
@@ -3866,7 +3861,15 @@ export function initVttCanvas(vtt) {
             ...opts
         });
     const processMassAttackFromChat = (massAttackCard, msgId = null, opts = {}) =>
-        processMassAttackFromChatExt(massAttackCard, msgId, { tokens, executeMassAttackResolution, ...opts });
+        processMassAttackFromChatExt(massAttackCard, msgId, {
+            vtt,
+            tokens,
+            selectedTokenIds,
+            executeMassAttackResolutionFn: executeMassAttackResolution,
+            promptMassAttackDistributionFn: promptMassAttackDistribution,
+            getTokenAC: (t) => getTokenAC(t) ?? 10,
+            ...opts
+        });
     const executeMassAttackResolution = (massAttackCard, distribution, msgId = null, opts = {}) =>
         executeMassAttackResolutionExt(massAttackCard, distribution, msgId, {
             tokens,
@@ -3895,7 +3898,7 @@ export function initVttCanvas(vtt) {
             getResolvedCreatureMonsterData,
             ...opts
         });
-    const handleCardAction = (c, d) =>
+    const handleCardAction = (c, d, msgId = null) =>
         handleCardActionExt(c, d, {
             tokens,
             currentMapId,
@@ -3911,7 +3914,8 @@ export function initVttCanvas(vtt) {
             triggerDamageFXAnimation,
             triggerHealingFXAnimation,
             getTokenAC: (t) => getTokenAC(t) ?? 10,
-            getResolvedCreatureMonsterData
+            getResolvedCreatureMonsterData,
+            msgId
         });
     const rollFromToken = (f, l, id, e) => rollFromTokenExt(f, l, id, e, { vtt });
 
@@ -5085,6 +5089,10 @@ export function initVttCanvas(vtt) {
             triggerPingAnimation: (...args) => triggerPingAnimation(...args),
             getWallCoordinatesForRaycasting: (...args) => getWallCoordinatesForRaycasting(...args),
             getTokenDrawDimensions: (...args) => getTokenDrawDimensions(...args),
+            getTokenResizeHandles: (...args) => getTokenResizeHandles(...args),
+            getTokenResizeHandleAt: (...args) => getTokenResizeHandleAt(...args),
+            getTokenResizeHandlePos: (...args) => getTokenResizeHandlePos(...args),
+            applyTokenResize: (...args) => applyTokenResizeExt(...args),
             emitTokenUpdates: (...args) => window.emitTokenUpdates(...args),
             emitDrawingsUpdate: () => emitDrawingsUpdate(),
             cancelActiveMeasurement: () => cancelActiveMeasurement(),

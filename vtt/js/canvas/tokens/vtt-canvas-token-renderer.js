@@ -1655,34 +1655,63 @@ export function renderTokensLayer(context = {}) {
                     uiNode.style.display = 'none';
                 }
             }
-            // Draw Resize Handle for Assets
+            // Draw 8-Way Resize Handles & Bounding Box for Assets / Maps
+            const isResizable = token.isAsset || token.layer === 'map' || token.isBackground;
             if (
-                token.isAsset &&
+                isResizable &&
                 isTokenSelected &&
                 activeTool === 'select' &&
                 (vtt.role === 'GM' || tokenLayer !== 'gm')
             ) {
                 ctxInteraction.save();
-                ctxInteraction.fillStyle = '#ffffff';
-                ctxInteraction.strokeStyle = 'var(--color-gold-base)';
-                ctxInteraction.lineWidth = 2;
-                ctxInteraction.beginPath();
+                const currentZoom = Math.max(0.05, zoom || 1);
                 const shudder = getTokenShudderOffset(id);
                 const basePos = tokenAnimations[id]?.currentPos || { x: token.x, y: token.y };
                 const renderPos = { x: basePos.x + shudder.x, y: basePos.y + shudder.y };
                 const { drawW, drawH } = getTokenDrawDimensions(token);
-                ctxInteraction.rect(renderPos.x + drawW - 8, renderPos.y + drawH - 8, 16, 16);
-                ctxInteraction.fill();
-                ctxInteraction.stroke();
 
-                // Draw 3 subtle lines for "grip"
-                ctxInteraction.beginPath();
-                ctxInteraction.strokeStyle = '#aaaaaa';
-                ctxInteraction.lineWidth = 1;
-                ctxInteraction.moveTo(renderPos.x + drawW - 2, renderPos.y + drawH - 5);
-                ctxInteraction.lineTo(renderPos.x + drawW + 5, renderPos.y + drawH + 2);
-                ctxInteraction.moveTo(renderPos.x + drawW - 5, renderPos.y + drawH - 2);
-                ctxInteraction.stroke();
+                // Billboard handle dimensions (constant physical pixels on screen)
+                const handleSize = 8 / currentZoom;
+                const halfHandle = handleSize / 2;
+                const lineW = 1.5 / currentZoom;
+
+                const cx = renderPos.x + drawW / 2;
+                const cy = renderPos.y + drawH / 2;
+                if (token.rotation) {
+                    ctxInteraction.translate(cx, cy);
+                    ctxInteraction.rotate(((token.rotation || 0) * Math.PI) / 180);
+                    ctxInteraction.translate(-cx, -cy);
+                }
+
+                // Accent bounding outline
+                ctxInteraction.strokeStyle = 'rgba(212, 175, 55, 0.9)';
+                ctxInteraction.lineWidth = lineW;
+                ctxInteraction.setLineDash([5 / currentZoom, 4 / currentZoom]);
+                ctxInteraction.strokeRect(renderPos.x, renderPos.y, drawW, drawH);
+                ctxInteraction.setLineDash([]);
+
+                // 8 Resize Handles (4 corners + 4 edge centers)
+                const handlePositions = [
+                    { x: renderPos.x, y: renderPos.y }, // nw
+                    { x: renderPos.x + drawW / 2, y: renderPos.y }, // n
+                    { x: renderPos.x + drawW, y: renderPos.y }, // ne
+                    { x: renderPos.x + drawW, y: renderPos.y + drawH / 2 }, // e
+                    { x: renderPos.x + drawW, y: renderPos.y + drawH }, // se
+                    { x: renderPos.x + drawW / 2, y: renderPos.y + drawH }, // s
+                    { x: renderPos.x, y: renderPos.y + drawH }, // sw
+                    { x: renderPos.x, y: renderPos.y + drawH / 2 } // w
+                ];
+
+                for (const h of handlePositions) {
+                    ctxInteraction.fillStyle = '#ffffff';
+                    ctxInteraction.strokeStyle = '#d4af37';
+                    ctxInteraction.lineWidth = lineW;
+                    ctxInteraction.beginPath();
+                    ctxInteraction.rect(h.x - halfHandle, h.y - halfHandle, handleSize, handleSize);
+                    ctxInteraction.fill();
+                    ctxInteraction.stroke();
+                }
+
                 ctxInteraction.restore();
             }
         });
@@ -2492,6 +2521,186 @@ function getCategoryColor(category) {
     }
 }
 
+function isTokenResizableAsset(token) {
+    return !!(token && (token.isAsset || token.layer === 'map' || token.isBackground));
+}
+
+function getTokenResizeHandles(token, getTokenDrawDimensions = null) {
+    if (!token || !isTokenResizableAsset(token)) return null;
+    const dims = getTokenDrawDimensions
+        ? getTokenDrawDimensions(token)
+        : { drawW: token.pixelWidth || 50, drawH: token.pixelHeight || 50 };
+    const { drawW, drawH } = dims;
+    const renderPos = { x: token.x, y: token.y };
+    const cx = renderPos.x + drawW / 2;
+    const cy = renderPos.y + drawH / 2;
+
+    const baseHandles = {
+        nw: { id: 'nw', x: renderPos.x, y: renderPos.y, cursor: 'nwse-resize' },
+        n: { id: 'n', x: renderPos.x + drawW / 2, y: renderPos.y, cursor: 'ns-resize' },
+        ne: { id: 'ne', x: renderPos.x + drawW, y: renderPos.y, cursor: 'nesw-resize' },
+        e: { id: 'e', x: renderPos.x + drawW, y: renderPos.y + drawH / 2, cursor: 'ew-resize' },
+        se: { id: 'se', x: renderPos.x + drawW, y: renderPos.y + drawH, cursor: 'nwse-resize' },
+        s: { id: 's', x: renderPos.x + drawW / 2, y: renderPos.y + drawH, cursor: 'ns-resize' },
+        sw: { id: 'sw', x: renderPos.x, y: renderPos.y + drawH, cursor: 'nesw-resize' },
+        w: { id: 'w', x: renderPos.x, y: renderPos.y + drawH / 2, cursor: 'ew-resize' }
+    };
+
+    if (token.rotation) {
+        const rad = ((token.rotation || 0) * Math.PI) / 180;
+        const cos = Math.cos(rad);
+        const sin = Math.sin(rad);
+        const rotatedHandles = {};
+        for (const [key, h] of Object.entries(baseHandles)) {
+            const dx = h.x - cx;
+            const dy = h.y - cy;
+            rotatedHandles[key] = {
+                id: h.id,
+                x: cx + (dx * cos - dy * sin),
+                y: cy + (dx * sin + dy * cos),
+                cursor: h.cursor
+            };
+        }
+        return rotatedHandles;
+    }
+    return baseHandles;
+}
+
+function getTokenResizeHandleAt(token, mouse, zoom = 1.0, getTokenDrawDimensions = null) {
+    const handles = getTokenResizeHandles(token, getTokenDrawDimensions);
+    if (!handles || !mouse) return null;
+    const currentZoom = Math.max(0.05, zoom || 1);
+    const threshold = Math.max(12 / currentZoom, 10);
+    for (const [key, h] of Object.entries(handles)) {
+        if (Math.hypot(mouse.x - h.x, mouse.y - h.y) <= threshold) {
+            return h;
+        }
+    }
+    return null;
+}
+
+function applyTokenResize(token, origGeom, handle, mouse, e, grid = {}, snapToGrid = null, currentMap = null) {
+    if (!token || !origGeom || !handle) return;
+    const handleId = typeof handle === 'string' ? handle : handle.id;
+    const gridPx = (grid.size || 50) * (grid.scale || 1.0);
+    const doSnap = !(e && e.altKey);
+
+    let mx = mouse.x;
+    let my = mouse.y;
+
+    const origX1 = origGeom.x;
+    const origW = origGeom.pixelWidth;
+    const origH = origGeom.pixelHeight;
+    const origX2 = origX1 + origW;
+    const origY1 = origGeom.y;
+    const origY2 = origY1 + origH;
+
+    const rad = ((token.rotation || 0) * Math.PI) / 180;
+    const hasRotation = Math.abs(token.rotation || 0) > 0.001;
+
+    // If rotated, unrotate mouse point around original center
+    if (hasRotation) {
+        const cx = (origX1 + origX2) / 2;
+        const cy = (origY1 + origY2) / 2;
+        const unrotRad = -rad;
+        const cos = Math.cos(unrotRad);
+        const sin = Math.sin(unrotRad);
+        const dx = mouse.x - cx;
+        const dy = mouse.y - cy;
+        mx = cx + (dx * cos - dy * sin);
+        my = cy + (dx * sin + dy * cos);
+    }
+
+    if (doSnap && snapToGrid && !hasRotation) {
+        const snapped = snapToGrid(mx, my, false);
+        mx = snapped.x;
+        my = snapped.y;
+    }
+
+    const minDim = 20;
+
+    let newX1 = origX1;
+    let newX2 = origX2;
+    let newY1 = origY1;
+    let newY2 = origY2;
+
+    if (handleId.includes('w')) {
+        newX1 = Math.min(mx, origX2 - minDim);
+    }
+    if (handleId.includes('e')) {
+        newX2 = Math.max(mx, origX1 + minDim);
+    }
+    if (handleId.includes('n')) {
+        newY1 = Math.min(my, origY2 - minDim);
+    }
+    if (handleId.includes('s')) {
+        newY2 = Math.max(my, origY1 + minDim);
+    }
+
+    let newW = newX2 - newX1;
+    let newH = newY2 - newY1;
+
+    // Shift key: lock aspect ratio
+    if (e && e.shiftKey && origW > 0 && origH > 0) {
+        const aspect = origW / origH;
+        if (handleId === 'e' || handleId === 'w') {
+            newH = newW / aspect;
+            const deltaH = newH - origH;
+            newY1 = origY1 - deltaH / 2;
+            newY2 = origY2 + deltaH / 2;
+        } else if (handleId === 'n' || handleId === 's') {
+            newW = newH * aspect;
+            const deltaW = newW - origW;
+            newX1 = origX1 - deltaW / 2;
+            newX2 = origX2 + deltaW / 2;
+        } else {
+            if (newW / newH > aspect) {
+                newW = newH * aspect;
+            } else {
+                newH = newW / aspect;
+            }
+            if (handleId.includes('w')) newX1 = newX2 - newW;
+            else newX2 = newX1 + newW;
+            if (handleId.includes('n')) newY1 = newY2 - newH;
+            else newY2 = newY1 + newH;
+        }
+    }
+
+    if (hasRotation) {
+        const origCx = (origX1 + origX2) / 2;
+        const origCy = (origY1 + origY2) / 2;
+        const newUnrotCx = (newX1 + newX2) / 2;
+        const newUnrotCy = (newY1 + newY2) / 2;
+        const deltaCx = newUnrotCx - origCx;
+        const deltaCy = newUnrotCy - origCy;
+        const cos = Math.cos(rad);
+        const sin = Math.sin(rad);
+        const worldCx = origCx + (deltaCx * cos - deltaCy * sin);
+        const worldCy = origCy + (deltaCx * sin + deltaCy * cos);
+        token.x = Math.round(worldCx - newW / 2);
+        token.y = Math.round(worldCy - newH / 2);
+    } else {
+        token.x = Math.round(newX1);
+        token.y = Math.round(newY1);
+    }
+
+    token.pixelWidth = Math.round(newW);
+    token.pixelHeight = Math.round(newH);
+
+    const customW = Math.max(1, Math.round((token.pixelWidth / gridPx) * 100) / 100);
+    const customH = Math.max(1, Math.round((token.pixelHeight / gridPx) * 100) / 100);
+    token.customWidth = customW;
+    token.customHeight = customH;
+    token.size = Math.max(customW, customH);
+
+    if (currentMap && (token.layer === 'map' || token.isBackground)) {
+        const maxExtentW = Math.max(token.pixelWidth, (token.x || 0) + token.pixelWidth);
+        const maxExtentH = Math.max(token.pixelHeight, (token.y || 0) + token.pixelHeight);
+        currentMap.gridWidth = Math.max(1, Math.round((maxExtentW / gridPx) * 100) / 100);
+        currentMap.gridHeight = Math.max(1, Math.round((maxExtentH / gridPx) * 100) / 100);
+    }
+}
+
 export {
     ytPingPongControllers,
     cleanupAllYouTubePingPong,
@@ -2511,5 +2720,9 @@ export {
     processTokenAnimReqs,
     animateTokens,
     getTokenCategory,
-    getCategoryColor
+    getCategoryColor,
+    isTokenResizableAsset,
+    getTokenResizeHandles,
+    getTokenResizeHandleAt,
+    applyTokenResize
 };

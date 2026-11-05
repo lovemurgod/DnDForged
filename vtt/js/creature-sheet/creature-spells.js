@@ -317,11 +317,54 @@ export function wireSpellSlots(panel, m, ctx) {
         });
     });
 
+    const isGm = vtt?.role === 'GM';
+    const activeChar =
+        linkedCharacterId && vtt?.campaignState?.characters
+            ? vtt.campaignState.characters[linkedCharacterId]
+            : null;
+    const isAssigned = Boolean(
+        activeChar &&
+        activeChar.assignedPlayers &&
+        (activeChar.assignedPlayers.includes(vtt?.username) ||
+            activeChar.assignedPlayers.includes('*') ||
+            activeChar.owner === vtt?.username)
+    );
+    const currentCanvasToken =
+        linkedTokenId && vtt?.canvasEngine ? vtt.canvasEngine.getTokens()?.[linkedTokenId] : null;
+    const isTokenOwner = Boolean(
+        currentCanvasToken &&
+        (currentCanvasToken.ownerUsername === vtt?.username ||
+            currentCanvasToken.playerOwner === vtt?.username ||
+            (currentCanvasToken.assignedPlayers &&
+                currentCanvasToken.assignedPlayers.includes(vtt?.username)))
+    );
+    const canModifySlots = isGm || isAssigned || isTokenOwner;
+
+    if (!canModifySlots) {
+        currentInputs.forEach((i) => {
+            i.disabled = true;
+            i.style.opacity = '0.5';
+            i.title = 'No permission to modify slots';
+        });
+        maxInputs.forEach((i) => {
+            i.disabled = true;
+            i.style.opacity = '0.5';
+            i.title = 'No permission to modify slots';
+        });
+        contentEl.querySelectorAll('.cs-btn-reset-slots, #cs-reset-slots-btn').forEach((b) => {
+            b.disabled = true;
+            b.style.opacity = '0.4';
+            b.style.cursor = 'not-allowed';
+            b.title = 'No permission to reset slots';
+        });
+    }
+
     // Reset Slots & Usages Button
     contentEl.querySelectorAll('.cs-btn-reset-slots, #cs-reset-slots-btn').forEach((resetBtn) => {
         resetBtn.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
+            if (!canModifySlots) return;
             currentInputs.forEach((curInput) => {
                 const level = curInput.dataset.level;
                 const maxInput = contentEl.querySelector(
@@ -349,9 +392,12 @@ export function wireSpellSlots(panel, m, ctx) {
         });
     });
 
-    // Listen for external token slot updates
+    // Listen for external token slot updates with listener cleanup
     if (vtt && vtt.socket) {
-        vtt.socket.on('token:updated', (data) => {
+        if (vtt._csSlotsTokenListener) {
+            vtt.socket.off('token:updated', vtt._csSlotsTokenListener);
+        }
+        vtt._csSlotsTokenListener = (data) => {
             if (linkedTokenId && data.tokens && data.tokens[linkedTokenId]) {
                 const updatedSlots = data.tokens[linkedTokenId].spellSlots;
                 if (updatedSlots) {
@@ -380,7 +426,8 @@ export function wireSpellSlots(panel, m, ctx) {
                     });
                 }
             }
-        });
+        };
+        vtt.socket.on('token:updated', vtt._csSlotsTokenListener);
     }
 }
 
@@ -1975,6 +2022,33 @@ export function setupCsSpellListeners(panel, m, ctx) {
             e.preventDefault();
             e.stopPropagation();
             const curM = ctx.getMonster ? ctx.getMonster() : m;
+            const vtt = ctx.getVtt ? ctx.getVtt() : typeof window !== 'undefined' ? window.VTT : null;
+            const linkedCharacterId = ctx.getLinkedCharacterId ? ctx.getLinkedCharacterId() : null;
+            const targetTokenId = ctx.getLinkedTokenId ? ctx.getLinkedTokenId() : null;
+
+            const isGm = vtt?.role === 'GM';
+            const activeChar =
+                linkedCharacterId && vtt?.campaignState?.characters
+                    ? vtt.campaignState.characters[linkedCharacterId]
+                    : null;
+            const isAssigned = Boolean(
+                activeChar &&
+                activeChar.assignedPlayers &&
+                (activeChar.assignedPlayers.includes(vtt?.username) ||
+                    activeChar.assignedPlayers.includes('*') ||
+                    activeChar.owner === vtt?.username)
+            );
+            const currentCanvasToken =
+                targetTokenId && vtt?.canvasEngine ? vtt.canvasEngine.getTokens()?.[targetTokenId] : null;
+            const isTokenOwner = Boolean(
+                currentCanvasToken &&
+                (currentCanvasToken.ownerUsername === vtt?.username ||
+                    currentCanvasToken.playerOwner === vtt?.username ||
+                    (currentCanvasToken.assignedPlayers &&
+                        currentCanvasToken.assignedPlayers.includes(vtt?.username)))
+            );
+            if (!isGm && !isAssigned && !isTokenOwner) return;
+
             const { level, sp, row } = extractSpellContext(btn, curM);
             if (!sp) return;
 
@@ -2004,18 +2078,20 @@ export function setupCsSpellListeners(panel, m, ctx) {
                 }
             }
 
-            const linkedCharacterId = ctx.getLinkedCharacterId ? ctx.getLinkedCharacterId() : null;
             if (linkedCharacterId && typeof window !== 'undefined' && window.VTT?.campaignState?.characters) {
                 const char = window.VTT.campaignState.characters[linkedCharacterId];
                 if (char) {
                     char.monsterData = curM;
                     window.VTT.socket.emit('character:update', { character: char });
                 }
-            } else if (typeof window !== 'undefined' && window.VTT?.currentToken) {
-                window.VTT.currentToken.monsterData = curM;
-                const curMapId =
-                    window.VTT?.canvasEngine?.getCurrentMapId?.() || window.VTT?.canvasEngine?.currentMap?.id || null;
-                window.VTT.socket.emit('token:update', { mapId: curMapId, token: window.VTT.currentToken });
+            } else if (targetTokenId && typeof window !== 'undefined' && window.VTT?.canvasEngine) {
+                const tok = window.VTT.canvasEngine.getTokens()?.[targetTokenId];
+                if (tok) {
+                    tok.monsterData = curM;
+                    const curMapId =
+                        window.VTT?.canvasEngine?.getCurrentMapId?.() || window.VTT?.canvasEngine?.currentMap?.id || null;
+                    window.VTT.socket.emit('token:update', { mapId: curMapId, token: tok });
+                }
             }
         })
     );
@@ -2025,6 +2101,33 @@ export function setupCsSpellListeners(panel, m, ctx) {
             e.preventDefault();
             e.stopPropagation();
             const curM = ctx.getMonster ? ctx.getMonster() : m;
+            const vtt = ctx.getVtt ? ctx.getVtt() : typeof window !== 'undefined' ? window.VTT : null;
+            const linkedCharacterId = ctx.getLinkedCharacterId ? ctx.getLinkedCharacterId() : null;
+            const targetTokenId = ctx.getLinkedTokenId ? ctx.getLinkedTokenId() : null;
+
+            const isGm = vtt?.role === 'GM';
+            const activeChar =
+                linkedCharacterId && vtt?.campaignState?.characters
+                    ? vtt.campaignState.characters[linkedCharacterId]
+                    : null;
+            const isAssigned = Boolean(
+                activeChar &&
+                activeChar.assignedPlayers &&
+                (activeChar.assignedPlayers.includes(vtt?.username) ||
+                    activeChar.assignedPlayers.includes('*') ||
+                    activeChar.owner === vtt?.username)
+            );
+            const currentCanvasToken =
+                targetTokenId && vtt?.canvasEngine ? vtt.canvasEngine.getTokens()?.[targetTokenId] : null;
+            const isTokenOwner = Boolean(
+                currentCanvasToken &&
+                (currentCanvasToken.ownerUsername === vtt?.username ||
+                    currentCanvasToken.playerOwner === vtt?.username ||
+                    (currentCanvasToken.assignedPlayers &&
+                        currentCanvasToken.assignedPlayers.includes(vtt?.username)))
+            );
+            if (!isGm && !isAssigned && !isTokenOwner) return;
+
             const spId = e.currentTarget.dataset.spellId;
             const usesMax = parseInt(e.currentTarget.dataset.usesMax) || 1;
             const useIdx = parseInt(e.currentTarget.dataset.useIdx) || 0;
@@ -2044,18 +2147,20 @@ export function setupCsSpellListeners(panel, m, ctx) {
                 });
             }
 
-            const linkedCharacterId = ctx.getLinkedCharacterId ? ctx.getLinkedCharacterId() : null;
             if (linkedCharacterId && typeof window !== 'undefined' && window.VTT?.campaignState?.characters) {
                 const char = window.VTT.campaignState.characters[linkedCharacterId];
                 if (char) {
                     char.monsterData = curM;
                     window.VTT.socket.emit('character:update', { character: char });
                 }
-            } else if (typeof window !== 'undefined' && window.VTT?.currentToken) {
-                window.VTT.currentToken.monsterData = curM;
-                const curMapId =
-                    window.VTT?.canvasEngine?.getCurrentMapId?.() || window.VTT?.canvasEngine?.currentMap?.id || null;
-                window.VTT.socket.emit('token:update', { mapId: curMapId, token: window.VTT.currentToken });
+            } else if (targetTokenId && typeof window !== 'undefined' && window.VTT?.canvasEngine) {
+                const tok = window.VTT.canvasEngine.getTokens()?.[targetTokenId];
+                if (tok) {
+                    tok.monsterData = curM;
+                    const curMapId =
+                        window.VTT?.canvasEngine?.getCurrentMapId?.() || window.VTT?.canvasEngine?.currentMap?.id || null;
+                    window.VTT.socket.emit('token:update', { mapId: curMapId, token: tok });
+                }
             }
         })
     );
@@ -2069,6 +2174,7 @@ export function saveAndRenderNpcSpells(m, spellData = null, ctx = {}) {
     ensureNpcSpells(curM);
 
     const linkedCharacterId = ctx.getLinkedCharacterId ? ctx.getLinkedCharacterId() : null;
+    const targetTokenId = ctx.getLinkedTokenId ? ctx.getLinkedTokenId() : null;
     if (linkedCharacterId && typeof window !== 'undefined' && window.VTT?.campaignState?.characters) {
         const char = window.VTT.campaignState.characters[linkedCharacterId];
         if (char) {
@@ -2076,12 +2182,15 @@ export function saveAndRenderNpcSpells(m, spellData = null, ctx = {}) {
             char.spells = curM.spells;
             window.VTT.socket.emit('character:update', { character: char });
         }
-    } else if (typeof window !== 'undefined' && window.VTT?.currentToken) {
-        window.VTT.currentToken.monsterData = curM;
-        window.VTT.currentToken.spells = curM.spells;
-        const curMapId =
-            window.VTT?.canvasEngine?.getCurrentMapId?.() || window.VTT?.canvasEngine?.currentMap?.id || null;
-        window.VTT.socket.emit('token:update', { mapId: curMapId, token: window.VTT.currentToken });
+    } else if (targetTokenId && typeof window !== 'undefined' && window.VTT?.canvasEngine) {
+        const tok = window.VTT.canvasEngine.getTokens()?.[targetTokenId];
+        if (tok) {
+            tok.monsterData = curM;
+            tok.spells = curM.spells;
+            const curMapId =
+                window.VTT?.canvasEngine?.getCurrentMapId?.() || window.VTT?.canvasEngine?.currentMap?.id || null;
+            window.VTT.socket.emit('token:update', { mapId: curMapId, token: tok });
+        }
     }
 
     const spellsHtml = buildSpellcastingHtml(curM, linkedCharacterId);

@@ -8,6 +8,7 @@ import { spawn, execFileSync, execSync } from 'child_process';
 import net from 'net';
 import crypto from 'crypto';
 import { SourceManager } from './source-manager.js';
+import { createCampaignTemplate, hashPassword } from '../utils.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -18,6 +19,17 @@ const gotTheLock = app.requestSingleInstanceLock();
 if (!gotTheLock) {
     app.quit();
 }
+
+// Global exception guards to prevent unhandled process crashes
+process.on('uncaughtException', (err) => {
+    console.error('[Main Process Uncaught Exception]', err);
+    if (typeof appendLog === 'function') {
+        appendLog(`[Uncaught Exception] ${err?.message || err}`);
+    }
+});
+process.on('unhandledRejection', (reason) => {
+    console.error('[Main Process Unhandled Rejection]', reason);
+});
 
 // Hardware GPU Acceleration & Canvas Optimization Switches
 app.commandLine.appendSwitch('enable-gpu-rasterization');
@@ -106,12 +118,7 @@ if (fs.existsSync(legacyCampFile) && !fs.existsSync(targetCampFile) && !fs.exist
 process.env.FORGEDVTT_DATA_DIR = appConfig.campaignDataDir;
 process.env.FORGEDVTT_CONFIG_FILE = configFilePath;
 
-// Helpers for GM password hashing
-function hashPassword(password, salt = null) {
-    const generatedSalt = salt || crypto.randomBytes(16).toString('hex');
-    const hash = crypto.pbkdf2Sync(password, generatedSalt, 1000, 64, 'sha256').toString('hex');
-    return { hash, salt: generatedSalt };
-}
+// Configured data and config file paths
 
 function isValidTunnelToken(str) {
     if (!str || typeof str !== 'string') return false;
@@ -160,7 +167,7 @@ function getCloudflaredPath() {
             .toString()
             .trim();
         if (output) return output.split('\r\n')[0].split('\n')[0];
-    } catch (e) {}
+    } catch (e) { }
 
     return null;
 }
@@ -217,7 +224,7 @@ async function syncConfigToServer() {
                 campaignDataDir: appConfig.campaignDataDir
             })
         });
-    } catch (e) {}
+    } catch (e) { }
     await syncSourcesToServer();
 }
 
@@ -230,7 +237,7 @@ async function syncSourcesToServer() {
                 disabledSources: sourceManager.config.disabledSources
             })
         });
-    } catch (e) {}
+    } catch (e) { }
 }
 
 async function isServerReady(port) {
@@ -239,7 +246,7 @@ async function isServerReady(port) {
             signal: AbortSignal.timeout(1000)
         });
         if (res.ok) return true;
-    } catch (e) {}
+    } catch (e) { }
     return false;
 }
 
@@ -271,6 +278,8 @@ async function startServer() {
     if (fs.existsSync(unpackedScript)) {
         serverScript = unpackedScript;
         workingDir = path.dirname(unpackedScript);
+    } else if (app.isPackaged || workingDir.includes('app.asar')) {
+        workingDir = process.resourcesPath || path.dirname(process.execPath);
     }
 
     let processExitedEarly = false;
@@ -342,13 +351,13 @@ async function startServer() {
         const reason = spawnError
             ? spawnError.message
             : processExitedEarly
-              ? `Server process exited prematurely with code ${earlyExitCode}`
-              : `Server did not become ready within ${timeoutMs / 1000} seconds`;
+                ? `Server process exited prematurely with code ${earlyExitCode}`
+                : `Server did not become ready within ${timeoutMs / 1000} seconds`;
         appendLog(`[Server Error] Startup failed: ${reason}`);
         if (serverProcess) {
             try {
                 serverProcess.kill();
-            } catch (e) {}
+            } catch (e) { }
             serverProcess = null;
         }
         isServerRunning = false;
@@ -404,7 +413,7 @@ async function stopServer() {
                         isDone = true;
                         try {
                             proc.kill();
-                        } catch {}
+                        } catch { }
                         resolve();
                     }
                 }, 1500);
@@ -486,9 +495,31 @@ async function startTunnel(params = {}) {
         }
     }
 
-    tunnelProcess = spawn(cloudflared, tunnelArgs, {
-        cwd: rootDir,
-        stdio: ['ignore', 'pipe', 'pipe']
+    // In packaged ASAR builds, rootDir points into app.asar which is a virtual archive,
+    // not a physical filesystem directory. Spawning an external OS binary with cwd inside
+    // an .asar archive fails with ENOENT in libuv CreateProcess.
+    const tunnelCwd = app.isPackaged || rootDir.includes('app.asar')
+        ? (process.resourcesPath || path.dirname(cloudflared))
+        : rootDir;
+
+    try {
+        tunnelProcess = spawn(cloudflared, tunnelArgs, {
+            cwd: tunnelCwd,
+            stdio: ['ignore', 'pipe', 'pipe'],
+            windowsHide: true
+        });
+    } catch (err) {
+        appendLog(`[Tunnel Err] Failed to spawn cloudflared: ${err.message}`);
+        isTunnelRunning = false;
+        notifyStatusChange();
+        return { success: false, error: err.message };
+    }
+
+    tunnelProcess.on('error', (err) => {
+        appendLog(`[Tunnel Err] Cloudflare process error: ${err.message}`);
+        isTunnelRunning = false;
+        tunnelProcess = null;
+        notifyStatusChange();
     });
 
     tunnelProcess.stdout.on('data', (data) => {
@@ -689,7 +720,7 @@ function updateTrayMenu() {
 
 function openVTTWindow() {
     if (session.defaultSession) {
-        session.defaultSession.clearCache().catch(() => {});
+        session.defaultSession.clearCache().catch(() => { });
     }
     const vttWin = new BrowserWindow({
         width: 1400,
@@ -716,8 +747,16 @@ ipcMain.handle('start-tunnel', async (_, params = {}) => {
     return await startTunnel(params);
 });
 ipcMain.handle('stop-tunnel', () => stopTunnel());
-ipcMain.handle('open-vtt-app', () => openVTTWindow());
-ipcMain.handle('open-vtt-browser', (_, url) => {
+ipcMain.handle('open-vtt-app', async () => {
+    if (!isServerRunning) {
+        await startServer();
+    }
+    return openVTTWindow();
+});
+ipcMain.handle('open-vtt-browser', async (_, url) => {
+    if (!isServerRunning) {
+        await startServer();
+    }
     const targetUrl = url || `http://localhost:${DEFAULT_PORT}/vtt/index.html`;
     try {
         const parsed = new URL(targetUrl);
@@ -760,7 +799,7 @@ ipcMain.handle('select-data-folder', async () => {
             const files = fs.readdirSync(oldDir);
             oldHasData = files.some((f) => f === 'campaigns.json' || f === 'uploads' || f === 'chat-log.json');
         }
-    } catch (e) {}
+    } catch (e) { }
 
     let imported = false;
     if (oldHasData) {
@@ -802,7 +841,7 @@ ipcMain.handle('select-data-folder', async () => {
     try {
         await fetch(`http://127.0.0.1:${DEFAULT_PORT}/api/server/data-dir`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: internalHeaders({ 'Content-Type': 'application/json' }),
             body: JSON.stringify({ dataDir: newDir })
         });
         appendLog(`[Server] Seamlessly updated database directory to: ${newDir}`);
@@ -880,12 +919,28 @@ async function restoreBackupFromFile(targetFile) {
 
         // Unpack assets if present
         if (assetsDir && fs.existsSync(assetsDir)) {
-            const globalUploads = path.join(appConfig.campaignDataDir, 'uploads');
-            if (!fs.existsSync(globalUploads)) fs.mkdirSync(globalUploads, { recursive: true });
-            try {
-                fs.cpSync(assetsDir, globalUploads, { recursive: true });
-            } catch (e) {
-                throw new Error(`Failed restoring assets to global uploads: ${e.message}`, { cause: e });
+            const hasIsolatedCampaigns = fs.existsSync(path.join(assetsDir, 'campaigns'));
+            const isolatedGlobalDir = path.join(assetsDir, 'global');
+
+            if (hasIsolatedCampaigns || fs.existsSync(isolatedGlobalDir)) {
+                if (fs.existsSync(isolatedGlobalDir)) {
+                    const globalUploads = path.join(appConfig.campaignDataDir, 'uploads');
+                    if (!fs.existsSync(globalUploads)) fs.mkdirSync(globalUploads, { recursive: true });
+                    try {
+                        fs.cpSync(isolatedGlobalDir, globalUploads, { recursive: true });
+                    } catch (e) {
+                        throw new Error(`Failed restoring assets to global uploads: ${e.message}`, { cause: e });
+                    }
+                }
+            } else {
+                // Legacy flat archive format: copy to global uploads
+                const globalUploads = path.join(appConfig.campaignDataDir, 'uploads');
+                if (!fs.existsSync(globalUploads)) fs.mkdirSync(globalUploads, { recursive: true });
+                try {
+                    fs.cpSync(assetsDir, globalUploads, { recursive: true });
+                } catch (e) {
+                    throw new Error(`Failed restoring assets to global uploads: ${e.message}`, { cause: e });
+                }
             }
         }
 
@@ -914,8 +969,14 @@ async function restoreBackupFromFile(targetFile) {
                 targetName = `${campData.name} (Restored)`;
             }
 
+            let campStr = JSON.stringify(campData);
+            if (origId && targetId !== origId) {
+                const oldPathRegex = new RegExp(`(/assets/campaigns/|assets/campaigns/)${origId}([/\\\\])`, 'g');
+                campStr = campStr.replace(oldPathRegex, `$1${targetId}$2`);
+            }
+
             const mergedCamp = {
-                ...campData,
+                ...JSON.parse(campStr),
                 id: targetId,
                 name: targetName
             };
@@ -926,12 +987,54 @@ async function restoreBackupFromFile(targetFile) {
 
             // Also unpack assets into per-campaign uploads if assets exist
             if (assetsDir && fs.existsSync(assetsDir)) {
-                unpackAssetsToCampaign(assetsDir, targetId, true);
+                const isolatedCampDir = path.join(assetsDir, 'campaigns', origId);
+                if (fs.existsSync(isolatedCampDir)) {
+                    unpackAssetsToCampaign(isolatedCampDir, targetId, true);
+                } else if (!fs.existsSync(path.join(assetsDir, 'campaigns'))) {
+                    // Legacy flat archive fallback
+                    unpackAssetsToCampaign(assetsDir, targetId, true);
+                }
+            }
+        }
+
+        // Unpack token assets if present in backup archive
+        if (assetsDir && fs.existsSync(assetsDir)) {
+            const extractedTokensDir = path.join(assetsDir, 'tokens');
+            if (fs.existsSync(extractedTokensDir)) {
+                const targetTokensDir = path.join(appConfig.campaignDataDir, 'assets', 'tokens');
+                if (!fs.existsSync(targetTokensDir)) fs.mkdirSync(targetTokensDir, { recursive: true });
+                try {
+                    fs.cpSync(extractedTokensDir, targetTokensDir, { recursive: true });
+                    appendLog(`[Restore] Successfully restored custom token assets.`);
+                } catch (e) {
+                    console.warn(`Could not restore token assets: ${e.message}`);
+                }
+            }
+        }
+
+        // Unpack custom homebrew sources if present in backup archive
+        const extractedSourcesDir = path.join(tempDir, 'sources');
+        let restoredSources = false;
+        if (fs.existsSync(extractedSourcesDir)) {
+            const targetSourcesDir = path.join(appConfig.campaignDataDir, 'sources');
+            if (!fs.existsSync(targetSourcesDir)) fs.mkdirSync(targetSourcesDir, { recursive: true });
+            try {
+                fs.cpSync(extractedSourcesDir, targetSourcesDir, { recursive: true });
+                restoredSources = true;
+                appendLog(`[Restore] Successfully restored custom homebrew sources.`);
+            } catch (e) {
+                console.warn(`Could not restore homebrew sources: ${e.message}`);
             }
         }
 
         // Save updated campaigns.json
         fs.writeFileSync(campFile, JSON.stringify(existingCampaigns, null, 2), 'utf8');
+
+        // Reload sources in manager and sync to server if restored
+        if (restoredSources) {
+            sourceManager.setCampaignDataDir(appConfig.campaignDataDir);
+            await syncSourcesToServer();
+        }
 
         // Notify server to re-read or sync database
         try {
@@ -940,7 +1043,7 @@ async function restoreBackupFromFile(targetFile) {
                 headers: internalHeaders({ 'Content-Type': 'application/json' }),
                 body: JSON.stringify({ dataDir: appConfig.campaignDataDir })
             });
-        } catch (e) {}
+        } catch (e) { }
 
         appendLog(`[Restore] Successfully restored ${restoredCount} campaign(s) and assets from ${targetFile}`);
         notifyStatusChange();
@@ -951,7 +1054,7 @@ async function restoreBackupFromFile(targetFile) {
     } finally {
         try {
             fs.rmSync(tempDir, { recursive: true, force: true });
-        } catch (e) {}
+        } catch (e) { }
     }
 }
 
@@ -1013,13 +1116,14 @@ ipcMain.handle('backup-campaign', async () => {
             const globalUploadsDir = path.join(appConfig.campaignDataDir, 'uploads');
             if (fs.existsSync(globalUploadsDir)) {
                 try {
-                    fs.cpSync(globalUploadsDir, assetsDir, { recursive: true });
+                    const destGlobal = path.join(assetsDir, 'global');
+                    fs.cpSync(globalUploadsDir, destGlobal, { recursive: true });
                 } catch (e) {
                     throw new Error(`Failed copying global uploads: ${e.message}`, { cause: e });
                 }
             }
 
-            // Collect per-campaign uploads
+            // Collect per-campaign uploads into isolated campaign folders
             const campRootDir = path.join(appConfig.campaignDataDir, 'campaigns');
             if (fs.existsSync(campRootDir)) {
                 try {
@@ -1027,7 +1131,8 @@ ipcMain.handle('backup-campaign', async () => {
                     for (const cFolder of campFolders) {
                         const cUploads = path.join(campRootDir, cFolder, 'uploads');
                         if (fs.existsSync(cUploads)) {
-                            fs.cpSync(cUploads, assetsDir, { recursive: true });
+                            const destCamp = path.join(assetsDir, 'campaigns', cFolder);
+                            fs.cpSync(cUploads, destCamp, { recursive: true });
                         }
                     }
                 } catch (e) {
@@ -1035,10 +1140,33 @@ ipcMain.handle('backup-campaign', async () => {
                 }
             }
 
-            // Collect any other referenced uploads
+            // Collect token assets (Homebrew Studio artwork)
+            const tokenAssetsDir = path.join(appConfig.campaignDataDir, 'assets', 'tokens');
+            if (fs.existsSync(tokenAssetsDir)) {
+                try {
+                    const destTokens = path.join(assetsDir, 'tokens');
+                    fs.cpSync(tokenAssetsDir, destTokens, { recursive: true });
+                } catch (e) {
+                    console.warn(`Could not copy token assets: ${e.message}`);
+                }
+            }
+
+            // Collect custom homebrew sources
+            const sourcesDir = path.join(appConfig.campaignDataDir, 'sources');
+            if (fs.existsSync(sourcesDir)) {
+                try {
+                    const destSources = path.join(tempDir, 'sources');
+                    fs.cpSync(sourcesDir, destSources, { recursive: true });
+                } catch (e) {
+                    console.warn(`Could not copy sources directory: ${e.message}`);
+                }
+            }
+
+            // Collect any other referenced uploads into global
             const referenced = findReferencedUploads(campaignsData);
             if (referenced.length > 0) {
-                collectAssets(referenced, '', assetsDir, true);
+                const destGlobal = path.join(assetsDir, 'global');
+                collectAssets(referenced, '', destGlobal, true);
             }
 
             packZipArchive(tempDir, filePath);
@@ -1056,7 +1184,7 @@ ipcMain.handle('backup-campaign', async () => {
     } finally {
         try {
             fs.rmSync(tempDir, { recursive: true, force: true });
-        } catch (e) {}
+        } catch (e) { }
     }
 });
 
@@ -1090,7 +1218,7 @@ ipcMain.handle('get-gm-credentials', () => {
     };
 });
 
-ipcMain.handle('set-gm-credentials', async (_, { username, password }) => {
+ipcMain.handle('set-gm-credentials', async (_, { username, password, clearPassword }) => {
     const cleanUsername = (username || '').trim();
     if (!cleanUsername) {
         return { success: false, error: 'Username cannot be empty.' };
@@ -1098,7 +1226,11 @@ ipcMain.handle('set-gm-credentials', async (_, { username, password }) => {
 
     let hash = appConfig.gmCredentials?.hash || '';
     let salt = appConfig.gmCredentials?.salt || '';
-    if (password && password.trim() !== '') {
+
+    if (clearPassword) {
+        hash = '';
+        salt = '';
+    } else if (password && password.trim() !== '') {
         const res = hashPassword(password);
         hash = res.hash;
         salt = res.salt;
@@ -1118,8 +1250,12 @@ ipcMain.handle('set-gm-credentials', async (_, { username, password }) => {
             headers: internalHeaders({ 'Content-Type': 'application/json' }),
             body: JSON.stringify({ gmCredentials: appConfig.gmCredentials })
         });
-        appendLog(`[GM Security] Updated master GM credentials for username "${cleanUsername}".`);
-    } catch (e) {}
+        appendLog(
+            hash
+                ? `[GM Security] Updated master GM credentials for username "${cleanUsername}".`
+                : `[GM Security] Removed master GM password for username "${cleanUsername}".`
+        );
+    } catch (e) { }
 
     notifyStatusChange();
     return { success: true, username: cleanUsername, hasPassword: !!hash };
@@ -1135,7 +1271,7 @@ ipcMain.handle('gm-get-campaigns', async () => {
             const data = await res.json();
             return { success: true, campaigns: data.campaigns || [] };
         }
-    } catch (e) {}
+    } catch (e) { }
 
     // Fallback to local file
     try {
@@ -1153,7 +1289,7 @@ ipcMain.handle('gm-get-campaigns', async () => {
             }));
             return { success: true, campaigns: list };
         }
-    } catch (e) {}
+    } catch (e) { }
     return { success: true, campaigns: [] };
 });
 
@@ -1166,7 +1302,7 @@ ipcMain.handle('gm-get-campaign-details', async (_, campId) => {
             const data = await res.json();
             return { success: true, campaign: data };
         }
-    } catch (e) {}
+    } catch (e) { }
 
     // Fallback to local file
     try {
@@ -1177,7 +1313,7 @@ ipcMain.handle('gm-get-campaign-details', async (_, campId) => {
                 return { success: true, campaign: data[campId] };
             }
         }
-    } catch (e) {}
+    } catch (e) { }
     return { success: false, error: 'Campaign not found' };
 });
 
@@ -1194,9 +1330,26 @@ ipcMain.handle('gm-save-campaign', async (_, campaignData) => {
         }
         const err = await res.json();
         return { success: false, error: err.error || 'Failed to save campaign' };
-    } catch (e) {
-        return { success: false, error: e.message };
+    } catch (e) { }
+
+    // Fallback to direct local file
+    try {
+        const campFile = path.join(appConfig.campaignDataDir, 'campaigns.json');
+        if (fs.existsSync(campFile)) {
+            const all = JSON.parse(fs.readFileSync(campFile, 'utf8'));
+            if (all[campaignData.id]) {
+                const target = all[campaignData.id];
+                if (campaignData.name && campaignData.name.trim()) target.name = campaignData.name.trim();
+                if (campaignData.description !== undefined) target.description = campaignData.description;
+                if (Array.isArray(campaignData.allowedUsers)) target.allowedUsers = campaignData.allowedUsers;
+                fs.writeFileSync(campFile, JSON.stringify(all, null, 2), 'utf8');
+                return { success: true, campaign: target };
+            }
+        }
+    } catch (err) {
+        return { success: false, error: err.message };
     }
+    return { success: false, error: 'Campaign not found' };
 });
 
 ipcMain.handle('gm-create-campaign', async (_, newCampData) => {
@@ -1212,8 +1365,28 @@ ipcMain.handle('gm-create-campaign', async (_, newCampData) => {
         }
         const err = await res.json();
         return { success: false, error: err.error || 'Failed to create campaign' };
-    } catch (e) {
-        return { success: false, error: e.message };
+    } catch (e) { }
+
+    // Fallback to direct local file
+    try {
+        const { name, description, allowedUsers } = newCampData || {};
+        if (!name || !name.trim()) return { success: false, error: 'Campaign name required' };
+        const id = name.trim().toLowerCase().replace(/[^a-z0-9]/gi, '_') + '_' + Date.now();
+        const campFile = path.join(appConfig.campaignDataDir, 'campaigns.json');
+        let all = {};
+        if (fs.existsSync(campFile)) {
+            try {
+                all = JSON.parse(fs.readFileSync(campFile, 'utf8'));
+            } catch (_) { }
+        }
+        const newCamp = createCampaignTemplate(id, name.trim());
+        if (description) newCamp.description = description;
+        if (Array.isArray(allowedUsers)) newCamp.allowedUsers = allowedUsers;
+        all[id] = newCamp;
+        fs.writeFileSync(campFile, JSON.stringify(all, null, 2), 'utf8');
+        return { success: true, campaign: newCamp };
+    } catch (err) {
+        return { success: false, error: err.message };
     }
 });
 
@@ -1228,9 +1401,81 @@ ipcMain.handle('gm-delete-campaign', async (_, campId) => {
         }
         const err = await res.json();
         return { success: false, error: err.error || 'Failed to delete campaign' };
-    } catch (e) {
-        return { success: false, error: e.message };
+    } catch (e) { }
+
+    // Fallback to direct local file
+    try {
+        const campFile = path.join(appConfig.campaignDataDir, 'campaigns.json');
+        if (fs.existsSync(campFile)) {
+            const all = JSON.parse(fs.readFileSync(campFile, 'utf8'));
+            const keys = Object.keys(all);
+            if (keys.length <= 1) {
+                return { success: false, error: 'Cannot delete the only campaign. Create another campaign first.' };
+            }
+            if (!all[campId]) return { success: false, error: 'Campaign not found' };
+            delete all[campId];
+            fs.writeFileSync(campFile, JSON.stringify(all, null, 2), 'utf8');
+            return { success: true, deletedId: campId };
+        }
+    } catch (err) {
+        return { success: false, error: err.message };
     }
+    return { success: false, error: 'Failed to delete campaign' };
+});
+
+ipcMain.handle('gm-delete-entity', async (_, { campaignId, entityType, entityId }) => {
+    try {
+        const res = await fetch(`http://127.0.0.1:${DEFAULT_PORT}/api/campaigns/${campaignId}/entities/${entityId}`, {
+            method: 'DELETE',
+            headers: internalHeaders()
+        });
+        if (res.ok) {
+            const data = await res.json();
+            return { success: true, deletedId: entityId, entityType: data.entityType || entityType };
+        }
+        const err = await res.json();
+        return { success: false, error: err.error || 'Failed to delete entity' };
+    } catch (e) { }
+
+    // Fallback to direct local file
+    try {
+        const campFile = path.join(appConfig.campaignDataDir, 'campaigns.json');
+        if (fs.existsSync(campFile)) {
+            const all = JSON.parse(fs.readFileSync(campFile, 'utf8'));
+            const camp = all[campaignId];
+            if (!camp) return { success: false, error: 'Campaign not found' };
+
+            let deleted = false;
+            if (camp.maps && camp.maps[entityId]) {
+                const mapKeys = Object.keys(camp.maps);
+                if (mapKeys.length <= 1) {
+                    return { success: false, error: 'Cannot delete the only map in the campaign.' };
+                }
+                delete camp.maps[entityId];
+                if (Array.isArray(camp.mapOrder)) {
+                    camp.mapOrder = camp.mapOrder.filter((id) => id !== entityId);
+                }
+                if (camp.activeMapId === entityId) {
+                    camp.activeMapId = (camp.mapOrder && camp.mapOrder[0]) || Object.keys(camp.maps)[0];
+                }
+                if (camp.activeGMMapId === entityId) {
+                    camp.activeGMMapId = camp.activeMapId;
+                }
+                deleted = true;
+            } else if (camp.characters && camp.characters[entityId]) {
+                delete camp.characters[entityId];
+                deleted = true;
+            }
+
+            if (!deleted) return { success: false, error: 'Entity not found in campaign' };
+
+            fs.writeFileSync(campFile, JSON.stringify(all, null, 2), 'utf8');
+            return { success: true, deletedId: entityId, entityType };
+        }
+    } catch (err) {
+        return { success: false, error: err.message };
+    }
+    return { success: false, error: 'Failed to delete entity' };
 });
 
 // --- Campaign Duplication & Packaging Helpers ---
@@ -1263,10 +1508,17 @@ function unpackZipArchive(zipFilePath, targetDir) {
 function findReferencedUploads(dataObj) {
     const fileNames = new Set();
     const jsonStr = JSON.stringify(dataObj);
-    const regex = /(?:vtt-uploads|uploads)[\/\\]([a-zA-Z0-9_\-\.]+)/gi;
+    const regex = /(?:vtt-uploads|uploads|assets[/\\]tokens|tokens)[/\\]([^"'<>\r\n]+?\.(?:png|jpe?g|webp|svg|gif|mp3|ogg|wav|webm|mp4|json|m4a|opus))/gi;
     let match;
     while ((match = regex.exec(jsonStr)) !== null) {
-        if (match[1]) fileNames.add(match[1]);
+        if (match[1]) {
+            let fn = match[1];
+            try {
+                fn = decodeURIComponent(fn);
+            } catch (_) { }
+            fn = path.basename(fn);
+            if (fn) fileNames.add(fn);
+        }
     }
     return Array.from(fileNames);
 }
@@ -1277,13 +1529,16 @@ function collectAssets(fileNames, campaignId, destAssetsDir, throwOnFailure = fa
 
     const campUploads = path.join(appConfig.campaignDataDir, 'campaigns', campaignId, 'uploads');
     const globalUploads = path.join(appConfig.campaignDataDir, 'uploads');
+    const tokenAssets = path.join(appConfig.campaignDataDir, 'assets', 'tokens');
 
     for (const fn of fileNames) {
         const p1 = path.join(campUploads, fn);
         const p2 = path.join(globalUploads, fn);
+        const p3 = path.join(tokenAssets, fn);
         let srcFile = null;
         if (fs.existsSync(p1)) srcFile = p1;
         else if (fs.existsSync(p2)) srcFile = p2;
+        else if (fs.existsSync(p3)) srcFile = p3;
 
         if (srcFile) {
             const dest = path.join(destAssetsDir, fn);
@@ -1304,15 +1559,23 @@ function collectAssets(fileNames, campaignId, destAssetsDir, throwOnFailure = fa
 function unpackAssetsToCampaign(extractedAssetsDir, targetCampaignId, throwOnFailure = false) {
     if (!fs.existsSync(extractedAssetsDir)) return 0;
     const targetUploads = path.join(appConfig.campaignDataDir, 'campaigns', targetCampaignId, 'uploads');
+    const targetTokens = path.join(appConfig.campaignDataDir, 'assets', 'tokens');
     if (!fs.existsSync(targetUploads)) fs.mkdirSync(targetUploads, { recursive: true });
 
     const files = fs.readdirSync(extractedAssetsDir);
     let count = 0;
     for (const f of files) {
         const src = path.join(extractedAssetsDir, f);
+        if (fs.statSync(src).isDirectory()) continue;
         const dst = path.join(targetUploads, f);
         try {
             fs.copyFileSync(src, dst);
+            if (f.startsWith('token-')) {
+                if (!fs.existsSync(targetTokens)) fs.mkdirSync(targetTokens, { recursive: true });
+                try {
+                    fs.copyFileSync(src, path.join(targetTokens, f));
+                } catch (_) { }
+            }
             count++;
         } catch (e) {
             if (throwOnFailure) {
@@ -1336,7 +1599,7 @@ ipcMain.handle('gm-duplicate-campaign', async (_, campId) => {
             appendLog(`[Campaigns] Duplicated campaign ${campId} -> ${data.campaign.name} (${data.campaign.id})`);
             return { success: true, campaign: data.campaign };
         }
-    } catch (e) {}
+    } catch (e) { }
 
     // Fallback to direct local file
     try {
@@ -1349,10 +1612,19 @@ ipcMain.handle('gm-duplicate-campaign', async (_, campId) => {
             const safeName = (orig.name || 'Campaign').trim();
             const newName = `${safeName} (Copy)`;
             const newId = safeName.toLowerCase().replace(/[^a-z0-9]/gi, '_') + '_copy_' + Date.now();
-            const cloned = JSON.parse(JSON.stringify(orig));
+            // Deep clone campaign object and migrate internal asset paths to new ID
+            let clonedStr = JSON.stringify(orig);
+            const oldPathRegex = new RegExp(`(/assets/campaigns/|assets/campaigns/)${campId}([/\\\\])`, 'g');
+            clonedStr = clonedStr.replace(oldPathRegex, `$1${newId}$2`);
+            const cloned = JSON.parse(clonedStr);
             cloned.id = newId;
             cloned.name = newName;
-            cloned.initiative = [];
+            cloned.initiative = {
+                combatants: [],
+                currentRound: 1,
+                activeTurnIndex: -1,
+                isVisible: false
+            };
 
             // Copy uploads folder
             const origUploads = path.join(appConfig.campaignDataDir, 'campaigns', campId, 'uploads');
@@ -1383,7 +1655,7 @@ ipcMain.handle('gm-export-campaign', async (_, campId) => {
             headers: internalHeaders()
         });
         if (res.ok) campaign = await res.json();
-    } catch (e) {}
+    } catch (e) { }
 
     if (!campaign) {
         try {
@@ -1392,7 +1664,7 @@ ipcMain.handle('gm-export-campaign', async (_, campId) => {
                 const all = JSON.parse(fs.readFileSync(campFile, 'utf8'));
                 campaign = all[campId];
             }
-        } catch (e) {}
+        } catch (e) { }
     }
 
     if (!campaign) return { success: false, error: 'Campaign not found' };
@@ -1404,7 +1676,7 @@ ipcMain.handle('gm-export-campaign', async (_, campId) => {
     if (!hasLocalUploads && fs.existsSync(campUploadsDir)) {
         try {
             hasLocalUploads = fs.readdirSync(campUploadsDir).length > 0;
-        } catch (e) {}
+        } catch (e) { }
     }
 
     const safeName = (campaign.name || 'Campaign').replace(/[^a-z0-9_\-]/gi, '_');
@@ -1461,7 +1733,7 @@ ipcMain.handle('gm-export-campaign', async (_, campId) => {
     } finally {
         try {
             fs.rmSync(tempDir, { recursive: true, force: true });
-        } catch (e) {}
+        } catch (e) { }
     }
 });
 
@@ -1521,10 +1793,16 @@ ipcMain.handle('gm-import-campaign', async (_, explicitFilePath) => {
             return { success: false, error: 'Invalid campaign format: missing campaign data.' };
         }
 
+        const origCampId = campData.id;
         const safeBaseId = (campData.id || campData.name).toLowerCase().replace(/[^a-z0-9]/gi, '_');
         const newCampId = `${safeBaseId}_imported_${Date.now()}`;
+        let campStr = JSON.stringify(campData);
+        if (origCampId) {
+            const oldPathRegex = new RegExp(`(/assets/campaigns/|assets/campaigns/)${origCampId}([/\\\\])`, 'g');
+            campStr = campStr.replace(oldPathRegex, `$1${newCampId}$2`);
+        }
         const newCamp = {
-            ...campData,
+            ...JSON.parse(campStr),
             id: newCampId,
             name: `${campData.name} (Imported)`
         };
@@ -1541,7 +1819,7 @@ ipcMain.handle('gm-import-campaign', async (_, explicitFilePath) => {
                 body: JSON.stringify({ campaign: newCamp })
             });
             if (res.ok) saved = true;
-        } catch (e) {}
+        } catch (e) { }
 
         if (!saved) {
             const campFile = path.join(appConfig.campaignDataDir, 'campaigns.json');
@@ -1561,7 +1839,7 @@ ipcMain.handle('gm-import-campaign', async (_, explicitFilePath) => {
     } finally {
         try {
             fs.rmSync(tempDir, { recursive: true, force: true });
-        } catch (e) {}
+        } catch (e) { }
     }
 });
 
@@ -1575,7 +1853,7 @@ ipcMain.handle('gm-export-granular', async (_, { campaignId, entityType, entityI
             headers: internalHeaders()
         });
         if (res.ok) campaign = await res.json();
-    } catch (e) {}
+    } catch (e) { }
 
     if (!campaign) {
         try {
@@ -1584,7 +1862,7 @@ ipcMain.handle('gm-export-granular', async (_, { campaignId, entityType, entityI
                 const all = JSON.parse(fs.readFileSync(campFile, 'utf8'));
                 campaign = all[campaignId];
             }
-        } catch (e) {}
+        } catch (e) { }
     }
 
     if (!campaign) return { success: false, error: 'Campaign not found' };
@@ -1609,8 +1887,7 @@ ipcMain.handle('gm-export-granular', async (_, { campaignId, entityType, entityI
                 (c.id && c.id.startsWith('npc_')) ||
                 (c.monsterData && !c.isPlayer && !c.isCompanion && !(c.id && c.id.startsWith('char_')))
             );
-        const isPlayer = (c) =>
-            !isCompanion(c) && !isCustomNpc(c) && Boolean(c.isPlayer || (c.id && c.id.startsWith('char_')));
+        const isPlayer = (c) => !isCompanion(c) && !isCustomNpc(c);
 
         const chars = Object.values(campaign.characters || {}).filter(isPlayer);
         if (batch) {
@@ -1707,7 +1984,7 @@ ipcMain.handle('gm-export-granular', async (_, { campaignId, entityType, entityI
     } finally {
         try {
             fs.rmSync(tempDir, { recursive: true, force: true });
-        } catch (e) {}
+        } catch (e) { }
     }
 });
 
@@ -1770,6 +2047,16 @@ ipcMain.handle('gm-import-granular', async (_, { campaignId, explicitFilePath })
             return { success: false, error: 'No recognizable entity items found in file.' };
         }
 
+        // Migrate any cross-campaign asset paths to target campaignId
+        items = items.map((item) => {
+            let itemStr = JSON.stringify(item);
+            itemStr = itemStr.replace(
+                /(?:\/assets\/campaigns\/|assets\/campaigns\/)[^/\\\s"']+(?=[/\\\\]uploads[/\\\\])/g,
+                `/assets/campaigns/${campaignId}`
+            );
+            return JSON.parse(itemStr);
+        });
+
         if (assetsDir && fs.existsSync(assetsDir)) {
             unpackAssetsToCampaign(assetsDir, campaignId);
         }
@@ -1782,7 +2069,7 @@ ipcMain.handle('gm-import-granular', async (_, { campaignId, explicitFilePath })
                 body: JSON.stringify({ entityType, entities: items })
             });
             if (res.ok) resData = await res.json();
-        } catch (e) {}
+        } catch (e) { }
 
         if (!resData) {
             const campFile = path.join(appConfig.campaignDataDir, 'campaigns.json');
@@ -1803,6 +2090,8 @@ ipcMain.handle('gm-import-granular', async (_, { campaignId, explicitFilePath })
                             mName = `${mName} (Copy)`;
                         }
                         camp.maps[mId] = { ...item, id: mId, name: mName };
+                        if (!camp.mapOrder) camp.mapOrder = Object.keys(camp.maps).filter((id) => id !== mId);
+                        if (!camp.mapOrder.includes(mId)) camp.mapOrder.push(mId);
                         importedIds.push(mId);
                     } else {
                         let cId = item.id;
@@ -1831,7 +2120,7 @@ ipcMain.handle('gm-import-granular', async (_, { campaignId, explicitFilePath })
     } finally {
         try {
             fs.rmSync(tempDir, { recursive: true, force: true });
-        } catch (e) {}
+        } catch (e) { }
     }
 });
 
@@ -1987,7 +2276,11 @@ ipcMain.handle('sources-select-asset', async () => {
         return { canceled: true };
     }
 
-    return sourceManager.saveAssetImage(filePaths[0]);
+    const saved = sourceManager.saveAssetImage(filePaths[0]);
+    return {
+        ...saved,
+        filePath: saved?.webPath || saved?.localPath
+    };
 });
 
 ipcMain.handle('sources-search-global', (_, { query, category, limit }) => {
@@ -2038,9 +2331,8 @@ ipcMain.handle('sources-execute-bulk-import', async (_, { candidates, conflictDe
     const res = sourceManager.bulkImportSources(candidates, conflictDecisions);
     if (res && res.success) {
         // Notify local express server to broadcast sources update to any connected VTTs
-        try {
-            await fetch(`http://localhost:${DEFAULT_PORT}/api/server/sync-sources`, { method: 'POST' }).catch(() => {});
-        } catch (_) {}
+        await syncSourcesToServer();
+        appendLog(`[Sources] Bulk imported sources and synchronized with server.`);
     }
     return res;
 });

@@ -66,7 +66,83 @@ export function renderStep1(ctx) {
         .map((c) => ({ name: c.name, source: c.source }))
         .sort((a, b) => a.name.localeCompare(b.name));
 
+    // Active Token Artwork
+    workingChar.tokenImages = Array.isArray(workingChar.tokenImages) ? workingChar.tokenImages : [];
+    if (typeof workingChar.activeTokenIndex !== 'number' || workingChar.activeTokenIndex < 0) {
+        workingChar.activeTokenIndex = 0;
+    }
+    const activeTokenObj = workingChar.tokenImages[workingChar.activeTokenIndex] || workingChar.tokenImages[0];
+    const activeTokenUrl = activeTokenObj
+        ? typeof activeTokenObj === 'string'
+            ? activeTokenObj
+            : activeTokenObj.url
+        : workingChar.avatar || 'favicon.svg';
+
     bodyEl.innerHTML = `
+        <!-- Character Identity: Name & Multi-Token Art -->
+        <div class="builder-section-box" style="border-left: 3px solid var(--color-gold-base);">
+            <div class="builder-section-header">
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <i class="fa-solid fa-id-card text-gradient-gold"></i>
+                    <strong style="font-size:0.95rem; color:var(--color-gold-base);">Hero Identity & Token Artwork</strong>
+                </div>
+            </div>
+            <div style="display:flex; gap:20px; align-items:flex-start; flex-wrap:wrap;">
+                <!-- Circular Avatar Preview with active indicator -->
+                <div style="display:flex; flex-direction:column; align-items:center; gap:8px;">
+                    <div id="pc-wiz-token-preview-circle" style="width:72px; height:72px; border-radius:50%; border:2px solid var(--color-gold-base); overflow:hidden; background:rgba(0,0,0,0.5); box-shadow:0 0 12px rgba(212,175,55,0.35); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                        <img id="pc-wiz-active-token-img" src="${activeTokenUrl}" alt="Token Art" style="width:100%; height:100%; object-fit:cover; display:block;" onerror="this.src='favicon.svg'">
+                    </div>
+                    <span class="badge" style="background:rgba(212,175,55,0.15); color:var(--color-gold-base); font-size:0.65rem; padding:1px 6px; border-radius:3px;">Active Token</span>
+                </div>
+
+                <!-- Name & Upload Controls -->
+                <div style="flex:1; min-width:260px; display:flex; flex-direction:column; gap:10px;">
+                    <div class="form-group" style="margin:0;">
+                        <label style="font-size:0.8rem; font-weight:600; color:var(--color-text-secondary); margin-bottom:4px; display:flex; align-items:center; gap:6px;">
+                            <i class="fa-solid fa-signature text-gradient-gold"></i> Character Name
+                        </label>
+                        <input type="text" id="pc-wizard-char-name" placeholder="Enter hero name (e.g. Valeros of Neverwinter)" value="${workingChar.name || ''}" style="width:100%; padding:8px 12px; font-size:1rem; font-weight:bold; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); color:var(--color-gold-light); border-radius:6px;">
+                    </div>
+
+                    <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+                        <input type="file" id="pc-wiz-token-file" accept="image/*,video/mp4,video/webm" style="display:none;">
+                        <button type="button" id="pc-wiz-upload-token-btn" class="btn btn-secondary btn-xs" style="display:inline-flex; align-items:center; gap:6px;">
+                            <i class="fa-solid fa-cloud-arrow-up"></i> Upload Media
+                        </button>
+                        <button type="button" id="pc-wiz-add-url-token-btn" class="btn btn-secondary btn-xs" style="display:inline-flex; align-items:center; gap:6px;">
+                            <i class="fa-solid fa-link"></i> Add from URL
+                        </button>
+                    </div>
+
+                    <!-- Token Gallery / Thumbnails -->
+                    ${
+                        workingChar.tokenImages.length > 0
+                            ? `
+                        <div style="display:flex; flex-direction:column; gap:4px; margin-top:2px;">
+                            <span style="font-size:0.75rem; color:var(--color-text-muted);">Uploaded Token Gallery (Click to select active):</span>
+                            <div id="pc-wiz-token-thumbnails" style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+                                ${workingChar.tokenImages
+                                    .map((tok, idx) => {
+                                        const u = typeof tok === 'string' ? tok : tok?.url || '';
+                                        const isActive = idx === workingChar.activeTokenIndex;
+                                        return `
+                                    <div class="pc-wiz-token-thumb-item" data-idx="${idx}" style="position:relative; width:40px; height:40px; border-radius:50%; border:2px solid ${isActive ? 'var(--color-gold-base)' : 'var(--color-border-subtle)'}; overflow:hidden; cursor:pointer; background:rgba(0,0,0,0.5); box-shadow:${isActive ? '0 0 8px rgba(212,175,55,0.6)' : 'none'};" title="${tok.name || 'Token'}">
+                                        <img src="${u}" style="width:100%; height:100%; object-fit:cover;" onerror="this.src='favicon.svg'">
+                                        <button type="button" class="pc-wiz-del-token-btn" data-idx="${idx}" style="position:absolute; top:-2px; right:-2px; width:16px; height:16px; border-radius:50%; background:#ef4444; border:none; color:#fff; font-size:9px; display:flex; align-items:center; justify-content:center; cursor:pointer; padding:0;" title="Remove this token">&times;</button>
+                                    </div>
+                                    `;
+                                    })
+                                    .join('')}
+                            </div>
+                        </div>
+                    `
+                            : ''
+                    }
+                </div>
+            </div>
+        </div>
+
         <!-- Species, Subrace & Background Selection -->
         <div class="builder-section-box">
             <div class="builder-section-header">
@@ -265,6 +341,93 @@ export function renderStep1(ctx) {
     `;
 
     // Step 1 Event Listeners
+
+    // Hero Name & Top Summary update
+    const nameInput = document.getElementById('pc-wizard-char-name');
+    nameInput?.addEventListener('input', (e) => {
+        workingChar.name = e.target.value;
+        if (ctx.updateTopSummary) ctx.updateTopSummary();
+    });
+
+    // Token Art Upload
+    const fileInput = document.getElementById('pc-wiz-token-file');
+    const uploadBtn = document.getElementById('pc-wiz-upload-token-btn');
+    uploadBtn?.addEventListener('click', () => fileInput?.click());
+    fileInput?.addEventListener('change', async (e) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        const formData = new FormData();
+        formData.append('file', file);
+        try {
+            const res = await fetch('/api/assets/upload', { method: 'POST', body: formData });
+            if (res.ok) {
+                const data = await res.json();
+                const url = data.url || data.path || data.filePath;
+                if (url) {
+                    workingChar.tokenImages.push({ url, name: file.name });
+                    workingChar.activeTokenIndex = workingChar.tokenImages.length - 1;
+                    workingChar.avatar = url;
+                    renderStep1(ctx);
+                }
+            } else {
+                console.error('Token upload failed:', res.statusText);
+            }
+        } catch (err) {
+            console.error('Error uploading token image:', err);
+        }
+    });
+
+    // Token Art from URL
+    const addUrlBtn = document.getElementById('pc-wiz-add-url-token-btn');
+    addUrlBtn?.addEventListener('click', () => {
+        const url = prompt('Enter token image/media URL (e.g., https://... or /assets/...):');
+        if (url && url.trim()) {
+            const cleanUrl = url.trim();
+            workingChar.tokenImages.push({ url: cleanUrl, name: `Token ${workingChar.tokenImages.length + 1}` });
+            workingChar.activeTokenIndex = workingChar.tokenImages.length - 1;
+            workingChar.avatar = cleanUrl;
+            renderStep1(ctx);
+        }
+    });
+
+    // Token Thumbnail selection
+    document.querySelectorAll('.pc-wiz-token-thumb-item').forEach((thumb) => {
+        thumb.addEventListener('click', (e) => {
+            if (e.target.closest('.pc-wiz-del-token-btn')) return;
+            const idx = parseInt(thumb.dataset.idx);
+            if (!isNaN(idx) && workingChar.tokenImages[idx]) {
+                workingChar.activeTokenIndex = idx;
+                const tok = workingChar.tokenImages[idx];
+                workingChar.avatar = typeof tok === 'string' ? tok : tok?.url;
+                renderStep1(ctx);
+            }
+        });
+    });
+
+    // Token Thumbnail deletion
+    document.querySelectorAll('.pc-wiz-del-token-btn').forEach((btn) => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const idx = parseInt(btn.dataset.idx);
+            if (!isNaN(idx) && workingChar.tokenImages[idx]) {
+                workingChar.tokenImages.splice(idx, 1);
+                if (workingChar.activeTokenIndex >= workingChar.tokenImages.length) {
+                    workingChar.activeTokenIndex = Math.max(0, workingChar.tokenImages.length - 1);
+                }
+                const cur = workingChar.tokenImages[workingChar.activeTokenIndex];
+                workingChar.avatar = cur ? (typeof cur === 'string' ? cur : cur?.url) : '';
+                renderStep1(ctx);
+            }
+        });
+    });
+
+    // Speed manual edits flag
+    ['pc-wiz-spd-walk', 'pc-wiz-spd-climb', 'pc-wiz-spd-fly', 'pc-wiz-spd-burrow'].forEach((id) => {
+        document.getElementById(id)?.addEventListener('input', () => {
+            workingChar._manualSpeedCustomized = true;
+        });
+    });
+
     const rSel = document.getElementById('pc-wizard-race');
     const custR = document.getElementById('pc-wizard-custom-race');
     rSel?.addEventListener('change', () => {

@@ -9,12 +9,13 @@
   <meta name="theme-color" content="#090d16">
   <meta property="og:type" content="website"><meta property="og:site_name" content="ForgeD VTT">
   <meta property="og:title" content="Getting Started — ForgeD VTT"><meta property="og:description" content="Set up your ForgeD game, start Cloudflare hosting, and share the player link. Players join in a browser.">
-  <meta property="og:url" content="https://forgedvtt.com/getting-started.html"><meta property="og:image" content="https://forgedvtt.com/img/logo.png">
+  <meta property="og:url" content="https://forgedvtt.com/getting-started.html"><meta property="og:image" content="https://forgedvtt.com/img/social-preview.jpg">
+  <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Getting Started — ForgeD VTT">
-  <meta name="twitter:description" content="Set up your ForgeD game, start Cloudflare hosting, and share the player link. Players join in a browser."><meta name="twitter:image" content="https://forgedvtt.com/img/logo.png">
+  <meta name="twitter:description" content="Set up your ForgeD game, start Cloudflare hosting, and share the player link. Players join in a browser."><meta name="twitter:image" content="https://forgedvtt.com/img/social-preview.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Inter:wght@400;500;600;700;800&family=Consolas&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer">
   <link rel="stylesheet" href="css/website.css">
   <link rel="icon" type="image/x-icon" href="favicon.ico"><link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="icon" type="image/png" sizes="96x96" href="favicon-96x96.png"><link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
@@ -40,15 +41,24 @@
     <li><span class="setup-number">2</span><div><h3>Start your game server</h3><p>In the app’s Hosting &amp; Server tab, choose <strong>Start Server</strong>. This runs your game from your computer. The app can start it automatically when you start online hosting.</p></div></li>
     <li><span class="setup-number">3</span><div><h3>Start the Cloudflare link</h3><p>Leave the default hosting mode selected and leave the Cloudflare token blank for the recommended quick setup. Choose <strong>Start Online Tunnel</strong> and wait for the player link to appear. This creates a secure route from your group to the game on your computer.</p></div></li>
     <li><span class="setup-number">4</span><div><h3>Open your tabletop</h3><p>Choose <strong>Open VTT Window</strong> to run the game inside ForgeD, or use <strong>Open in Browser</strong>.</p></div></li>
-    <li><span class="setup-number">5</span><div><h3>Copy and share the player link</h3><p>Choose <strong>Copy Link</strong> in the app and send that link to your group. Keep ForgeD and online hosting running while you play. A quick link may change when you start a new session.</p></div></li>
+    <li><span class="setup-number">5</span><div><h3>Copy and share the player link</h3><p>Choose <strong>Copy Link</strong> in the app and send that link to your group. Keep ForgeD and online hosting running while you play. A quick link may change when you start a new session.</p>
+    <div class="gm-next-steps" style="margin-top: 18px; padding: 14px 18px; background: rgba(16, 21, 33, 0.85); border: 1px solid var(--border-gold); border-radius: 10px;">
+      <h4 style="margin: 0 0 8px; color: var(--accent-gold); font-size: 0.98rem;"><i class="fa-solid fa-list-check" aria-hidden="true"></i> Next steps inside the tabletop:</h4>
+      <ul style="margin: 0; padding-left: 18px; color: var(--text-secondary); line-height: 1.7; font-size: 0.92rem;">
+        <li><strong>Set a GM password:</strong> Enter your password in the login window to secure Game Master controls.</li>
+        <li><strong>Open a map:</strong> Click the Map icon (<i class="fa-solid fa-map" aria-hidden="true"></i>) on the left toolbar to choose a blank tactical grid or upload a battlemap.</li>
+        <li><strong>Add characters &amp; tokens:</strong> Open the Bestiary (<i class="fa-solid fa-book-skull" aria-hidden="true"></i>) or Character Builder (<i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i>) to place tokens on the grid.</li>
+      </ul>
+    </div>
+    </div></li>
   </ol></div>
   <aside class="start-note"><span class="note-icon" aria-hidden="true"><i class="fa-solid fa-lightbulb"></i></span><h2>What’s a tunnel?</h2><p>It’s a secure connection that lets your friends reach the game running on your computer. ForgeD starts it for you; you don’t need to change your router settings.</p><a href="guide.html#guide-hosting-setup">Cloudflare setup details <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></aside>
 </section>
-<section class="player-start" id="players" aria-labelledby="players-title"><div class="player-mark" aria-hidden="true"><i class="fa-solid fa-dice-d20"></i></div><div><p class="eyebrow">For players</p><h2 id="players-title">Your Game Master sends the link.</h2><p>Open it in Chrome, Edge, Firefox, or Safari on your computer, tablet, or phone. You don’t need to install ForgeD or create a website account. Choose your character when prompted, then join the game.</p></div></section>
+<section class="player-start" id="players" aria-labelledby="players-title"><div class="player-mark" aria-hidden="true"><i class="fa-solid fa-dice-d20"></i></div><div><p class="eyebrow">For players</p><h2 id="players-title">Your Game Master sends the link.</h2><p>Open it in Chrome, Edge, Firefox, or Safari on your computer, tablet, or phone. You don’t need to install ForgeD or create a website account. Enter your Player Name, choose the Player role, and click Enter Campaign. Once inside the table, open your character sheet from the side panel or click your assigned token.</p></div></section>
 <section class="troubleshooting" aria-labelledby="trouble-title"><p class="eyebrow">If something gets stuck</p><h2 id="trouble-title">A few quick things to check.</h2><details><summary>The game link isn’t appearing.</summary><p>Check that the local server is running, then try <strong>Start Online Tunnel</strong> again. Wait for the app to show the active link before copying it.</p></details><details><summary>My players can’t open the link.</summary><p>Make sure the computer hosting the game is online and ForgeD remains open with the tunnel active. Copy the current link from the app and send it again.</p></details><details><summary>The link changed after I restarted ForgeD.</summary><p>A no-token Quick Tunnel uses a temporary link. Copy the new link shown in the app and send it to your players. If you need a stable address, see the optional Cloudflare setup in the Guide.</p></details><p class="troubleshooting-guide">Need more help? <a href="guide.html#guide-hosting-setup">Read Cloudflare hosting help</a> or <a href="guide.html">search the Guide</a>.</p></section></main>
   <footer class="footer-vtt">
         <p>© 2026 ForgeD VTT — Self-Hosted Virtual Tabletop System. Designed for Tabletop Freedom.</p>
-        <p style="margin-top: 0.5rem; font-size: 0.8rem; opacity: 0.85;">This work includes material from the System Reference Document 5.1 (SRD 5.1) by Wizards of the Coast LLC, available under the Creative Commons Attribution 4.0 International License (CC-BY-4.0). 2024 Free Rules and SRD 5.2 content are used under the Wizards of the Coast Fan Content Policy. • <a href="LEGAL.md" target="_blank" style="color: #d4af37; text-decoration: underline;">Legal Notices &amp; OGC Disclaimers</a></p>
+        <p style="margin-top: 0.5rem; font-size: 0.8rem; opacity: 0.85;">This work includes material from the System Reference Document 5.1 (SRD 5.1) by Wizards of the Coast LLC, available under the Creative Commons Attribution 4.0 International License (CC-BY-4.0). 2024 Free Rules and SRD 5.2 content are used under the Wizards of the Coast Fan Content Policy. • <a href="legal.html" style="color: #d4af37; text-decoration: underline;">Legal Notices &amp; OGC Disclaimers</a></p>
     </footer>
 
 </body></html>

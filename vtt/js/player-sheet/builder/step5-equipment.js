@@ -52,6 +52,36 @@ export const SIMPLE_WEAPONS = [
 export function renderStep5(ctx) {
     const { bodyEl, workingChar, classEquipChoiceSets, classFixedItems, candidateBgItems, updateCountsDisplay } = ctx;
 
+    const isLevelUpSkip = workingChar.builderMode === 'levelup' && !workingChar.allowLevelUpRebuildEquip;
+
+    if (isLevelUpSkip) {
+        bodyEl.innerHTML = `
+            <div class="builder-section-box" style="border-left:3px solid #38bdf8; text-align:left; padding:20px;">
+                <div class="builder-section-header" style="border-bottom:none; margin-bottom:10px; padding:0;">
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <i class="fa-solid fa-shield-halved text-gradient-gold" style="font-size:1.2rem;"></i>
+                        <strong style="font-size:1.05rem; color:var(--color-gold-base);">Level-Up Mode: Equipment & Gear Preserved</strong>
+                        <span class="badge" style="background:#0284c7; color:#fff; font-size:0.7rem; padding:2px 8px; border-radius:4px;">Existing Inventory Intact</span>
+                    </div>
+                </div>
+                <div style="font-size:0.85rem; color:var(--color-text-secondary); line-height:1.6; max-width:680px;">
+                    Your hero already has established weapons, armor, currency, and backpack containers on their sheet. Starting class packages and background gold pouches are bypassed during leveling up so your inventory won't be duplicated.
+                </div>
+                <div style="margin-top:16px; display:flex; gap:10px; align-items:center;">
+                    <button type="button" id="pc-wiz-enable-equip-rebuild" class="btn btn-secondary btn-xs" style="color:var(--color-gold-light);">
+                        <i class="fa-solid fa-rotate"></i> Re-run Starting Equipment Selection
+                    </button>
+                </div>
+            </div>
+        `;
+
+        document.getElementById('pc-wiz-enable-equip-rebuild')?.addEventListener('click', () => {
+            workingChar.allowLevelUpRebuildEquip = true;
+            renderStep5(ctx);
+        });
+        return;
+    }
+
     bodyEl.innerHTML = `
         <!-- Equipment Mode Selection -->
         <div class="builder-section-box">

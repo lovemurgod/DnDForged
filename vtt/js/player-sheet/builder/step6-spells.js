@@ -212,6 +212,20 @@ export function renderStep6(ctx) {
                           const leveledChecked = sec.spells.filter((s) => !s.isCantrip && s.checked).length;
                           const cantripOver = cantripsChecked > sec.maxCantrips;
                           const spellOver = leveledChecked > sec.maxSpells;
+                          const isPrepared = sec.casterType === 'prepared' || sec.isPrepared;
+                          const isWizard = sec.casterType === 'wizard' || sec.isWizard;
+
+                          let spellPillText = `Spells Known: ${leveledChecked} / ${sec.maxSpells}${spellOver ? ' (Over Limit)' : ''}`;
+                          let spellPillStyle = `color:${spellOver ? '#ffb74d' : '#4fc3f7'}; ${spellOver ? 'border:1px solid #ffb74d; background:rgba(255,183,77,0.15);' : ''}`;
+
+                          if (isPrepared) {
+                              spellPillText = `Eligible Spells to Import: ${leveledChecked} selected (All eligible available. Daily prep on sheet)`;
+                              spellPillStyle = `color:#4fc3f7;`;
+                          } else if (isWizard) {
+                              const over = leveledChecked > sec.maxSpells;
+                              spellPillText = `Spellbook Capacity: ${leveledChecked} / ${sec.maxSpells}${over ? ' (Extra Inscribed)' : ''}`;
+                              spellPillStyle = `color:${over ? '#ffb74d' : '#4fc3f7'}; ${over ? 'border:1px solid #ffb74d; background:rgba(255,183,77,0.15);' : ''}`;
+                          }
 
                           // Apply filters
                           const filteredSpells = sec.spells.filter((sp) => {
@@ -241,9 +255,10 @@ export function renderStep6(ctx) {
                             <span id="pc-wiz-sec-cantrips-${secIdx}" class="builder-pill" style="color:${cantripOver ? '#ffb74d' : '#ba68c8'}; ${cantripOver ? 'border:1px solid #ffb74d; background:rgba(255,183,77,0.15);' : ''}">
                                 Cantrips: ${cantripsChecked} / ${sec.maxCantrips}${cantripOver ? ' (Over Limit)' : ''}
                             </span>
-                            <span id="pc-wiz-sec-spells-${secIdx}" class="builder-pill" style="color:${spellOver ? '#ffb74d' : '#4fc3f7'}; ${spellOver ? 'border:1px solid #ffb74d; background:rgba(255,183,77,0.15);' : ''}">
-                                Spells: ${leveledChecked} / ${sec.maxSpells}${spellOver ? ' (Over Limit)' : ''}
+                            <span id="pc-wiz-sec-spells-${secIdx}" class="builder-pill" style="${spellPillStyle}">
+                                ${spellPillText}
                             </span>
+                            ${isPrepared ? `<span class="badge" style="background:rgba(46,204,113,0.15); color:#2ecc71; border:1px solid rgba(46,204,113,0.4); font-size:0.7rem; padding:1px 6px;">Divine / Primal List &bull; All Eligible Selected</span>` : ''}
                         </div>
                         <div style="display:flex; gap:6px; margin-left:auto;">
                             <button type="button" class="btn btn-secondary btn-xxs pc-wiz-sp-select-all" data-sec="${secIdx}"><i class="fa-solid fa-check-double"></i> Select All</button>
@@ -340,11 +355,26 @@ export function renderStep6(ctx) {
         }
         const spellPill = document.getElementById(`pc-wiz-sec-spells-${secIdx}`);
         if (spellPill) {
-            const over = leveledChecked > sec.maxSpells;
-            spellPill.style.color = over ? '#ffb74d' : '#4fc3f7';
-            spellPill.style.border = over ? '1px solid #ffb74d' : '';
-            spellPill.style.background = over ? 'rgba(255,183,77,0.15)' : '';
-            spellPill.textContent = `Spells: ${leveledChecked} / ${sec.maxSpells}${over ? ' (Over Limit)' : ''}`;
+            const isPrepared = sec.casterType === 'prepared' || sec.isPrepared;
+            const isWizard = sec.casterType === 'wizard' || sec.isWizard;
+            if (isPrepared) {
+                spellPill.style.color = '#4fc3f7';
+                spellPill.style.border = '';
+                spellPill.style.background = '';
+                spellPill.textContent = `Eligible Spells to Import: ${leveledChecked} selected (All eligible available. Daily prep on sheet)`;
+            } else if (isWizard) {
+                const over = leveledChecked > sec.maxSpells;
+                spellPill.style.color = over ? '#ffb74d' : '#4fc3f7';
+                spellPill.style.border = over ? '1px solid #ffb74d' : '';
+                spellPill.style.background = over ? 'rgba(255,183,77,0.15)' : '';
+                spellPill.textContent = `Spellbook Capacity: ${leveledChecked} / ${sec.maxSpells}${over ? ' (Extra Inscribed)' : ''}`;
+            } else {
+                const over = leveledChecked > sec.maxSpells;
+                spellPill.style.color = over ? '#ffb74d' : '#4fc3f7';
+                spellPill.style.border = over ? '1px solid #ffb74d' : '';
+                spellPill.style.background = over ? 'rgba(255,183,77,0.15)' : '';
+                spellPill.textContent = `Spells Known: ${leveledChecked} / ${sec.maxSpells}${over ? ' (Over Limit)' : ''}`;
+            }
         }
         updateCountsDisplay();
     }

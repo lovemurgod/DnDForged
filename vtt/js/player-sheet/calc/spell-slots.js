@@ -27,6 +27,54 @@ export const MULTICLASS_SPELL_SLOT_TABLE = [
     /* 20 */ [4, 3, 3, 3, 3, 2, 2, 1, 1]
 ];
 
+export const SINGLE_CLASS_HALF_CASTER_TABLE_2014 = [
+    /*  0 */ [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    /*  1 */ [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    /*  2 */ [2, 0, 0, 0, 0, 0, 0, 0, 0],
+    /*  3 */ [3, 0, 0, 0, 0, 0, 0, 0, 0],
+    /*  4 */ [3, 0, 0, 0, 0, 0, 0, 0, 0],
+    /*  5 */ [4, 2, 0, 0, 0, 0, 0, 0, 0],
+    /*  6 */ [4, 2, 0, 0, 0, 0, 0, 0, 0],
+    /*  7 */ [4, 3, 0, 0, 0, 0, 0, 0, 0],
+    /*  8 */ [4, 3, 0, 0, 0, 0, 0, 0, 0],
+    /*  9 */ [4, 3, 2, 0, 0, 0, 0, 0, 0],
+    /* 10 */ [4, 3, 2, 0, 0, 0, 0, 0, 0],
+    /* 11 */ [4, 3, 3, 0, 0, 0, 0, 0, 0],
+    /* 12 */ [4, 3, 3, 0, 0, 0, 0, 0, 0],
+    /* 13 */ [4, 3, 3, 1, 0, 0, 0, 0, 0],
+    /* 14 */ [4, 3, 3, 1, 0, 0, 0, 0, 0],
+    /* 15 */ [4, 3, 3, 2, 0, 0, 0, 0, 0],
+    /* 16 */ [4, 3, 3, 2, 0, 0, 0, 0, 0],
+    /* 17 */ [4, 3, 3, 3, 1, 0, 0, 0, 0],
+    /* 18 */ [4, 3, 3, 3, 1, 0, 0, 0, 0],
+    /* 19 */ [4, 3, 3, 3, 2, 0, 0, 0, 0],
+    /* 20 */ [4, 3, 3, 3, 2, 0, 0, 0, 0]
+];
+
+export const SINGLE_CLASS_THIRD_CASTER_TABLE = [
+    /*  0 */ [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    /*  1 */ [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    /*  2 */ [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    /*  3 */ [2, 0, 0, 0, 0, 0, 0, 0, 0],
+    /*  4 */ [3, 0, 0, 0, 0, 0, 0, 0, 0],
+    /*  5 */ [3, 0, 0, 0, 0, 0, 0, 0, 0],
+    /*  6 */ [3, 0, 0, 0, 0, 0, 0, 0, 0],
+    /*  7 */ [4, 2, 0, 0, 0, 0, 0, 0, 0],
+    /*  8 */ [4, 2, 0, 0, 0, 0, 0, 0, 0],
+    /*  9 */ [4, 2, 0, 0, 0, 0, 0, 0, 0],
+    /* 10 */ [4, 3, 0, 0, 0, 0, 0, 0, 0],
+    /* 11 */ [4, 3, 0, 0, 0, 0, 0, 0, 0],
+    /* 12 */ [4, 3, 0, 0, 0, 0, 0, 0, 0],
+    /* 13 */ [4, 3, 2, 0, 0, 0, 0, 0, 0],
+    /* 14 */ [4, 3, 2, 0, 0, 0, 0, 0, 0],
+    /* 15 */ [4, 3, 2, 0, 0, 0, 0, 0, 0],
+    /* 16 */ [4, 3, 3, 0, 0, 0, 0, 0, 0],
+    /* 17 */ [4, 3, 3, 0, 0, 0, 0, 0, 0],
+    /* 18 */ [4, 3, 3, 0, 0, 0, 0, 0, 0],
+    /* 19 */ [4, 3, 3, 1, 0, 0, 0, 0, 0],
+    /* 20 */ [4, 3, 3, 1, 0, 0, 0, 0, 0]
+];
+
 export const WARLOCK_PACT_SLOTS = [
     // [slots, slotLevel] indexed by warlock level 0..20
     [0, 0],
@@ -139,8 +187,45 @@ export function calculateCharacterSpellSlots(classes, is2024 = false, existingSl
     );
     const warlockLvl = warlockClass ? parseInt(warlockClass.level) || 0 : 0;
 
+    let fullCasterLevels = 0;
+    let artificerLevels = 0;
+    let halfCasterLevels = 0;
+    let thirdCasterLevels = 0;
+
+    validClasses.forEach((c) => {
+        const rawName = (c.name || '')
+            .toLowerCase()
+            .replace(/\s*\[.*?\]$/, '')
+            .trim();
+        const sub = (c.subclass || '').toLowerCase();
+        const lvl = parseInt(c.level) || 0;
+        if (lvl <= 0) return;
+
+        if (['wizard', 'cleric', 'druid', 'sorcerer', 'bard'].includes(rawName)) {
+            fullCasterLevels += lvl;
+        } else if (rawName === 'artificer') {
+            artificerLevels += lvl;
+        } else if (['paladin', 'ranger'].includes(rawName)) {
+            halfCasterLevels += lvl;
+        } else if (sub.includes('eldritch knight') || sub.includes('arcane trickster')) {
+            thirdCasterLevels += lvl;
+        }
+    });
+
+    const isSingleHalfCaster =
+        fullCasterLevels === 0 && artificerLevels === 0 && thirdCasterLevels === 0 && halfCasterLevels > 0;
+    const isSingleThirdCaster =
+        fullCasterLevels === 0 && artificerLevels === 0 && halfCasterLevels === 0 && thirdCasterLevels > 0;
+
     const totalCasterLevel = calculateEffectiveCasterLevel(validClasses, is2024);
-    const row = MULTICLASS_SPELL_SLOT_TABLE[totalCasterLevel] || MULTICLASS_SPELL_SLOT_TABLE[0];
+    let row;
+    if (isSingleThirdCaster) {
+        row = SINGLE_CLASS_THIRD_CASTER_TABLE[Math.min(20, thirdCasterLevels)] || SINGLE_CLASS_THIRD_CASTER_TABLE[0];
+    } else if (isSingleHalfCaster && !is2024) {
+        row = SINGLE_CLASS_HALF_CASTER_TABLE_2014[Math.min(20, halfCasterLevels)] || SINGLE_CLASS_HALF_CASTER_TABLE_2014[0];
+    } else {
+        row = MULTICLASS_SPELL_SLOT_TABLE[totalCasterLevel] || MULTICLASS_SPELL_SLOT_TABLE[0];
+    }
 
     const spellSlots = {};
     for (let i = 1; i <= 9; i++) {

@@ -383,6 +383,7 @@ export function renderStep2(ctx) {
                                 const aBonus = asiBonuses[s] || 0;
                                 const tot = stats[s] || 10;
                                 const mod = getMod(tot);
+                                const isOverCap = tot > 20;
 
                                 return `
                                 <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
@@ -400,7 +401,10 @@ export function renderStep2(ctx) {
                                          }
                                      </td>
                                      <td style="padding:8px 6px; color:${aBonus > 0 ? '#4fc3f7' : 'var(--color-text-muted)'};">${aBonus > 0 ? '+' + aBonus : '+0'}</td>
-                                     <td style="padding:8px 6px; font-weight:bold; font-size:1.05rem; color:var(--color-gold-light);">${tot}</td>
+                                     <td style="padding:8px 6px; font-weight:bold; font-size:1.05rem; color:${isOverCap ? '#ff9800' : 'var(--color-gold-light)'};">
+                                         ${tot}
+                                         ${isOverCap ? '<span class="badge" style="background:rgba(255,152,0,0.2); color:#ffb74d; border:1px solid #ff9800; font-size:0.65rem; margin-left:4px; padding:1px 4px; border-radius:3px;" title="Standard 5e ability cap is 20 without magic items or epic boons.">>20 Cap</span>' : ''}
+                                     </td>
                                      <td style="padding:8px 6px; font-weight:bold; font-size:1.05rem; color:${mod >= 0 ? 'var(--color-gold-base)' : '#e57373'};">${mod >= 0 ? '+' : ''}${mod}</td>
                                  </tr>
                              `;
@@ -423,7 +427,13 @@ export function renderStep2(ctx) {
     document.querySelectorAll('.pc-std-arr-sel').forEach((sel) => {
         sel.addEventListener('change', (e) => {
             const st = e.target.dataset.stat;
-            workingChar.standardArrayAssignments[st] = parseInt(e.target.value) || 10;
+            const newVal = parseInt(e.target.value) || 10;
+            const oldVal = workingChar.standardArrayAssignments[st];
+            const duplicateStat = statList.find((other) => other !== st && workingChar.standardArrayAssignments[other] === newVal);
+            if (duplicateStat) {
+                workingChar.standardArrayAssignments[duplicateStat] = oldVal;
+            }
+            workingChar.standardArrayAssignments[st] = newVal;
             recomputeCandidates().then(() => renderStep2(ctx));
         });
     });
@@ -471,7 +481,13 @@ export function renderStep2(ctx) {
     document.querySelectorAll('.pc-roll-assign-sel').forEach((sel) => {
         sel.addEventListener('change', (e) => {
             const idx = parseInt(e.target.dataset.idx);
-            workingChar.rolledScores[idx].assignedStat = e.target.value;
+            const newStat = e.target.value;
+            const oldStat = workingChar.rolledScores[idx].assignedStat;
+            const duplicatePool = workingChar.rolledScores.find((r, rIdx) => rIdx !== idx && r.assignedStat === newStat);
+            if (duplicatePool) {
+                duplicatePool.assignedStat = oldStat;
+            }
+            workingChar.rolledScores[idx].assignedStat = newStat;
             recomputeCandidates().then(() => renderStep2(ctx));
         });
     });
@@ -490,24 +506,46 @@ export function renderStep2(ctx) {
         });
     });
 
+    function ensureDistinctThree(p1Key, p2Key, p3Key) {
+        const used = new Set();
+        [p1Key, p2Key, p3Key].forEach((key) => {
+            if (used.has(workingChar[key])) {
+                const nextAvail = statList.find((s) => !used.has(s)) || 'str';
+                workingChar[key] = nextAvail;
+                used.add(nextAvail);
+            } else {
+                used.add(workingChar[key]);
+            }
+        });
+    }
+
     document.getElementById('pc-wiz-tashas-2')?.addEventListener('change', (e) => {
         workingChar.tashasPlus2 = e.target.value;
+        if (workingChar.tashasPlus1 === workingChar.tashasPlus2) {
+            workingChar.tashasPlus1 = statList.find((s) => s !== workingChar.tashasPlus2) || 'con';
+        }
         recomputeCandidates().then(() => renderStep2(ctx));
     });
     document.getElementById('pc-wiz-tashas-1')?.addEventListener('change', (e) => {
         workingChar.tashasPlus1 = e.target.value;
+        if (workingChar.tashasPlus2 === workingChar.tashasPlus1) {
+            workingChar.tashasPlus2 = statList.find((s) => s !== workingChar.tashasPlus1) || 'str';
+        }
         recomputeCandidates().then(() => renderStep2(ctx));
     });
     document.getElementById('pc-wiz-tashas-1-1')?.addEventListener('change', (e) => {
         workingChar.tashasPlus1_1 = e.target.value;
+        ensureDistinctThree('tashasPlus1_1', 'tashasPlus1_2', 'tashasPlus1_3');
         recomputeCandidates().then(() => renderStep2(ctx));
     });
     document.getElementById('pc-wiz-tashas-1-2')?.addEventListener('change', (e) => {
         workingChar.tashasPlus1_2 = e.target.value;
+        ensureDistinctThree('tashasPlus1_2', 'tashasPlus1_1', 'tashasPlus1_3');
         recomputeCandidates().then(() => renderStep2(ctx));
     });
     document.getElementById('pc-wiz-tashas-1-3')?.addEventListener('change', (e) => {
         workingChar.tashasPlus1_3 = e.target.value;
+        ensureDistinctThree('tashasPlus1_3', 'tashasPlus1_1', 'tashasPlus1_2');
         recomputeCandidates().then(() => renderStep2(ctx));
     });
 
@@ -520,22 +558,31 @@ export function renderStep2(ctx) {
 
     document.getElementById('pc-wiz-bgasi-2')?.addEventListener('change', (e) => {
         workingChar.bgAsiPlus2 = e.target.value;
+        if (workingChar.bgAsiPlus1 === workingChar.bgAsiPlus2) {
+            workingChar.bgAsiPlus1 = statList.find((s) => s !== workingChar.bgAsiPlus2) || 'con';
+        }
         recomputeCandidates().then(() => renderStep2(ctx));
     });
     document.getElementById('pc-wiz-bgasi-1')?.addEventListener('change', (e) => {
         workingChar.bgAsiPlus1 = e.target.value;
+        if (workingChar.bgAsiPlus2 === workingChar.bgAsiPlus1) {
+            workingChar.bgAsiPlus2 = statList.find((s) => s !== workingChar.bgAsiPlus1) || 'str';
+        }
         recomputeCandidates().then(() => renderStep2(ctx));
     });
     document.getElementById('pc-wiz-bgasi-1-1')?.addEventListener('change', (e) => {
         workingChar.bgAsiPlus1_1 = e.target.value;
+        ensureDistinctThree('bgAsiPlus1_1', 'bgAsiPlus1_2', 'bgAsiPlus1_3');
         recomputeCandidates().then(() => renderStep2(ctx));
     });
     document.getElementById('pc-wiz-bgasi-1-2')?.addEventListener('change', (e) => {
         workingChar.bgAsiPlus1_2 = e.target.value;
+        ensureDistinctThree('bgAsiPlus1_2', 'bgAsiPlus1_1', 'bgAsiPlus1_3');
         recomputeCandidates().then(() => renderStep2(ctx));
     });
     document.getElementById('pc-wiz-bgasi-1-3')?.addEventListener('change', (e) => {
         workingChar.bgAsiPlus1_3 = e.target.value;
+        ensureDistinctThree('bgAsiPlus1_3', 'bgAsiPlus1_1', 'bgAsiPlus1_2');
         recomputeCandidates().then(() => renderStep2(ctx));
     });
 

@@ -13,7 +13,10 @@ import {
 } from './vtt-canvas-camera.js';
 import {
     triggerPingAnimation as triggerPingAnimationExt,
-    processTokenAnimReqs as processTokenAnimReqsExt
+    processTokenAnimReqs as processTokenAnimReqsExt,
+    getTokenResizeHandles as getTokenResizeHandlesExt,
+    getTokenResizeHandleAt as getTokenResizeHandleAtExt,
+    applyTokenResize as applyTokenResizeExt
 } from './tokens/vtt-canvas-token-renderer.js';
 import {
     getDrawingBoundingBox as getDrawingBoundingBoxExt,
@@ -102,6 +105,7 @@ export function setupPointerInteraction(ctx = {}) {
     let drawingResizeOriginalBBox = null;
     let drawingDragStart = null;
     let activeResizeTokenId = null;
+    let activeResizeTokenHandle = null;
     let activeRotateTokenId = null;
     let resizeDragStartMouse = null;
     let resizeDragStartDims = null;
@@ -116,6 +120,7 @@ export function setupPointerInteraction(ctx = {}) {
     let wallsVersion = 0;
     let mapToolDragOriginalGeom = null;
     let hoveredResizeTokenId = null;
+    let hoveredResizeTokenHandle = null;
     let hoveredRotateTokenId = null;
     let hoveredRotatePortalId = null;
     let tokenInsidePortals = ctx.tokenInsidePortals || new Map();
@@ -243,6 +248,11 @@ export function setupPointerInteraction(ctx = {}) {
     const getLocalLightFacingFromWorldAngle = ctx.getLocalLightFacingFromWorldAngle || ((t, deg) => deg);
     const getTokenRotationHandlePos = ctx.getTokenRotationHandlePos || (() => null);
     const getTokenResizeHandlePos = ctx.getTokenResizeHandlePos || (() => null);
+    const getTokenResizeHandles =
+        ctx.getTokenResizeHandles || ((t) => getTokenResizeHandlesExt(t, getTokenDrawDimensions));
+    const getTokenResizeHandleAt =
+        ctx.getTokenResizeHandleAt || ((t, m, z) => getTokenResizeHandleAtExt(t, m, z, getTokenDrawDimensions));
+    const applyTokenResize = ctx.applyTokenResize || applyTokenResizeExt;
     const triggerPingAnimation = ctx.triggerPingAnimation || triggerPingAnimationExt;
     const processTokenAnimReqs = ctx.processTokenAnimReqs || processTokenAnimReqsExt;
     const getDrawingBoundingBox = ctx.getDrawingBoundingBox || getDrawingBoundingBoxExt;
@@ -493,6 +503,15 @@ export function setupPointerInteraction(ctx = {}) {
             if (e.button === 0 && e.shiftKey && ctx.activeTool === 'select') {
                 const token = getTokenAtPoint(mouse);
                 if (token) {
+                    const isGm = window.VTT?.role === 'GM';
+                    const canOpen = isGm || isTokenControlledByPlayer(token, true);
+                    if (!canOpen) {
+                        if (window.VTT?.chatEngine?.addSystemMessage) {
+                            window.VTT.chatEngine.addSystemMessage("You do not have permission to inspect this creature's stat block.");
+                        }
+                        return;
+                    }
+
                     let charRef = null;
                     if (token.characterId && window.VTT?.campaignState?.characters) {
                         charRef = window.VTT.campaignState.characters[token.characterId];
@@ -823,23 +842,19 @@ export function setupPointerInteraction(ctx = {}) {
                     }
 
                     let clickedResizeTokenId = null;
+                    let clickedResizeTokenHandle = null;
                     let clickedRotateTokenId = null;
                     if (e.button === 0) {
                         ctx.selectedTokenIds.forEach((id) => {
                             const t = ctx.tokens[id];
                             const tokenLayer = t?.layer || 'token';
                             if (t && isTokenControlledByPlayer(t) && tokenLayer === ctx.activeLayer) {
-                                if (t.isAsset) {
-                                    const rh = getTokenResizeHandlePos(t);
+                                const isResizable = t.isAsset || t.layer === 'map' || t.isBackground;
+                                if (isResizable) {
+                                    const rh = getTokenResizeHandleAt(t, mouse, ctx.zoom);
                                     if (rh) {
-                                        if (
-                                            mouse.x >= rh.x - 8 &&
-                                            mouse.x <= rh.x + 8 &&
-                                            mouse.y >= rh.y - 8 &&
-                                            mouse.y <= rh.y + 8
-                                        ) {
-                                            clickedResizeTokenId = id;
-                                        }
+                                        clickedResizeTokenId = id;
+                                        clickedResizeTokenHandle = rh;
                                     }
                                 }
                                 const h = getTokenRotationHandlePos(t);
@@ -853,12 +868,18 @@ export function setupPointerInteraction(ctx = {}) {
                         });
                     }
 
-                    if (clickedResizeTokenId) {
+                    if (clickedResizeTokenId && clickedResizeTokenHandle) {
                         activeResizeTokenId = clickedResizeTokenId;
+                        activeResizeTokenHandle = clickedResizeTokenHandle;
                         const token = ctx.tokens[clickedResizeTokenId];
                         const { drawW, drawH } = getTokenDrawDimensions(token);
                         resizeDragStartMouse = { x: mouse.x, y: mouse.y };
-                        resizeDragStartDims = { pixelWidth: drawW, pixelHeight: drawH };
+                        resizeDragStartDims = {
+                            x: token.x,
+                            y: token.y,
+                            pixelWidth: drawW,
+                            pixelHeight: drawH
+                        };
                         renderAll();
                         return;
                     }
@@ -1464,58 +1485,19 @@ export function setupPointerInteraction(ctx = {}) {
                     return;
                 }
 
-                if (activeResizeTokenId) {
+                if (activeResizeTokenId && activeResizeTokenHandle && resizeDragStartDims) {
                     const token = ctx.tokens[activeResizeTokenId];
-                    if (token && resizeDragStartDims) {
-                        const gridPx = (ctx.grid.size || 50) * (ctx.grid.scale || 1.0);
-                        let rawW = Math.max(20, mouse.x - token.x);
-                        let rawH = Math.max(20, mouse.y - token.y);
-
-                        // Shift key: preserve aspect ratio
-                        if (e.shiftKey && resizeDragStartDims.pixelWidth > 0 && resizeDragStartDims.pixelHeight > 0) {
-                            const aspect = resizeDragStartDims.pixelWidth / resizeDragStartDims.pixelHeight;
-                            if (rawW / rawH > aspect) {
-                                rawW = rawH * aspect;
-                            } else {
-                                rawH = rawW / aspect;
-                            }
-                        }
-
-                        let newPixelW, newPixelH;
-                        if (e.altKey) {
-                            // Alt key: free unsnapped pixel resize
-                            newPixelW = Math.round(rawW);
-                            newPixelH = Math.round(rawH);
-                        } else {
-                            // Default: ctx.grid-cell snapped resize
-                            let widthUnits = Math.max(1, Math.round(rawW / gridPx));
-                            let heightUnits = Math.max(1, Math.round(rawH / gridPx));
-                            newPixelW = widthUnits * gridPx;
-                            newPixelH = heightUnits * gridPx;
-                            if (
-                                e.shiftKey &&
-                                resizeDragStartDims.pixelWidth > 0 &&
-                                resizeDragStartDims.pixelHeight > 0
-                            ) {
-                                const aspect = resizeDragStartDims.pixelWidth / resizeDragStartDims.pixelHeight;
-                                if (widthUnits / heightUnits > aspect) {
-                                    newPixelW = Math.round(newPixelH * aspect);
-                                } else {
-                                    newPixelH = Math.round(newPixelW / aspect);
-                                }
-                            }
-                        }
-
-                        token.pixelWidth = newPixelW;
-                        token.pixelHeight = newPixelH;
-
-                        // Sync ctx.grid dimensions
-                        const customW = Math.max(1, Math.round((newPixelW / gridPx) * 100) / 100);
-                        const customH = Math.max(1, Math.round((newPixelH / gridPx) * 100) / 100);
-                        token.customWidth = customW;
-                        token.customHeight = customH;
-                        token.size = Math.max(customW, customH);
-
+                    if (token) {
+                        applyTokenResize(
+                            token,
+                            resizeDragStartDims,
+                            activeResizeTokenHandle,
+                            mouse,
+                            e,
+                            ctx.grid,
+                            snapToGrid,
+                            vtt.campaignState?.maps?.[ctx.currentMapId]
+                        );
                         renderAll();
                     }
                     return;
@@ -1547,23 +1529,19 @@ export function setupPointerInteraction(ctx = {}) {
                 }
 
                 let newHoveredResizeTokenId = null;
+                let newHoveredResizeTokenHandle = null;
                 let newHoveredRotateTokenId = null;
                 if (ctx.activeTool === 'select' && !ctx.dragTargetId && !activeRotateTokenId && !activeResizeTokenId) {
                     ctx.selectedTokenIds.forEach((id) => {
                         const token = ctx.tokens[id];
                         const tokenLayer = token?.layer || 'token';
                         if (token && isTokenControlledByPlayer(token) && tokenLayer === ctx.activeLayer) {
-                            if (token.isAsset) {
-                                const rh = getTokenResizeHandlePos(token);
+                            const isResizable = token.isAsset || token.layer === 'map' || token.isBackground;
+                            if (isResizable) {
+                                const rh = getTokenResizeHandleAt(token, mouse, ctx.zoom);
                                 if (rh) {
-                                    if (
-                                        mouse.x >= rh.x - 8 &&
-                                        mouse.x <= rh.x + 8 &&
-                                        mouse.y >= rh.y - 8 &&
-                                        mouse.y <= rh.y + 8
-                                    ) {
-                                        newHoveredResizeTokenId = id;
-                                    }
+                                    newHoveredResizeTokenId = id;
+                                    newHoveredResizeTokenHandle = rh;
                                 }
                             }
                             const h = getTokenRotationHandlePos(token);
@@ -1576,9 +1554,15 @@ export function setupPointerInteraction(ctx = {}) {
                         }
                     });
                 }
-                if (hoveredResizeTokenId !== newHoveredResizeTokenId) {
+                if (
+                    hoveredResizeTokenId !== newHoveredResizeTokenId ||
+                    hoveredResizeTokenHandle?.id !== newHoveredResizeTokenHandle?.id
+                ) {
                     hoveredResizeTokenId = newHoveredResizeTokenId;
-                    if (hoveredResizeTokenId) canvasInteraction.style.cursor = 'nwse-resize';
+                    hoveredResizeTokenHandle = newHoveredResizeTokenHandle;
+                    if (hoveredResizeTokenHandle) {
+                        canvasInteraction.style.cursor = hoveredResizeTokenHandle.cursor || 'nwse-resize';
+                    }
                     renderAll();
                 }
                 if (hoveredRotateTokenId !== newHoveredRotateTokenId) {
@@ -2278,10 +2262,27 @@ export function setupPointerInteraction(ctx = {}) {
             }
 
             if (activeResizeTokenId) {
+                const resizedToken = ctx.tokens[activeResizeTokenId];
                 activeResizeTokenId = null;
+                activeResizeTokenHandle = null;
                 resizeDragStartMouse = null;
                 resizeDragStartDims = null;
-                if (vtt.socket) window.emitTokenUpdates(ctx.tokens);
+                if (vtt.socket) {
+                    window.emitTokenUpdates(ctx.tokens);
+                    if (
+                        resizedToken &&
+                        (resizedToken.layer === 'map' || resizedToken.isBackground) &&
+                        ctx.currentMapId
+                    ) {
+                        vtt.socket.emit('map:edit', {
+                            mapId: ctx.currentMapId,
+                            updates: {
+                                gridWidth: resizedToken.customWidth,
+                                gridHeight: resizedToken.customHeight
+                            }
+                        });
+                    }
+                }
                 renderAll();
                 return;
             }
@@ -2816,6 +2817,10 @@ export function setupPointerInteraction(ctx = {}) {
             }
             tokenTooltipPendingId = null;
             hideGmTokenTooltip();
+            if (!activeResizeTokenId && !activeRotateTokenId) {
+                hoveredResizeTokenId = null;
+                hoveredResizeTokenHandle = null;
+            }
         });
     }
 

@@ -25,7 +25,7 @@ export function broadcastCampaignSync(campaignId) {
     for (const socketId of room) {
         const s = activeIo.sockets.sockets.get(socketId);
         if (s) {
-            s.emit('campaign:state-sync', getSanitizedCampaignSync(camp, s.role, s.username));
+            s.emit('campaign:state-sync', getSanitizedCampaignSync(camp, s.role, s.username, campaignId));
         }
     }
 }
@@ -43,7 +43,7 @@ function getPlayerMapOverride(camp, username) {
     return null;
 }
 
-function getSanitizedCampaignSync(camp, role, username) {
+function getSanitizedCampaignSync(camp, role, username, campaignId = null) {
     if (!camp) return null;
     const cloned = { ...camp };
     if (!cloned.mapOrder && cloned.maps) {
@@ -54,6 +54,21 @@ function getSanitizedCampaignSync(camp, role, username) {
     }
     if (cloned.playerMapOverrides) {
         cloned.playerMapOverrides = { ...camp.playerMapOverrides };
+    }
+
+    const campId = campaignId || camp.id;
+    if (role === 'GM' && activeIo && campId) {
+        const room = activeIo.sockets.adapter.rooms.get(campId);
+        const online = [];
+        if (room) {
+            for (const socketId of room) {
+                const s = activeIo.sockets.sockets.get(socketId);
+                if (s && s.role !== 'GM' && s.username) {
+                    online.push(s.username);
+                }
+            }
+        }
+        cloned.onlinePlayers = [...new Set(online)];
     }
 
     // Determine which map IDs need full data for this user
@@ -359,13 +374,13 @@ export function initSocketServer(io) {
                 finalRole === 'GM'
                     ? rawChat
                     : rawChat.filter((m) => {
-                          if (m.whisperToGM) return m.username === username;
-                          if (m.whisperTo) {
-                              const tLower = String(m.whisperTo).toLowerCase().trim();
-                              return m.username === username || (username && username.toLowerCase().trim() === tLower);
-                          }
-                          return true;
-                      });
+                        if (m.whisperToGM) return m.username === username;
+                        if (m.whisperTo) {
+                            const tLower = String(m.whisperTo).toLowerCase().trim();
+                            return m.username === username || (username && username.toLowerCase().trim() === tLower);
+                        }
+                        return true;
+                    });
 
             let gmSessionToken = null;
             if (finalRole === 'GM') {
@@ -377,7 +392,7 @@ export function initSocketServer(io) {
                 gmSessionToken,
                 role: finalRole,
                 userRole: finalRole,
-                campaignState: getSanitizedCampaignSync(campaigns[activeCampId], finalRole, username),
+                campaignState: getSanitizedCampaignSync(campaigns[activeCampId], finalRole, username, activeCampId),
                 chatHistory: sanitizedChat
             });
 
@@ -387,6 +402,7 @@ export function initSocketServer(io) {
                     text: `${username} has joined the game.`,
                     timestamp: Date.now()
                 });
+                broadcastCampaignSync(activeCampId);
             }
         });
 
@@ -492,7 +508,7 @@ export function initSocketServer(io) {
                 (socket.role === 'GM'
                     ? campaigns[campaignId].activeGMMapId || campaigns[campaignId].activeMapId
                     : getPlayerMapOverride(campaigns[campaignId], socket.username) ||
-                      campaigns[campaignId].activeMapId);
+                    campaigns[campaignId].activeMapId);
 
             // Handle single token format { token } gracefully
             if (data.token && data.token.id && !data.tokens) {
@@ -507,7 +523,7 @@ export function initSocketServer(io) {
                     (socket.role === 'GM'
                         ? campaigns[campaignId].activeGMMapId || campaigns[campaignId].activeMapId
                         : getPlayerMapOverride(campaigns[campaignId], socket.username) ||
-                          campaigns[campaignId].activeMapId);
+                        campaigns[campaignId].activeMapId);
 
                 let wasVisibleToPlayers = false;
                 let isVisibleToPlayers = false;
@@ -637,7 +653,7 @@ export function initSocketServer(io) {
                 (socket.role === 'GM'
                     ? campaigns[campaignId].activeGMMapId || campaigns[campaignId].activeMapId
                     : getPlayerMapOverride(campaigns[campaignId], socket.username) ||
-                      campaigns[campaignId].activeMapId);
+                    campaigns[campaignId].activeMapId);
             if (campaigns[campaignId].maps && campaigns[campaignId].maps[mapId]) {
                 const cloned = JSON.parse(JSON.stringify(data.token || {}));
                 if (!cloned.id) cloned.id = data.tokenId;
@@ -684,7 +700,7 @@ export function initSocketServer(io) {
                 (socket.role === 'GM'
                     ? campaigns[campaignId].activeGMMapId || campaigns[campaignId].activeMapId
                     : getPlayerMapOverride(campaigns[campaignId], socket.username) ||
-                      campaigns[campaignId].activeMapId);
+                    campaigns[campaignId].activeMapId);
             let wasVisibleToPlayers = false;
             let isVisibleToPlayers = false;
             let tokenSnapshot = null;
@@ -774,7 +790,7 @@ export function initSocketServer(io) {
                 (socket.role === 'GM'
                     ? campaigns[campaignId].activeGMMapId || campaigns[campaignId].activeMapId
                     : getPlayerMapOverride(campaigns[campaignId], socket.username) ||
-                      campaigns[campaignId].activeMapId);
+                    campaigns[campaignId].activeMapId);
             if (campaigns[campaignId].maps && campaigns[campaignId].maps[mapId]) {
                 const existingToken = campaigns[campaignId].maps[mapId].tokens[data.tokenId];
                 if (!existingToken) return;
@@ -871,9 +887,10 @@ export function initSocketServer(io) {
                     currentOrder.push(mapId);
                 }
                 camp.mapOrder = currentOrder;
-                if (folder !== undefined) {
-                    camp.maps[mapId].folder = folder;
-                }
+            }
+
+            if (mapId && camp.maps[mapId] && folder !== undefined) {
+                camp.maps[mapId].folder = folder;
             }
 
             saveCampaigns();
@@ -885,14 +902,43 @@ export function initSocketServer(io) {
             const { campaignId } = socket;
             if (!campaignId || !campaigns[campaignId] || socket.role !== 'GM') return;
             const folderName = (data?.folder || '').trim();
-            if (!folderName) return;
+            if (!folderName || folderName === '__ALL__' || folderName === '__UNCATEGORIZED__') return;
             const camp = campaigns[campaignId];
             if (!camp.mapFolders) camp.mapFolders = [];
             if (!camp.mapFolders.includes(folderName)) {
                 camp.mapFolders.push(folderName);
+                camp.mapFolders.sort();
                 saveCampaigns();
                 broadcastCampaignSync(campaignId);
             }
+        });
+
+        // Rename a map folder (GM only)
+        socket.on('map:folder-rename', (data) => {
+            const { campaignId } = socket;
+            if (!campaignId || !campaigns[campaignId] || socket.role !== 'GM') return;
+            const oldFolder = (data?.oldFolder || '').trim();
+            const newFolder = (data?.newFolder || '').trim();
+            if (!oldFolder || !newFolder || oldFolder === newFolder) return;
+            if (newFolder === '__ALL__' || newFolder === '__UNCATEGORIZED__') return;
+
+            const camp = campaigns[campaignId];
+            if (camp.mapFolders) {
+                const idx = camp.mapFolders.indexOf(oldFolder);
+                if (idx !== -1) {
+                    camp.mapFolders[idx] = newFolder;
+                    camp.mapFolders.sort();
+                }
+            }
+            if (camp.maps) {
+                Object.values(camp.maps).forEach((m) => {
+                    if (m.folder === oldFolder) {
+                        m.folder = newFolder;
+                    }
+                });
+            }
+            saveCampaigns();
+            broadcastCampaignSync(campaignId);
         });
 
         // Delete a map folder (GM only)
@@ -900,14 +946,37 @@ export function initSocketServer(io) {
             const { campaignId } = socket;
             if (!campaignId || !campaigns[campaignId] || socket.role !== 'GM') return;
             const folderName = (data?.folder || '').trim();
+            const mode = data?.mode || 'uncategorize'; // 'uncategorize' or 'cascade'
             const camp = campaigns[campaignId];
             if (camp.mapFolders) {
                 camp.mapFolders = camp.mapFolders.filter((f) => f !== folderName);
             }
             if (camp.maps) {
-                Object.values(camp.maps).forEach((m) => {
-                    if (m.folder === folderName) m.folder = '';
-                });
+                if (mode === 'cascade') {
+                    const mapsInFolder = Object.values(camp.maps).filter((m) => m.folder === folderName);
+                    const remainingMapCount = Object.keys(camp.maps).length - mapsInFolder.length;
+                    if (remainingMapCount < 1) {
+                        socket.emit('error', 'Cannot delete folder and all maps: a campaign must retain at least one map.');
+                        return;
+                    }
+                    mapsInFolder.forEach((m) => {
+                        const mId = m.id;
+                        delete camp.maps[mId];
+                        if (camp.mapOrder) {
+                            camp.mapOrder = camp.mapOrder.filter((id) => id !== mId);
+                        }
+                        if (camp.playerMapOverrides) {
+                            Object.keys(camp.playerMapOverrides).forEach((u) => {
+                                if (camp.playerMapOverrides[u] === mId) delete camp.playerMapOverrides[u];
+                            });
+                        }
+                        if (camp.activeGMMapId === mId) camp.activeGMMapId = camp.activeMapId;
+                    });
+                } else {
+                    Object.values(camp.maps).forEach((m) => {
+                        if (m.folder === folderName) m.folder = '';
+                    });
+                }
             }
             saveCampaigns();
             broadcastCampaignSync(campaignId);
@@ -1680,6 +1749,57 @@ export function initSocketServer(io) {
             broadcastCampaignSync(campaignId);
         });
 
+        // Bulk create multiple maps in a single transaction without switching GM active map (GM only)
+        socket.on('map:bulk-create', (data) => {
+            const { campaignId } = socket;
+            if (!campaignId || !campaigns[campaignId] || socket.role !== 'GM') return;
+            const mapList = Array.isArray(data?.maps) ? data.maps : [];
+            if (mapList.length === 0) return;
+
+            const camp = campaigns[campaignId];
+            if (!camp.maps) camp.maps = {};
+            if (!camp.mapOrder) camp.mapOrder = Object.keys(camp.maps);
+
+            const targetFolder = (data?.targetFolder || '').trim();
+            if (targetFolder && targetFolder !== '__ALL__' && targetFolder !== '__UNCATEGORIZED__') {
+                if (!camp.mapFolders) camp.mapFolders = [];
+                if (!camp.mapFolders.includes(targetFolder)) {
+                    camp.mapFolders.push(targetFolder);
+                    camp.mapFolders.sort();
+                }
+            }
+
+            mapList.forEach((m, idx) => {
+                const mapId = `map_${campaignId}_${Date.now()}_${idx}_${Math.random().toString(36).substr(2, 5)}`;
+                const newMap = {
+                    id: mapId,
+                    name: m.name || `Imported Map ${idx + 1}`,
+                    folder: (m.folder || targetFolder || '').trim(),
+                    mapImage: m.mapImage || '',
+                    thumbnail: m.thumbnail || m.mapImage || '',
+                    gridWidth: m.gridWidth,
+                    gridHeight: m.gridHeight,
+                    grid: m.grid || { size: 50, offsetX: 0, offsetY: 0, scale: 1, feetPerSquare: 5, type: 'square' },
+                    tokens: m.tokens || {},
+                    walls: m.walls || [],
+                    notes: m.notes || [],
+                    lights: m.lights || [],
+                    shapes: m.shapes || {},
+                    drawings: m.drawings || {},
+                    traps: m.traps || [],
+                    portals: m.portals || []
+                };
+                camp.maps[mapId] = newMap;
+                if (!camp.mapOrder.includes(mapId)) {
+                    camp.mapOrder.push(mapId);
+                }
+            });
+
+            saveCampaigns();
+            console.log(`[map:bulk-create] SUCCESS: created ${mapList.length} maps in room ${campaignId}`);
+            broadcastCampaignSync(campaignId);
+        });
+
         // Duplicate an existing map (GM only)
         socket.on('map:duplicate', (data) => {
             const { campaignId } = socket;
@@ -1703,6 +1823,27 @@ export function initSocketServer(io) {
                     remappedTokens[newTId] = { ...tVal, id: newTId };
                 }
                 cloned.tokens = remappedTokens;
+            }
+
+            // Remap portals, traps, lights IDs and unlink cross-map portal links
+            if (Array.isArray(cloned.portals)) {
+                cloned.portals = cloned.portals.map((p) => ({
+                    ...p,
+                    id: `portal_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`,
+                    targetPortalId: null
+                }));
+            }
+            if (Array.isArray(cloned.traps)) {
+                cloned.traps = cloned.traps.map((tr) => ({
+                    ...tr,
+                    id: `trap_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`
+                }));
+            }
+            if (Array.isArray(cloned.lights)) {
+                cloned.lights = cloned.lights.map((l) => ({
+                    ...l,
+                    id: `light_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`
+                }));
             }
 
             campaigns[campaignId].maps[newMapId] = cloned;
@@ -1747,10 +1888,32 @@ export function initSocketServer(io) {
             const { mapId } = data || {};
             const camp = campaigns[campaignId];
             if (camp.maps && camp.maps[mapId]) {
-                // Strictly block deletion if map is active party map or viewed via player override
-                const isPartyActive = camp.activeMapId === mapId;
-                const hasPlayerOverride = Object.values(camp.playerMapOverrides || {}).includes(mapId);
-                if (isPartyActive || hasPlayerOverride) {
+                // Safeguard 1: Disallow deleting the only remaining map
+                if (Object.keys(camp.maps).length <= 1) {
+                    socket.emit(
+                        'error',
+                        'Cannot delete the only map in the campaign. A campaign must retain at least one map.'
+                    );
+                    return;
+                }
+
+                // Safeguard 2: Check active connected player sockets in this campaign room
+                const room = io.sockets.adapter.rooms.get(campaignId);
+                let activeConnectedViewing = false;
+                if (room) {
+                    for (const sId of room) {
+                        const s = io.sockets.sockets.get(sId);
+                        if (s && s.role !== 'GM') {
+                            const effectivePlayerMap = getPlayerMapOverride(camp, s.username) || camp.activeMapId;
+                            if (effectivePlayerMap === mapId) {
+                                activeConnectedViewing = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                if (activeConnectedViewing || (camp.activeMapId === mapId && room && room.size > 1)) {
                     socket.emit(
                         'error',
                         'Cannot delete map while players are actively viewing it. Move players to another map first.'
@@ -1758,9 +1921,22 @@ export function initSocketServer(io) {
                     return;
                 }
 
+                // Auto-prune offline player overrides that were mapped to this map
+                if (camp.playerMapOverrides) {
+                    for (const [user, targetId] of Object.entries(camp.playerMapOverrides)) {
+                        if (targetId === mapId) {
+                            delete camp.playerMapOverrides[user];
+                        }
+                    }
+                }
+
                 delete camp.maps[mapId];
                 if (camp.mapOrder) {
                     camp.mapOrder = camp.mapOrder.filter((id) => id !== mapId);
+                }
+                const remainingMapIds = Object.keys(camp.maps);
+                if (camp.activeMapId === mapId) {
+                    camp.activeMapId = remainingMapIds[0];
                 }
                 if (camp.activeGMMapId === mapId) {
                     camp.activeGMMapId = camp.activeMapId;
@@ -1784,7 +1960,7 @@ export function initSocketServer(io) {
                 saveCampaigns();
             }
 
-            socket.emit('campaign:state-sync', getSanitizedCampaignSync(camp, socket.role, socket.username));
+            socket.emit('campaign:state-sync', getSanitizedCampaignSync(camp, socket.role, socket.username, campaignId));
         };
         socket.on('map:switch-gm', handleMapSwitchGm);
         socket.on('map:switch', handleMapSwitchGm); // Backwards-compatibility alias
@@ -1829,7 +2005,7 @@ export function initSocketServer(io) {
             if (data.activeGMMapId && camp.maps && camp.maps[data.activeGMMapId]) {
                 camp.activeGMMapId = data.activeGMMapId;
                 saveCampaigns();
-                socket.emit('campaign:state-sync', getSanitizedCampaignSync(camp, socket.role, socket.username));
+                socket.emit('campaign:state-sync', getSanitizedCampaignSync(camp, socket.role, socket.username, campaignId));
             }
         });
 
@@ -1887,7 +2063,7 @@ export function initSocketServer(io) {
                 (socket.role === 'GM'
                     ? campaigns[campaignId].activeGMMapId || campaigns[campaignId].activeMapId
                     : getPlayerMapOverride(campaigns[campaignId], socket.username) ||
-                      campaigns[campaignId].activeMapId);
+                    campaigns[campaignId].activeMapId);
             if (campaigns[campaignId].maps && campaigns[campaignId].maps[targetMapId]) {
                 socket.emit('map:full_data', { mapId: targetMapId, map: campaigns[campaignId].maps[targetMapId] });
             }
@@ -1902,7 +2078,7 @@ export function initSocketServer(io) {
                 (socket.role === 'GM'
                     ? campaigns[campaignId].activeGMMapId || campaigns[campaignId].activeMapId
                     : getPlayerMapOverride(campaigns[campaignId], socket.username) ||
-                      campaigns[campaignId].activeMapId);
+                    campaigns[campaignId].activeMapId);
 
             let token = campaigns[campaignId].maps?.[targetMapId]?.tokens?.[data.tokenId];
             if (!token && campaigns[campaignId].maps) {
@@ -1964,11 +2140,11 @@ export function initSocketServer(io) {
                     saveAbility: stripTags(cleanMacro.saveAbility),
                     dmgRolls: Array.isArray(cleanMacro.dmgRolls)
                         ? cleanMacro.dmgRolls.map((dr) => ({
-                              ...dr,
-                              type: stripTags(dr.type),
-                              label: stripTags(dr.label),
-                              formula: stripTags(dr.formula)
-                          }))
+                            ...dr,
+                            type: stripTags(dr.type),
+                            label: stripTags(dr.label),
+                            formula: stripTags(dr.formula)
+                        }))
                         : cleanMacro.dmgRolls
                 };
             }
@@ -2060,6 +2236,26 @@ export function initSocketServer(io) {
                     }
                     saveChat();
                     io.to(campaignId).emit('chat:mass_attack_resolved', data);
+                }
+            }
+        });
+
+        // Resolve macro card in chat (GM only)
+        socket.on('chat:macro_resolved', (data) => {
+            const { campaignId } = socket;
+            if (!campaignId || socket.role !== 'GM' || !data || !data.id) return;
+            if (chatLogs[campaignId]) {
+                const msg = chatLogs[campaignId].find((m) => m.id === data.id);
+                if (msg && msg.macroCard) {
+                    msg.macroCard.resolved = data.resolution || true;
+                    if (data.results) {
+                        msg.macroCard.results = data.results;
+                    }
+                    if (data.summary) {
+                        msg.macroCard.summary = data.summary;
+                    }
+                    saveChat();
+                    io.to(campaignId).emit('chat:macro_resolved', data);
                 }
             }
         });
@@ -2193,6 +2389,7 @@ export function initSocketServer(io) {
                     text: `${socket.username} has left the game.`,
                     timestamp: Date.now()
                 });
+                broadcastCampaignSync(socket.campaignId);
             }
         });
     });

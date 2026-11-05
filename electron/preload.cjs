@@ -1,6 +1,15 @@
-const { contextBridge, ipcRenderer } = require('electron');
+const { contextBridge, ipcRenderer, webUtils } = require('electron');
 
 contextBridge.exposeInMainWorld('electronAPI', {
+  getPathForFile: (file) => {
+    if (!file) return '';
+    try {
+      if (webUtils && typeof webUtils.getPathForFile === 'function') {
+        return webUtils.getPathForFile(file);
+      }
+    } catch (_) { }
+    return file.path || '';
+  },
   getStatus: () => ipcRenderer.invoke('get-status'),
   getLogs: () => ipcRenderer.invoke('get-logs'),
   startServer: () => ipcRenderer.invoke('start-server'),
@@ -29,6 +38,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   gmImportCampaign: (filePath) => ipcRenderer.invoke('gm-import-campaign', filePath),
   gmExportGranular: (params) => ipcRenderer.invoke('gm-export-granular', params),
   gmImportGranular: (params) => ipcRenderer.invoke('gm-import-granular', params),
+  gmDeleteEntity: (params) => ipcRenderer.invoke('gm-delete-entity', params),
 
   // Database Sources & Homebrew Management
   sourcesGetAll: (campaignId) => ipcRenderer.invoke('sources-get-all', campaignId),

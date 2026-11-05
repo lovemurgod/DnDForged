@@ -131,8 +131,11 @@ campaignsRouter.post('/campaigns/:id/duplicate', verifyGmOrSecret, (req, res) =>
     const newName = `${safeName} (Copy)`;
     const newId = safeName.toLowerCase().replace(/[^a-z0-9]/gi, '_') + '_copy_' + Date.now();
 
-    // Deep clone campaign object
-    const cloned = JSON.parse(JSON.stringify(origCamp));
+    // Deep clone campaign object and migrate internal asset paths to new ID
+    let clonedStr = JSON.stringify(origCamp);
+    const oldPathRegex = new RegExp(`(/assets/campaigns/|assets/campaigns/)${origId}([/\\\\])`, 'g');
+    clonedStr = clonedStr.replace(oldPathRegex, `$1${newId}$2`);
+    const cloned = JSON.parse(clonedStr);
     cloned.id = newId;
     cloned.name = newName;
     cloned.initiative = {
@@ -176,10 +179,18 @@ campaignsRouter.post('/campaigns/import', verifyGmOrSecret, (req, res) => {
         campId = (campaign.name || 'imported').toLowerCase().replace(/[^a-z0-9]/gi, '_') + '_' + Date.now();
     }
 
+    let campDataToImport = campaign;
+    if (campaign.id && campId !== campaign.id) {
+        let campStr = JSON.stringify(campaign);
+        const oldPathRegex = new RegExp(`(/assets/campaigns/|assets/campaigns/)${campaign.id}([/\\\\])`, 'g');
+        campStr = campStr.replace(oldPathRegex, `$1${campId}$2`);
+        campDataToImport = JSON.parse(campStr);
+    }
+
     const targetGm = (req.body.gmUsername || req.body.username || '').trim();
     const importedCamp = {
         ...createCampaignTemplate(campId, campaign.name || 'Imported Campaign'),
-        ...campaign,
+        ...campDataToImport,
         id: campId
     };
 
@@ -211,8 +222,15 @@ campaignsRouter.post('/campaigns/:id/import-entity', verifyGmOrSecret, (req, res
 
     const importedIds = [];
 
-    for (const item of items) {
+    for (let item of items) {
         if (!item) continue;
+        let itemStr = JSON.stringify(item);
+        itemStr = itemStr.replace(
+            /(?:\/assets\/campaigns\/|assets\/campaigns\/)[^/\\\s"']+(?=[/\\\\]uploads[/\\\\])/g,
+            `/assets/campaigns/${campId}`
+        );
+        item = JSON.parse(itemStr);
+
         if (entityType === 'map' || item.grid || item.tokens !== undefined) {
             // It's a map
             let mapId = item.id;
@@ -243,6 +261,48 @@ campaignsRouter.post('/campaigns/:id/import-entity', verifyGmOrSecret, (req, res
     saveCampaigns();
     notifyCampaignSync(campId);
     res.json({ success: true, count: importedIds.length, importedIds, campaign });
+});
+
+// Delete granular entity (map or character) from a campaign
+campaignsRouter.delete('/campaigns/:id/entities/:entityId', verifyGmOrSecret, (req, res) => {
+    const campId = req.params.id;
+    const entityId = req.params.entityId;
+    const campaign = campaigns[campId];
+    if (!campaign) return res.status(404).json({ error: 'Campaign not found' });
+
+    let deleted = false;
+    let entityType = null;
+
+    if (campaign.maps && campaign.maps[entityId]) {
+        const mapKeys = Object.keys(campaign.maps);
+        if (mapKeys.length <= 1) {
+            return res.status(400).json({ error: 'Cannot delete the only map in the campaign.' });
+        }
+        delete campaign.maps[entityId];
+        if (Array.isArray(campaign.mapOrder)) {
+            campaign.mapOrder = campaign.mapOrder.filter((id) => id !== entityId);
+        }
+        if (campaign.activeMapId === entityId) {
+            campaign.activeMapId = (campaign.mapOrder && campaign.mapOrder[0]) || Object.keys(campaign.maps)[0];
+        }
+        if (campaign.activeGMMapId === entityId) {
+            campaign.activeGMMapId = campaign.activeMapId;
+        }
+        deleted = true;
+        entityType = 'map';
+    } else if (campaign.characters && campaign.characters[entityId]) {
+        delete campaign.characters[entityId];
+        deleted = true;
+        entityType = 'character';
+    }
+
+    if (!deleted) {
+        return res.status(404).json({ error: 'Entity not found in campaign' });
+    }
+
+    saveCampaigns();
+    notifyCampaignSync(campId);
+    res.json({ success: true, deletedId: entityId, entityType });
 });
 
 // Chat log endpoint (/api/chat when mounted under /api - GM or internal secret only)
