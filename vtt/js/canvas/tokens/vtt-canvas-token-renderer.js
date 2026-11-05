@@ -1072,21 +1072,23 @@ export function renderTokensLayer(context = {}) {
                     ctxInteraction.lineTo(handleInfo.x, handleInfo.y);
                     ctxInteraction.stroke();
 
-                    // Handle circle
+                    // Handle circle & icon scaled appropriately with zoom factor
+                    const zoomFactor = context.zoom || 1;
+                    const handleRadius = Math.max(3.5, 7 / zoomFactor);
                     const isHovered = hoveredRotateTokenId === token.id || activeRotateTokenId === token.id;
                     ctxInteraction.beginPath();
-                    ctxInteraction.arc(handleInfo.x, handleInfo.y, 7, 0, Math.PI * 2);
+                    ctxInteraction.arc(handleInfo.x, handleInfo.y, handleRadius, 0, Math.PI * 2);
                     ctxInteraction.fillStyle = isHovered ? '#ffe875' : '#ffffff';
                     ctxInteraction.fill();
                     ctxInteraction.strokeStyle = 'var(--color-gold-base)';
-                    ctxInteraction.lineWidth = 2;
+                    ctxInteraction.lineWidth = Math.max(1, 2 / zoomFactor);
                     ctxInteraction.stroke();
 
                     // Rotation arrow icon
                     ctxInteraction.beginPath();
-                    ctxInteraction.arc(handleInfo.x, handleInfo.y, 3.5, -Math.PI * 0.7, Math.PI * 0.7);
+                    ctxInteraction.arc(handleInfo.x, handleInfo.y, handleRadius * 0.5, -Math.PI * 0.7, Math.PI * 0.7);
                     ctxInteraction.strokeStyle = '#222222';
-                    ctxInteraction.lineWidth = 1.5;
+                    ctxInteraction.lineWidth = Math.max(1, 1.5 / zoomFactor);
                     ctxInteraction.stroke();
 
                     ctxInteraction.restore();
@@ -1783,9 +1785,21 @@ export function renderActiveDamageFXPass(ctxInteraction, fxList = null, renderDa
     });
 }
 
-export function cleanupOrphanedTokenOverlays(tokens = {}) {
+let lastKnownTokenCount = -1;
+let orphanCheckCounter = 0;
+
+export function cleanupOrphanedTokenOverlays(tokens = {}, force = false) {
     // Cleanup orphaned token overlays across both overlay containers (main and under-grid map layer)
-    const validTokenIds = new Set(Object.keys(tokens));
+    const keys = Object.keys(tokens);
+    const count = keys.length;
+    orphanCheckCounter++;
+    // Fast path: avoid expensive DOM querySelectorAll queries on every frame if token set size hasn't changed
+    if (!force && count === lastKnownTokenCount && orphanCheckCounter % 60 !== 0) {
+        return;
+    }
+    lastKnownTokenCount = count;
+
+    const validTokenIds = new Set(keys);
     const overlayContainers = [
         document.getElementById('vtt-html-overlays'),
         document.getElementById('vtt-map-html-overlays')
@@ -1798,6 +1812,9 @@ export function cleanupOrphanedTokenOverlays(tokens = {}) {
             else if (node.id.startsWith('token_ui_')) tokenId = node.id.substring(9);
             if (tokenId && !validTokenIds.has(tokenId)) {
                 cleanupMediaElement(node);
+                try {
+                    node.remove();
+                } catch (e) {}
             }
         });
     });
@@ -2441,9 +2458,11 @@ function animateTokens() {
         }
 
         const elapsed = now - anim.startTime;
-        const progress = Math.min(elapsed / anim.duration, 1);
+        const duration = Number.isFinite(anim.duration) && anim.duration > 0 ? anim.duration : 300;
+        const rawProgress = elapsed / duration;
+        const progress = Number.isFinite(rawProgress) ? Math.min(Math.max(0, rawProgress), 1) : 1;
 
-        if (anim.totalDist === 0) {
+        if (anim.totalDist === 0 || progress >= 1) {
             anim.currentPos = { x: anim.endX, y: anim.endY };
             delete tokenAnimations[id];
             continue;
@@ -2467,13 +2486,7 @@ function animateTokens() {
         }
 
         anim.currentPos = currentPos;
-
-        if (progress >= 1) {
-            anim.currentPos = { x: anim.endX, y: anim.endY };
-            delete tokenAnimations[id];
-        } else {
-            hasActive = true;
-        }
+        hasActive = true;
     }
 
     if (hasActive) {

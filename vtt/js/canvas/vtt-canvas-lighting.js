@@ -339,6 +339,7 @@ export function setupLightingPanelControls(state = {}, callbacks = {}) {
         'light-intensity',
         'light-color2'
     ];
+    let lightUpdateDebounceTimer = null;
     lightPropInputs.forEach((id) => {
         const el = document.getElementById(id);
         if (el) {
@@ -355,7 +356,13 @@ export function setupLightingPanelControls(state = {}, callbacks = {}) {
                         l.animationSpeed = parseFloat(document.getElementById('light-speed')?.value) || 1.0;
                         l.animationIntensity = parseFloat(document.getElementById('light-intensity')?.value) || 0.1;
                         l.animationColor2 = document.getElementById('light-color2')?.value || '#ffe082';
-                        if (socket) socket.emit('lights:update', { mapId: currentMapId, lights });
+                        
+                        if (socket) {
+                            if (lightUpdateDebounceTimer) clearTimeout(lightUpdateDebounceTimer);
+                            lightUpdateDebounceTimer = setTimeout(() => {
+                                socket.emit('lights:update', { mapId: currentMapId, lights });
+                            }, 80);
+                        }
                         if (renderAll) renderAll();
                     }
                 }

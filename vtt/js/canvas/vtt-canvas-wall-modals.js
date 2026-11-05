@@ -27,14 +27,24 @@ export function createWallSettingsModalContainer(clientX, clientY, width = 280) 
 }
 
 export function setupModalOutsideClick(popup) {
+    let active = true;
     const closeOnOutside = (e) => {
+        if (!active) return;
         if (!popup.contains(e.target)) {
-            popup.remove();
+            active = false;
             window.removeEventListener('mousedown', closeOnOutside);
+            popup.remove();
         }
     };
+    popup._cleanupOutsideClick = () => {
+        if (!active) return;
+        active = false;
+        window.removeEventListener('mousedown', closeOnOutside);
+    };
     setTimeout(() => {
-        window.addEventListener('mousedown', closeOnOutside);
+        if (active && document.body.contains(popup)) {
+            window.addEventListener('mousedown', closeOnOutside);
+        }
     }, 120);
 }
 
@@ -102,7 +112,10 @@ export function showDoorSettingsModal(wallIdx, clientX, clientY, ctx) {
     document.body.appendChild(popup);
     setupModalOutsideClick(popup);
 
-    popup.querySelector('.modal-close-btn').onclick = () => popup.remove();
+    popup.querySelector('.modal-close-btn').onclick = () => {
+        popup._cleanupOutsideClick?.();
+        popup.remove();
+    };
 
     popup.querySelector('#modal-door-locked').onchange = (e) => {
         wall.isLocked = e.target.checked;
@@ -137,18 +150,21 @@ export function showDoorSettingsModal(wallIdx, clientX, clientY, ctx) {
     popup.querySelector('#modal-convert-to-wall').onclick = () => {
         wall.type = 'wall';
         onWallsUpdated();
+        popup._cleanupOutsideClick?.();
         popup.remove();
     };
 
     popup.querySelector('#modal-convert-to-window').onclick = () => {
         wall.type = 'window';
         onWallsUpdated();
+        popup._cleanupOutsideClick?.();
         popup.remove();
     };
 
     popup.querySelector('#modal-door-delete').onclick = () => {
         walls.splice(wallIdx, 1);
         if (typeof onWallDeleted === 'function') onWallDeleted(wallIdx);
+        popup._cleanupOutsideClick?.();
         popup.remove();
     };
 }
@@ -225,7 +241,10 @@ export function showWindowSettingsModal(wallIdx, clientX, clientY, ctx) {
     document.body.appendChild(popup);
     setupModalOutsideClick(popup);
 
-    popup.querySelector('.modal-close-btn').onclick = () => popup.remove();
+    popup.querySelector('.modal-close-btn').onclick = () => {
+        popup._cleanupOutsideClick?.();
+        popup.remove();
+    };
 
     popup.querySelector('#modal-window-locked').onchange = (e) => {
         wall.isLocked = e.target.checked;
@@ -269,18 +288,21 @@ export function showWindowSettingsModal(wallIdx, clientX, clientY, ctx) {
     popup.querySelector('#modal-convert-to-wall').onclick = () => {
         wall.type = 'wall';
         onWallsUpdated();
+        popup._cleanupOutsideClick?.();
         popup.remove();
     };
 
     popup.querySelector('#modal-convert-to-door').onclick = () => {
         wall.type = 'door';
         onWallsUpdated();
+        popup._cleanupOutsideClick?.();
         popup.remove();
     };
 
     popup.querySelector('#modal-window-delete').onclick = () => {
         walls.splice(wallIdx, 1);
         if (typeof onWallDeleted === 'function') onWallDeleted(wallIdx);
+        popup._cleanupOutsideClick?.();
         popup.remove();
     };
 }
@@ -341,7 +363,10 @@ export function showWallSettingsModal(wallIdx, clientX, clientY, ctx) {
     document.body.appendChild(popup);
     setupModalOutsideClick(popup);
 
-    popup.querySelector('.modal-close-btn').onclick = () => popup.remove();
+    popup.querySelector('.modal-close-btn').onclick = () => {
+        popup._cleanupOutsideClick?.();
+        popup.remove();
+    };
 
     const dirModeSelect = popup.querySelector('#modal-wall-direction-mode');
     const onewayControls = popup.querySelector('#modal-wall-oneway-controls');
@@ -365,18 +390,21 @@ export function showWallSettingsModal(wallIdx, clientX, clientY, ctx) {
     popup.querySelector('#modal-convert-to-door').onclick = () => {
         wall.type = 'door';
         onWallsUpdated();
+        popup._cleanupOutsideClick?.();
         popup.remove();
     };
 
     popup.querySelector('#modal-convert-to-window').onclick = () => {
         wall.type = 'window';
         onWallsUpdated();
+        popup._cleanupOutsideClick?.();
         popup.remove();
     };
 
     popup.querySelector('#modal-wall-delete').onclick = () => {
         walls.splice(wallIdx, 1);
         if (typeof onWallDeleted === 'function') onWallDeleted(wallIdx);
+        popup._cleanupOutsideClick?.();
         popup.remove();
     };
 }

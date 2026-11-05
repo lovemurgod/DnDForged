@@ -548,11 +548,11 @@ assert.strictEqual(
     'global-search-results-panel must exist in index.html'
 );
 assert.strictEqual(
-    indexHtmlContent.includes('ForgeDVTT Desktop v1.4.0'),
+    indexHtmlContent.includes('ForgeDVTT Desktop v1.4.1'),
     true,
-    'Dashboard footer must display updated v1.4.0'
+    'Dashboard footer must display updated v1.4.1'
 );
-console.log('  ✓ HTML tag nesting, search results container, and v1.4.0 footer verified.');
+console.log('  ✓ HTML tag nesting, search results container, and v1.4.1 footer verified.');
 
 // 2. Verify GM password removal clears hash and salt
 function simulateSetGmCredentials(appConfig, { username, password, clearPassword }) {

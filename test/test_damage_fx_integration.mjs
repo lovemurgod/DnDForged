@@ -15,7 +15,6 @@ import {
 test('Damage FX Integration: Queue fallback and mass action wiring', async (t) => {
     await t.test('renderActiveDamageFXPass draws queued effects even when passed null, undefined, or empty array', () => {
         let burstCalled = false;
-        let floatingTextCalled = false;
 
         const mockCtx = {
             save: () => { },
@@ -24,8 +23,8 @@ test('Damage FX Integration: Queue fallback and mass action wiring', async (t) =
             arc: () => { },
             fill: () => { },
             stroke: () => { },
-            strokeText: () => { floatingTextCalled = true; },
-            fillText: () => { floatingTextCalled = true; },
+            strokeText: () => { },
+            fillText: () => { },
             createRadialGradient: () => ({ addColorStop: () => { } }),
             font: '',
             textAlign: '',

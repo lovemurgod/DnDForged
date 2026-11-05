@@ -1392,6 +1392,51 @@
     box-shadow: 0 4px 12px rgba(239, 68, 68, 0.45);
 }
 
+.trap-card-actions-row {
+    display: flex;
+    gap: 6px;
+    margin-top: 8px;
+    width: 100%;
+}
+.trap-btn-action {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(30, 41, 59, 0.85);
+    color: #f1f5f9;
+    transition: all 0.15s ease;
+}
+.trap-btn-action:hover {
+    filter: brightness(1.2);
+    transform: translateY(-1px);
+}
+.trap-btn-action:active {
+    transform: translateY(1px);
+}
+.trap-btn-process {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.4) 0%, rgba(37, 99, 235, 0.5) 100%);
+    border-color: rgba(96, 165, 250, 0.6);
+    color: #93c5fd;
+}
+.trap-btn-full {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.4) 0%, rgba(185, 28, 28, 0.5) 100%);
+    border-color: rgba(248, 113, 113, 0.6);
+    color: #fca5a5;
+}
+.trap-btn-half {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.4) 0%, rgba(217, 119, 6, 0.5) 100%);
+    border-color: rgba(251, 191, 36, 0.6);
+    color: #fde68a;
+}
+
 /* ═══════════════════════════════════════════════════════════════════════════ */
 
 /* Fix for Chat Icons */

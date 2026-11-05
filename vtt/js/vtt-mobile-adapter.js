@@ -1823,6 +1823,7 @@ export function initVttMobileAdapter(vtt) {
         const trapDcMinus = document.getElementById('btn-mobile-trap-dc-minus');
         const trapDcPlus = document.getElementById('btn-mobile-trap-dc-plus');
         const trapDamageInput = document.getElementById('mobile-trap-damage-input');
+        const trapDamageTypeSelect = document.getElementById('mobile-trap-damage-type-select');
         const trapAutoCheck = document.getElementById('mobile-trap-auto-check');
         const trapRepeatCheck = document.getElementById('mobile-trap-repeat-check');
         const damageChips = sheet.querySelectorAll('.mobile-chip-btn');
@@ -1839,6 +1840,7 @@ export function initVttMobileAdapter(vtt) {
         const desktopTrapAbility = document.getElementById('maptools-trap-ability');
         const desktopTrapDc = document.getElementById('maptools-trap-dc');
         const desktopTrapDamage = document.getElementById('maptools-trap-damage');
+        const desktopTrapDamageType = document.getElementById('maptools-trap-damage-type');
         const desktopTrapAuto = document.getElementById('maptools-trap-auto');
         const desktopTrapRepeat = document.getElementById('maptools-trap-repeat');
         const desktopSaveTrapBtn = document.getElementById('btn-save-trap');
@@ -1877,6 +1879,7 @@ export function initVttMobileAdapter(vtt) {
             if (desktopTrapAbility && trapAbilitySelect) trapAbilitySelect.value = desktopTrapAbility.value;
             if (desktopTrapDc && trapDcVal) trapDcVal.textContent = desktopTrapDc.value || '15';
             if (desktopTrapDamage && trapDamageInput) trapDamageInput.value = desktopTrapDamage.value;
+            if (desktopTrapDamageType && trapDamageTypeSelect) trapDamageTypeSelect.value = desktopTrapDamageType.value || 'piercing';
             if (desktopTrapAuto && trapAutoCheck) trapAutoCheck.checked = desktopTrapAuto.checked;
             if (desktopTrapRepeat && trapRepeatCheck) trapRepeatCheck.checked = desktopTrapRepeat.checked;
         }
@@ -1994,6 +1997,11 @@ export function initVttMobileAdapter(vtt) {
         if (trapDamageInput && desktopTrapDamage) {
             trapDamageInput.addEventListener('input', () => {
                 desktopTrapDamage.value = trapDamageInput.value;
+            });
+        }
+        if (trapDamageTypeSelect && desktopTrapDamageType) {
+            trapDamageTypeSelect.addEventListener('change', () => {
+                desktopTrapDamageType.value = trapDamageTypeSelect.value;
             });
         }
         if (trapAutoCheck && desktopTrapAuto) {

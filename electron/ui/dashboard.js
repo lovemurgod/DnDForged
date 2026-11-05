@@ -50,6 +50,19 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     });
 
+    // --- HEADER CONTROLS ---
+    const btnOpenAppGuide = document.getElementById('btn-open-app-guide');
+    if (btnOpenAppGuide) {
+        btnOpenAppGuide.addEventListener('click', () => {
+            const guideUrl = 'https://forgedvtt.com/app-guide.html';
+            if (window.electronAPI?.openExternal) {
+                window.electronAPI.openExternal(guideUrl);
+            } else {
+                window.open(guideUrl, '_blank');
+            }
+        });
+    }
+
     // --- HOSTING & SERVER DOM ELEMENTS ---
     const overallBadge = document.getElementById('overall-status-badge');
     const overallText = document.getElementById('overall-status-text');

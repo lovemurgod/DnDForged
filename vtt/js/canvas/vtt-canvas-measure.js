@@ -55,7 +55,8 @@ export function drawMeasurementTemplate(
     points,
     showDistance,
     gridRef = null,
-    resolveRulerPortalBendingFn = null
+    resolveRulerPortalBendingFn = null,
+    zoomLevel = 1.0
 ) {
     if (!startPoint || !endPoint) return;
     const fillColor = color || '#00ffff';
@@ -204,7 +205,7 @@ export function drawMeasurementTemplate(
     }
 
     // Distance label — shown only during live drawing
-    const zoom = (ctx.getTransform ? ctx.getTransform()?.a : 1) || 1;
+    const zoom = zoomLevel || (ctx.getTransform ? ctx.getTransform()?.a : 1) || 1;
     if (showDistance && distancePx > 0) {
         const distInfo = calcDistanceFormatted(distancePx, activeGrid);
         const label = distInfo.label;

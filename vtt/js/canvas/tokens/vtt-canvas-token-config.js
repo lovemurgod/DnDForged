@@ -18,7 +18,7 @@ export const DEFAULT_PLAYER_TOKEN_PREFS = {
     flightPosition: 'inside-tl', // 'inside-tl' | 'outside-tl' | 'outside-bl'
     conditionPosition: 'inside-tr', // 'inside-tr' | 'outside-tr' | 'outside-br'
     conditionOrientation: 'horizontal', // 'horizontal' | 'vertical'
-    damageFxEnabled: true // enable elemental canvas bursts, token shudder & floating combat numbers
+    damageFxEnabled: true // enable elemental canvas bursts & token shudder
 };
 
 export const DEFAULT_GM_TOKEN_PREFS = {

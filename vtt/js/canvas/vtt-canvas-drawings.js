@@ -316,15 +316,16 @@ export function drawDrawingObject(
             if (hasStroke) ctx.stroke();
         }
     } else if (d.type === 'fill') {
-        if (d.imageData) {
-            let img = drawingImageCache?.get(d.imageData);
+        const src = d.imageData || d.dataUrl;
+        if (src) {
+            let img = drawingImageCache?.get(src);
             if (!img && drawingImageCache) {
                 img = new Image();
-                img.src = d.imageData;
+                img.src = src;
                 if (typeof renderAllFn === 'function') {
                     img.onload = () => renderAllFn();
                 }
-                drawingImageCache.set(d.imageData, img);
+                drawingImageCache.set(src, img);
             }
             if (img && img.complete) {
                 ctx.drawImage(img, d.x, d.y, d.width, d.height);
@@ -619,40 +620,136 @@ export function performCanvasFloodFill(startX, startY, options = {}) {
     const bh = maxY - minY + 1;
     if (bw <= 0 || bh <= 0) return;
 
-    const fillCanvas = document.createElement('canvas');
-    fillCanvas.width = bw;
-    fillCanvas.height = bh;
-    const fillCtx = fillCanvas.getContext('2d');
-    const fillImgData = fillCtx.createImageData(bw, bh);
+    function simplifyDP(pts, epsilon) {
+        if (pts.length <= 2) return pts;
+        let dmax = 0;
+        let index = 0;
+        const end = pts.length - 1;
+        const p1 = pts[0];
+        const p2 = pts[end];
+        const lineLenSq = (p2.x - p1.x) * (p2.x - p1.x) + (p2.y - p1.y) * (p2.y - p1.y);
 
-    for (let py = minY; py <= maxY; py++) {
-        for (let px = minX; px <= maxX; px++) {
-            if (visited[py * mapW + px]) {
-                const fillIdx = ((py - minY) * bw + (px - minX)) * 4;
-                fillImgData.data[fillIdx] = fillR;
-                fillImgData.data[fillIdx + 1] = fillG;
-                fillImgData.data[fillIdx + 2] = fillB;
-                fillImgData.data[fillIdx + 3] = fillA;
+        for (let i = 1; i < end; i++) {
+            let d = 0;
+            if (lineLenSq === 0) {
+                d = Math.hypot(pts[i].x - p1.x, pts[i].y - p1.y);
+            } else {
+                const t = Math.max(0, Math.min(1, ((pts[i].x - p1.x) * (p2.x - p1.x) + (pts[i].y - p1.y) * (p2.y - p1.y)) / lineLenSq));
+                d = Math.hypot(pts[i].x - (p1.x + t * (p2.x - p1.x)), pts[i].y - (p1.y + t * (p2.y - p1.y)));
+            }
+            if (d > dmax) {
+                index = i;
+                dmax = d;
             }
         }
+        if (dmax > epsilon) {
+            const rec1 = simplifyDP(pts.slice(0, index + 1), epsilon);
+            const rec2 = simplifyDP(pts.slice(index), epsilon);
+            return rec1.slice(0, rec1.length - 1).concat(rec2);
+        }
+        return [p1, p2];
     }
-    fillCtx.putImageData(fillImgData, 0, 0);
 
-    const dataUrl = fillCanvas.toDataURL();
+    function traceVisitedContour() {
+        let firstX = -1, firstY = -1;
+        for (let py = minY; py <= maxY; py++) {
+            const rOffset = py * mapW;
+            for (let px = minX; px <= maxX; px++) {
+                if (visited[rOffset + px]) {
+                    firstX = px;
+                    firstY = py;
+                    break;
+                }
+            }
+            if (firstX !== -1) break;
+        }
+        if (firstX === -1) return null;
+
+        const cdx = [0, 1, 1, 1, 0, -1, -1, -1];
+        const cdy = [-1, -1, 0, 1, 1, 1, 0, -1];
+        const raw = [{ x: firstX, y: firstY }];
+        let curX = firstX, curY = firstY, cDir = 7;
+        let cStep = 0;
+        const maxCSteps = 20000;
+
+        while (cStep++ < maxCSteps) {
+            let foundNext = false;
+            const startCheck = (cDir + 5) % 8;
+            for (let i = 0; i < 8; i++) {
+                const d = (startCheck + i) % 8;
+                const nX = curX + cdx[d];
+                const nY = curY + cdy[d];
+                if (nX >= 0 && nX < mapW && nY >= 0 && nY < mapH && visited[nY * mapW + nX]) {
+                    curX = nX;
+                    curY = nY;
+                    cDir = d;
+                    raw.push({ x: curX, y: curY });
+                    foundNext = true;
+                    break;
+                }
+            }
+            if (!foundNext) break;
+            if (curX === firstX && curY === firstY && raw.length > 2) break;
+        }
+
+        if (raw.length < 3) return null;
+        return simplifyDP(raw, 1.5);
+    }
+
     const newId = 'drawing_' + Date.now() + Math.random().toString(36).substr(2, 5);
-    const newDrawing = {
-        id: newId,
-        type: 'fill',
-        x: minX,
-        y: minY,
-        width: bw,
-        height: bh,
-        dataUrl,
-        layer: activeLayer,
-        ownerUsername: options.username,
-        opacity: options.paintOpacity || 1.0,
-        zIndex: Date.now()
-    };
+    const contourPoints = traceVisitedContour();
+    let newDrawing;
+
+    if (contourPoints && contourPoints.length >= 3) {
+        newDrawing = {
+            id: newId,
+            type: 'polygon',
+            points: contourPoints,
+            color: options.paintFillColor || '#eab308',
+            fillColor: options.paintFillColor || '#eab308',
+            fillMode: 'fill',
+            isClosed: true,
+            layer: activeLayer,
+            ownerUsername: options.username,
+            opacity: options.paintOpacity || 1.0,
+            zIndex: Date.now()
+        };
+    } else {
+        const fillCanvas = document.createElement('canvas');
+        fillCanvas.width = bw;
+        fillCanvas.height = bh;
+        const fillCtx = fillCanvas.getContext('2d');
+        const fillImgData = fillCtx.createImageData(bw, bh);
+
+        for (let py = minY; py <= maxY; py++) {
+            for (let px = minX; px <= maxX; px++) {
+                if (visited[py * mapW + px]) {
+                    const fillIdx = ((py - minY) * bw + (px - minX)) * 4;
+                    fillImgData.data[fillIdx] = fillR;
+                    fillImgData.data[fillIdx + 1] = fillG;
+                    fillImgData.data[fillIdx + 2] = fillB;
+                    fillImgData.data[fillIdx + 3] = fillA;
+                }
+            }
+        }
+        fillCtx.putImageData(fillImgData, 0, 0);
+
+        const dataUrl = fillCanvas.toDataURL();
+        newDrawing = {
+            id: newId,
+            type: 'fill',
+            x: minX,
+            y: minY,
+            width: bw,
+            height: bh,
+            imageData: dataUrl,
+            dataUrl,
+            layer: activeLayer,
+            ownerUsername: options.username,
+            opacity: options.paintOpacity || 1.0,
+            zIndex: Date.now()
+        };
+    }
 
     if (options.onNewDrawing) {
         options.onNewDrawing(newDrawing);
@@ -751,20 +848,63 @@ export function cancelDrawingTextInput(state = {}) {
 
 export function eraseDrawingsAtPoint(pt, drawings, options = {}) {
     if (!drawings || !pt) return;
+    const targetLayer = options.activeLayer || 'token';
     const radius = (options.paintEraserSize || 20) / (options.zoom || 1);
     let changed = false;
 
     Object.entries(drawings).forEach(([id, d]) => {
+        if ((d.layer || 'token') !== targetLayer) return;
         if (options.isDrawingControlledByPlayer && !options.isDrawingControlledByPlayer(d)) return;
         const bbox = getDrawingBoundingBox(d, options.ctx);
         if (!bbox) return;
 
+        // Bounding box pre-check
         if (
-            pt.x >= bbox.minX - radius &&
-            pt.x <= bbox.maxX + radius &&
-            pt.y >= bbox.minY - radius &&
-            pt.y <= bbox.maxY + radius
+            pt.x < bbox.minX - radius ||
+            pt.x > bbox.maxX + radius ||
+            pt.y < bbox.minY - radius ||
+            pt.y > bbox.maxY + radius
         ) {
+            return;
+        }
+
+        // Precise stroke hit-check: avoid deleting drawings when clicking in empty bounding box space
+        let hit = false;
+        if (d.type === 'pencil' || d.type === 'brush' || d.type === 'eraser') {
+            const pts = d.points || [];
+            const thresh = radius + (d.strokeWidth || 4) / 2;
+            for (let i = 0; i < pts.length; i++) {
+                if (Math.hypot(pt.x - pts[i].x, pt.y - pts[i].y) <= thresh) {
+                    hit = true;
+                    break;
+                }
+            }
+        } else if (d.type === 'line' || d.type === 'arrow') {
+            const p1 = d.startPoint || { x: d.x || 0, y: d.y || 0 };
+            const p2 = d.endPoint || { x: (d.x || 0) + (d.width || 0), y: (d.y || 0) + (d.height || 0) };
+            const l2 = Math.hypot(p2.x - p1.x, p2.y - p1.y) ** 2;
+            const t = l2 === 0 ? 0 : Math.max(0, Math.min(1, ((pt.x - p1.x) * (p2.x - p1.x) + (pt.y - p1.y) * (p2.y - p1.y)) / l2));
+            const dist = Math.hypot(pt.x - (p1.x + t * (p2.x - p1.x)), pt.y - (p1.y + t * (p2.y - p1.y)));
+            if (dist <= radius + (d.strokeWidth || 4) / 2) hit = true;
+        } else if (d.type === 'polygon') {
+            const pts = d.points || [];
+            const thresh = radius + (d.strokeWidth || 4) / 2;
+            for (let i = 0; i < pts.length; i++) {
+                const p1 = pts[i];
+                const p2 = pts[(i + 1) % pts.length];
+                const l2 = Math.hypot(p2.x - p1.x, p2.y - p1.y) ** 2;
+                const t = l2 === 0 ? 0 : Math.max(0, Math.min(1, ((pt.x - p1.x) * (p2.x - p1.x) + (pt.y - p1.y) * (p2.y - p1.y)) / l2));
+                const dist = Math.hypot(pt.x - (p1.x + t * (p2.x - p1.x)), pt.y - (p1.y + t * (p2.y - p1.y)));
+                if (dist <= thresh) {
+                    hit = true;
+                    break;
+                }
+            }
+        } else {
+            hit = true; // Fallback for text or fills inside bounding box
+        }
+
+        if (hit) {
             if (options.paintUndoStack) {
                 options.paintUndoStack.push({ action: 'delete', drawing: { ...d } });
             }
@@ -865,35 +1005,62 @@ export function showDrawingContextMenu(drawingId, clientX, clientY, context = {}
     if (clientY + menuRect.height > window.innerHeight)
         menu.style.top = `${window.innerHeight - menuRect.height - 10}px`;
 
+    const closeMenu = (e) => {
+        if (!e || !menu.contains(e.target)) {
+            menu.remove();
+            window.removeEventListener('click', closeMenu);
+            window.removeEventListener('contextmenu', closeMenu);
+        }
+    };
+
     menu.querySelector('#menu-draw-front')?.addEventListener('click', () => {
         const allZ = Object.values(drawings).map((x) => x.zIndex || 0);
         d.zIndex = Math.max(...allZ, 0) + 1;
-        menu.remove();
+        closeMenu();
+        context.onDrawingsChanged?.();
+    });
+
+    menu.querySelector('#menu-draw-forward')?.addEventListener('click', () => {
+        const sameLayer = Object.values(drawings)
+            .filter((x) => (x.layer || 'token') === (d.layer || 'token'))
+            .map((x) => x.zIndex || 0)
+            .sort((a, b) => a - b);
+        const curZ = d.zIndex || 0;
+        const nextZ = sameLayer.find((z) => z > curZ);
+        d.zIndex = nextZ !== undefined ? nextZ + 1 : curZ + 1;
+        closeMenu();
+        context.onDrawingsChanged?.();
+    });
+
+    menu.querySelector('#menu-draw-backward')?.addEventListener('click', () => {
+        const sameLayer = Object.values(drawings)
+            .filter((x) => (x.layer || 'token') === (d.layer || 'token'))
+            .map((x) => x.zIndex || 0)
+            .sort((a, b) => b - a);
+        const curZ = d.zIndex || 0;
+        const prevZ = sameLayer.find((z) => z < curZ);
+        d.zIndex = prevZ !== undefined ? prevZ - 1 : curZ - 1;
+        closeMenu();
         context.onDrawingsChanged?.();
     });
 
     menu.querySelector('#menu-draw-back')?.addEventListener('click', () => {
         const allZ = Object.values(drawings).map((x) => x.zIndex || 0);
         d.zIndex = Math.min(...allZ, 0) - 1;
-        menu.remove();
+        closeMenu();
         context.onDrawingsChanged?.();
     });
 
     menu.querySelector('#menu-draw-delete')?.addEventListener('click', () => {
         if (context.paintUndoStack) context.paintUndoStack.push({ action: 'delete', drawing: { ...d } });
         delete drawings[drawingId];
-        menu.remove();
+        closeMenu();
         context.onDrawingsChanged?.();
     });
 
     setTimeout(() => {
-        const closeMenu = (e) => {
-            if (!menu.contains(e.target)) {
-                menu.remove();
-                window.removeEventListener('click', closeMenu);
-            }
-        };
         window.addEventListener('click', closeMenu);
+        window.addEventListener('contextmenu', closeMenu);
     }, 10);
 }
 
@@ -901,6 +1068,8 @@ export function setupPaintRibbonControls(state, callbacks = {}) {
     if (typeof document === 'undefined') return;
     const ribbon = document.getElementById('panel-paint-ribbon');
     if (!ribbon) return;
+    if (ribbon.dataset.paintRibbonInitialized === 'true') return;
+    ribbon.dataset.paintRibbonInitialized = 'true';
 
     ribbon.querySelectorAll('.paint-subtool-btn').forEach((btn) => {
         btn.addEventListener('click', () => {

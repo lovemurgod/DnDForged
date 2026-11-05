@@ -149,6 +149,7 @@ export function parseActionMacro(
     );
     const isSilveredAttack = !!(preParsedMacro?.isSilvered || /silvered/i.test(textToCheck));
     const isAdamantineAttack = !!(preParsedMacro?.isAdamantine || /adamantine/i.test(textToCheck));
+    const isSpellAttack = !!(preParsedMacro?.isSpell || /spell\s+attack|cast\s+a\s+spell/i.test(textToCheck));
 
     // Zero-regex execution: Use pre-compiled macro schema if available
     if (preParsedMacro) {
@@ -196,6 +197,7 @@ export function parseActionMacro(
                     isMagic: d.isMagic !== undefined ? !!d.isMagic : isMagicAttack,
                     isSilvered: d.isSilvered !== undefined ? !!d.isSilvered : isSilveredAttack,
                     isAdamantine: d.isAdamantine !== undefined ? !!d.isAdamantine : isAdamantineAttack,
+                    isSpell: d.isSpell !== undefined ? !!d.isSpell : isSpellAttack,
                     roll: {
                         total: evalRoll.total,
                         formula: evalRoll.formula || d.formula,
@@ -349,6 +351,7 @@ export function parseActionMacro(
             isMagic: isMagicAttack,
             isSilvered: isSilveredAttack,
             isAdamantine: isAdamantineAttack,
+            isSpell: isSpellAttack,
             roll: {
                 total: evalRoll.total,
                 formula: rolledFormula,
@@ -396,7 +399,10 @@ export function parseActionMacro(
 export function showMassRollDialog({ abilityName, charName, initialMode, hasAttack, onConfirm }) {
     if (typeof document === 'undefined') return;
     const existing = document.getElementById('vtt-mass-roll-backdrop');
-    if (existing) existing.remove();
+    if (existing) {
+        if (typeof existing._cleanup === 'function') existing._cleanup();
+        existing.remove();
+    }
 
     const backdrop = document.createElement('div');
     backdrop.id = 'vtt-mass-roll-backdrop';
@@ -506,8 +512,13 @@ export function showMassRollDialog({ abilityName, charName, initialMode, hasAtta
         });
     }
 
-    function closeDialog() {
+    function cleanupListener() {
         if (typeof window !== 'undefined') window.removeEventListener('keydown', onKeyDown);
+    }
+    backdrop._cleanup = cleanupListener;
+
+    function closeDialog() {
+        cleanupListener();
         backdrop.remove();
     }
 
@@ -572,6 +583,10 @@ export function executeMassRolls({
                 creatureName: charName
             };
 
+            // [BEHAVIOR NOTE - INTENTIONAL DESIGN]:
+            // Individual attack macro cards are intentionally emitted sequentially to chat to provide
+            // granular rolling breakdown, discrete 3D dice physics trigger points, and standalone action history
+            // before the consolidated summary Mass Attack Card is generated below.
             if (visibility === 'private' || visibility === 'gm') {
                 msgOut.to = vtt.username;
                 vtt.socket.emit('chat:whisper', msgOut);
@@ -595,6 +610,10 @@ export function executeMassRolls({
                     type: dr.type,
                     formula: dr.formula,
                     saveRider: !!dr.saveRider,
+                    isMagic: !!dr.isMagic,
+                    isSilvered: !!dr.isSilvered,
+                    isAdamantine: !!dr.isAdamantine,
+                    isSpell: !!dr.isSpell,
                     roll: {
                         total: dr.roll?.total || 0,
                         formula: dr.roll?.formula || dr.formula,
@@ -616,6 +635,9 @@ export function executeMassRolls({
                 timestamp: Date.now()
             };
 
+            // [BEHAVIOR NOTE - INTENTIONAL DESIGN]:
+            // whisperToGM: true is intentional for MassAttackCard so GM retains exclusive orchestration
+            // and target allocation controls over mass combat resolutions before results are broadcast.
             vtt.socket.emit('chat:msg', {
                 whisperToGM: true,
                 massAttackCard: massAttackCard

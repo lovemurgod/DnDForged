@@ -27,6 +27,12 @@ export function setupKeyboardShortcuts(ctx = {}) {
     const snapToGridCenter = ctx.snapToGridCenter || ((x, y) => snapToGridCenterExt(x, y, ctx.grid));
 
     function deleteSelection() {
+        if (ctx.selectedMapToolItem && typeof ctx.deleteSelectedMapToolItem === 'function') {
+            ctx.deleteSelectedMapToolItem(ctx.selectedMapToolItem.type);
+            if (typeof ctx.renderAll === 'function') ctx.renderAll();
+            return;
+        }
+
         let changedTokens = false;
         let changedShapes = false;
         let changedWalls = false;
@@ -126,6 +132,7 @@ export function setupKeyboardShortcuts(ctx = {}) {
         if (changedLights) vtt.socket.emit('lights:update', { mapId: ctx.currentMapId, lights: ctx.lights });
         if (changedWalls) {
             if ('hoveredWallIdx' in ctx) ctx.hoveredWallIdx = -1;
+            if (typeof ctx.syncWallSpatialIndex === 'function') ctx.syncWallSpatialIndex();
             vtt.socket.emit('walls:update', { mapId: ctx.currentMapId, walls: ctx.walls });
         }
         if (changedTokens || changedShapes || changedWalls || changedLights) ctx.renderAll();
@@ -245,7 +252,10 @@ export function setupKeyboardShortcuts(ctx = {}) {
                 }
             });
             if (changedLights) vtt.socket.emit('lights:update', { mapId: ctx.currentMapId, lights: ctx.lights });
-            if (changedWalls) vtt.socket.emit('walls:update', { mapId: ctx.currentMapId, walls: ctx.walls });
+            if (changedWalls) {
+                if (typeof ctx.syncWallSpatialIndex === 'function') ctx.syncWallSpatialIndex();
+                vtt.socket.emit('walls:update', { mapId: ctx.currentMapId, walls: ctx.walls });
+            }
             ctx.renderAll();
         } else if (ctx.vttClipboard.type === 'objects' && ctx.activeLayer !== 'lighting') {
             let changedTokens = false;
@@ -303,7 +313,11 @@ export function setupKeyboardShortcuts(ctx = {}) {
                 ['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target?.tagName) ||
                 document.activeElement?.isContentEditable ||
                 e.target?.isContentEditable;
-            if (isInputActive) return;
+            const isModalActive = Boolean(
+                typeof document !== 'undefined' &&
+                document.querySelector('.modal.show, .swal2-container, #vtt-token-edit-modal:not(.vtt-hidden), #panel-character-sheet:not(.vtt-hidden)')
+            );
+            if (isInputActive || isModalActive) return;
 
             const isCtrl = e.ctrlKey || e.metaKey;
             const key = e.key ? e.key.toLowerCase() : '';
@@ -384,6 +398,31 @@ export function setupKeyboardShortcuts(ctx = {}) {
                     if (toolId) {
                         e.preventDefault();
                         document.getElementById(toolId)?.click();
+                        return;
+                    }
+                }
+            }
+
+            // Map Tool Undo / Redo Shortcuts (Ctrl+Z, Ctrl+Y, Ctrl+Shift+Z)
+            if (isCtrl && (key === 'z' || key === 'y')) {
+                const isMapToolActive =
+                    ctx.activeLayer === 'traps' ||
+                    ctx.activeLayer === 'portals' ||
+                    ctx.activeTool === 'maptools' ||
+                    (ctx.mapToolUndoStack && ctx.mapToolUndoStack.length > 0);
+                if (isMapToolActive && typeof ctx.mapToolUndo === 'function' && typeof ctx.mapToolRedo === 'function') {
+                    if (key === 'z') {
+                        if (e.shiftKey) {
+                            e.preventDefault();
+                            ctx.mapToolRedo();
+                        } else {
+                            e.preventDefault();
+                            ctx.mapToolUndo();
+                        }
+                        return;
+                    } else if (key === 'y') {
+                        e.preventDefault();
+                        ctx.mapToolRedo();
                         return;
                     }
                 }
@@ -546,16 +585,24 @@ export function setupKeyboardShortcuts(ctx = {}) {
                 // Clear active measurements or ctx.shapes
                 const dragTargetId = ctx.dragTargetId;
                 if (ctx.localIsMeasuring || ctx.localIsShaping || ctx.isTokenMeasuring || dragTargetId) {
-                    if (dragTargetId) {
-                        const originalPos = ctx.tokenDragOriginalPositions?.[dragTargetId];
-                        if (originalPos && ctx.tokens[dragTargetId]) {
-                            ctx.tokens[dragTargetId].x = originalPos.x;
-                            ctx.tokens[dragTargetId].y = originalPos.y;
+                    if (dragTargetId || (ctx.tokenDragOriginalPositions && Object.keys(ctx.tokenDragOriginalPositions).length > 0)) {
+                        let hadMoved = false;
+                        Object.entries(ctx.tokenDragOriginalPositions || {}).forEach(([id, orig]) => {
+                            if (ctx.tokens[id] && orig) {
+                                if (ctx.tokens[id].x !== orig.x || ctx.tokens[id].y !== orig.y) hadMoved = true;
+                                ctx.tokens[id].x = orig.x;
+                                ctx.tokens[id].y = orig.y;
+                            }
+                        });
+                        ctx.tokenDragOriginalPositions = {};
+                        ctx.dragTargetId = null;
+                        if (hadMoved) {
                             if (typeof window !== 'undefined' && window.emitTokenUpdates) {
                                 window.emitTokenUpdates(ctx.tokens);
+                            } else if (typeof ctx.emitTokenUpdates === 'function') {
+                                ctx.emitTokenUpdates(ctx.tokens);
                             }
                         }
-                        ctx.dragTargetId = null;
                     }
                     if (ctx.isTokenMeasuring) {
                         ctx.isTokenMeasuring = false;
@@ -579,6 +626,9 @@ export function setupKeyboardShortcuts(ctx = {}) {
                 if (noteViewer) {
                     noteViewer.remove();
                     return;
+                }
+                if (ctx.selectedMapToolItem && typeof ctx.deselectMapToolItem === 'function') {
+                    ctx.deselectMapToolItem();
                 }
                 ctx.selectedTokenIds.clear();
                 ctx.gmTokenVisionMode = false;
@@ -675,7 +725,7 @@ export function setupKeyboardShortcuts(ctx = {}) {
                 return;
             }
 
-            // Token Rotation (Q / E) & Flipping (W / A / S / D)
+            // Token Rotation (Q / E) & Flipping (R for vertical / F for horizontal)
             if (!isCtrl && !e.altKey && ctx.selectedTokenIds && ctx.selectedTokenIds.size > 0) {
                 if (key === 'q' || key === 'e') {
                     e.preventDefault();
@@ -702,22 +752,16 @@ export function setupKeyboardShortcuts(ctx = {}) {
                         return;
                     }
                 }
-                if (['w', 'a', 's', 'd'].includes(key)) {
+                if (key === 'r' || key === 'f') {
                     let updated = false;
                     ctx.selectedTokenIds.forEach((id) => {
                         const token = ctx.tokens[id];
                         if (token && ctx.isTokenControlledByPlayer(token)) {
-                            if (key === 'w' && token.flipY !== false) {
-                                token.flipY = false;
+                            if (key === 'r') {
+                                token.flipY = !token.flipY;
                                 updated = true;
-                            } else if (key === 's' && token.flipY !== true) {
-                                token.flipY = true;
-                                updated = true;
-                            } else if (key === 'a' && token.flipX !== true) {
-                                token.flipX = true;
-                                updated = true;
-                            } else if (key === 'd' && token.flipX !== false) {
-                                token.flipX = false;
+                            } else if (key === 'f') {
+                                token.flipX = !token.flipX;
                                 updated = true;
                             }
                         }
@@ -735,7 +779,24 @@ export function setupKeyboardShortcuts(ctx = {}) {
                 }
             }
 
-            if (e.key === 'ArrowUp' || e.key === 'ArrowDown' || e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+            // Shift + WASD camera pan
+            if (e.shiftKey && !isCtrl && !e.altKey && ['w', 'a', 's', 'd'].includes(key)) {
+                e.preventDefault();
+                cancelCameraAnimation();
+                const panStep = 50;
+                if (key === 'w') ctx.panY += panStep;
+                if (key === 's') ctx.panY -= panStep;
+                if (key === 'a') ctx.panX += panStep;
+                if (key === 'd') ctx.panX -= panStep;
+                updateContainerTransform();
+                ctx.renderAll();
+                return;
+            }
+
+            const isArrow = e.key === 'ArrowUp' || e.key === 'ArrowDown' || e.key === 'ArrowLeft' || e.key === 'ArrowRight';
+            const isWasdMove = !e.shiftKey && !isCtrl && !e.altKey && ['w', 'a', 's', 'd'].includes(key);
+
+            if (isArrow || isWasdMove) {
                 if (
                     ctx.selectedTokenIds.size > 0 ||
                     (typeof ctx.selectedShapeIds !== 'undefined' && ctx.selectedShapeIds.size > 0) ||
@@ -749,10 +810,10 @@ export function setupKeyboardShortcuts(ctx = {}) {
                     const unitSize =
                         (ctx.grid && ctx.grid.size ? ctx.grid.size : 50) *
                         (ctx.grid && ctx.grid.scale ? ctx.grid.scale : 1);
-                    if (e.key === 'ArrowUp') dy = -unitSize;
-                    if (e.key === 'ArrowDown') dy = unitSize;
-                    if (e.key === 'ArrowLeft') dx = -unitSize;
-                    if (e.key === 'ArrowRight') dx = unitSize;
+                    if (e.key === 'ArrowUp' || key === 'w') dy = -unitSize;
+                    if (e.key === 'ArrowDown' || key === 's') dy = unitSize;
+                    if (e.key === 'ArrowLeft' || key === 'a') dx = -unitSize;
+                    if (e.key === 'ArrowRight' || key === 'd') dx = unitSize;
 
                     let changedTokens = false;
                     let changedShapes = false;

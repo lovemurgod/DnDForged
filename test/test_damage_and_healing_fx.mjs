@@ -7,7 +7,6 @@ import {
     activeTokenShudders,
     triggerTokenShudder,
     getTokenShudderOffset,
-    renderFloatingDamageText,
     renderDamageFXBurst
 } from '../vtt/js/canvas/tokens/vtt-canvas-token-renderer.js';
 

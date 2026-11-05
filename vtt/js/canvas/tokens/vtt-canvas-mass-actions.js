@@ -12,13 +12,20 @@ import {
 } from './vtt-canvas-token-rollers.js';
 
 export function _hasResistanceType(arr, dmgType, attackMeta = {}) {
-    if (!arr || !Array.isArray(arr) || !dmgType) return false;
+    if (!arr || !dmgType) return false;
+    let list = arr;
+    if (typeof list === 'string') {
+        list = list.split(',').map((s) => s.trim()).filter(Boolean);
+    } else if (!Array.isArray(list) && typeof list === 'object') {
+        list = [list];
+    }
+    if (!Array.isArray(list)) return false;
     const targetType = dmgType.toLowerCase().trim();
     const isMagic = !!(attackMeta.isMagic || attackMeta.isSpell);
     const isSilvered = !!attackMeta.isSilvered;
     const isAdamantine = !!attackMeta.isAdamantine;
 
-    return arr.some((r) => {
+    return list.some((r) => {
         if (!r) return false;
         // 1. Plain string defense e.g. "fire", "slashing"
         if (typeof r === 'string') {
@@ -200,7 +207,8 @@ export function applyDamageToTokens(tokenIds, amount, type, mode, attackMeta = {
                     token.tempHp -= tempDamage;
                     finalAmount -= tempDamage;
                 }
-                const totalDeducted = tempDamage + (finalAmount > 0 ? Math.min(token.hp, finalAmount) : 0);
+                // [OVERKILL CONSISTENCY]: Count full overkill damage dealt
+                const totalDeducted = tempDamage + finalAmount;
                 if (finalAmount > 0) {
                     token.hp = Math.max(0, token.hp - finalAmount);
                 }
@@ -421,6 +429,26 @@ export function resolveTokenAC(token, options = {}) {
     const charId = token.characterId || token.sourceCharacterId;
     if (charId && vtt?.campaignState?.characters) {
         const char = vtt.campaignState.characters[charId];
+        if (char) {
+            let base = char.baseAc !== undefined && char.baseAc !== null ? parseInt(char.baseAc, 10) : (parseInt(char.ac, 10) || 10);
+            const mod = parseInt(char.acMod, 10) || 0;
+            let toggleBonus = 0;
+            if (Array.isArray(char.acToggles)) {
+                char.acToggles.filter((t) => t && t.enabled).forEach((t) => {
+                    if (t.formula) {
+                        const str = String(t.formula).trim();
+                        const matches = str.match(/[+-]?\s*\d+/g);
+                        if (matches) {
+                            toggleBonus += matches.reduce((sum, term) => sum + (parseInt(term.replace(/\s+/g, ''), 10) || 0), 0);
+                        }
+                    } else if (typeof t.bonus === 'number') {
+                        toggleBonus += t.bonus;
+                    }
+                });
+            }
+            const effective = Math.max(1, base + mod + toggleBonus);
+            if (!isNaN(effective)) return effective;
+        }
         if (typeof char?.ac === 'number') return char.ac;
         if (char?.ac !== undefined && char?.ac !== null && !isNaN(parseInt(char.ac, 10))) {
             return parseInt(char.ac, 10);
@@ -434,7 +462,10 @@ export function promptMassAttackDistribution(massAttackCard, selectedIds, onConf
     const { tokens = {} } = options;
 
     const existing = document.getElementById('vtt-distribute-attacks-backdrop');
-    if (existing) existing.remove();
+    if (existing) {
+        if (typeof existing._cleanup === 'function') existing._cleanup();
+        existing.remove();
+    }
 
     const attacks = massAttackCard.attacks || [];
     const targetTokens = selectedIds.map((id) => tokens[id]).filter(Boolean);
@@ -504,8 +535,13 @@ export function promptMassAttackDistribution(massAttackCard, selectedIds, onConf
     backdrop.appendChild(dialog);
     document.body.appendChild(backdrop);
 
-    function closeDialog() {
+    function cleanupListener() {
         window.removeEventListener('keydown', onKeyDown);
+    }
+    backdrop._cleanup = cleanupListener;
+
+    function closeDialog() {
+        cleanupListener();
         backdrop.remove();
     }
 
@@ -795,9 +831,9 @@ export function executeMassAttackResolution(massAttackCard, distribution, msgId,
             };
         });
     } else if (mode === 'damage_random') {
-        attacks.forEach((attack, idx) => {
-            const testTarget = targetTokens[idx % targetTokens.length];
-            const targetAC = resolveTokenAC(testTarget, options);
+        attacks.forEach((attack) => {
+            const assignedToken = targetTokens[Math.floor(Math.random() * targetTokens.length)];
+            const targetAC = resolveTokenAC(assignedToken, options);
 
             let hit = false;
             if (attack.atkRoll) {
@@ -809,10 +845,7 @@ export function executeMassAttackResolution(massAttackCard, distribution, msgId,
             }
 
             let deducted = 0;
-            let assignedToken = testTarget;
-
             if (hit) {
-                assignedToken = targetTokens[Math.floor(Math.random() * targetTokens.length)];
                 const dmgRolls = attack.dmgRolls || [];
                 const hitDamages = dmgRolls.filter((dr) => !dr.saveRider);
                 const riderDamages = dmgRolls.filter((dr) => dr.saveRider);
@@ -866,12 +899,10 @@ export function executeMassAttackResolution(massAttackCard, distribution, msgId,
 
         if (hittingAttacks.length > 0) {
             const typeDamagePool = {};
-            const saveRiderAttacks = [];
 
             hittingAttacks.forEach(({ attack }) => {
                 const dmgRolls = attack.dmgRolls || [];
                 const hitDamages = dmgRolls.filter((dr) => !dr.saveRider);
-                const riderDamages = dmgRolls.filter((dr) => dr.saveRider);
 
                 hitDamages.forEach((dr) => {
                     const type = dr.type || 'untyped';
@@ -889,20 +920,24 @@ export function executeMassAttackResolution(massAttackCard, distribution, msgId,
                     }
                     typeDamagePool[key].total += amount;
                 });
-
-                if (attack.saveInfo && attack.saveInfo.dc) {
-                    saveRiderAttacks.push({ attack, riderDamages });
-                }
             });
 
-            const numTargets = targetTokens.length;
-            const targetSlices = targetTokens.map(() => []);
+            // Distribute damage equally among targets that were actually hit
+            const hitTokensMap = new Map();
+            hittingAttacks.forEach(({ testTarget }) => {
+                if (testTarget && !hitTokensMap.has(testTarget.id)) {
+                    hitTokensMap.set(testTarget.id, testTarget);
+                }
+            });
+            const hitTargets = Array.from(hitTokensMap.values());
+            const numTargets = hitTargets.length;
+            const targetSlices = hitTargets.map(() => []);
 
             Object.values(typeDamagePool).forEach((pool) => {
                 const base = Math.floor(pool.total / numTargets);
                 const remainder = pool.total % numTargets;
 
-                targetTokens.forEach((_, tIdx) => {
+                hitTargets.forEach((_, tIdx) => {
                     const share = base + (tIdx < remainder ? 1 : 0);
                     if (share > 0) {
                         targetSlices[tIdx].push({
@@ -919,19 +954,24 @@ export function executeMassAttackResolution(massAttackCard, distribution, msgId,
             });
 
             let grandTotalDeducted = 0;
-            targetTokens.forEach((token, tIdx) => {
+            hitTargets.forEach((token, tIdx) => {
                 const sliceDamages = targetSlices[tIdx];
                 if (sliceDamages.length > 0) {
                     const deducted = recordTokenDamage(token, sliceDamages);
                     grandTotalDeducted += deducted;
+                }
+            });
 
-                    saveRiderAttacks.forEach(({ attack, riderDamages }) => {
-                        saveRiderTokens.push({
-                            token,
-                            attackIndex: attack.index,
-                            saveInfo: attack.saveInfo,
-                            riderDamages
-                        });
+            // Trigger save riders strictly for the specific target each hitting attack was directed at
+            hittingAttacks.forEach(({ attack, testTarget }) => {
+                if (attack.saveInfo && attack.saveInfo.dc) {
+                    const dmgRolls = attack.dmgRolls || [];
+                    const riderDamages = dmgRolls.filter((dr) => dr.saveRider);
+                    saveRiderTokens.push({
+                        token: testTarget,
+                        attackIndex: attack.index,
+                        saveInfo: attack.saveInfo,
+                        riderDamages
                     });
                 }
             });
@@ -943,7 +983,7 @@ export function executeMassAttackResolution(massAttackCard, distribution, msgId,
                 const share = hitDamagePerAttack + (hIdx < hitRemainder ? 1 : 0);
                 attack.resolution = {
                     tokenId: testTarget.id,
-                    tokenName: `${targetTokens.length} Targets`,
+                    tokenName: testTarget.name || `${hitTargets.length} Targets`,
                     hit: true,
                     damageDealt: share
                 };
@@ -1056,13 +1096,14 @@ export function executeMassAttackResolution(massAttackCard, distribution, msgId,
                 setTimeout(rollNextRider, 150);
             } else {
                 const firstSave = saveRiderTokens[0]?.saveInfo || {};
+                const allRiderDamages = saveRiderTokens.flatMap((s) => s.riderDamages || []);
                 postSaveResolutionChatCard(
                     {
                         dc: parseInt(firstSave.dc) || 10,
                         ability: (firstSave.ability || 'CON').toUpperCase(),
                         results,
                         cardData: {
-                            dmgRolls: []
+                            dmgRolls: allRiderDamages.length > 0 ? allRiderDamages : []
                         }
                     },
                     { vtt }
@@ -1280,6 +1321,9 @@ export function processCardFullResolution(cardData, selectedIds, options = {}) {
         rollNextToken();
         return true;
     } else if (!hasAttack) {
+        // [BEHAVIOR NOTE - INTENTIONAL DESIGN]:
+        // Non-attack, non-save damage cards (traps, hazards, auras, flat damage) intentionally treat all selected
+        // tokens as within the Area of Effect (AoE) and apply full damage to each selected target.
         const res = applyCompositeDamageToTokens(selectedIds, dmgRolls, 1.0, options);
         grandTotalDeducted = res?.totalDeducted ?? 0;
         const summary = `Applied ${grandTotalDeducted} DMG to ${targetNames}`;
@@ -1314,7 +1358,13 @@ export function handleCardAction(cardData, action, options = {}) {
     const { vtt = (typeof window !== 'undefined' ? window.VTT : null) || {}, selectedTokenIds = new Set() } = options;
 
     if (vtt.role !== 'GM') return false;
-    const selectedIds = Array.from(selectedTokenIds);
+    let selectedIds = Array.from(selectedTokenIds);
+
+    // If card has explicit target token (like a sprung trap card), fallback to it if nothing selected
+    if (selectedIds.length === 0 && cardData && cardData.tokenId) {
+        selectedIds = [cardData.tokenId];
+    }
+
     if (selectedIds.length === 0) {
         if (typeof JqueryUtil !== 'undefined' && JqueryUtil.doToast) {
             JqueryUtil.doToast({
@@ -1326,40 +1376,115 @@ export function handleCardAction(cardData, action, options = {}) {
     }
 
     const msgId = options.msgId || null;
-    const dmgRolls = cardData.dmgRolls || [];
+    let dmgRolls = cardData.dmgRolls || [];
+    if (dmgRolls.length === 0) {
+        if (cardData.damageRoll) {
+            dmgRolls = [{ roll: cardData.damageRoll, type: cardData.damageType || 'piercing' }];
+        } else if (cardData.damage) {
+            const amt = parseInt(cardData.damage) || 0;
+            dmgRolls = [{ formula: String(cardData.damage), roll: { total: amt }, type: cardData.damageType || 'piercing' }];
+        }
+    }
+
     const tokens = options.tokens || {};
     const targetNames = selectedIds
         .map((id) => tokens[id]?.name || 'Target')
         .slice(0, 3)
         .join(', ') + (selectedIds.length > 3 ? ` +${selectedIds.length - 3} more` : '');
 
+    const isTrapCard = Boolean(cardData.isTrap || cardData.trapId);
+
     if (action === 'full') {
         const res = applyCompositeDamageToTokens(selectedIds, dmgRolls, 1.0, options);
         const totalDmg = res?.totalDeducted ?? 0;
         const summary = `Full Damage (${totalDmg} HP) applied to ${targetNames}`;
-        cardData.resolved = { summary, timestamp: Date.now() };
-        if (vtt.socket && msgId) {
-            vtt.socket.emit('chat:macro_resolved', {
-                id: msgId,
-                macroCard: cardData,
-                resolution: cardData.resolved
-            });
+        if (isTrapCard) {
+            if (typeof JqueryUtil !== 'undefined' && JqueryUtil.doToast) {
+                JqueryUtil.doToast({ type: 'success', content: summary });
+            }
+        } else {
+            cardData.resolved = { summary, timestamp: Date.now() };
+            if (vtt.socket && msgId) {
+                vtt.socket.emit('chat:macro_resolved', {
+                    id: msgId,
+                    macroCard: cardData,
+                    resolution: cardData.resolved
+                });
+            }
         }
         return true;
     } else if (action === 'half') {
         const res = applyCompositeDamageToTokens(selectedIds, dmgRolls, 0.5, options);
         const totalDmg = res?.totalDeducted ?? 0;
         const summary = `Half Damage (${totalDmg} HP) applied to ${targetNames}`;
-        cardData.resolved = { summary, timestamp: Date.now() };
-        if (vtt.socket && msgId) {
-            vtt.socket.emit('chat:macro_resolved', {
-                id: msgId,
-                macroCard: cardData,
-                resolution: cardData.resolved
-            });
+        if (isTrapCard) {
+            if (typeof JqueryUtil !== 'undefined' && JqueryUtil.doToast) {
+                JqueryUtil.doToast({ type: 'success', content: summary });
+            }
+        } else {
+            cardData.resolved = { summary, timestamp: Date.now() };
+            if (vtt.socket && msgId) {
+                vtt.socket.emit('chat:macro_resolved', {
+                    id: msgId,
+                    macroCard: cardData,
+                    resolution: cardData.resolved
+                });
+            }
         }
         return true;
     } else if (action === 'process') {
+        if (isTrapCard) {
+            // Trap resolution logic:
+            // 1. If saveAbility is NONE or empty, full damage applies directly
+            if (!cardData.saveAbility || cardData.saveAbility === 'NONE') {
+                const res = applyCompositeDamageToTokens(selectedIds, dmgRolls, 1.0, options);
+                const totalDmg = res?.totalDeducted ?? 0;
+                const summary = `Full Damage (${totalDmg} HP) applied to ${targetNames}`;
+                if (typeof JqueryUtil !== 'undefined' && JqueryUtil.doToast) {
+                    JqueryUtil.doToast({ type: 'success', content: summary });
+                }
+                return true;
+            }
+
+            // 2. Check if a single target pre-rolled their save
+            const saveKey = `${cardData.trapId}_${cardData.tokenId || selectedIds[0]}`;
+            const recordedSave =
+                vtt._lastTrapSaves?.[saveKey] ||
+                (typeof window !== 'undefined' && window.VTT?._lastTrapSaves?.[saveKey]) ||
+                cardData.lastSaveRoll ||
+                null;
+
+            if (selectedIds.length === 1) {
+                if (!recordedSave) {
+                    if (typeof JqueryUtil !== 'undefined' && JqueryUtil.doToast) {
+                        JqueryUtil.doToast({
+                            type: 'warning',
+                            content: `Please click 'Roll Save' first before processing the trap.`
+                        });
+                    }
+                    return false;
+                }
+                const dc = parseInt(cardData.saveDc) || 15;
+                const passed = recordedSave.total >= dc;
+                const multiplier = passed ? 0.5 : 1.0;
+                const res = applyCompositeDamageToTokens(selectedIds, dmgRolls, multiplier, options);
+                const totalDmg = res?.totalDeducted ?? 0;
+                const summary = passed
+                    ? `Save Passed (${recordedSave.total} vs DC ${dc}): Half Damage (${totalDmg} HP) applied to ${targetNames}`
+                    : `Save Failed (${recordedSave.total} vs DC ${dc}): Full Damage (${totalDmg} HP) applied to ${targetNames}`;
+
+                if (typeof JqueryUtil !== 'undefined' && JqueryUtil.doToast) {
+                    JqueryUtil.doToast({ type: passed ? 'info' : 'success', content: summary });
+                }
+                return true;
+            }
+
+            // 3. Multi-target AoE: route through mass saving throws workflow
+            cardData.dmgRolls = dmgRolls;
+            cardData.saveInfo = cardData.saveInfo || { dc: cardData.saveDc, ability: cardData.saveAbility };
+            return processCardFullResolution(cardData, selectedIds, { ...options, msgId });
+        }
+
         return processCardFullResolution(cardData, selectedIds, { ...options, msgId });
     }
     return false;
@@ -1500,6 +1625,398 @@ export function showApplyDamageModal(tokenIds, options = {}) {
     });
 }
 
+export function promptCustomModifierModal(checkLabel, onConfirm, onCancel) {
+    if (typeof document === 'undefined') {
+        if (typeof onConfirm === 'function') onConfirm(0);
+        return;
+    }
+
+    const existing = document.getElementById('vtt-custom-mod-backdrop');
+    if (existing) {
+        if (typeof existing._cleanup === 'function') existing._cleanup();
+        existing.remove();
+    }
+
+    const backdrop = document.createElement('div');
+    backdrop.id = 'vtt-custom-mod-backdrop';
+    backdrop.className = 'vtt-modal-backdrop';
+
+    let currentMod = 0;
+
+    const dialog = document.createElement('div');
+    dialog.className = 'vtt-mass-roll-dialog';
+    dialog.style.width = '360px';
+
+    dialog.innerHTML = `
+        <div class="mass-roll-header">
+            <div class="mass-roll-title">
+                <i class="fa-solid fa-calculator"></i>
+                <span>Custom Modifier</span>
+            </div>
+            <button type="button" class="mass-roll-close" id="btn-mod-close" title="Close"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="mass-roll-body">
+            <div class="mass-roll-creature-info">
+                Some selected tokens lack a stat block. Specify a modifier for <strong>${escapeTokenHtml(checkLabel)}</strong>:
+            </div>
+            
+            <div>
+                <div class="mass-roll-label">
+                    <span>Modifier</span>
+                    <span id="mod-display" style="color:var(--color-gold-light); font-family:var(--font-mono, monospace);">+0</span>
+                </div>
+                <div class="mass-roll-count-row">
+                    <button type="button" class="mass-roll-step-btn" id="mod-minus">-</button>
+                    <input type="number" class="mass-roll-input" id="mod-input" value="0" min="-10" max="30">
+                    <button type="button" class="mass-roll-step-btn" id="mod-plus">+</button>
+                </div>
+            </div>
+
+            <div class="mass-roll-presets">
+                <button type="button" class="mass-roll-preset-chip" data-mod="-2">-2</button>
+                <button type="button" class="mass-roll-preset-chip" data-mod="-1">-1</button>
+                <button type="button" class="mass-roll-preset-chip" data-mod="0">+0</button>
+                <button type="button" class="mass-roll-preset-chip" data-mod="1">+1</button>
+                <button type="button" class="mass-roll-preset-chip" data-mod="2">+2</button>
+                <button type="button" class="mass-roll-preset-chip" data-mod="3">+3</button>
+                <button type="button" class="mass-roll-preset-chip" data-mod="4">+4</button>
+                <button type="button" class="mass-roll-preset-chip" data-mod="5">+5</button>
+            </div>
+        </div>
+        <div class="mass-roll-footer">
+            <button type="button" class="btn-mass-roll-cancel" id="btn-mod-cancel">Cancel</button>
+            <button type="button" class="btn-mass-roll-confirm" id="btn-mod-confirm">
+                <i class="fa-solid fa-dice-d20"></i> Confirm & Roll
+            </button>
+        </div>
+    `;
+
+    backdrop.appendChild(dialog);
+    document.body.appendChild(backdrop);
+
+    const inputEl = dialog.querySelector('#mod-input');
+    const displayEl = dialog.querySelector('#mod-display');
+
+    function updateMod(val) {
+        currentMod = parseInt(val) || 0;
+        inputEl.value = currentMod;
+        if (displayEl) displayEl.textContent = currentMod >= 0 ? `+${currentMod}` : `${currentMod}`;
+    }
+
+    inputEl.focus();
+    inputEl.select();
+
+    inputEl.addEventListener('input', () => updateMod(inputEl.value));
+    dialog.querySelector('#mod-minus').addEventListener('click', () => updateMod(currentMod - 1));
+    dialog.querySelector('#mod-plus').addEventListener('click', () => updateMod(currentMod + 1));
+
+    dialog.querySelectorAll('.mass-roll-preset-chip').forEach((chip) => {
+        chip.addEventListener('click', () => {
+            const m = parseInt(chip.dataset.mod) || 0;
+            updateMod(m);
+        });
+    });
+
+    function cleanup() {
+        if (typeof window !== 'undefined') window.removeEventListener('keydown', onKeyDown);
+        backdrop.remove();
+    }
+    backdrop._cleanup = cleanup;
+
+    function doConfirm() {
+        cleanup();
+        if (typeof onConfirm === 'function') onConfirm(currentMod);
+    }
+
+    function doCancel() {
+        cleanup();
+        if (typeof onCancel === 'function') onCancel();
+    }
+
+    function onKeyDown(e) {
+        if (e.key === 'Escape') {
+            e.preventDefault();
+            doCancel();
+        } else if (e.key === 'Enter') {
+            e.preventDefault();
+            doConfirm();
+        }
+    }
+
+    if (typeof window !== 'undefined') window.addEventListener('keydown', onKeyDown);
+    dialog.querySelector('#btn-mod-close').addEventListener('click', doCancel);
+    dialog.querySelector('#btn-mod-cancel').addEventListener('click', doCancel);
+    dialog.querySelector('#btn-mod-confirm').addEventListener('click', doConfirm);
+    backdrop.addEventListener('click', (e) => {
+        if (e.target === backdrop) doCancel();
+    });
+}
+
+export function clusterTokensByProximity(tokensList, numSubgroups) {
+    if (!tokensList || !Array.isArray(tokensList) || tokensList.length <= 1 || numSubgroups <= 1) {
+        return tokensList ? [tokensList.slice()] : [[]];
+    }
+    const n = tokensList.length;
+    const k = Math.min(numSubgroups, n);
+
+    // Helper to get token center coordinates
+    const getPos = (t) => ({
+        x: (t.x || 0) + (t.width || 50) / 2,
+        y: (t.y || 0) + (t.height || 50) / 2
+    });
+
+    // Compute target capacities for each squad
+    const baseSize = Math.floor(n / k);
+    const remainder = n % k;
+    const capacities = Array.from({ length: k }, (_, i) => baseSize + (i < remainder ? 1 : 0));
+
+    // Distance squared helper
+    const distSq = (p1, p2) => (p1.x - p2.x) ** 2 + (p1.y - p2.y) ** 2;
+
+    const unassigned = [...tokensList];
+    const squads = [];
+
+    for (let s = 0; s < k; s++) {
+        if (unassigned.length === 0) break;
+        const capacity = capacities[s];
+        if (s === k - 1) {
+            // Last squad takes all remaining tokens
+            squads.push(unassigned.splice(0, unassigned.length));
+            break;
+        }
+
+        // Calculate centroid of remaining unassigned tokens
+        let meanX = 0;
+        let meanY = 0;
+        unassigned.forEach((t) => {
+            const p = getPos(t);
+            meanX += p.x;
+            meanY += p.y;
+        });
+        meanX /= unassigned.length;
+        meanY /= unassigned.length;
+
+        // Choose seed token: peripheral anchor farthest from remaining centroid
+        let seedIdx = 0;
+        let maxDist = -1;
+        unassigned.forEach((t, idx) => {
+            const d = distSq(getPos(t), { x: meanX, y: meanY });
+            if (d > maxDist) {
+                maxDist = d;
+                seedIdx = idx;
+            }
+        });
+
+        const seedToken = unassigned.splice(seedIdx, 1)[0];
+        const currentSquad = [seedToken];
+        const seedPos = getPos(seedToken);
+
+        // Gather nearest neighbors to seedPos up to capacity
+        while (currentSquad.length < capacity && unassigned.length > 0) {
+            let bestIdx = 0;
+            let minDist = Infinity;
+            unassigned.forEach((t, idx) => {
+                const d = distSq(getPos(t), seedPos);
+                if (d < minDist) {
+                    minDist = d;
+                    bestIdx = idx;
+                }
+            });
+            const picked = unassigned.splice(bestIdx, 1)[0];
+            currentSquad.push(picked);
+        }
+        squads.push(currentSquad);
+    }
+
+    // Sort squads by centroid coordinates (X then Y) for intuitive progression across battlefield
+    squads.sort((a, b) => {
+        const avgA = a.reduce((sum, t) => sum + (t.x || 0), 0) / a.length;
+        const avgB = b.reduce((sum, t) => sum + (t.x || 0), 0) / b.length;
+        if (Math.abs(avgA - avgB) > 1) return avgA - avgB;
+        const avgAY = a.reduce((sum, t) => sum + (t.y || 0), 0) / a.length;
+        const avgBY = b.reduce((sum, t) => sum + (t.y || 0), 0) / b.length;
+        return avgAY - avgBY;
+    });
+
+    return squads;
+}
+
+export function promptQuickSplitModal(groups, targetTokens, onConfirm, onCancel) {
+    if (typeof document === 'undefined') return;
+
+    const existing = document.getElementById('vtt-quick-split-backdrop');
+    if (existing) {
+        if (typeof existing._cleanup === 'function') existing._cleanup();
+        existing.remove();
+    }
+
+    // Find the largest group
+    let maxGroupName = '';
+    let maxCount = 0;
+    Object.entries(groups).forEach(([name, list]) => {
+        if (list.length > maxCount) {
+            maxCount = list.length;
+            maxGroupName = name;
+        }
+    });
+
+    const backdrop = document.createElement('div');
+    backdrop.id = 'vtt-quick-split-backdrop';
+    backdrop.className = 'vtt-modal-backdrop';
+
+    const dialog = document.createElement('div');
+    dialog.className = 'vtt-mass-roll-dialog';
+    dialog.style.width = '440px';
+
+    let numSubgroups = maxCount <= 12 ? 2 : Math.min(10, Math.ceil(maxCount / 5));
+
+    // Flexible presets depending on army/group size
+    let presetsHtml = '';
+    if (maxCount <= 20) {
+        presetsHtml = `
+            <button type="button" class="mass-roll-preset-chip" data-sub="1">Single (1 Group)</button>
+            <button type="button" class="mass-roll-preset-chip" data-sub="2">2 Groups</button>
+            <button type="button" class="mass-roll-preset-chip" data-size="4">Groups of 4</button>
+            <button type="button" class="mass-roll-preset-chip" data-size="5">Groups of 5</button>
+        `;
+    } else {
+        presetsHtml = `
+            <button type="button" class="mass-roll-preset-chip" data-sub="1">Single Group</button>
+            <button type="button" class="mass-roll-preset-chip" data-size="5">Groups of 5</button>
+            <button type="button" class="mass-roll-preset-chip" data-size="10">Groups of 10</button>
+            <button type="button" class="mass-roll-preset-chip" data-size="20">Groups of 20</button>
+            <button type="button" class="mass-roll-preset-chip" data-sub="2">Halves (2)</button>
+            <button type="button" class="mass-roll-preset-chip" data-sub="4">Quarters (4)</button>
+        `;
+    }
+
+    dialog.innerHTML = `
+        <div class="mass-roll-header">
+            <div class="mass-roll-title">
+                <i class="fa-solid fa-users-rays"></i>
+                <span>Group Initiative: Squad Split</span>
+            </div>
+            <button type="button" class="mass-roll-close" id="btn-split-close" title="Close"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="mass-roll-body">
+            <div class="mass-roll-creature-info">
+                Large group detected: <strong>${maxCount} × ${escapeTokenHtml(maxGroupName)}</strong>. Choose how to split initiative squads:
+            </div>
+            
+            <div>
+                <div class="mass-roll-label">
+                    <span>Number of Subgroups</span>
+                    <span id="split-subgroups-display" style="color:var(--color-gold-light); font-family:var(--font-mono, monospace);">${numSubgroups}</span>
+                </div>
+                <div class="mass-roll-count-row">
+                    <button type="button" class="mass-roll-step-btn" id="split-minus">-</button>
+                    <input type="number" class="mass-roll-input" id="split-input" value="${numSubgroups}" min="1" max="${maxCount}">
+                    <button type="button" class="mass-roll-step-btn" id="split-plus">+</button>
+                </div>
+            </div>
+
+            <div class="mass-roll-presets">
+                ${presetsHtml}
+            </div>
+
+            <div id="split-preview" style="font-size:0.8rem; color:#aaa; background:rgba(0,0,0,0.25); padding:8px 12px; border-radius:6px; border:1px solid rgba(255,255,255,0.08);">
+            </div>
+        </div>
+        <div class="mass-roll-footer" style="display:flex; justify-content:space-between;">
+            <button type="button" class="btn-mass-roll-cancel" id="btn-split-cancel">Cancel</button>
+            <div style="display:flex; gap:6px;">
+                <button type="button" class="btn btn-secondary" id="btn-split-single" style="font-size:0.8rem;">
+                    Keep Single
+                </button>
+                <button type="button" class="btn-mass-roll-confirm" id="btn-split-confirm">
+                    <i class="fa-solid fa-dice-d20"></i> Split & Roll
+                </button>
+            </div>
+        </div>
+    `;
+
+    backdrop.appendChild(dialog);
+    document.body.appendChild(backdrop);
+
+    const inputEl = dialog.querySelector('#split-input');
+    const displayEl = dialog.querySelector('#split-subgroups-display');
+    const previewEl = dialog.querySelector('#split-preview');
+
+    let currentSplitConfig = { mode: 'count', value: numSubgroups };
+
+    function updateSplit(val, config = null) {
+        numSubgroups = Math.max(1, Math.min(maxCount, parseInt(val) || 1));
+        currentSplitConfig = config || { mode: 'count', value: numSubgroups };
+        inputEl.value = numSubgroups;
+        if (displayEl) displayEl.textContent = numSubgroups;
+        if (previewEl) {
+            if (numSubgroups === 1) {
+                previewEl.innerHTML = `<i class="fa-solid fa-user-group"></i> All <strong>${maxCount}</strong> tokens will share a single initiative roll.`;
+            } else if (currentSplitConfig.mode === 'size') {
+                const targetSize = currentSplitConfig.value;
+                previewEl.innerHTML = `<i class="fa-solid fa-users-rays"></i> Splitting by squad size into <strong>squads of ~${targetSize}</strong> tokens each (${numSubgroups} squads for ${maxGroupName}).`;
+            } else {
+                const perSquad = Math.ceil(maxCount / numSubgroups);
+                previewEl.innerHTML = `<i class="fa-solid fa-users-rays"></i> Splitting into <strong>${numSubgroups} geographic squads</strong> (~${perSquad} tokens per squad), each rolling its own initiative.`;
+            }
+        }
+    }
+
+    updateSplit(numSubgroups, { mode: 'count', value: numSubgroups });
+
+    inputEl.addEventListener('input', () => updateSplit(inputEl.value, { mode: 'count', value: parseInt(inputEl.value) || 1 }));
+    dialog.querySelector('#split-minus').addEventListener('click', () => updateSplit(numSubgroups - 1, { mode: 'count', value: numSubgroups - 1 }));
+    dialog.querySelector('#split-plus').addEventListener('click', () => updateSplit(numSubgroups + 1, { mode: 'count', value: numSubgroups + 1 }));
+
+    dialog.querySelectorAll('.mass-roll-preset-chip').forEach((chip) => {
+        chip.addEventListener('click', () => {
+            if (chip.dataset.sub) {
+                const sub = parseInt(chip.dataset.sub) || 1;
+                updateSplit(sub, { mode: 'count', value: sub });
+            } else if (chip.dataset.size) {
+                const size = parseInt(chip.dataset.size) || 5;
+                const subs = Math.max(1, Math.ceil(maxCount / size));
+                updateSplit(subs, { mode: 'size', value: size });
+            }
+        });
+    });
+
+    function cleanup() {
+        if (typeof window !== 'undefined') window.removeEventListener('keydown', onKeyDown);
+        backdrop.remove();
+    }
+    backdrop._cleanup = cleanup;
+
+    function doConfirm(splitResult) {
+        cleanup();
+        if (typeof onConfirm === 'function') onConfirm(splitResult);
+    }
+
+    function doCancel() {
+        cleanup();
+        if (typeof onCancel === 'function') onCancel();
+    }
+
+    function onKeyDown(e) {
+        if (e.key === 'Escape') {
+            e.preventDefault();
+            doCancel();
+        } else if (e.key === 'Enter') {
+            e.preventDefault();
+            doConfirm(currentSplitConfig);
+        }
+    }
+
+    if (typeof window !== 'undefined') window.addEventListener('keydown', onKeyDown);
+    dialog.querySelector('#btn-split-close').addEventListener('click', doCancel);
+    dialog.querySelector('#btn-split-cancel').addEventListener('click', doCancel);
+    dialog.querySelector('#btn-split-single').addEventListener('click', () => doConfirm({ mode: 'count', value: 1 }));
+    dialog.querySelector('#btn-split-confirm').addEventListener('click', () => doConfirm(currentSplitConfig));
+    backdrop.addEventListener('click', (e) => {
+        if (e.target === backdrop) doCancel();
+    });
+}
+
 export function showMassRollContextMenu(tokenIds, clientX, clientY, options = {}) {
     if (typeof document === 'undefined') return;
     const {
@@ -1569,7 +2086,10 @@ export function showMassRollContextMenu(tokenIds, clientX, clientY, options = {}
             <span><i class="fa-solid fa-heart-crack item-icon"></i> Apply Damage</span>
         </div>
         <div class="vtt-token-menu-item" id="menu-roll-init">
-            <span><i class="fa-solid fa-swords item-icon"></i> Roll Initiative for All</span>
+            <span><i class="fa-solid fa-swords item-icon"></i> Roll Initiative for All (Individual)</span>
+        </div>
+        <div class="vtt-token-menu-item" id="menu-roll-group-init">
+            <span><i class="fa-solid fa-users-rays item-icon"></i> Roll Group Initiative (By Name)</span>
         </div>
         <div class="vtt-token-menu-divider"></div>
     `;
@@ -1816,20 +2336,19 @@ export function showMassRollContextMenu(tokenIds, clientX, clientY, options = {}
         return null;
     };
 
-    const getFallbackModIfNeeded = (tokensList, checkLabel) => {
+    const withFallbackMod = (tokensList, checkLabel, callback) => {
         const hasStatless = tokensList.some(
             (t) =>
                 !getResolvedMonsterData(t) &&
                 !(t.isPlayer && t.characterId && vtt.campaignState?.characters?.[t.characterId])
         );
-        if (!hasStatless) return 0;
-
-        const input =
-            typeof prompt === 'function'
-                ? prompt(`Enter custom modifier for tokens lacking a stat block (for ${checkLabel}):`, '0')
-                : '0';
-        if (input === null) return null;
-        return parseInt(input) || 0;
+        if (!hasStatless) {
+            callback(0);
+            return;
+        }
+        promptCustomModifierModal(checkLabel, (customMod) => {
+            callback(customMod);
+        });
     };
 
     // Splash Art
@@ -1850,56 +2369,187 @@ export function showMassRollContextMenu(tokenIds, clientX, clientY, options = {}
         });
     }
 
-    // Initiative
-    menu.querySelector('#menu-roll-init')?.addEventListener('click', () => {
-        const fallbackMod = getFallbackModIfNeeded(targetTokens, 'Initiative');
-        if (fallbackMod === null) {
-            menu.remove();
-            return;
-        }
-
-        targetTokens.forEach((t) => {
-            let formula = '';
-            let dexScore = 10;
-            const mData = getResolvedMonsterData(t);
-            if (mData) {
-                dexScore = mData.dex || 10;
-                let mod = Math.floor((dexScore - 10) / 2);
-                if (mData.initiative !== undefined) {
-                    if (typeof mData.initiative === 'number') mod = mData.initiative;
-                    else if (typeof mData.initiative?.bonus === 'number') mod = mData.initiative.bonus;
-                }
-                formula = `1d20${mod >= 0 ? '+' : ''}${mod}`;
-            } else if (t.isPlayer && t.characterId && vtt.campaignState?.characters?.[t.characterId]) {
-                const char = vtt.campaignState.characters[t.characterId];
-                if (char.isCustomNpc || char.monsterData) {
-                    dexScore = char.monsterData?.dex || 10;
+    // Individual Initiative
+    menu.querySelector('#menu-roll-init')?.addEventListener('click', (e) => {
+        withFallbackMod(targetTokens, 'Initiative', (fallbackMod) => {
+            // [BEHAVIOR NOTE - INTENTIONAL DESIGN]:
+            // Simultaneous dice rolls and 3D dice physics instances for every selected token
+            // during canvas mass rolls is intentional tabletop behavior to give authentic per-token feedback.
+            targetTokens.forEach((t) => {
+                let formula = '';
+                let dexScore = 10;
+                const mData = getResolvedMonsterData(t);
+                if (mData) {
+                    dexScore = mData.dex || 10;
                     let mod = Math.floor((dexScore - 10) / 2);
-                    if (char.monsterData?.initiative !== undefined) {
-                        if (typeof char.monsterData.initiative === 'number') mod = char.monsterData.initiative;
-                        else if (typeof char.monsterData.initiative?.bonus === 'number')
-                            mod = char.monsterData.initiative.bonus;
+                    if (mData.initiative !== undefined) {
+                        if (typeof mData.initiative === 'number') mod = mData.initiative;
+                        else if (typeof mData.initiative?.bonus === 'number') mod = mData.initiative.bonus;
                     }
                     formula = `1d20${mod >= 0 ? '+' : ''}${mod}`;
+                } else if (t.isPlayer && t.characterId && vtt.campaignState?.characters?.[t.characterId]) {
+                    const char = vtt.campaignState.characters[t.characterId];
+                    if (char.isCustomNpc || char.monsterData) {
+                        dexScore = char.monsterData?.dex || 10;
+                        let mod = Math.floor((dexScore - 10) / 2);
+                        if (char.monsterData?.initiative !== undefined) {
+                            if (typeof char.monsterData.initiative === 'number') mod = char.monsterData.initiative;
+                            else if (typeof char.monsterData.initiative?.bonus === 'number')
+                                mod = char.monsterData.initiative.bonus;
+                        }
+                        formula = `1d20${mod >= 0 ? '+' : ''}${mod}`;
+                    } else {
+                        dexScore = char.stats?.dex || 10;
+                        formula = getPcRollFormula(char, 'initiative');
+                    }
                 } else {
-                    dexScore = char.stats?.dex || 10;
-                    formula = getPcRollFormula(char, 'initiative');
+                    let mod = fallbackMod;
+                    formula = `1d20${mod >= 0 ? '+' : ''}${mod}`;
                 }
+
+                let dexTiebreaker = 0;
+                if (campaignSettings.initDexTiebreaker !== false) {
+                    dexTiebreaker = Math.round(dexScore) / 100;
+                }
+
+                const label = `${t.name}: Initiative`;
+                const resultTotal = rollFromToken(formula, label, t.id, dexTiebreaker, { vtt, optEvent: e });
+
+                if (typeof window !== 'undefined' && window.VTT?.chatEngine) {
+                    window.VTT.chatEngine.addToInitiative(t.name, resultTotal, t.id);
+                }
+            });
+        });
+        menu.remove();
+    });
+
+    // Group Initiative by Name
+    menu.querySelector('#menu-roll-group-init')?.addEventListener('click', (e) => {
+        withFallbackMod(targetTokens, 'Group Initiative', (fallbackMod) => {
+            const groups = {};
+            targetTokens.forEach((t) => {
+                const name = (t.name || 'Token').trim();
+                if (!groups[name]) groups[name] = [];
+                groups[name].push(t);
+            });
+
+            const hasLargeGroup = Object.values(groups).some((list) => list.length > 6);
+
+            const runRolls = (splitSettings = {}) => {
+                // [BEHAVIOR NOTE - INTENTIONAL DESIGN]:
+                // Firing dice rolls and 3D dice physics instances for every combatant group
+                // is intentional tabletop behavior to give authentic per-group roll feedback.
+                Object.entries(groups).forEach(([name, tokensList]) => {
+                    const count = tokensList.length;
+                    let subCount = 1;
+                    if (typeof splitSettings === 'object' && splitSettings !== null) {
+                        if (splitSettings.mode === 'size') {
+                            subCount = Math.max(1, Math.ceil(count / (splitSettings.value || 5)));
+                        } else if (splitSettings.mode === 'count') {
+                            subCount = Math.max(1, Math.min(count, splitSettings.value || 2));
+                        } else if (splitSettings[name] !== undefined) {
+                            const conf = splitSettings[name];
+                            if (typeof conf === 'object' && conf !== null) {
+                                if (conf.mode === 'size') {
+                                    subCount = Math.max(1, Math.ceil(count / (conf.value || 5)));
+                                } else if (conf.mode === 'count') {
+                                    subCount = Math.max(1, Math.min(count, conf.value || 2));
+                                } else {
+                                    subCount = Math.max(1, Math.min(count, parseInt(conf.value) || 1));
+                                }
+                            } else {
+                                subCount = Math.max(1, Math.min(count, parseInt(conf) || 1));
+                            }
+                        } else if (count > 6) {
+                            subCount = 2;
+                        }
+                    } else if (typeof splitSettings === 'number') {
+                        subCount = Math.max(1, Math.min(count, splitSettings));
+                    } else if (count > 6) {
+                        subCount = 2;
+                    }
+
+                    const repFormula = (t) => {
+                        let formula = '';
+                        let dexScore = 10;
+                        const mData = getResolvedMonsterData(t);
+                        if (mData) {
+                            dexScore = mData.dex || 10;
+                            let mod = Math.floor((dexScore - 10) / 2);
+                            if (mData.initiative !== undefined) {
+                                if (typeof mData.initiative === 'number') mod = mData.initiative;
+                                else if (typeof mData.initiative?.bonus === 'number') mod = mData.initiative.bonus;
+                            }
+                            formula = `1d20${mod >= 0 ? '+' : ''}${mod}`;
+                        } else if (t.isPlayer && t.characterId && vtt.campaignState?.characters?.[t.characterId]) {
+                            const char = vtt.campaignState.characters[t.characterId];
+                            if (char.isCustomNpc || char.monsterData) {
+                                dexScore = char.monsterData?.dex || 10;
+                                let mod = Math.floor((dexScore - 10) / 2);
+                                if (char.monsterData?.initiative !== undefined) {
+                                    if (typeof char.monsterData.initiative === 'number') mod = char.monsterData.initiative;
+                                    else if (typeof char.monsterData.initiative?.bonus === 'number')
+                                        mod = char.monsterData.initiative.bonus;
+                                }
+                                formula = `1d20${mod >= 0 ? '+' : ''}${mod}`;
+                            } else {
+                                dexScore = char.stats?.dex || 10;
+                                formula = getPcRollFormula(char, 'initiative');
+                            }
+                        } else {
+                            formula = `1d20${fallbackMod >= 0 ? '+' : ''}${fallbackMod}`;
+                        }
+
+                        let dexTiebreaker = 0;
+                        if (campaignSettings.initDexTiebreaker !== false) {
+                            dexTiebreaker = Math.round(dexScore) / 100;
+                        }
+                        return { formula, dexTiebreaker };
+                    };
+
+                    if (subCount <= 1 || count <= 1) {
+                        const rep = tokensList[0];
+                        const { formula, dexTiebreaker } = repFormula(rep);
+                        const label = `${name}: Group Initiative`;
+                        const resultTotal = rollFromToken(formula, label, rep.id, dexTiebreaker, { vtt, optEvent: e });
+
+                        if (typeof window !== 'undefined' && window.VTT?.chatEngine) {
+                            tokensList.forEach((t) => {
+                                window.VTT.chatEngine.addToInitiative(t.name, resultTotal, t.id);
+                            });
+                        }
+                    } else {
+                        // [GEOGRAPHIC SQUAD CLUSTERING]: Cluster tokens by map coordinates so each squad is adjacent
+                        const squads = clusterTokensByProximity(tokensList, subCount);
+                        squads.forEach((squadTokens, s) => {
+                            if (squadTokens.length === 0) return;
+                            const rep = squadTokens[0];
+                            const { formula, dexTiebreaker } = repFormula(rep);
+                            const label = `${name} (Squad ${s + 1}): Initiative`;
+                            const resultTotal = rollFromToken(formula, label, rep.id, dexTiebreaker, { vtt, optEvent: e });
+
+                            if (typeof window !== 'undefined' && window.VTT?.chatEngine) {
+                                squadTokens.forEach((t) => {
+                                    window.VTT.chatEngine.addToInitiative(`${t.name} (Squad ${s + 1})`, resultTotal, t.id);
+                                });
+                            }
+                        });
+                    }
+                });
+            };
+
+            if (hasLargeGroup) {
+                promptQuickSplitModal(groups, targetTokens, (chosenSplitConfig) => {
+                    const splitConfig = {};
+                    Object.entries(groups).forEach(([name, list]) => {
+                        if (list.length > 6) {
+                            splitConfig[name] = chosenSplitConfig;
+                        }
+                    });
+                    runRolls(splitConfig);
+                });
             } else {
-                let mod = fallbackMod;
-                formula = `1d20${mod >= 0 ? '+' : ''}${mod}`;
-            }
-
-            let dexTiebreaker = 0;
-            if (campaignSettings.initDexTiebreaker !== false) {
-                dexTiebreaker = Math.round(dexScore) / 100;
-            }
-
-            const label = `${t.name}: Initiative`;
-            const resultTotal = rollFromToken(formula, label, t.id, dexTiebreaker, { vtt });
-
-            if (typeof window !== 'undefined' && window.VTT?.chatEngine) {
-                window.VTT.chatEngine.addToInitiative(t.name, resultTotal, t.id);
+                runRolls();
             }
         });
         menu.remove();
@@ -1907,32 +2557,30 @@ export function showMassRollContextMenu(tokenIds, clientX, clientY, options = {}
 
     // Abilities
     menu.querySelectorAll('.menu-roll-ability').forEach((item) => {
-        item.addEventListener('click', () => {
+        item.addEventListener('click', (e) => {
             const abKey = item.dataset.ability;
             const abLabel = item.dataset.label;
 
-            const fallbackMod = getFallbackModIfNeeded(targetTokens, `${abLabel} Check`);
-            if (fallbackMod === null) {
-                menu.remove();
-                return;
-            }
-
-            targetTokens.forEach((t) => {
-                let formula = '';
-                const mData = getResolvedMonsterData(t);
-                if (mData) {
-                    const score = mData[abKey] || 10;
-                    let mod = Math.floor((score - 10) / 2);
-                    formula = `1d20${mod >= 0 ? '+' : ''}${mod}`;
-                } else if (t.isPlayer && t.characterId && vtt.campaignState?.characters?.[t.characterId]) {
-                    const char = vtt.campaignState.characters[t.characterId];
-                    formula = getPcRollFormula(char, 'ability', abKey);
-                } else {
-                    let mod = fallbackMod;
-                    formula = `1d20${mod >= 0 ? '+' : ''}${mod}`;
-                }
-                const label = `${t.name}: ${abLabel.toUpperCase()} Check`;
-                rollFromToken(formula, label, t.id, 0, { vtt });
+            withFallbackMod(targetTokens, `${abLabel} Check`, (fallbackMod) => {
+                // [BEHAVIOR NOTE - INTENTIONAL DESIGN]:
+                // Simultaneous dice rolls and 3D dice physics instances for every selected token
+                // during canvas mass rolls is intentional tabletop behavior to give authentic per-token feedback.
+                targetTokens.forEach((t) => {
+                    let formula = '';
+                    const mData = getResolvedMonsterData(t);
+                    if (mData) {
+                        const score = mData[abKey] || 10;
+                        let mod = Math.floor((score - 10) / 2);
+                        formula = `1d20${mod >= 0 ? '+' : ''}${mod}`;
+                    } else if (t.isPlayer && t.characterId && vtt.campaignState?.characters?.[t.characterId]) {
+                        const char = vtt.campaignState.characters[t.characterId];
+                        formula = getPcRollFormula(char, 'ability', abKey);
+                    } else {
+                        formula = `1d20${fallbackMod >= 0 ? '+' : ''}${fallbackMod}`;
+                    }
+                    const label = `${t.name}: ${abLabel.toUpperCase()} Check`;
+                    rollFromToken(formula, label, t.id, 0, { vtt, optEvent: e });
+                });
             });
             menu.remove();
         });
@@ -1940,35 +2588,33 @@ export function showMassRollContextMenu(tokenIds, clientX, clientY, options = {}
 
     // Saves
     menu.querySelectorAll('.menu-roll-save').forEach((item) => {
-        item.addEventListener('click', () => {
+        item.addEventListener('click', (e) => {
             const abKey = item.dataset.ability;
             const abLabel = item.dataset.label;
 
-            const fallbackMod = getFallbackModIfNeeded(targetTokens, `${abLabel} Save`);
-            if (fallbackMod === null) {
-                menu.remove();
-                return;
-            }
-
-            targetTokens.forEach((t) => {
-                let formula = '';
-                const mData = getResolvedMonsterData(t);
-                if (mData) {
-                    const score = mData[abKey] || 10;
-                    let mod = Math.floor((score - 10) / 2);
-                    if (mData.save && mData.save[abKey] !== undefined) {
-                        mod = parseInt(mData.save[abKey]);
+            withFallbackMod(targetTokens, `${abLabel} Save`, (fallbackMod) => {
+                // [BEHAVIOR NOTE - INTENTIONAL DESIGN]:
+                // Simultaneous dice rolls and 3D dice physics instances for every selected token
+                // during canvas mass rolls is intentional tabletop behavior to give authentic per-token feedback.
+                targetTokens.forEach((t) => {
+                    let formula = '';
+                    const mData = getResolvedMonsterData(t);
+                    if (mData) {
+                        const score = mData[abKey] || 10;
+                        let mod = Math.floor((score - 10) / 2);
+                        if (mData.save && mData.save[abKey] !== undefined) {
+                            mod = parseInt(mData.save[abKey]);
+                        }
+                        formula = `1d20${mod >= 0 ? '+' : ''}${mod}`;
+                    } else if (t.isPlayer && t.characterId && vtt.campaignState?.characters?.[t.characterId]) {
+                        const char = vtt.campaignState.characters[t.characterId];
+                        formula = getPcRollFormula(char, 'save', abKey);
+                    } else {
+                        formula = `1d20${fallbackMod >= 0 ? '+' : ''}${fallbackMod}`;
                     }
-                    formula = `1d20${mod >= 0 ? '+' : ''}${mod}`;
-                } else if (t.isPlayer && t.characterId && vtt.campaignState?.characters?.[t.characterId]) {
-                    const char = vtt.campaignState.characters[t.characterId];
-                    formula = getPcRollFormula(char, 'save', abKey);
-                } else {
-                    let mod = fallbackMod;
-                    formula = `1d20${mod >= 0 ? '+' : ''}${mod}`;
-                }
-                const label = `${t.name}: ${abLabel.toUpperCase()} Saving Throw`;
-                rollFromToken(formula, label, t.id, 0, { vtt });
+                    const label = `${t.name}: ${abLabel.toUpperCase()} Saving Throw`;
+                    rollFromToken(formula, label, t.id, 0, { vtt, optEvent: e });
+                });
             });
             menu.remove();
         });
@@ -1976,37 +2622,35 @@ export function showMassRollContextMenu(tokenIds, clientX, clientY, options = {}
 
     // Skills
     menu.querySelectorAll('.menu-roll-skill').forEach((item) => {
-        item.addEventListener('click', () => {
+        item.addEventListener('click', (e) => {
             const skKey = item.dataset.skill;
             const skLabel = item.dataset.label;
 
-            const fallbackMod = getFallbackModIfNeeded(targetTokens, `${skLabel} Check`);
-            if (fallbackMod === null) {
-                menu.remove();
-                return;
-            }
+            withFallbackMod(targetTokens, `${skLabel} Check`, (fallbackMod) => {
+                // [BEHAVIOR NOTE - INTENTIONAL DESIGN]:
+                // Simultaneous dice rolls and 3D dice physics instances for every selected token
+                // during canvas mass rolls is intentional tabletop behavior to give authentic per-token feedback.
+                const skillObj = skills.find((s) => s.key === skKey);
 
-            const skillObj = skills.find((s) => s.key === skKey);
-
-            targetTokens.forEach((t) => {
-                let formula = '';
-                const mData = getResolvedMonsterData(t);
-                if (mData) {
-                    const score = mData[skillObj.ability] || 10;
-                    let mod = Math.floor((score - 10) / 2);
-                    if (mData.skill && mData.skill[skKey] !== undefined) {
-                        mod = parseInt(mData.skill[skKey]);
+                targetTokens.forEach((t) => {
+                    let formula = '';
+                    const mData = getResolvedMonsterData(t);
+                    if (mData) {
+                        const score = mData[skillObj.ability] || 10;
+                        let mod = Math.floor((score - 10) / 2);
+                        if (mData.skill && mData.skill[skKey] !== undefined) {
+                            mod = parseInt(mData.skill[skKey]);
+                        }
+                        formula = `1d20${mod >= 0 ? '+' : ''}${mod}`;
+                    } else if (t.isPlayer && t.characterId && vtt.campaignState?.characters?.[t.characterId]) {
+                        const char = vtt.campaignState.characters[t.characterId];
+                        formula = getPcRollFormula(char, 'skill', skKey);
+                    } else {
+                        formula = `1d20${fallbackMod >= 0 ? '+' : ''}${fallbackMod}`;
                     }
-                    formula = `1d20${mod >= 0 ? '+' : ''}${mod}`;
-                } else if (t.isPlayer && t.characterId && vtt.campaignState?.characters?.[t.characterId]) {
-                    const char = vtt.campaignState.characters[t.characterId];
-                    formula = getPcRollFormula(char, 'skill', skKey);
-                } else {
-                    let mod = fallbackMod;
-                    formula = `1d20${mod >= 0 ? '+' : ''}${mod}`;
-                }
-                const label = `${t.name}: ${skLabel} Check`;
-                rollFromToken(formula, label, t.id, 0, { vtt });
+                    const label = `${t.name}: ${skLabel} Check`;
+                    rollFromToken(formula, label, t.id, 0, { vtt, optEvent: e });
+                });
             });
             menu.remove();
         });

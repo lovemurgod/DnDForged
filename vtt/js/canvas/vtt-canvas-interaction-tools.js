@@ -48,9 +48,16 @@ export function getSelectionBounds(start, end) {
 export function isTokenWithinSelection(token, rect, getTokenDrawDimensions) {
     if (!token || !rect) return false;
     const dims = getTokenDrawDimensions ? getTokenDrawDimensions(token) : { drawW: 50, drawH: 50 };
-    const cx = token.x + dims.drawW / 2;
-    const cy = token.y + dims.drawH / 2;
-    return cx >= rect.x1 && cx <= rect.x2 && cy >= rect.y1 && cy <= rect.y2;
+    const minX = Math.min(rect.x1, rect.x2);
+    const maxX = Math.max(rect.x1, rect.x2);
+    const minY = Math.min(rect.y1, rect.y2);
+    const maxY = Math.max(rect.y1, rect.y2);
+
+    const tokenRight = token.x + dims.drawW;
+    const tokenBottom = token.y + dims.drawH;
+
+    // Overlap / intersection: selected if token bounding box intersects selection rectangle
+    return token.x <= maxX && tokenRight >= minX && token.y <= maxY && tokenBottom >= minY;
 }
 
 export function getTokenAtPoint(mouse, requireControl = true, matchLayer = true, touchRadius = 0, context = {}) {
@@ -91,7 +98,12 @@ export function getTokenAtPoint(mouse, requireControl = true, matchLayer = true,
         const ty = token.y + drawH / 2;
         if (vtt.role !== 'GM' && !isVisibleFn(tx, ty)) continue;
 
-        if (token.rotation) {
+        if (!token.isAsset) {
+            const tokenRadius = Math.min(drawW, drawH) / 2;
+            if (Math.hypot(mouse.x - tx, mouse.y - ty) <= tokenRadius + r) {
+                return token;
+            }
+        } else if (token.rotation) {
             const cx = token.x + drawW / 2;
             const cy = token.y + drawH / 2;
             const rad = (-token.rotation * Math.PI) / 180;
@@ -142,25 +154,42 @@ export function setupViewportControls(context = {}) {
     canvasInteraction.addEventListener('wheel', (e) => {
         e.preventDefault();
         context.cancelCameraAnimation?.();
-        const delta = e.deltaY > 0 ? 0.9 : 1.1;
+        context.hideGmTokenTooltip?.();
 
-        if (!viewport) return;
-        const vr = viewport.getBoundingClientRect();
-        const mouseX = e.clientX - vr.left;
-        const mouseY = e.clientY - vr.top;
+        const isZoomGesture = e.ctrlKey || e.deltaMode !== 0 || Math.abs(e.deltaY) >= 50;
 
-        const targetX = (mouseX - context.panX) / context.zoom;
-        const targetY = (mouseY - context.panY) / context.zoom;
+        if (isZoomGesture) {
+            // Zoom gesture (Pinch-to-zoom, Ctrl+Wheel, or notched mousewheel)
+            const zoomFactor = e.ctrlKey
+                ? Math.exp(-e.deltaY * 0.01)
+                : e.deltaY > 0
+                  ? 0.9
+                  : 1.1;
 
-        const nextZoom = Math.min(5.0, Math.max(0.1, context.zoom * delta));
-        context.zoom = nextZoom;
+            if (!viewport) return;
+            const vr = viewport.getBoundingClientRect();
+            const mouseX = e.clientX - vr.left;
+            const mouseY = e.clientY - vr.top;
 
-        context.panX = mouseX - targetX * context.zoom;
-        context.panY = mouseY - targetY * context.zoom;
+            const targetX = (mouseX - context.panX) / context.zoom;
+            const targetY = (mouseY - context.panY) / context.zoom;
 
-        context.updateContainerTransform?.();
-        context.renderAll?.();
-    });
+            const nextZoom = Math.min(5.0, Math.max(0.1, context.zoom * zoomFactor));
+            context.zoom = nextZoom;
+
+            context.panX = mouseX - targetX * context.zoom;
+            context.panY = mouseY - targetY * context.zoom;
+
+            context.updateContainerTransform?.();
+            context.renderAll?.();
+        } else {
+            // Two-finger trackpad panning (Modern CAD / Figma / Roll20 style)
+            context.panX -= e.deltaX;
+            context.panY -= e.deltaY;
+            context.updateContainerTransform?.();
+            context.renderAll?.();
+        }
+    }, { passive: false });
 
     canvasInteraction.addEventListener('contextmenu', (e) => {
         e.preventDefault();
@@ -170,9 +199,11 @@ export function setupViewportControls(context = {}) {
         const vtt = context.vtt || (typeof window !== 'undefined' ? window.VTT : {});
 
         let portalUnderMouse = null;
+        let trapUnderMouse = null;
         if (vtt.role === 'GM') {
             const hitTool = context.getMapToolItemAtCoord?.(mouse.x, mouse.y);
             portalUnderMouse = hitTool && hitTool.type === 'portal' ? hitTool.item : null;
+            trapUnderMouse = hitTool && hitTool.type === 'trap' ? hitTool.item : null;
             if (!portalUnderMouse && Array.isArray(context.portals) && context.isTokenCollidingWithPortal) {
                 portalUnderMouse = context.portals
                     .slice()
@@ -191,6 +222,15 @@ export function setupViewportControls(context = {}) {
             context.selectMapToolItem?.('portal', portalUnderMouse.id);
             context.renderAll?.();
             context.showPortalContextMenu?.(portalUnderMouse.id, e.clientX, e.clientY);
+            return;
+        }
+
+        if (trapUnderMouse && (!token || context.activeLayer === 'traps' || context.activeTool === 'maptools')) {
+            e.stopPropagation();
+            e.preventDefault();
+            context.selectMapToolItem?.('trap', trapUnderMouse.id);
+            context.renderAll?.();
+            context.showTrapContextMenu?.(trapUnderMouse.id, e.clientX, e.clientY);
             return;
         }
 

@@ -3,6 +3,13 @@
 
 import { computeVisibilityPolygon } from './vtt-canvas-visibility.js';
 import { interpolateColors, getTokenEffectiveLightFacing } from './vtt-canvas-lighting.js';
+import { checkLineIntersection } from './vtt-canvas-traps.js';
+import {
+    computePortalSightFrustum,
+    calcPortalCenter,
+    getPortalNormalVector,
+    isWallCoincidentWithPortal
+} from './vtt-canvas-portals.js';
 
 export function renderFogOfWarLayer(width, height, options = {}) {
     const {
@@ -15,6 +22,7 @@ export function renderFogOfWarLayer(width, height, options = {}) {
         selectedTokenIds = new Set(),
         tokens = {},
         lights = [],
+        portals = [],
         walls = [],
         wallsVersion = 1,
         grid = { size: 50, scale: 1, feetPerSquare: 5 },
@@ -32,6 +40,7 @@ export function renderFogOfWarLayer(width, height, options = {}) {
     } = options;
 
     const activeSpatialIndex = spatialIndex || wallSpatialIndex;
+    const isGM = options.isGM !== undefined ? options.isGM : vtt.role === 'GM';
 
     if (!ctxFog || !canvasFog) return [];
 
@@ -80,8 +89,7 @@ export function renderFogOfWarLayer(width, height, options = {}) {
             (token.characterId && vtt.campaignState?.characters?.[token.characterId]?.isPlayer)
         );
         if (vtt.role === 'GM') {
-            if (gmVisionMode) return selectedTokenIds.has(token.id);
-            if (selectedTokenIds.size > 0) return selectedTokenIds.has(token.id);
+            if (gmVisionMode && selectedTokenIds.size > 0) return selectedTokenIds.has(token.id);
             return grantsVision;
         }
         return grantsVision && isTokenControlledByPlayer(token, true);
@@ -146,7 +154,9 @@ export function renderFogOfWarLayer(width, height, options = {}) {
 
         const cacheKey = `${cx.toFixed(1)}_${cy.toFixed(1)}_${radius.toFixed(1)}_${wallsVersion}`;
         let visibilityPolygon;
-        if (source._polyCache && source._polyCache.key === cacheKey) {
+        if (isDaylightMode || radius >= maxLosRadius) {
+            visibilityPolygon = losPolygon;
+        } else if (source._polyCache && source._polyCache.key === cacheKey) {
             visibilityPolygon = source._polyCache.polygon;
         } else {
             visibilityPolygon = computeVisPolyFn(
@@ -191,6 +201,77 @@ export function renderFogOfWarLayer(width, height, options = {}) {
                 }
             }
             ctxFog.fill();
+        }
+
+        // Carve active portal line-of-sight frustums and reflect stencils visible to this token
+        if (Array.isArray(portals) && portals.length > 0) {
+            portals.forEach((portal) => {
+                const isReflect =
+                    portal.reflectMode === 'one-way' ||
+                    portal.reflectMode === 'two-way';
+                const isViewThrough = !!(portal.viewThrough || portal.seeThrough);
+                if (!isReflect && !isViewThrough) return;
+
+                const centerA = calcPortalCenter(portal);
+                const vInX = centerA.x - cx;
+                const vInY = centerA.y - cy;
+                const distToA = Math.hypot(vInX, vInY);
+                if (distToA > radius && !isDaylightMode && (!isGM || gmVisionMode)) return;
+
+                let blocked = false;
+                for (let i = 0; i < walls.length; i++) {
+                    const w = walls[i];
+                    if (w.isOpen) continue;
+                    if (isWallCoincidentWithPortal(w, portal)) continue;
+                    if (checkLineIntersection({ x: cx, y: cy }, centerA, { x: w.x1, y: w.y1 }, { x: w.x2, y: w.y2 })) {
+                        blocked = true;
+                        break;
+                    }
+                }
+                if (blocked && (!isGM || gmVisionMode)) return;
+
+                if (portal.isOneWay && !portal.isRadial) {
+                    const normA = getPortalNormalVector(portal);
+                    if (vInX * normA.dx + vInY * normA.dy >= 0) return;
+                }
+
+                if (isReflect) {
+                    ctxFog.save();
+                    ctxFog.beginPath();
+                    const gA = portal.geom;
+                    if (portal.shape === 'circle' && gA) {
+                        ctxFog.arc(centerA.x, centerA.y, gA.r !== undefined ? gA.r : 25, 0, Math.PI * 2);
+                    } else if (portal.shape === 'rect' && gA) {
+                        ctxFog.rect(gA.x, gA.y, gA.w, gA.h);
+                    } else if (portal.shape === 'polygon' && gA?.points?.length >= 3) {
+                        ctxFog.moveTo(gA.points[0].x, gA.points[0].y);
+                        for (let pi = 1; pi < gA.points.length; pi++) ctxFog.lineTo(gA.points[pi].x, gA.points[pi].y);
+                        ctxFog.closePath();
+                    } else {
+                        ctxFog.arc(centerA.x, centerA.y, 25, 0, Math.PI * 2);
+                    }
+                    ctxFog.fillStyle = 'rgba(255, 255, 255, 1.0)';
+                    ctxFog.fill();
+                    ctxFog.restore();
+                } else if (isViewThrough) {
+                    const remainingSight = (isDaylightMode ? 99999 : radius) - distToA;
+                    if (remainingSight > 10) {
+                        const frustum = computePortalSightFrustum(portal, { x: cx, y: cy }, remainingSight);
+                        if (frustum && frustum.length >= 3) {
+                            ctxFog.save();
+                            ctxFog.beginPath();
+                            ctxFog.moveTo(frustum[0].x, frustum[0].y);
+                            for (let fi = 1; fi < frustum.length; fi++) {
+                                ctxFog.lineTo(frustum[fi].x, frustum[fi].y);
+                            }
+                            ctxFog.closePath();
+                            ctxFog.fillStyle = 'rgba(255, 255, 255, 1.0)';
+                            ctxFog.fill();
+                            ctxFog.restore();
+                        }
+                    }
+                }
+            });
         }
     });
 
@@ -367,12 +448,11 @@ export function renderFogOfWarLayer(width, height, options = {}) {
                 litPolygons.push(visibilityPolygon);
 
                 const d = Math.max(16, Math.ceil(maxRadius * 2));
-                if (scratchLightCanvas.width !== d || scratchLightCanvas.height !== d) {
-                    scratchLightCanvas.width = d;
-                    scratchLightCanvas.height = d;
-                } else {
-                    ctxScratchLight.clearRect(0, 0, d, d);
+                if (scratchLightCanvas.width < d || scratchLightCanvas.height < d) {
+                    scratchLightCanvas.width = Math.max(1024, Math.ceil(d / 512) * 512);
+                    scratchLightCanvas.height = Math.max(1024, Math.ceil(d / 512) * 512);
                 }
+                ctxScratchLight.clearRect(0, 0, d, d);
 
                 const centerX = maxRadius;
                 const centerY = maxRadius;
@@ -444,7 +524,7 @@ export function renderFogOfWarLayer(width, height, options = {}) {
                 }
 
                 ctxFog.globalCompositeOperation = 'destination-out';
-                ctxFog.drawImage(scratchLightCanvas, light.x - maxRadius, light.y - maxRadius);
+                ctxFog.drawImage(scratchLightCanvas, 0, 0, d, d, light.x - maxRadius, light.y - maxRadius, d, d);
                 ctxFog.restore();
 
                 if (!options.ctxFloor && effectiveColor && effectiveColor !== '#ffffff') {
@@ -539,6 +619,7 @@ export function renderLightFloorWashPass(ctxFloor, width, height, options = {}) 
     } = options;
 
     const activeSpatialIndex = spatialIndex || wallSpatialIndex;
+    const isGM = options.isGM !== undefined ? options.isGM : vtt.role === 'GM';
     const lightSources = [];
     const nowSec = (typeof performance !== 'undefined' ? performance.now() : Date.now()) / 1000;
     let anyLightHasAnimation = false;

@@ -193,7 +193,8 @@ export function setupSocketSync(ctx = {}) {
         if (data.mapId === ctx.currentMapId) {
             const incoming = data.tokens || {};
             for (const id in incoming) {
-                if (id === ctx.dragTargetId && ctx.tokens[id]) continue;
+                const isBeingDragged = id === ctx.dragTargetId || (ctx.dragTargetId && ctx.selectedTokenIds?.has(id));
+                if (isBeingDragged && ctx.tokens[id]) continue;
                 ctx.tokens[id] = incoming[id];
             }
             for (const id in ctx.tokens) {
@@ -201,7 +202,8 @@ export function setupSocketSync(ctx = {}) {
                 if (t && (t.layer === 'map' || t.isBackground) && t.isAsset) continue;
                 // Guard: Never delete GM layer ctx.tokens for GM client on token:updated
                 if (vtt.role === 'GM' && t && t.layer === 'gm') continue;
-                if (id === ctx.dragTargetId) continue;
+                const isBeingDragged = id === ctx.dragTargetId || (ctx.dragTargetId && ctx.selectedTokenIds?.has(id));
+                if (isBeingDragged) continue;
                 if (!incoming[id]) {
                     delete ctx.tokens[id];
                     if (ctx.selectedTokenIds.has(id)) ctx.selectedTokenIds.delete(id);
@@ -295,6 +297,9 @@ export function setupSocketSync(ctx = {}) {
                 }
                 return;
             }
+            const isBeingDragged = tokenId === ctx.dragTargetId || (ctx.dragTargetId && ctx.selectedTokenIds?.has(tokenId));
+            if (isBeingDragged) return;
+
             if (ctx.tokens[tokenId]) {
                 Object.assign(ctx.tokens[tokenId], data.changes);
                 if (ctx.lastBroadcastedTokens) {

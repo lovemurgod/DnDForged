@@ -520,12 +520,20 @@ export function showShapeContextMenu(shape, clientX, clientY, context = {}) {
         });
     });
 
+    const closeMenu = (e) => {
+        if (!e || !menu.contains(e.target)) {
+            menu.remove();
+            window.removeEventListener('click', closeMenu);
+            window.removeEventListener('contextmenu', closeMenu);
+        }
+    };
+
     // Move to layer clicks
     menu.querySelectorAll('.menu-shape-move-layer').forEach((item) => {
         item.addEventListener('click', (e) => {
             e.stopPropagation();
             const targetLayer = item.dataset.layer;
-            menu.remove();
+            closeMenu();
             context.onMoveToLayer?.(shape.id, targetLayer);
         });
     });
@@ -533,43 +541,36 @@ export function showShapeContextMenu(shape, clientX, clientY, context = {}) {
     // Z-order clicks
     menu.querySelector('#menu-shape-front')?.addEventListener('click', (e) => {
         e.stopPropagation();
-        menu.remove();
+        closeMenu();
         context.onZOrderChange?.(shape.id, 'front');
     });
 
     menu.querySelector('#menu-shape-forward')?.addEventListener('click', (e) => {
         e.stopPropagation();
-        menu.remove();
+        closeMenu();
         context.onZOrderChange?.(shape.id, 'front-one');
     });
 
     menu.querySelector('#menu-shape-backward')?.addEventListener('click', (e) => {
         e.stopPropagation();
-        menu.remove();
+        closeMenu();
         context.onZOrderChange?.(shape.id, 'back-one');
     });
 
     menu.querySelector('#menu-shape-back')?.addEventListener('click', (e) => {
         e.stopPropagation();
-        menu.remove();
+        closeMenu();
         context.onZOrderChange?.(shape.id, 'back');
     });
 
     // Delete shape click
     menu.querySelector('#menu-shape-delete')?.addEventListener('click', (e) => {
         e.stopPropagation();
-        menu.remove();
+        closeMenu();
         context.onDeleteShape?.(shape.id);
     });
 
     setTimeout(() => {
-        const closeMenu = (e) => {
-            if (!menu.contains(e.target)) {
-                menu.remove();
-                window.removeEventListener('click', closeMenu);
-                window.removeEventListener('contextmenu', closeMenu);
-            }
-        };
         window.addEventListener('click', closeMenu);
         window.addEventListener('contextmenu', closeMenu);
     }, 10);

@@ -570,6 +570,36 @@ export function initVttChat(vtt, chatHistory) {
                 e.stopPropagation();
                 return;
             }
+
+            // Trap action buttons click delegation (Process, Full Damage, Half Damage)
+            const trapActionBtn = e.target.closest('.trap-btn-action');
+            if (trapActionBtn) {
+                if (vtt.role !== 'GM') return;
+                const action = trapActionBtn.dataset.action;
+                const rowEl = trapActionBtn.closest('.trap-card-actions-row');
+                const msgEl = trapActionBtn.closest('.chat-message');
+                const msgId = msgEl?.dataset?.msgId || rowEl?.dataset?.msgId;
+                let cardData = null;
+                if (rowEl && rowEl.dataset.cardData) {
+                    try {
+                        cardData = JSON.parse(decodeURIComponent(rowEl.dataset.cardData));
+                    } catch (err) {}
+                }
+                if (!cardData && msgEl?._msgData?.trapCard) {
+                    cardData = { ...msgEl._msgData.trapCard, isTrap: true };
+                }
+
+                if (cardData && action && window.VTT?.canvasEngine?.handleCardAction) {
+                    const rowButtons = rowEl ? Array.from(rowEl.querySelectorAll('.trap-btn-action')) : [trapActionBtn];
+                    rowButtons.forEach((b) => (b.disabled = true));
+                    const handled = window.VTT.canvasEngine.handleCardAction(cardData, action, msgId);
+                    if (handled === false) {
+                        rowButtons.forEach((b) => (b.disabled = false));
+                    }
+                }
+                e.stopPropagation();
+                return;
+            }
         });
 
         // Close menus when clicking outside
@@ -1542,6 +1572,29 @@ export function initVttChat(vtt, chatHistory) {
         // Structured trap card
         else if (msg.trapCard) {
             const tc = msg.trapCard;
+            const dmgType = tc.damageType ? tc.damageType.toLowerCase() : 'piercing';
+            const dmgTypeLabel = dmgType.charAt(0).toUpperCase() + dmgType.slice(1);
+            let encodedData = '';
+            try {
+                encodedData = encodeURIComponent(JSON.stringify({ ...tc, isTrap: true, damageType: dmgType }));
+            } catch (err) {}
+
+            const actionButtonsHtml = (vtt.role === 'GM')
+                ? `
+                <div class="trap-card-actions-row" data-card-data="${encodedData}" data-msg-id="${escapeHtml(msg.id || '')}">
+                    <button type="button" class="trap-btn-action trap-btn-process" data-action="process" title="Process saving throw result and apply damage to victim">
+                        <i class="fa-solid fa-play"></i> Process
+                    </button>
+                    <button type="button" class="trap-btn-action trap-btn-full" data-action="full" title="Apply full damage to victim">
+                        <i class="fa-solid fa-burst"></i> Full Damage
+                    </button>
+                    <button type="button" class="trap-btn-action trap-btn-half" data-action="half" title="Apply half damage to victim">
+                        <i class="fa-solid fa-shield-halved"></i> Half Damage
+                    </button>
+                </div>
+                `
+                : '';
+
             bodyText = `
                 <div class="trap-chat-card">
                     <div class="trap-chat-header">
@@ -1557,11 +1610,11 @@ export function initVttChat(vtt, chatHistory) {
                         ${tc.damageRoll
                     ? `
                             <span class="trap-chat-badge" style="background: rgba(239, 68, 68, 0.25); border-color: rgba(239, 68, 68, 0.6); color: #fca5a5;">
-                                <i class="fa-solid fa-burst"></i> Damage: <strong>${escapeHtml(tc.damageRoll.total)}</strong> <span style="font-size: 0.85em; opacity: 0.85;">(${escapeHtml(tc.damageRoll.breakdownStr || tc.damageRoll.formula || tc.damage || '')})</span>
+                                <i class="fa-solid fa-burst"></i> Damage: <strong>${escapeHtml(tc.damageRoll.total)}</strong> ${escapeHtml(dmgTypeLabel)} <span style="font-size: 0.85em; opacity: 0.85;">(${escapeHtml(tc.damageRoll.breakdownStr || tc.damageRoll.formula || tc.damage || '')})</span>
                             </span>
                         `
                     : tc.damage
-                        ? `<span class="trap-chat-badge"><i class="fa-solid fa-burst"></i> ${escapeHtml(tc.damage)}</span>`
+                        ? `<span class="trap-chat-badge"><i class="fa-solid fa-burst"></i> ${escapeHtml(tc.damage)} ${escapeHtml(dmgTypeLabel)}</span>`
                         : ''
                 }
                     </div>
@@ -1573,6 +1626,7 @@ export function initVttChat(vtt, chatHistory) {
                     `
                     : ''
                 }
+                    ${actionButtonsHtml}
                 </div>
             `;
         }
@@ -2903,6 +2957,9 @@ export function initVttChat(vtt, chatHistory) {
     function appendWhisperMessage(msg, isHistorical = false) {
         const messageDiv = document.createElement('div');
         messageDiv.className = 'chat-message whisper-card animated-fade-in';
+        if (msg.id) {
+            messageDiv.dataset.msgId = msg.id;
+        }
 
         const time = new Date(msg.timestamp || Date.now()).toLocaleTimeString([], {
             hour: '2-digit',

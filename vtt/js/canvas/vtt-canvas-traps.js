@@ -288,11 +288,29 @@ export function rollTrapSave(trapId, tokenId, ability, dc, options = {}) {
         window?.vttPlayerSheetAPI?.simulateRoll ||
         (typeof window !== 'undefined' && typeof window.simulateRoll === 'function' ? window.simulateRoll : null);
     const rollData = effectiveRollFn ? effectiveRollFn(formula) : null;
+    const finalRoll = rollData || { formula, total: Math.floor(Math.random() * 20) + 1 + totalMod };
+
+    if (typeof window !== 'undefined') {
+        window.VTT = window.VTT || {};
+        window.VTT._lastTrapSaves = window.VTT._lastTrapSaves || {};
+        window.VTT._lastTrapSaves[`${trapId}_${tokenId}`] = {
+            total: finalRoll.total,
+            dc: parseInt(dc) || 15,
+            passed: finalRoll.total >= (parseInt(dc) || 15)
+        };
+    }
 
     if (vtt.socket) {
         vtt.socket.emit('chat:msg', {
             text: `[${charName}: ${ability.toUpperCase()} Save] rolls **Saving Throw**`,
-            roll: rollData || { formula, total: Math.floor(Math.random() * 20) + 1 + totalMod }
+            roll: finalRoll,
+            trapSaveResult: {
+                trapId,
+                tokenId,
+                total: finalRoll.total,
+                dc: parseInt(dc) || 15,
+                passed: finalRoll.total >= (parseInt(dc) || 15)
+            }
         });
     }
 }
@@ -322,8 +340,10 @@ export function renderPlacedTrapsList(traps, selectedMapToolItem, callbacks = {}
     traps.forEach((trap, idx) => {
         const isSelected =
             selectedMapToolItem && selectedMapToolItem.type === 'trap' && selectedMapToolItem.id === trap.id;
+        const isSpent = trap.isSpent && !trap.repeatTrigger;
+        const isDisarmed = !!trap.isDisarmed;
         const card = document.createElement('div');
-        card.className = `maptools-item-card ${trap.isSpent && !trap.repeatTrigger ? 'is-spent' : ''} ${isSelected ? 'is-selected' : ''}`;
+        card.className = `maptools-item-card ${isSpent || isDisarmed ? 'is-spent' : ''} ${isSelected ? 'is-selected' : ''}`;
         const safeName = escapeHtml(trap.name || 'Trap');
         const safeShape = escapeHtml(String(trap.shape || '').toUpperCase());
         const safeDc = escapeHtml(trap.saveDc ?? '');
@@ -331,15 +351,25 @@ export function renderPlacedTrapsList(traps, selectedMapToolItem, callbacks = {}
         const safeDamage = escapeHtml(trap.damage ?? '');
         const safeId = escapeHtml(trap.id ?? '');
 
+        let statusBadge = '';
+        if (isDisarmed) {
+            statusBadge = '<span style="color:#38bdf8; font-weight:600; margin-left:4px;">[Disarmed]</span>';
+        } else if (isSpent) {
+            statusBadge = '<span style="color:#f87171; font-weight:600; margin-left:4px;">[Sprung]</span>';
+        }
+
+        const iconColor = isDisarmed ? '#38bdf8' : isSpent ? '#94a3b8' : '#ef4444';
+        const iconClass = isDisarmed ? 'fa-shield-halved' : isSpent ? 'fa-bolt-lightning text-muted' : 'fa-triangle-exclamation';
+
         card.innerHTML = `
             <div class="maptools-item-info">
                 <div class="maptools-item-name">
-                    <i class="fa-solid ${trap.isSpent && !trap.repeatTrigger ? 'fa-bolt-lightning text-muted' : 'fa-triangle-exclamation'}" style="color: ${trap.isSpent && !trap.repeatTrigger ? '#94a3b8' : '#ef4444'};"></i>
+                    <i class="fa-solid ${iconClass}" style="color: ${iconColor};"></i>
                     <span>${safeName}</span>
                 </div>
                 <div class="maptools-item-meta">
                     ${safeShape} | DC ${safeDc} ${safeAbility} | ${safeDamage}
-                    ${trap.isSpent && !trap.repeatTrigger ? '<span style="color:#f87171; font-weight:600; margin-left:4px;">[Sprung]</span>' : ''}
+                    ${statusBadge}
                 </div>
             </div>
             <div class="maptools-item-actions">
@@ -347,13 +377,17 @@ export function renderPlacedTrapsList(traps, selectedMapToolItem, callbacks = {}
                     <i class="fa-solid fa-pen"></i>
                 </button>
                 ${
-                    trap.isSpent && !trap.repeatTrigger
+                    isSpent || isDisarmed || trap.isRevealed
                         ? `
-                    <button type="button" class="maptools-action-btn btn-rearm" title="Reset/Re-arm Trap" data-idx="${idx}">
+                    <button type="button" class="maptools-action-btn btn-rearm" title="Reset & Re-arm Trap (Hide & Re-arm)" data-idx="${idx}">
                         <i class="fa-solid fa-arrows-rotate"></i>
                     </button>
                 `
-                        : ''
+                        : `
+                    <button type="button" class="maptools-action-btn btn-disarm" title="Safely Disarm Trap" data-idx="${idx}">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </button>
+                `
                 }
                 <button type="button" class="maptools-action-btn btn-focus" title="Center View on Trap" data-idx="${idx}">
                     <i class="fa-solid fa-eye"></i>
@@ -382,6 +416,18 @@ export function renderPlacedTrapsList(traps, selectedMapToolItem, callbacks = {}
         card.querySelector('.btn-rearm')?.addEventListener('click', (e) => {
             e.stopPropagation();
             trap.isSpent = false;
+            trap.isRevealed = false;
+            trap.isDisarmed = false;
+            if (vtt.socket) vtt.socket.emit('traps:update', { mapId: currentMapId, traps });
+            if (onUpdate) onUpdate();
+            if (renderAll) renderAll();
+        });
+
+        card.querySelector('.btn-disarm')?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            trap.isSpent = true;
+            trap.isRevealed = true;
+            trap.isDisarmed = true;
             if (vtt.socket) vtt.socket.emit('traps:update', { mapId: currentMapId, traps });
             if (onUpdate) onUpdate();
             if (renderAll) renderAll();
@@ -389,7 +435,11 @@ export function renderPlacedTrapsList(traps, selectedMapToolItem, callbacks = {}
 
         card.querySelector('.btn-delete')?.addEventListener('click', (e) => {
             e.stopPropagation();
-            traps.splice(idx, 1);
+            const [deleted] = traps.splice(idx, 1);
+            if (callbacks.mapToolUndoStack && deleted) {
+                callbacks.mapToolUndoStack.push({ action: 'delete', type: 'trap', item: JSON.parse(JSON.stringify(deleted)) });
+                if (callbacks.mapToolRedoStack) callbacks.mapToolRedoStack.length = 0;
+            }
             if (vtt.campaignState?.maps?.[currentMapId]) {
                 vtt.campaignState.maps[currentMapId].traps = traps;
             }
@@ -403,5 +453,120 @@ export function renderPlacedTrapsList(traps, selectedMapToolItem, callbacks = {}
         });
 
         listEl.appendChild(card);
+    });
+}
+
+export function showTrapContextMenu(trapId, clientX, clientY, context = {}) {
+    if (typeof document === 'undefined') return;
+    const oldMenu = document.getElementById('vtt-token-context-menu');
+    if (oldMenu) oldMenu.remove();
+
+    const traps = context.traps || [];
+    const trap = traps.find((t) => t.id === trapId);
+    const role = context.role || 'GM';
+    if (!trap || role !== 'GM') return;
+
+    const menu = document.createElement('div');
+    menu.id = 'vtt-token-context-menu';
+    menu.className = 'vtt-token-context-menu';
+    menu.style.left = `${clientX}px`;
+    menu.style.top = `${clientY}px`;
+
+    const isSpent = trap.isSpent && !trap.repeatTrigger;
+    const isDisarmed = !!trap.isDisarmed;
+
+    const html = `
+        <div class="vtt-token-menu-header">
+            <i class="fa-solid fa-triangle-exclamation"></i> ${escapeHtml(trap.name || 'Trap')}
+        </div>
+        ${
+            isSpent || isDisarmed || trap.isRevealed
+                ? `
+            <div class="vtt-token-menu-item" id="menu-trap-rearm">
+                <span><i class="fa-solid fa-arrows-rotate item-icon"></i> Reset & Re-arm Trap</span>
+            </div>
+        `
+                : `
+            <div class="vtt-token-menu-item" id="menu-trap-disarm">
+                <span><i class="fa-solid fa-shield-halved item-icon"></i> Disarm Trap</span>
+            </div>
+        `
+        }
+        <div class="vtt-token-menu-item" id="menu-trap-edit">
+            <span><i class="fa-solid fa-pen-to-square item-icon"></i> Edit Trap</span>
+        </div>
+        <div class="vtt-token-menu-divider"></div>
+        <div class="vtt-token-menu-item text-danger" id="menu-trap-delete" style="color: var(--color-danger);">
+            <span><i class="fa-solid fa-trash item-icon"></i> Delete Trap</span>
+        </div>
+    `;
+
+    menu.innerHTML = html;
+    document.body.appendChild(menu);
+
+    const menuRect = menu.getBoundingClientRect();
+    if (clientX + menuRect.width > window.innerWidth) menu.style.left = `${window.innerWidth - menuRect.width - 10}px`;
+    if (clientY + menuRect.height > window.innerHeight)
+        menu.style.top = `${window.innerHeight - menuRect.height - 10}px`;
+
+    function syncTraps() {
+        if (context.campaignState?.maps?.[context.currentMapId]) {
+            context.campaignState.maps[context.currentMapId].traps = traps;
+        }
+        if (context.socket) context.socket.emit('traps:update', { mapId: context.currentMapId, traps });
+        if (context.renderPlacedTrapsList) context.renderPlacedTrapsList();
+        if (context.renderAll) context.renderAll();
+    }
+
+    const closeMenu = (e) => {
+        if (!e || !menu.contains(e.target)) {
+            window.removeEventListener('click', closeMenu);
+            window.removeEventListener('contextmenu', closeMenu);
+            window.removeEventListener('pointerdown', closeMenu);
+            if (menu.parentNode) menu.remove();
+        }
+    };
+    setTimeout(() => {
+        window.addEventListener('click', closeMenu);
+        window.addEventListener('contextmenu', closeMenu);
+        window.addEventListener('pointerdown', closeMenu);
+    }, 50);
+
+    menu.querySelector('#menu-trap-rearm')?.addEventListener('click', () => {
+        trap.isSpent = false;
+        trap.isRevealed = false;
+        trap.isDisarmed = false;
+        syncTraps();
+        closeMenu();
+    });
+
+    menu.querySelector('#menu-trap-disarm')?.addEventListener('click', () => {
+        trap.isSpent = true;
+        trap.isRevealed = true;
+        trap.isDisarmed = true;
+        syncTraps();
+        closeMenu();
+    });
+
+    menu.querySelector('#menu-trap-edit')?.addEventListener('click', () => {
+        if (context.selectMapToolItem) context.selectMapToolItem('trap', trapId);
+        closeMenu();
+    });
+
+    menu.querySelector('#menu-trap-delete')?.addEventListener('click', () => {
+        if (context.deleteSelectedMapToolItem) {
+            context.deleteSelectedMapToolItem('trap', trapId);
+        } else {
+            const idx = traps.findIndex((t) => t.id === trapId);
+            if (idx !== -1) {
+                const [deleted] = traps.splice(idx, 1);
+                if (context.mapToolUndoStack && deleted) {
+                    context.mapToolUndoStack.push({ action: 'delete', type: 'trap', item: JSON.parse(JSON.stringify(deleted)) });
+                    if (context.mapToolRedoStack) context.mapToolRedoStack.length = 0;
+                }
+                syncTraps();
+            }
+        }
+        closeMenu();
     });
 }

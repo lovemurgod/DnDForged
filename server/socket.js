@@ -1143,11 +1143,12 @@ export function initSocketServer(io) {
                     trapName: trapName,
                     tokenId: (triggeringToken && triggeringToken.id) || data.tokenId,
                     tokenName: tokenName,
-                    saveAbility: tr.saveAbility || 'DEX',
-                    saveDc: tr.saveDc || 15,
-                    damage: tr.damage || '',
+                    saveAbility: tr.saveAbility || data.saveAbility || 'DEX',
+                    saveDc: tr.saveDc || data.saveDc || 15,
+                    damage: tr.damage || data.damage || '',
+                    damageType: tr.damageType || data.damageType || 'piercing',
                     damageRoll: data.damageRoll || null,
-                    flavor: tr.flavor || 'A concealed hazard is sprung upon entry!'
+                    flavor: tr.flavor || data.flavor || 'A concealed hazard is sprung upon entry!'
                 },
                 timestamp: Date.now(),
                 hidden: false,
@@ -1165,6 +1166,7 @@ export function initSocketServer(io) {
                 saveAbility: tr.saveAbility,
                 saveDc: tr.saveDc,
                 damage: tr.damage,
+                damageType: tr.damageType || data.damageType || 'piercing',
                 flavor: tr.flavor
             });
         });

@@ -149,6 +149,7 @@ import {
     renderTraps as renderTrapsExt,
     rollTrapSave as rollTrapSaveExt,
     renderPlacedTrapsList as renderPlacedTrapsListExt,
+    showTrapContextMenu as showTrapContextMenuExt,
     triggerTrapSpringFX as triggerTrapSpringFXExt,
     postTrapTriggerChatCard as postTrapTriggerChatCardExt
 } from './canvas/vtt-canvas-traps.js';
@@ -193,7 +194,9 @@ import {
     commitNewMapToolItem as commitNewMapToolItemExt,
     renderSelectedMapToolHighlight as renderSelectedMapToolHighlightExt,
     renderMapToolDrawingPreview as renderMapToolDrawingPreviewExt,
-    setupMapToolsControls as setupMapToolsControlsExt
+    setupMapToolsControls as setupMapToolsControlsExt,
+    mapToolUndo as mapToolUndoExt,
+    mapToolRedo as mapToolRedoExt
 } from './canvas/vtt-canvas-map-tools.js';
 import {
     getWallCoordinatesForRaycasting as getWallCoordinatesForRaycastingExt,
@@ -587,7 +590,8 @@ export function initVttCanvas(vtt) {
     }
 
     function getNoteAtCoord(x, y) {
-        for (let note of notes) {
+        for (let i = notes.length - 1; i >= 0; i--) {
+            const note = notes[i];
             let isInteractable = false;
             if (vtt.role === 'GM') {
                 if (activeLayer === 'notes') isInteractable = true;
@@ -603,7 +607,7 @@ export function initVttCanvas(vtt) {
     }
 
     function getWallVertexAtCoord(x, y) {
-        let minDistance = 12; // 12px threshold to grab endpoint vertex
+        let minDistance = Math.max(12, 16 / Math.max(0.1, zoom || 1)); // Zoom-aware threshold to grab endpoint vertex
         let found = null;
 
         walls.forEach((wall, idx) => {
@@ -733,6 +737,14 @@ export function initVttCanvas(vtt) {
     function isPointVisible(x, y) {
         if (vtt.role === 'GM' && !gmTokenVisionMode) return true;
 
+        const currentMap = vtt.campaignState?.maps?.[currentMapId];
+        // If Fog of War is disabled on this map, all points are visible
+        if (currentMap?.lightingSettings?.fogOfWar === false) return true;
+
+        // If no tokens exist on map or daylight mode has no active vision polygons, visible by default
+        if (!tokens || Object.keys(tokens).length === 0) return true;
+        if (currentMap?.lightingSettings?.daylightMode && (!visionPolygons || visionPolygons.length === 0)) return true;
+
         const pt = { x, y };
         // 1. Check unlit darkvision / immediate token sight polygons
         for (let i = 0; i < visionPolygons.length; i++) {
@@ -802,10 +814,12 @@ export function initVttCanvas(vtt) {
             currentMapId,
             vtt,
             onWallsUpdated: () => {
+                syncWallSpatialIndex();
                 if (vtt.socket) vtt.socket.emit('walls:update', { mapId: currentMapId, walls });
                 requestRender();
             },
             onWallDeleted: () => {
+                syncWallSpatialIndex();
                 selectedWallIdx = -1;
                 hoveredWallIdx = -1;
                 selectedWallIdxs.clear();
@@ -1211,6 +1225,22 @@ export function initVttCanvas(vtt) {
             deleteSelectedMapToolItem
         });
     }
+    function showTrapContextMenu(trapId, clientX, clientY) {
+        showTrapContextMenuExt(trapId, clientX, clientY, {
+            traps,
+            role: vtt.role,
+            tokens,
+            currentMapId,
+            campaignState: vtt.campaignState,
+            socket: vtt.socket,
+            renderPlacedTrapsList,
+            renderAll,
+            selectMapToolItem,
+            deleteSelectedMapToolItem,
+            mapToolUndoStack,
+            mapToolRedoStack
+        });
+    }
     function setupPaintRibbonControls() {
         setupPaintRibbonControlsExt(
             {
@@ -1264,6 +1294,8 @@ export function initVttCanvas(vtt) {
     // Map Tools (Traps & Portals) State
     let traps = [];
     let portals = [];
+    const mapToolUndoStack = [];
+    const mapToolRedoStack = [];
     let selectedMapToolItem = null;
     let activeMapToolSubmode = 'traps'; // 'traps' | 'portals'
     let currentMapToolShape = 'rect'; // 'rect' | 'circle' | 'line' | 'polygon'
@@ -1375,7 +1407,9 @@ export function initVttCanvas(vtt) {
         commitNewMapToolItem: (...args) => commitNewMapToolItem(...args),
         applyMapToolResize: (...args) => applyMapToolResize(...args),
         updateDraggedMapToolGeom: (...args) => updateDraggedMapToolGeom(...args),
-        getPortalRotationHandlePos: (...args) => getPortalRotationHandlePos(...args)
+        getPortalRotationHandlePos: (...args) => getPortalRotationHandlePos(...args),
+        mapToolUndoStack,
+        mapToolRedoStack
     };
 
     const cloneMapToolGeom = (g) => cloneMapToolGeomExt(g);
@@ -1495,6 +1529,38 @@ export function initVttCanvas(vtt) {
             currentMapId,
             campaignState: vtt.campaignState,
             socket: vtt.socket,
+            mapToolUndoStack,
+            mapToolRedoStack,
+            onRenderLists: () => {
+                renderPlacedTrapsList();
+                renderPlacedPortalsList();
+            },
+            renderAll
+        });
+    const mapToolUndo = () =>
+        mapToolUndoExt({
+            mapToolUndoStack,
+            mapToolRedoStack,
+            traps,
+            portals,
+            currentMapId,
+            campaignState: vtt.campaignState,
+            socket: vtt.socket,
+            onRenderLists: () => {
+                renderPlacedTrapsList();
+                renderPlacedPortalsList();
+            },
+            renderAll
+        });
+    const mapToolRedo = () =>
+        mapToolRedoExt({
+            mapToolUndoStack,
+            mapToolRedoStack,
+            traps,
+            portals,
+            currentMapId,
+            campaignState: vtt.campaignState,
+            socket: vtt.socket,
             onRenderLists: () => {
                 renderPlacedTrapsList();
                 renderPlacedPortalsList();
@@ -1525,6 +1591,8 @@ export function initVttCanvas(vtt) {
             currentMapId,
             campaignState: vtt.campaignState,
             socket: vtt.socket,
+            mapToolUndoStack,
+            mapToolRedoStack,
             onRenderLists: () => {
                 renderPlacedTrapsList();
                 renderPlacedPortalsList();
@@ -1621,6 +1689,8 @@ export function initVttCanvas(vtt) {
             onPanTo: panTo,
             onUpdate: renderPlacedTrapsList,
             onDeselect: deselectMapToolItem,
+            mapToolUndoStack,
+            mapToolRedoStack,
             renderAll,
             zoom,
             vtt
@@ -2491,6 +2561,7 @@ export function initVttCanvas(vtt) {
             selectedTokenIds,
             tokens,
             lights,
+            portals,
             walls,
             wallsVersion,
             wallSpatialIndex,
@@ -2645,7 +2716,8 @@ export function initVttCanvas(vtt) {
             currentMapId,
             drawMeasurementTemplate,
             resolveRulerPortalBending,
-            grid
+            grid,
+            zoom
         });
 
         renderStandaloneLightsInteractionPass(ctxInteraction, {
@@ -2732,7 +2804,7 @@ export function initVttCanvas(vtt) {
 
         // Draw in-progress live Paint stroke / shape preview
         if (activeTool === 'paint') {
-            if (currentPaintStroke && currentPaintStroke.type !== 'eraser') {
+            if (currentPaintStroke) {
                 drawDrawingObject(ctxInteraction, currentPaintStroke, false);
             } else if (polygonPoints.length > 0) {
                 ctxInteraction.save();
@@ -4160,6 +4232,7 @@ export function initVttCanvas(vtt) {
         isTokenCollidingWithPortal: (tok, p) => isTokenCollidingWithPortal(tok, p),
         selectMapToolItem: (t, id) => selectMapToolItem(t, id),
         showPortalContextMenu: (id, x, y) => showPortalContextMenu(id, x, y),
+        showTrapContextMenu: (id, x, y) => showTrapContextMenu(id, x, y),
         showTokenContextMenu: (id, x, y) => showTokenContextMenu(id, x, y),
         showMassRollContextMenu: (...args) => showMassRollContextMenu(...args),
         showShapeContextMenu: (s, x, y) => showShapeContextMenu(s, x, y),
@@ -4357,6 +4430,17 @@ export function initVttCanvas(vtt) {
 
         canvasInteraction.addEventListener('dblclick', (e) => {
             const mouse = getCanvasMouseCoords(e);
+
+            // 1. Map tool polygon finalization
+            if (activeTool === 'maptools' || activeTool === 'map-tools') {
+                if (currentMapToolShape === 'polygon') {
+                    e.preventDefault();
+                    finalizeMapToolPolygon();
+                }
+                return;
+            }
+
+            // 2. Text drawing inline editing
             if (activeTool === 'select' || activeTool === 'paint') {
                 const clickedDrawing = getDrawingAtPoint(mouse, true);
                 if (clickedDrawing && clickedDrawing.type === 'text' && isDrawingControlledByPlayer(clickedDrawing)) {
@@ -4365,23 +4449,10 @@ export function initVttCanvas(vtt) {
                     return;
                 }
             }
-            if (activeTool !== 'select') return;
-            const token = getTokenAtPoint(mouse);
-            if (token) {
-                e.preventDefault();
-                openTokenEditModal(token.id);
-            }
-        });
 
-        canvasInteraction.addEventListener('dblclick', (e) => {
-            if (activeTool === 'maptools' || activeTool === 'map-tools') {
-                if (currentMapToolShape === 'polygon') {
-                    finalizeMapToolPolygon();
-                }
-                return;
-            }
             if (activeTool !== 'select') return;
-            const mouse = getCanvasMouseCoords(e);
+
+            // 3. Token Rotation Handle Reset (checked before token body hit test)
             let resetId = null;
             selectedTokenIds.forEach((id) => {
                 const token = tokens[id];
@@ -4389,18 +4460,27 @@ export function initVttCanvas(vtt) {
                     const h = getTokenRotationHandlePos(token);
                     if (h) {
                         const dist = Math.hypot(mouse.x - h.x, mouse.y - h.y);
-                        if (dist <= 10 / zoom) {
+                        if (dist <= 14 / zoom) {
                             resetId = id;
                         }
                     }
                 }
             });
             if (resetId) {
+                e.preventDefault();
                 selectedTokenIds.forEach((id) => {
                     if (tokens[id]) tokens[id].rotation = 0;
                 });
                 if (vtt.socket) window.emitTokenUpdates(tokens);
                 renderAll();
+                return;
+            }
+
+            // 4. Token Configuration Modal
+            const token = getTokenAtPoint(mouse);
+            if (token) {
+                e.preventDefault();
+                openTokenEditModal(token.id);
             }
         });
 
@@ -5010,6 +5090,8 @@ export function initVttCanvas(vtt) {
             set hoveredMapToolHandle(v) {
                 hoveredMapToolHandle = v;
             },
+            mapToolUndoStack,
+            mapToolRedoStack,
             renderAll: () => renderAll(),
             panTo: (...args) => panTo(...args),
             getCanvasMouseCoords: (e) => getCanvasMouseCoords(e),
@@ -5044,6 +5126,10 @@ export function initVttCanvas(vtt) {
             showWindowSettingsModal: (...args) => showWindowSettingsModalExt(...args),
             showWallSettingsModal: (...args) => showWallSettingsModalExt(...args),
             closeAnyWallModal: () => closeAnyWallModal(),
+            syncWallSpatialIndex: (w, h) => syncWallSpatialIndex(w, h),
+            get wallSpatialIndex() {
+                return wallSpatialIndex;
+            },
             updateContainerTransform: () => updateContainerTransform(),
             updateCoordinateDisplay: (coords) => updateCoordinateDisplay(coords),
             cancelCameraAnimation: () => cancelCameraAnimation(),
@@ -5447,6 +5533,16 @@ export function initVttCanvas(vtt) {
                 currentMapToolShape = v;
             },
             finalizeMapToolPolygon: () => finalizeMapToolPolygon(),
+            get selectedMapToolItem() {
+                return selectedMapToolItem;
+            },
+            deleteSelectedMapToolItem: (type) => deleteSelectedMapToolItem(type),
+            deselectMapToolItem: () => deselectMapToolItem(),
+            mapToolUndo: () => mapToolUndo(),
+            mapToolRedo: () => mapToolRedo(),
+            get mapToolUndoStack() {
+                return mapToolUndoStack;
+            },
             switchActiveLayer: (l) => switchActiveLayer(l),
             get activeLayer() {
                 return activeLayer;

@@ -511,19 +511,31 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group" style="margin-bottom: 8px;">
-                        <label for="mobile-trap-damage-input" style="font-size: 0.78rem; color: #94a3b8;">Damage /
-                            Effect</label>
-                        <input type="text" id="mobile-trap-damage-input" value="4d6 piercing" class="form-control"
-                            style="font-size: 0.9rem; padding: 8px 10px; width: 100%; margin-bottom: 6px;">
-                        <!-- Quick Damage Chips -->
-                        <div class="mobile-damage-chips"
-                            style="display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px;">
-                            <button type="button" class="mobile-chip-btn" data-damage="2d6 piercing">2d6</button>
-                            <button type="button" class="mobile-chip-btn" data-damage="3d6 fire">3d6 Fire</button>
-                            <button type="button" class="mobile-chip-btn" data-damage="4d6 piercing">4d6</button>
-                            <button type="button" class="mobile-chip-btn" data-damage="2d10 poison">2d10</button>
-                            <button type="button" class="mobile-chip-btn" data-damage="4d10 force">4d10</button>
+                    <div style="display: flex; gap: 8px; margin-bottom: 6px;">
+                        <div class="form-group" style="flex: 1.2;">
+                            <label for="mobile-trap-damage-input" style="font-size: 0.78rem; color: #94a3b8;">Damage Dice</label>
+                            <input type="text" id="mobile-trap-damage-input" value="4d6" class="form-control"
+                                style="font-size: 0.9rem; padding: 8px 10px; width: 100%;">
+                        </div>
+                        <div class="form-group" style="flex: 1;">
+                            <label for="mobile-trap-damage-type-select" style="font-size: 0.78rem; color: #94a3b8;">Damage Type</label>
+                            <select id="mobile-trap-damage-type-select"
+                                style="width: 100%; height: 42px; border-radius: 8px; font-size: 0.88rem;">
+                                <option value="piercing" selected>Piercing</option>
+                                <option value="slashing">Slashing</option>
+                                <option value="bludgeoning">Bludgeoning</option>
+                                <option value="fire">Fire</option>
+                                <option value="poison">Poison</option>
+                                <option value="acid">Acid</option>
+                                <option value="cold">Cold</option>
+                                <option value="lightning">Lightning</option>
+                                <option value="necrotic">Necrotic</option>
+                                <option value="radiant">Radiant</option>
+                                <option value="force">Force</option>
+                                <option value="psychic">Psychic</option>
+                                <option value="thunder">Thunder</option>
+                                <option value="untyped">Untyped</option>
+                            </select>
                         </div>
                     </div>
                     <div style="display: flex; justify-content: space-between; align-items: center; margin: 10px 0;">
@@ -3425,9 +3437,30 @@
                     </div>
                 </div>
 
-                <div class="form-group" style="margin-bottom: 8px;">
-                    <label for="maptools-trap-damage">Damage / Effect</label>
-                    <input type="text" id="maptools-trap-damage" value="4d6 piercing" placeholder="e.g. 4d6 piercing">
+                <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                    <div class="form-group" style="flex: 1.2;">
+                        <label for="maptools-trap-damage">Damage Dice</label>
+                        <input type="text" id="maptools-trap-damage" value="4d6" placeholder="e.g. 4d6">
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label for="maptools-trap-damage-type">Damage Type</label>
+                        <select id="maptools-trap-damage-type" style="width: 100%;">
+                            <option value="piercing" selected>Piercing</option>
+                            <option value="slashing">Slashing</option>
+                            <option value="bludgeoning">Bludgeoning</option>
+                            <option value="fire">Fire</option>
+                            <option value="poison">Poison</option>
+                            <option value="acid">Acid</option>
+                            <option value="cold">Cold</option>
+                            <option value="lightning">Lightning</option>
+                            <option value="necrotic">Necrotic</option>
+                            <option value="radiant">Radiant</option>
+                            <option value="force">Force</option>
+                            <option value="psychic">Psychic</option>
+                            <option value="thunder">Thunder</option>
+                            <option value="untyped">Untyped</option>
+                        </select>
+                    </div>
                 </div>
 
                 <div class="maptools-toggle-row">

@@ -48,17 +48,27 @@ export function cancelActiveMeasurement(context = {}) {
 }
 
 export function cancelTokenDrag(context = {}) {
-    if (context.dragTargetId) {
+    let hadMoved = false;
+    if (context.tokenDragOriginalPositions && Object.keys(context.tokenDragOriginalPositions).length > 0) {
+        Object.entries(context.tokenDragOriginalPositions).forEach(([id, orig]) => {
+            const tok = context.tokens?.[id];
+            if (tok && orig) {
+                if (tok.x !== orig.x || tok.y !== orig.y) hadMoved = true;
+                tok.x = orig.x;
+                tok.y = orig.y;
+            }
+        });
+    } else if (context.dragTargetId) {
         const originalPos = context.tokenDragOriginalPositions?.[context.dragTargetId];
         const targetToken = context.tokens?.[context.dragTargetId];
         if (originalPos && targetToken) {
-            const hadMoved = targetToken.x !== originalPos.x || targetToken.y !== originalPos.y;
+            if (targetToken.x !== originalPos.x || targetToken.y !== originalPos.y) hadMoved = true;
             targetToken.x = originalPos.x;
             targetToken.y = originalPos.y;
-            if (hadMoved) context.emitTokenUpdates?.(context.tokens);
         }
-        context.dragTargetId = null;
     }
+    if (hadMoved) context.emitTokenUpdates?.(context.tokens);
+    context.dragTargetId = null;
     context.tokenDragOriginalPositions = {};
     const dragPill = typeof document !== 'undefined' ? document.getElementById('vtt-mobile-drag-pill') : null;
     if (dragPill) dragPill.classList.add('vtt-hidden');
@@ -128,18 +138,36 @@ export function moveTouchTokenDrag(clientX, clientY, context = {}) {
         let closestT = 1.0;
         let collisionPoint = null;
 
-        const walls = context.walls || [];
+        const walls = context.wallSpatialIndex?.tree
+            ? context.wallSpatialIndex.tree.queryRange({
+                  minX: Math.min(startCenter.x, endCenter.x) - radius - 15,
+                  minY: Math.min(startCenter.y, endCenter.y) - radius - 15,
+                  maxX: Math.max(startCenter.x, endCenter.x) + radius + 15,
+                  maxY: Math.max(startCenter.y, endCenter.y) + radius + 15
+              })
+            : context.walls || [];
         const portals = context.portals || [];
         walls.forEach((wall) => {
             if (wall.isOpen) return;
             if (
                 Array.isArray(portals) &&
-                portals.some(
-                    (po) =>
-                        po.walkThrough &&
-                        distToSegmentSq(calcPortalCenter(po), { x: wall.x1, y: wall.y1 }, { x: wall.x2, y: wall.y2 }) <=
-                            35 * 35
-                )
+                portals.some((po) => {
+                    if (!po.walkThrough) return false;
+                    const pRad =
+                        po.shape === 'circle' && po.geom?.r
+                            ? po.geom.r
+                            : po.shape === 'rect' && po.geom
+                              ? Math.max(po.geom.w, po.geom.h) / 2
+                              : 45;
+                    const threshSq = Math.max(pRad * pRad * 1.5, 55 * 55);
+                    return (
+                        distToSegmentSq(
+                            calcPortalCenter(po),
+                            { x: wall.x1, y: wall.y1 },
+                            { x: wall.x2, y: wall.y2 }
+                        ) <= threshSq
+                    );
+                })
             )
                 return;
             const intersect = getLineIntersection(
@@ -243,10 +271,16 @@ export function moveTouchTokenDrag(clientX, clientY, context = {}) {
 
 export function endTouchTokenDrag(clientX, clientY, context = {}) {
     if (!context.dragTargetId) return;
-    const t = context.tokens?.[context.dragTargetId];
+    const movedTokensList = Array.from(context.selectedTokenIds || [])
+        .map((id) => context.tokens?.[id])
+        .filter(Boolean);
+    if (!movedTokensList.some((t) => t.id === context.dragTargetId) && context.tokens?.[context.dragTargetId]) {
+        movedTokensList.push(context.tokens[context.dragTargetId]);
+    }
+
     let didMove = false;
-    if (t) {
-        const originalPos = context.tokenDragOriginalPositions?.[context.dragTargetId] || { x: t.x, y: t.y };
+    movedTokensList.forEach((t) => {
+        const originalPos = context.tokenDragOriginalPositions?.[t.id] || { x: t.x, y: t.y };
         if (originalPos.x !== t.x || originalPos.y !== t.y) {
             didMove = true;
             const triggerRes = context.checkTokenMoveTriggers?.(t, originalPos);
@@ -254,23 +288,33 @@ export function endTouchTokenDrag(clientX, clientY, context = {}) {
                 delete t._animReq;
                 if (context.tokenAnimations?.[t.id]) delete context.tokenAnimations[t.id];
                 if (triggerRes?.action === 'teleport' && context.tokens?.[t.id]) {
-                    context.selectedTokenIds.clear();
-                    context.selectedTokenIds.add(t.id);
+                    context.selectedTokenIds?.clear();
+                    context.selectedTokenIds?.add(t.id);
                     context.selectedTokenId = t.id;
                 }
             } else {
+                const leadOrig =
+                    (context.dragTargetId && context.tokenDragOriginalPositions?.[context.dragTargetId]) || originalPos;
+                const offX = originalPos.x - leadOrig.x;
+                const offY = originalPos.y - leadOrig.y;
+                const baseWaypoints = context.isTokenMeasuring ? context.measureAnchorPoints?.slice(1) || [] : [];
+                const tokenWaypoints =
+                    t.id === context.dragTargetId || (offX === 0 && offY === 0)
+                        ? baseWaypoints
+                        : baseWaypoints.map((wp) => ({ x: wp.x + offX, y: wp.y + offY }));
+
                 t._animReq = {
                     startX: originalPos.x,
                     startY: originalPos.y,
                     endX: t.x,
                     endY: t.y,
-                    waypoints: context.isTokenMeasuring ? context.measureAnchorPoints.slice(1) : [],
+                    waypoints: tokenWaypoints,
                     timestamp: Date.now(),
                     duration: 500
                 };
             }
         }
-    }
+    });
     if (didMove) {
         context.emitTokenUpdates?.(context.tokens);
         context.processTokenAnimReqs?.(context.tokens);

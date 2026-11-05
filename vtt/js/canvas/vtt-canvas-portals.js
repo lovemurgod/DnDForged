@@ -104,7 +104,8 @@ export function isTokenCollidingWithPortal(token, portal, fromPos = null, toPos 
             const hit = checkLineIntersection(fromPos, toPos, { x: g.x1, y: g.y1 }, { x: g.x2, y: g.y2 });
             if (hit) return true;
         }
-        return distToSegmentSq(evalCenter, { x: g.x1, y: g.y1 }, { x: g.x2, y: g.y2 }) <= 16;
+        const effectiveRadius = Math.max(4, Math.min(drawW, drawH) / 2);
+        return distToSegmentSq(evalCenter, { x: g.x1, y: g.y1 }, { x: g.x2, y: g.y2 }) <= (effectiveRadius * effectiveRadius);
     } else if (portal.shape === 'rect') {
         if (isPointInsideGeometry(evalCenter, 'rect', g)) return true;
         if (fromPos && toPos && findEarliestPathIntersection(fromPos, toPos, 'rect', g)) return true;
@@ -725,6 +726,112 @@ function getLineIntersectionInternal(r_px, r_py, r_dx, r_dy, s_px, s_py, s_dx, s
     return null;
 }
 
+export function getPortalAperturePoints(portal, observerPoint) {
+    if (!portal || !portal.geom) return null;
+    const g = portal.geom;
+    if (portal.shape === 'line') {
+        return { p1: { x: g.x1, y: g.y1 }, p2: { x: g.x2, y: g.y2 } };
+    }
+    const center = calcPortalCenter(portal);
+    if (portal.shape === 'circle') {
+        const r = g.r !== undefined ? g.r : 25;
+        const dEye = Math.hypot(center.x - observerPoint.x, center.y - observerPoint.y) || 1;
+        if (dEye <= r) {
+            const norm = getPortalNormalVector(portal);
+            return {
+                p1: { x: center.x - norm.dy * r, y: center.y + norm.dx * r },
+                p2: { x: center.x + norm.dy * r, y: center.y - norm.dx * r }
+            };
+        }
+        const angC = Math.atan2(center.y - observerPoint.y, center.x - observerPoint.x);
+        const alpha = Math.asin(Math.min(0.999, r / dEye));
+        return {
+            p1: { x: observerPoint.x + Math.cos(angC - alpha) * dEye, y: observerPoint.y + Math.sin(angC - alpha) * dEye },
+            p2: { x: observerPoint.x + Math.cos(angC + alpha) * dEye, y: observerPoint.y + Math.sin(angC + alpha) * dEye }
+        };
+    }
+    if (portal.shape === 'rect' || (portal.shape === 'polygon' && g?.points?.length >= 3)) {
+        const pts = portal.shape === 'rect'
+            ? [{ x: g.x, y: g.y }, { x: g.x + g.w, y: g.y }, { x: g.x + g.w, y: g.y + g.h }, { x: g.x, y: g.y + g.h }]
+            : g.points;
+        let minA = Infinity, maxA = -Infinity;
+        let minP = pts[0], maxP = pts[0];
+        const refA = Math.atan2(center.y - observerPoint.y, center.x - observerPoint.x);
+        pts.forEach((p) => {
+            const a = Math.atan2(p.y - observerPoint.y, p.x - observerPoint.x);
+            let diff = (a - refA) % (Math.PI * 2);
+            if (diff < -Math.PI) diff += Math.PI * 2;
+            if (diff > Math.PI) diff -= Math.PI * 2;
+            if (diff < minA) { minA = diff; minP = p; }
+            if (diff > maxA) { maxA = diff; maxP = p; }
+        });
+        return { p1: minP, p2: maxP };
+    }
+    const norm = getPortalNormalVector(portal);
+    return {
+        p1: { x: center.x - norm.dy * 25, y: center.y + norm.dx * 25 },
+        p2: { x: center.x + norm.dy * 25, y: center.y - norm.dx * 25 }
+    };
+}
+
+export function computePortalSightFrustum(portal, sourceCenter, remainingSight) {
+    const ap = getPortalAperturePoints(portal, sourceCenter);
+    if (!ap) return null;
+    const { p1, p2 } = ap;
+
+    const d1X = p1.x - sourceCenter.x;
+    const d1Y = p1.y - sourceCenter.y;
+    const len1 = Math.hypot(d1X, d1Y) || 1;
+    const e1 = {
+        x: p1.x + (d1X / len1) * remainingSight,
+        y: p1.y + (d1Y / len1) * remainingSight
+    };
+
+    const d2X = p2.x - sourceCenter.x;
+    const d2Y = p2.y - sourceCenter.y;
+    const len2 = Math.hypot(d2X, d2Y) || 1;
+    const e2 = {
+        x: p2.x + (d2X / len2) * remainingSight,
+        y: p2.y + (d2Y / len2) * remainingSight
+    };
+
+    const ang1 = Math.atan2(e1.y - sourceCenter.y, e1.x - sourceCenter.x);
+    const ang2 = Math.atan2(e2.y - sourceCenter.y, e2.x - sourceCenter.x);
+    let span = (ang2 - ang1) % (Math.PI * 2);
+    if (span < -Math.PI) span += Math.PI * 2;
+    if (span > Math.PI) span -= Math.PI * 2;
+
+    const steps = Math.max(4, Math.round(Math.abs(span) * 8));
+    const arcPts = [];
+    const totalDist = Math.max(len1, len2) + remainingSight;
+    for (let s = 1; s < steps; s++) {
+        const a = ang1 + (span * s) / steps;
+        arcPts.push({
+            x: sourceCenter.x + Math.cos(a) * totalDist,
+            y: sourceCenter.y + Math.sin(a) * totalDist
+        });
+    }
+
+    return [p1, e1, ...arcPts, e2, p2];
+}
+
+export function isWallCoincidentWithPortal(w, p) {
+    if (!w || !p || !p.geom) return false;
+    const g = p.geom;
+    if (p.shape === 'line') {
+        const d1 = distToSegmentSq({ x: g.x1, y: g.y1 }, { x: w.x1, y: w.y1 }, { x: w.x2, y: w.y2 });
+        const d2 = distToSegmentSq({ x: g.x2, y: g.y2 }, { x: w.x1, y: w.y1 }, { x: w.x2, y: w.y2 });
+        if (d1 <= 225 && d2 <= 225) return true;
+        const d3 = distToSegmentSq({ x: w.x1, y: w.y1 }, { x: g.x1, y: g.y1 }, { x: g.x2, y: g.y2 });
+        const d4 = distToSegmentSq({ x: w.x2, y: w.y2 }, { x: g.x1, y: g.y1 }, { x: g.x2, y: g.y2 });
+        if (d3 <= 225 && d4 <= 225) return true;
+    } else {
+        const c = calcPortalCenter(p);
+        if (distToSegmentSq(c, { x: w.x1, y: w.y1 }, { x: w.x2, y: w.y2 }) <= 400) return true;
+    }
+    return false;
+}
+
 export function renderProjectedPortals(ctx, portals, options = {}) {
     if (!Array.isArray(portals) || portals.length === 0) return;
     const {
@@ -1129,42 +1236,16 @@ export function renderProjectedPortals(ctx, portals, options = {}) {
                         }
                     }
 
+                    const frustum = computePortalSightFrustum(portal, sourceCenter, remainingSight);
+                    if (!frustum || frustum.length < 3) return;
+
                     ctx.save();
                     ctx.beginPath();
-                    if (portal.shape === 'line' && p1A && p2A) {
-                        const d1X = p1A.x - sourceCenter.x;
-                        const d1Y = p1A.y - sourceCenter.y;
-                        const len1 = Math.hypot(d1X, d1Y) || 1;
-                        const e1 = {
-                            x: p1A.x + (d1X / len1) * remainingSight,
-                            y: p1A.y + (d1Y / len1) * remainingSight
-                        };
-
-                        const d2X = p2A.x - sourceCenter.x;
-                        const d2Y = p2A.y - sourceCenter.y;
-                        const len2 = Math.hypot(d2X, d2Y) || 1;
-                        const e2 = {
-                            x: p2A.x + (d2X / len2) * remainingSight,
-                            y: p2A.y + (d2Y / len2) * remainingSight
-                        };
-
-                        ctx.moveTo(p1A.x, p1A.y);
-                        ctx.lineTo(e1.x, e1.y);
-                        ctx.lineTo(e2.x, e2.y);
-                        ctx.lineTo(p2A.x, p2A.y);
-                        ctx.closePath();
-                    } else if (portal.shape === 'circle' && gA) {
-                        const r = gA.r !== undefined ? gA.r : 25;
-                        ctx.arc(centerA.x, centerA.y, r, 0, Math.PI * 2);
-                    } else if (portal.shape === 'rect' && gA) {
-                        ctx.rect(gA.x, gA.y, gA.w, gA.h);
-                    } else if (portal.shape === 'polygon' && gA?.points?.length >= 3) {
-                        ctx.moveTo(gA.points[0].x, gA.points[0].y);
-                        for (let pi = 1; pi < gA.points.length; pi++) ctx.lineTo(gA.points[pi].x, gA.points[pi].y);
-                        ctx.closePath();
-                    } else {
-                        ctx.arc(centerA.x, centerA.y, 25, 0, Math.PI * 2);
+                    ctx.moveTo(frustum[0].x, frustum[0].y);
+                    for (let pi = 1; pi < frustum.length; pi++) {
+                        ctx.lineTo(frustum[pi].x, frustum[pi].y);
                     }
+                    ctx.closePath();
                     ctx.clip();
 
                     ctx.translate(centerA.x, centerA.y);
@@ -1314,14 +1395,26 @@ export function populateTargetPortalsDropdown(
         candidatePortals = campaignState.maps[chosenMapId].portals;
     }
 
-    candidatePortals.forEach((p) => {
-        const opt = document.createElement('option');
-        opt.value = p.id;
-        opt.textContent = p.name || 'Portal';
-        portalSelect.appendChild(opt);
-    });
+    if (chosenMapId !== currentMapId && candidatePortals.length === 0) {
+        const emptyOpt = document.createElement('option');
+        emptyOpt.value = '';
+        emptyOpt.textContent = '-- No portals on this map --';
+        emptyOpt.disabled = true;
+        portalSelect.appendChild(emptyOpt);
+    } else {
+        candidatePortals.forEach((p) => {
+            const opt = document.createElement('option');
+            opt.value = p.id;
+            opt.textContent = p.name || 'Portal';
+            portalSelect.appendChild(opt);
+        });
+    }
 
-    if (currentPortalVal) portalSelect.value = currentPortalVal;
+    if (currentPortalVal && candidatePortals.some((p) => p.id === currentPortalVal)) {
+        portalSelect.value = currentPortalVal;
+    } else {
+        portalSelect.value = '';
+    }
 }
 
 export function cleanupPortalReferences(deletedId, portals, currentMapId, campaignState, socket = null) {
@@ -1592,6 +1685,20 @@ export function showPortalContextMenu(portalId, clientX, clientY, context = {}) 
         if (context.renderAll) context.renderAll();
     }
 
+    const closeMenu = (e) => {
+        if (!e || !menu.contains(e.target)) {
+            window.removeEventListener('click', closeMenu);
+            window.removeEventListener('contextmenu', closeMenu);
+            window.removeEventListener('pointerdown', closeMenu);
+            if (menu.parentNode) menu.remove();
+        }
+    };
+    setTimeout(() => {
+        window.addEventListener('click', closeMenu);
+        window.addEventListener('contextmenu', closeMenu);
+        window.addEventListener('pointerdown', closeMenu);
+    }, 50);
+
     menu.querySelector('#menu-portal-front')?.addEventListener('click', (e) => {
         e.stopPropagation();
         const tokens = context.tokens || {};
@@ -1604,7 +1711,7 @@ export function showPortalContextMenu(portalId, clientX, clientY, context = {}) 
             portals.push(item);
         }
         syncPortals();
-        menu.remove();
+        closeMenu();
     });
 
     menu.querySelector('#menu-portal-forward')?.addEventListener('click', (e) => {
@@ -1617,7 +1724,7 @@ export function showPortalContextMenu(portalId, clientX, clientY, context = {}) 
             portals[idx + 1] = temp;
         }
         syncPortals();
-        menu.remove();
+        closeMenu();
     });
 
     menu.querySelector('#menu-portal-backward')?.addEventListener('click', (e) => {
@@ -1630,7 +1737,7 @@ export function showPortalContextMenu(portalId, clientX, clientY, context = {}) 
             portals[idx - 1] = temp;
         }
         syncPortals();
-        menu.remove();
+        closeMenu();
     });
 
     menu.querySelector('#menu-portal-back')?.addEventListener('click', (e) => {
@@ -1645,24 +1752,24 @@ export function showPortalContextMenu(portalId, clientX, clientY, context = {}) 
             portals.unshift(item);
         }
         syncPortals();
-        menu.remove();
+        closeMenu();
     });
 
     menu.querySelector('#menu-portal-flip')?.addEventListener('click', () => {
         portal.facingAngle = ((portal.facingAngle !== undefined ? portal.facingAngle : 270) + 180) % 360;
         portal.viewSideFlipped = !portal.viewSideFlipped;
         syncPortals();
-        menu.remove();
+        closeMenu();
     });
 
     menu.querySelector('#menu-portal-edit')?.addEventListener('click', () => {
         if (context.selectMapToolItem) context.selectMapToolItem('portal', portalId);
-        menu.remove();
+        closeMenu();
     });
 
     menu.querySelector('#menu-portal-delete')?.addEventListener('click', () => {
         if (context.deleteSelectedMapToolItem) context.deleteSelectedMapToolItem('portal', portalId);
-        menu.remove();
+        closeMenu();
     });
 }
 
@@ -1744,7 +1851,17 @@ export function checkTokenMoveTriggers(token, originalPos, context = {}) {
 
     // 1. Armed Traps
     traps.forEach((tr) => {
+        if (tr.isDisarmed) return;
         if (tr.isSpent && !tr.repeatTrigger) return;
+
+        // Elevation / altitude check (flying creatures do not trigger ground-level traps)
+        const tokenElevation = Number(token.elevation ?? token.altitude ?? 0);
+        const minElev = tr.minElevation !== undefined && tr.minElevation !== '' ? Number(tr.minElevation) : 0;
+        const maxElev = tr.maxElevation !== undefined && tr.maxElevation !== '' ? Number(tr.maxElevation) : 5;
+        if (!isNaN(minElev) && !isNaN(maxElev) && (tokenElevation < minElev || tokenElevation > maxElev)) {
+            return;
+        }
+
         const wasInside = isPointInsideGeometry(from, tr.shape, tr.geom);
         const isInside = isPointInsideGeometry(to, tr.shape, tr.geom);
         if (wasInside && !isInside) return;
@@ -1872,6 +1989,11 @@ export function checkTokenMoveTriggers(token, originalPos, context = {}) {
                 }
             }
 
+            const parsedDamageType =
+                trap.damageType ||
+                (rawDamage.replace(match ? match[0] : '', '').trim().toLowerCase()) ||
+                'piercing';
+
             vtt.socket.emit('trap:trigger', {
                 mapId: currentMapId,
                 trapId: trap.id,
@@ -1880,7 +2002,8 @@ export function checkTokenMoveTriggers(token, originalPos, context = {}) {
                 tokenName: token.name || 'Creature',
                 saveAbility: trap.saveAbility || 'DEX',
                 saveDc: trap.saveDc || 15,
-                damage: trap.damage || '4d6 piercing',
+                damage: diceFormula || trap.damage || '4d6',
+                damageType: parsedDamageType,
                 damageRoll: damageRoll,
                 flavor: trap.flavor || 'A concealed hazard is sprung upon entry!',
                 coords: { x: token.x + drawW / 2, y: token.y + drawH / 2 }
@@ -1924,7 +2047,11 @@ export function checkTokenMoveTriggers(token, originalPos, context = {}) {
             selectedTokenIds.clear();
             selectedTokenIds.add(token.id);
             if ('selectedTokenId' in context) context.selectedTokenId = token.id;
-            window.emitTokenUpdates(tokens);
+            if (typeof window !== 'undefined' && typeof window.emitTokenUpdates === 'function') {
+                window.emitTokenUpdates(tokens);
+            } else if (typeof context.emitTokenUpdates === 'function') {
+                context.emitTokenUpdates(tokens);
+            }
             panTo(exitPos.x + drawW / 2, exitPos.y + drawH / 2, null, 300);
             renderAll();
         } else {

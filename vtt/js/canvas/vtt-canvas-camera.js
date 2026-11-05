@@ -330,8 +330,10 @@ export async function setMapBackground(url, context = {}) {
         const isVideo = !!url.match(/\.(mp4|webm|ogg)(\?.*)?$/i) || url.includes('pinimg.com/videos');
         const isYoutube = url.includes('youtube.com') || url.includes('youtu.be');
 
-        // Find existing background token on the map layer
-        let bgToken = Object.values(currentMap.tokens).find((t) => t.layer === 'map' && (t.isBackground || t.isAsset));
+        // Find existing background token on the map layer (never overwrite arbitrary map assets/props)
+        let bgToken = Object.values(currentMap.tokens).find(
+            (t) => t.layer === 'map' && (t.isBackground || t.id === `asset_${mapId}_bg`)
+        );
 
         if (bgToken) {
             bgToken.img = url;

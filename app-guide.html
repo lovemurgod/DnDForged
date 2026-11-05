@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Control Center &amp; Homebrew Guide — ForgeD VTT</title>
+  <meta name="description"
+    content="Official Game Master manual for the ForgeD Control Center desktop app: server hosting, Cloudflare tunnels, backups, and deep code-backed homebrew creation for monsters, items, and spells.">
+  <link rel="canonical" href="https://forgedvtt.com/app-guide.html">
+  <meta name="theme-color" content="#090d16">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="ForgeD VTT">
+  <meta property="og:title" content="Control Center &amp; Homebrew Guide — ForgeD VTT">
+  <meta property="og:description"
+    content="Official Game Master manual for the ForgeD Control Center desktop app: server hosting, Cloudflare tunnels, backups, and deep code-backed homebrew creation for monsters, items, and spells.">
+  <meta property="og:url" content="https://forgedvtt.com/app-guide.html">
+  <meta property="og:image" content="https://forgedvtt.com/img/social-preview.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Control Center &amp; Homebrew Guide — ForgeD VTT">
+  <meta name="twitter:description"
+    content="Official Game Master manual for the ForgeD Control Center desktop app: server hosting, Cloudflare tunnels, backups, and deep code-backed homebrew creation for monsters, items, and spells.">
+  <meta name="twitter:image" content="https://forgedvtt.com/img/social-preview.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Inter:wght@400;500;600;700;800&family=Consolas&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer">
+  <link rel="stylesheet" href="css/website.css">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="icon" type="image/png" sizes="96x96" href="favicon-96x96.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+</head>
+
+<body class="site-page">
+  <div class="bg-tactical-grid" aria-hidden="true"></div>
+  <div class="bg-ambient-lights" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <a class="site-brand" href="index.html" aria-label="ForgeD VTT home"><img src="img/TextLogo.png"
+        alt="ForgeD VTT"></a>
+    <nav class="site-nav" aria-label="Main navigation">
+      <a href="index.html">Home</a>
+      <a href="getting-started.html">Getting Started</a>
+      <a href="guide.html">Guide</a>
+      <a href="app-guide.html" aria-current="page">App Guide</a>
+    </nav>
+    <a class="btn-vtt-gold site-download"
+      href="https://github.com/lovemurgod/DnDForged/releases/download/1.4.0/ForgeDVTT-Setup-1.4.0.exe"><i
+        class="fa-brands fa-windows" aria-hidden="true"></i> Download for Windows</a>
+  </header>
+
+  <main class="main-wrapper site-main">
+    <div class="guide-header-box" style="margin-bottom: 25px;">
+      <p class="eyebrow"><i class="fa-solid fa-screwdriver-wrench" aria-hidden="true"></i> Game Master Operations</p>
+      <h1 class="guide-page-title"><i class="fa-solid fa-server" aria-hidden="true"></i> Control Center &amp; Homebrew
+        Studio</h1>
+      <p>Complete technical manual for the Windows desktop host application, server networking, campaign backups, and
+        code-grounded homebrew engineering for monsters, magic items, and spells.</p>
+    </div>
+
+    <div class="manual-layout">
+      <!-- Left Sticky Sidebar Table of Contents -->
+      <aside class="manual-sidebar">
+        <div class="manual-search-box">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="manual-search-input" name="manual-search" aria-label="Search App Guide"
+            placeholder="Search a tool, formula, or setting…" autocomplete="off">
+          <button type="button" class="manual-search-clear" id="manual-search-clear"
+            aria-label="Clear search">✕</button>
+          <div id="manual-search-results" class="manual-search-results" role="listbox" hidden></div>
+          <p id="manual-search-status" role="status" aria-live="polite">Search by tool, task, or formula</p>
+        </div>
+
+        <div class="mobile-toc-toggle-wrap">
+          <button type="button" id="mobile-toc-toggle" class="mobile-toc-btn" aria-expanded="false"
+            aria-controls="manual-toc-list">
+            <span><i class="fa-solid fa-list-ul"></i> App Guide Contents</span>
+            <i class="fa-solid fa-chevron-down" id="mobile-toc-arrow"></i>
+          </button>
+        </div>
+
+        <nav class="manual-toc" id="manual-toc-list">
+          <div class="manual-toc-group">
+            <div class="manual-toc-title">Control Center Operations</div>
+            <a href="#app-hosting-server" class="manual-toc-link active"><i class="fa-solid fa-network-wired"></i>
+              Server &amp; Cloudflare Tunnels</a>
+            <a href="#app-campaign-backup" class="manual-toc-link"><i class="fa-solid fa-database"></i> Campaign Data
+              &amp; Backups</a>
+          </div>
+
+          <div class="manual-toc-group">
+            <div class="manual-toc-title">Homebrew Studio &amp; Code Schemas</div>
+            <a href="#app-homebrew-monsters" class="manual-toc-link"><i class="fa-solid fa-dragon"></i> Monsters, Bosses
+              &amp; Attack Syntax</a>
+            <a href="#app-homebrew-items" class="manual-toc-link"><i class="fa-solid fa-shield-halved"></i> Weapons,
+              Armor &amp; Magic Gear</a>
+            <a href="#app-homebrew-spells" class="manual-toc-link"><i class="fa-solid fa-wand-magic-sparkles"></i>
+              Spells, Cantrips &amp; Scaling</a>
+          </div>
+
+          <div class="manual-toc-group">
+            <div class="manual-toc-title">Compendium Sourcing</div>
+            <a href="#app-compendium-sources" class="manual-toc-link"><i class="fa-solid fa-boxes-packing"></i> Custom
+              JSON Compendiums</a>
+          </div>
+        </nav>
+      </aside>
+
+      <!-- Right Detailed Manual Content -->
+      <div class="manual-content" id="manual-content-container">
+
+        <!-- SECTION 1: SERVER HOSTING & CLOUDFLARE TUNNELS -->
+        <section class="manual-section" id="app-hosting-server">
+          <div class="manual-section-header">
+            <div class="manual-section-title-wrap">
+              <div class="manual-section-icon"><i class="fa-solid fa-network-wired"></i></div>
+              <h2 class="manual-section-title">Server &amp; Cloudflare Tunnels</h2>
+            </div>
+            <span class="manual-section-badge gm">Control Center • Tab 1</span>
+          </div>
+
+          <p class="section-lead">ForgeD runs a high-performance local Express server and uses Cloudflare to provide
+            players with an instant, secure web route into your session without changing router port-forwarding rules.
+          </p>
+
+          <div class="doc-feature-group">
+            <div class="doc-feature-card"
+              data-keywords="express server port 5050 loopback nodejs local hosting localhost firewall">
+              <div class="doc-feature-card-header">
+                <div class="doc-feature-title">
+                  <i class="fa-solid fa-microchip blue"></i> Express Engine &amp; Loopback Port 5050
+                </div>
+                <span class="btn-inspector-action"><i class="fa-solid fa-server"></i> Local Core</span>
+              </div>
+              <div class="doc-feature-body">
+                <p>When you click <strong>Start Server</strong> in the Control Center, the app spins up a bundled
+                  Node.js HTTP and WebSocket server on loopback port <code>5050</code>:</p>
+                <ul>
+                  <li><i class="fa-solid fa-circle-dot"></i> <strong>Local Web Address:</strong> Accessible internally
+                    at <code>http://localhost:5050</code> or <code>http://127.0.0.1:5050</code>.</li>
+                  <li><i class="fa-solid fa-circle-dot"></i> <strong>Cryptographic Session Tokens:</strong> The desktop
+                    app protects local API calls with <code>x-server-secret</code> and authenticates the Game Master
+                    session using salted PBKDF2 hash tokens.</li>
+                  <li><i class="fa-solid fa-circle-dot"></i> <strong>Windows Firewall:</strong> If prompted on first
+                    launch, allow ForgeD on <em>Private Networks</em>. Public incoming ports are never exposed because
+                    the tunnel routes outbound traffic securely.</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="doc-feature-card"
+              data-keywords="cloudflare tunnel quick tunnel custom domain zero trust token hostname trycloudflare">
+              <div class="doc-feature-card-header">
+                <div class="doc-feature-title">
+                  <i class="fa-solid fa-cloud-bolt gold"></i> Cloudflare Hosting Modes
+                </div>
+                <span class="btn-inspector-action"><i class="fa-solid fa-arrows-split-up-and-left"></i> Dual
+                  Tunnels</span>
+              </div>
+              <div class="doc-feature-body">
+                <p>ForgeD supports two tunnel modes to connect external players to your session:</p>
+                <ul>
+                  <li><i class="fa-solid fa-circle-dot"></i> <strong>Quick Tunnel (Default &amp; Recommended):</strong>
+                    Leave the token field blank and click <strong>Start Online Tunnel</strong>. The launcher establishes
+                    an ephemeral, zero-config Cloudflare tunnel (e.g.
+                    <code>https://random-name.trycloudflare.com</code>). It requires zero accounts and generates your
+                    active player link in ~5 seconds.</li>
+                  <li><i class="fa-solid fa-circle-dot"></i> <strong>Custom Domain (Persistent URL):</strong> If you own
+                    a domain managed in Cloudflare Zero Trust, create a Cloudflare Tunnel routed to service
+                    <code>http://127.0.0.1:5050</code>. Paste the tunnel token and your custom hostname into ForgeD for
+                    a permanent session URL (e.g. <code>https://dnd.yourdomain.com</code>).</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="doc-section-subtitle">
+            <i class="fa-solid fa-sliders"></i> Session Controls &amp; Live Diagnostics
+          </div>
+
+          <div class="manual-subgrid">
+            <div class="manual-subcard">
+              <h3 class=""><i class="fa-solid fa-desktop"></i> Tabletop Launch Options</h3>
+              <p>Once the server is running, you have two ways to open your GM view:</p>
+              <ul>
+                <li><strong>Open VTT Window:</strong> Opens an isolated native desktop window running the client with
+                  hardware-accelerated WebGL.</li>
+                <li><strong>Open in Browser:</strong> Opens the local URL in your system's default browser (Chrome,
+                  Edge, Firefox, Brave).</li>
+                <li><strong>Copy Link:</strong> Copies the active player invite URL directly to your Windows clipboard.
+                </li>
+              </ul>
+            </div>
+
+            <div class="manual-subcard">
+              <h3 class=""><i class="fa-solid fa-chart-line"></i> Live Network Monitor</h3>
+              <p>The Control Center provides real-time session feedback:</p>
+              <ul>
+                <li><strong>Active Players:</strong> Shows live count of connected browser WebSockets.</li>
+                <li><strong>Tunnel Status:</strong> Displays latency, tunnel uptime, and connection health.</li>
+                <li><strong>Log Stream:</strong> Inspect server events, file uploads, and WebSocket sync traffic in real
+                  time.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION 2: CAMPAIGN DATA & BACKUPS -->
+        <section class="manual-section" id="app-campaign-backup">
+          <div class="manual-section-header">
+            <div class="manual-section-title-wrap">
+              <div class="manual-section-icon"><i class="fa-solid fa-database"></i></div>
+              <h2 class="manual-section-title">Campaign Data &amp; Backups</h2>
+            </div>
+            <span class="manual-section-badge gm">Control Center • Tab 2</span>
+          </div>
+
+          <p class="section-lead">All campaign maps, characters, tokens, handouts, and chat logs are stored locally on
+            your computer in standard JSON format. You retain 100% data ownership.</p>
+
+          <div class="doc-section-subtitle">
+            <i class="fa-solid fa-folder-open"></i> Data Directory Architecture
+          </div>
+
+          <div class="manual-subgrid">
+            <div class="manual-subcard">
+              <h3 class=""><i class="fa-solid fa-hard-drive"></i> The <code>.dndforged-data</code> Folder</h3>
+              <p>ForgeD stores all user content in the <code>.dndforged-data</code> directory located inside your
+                application folder or user profile:</p>
+              <ul>
+                <li><code>campaigns.json</code> — Contains all scenes, tactical grids, placed tokens, fog-of-war states,
+                  and character sheets.</li>
+                <li><code>campaigns.json.bak</code> — Automated rolling safety backup created every time the server
+                  starts or saves.</li>
+                <li><code>chat-log.json</code> — Persistent history of all dice rolls, public messages, and GM whispers.
+                </li>
+                <li><code>assets/</code> — Uploaded battlemap graphics, custom token portraits, audio files, and video
+                  loops.</li>
+                <li><code>auth.json</code> — Cryptographic hash of your Game Master password.</li>
+              </ul>
+            </div>
+
+            <div class="manual-subcard">
+              <h3 class=""><i class="fa-solid fa-shield-virus"></i> Disaster Recovery &amp; PC Migration</h3>
+              <p>How to protect and transfer your world with zero data loss:</p>
+              <ul>
+                <li><strong>1-Click Backup:</strong> In the GM Dashboard tab, click <strong>Open Data Folder</strong>.
+                  Simply copy the <code>.dndforged-data</code> folder to Google Drive, OneDrive, or a USB drive.</li>
+                <li><strong>Restoring a Corrupt File:</strong> If a power loss occurs during play, rename
+                  <code>campaigns.json.bak</code> to <code>campaigns.json</code> and restart the server.</li>
+                <li><strong>Migrating to a New PC:</strong> Install ForgeD on the new computer, copy your
+                  <code>.dndforged-data</code> directory over, and launch the app. All campaigns restore instantly.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION 3: HOMEBREW MONSTERS & BOSS STUDIO -->
+        <section class="manual-section" id="app-homebrew-monsters">
+          <div class="manual-section-header">
+            <div class="manual-section-title-wrap">
+              <div class="manual-section-icon"><i class="fa-solid fa-dragon"></i></div>
+              <h2 class="manual-section-title">Monsters, Bosses &amp; Attack Syntax</h2>
+            </div>
+            <span class="manual-section-badge player">Homebrew Studio</span>
+          </div>
+
+          <p class="section-lead">ForgeD features a natural-language attack parser. Writing your actions in standard 5e
+            format allows the VTT to automatically extract to-hit bonuses, reach, damage formulas, and save DCs into
+            single-click combat buttons.</p>
+
+          <div class="doc-section-subtitle">
+            <i class="fa-solid fa-code"></i> Action Syntax Engine &amp; Regex Rules
+          </div>
+
+          <p style="color: var(--text-secondary); margin-bottom: 15px;">When adding an action in the <strong>Creature
+              Editor</strong>, use the following standard formats to enable automatic dice macros:</p>
+
+          <div class="manual-subgrid">
+            <div class="manual-subcard">
+              <h3 class=""><i class="fa-solid fa-crosshairs red"></i> Melee &amp; Ranged Weapon Attacks</h3>
+              <p>Format syntax:</p>
+              <pre
+                style="background: rgba(0,0,0,0.6); padding: 12px; border-radius: 6px; color: #f5c453; font-family: var(--font-code); font-size: 0.82rem; overflow-x: auto;">Melee Weapon Attack: +8 to hit, reach 10 ft., one target. Hit: 15 (2d8 + 6) slashing damage plus 7 (2d6) fire damage.</pre>
+              <ul style="margin-top: 10px;">
+                <li><strong>To-Hit:</strong> <code>+8 to hit</code> creates a <code>d20 + 8</code> attack roll button.
+                </li>
+                <li><strong>Damage Formula:</strong> <code>15 (2d8 + 6) slashing</code> creates a <code>2d8 + 6</code>
+                  slashing damage roll.</li>
+                <li><strong>Secondary Riders:</strong> Adding <code>plus 7 (2d6) fire damage</code> generates a
+                  secondary damage button in chat.</li>
+              </ul>
+            </div>
+
+            <div class="manual-subcard">
+              <h3 class=""><i class="fa-solid fa-burst gold"></i> Saving Throw Area Attacks</h3>
+              <p>Format syntax:</p>
+              <pre
+                style="background: rgba(0,0,0,0.6); padding: 12px; border-radius: 6px; color: #f5c453; font-family: var(--font-code); font-size: 0.82rem; overflow-x: auto;">Fire Breath (Recharge 5–6). Each creature in a 30-foot cone must make a DC 16 Dexterity saving throw, taking 42 (12d6) fire damage on a failed save, or half as much on a successful one.</pre>
+              <ul style="margin-top: 10px;">
+                <li><strong>Save Prompt:</strong> <code>DC 16 Dexterity</code> automatically generates a 1-click player
+                  saving throw prompt in the multiplayer chat log.</li>
+                <li><strong>Recharge Die:</strong> <code>(Recharge 5–6)</code> creates an automated recharge roll button
+                  in the sheet header.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="doc-section-subtitle">
+            <i class="fa-solid fa-skull-crossbones"></i> Advanced Boss Mechanics: Multiattack &amp; Legendary Actions
+          </div>
+
+          <div class="doc-feature-group">
+            <div class="doc-feature-card" data-keywords="multiattack auto routine execution claw bite slam combo">
+              <div class="doc-feature-card-header">
+                <div class="doc-feature-title">
+                  <i class="fa-solid fa-swords red"></i> Multiattack Parser
+                </div>
+                <span class="btn-inspector-action"><i class="fa-solid fa-bolt"></i> 1-Click Combo</span>
+              </div>
+              <div class="doc-feature-body">
+                <p>ForgeD parses natural language multiattack lines into automated routine buttons:</p>
+                <ul>
+                  <li><strong>Example String:</strong>
+                    <code>The dragon makes three attacks: one with its Bite and two with its Claws.</code></li>
+                  <li><strong>Execution Card:</strong> Clicking Multiattack on the creature sheet broadcasts an action
+                    card with direct roll triggers for each weapon in the routine, saving significant GM combat time.
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="doc-feature-card" data-keywords="legendary actions pool cost 3 budget lair reactions">
+              <div class="doc-feature-card-header">
+                <div class="doc-feature-title">
+                  <i class="fa-solid fa-crown gold"></i> Legendary &amp; Lair Actions
+                </div>
+                <span class="btn-inspector-action"><i class="fa-solid fa-layer-group"></i> Action Budget</span>
+              </div>
+              <div class="doc-feature-body">
+                <p>Configure true epic boss encounters with flexible resource pools:</p>
+                <ul>
+                  <li><strong>Legendary Pool:</strong> Toggle <strong>Legendary Actions</strong> to give the monster a
+                    3-pip action tracker that refreshes at the start of its turn.</li>
+                  <li><strong>Cost Modifiers:</strong> Actions marked with <code>(Costs 2 Actions)</code> automatically
+                    deduct two charges when executed.</li>
+                  <li><strong>Lair Action Triggers:</strong> Special initiative count 20 triggers broadcast lair effects
+                    directly to the combat carousel.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="doc-section-subtitle">
+            <i class="fa-solid fa-shield-virus"></i> Complex Defenses &amp; Damage Bypasses
+          </div>
+
+          <div class="manual-table-wrap">
+            <table class="manual-table">
+              <thead>
+                <tr>
+                  <th>Defense Category</th>
+                  <th>Standard Types Supported</th>
+                  <th>Physical Bypass Exceptions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Damage Vulnerabilities</strong></td>
+                  <td>Acid, Bludgeoning, Cold, Fire, Force, Lightning, Necrotic, Piercing, Poison, Psychic, Radiant,
+                    Slashing, Thunder</td>
+                  <td>N/A (Multiplies total damage by 2×)</td>
+                </tr>
+                <tr>
+                  <td><strong>Damage Resistances</strong></td>
+                  <td>All standard 5e damage types</td>
+                  <td>Nonmagical, Silvered, Adamantine, Spells</td>
+                </tr>
+                <tr>
+                  <td><strong>Damage Immunities</strong></td>
+                  <td>All standard 5e damage types</td>
+                  <td>Nonmagical weapons, non-silvered attacks</td>
+                </tr>
+                <tr>
+                  <td><strong>Condition Immunities</strong></td>
+                  <td>Blinded, Charmed, Deafened, Exhaustion, Frightened, Grappled, Incapacitated, Invisible, Paralyzed,
+                    Petrified, Poisoned, Prone, Restrained, Stunned, Unconscious</td>
+                  <td>Prevents status ring placement and saves</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- SECTION 4: MAGIC ITEMS & GEAR ENGINEERING -->
+        <section class="manual-section" id="app-homebrew-items">
+          <div class="manual-section-header">
+            <div class="manual-section-title-wrap">
+              <div class="manual-section-icon"><i class="fa-solid fa-shield-halved"></i></div>
+              <h2 class="manual-section-title">Weapons, Armor &amp; Magic Gear</h2>
+            </div>
+            <span class="manual-section-badge player">Equipment Studio</span>
+          </div>
+
+          <p class="section-lead">ForgeD's equipment engine dynamically calculates Armor Class, weapon attack macros,
+            and weight encumbrance based on 5e rules and item properties.</p>
+
+          <div class="doc-section-subtitle">
+            <i class="fa-solid fa-shield"></i> Dynamic Armor Class (AC) Rules
+          </div>
+
+          <div class="manual-subgrid">
+            <div class="manual-subcard">
+              <h3 class=""><i class="fa-solid fa-shirt"></i> Armor Categories</h3>
+              <p>When creating homebrew armor, select the category to trigger exact AC math:</p>
+              <ul>
+                <li><strong>Light:</strong> Base AC + character's full DEX modifier (e.g. <code>12 + DEX</code>).</li>
+                <li><strong>Medium:</strong> Base AC + DEX modifier, automatically capped at <code>+2</code> (e.g.
+                  <code>14 + min(DEX, 2)</code>).</li>
+                <li><strong>Heavy:</strong> Flat base AC with zero DEX bonus (e.g. <code>18</code>). Automatically flags
+                  the stealth disadvantage indicator.</li>
+                <li><strong>Shield:</strong> Checking the <strong>Equip</strong> box adds a flat <code>+2 AC</code>
+                  bonus.</li>
+              </ul>
+            </div>
+
+            <div class="manual-subcard">
+              <h3 class=""><i class="fa-solid fa-wand-magic-sparkles"></i> Unarmored Defense Formulas</h3>
+              <p>Homebrew classes or magical tattoos can override standard base AC:</p>
+              <ul>
+                <li><strong>Barbarian Style:</strong> <code>10 + DEX mod + CON mod</code>.</li>
+                <li><strong>Monk Style:</strong> <code>10 + DEX mod + WIS mod</code>.</li>
+                <li><strong>Mage Armor:</strong> Flat <code>13 + DEX mod</code> without equipping physical armor.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="doc-section-subtitle">
+            <i class="fa-solid fa-sword"></i> Weapon Properties &amp; Action Automation
+          </div>
+
+          <div class="doc-feature-group">
+            <div class="doc-feature-card"
+              data-keywords="finesse versatile heavy reach thrown loading weapon properties">
+              <div class="doc-feature-card-header">
+                <div class="doc-feature-title">
+                  <i class="fa-solid fa-tags blue"></i> Core Weapon Property Tags
+                </div>
+                <span class="btn-inspector-action"><i class="fa-solid fa-microchip"></i> Auto-Detection</span>
+              </div>
+              <div class="doc-feature-body">
+                <p>ForgeD checks weapon tags to construct optimal attack macros:</p>
+                <ul>
+                  <li><strong>Finesse:</strong> The macro automatically compares the character's Strength and Dexterity
+                    modifiers, selecting whichever is higher.</li>
+                  <li><strong>Versatile:</strong> Generates two clickable damage buttons in chat: one for standard
+                    one-handed strikes (e.g. <code>1d8</code>) and one for two-handed strikes (e.g. <code>1d10</code>).
+                  </li>
+                  <li><strong>Enhancement Bonus:</strong> Setting an item bonus (<code>+1</code>, <code>+2</code>, or
+                    <code>+3</code>) automatically adds the bonus to both the attack roll and damage total.</li>
+                  <li><strong>Damage Riders:</strong> Append extra dice (e.g. <code>+1d6 radiant</code> or
+                    <code>+2d6 fire</code>) to display distinct damage type badges on hit cards.</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="doc-feature-card" data-keywords="attunement charges dawn short rest long rest pips counters">
+              <div class="doc-feature-card-header">
+                <div class="doc-feature-title">
+                  <i class="fa-solid fa-sparkles gold"></i> Charges &amp; Attunement Slots
+                </div>
+                <span class="btn-inspector-action"><i class="fa-solid fa-sliders"></i> Pip Counters</span>
+              </div>
+              <div class="doc-feature-body">
+                <p>Build wondrous items and artifacts with interactive resource tracking:</p>
+                <ul>
+                  <li><strong>Attunement Tracking:</strong> Check <strong>Requires Attunement</strong> to enforce the
+                    3-slot attunement limit on the character sheet.</li>
+                  <li><strong>Interactive Pips:</strong> Define maximum charges (e.g. 7 charges for a <em>Staff of
+                      Power</em>) to render clickable consumption bubbles on the equipment tab.</li>
+                  <li><strong>Recharge Routines:</strong> Select recharge triggers (e.g. <code>1d6 + 1 at Dawn</code>,
+                    <code>Short Rest</code>, or <code>Long Rest</code>).</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION 5: HOMEBREW SPELLS & MAGIC -->
+        <section class="manual-section" id="app-homebrew-spells">
+          <div class="manual-section-header">
+            <div class="manual-section-title-wrap">
+              <div class="manual-section-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+              <h2 class="manual-section-title">Spells, Cantrips &amp; Scaling</h2>
+            </div>
+            <span class="manual-section-badge player">Magic Studio</span>
+          </div>
+
+          <p class="section-lead">ForgeD features automated cantrip scaling, leveled spell slot upcasting, and
+            interactive spell DC cards for all homebrew arcane and divine magic.</p>
+
+          <div class="manual-subgrid">
+            <div class="manual-subcard">
+              <h3 class=""><i class="fa-solid fa-chart-line-up"></i> Cantrip Level-Scaling Engine</h3>
+              <p>Cantrips automatically scale damage dice according to total character level:</p>
+              <ul>
+                <li><strong>Level 1–4:</strong> Base damage (e.g. <code>1d10</code> fire).</li>
+                <li><strong>Level 5–10:</strong> Automatically scales to <code>2d10</code>.</li>
+                <li><strong>Level 11–16:</strong> Automatically scales to <code>3d10</code>.</li>
+                <li><strong>Level 17–20:</strong> Automatically scales to <code>4d10</code>.</li>
+              </ul>
+              <p style="margin-top: 8px; font-size: 0.82rem; color: var(--text-muted);">The sheet dynamically detects
+                character level and updates the roll formula without manual intervention.</p>
+            </div>
+
+            <div class="manual-subcard">
+              <h3 class=""><i class="fa-solid fa-arrow-up-from-bracket"></i> Leveled Slot Upcasting</h3>
+              <p>Format homebrew spells to support higher-level slot casting:</p>
+              <ul>
+                <li><strong>Base Damage:</strong> Set the spell level (1st through 9th) and initial damage dice (e.g.
+                  <code>8d6</code> for 3rd-level <em>Fireball</em>).</li>
+                <li><strong>Higher Level Tag:</strong> In the spell description, include standard 5e text:
+                  <code>When you cast this spell using a spell slot of 4th level or higher, the damage increases by 1d6 for each slot level above 3rd.</code>
+                </li>
+                <li><strong>Slot Selector:</strong> Clicking Cast prompts for the slot level, automatically calculating
+                  and rolling the enhanced damage dice into chat.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION 6: CUSTOM COMPENDIUMS & SOURCES -->
+        <section class="manual-section" id="app-compendium-sources">
+          <div class="manual-section-header">
+            <div class="manual-section-title-wrap">
+              <div class="manual-section-icon"><i class="fa-solid fa-boxes-packing"></i></div>
+              <h2 class="manual-section-title">Custom JSON Compendiums</h2>
+            </div>
+            <span class="manual-section-badge gm">Source Control</span>
+          </div>
+
+          <p class="section-lead">Expand your game universe with external homebrew packages, third-party settings, and
+            community JSON compendiums using ForgeD's Source Manager.</p>
+
+          <div class="doc-section-subtitle">
+            <i class="fa-solid fa-folder-tree"></i> JSON Compendium Directory Architecture
+          </div>
+
+          <div class="manual-subgrid">
+            <div class="manual-subcard">
+              <h3 class=""><i class="fa-solid fa-file-code"></i> Data File Layout</h3>
+              <p>Place custom homebrew JSON packages into your campaign data directory:</p>
+              <pre
+                style="background: rgba(0,0,0,0.6); padding: 12px; border-radius: 6px; color: #7dd3fc; font-family: var(--font-code); font-size: 0.8rem; overflow-x: auto;">
+.dndforged-data/
+├── sources/
+│   ├── bestiary/     (custom monster .json files)
+│   ├── spells/       (custom magic .json files)
+│   ├── items/        (custom equipment .json files)
+│   └── classes/      (custom subclass .json files)
+└── sources-config.json</pre>
+            </div>
+
+            <div class="manual-subcard">
+              <h3 class=""><i class="fa-solid fa-rotate"></i> Running the Database Rebuilder</h3>
+              <p>After adding custom JSON packages, compile them into the active game catalog:</p>
+              <ul>
+                <li><strong>In the Desktop App:</strong> Open the <strong>Database Sources</strong> tab in the Control
+                  Center and click <strong>Rebuild Catalogs</strong>.</li>
+                <li><strong>Via Developer Terminal:</strong> Run <code>npm run build:dbs</code> in the project root.
+                </li>
+                <li><strong>Automatic Deduplication:</strong> ForgeD resolves duplicate slugs by prioritizing custom
+                  campaign homebrew over core SRD entries.</li>
+                <li><strong>Token Fallbacks:</strong> If a creature lacks artwork, ForgeD automatically renders a clean
+                  procedural initial-letter badge token on the canvas.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </main>
+
+  <a href="#manual-search-input" id="guide-back-to-top" class="guide-back-to-top" aria-label="Back to top of guide">
+    <i class="fa-solid fa-arrow-up" aria-hidden="true"></i>
+  </a>
+
+  <footer class="footer-vtt">
+    <p>© 2026 ForgeD VTT — Self-Hosted Virtual Tabletop System. Designed for Tabletop Freedom.</p>
+    <p style="margin-top: 0.5rem; font-size: 0.8rem; opacity: 0.85;">This work includes material from the System
+      Reference Document 5.1 (SRD 5.1) by Wizards of the Coast LLC, available under the Creative Commons Attribution 4.0
+      International License (CC-BY-4.0). 2024 Free Rules and SRD 5.2 content are used under the Wizards of the Coast Fan
+      Content Policy. • <a href="legal.html" style="color: #d4af37; text-decoration: underline;">Legal Notices &amp; OGC
+        Disclaimers</a></p>
+  </footer>
+
+  <script>
+    const searchInput = document.getElementById('manual-search-input');
+    const searchClearBtn = document.getElementById('manual-search-clear');
+    const searchResults = document.getElementById('manual-search-results');
+    const searchStatus = document.getElementById('manual-search-status');
+    const mobileTocToggle = document.getElementById('mobile-toc-toggle');
+    const manualSidebar = document.querySelector('.manual-sidebar');
+    const mobileTocArrow = document.getElementById('mobile-toc-arrow');
+    const backToTopBtn = document.getElementById('guide-back-to-top');
+
+    let appSearchIndex = [];
+    let activeResultIndex = -1;
+
+    function escapeHtml(str) {
+      return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    function highlightMatch(text, query) {
+      if (!query) return escapeHtml(text);
+      const qLower = query.toLowerCase();
+      const tLower = text.toLowerCase();
+      const idx = tLower.indexOf(qLower);
+      if (idx === -1) return escapeHtml(text);
+      const before = text.slice(0, idx);
+      const match = text.slice(idx, idx + query.length);
+      const after = text.slice(idx + query.length);
+      return escapeHtml(before) + '<mark style="background: rgba(245, 196, 83, 0.35); color: #fff; padding: 0 2px; border-radius: 2px;">' + escapeHtml(match) + '</mark>' + escapeHtml(after);
+    }
+
+    function buildSearchIndex() {
+      appSearchIndex = [];
+
+      document.querySelectorAll('.manual-section').forEach((sec) => {
+        const titleEl = sec.querySelector('.manual-section-title');
+        const badgeEl = sec.querySelector('.manual-section-badge');
+        const leadEl = sec.querySelector('.section-lead, .doc-section-lead');
+        const iconEl = sec.querySelector('.manual-section-icon i');
+
+        if (titleEl) {
+          const title = titleEl.textContent.trim();
+          const badge = badgeEl ? badgeEl.textContent.trim() : '';
+          const lead = leadEl ? leadEl.textContent.trim() : '';
+          const icon = iconEl ? iconEl.className : 'fa-solid fa-book';
+
+          appSearchIndex.push({
+            element: sec,
+            sectionId: sec.id,
+            category: badge || 'Section',
+            title: title,
+            snippet: lead,
+            icon: icon,
+            keywords: (title + ' ' + badge + ' ' + lead).toLowerCase()
+          });
+        }
+
+        sec.querySelectorAll('.doc-feature-card').forEach((card) => {
+          const titleEl = card.querySelector('.doc-feature-title');
+          const bodyEl = card.querySelector('.doc-feature-body');
+          const iconEl = card.querySelector('.doc-feature-title i');
+          const kw = card.getAttribute('data-keywords') || '';
+
+          if (titleEl) {
+            const title = titleEl.textContent.trim();
+            const body = bodyEl ? bodyEl.textContent.replace(/\s+/g, ' ').trim() : '';
+            const icon = iconEl ? iconEl.className : 'fa-solid fa-circle-check';
+            const catTitle = titleEl ? titleEl.textContent.trim() : 'Feature';
+
+            appSearchIndex.push({
+              element: card,
+              sectionId: sec.id,
+              category: catTitle,
+              title: title,
+              snippet: body.slice(0, 110),
+              icon: icon,
+              keywords: (title + ' ' + body + ' ' + kw).toLowerCase()
+            });
+          }
+        });
+
+        sec.querySelectorAll('.manual-subcard').forEach((card) => {
+          const h3El = card.querySelector('h3');
+          const pEl = card.querySelector('p');
+          const iconEl = card.querySelector('h3 i');
+
+          if (h3El) {
+            const title = h3El.textContent.trim();
+            const text = pEl ? pEl.textContent.trim() : '';
+            const icon = iconEl ? iconEl.className : 'fa-solid fa-info-circle';
+            const catTitle = sec.querySelector('.manual-section-title') ? sec.querySelector('.manual-section-title').textContent.trim() : 'Reference';
+
+            appSearchIndex.push({
+              element: card,
+              sectionId: sec.id,
+              category: catTitle,
+              title: title,
+              snippet: text.slice(0, 110),
+              icon: icon,
+              keywords: (title + ' ' + text).toLowerCase()
+            });
+          }
+        });
+
+        sec.querySelectorAll('.manual-table tbody tr').forEach((row) => {
+          const cells = row.querySelectorAll('td');
+          if (cells.length >= 2) {
+            const action = cells[0].textContent.trim();
+            const syntaxOrKey = cells[1].textContent.trim();
+            const desc = cells[cells.length - 1].textContent.trim();
+            const catTitle = sec.querySelector('.manual-section-title') ? sec.querySelector('.manual-section-title').textContent.trim() : 'Reference Table';
+
+            appSearchIndex.push({
+              element: row,
+              sectionId: sec.id,
+              category: catTitle,
+              title: action + ' (' + syntaxOrKey + ')',
+              snippet: desc,
+              icon: 'fa-solid fa-table',
+              keywords: (action + ' ' + syntaxOrKey + ' ' + desc).toLowerCase()
+            });
+          }
+        });
+      });
+    }
+
+    function selectResult(item) {
+      if (!item || !item.element) return;
+
+      if (searchResults) searchResults.hidden = true;
+      activeResultIndex = -1;
+
+      if (manualSidebar && manualSidebar.classList.contains('toc-expanded')) {
+        manualSidebar.classList.remove('toc-expanded');
+        if (mobileTocToggle) mobileTocToggle.setAttribute('aria-expanded', 'false');
+        if (mobileTocArrow) mobileTocArrow.className = 'fa-solid fa-chevron-down';
+      }
+
+      if (item.sectionId) {
+        history.replaceState(null, '', '#' + item.sectionId);
+      }
+
+      item.element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+      item.element.classList.remove('search-target-pulse');
+      void item.element.offsetWidth;
+      item.element.classList.add('search-target-pulse');
+      setTimeout(() => {
+        item.element.classList.remove('search-target-pulse');
+      }, 2000);
+    }
+
+    let searchDebounceTimer = null;
+    function handleSearchInput() {
+      clearTimeout(searchDebounceTimer);
+      searchDebounceTimer = setTimeout(() => {
+        const query = searchInput.value.trim().toLowerCase();
+        activeResultIndex = -1;
+
+        if (!query) {
+          if (searchResults) {
+            searchResults.hidden = true;
+            searchResults.innerHTML = '';
+          }
+          if (searchClearBtn) searchClearBtn.style.display = 'none';
+          if (searchStatus) searchStatus.textContent = 'Search by tool, task, or formula';
+          return;
+        }
+
+        if (searchClearBtn) searchClearBtn.style.display = 'block';
+
+        const scored = [];
+        appSearchIndex.forEach((item) => {
+          let score = 0;
+          const tLower = item.title.toLowerCase();
+          const kLower = item.keywords;
+
+          if (tLower === query) score += 100;
+          else if (tLower.startsWith(query)) score += 60;
+          else if (tLower.includes(query)) score += 40;
+          else if (kLower.includes(query)) score += 20;
+
+          if (score > 0) scored.push({ item, score });
+        });
+
+        scored.sort((a, b) => b.score - a.score);
+        const topMatches = scored.slice(0, 8).map(s => s.item);
+
+        if (searchStatus) {
+          searchStatus.textContent = topMatches.length ? topMatches.length + ' topic' + (topMatches.length === 1 ? '' : 's') + ' found' : 'No matching topics';
+        }
+
+        if (topMatches.length === 0) {
+          searchResults.innerHTML = '<div class="search-empty-msg"><i class="fa-solid fa-circle-question" style="color: var(--color-gold); margin-bottom: 6px; display: block; font-size: 1.2rem;"></i>No guide results for "<strong>' + escapeHtml(query) + '</strong>".<br><span style="font-size: 0.76rem; color: var(--text-muted);">Try searching a formula, setting, or command.</span></div>';
+          searchResults.hidden = false;
+          return;
+        }
+
+        let html = '';
+        topMatches.forEach((match, idx) => {
+          html += '<div class="search-result-item" role="option" data-idx="' + idx + '">' +
+            '<div class="search-result-header">' +
+            '<span class="search-result-title"><i class="' + match.icon + '"></i> ' + highlightMatch(match.title, query) + '</span>' +
+            '<span class="search-result-category">' + escapeHtml(match.category) + '</span>' +
+            '</div>' +
+            '<p class="search-result-snippet">' + highlightMatch(match.snippet, query) + '</p>' +
+            '</div>';
+        });
+
+        searchResults.innerHTML = html;
+        searchResults.hidden = false;
+
+        searchResults.querySelectorAll('.search-result-item').forEach((row) => {
+          row.addEventListener('click', () => {
+            const idx = parseInt(row.getAttribute('data-idx'), 10);
+            selectResult(topMatches[idx]);
+          });
+        });
+      }, 100);
+    }
+
+    if (searchInput) {
+      searchInput.addEventListener('input', handleSearchInput);
+      searchInput.addEventListener('focus', () => {
+        if (searchInput.value.trim() && searchResults && searchResults.innerHTML) {
+          searchResults.hidden = false;
+        }
+      });
+
+      searchInput.addEventListener('keydown', (e) => {
+        if (!searchResults || searchResults.hidden) return;
+        const items = searchResults.querySelectorAll('.search-result-item');
+        if (e.key === 'Escape') {
+          searchResults.hidden = true;
+          searchInput.value = '';
+          if (searchClearBtn) searchClearBtn.style.display = 'none';
+          if (searchStatus) searchStatus.textContent = 'Search by tool, task, or formula';
+          activeResultIndex = -1;
+        } else if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          if (items.length) {
+            activeResultIndex = (activeResultIndex + 1) % items.length;
+            items.forEach((it, i) => it.classList.toggle('selected', i === activeResultIndex));
+            items[activeResultIndex].scrollIntoView({ block: 'nearest' });
+          }
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          if (items.length) {
+            activeResultIndex = (activeResultIndex - 1 + items.length) % items.length;
+            items.forEach((it, i) => it.classList.toggle('selected', i === activeResultIndex));
+            items[activeResultIndex].scrollIntoView({ block: 'nearest' });
+          }
+        } else if (e.key === 'Enter') {
+          e.preventDefault();
+          if (items.length) {
+            const idx = activeResultIndex >= 0 ? activeResultIndex : 0;
+            items[idx].click();
+          }
+        }
+      });
+    }
+
+    if (searchClearBtn) {
+      searchClearBtn.addEventListener('click', () => {
+        searchInput.value = '';
+        if (searchResults) {
+          searchResults.hidden = true;
+          searchResults.innerHTML = '';
+        }
+        searchClearBtn.style.display = 'none';
+        if (searchStatus) searchStatus.textContent = 'Search by tool, task, or formula';
+        searchInput.focus();
+      });
+    }
+
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.manual-search-box')) {
+        if (searchResults) searchResults.hidden = true;
+      }
+    });
+
+    if (mobileTocToggle && manualSidebar) {
+      mobileTocToggle.addEventListener('click', () => {
+        const expanded = manualSidebar.classList.toggle('toc-expanded');
+        mobileTocToggle.setAttribute('aria-expanded', String(expanded));
+        if (mobileTocArrow) {
+          mobileTocArrow.className = expanded ? 'fa-solid fa-chevron-up' : 'fa-solid fa-chevron-down';
+        }
+      });
+    }
+
+    document.querySelectorAll('.manual-toc-link').forEach((link) => {
+      link.addEventListener('click', () => {
+        if (manualSidebar && manualSidebar.classList.contains('toc-expanded')) {
+          manualSidebar.classList.remove('toc-expanded');
+          if (mobileTocToggle) mobileTocToggle.setAttribute('aria-expanded', 'false');
+          if (mobileTocArrow) mobileTocArrow.className = 'fa-solid fa-chevron-down';
+        }
+      });
+    });
+
+    window.addEventListener('scroll', () => {
+      if (backToTopBtn) {
+        backToTopBtn.classList.toggle('visible', window.scrollY > 400);
+      }
+      const sections = [...document.querySelectorAll('.manual-section')];
+      let active = null;
+      for (const section of sections) {
+        if (section.getBoundingClientRect().top < 150) active = section;
+        else break;
+      }
+      if (!active) return;
+      document.querySelectorAll('.manual-toc-link').forEach((link) => link.classList.toggle('active', link.hash === '#' + active.id));
+    }, { passive: true });
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', buildSearchIndex);
+    } else {
+      buildSearchIndex();
+    }
+  </script>
+
+</body>
+
+</html>

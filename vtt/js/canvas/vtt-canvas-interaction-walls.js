@@ -38,6 +38,7 @@ export function renderGmWallSegmentsPass(ctxInteraction, options = {}) {
     const localMeasureEnd = options.localMeasureEnd || null;
     const isTokenMeasuring = Boolean(options.isTokenMeasuring);
     const resolveRulerPortalBending = options.resolveRulerPortalBending || null;
+    const zoom = options.zoom || 1.0;
 
     // 1. Draw GM Wall Segments if in GM mode
     if (vtt.role === 'GM') {
@@ -431,7 +432,8 @@ export function renderGmWallSegmentsPass(ctxInteraction, options = {}) {
             points,
             true,
             grid,
-            resolveRulerPortalBending
+            resolveRulerPortalBending,
+            zoom
         );
     }
     if (localIsMeasuring && localMeasureStart && localMeasureEnd) {
@@ -454,7 +456,8 @@ export function renderGmWallSegmentsPass(ctxInteraction, options = {}) {
             points,
             true,
             grid,
-            resolveRulerPortalBending
+            resolveRulerPortalBending,
+            zoom
         );
     }
     if (typeof otherMeasurements !== 'undefined') {
@@ -473,7 +476,8 @@ export function renderGmWallSegmentsPass(ctxInteraction, options = {}) {
                     m.points || null,
                     m.showDistance !== false,
                     grid,
-                    resolveRulerPortalBending
+                    resolveRulerPortalBending,
+                    zoom
                 );
             }
         });

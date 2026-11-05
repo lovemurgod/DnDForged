@@ -11,6 +11,59 @@ import {
     renderPlacedPortalsList
 } from './vtt-canvas-portals.js';
 
+export const STANDARD_DAMAGE_TYPES = [
+    'piercing', 'slashing', 'bludgeoning', 'fire', 'poison', 'acid',
+    'cold', 'lightning', 'necrotic', 'radiant', 'force', 'psychic', 'thunder', 'untyped'
+];
+
+export function parseDamageFormulaAndType(rawDamage = '', explicitType = '') {
+    const str = String(rawDamage || '').trim();
+    for (const dt of STANDARD_DAMAGE_TYPES) {
+        const regex = new RegExp(`\\b${dt}\\b`, 'i');
+        if (regex.test(str)) {
+            const dice = str.replace(regex, '').trim();
+            return { dice, type: dt };
+        }
+    }
+    if (explicitType && STANDARD_DAMAGE_TYPES.includes(String(explicitType).toLowerCase())) {
+        return { dice: str, type: String(explicitType).toLowerCase() };
+    }
+    return { dice: str, type: 'piercing' };
+}
+
+export function populateTargetMapsDropdown(campaignState, currentMapId, selectedTargetMapId = null) {
+    if (typeof document === 'undefined') return;
+    const mapSelect = document.getElementById('maptools-portal-target-map');
+    if (!mapSelect) return;
+
+    const currentVal = selectedTargetMapId !== null
+        ? selectedTargetMapId
+        : (mapSelect.value || currentMapId);
+
+    mapSelect.innerHTML = '';
+    const intraOpt = document.createElement('option');
+    intraOpt.value = currentMapId;
+    intraOpt.textContent = '-- Active Map (Intra-Map) --';
+    mapSelect.appendChild(intraOpt);
+
+    if (campaignState && campaignState.maps) {
+        Object.keys(campaignState.maps).forEach((mapId) => {
+            if (mapId === currentMapId) return;
+            const mapObj = campaignState.maps[mapId];
+            const opt = document.createElement('option');
+            opt.value = mapId;
+            opt.textContent = mapObj.name ? `${mapObj.name} (Map)` : `Map (${mapId})`;
+            mapSelect.appendChild(opt);
+        });
+    }
+
+    if (currentVal && mapSelect.querySelector(`option[value="${currentVal}"]`)) {
+        mapSelect.value = currentVal;
+    } else {
+        mapSelect.value = currentMapId;
+    }
+}
+
 let isDrawingMapTool = false;
 let mapToolStartPoint = null;
 let mapToolCurrentPoint = null;
@@ -285,7 +338,10 @@ export function selectMapToolItem(type, id, state, callbacks = {}) {
         const dcEl = document.getElementById('maptools-trap-dc');
         if (dcEl) dcEl.value = trap.saveDc || 15;
         const dmgEl = document.getElementById('maptools-trap-damage');
-        if (dmgEl) dmgEl.value = trap.damage || '4d6 piercing';
+        const dmgTypeEl = document.getElementById('maptools-trap-damage-type');
+        const parsedDmg = parseDamageFormulaAndType(trap.damage, trap.damageType);
+        if (dmgEl) dmgEl.value = parsedDmg.dice || '4d6';
+        if (dmgTypeEl) dmgTypeEl.value = parsedDmg.type || 'piercing';
         const autoEl = document.getElementById('maptools-trap-auto');
         if (autoEl) autoEl.checked = trap.triggerAuto !== false;
         const repeatEl = document.getElementById('maptools-trap-repeat');
@@ -320,10 +376,10 @@ export function selectMapToolItem(type, id, state, callbacks = {}) {
 
         const nameEl = document.getElementById('maptools-portal-name');
         if (nameEl) nameEl.value = portal.name || 'Mystic Portal';
-        const mapEl = document.getElementById('maptools-portal-target-map');
-        if (mapEl) mapEl.value = portal.targetMapId || '';
 
-        populateTargetPortalsDropdown(portals, currentMapId, campaignState, portal.id);
+        const tgtMapId = portal.targetMapId || currentMapId;
+        populateTargetMapsDropdown(campaignState, currentMapId, tgtMapId);
+        populateTargetPortalsDropdown(portals, currentMapId, campaignState, portal.id, tgtMapId);
 
         const portalSelect = document.getElementById('maptools-portal-target-portal');
         if (portalSelect) portalSelect.value = portal.targetPortalId || '';
@@ -395,7 +451,11 @@ export function saveSelectedMapToolItem(type, state, callbacks = {}) {
             trap.name = document.getElementById('maptools-trap-name')?.value || trap.name;
             trap.saveAbility = document.getElementById('maptools-trap-ability')?.value || trap.saveAbility;
             trap.saveDc = parseInt(document.getElementById('maptools-trap-dc')?.value) || trap.saveDc;
-            trap.damage = document.getElementById('maptools-trap-damage')?.value || trap.damage;
+            const rawDmg = document.getElementById('maptools-trap-damage')?.value || trap.damage;
+            const rawType = document.getElementById('maptools-trap-damage-type')?.value || trap.damageType;
+            const parsed = parseDamageFormulaAndType(rawDmg, rawType);
+            trap.damage = parsed.dice || '4d6';
+            trap.damageType = parsed.type || 'piercing';
             trap.triggerAuto = document.getElementById('maptools-trap-auto')?.checked ?? trap.triggerAuto;
             trap.repeatTrigger = document.getElementById('maptools-trap-repeat')?.checked ?? trap.repeatTrigger;
         }
@@ -432,6 +492,21 @@ export function saveSelectedMapToolItem(type, state, callbacks = {}) {
 
         const newTargetMapId = portal.targetMapId;
         const newTargetPortalId = portal.targetPortalId;
+
+        // Guard: Prevent saving cross-map connection without a selected destination portal
+        if (newTargetMapId !== currentMapId && !newTargetPortalId) {
+            if (typeof JqueryUtil !== 'undefined' && JqueryUtil.doToast) {
+                JqueryUtil.doToast({
+                    type: 'warning',
+                    content: 'Please create and select a destination portal on that map before linking.'
+                });
+            }
+            portal.targetMapId = prevTargetMapId;
+            portal.targetPortalId = prevTargetPortalId;
+            const mapSelect = document.getElementById('maptools-portal-target-map');
+            if (mapSelect) mapSelect.value = prevTargetMapId;
+            return;
+        }
 
         if (
             prevTargetPortalId &&
@@ -507,12 +582,16 @@ export function saveSelectedMapToolItem(type, state, callbacks = {}) {
 export function deleteSelectedMapToolItem(type, state, callbacks = {}) {
     if (!state.selectedMapToolItem || state.selectedMapToolItem.type !== type) return;
     const id = state.selectedMapToolItem.id;
-    const { traps = [], portals = [], currentMapId = null, campaignState = {}, socket = null } = callbacks;
+    const { traps = [], portals = [], currentMapId = null, campaignState = {}, socket = null, mapToolUndoStack = null, mapToolRedoStack = null } = callbacks;
 
     if (type === 'trap') {
         const idx = traps.findIndex((t) => t.id === id);
         if (idx !== -1) {
-            traps.splice(idx, 1);
+            const [deleted] = traps.splice(idx, 1);
+            if (deleted && mapToolUndoStack) {
+                mapToolUndoStack.push({ action: 'delete', type: 'trap', item: JSON.parse(JSON.stringify(deleted)) });
+                if (mapToolRedoStack) mapToolRedoStack.length = 0;
+            }
             if (campaignState?.maps?.[currentMapId]) {
                 campaignState.maps[currentMapId].traps = traps;
             }
@@ -521,7 +600,11 @@ export function deleteSelectedMapToolItem(type, state, callbacks = {}) {
     } else {
         const idx = portals.findIndex((p) => p.id === id);
         if (idx !== -1) {
-            portals.splice(idx, 1);
+            const [deleted] = portals.splice(idx, 1);
+            if (deleted && mapToolUndoStack) {
+                mapToolUndoStack.push({ action: 'delete', type: 'portal', item: JSON.parse(JSON.stringify(deleted)) });
+                if (mapToolRedoStack) mapToolRedoStack.length = 0;
+            }
             cleanupPortalReferences(id, portals, currentMapId, campaignState, socket);
             if (campaignState?.maps?.[currentMapId]) {
                 campaignState.maps[currentMapId].portals = portals;
@@ -581,14 +664,19 @@ export function commitNewMapToolItem(start, end, polyPts, state, callbacks = {})
         let name = 'Spike Pit',
             saveAbility = 'DEX',
             saveDc = 15,
-            damage = '4d6 piercing',
+            damage = '4d6',
+            damageType = 'piercing',
             triggerAuto = true,
             repeatTrigger = false;
         if (typeof document !== 'undefined') {
             name = document.getElementById('maptools-trap-name')?.value || name;
             saveAbility = document.getElementById('maptools-trap-ability')?.value || saveAbility;
             saveDc = parseInt(document.getElementById('maptools-trap-dc')?.value) || saveDc;
-            damage = document.getElementById('maptools-trap-damage')?.value || damage;
+            const rawDmg = document.getElementById('maptools-trap-damage')?.value || damage;
+            const rawType = document.getElementById('maptools-trap-damage-type')?.value || damageType;
+            const parsed = parseDamageFormulaAndType(rawDmg, rawType);
+            damage = parsed.dice || '4d6';
+            damageType = parsed.type || 'piercing';
             triggerAuto = document.getElementById('maptools-trap-auto')?.checked ?? triggerAuto;
             repeatTrigger = document.getElementById('maptools-trap-repeat')?.checked ?? repeatTrigger;
         }
@@ -606,10 +694,15 @@ export function commitNewMapToolItem(start, end, polyPts, state, callbacks = {})
             saveAbility,
             saveDc,
             damage,
+            damageType,
             flavor: 'A concealed hazard is sprung upon entry!'
         };
 
         traps.push(newTrap);
+        if (callbacks.mapToolUndoStack) {
+            callbacks.mapToolUndoStack.push({ action: 'add', type: 'trap', item: JSON.parse(JSON.stringify(newTrap)) });
+            if (callbacks.mapToolRedoStack) callbacks.mapToolRedoStack.length = 0;
+        }
         if (campaignState?.maps?.[currentMapId]) {
             campaignState.maps[currentMapId].traps = traps;
         }
@@ -633,6 +726,19 @@ export function commitNewMapToolItem(start, end, polyPts, state, callbacks = {})
             name = document.getElementById('maptools-portal-name')?.value || name;
             targetMapId = document.getElementById('maptools-portal-target-map')?.value || currentMapId;
             targetPortalId = document.getElementById('maptools-portal-target-portal')?.value || '';
+
+            if (targetMapId !== currentMapId && !targetPortalId) {
+                if (typeof JqueryUtil !== 'undefined' && JqueryUtil.doToast) {
+                    JqueryUtil.doToast({
+                        type: 'warning',
+                        content: 'Please create and select a destination portal on that map before linking.'
+                    });
+                }
+                targetMapId = currentMapId;
+                const mapSelect = document.getElementById('maptools-portal-target-map');
+                if (mapSelect) mapSelect.value = currentMapId;
+            }
+
             linkBack = document.getElementById('maptools-portal-linkback')?.checked ?? true;
             walkThrough = document.getElementById('maptools-portal-walkthrough')?.checked ?? true;
             viewThrough = document.getElementById('maptools-portal-viewthrough')?.checked ?? false;
@@ -672,6 +778,10 @@ export function commitNewMapToolItem(start, end, polyPts, state, callbacks = {})
         };
 
         portals.push(newPortal);
+        if (callbacks.mapToolUndoStack) {
+            callbacks.mapToolUndoStack.push({ action: 'add', type: 'portal', item: JSON.parse(JSON.stringify(newPortal)) });
+            if (callbacks.mapToolRedoStack) callbacks.mapToolRedoStack.length = 0;
+        }
 
         if (linkBack && targetPortalId) {
             if (targetMapId === currentMapId) {
@@ -936,6 +1046,8 @@ export function setupMapToolsControls(state, callbacks = {}) {
     if (typeof document === 'undefined') return;
     const panel = document.getElementById('panel-map-tools');
     if (!panel) return;
+    if (panel.dataset.mapToolsInitialized === 'true') return;
+    panel.dataset.mapToolsInitialized = 'true';
 
     const {
         switchActiveLayer = null,
@@ -966,6 +1078,8 @@ export function setupMapToolsControls(state, callbacks = {}) {
                 ?.classList.toggle('vtt-hidden', state.activeMapToolSubmode !== 'portals');
 
             if (state.activeMapToolSubmode === 'portals') {
+                populateTargetMapsDropdown(campaignState, currentMapId);
+                populateTargetPortalsDropdown(portals, currentMapId, campaignState, state.selectedMapToolItem?.id);
                 if (switchActiveLayer) {
                     switchActiveLayer('portals');
                 } else if (updateLayerButtonIcon) {
@@ -985,6 +1099,20 @@ export function setupMapToolsControls(state, callbacks = {}) {
         });
     });
 
+    // Initialize Target Maps dropdown
+    populateTargetMapsDropdown(campaignState, currentMapId);
+    populateTargetPortalsDropdown(portals, currentMapId, campaignState, null);
+
+    // Auto-detect damage type when user types into maptools-trap-damage
+    document.getElementById('maptools-trap-damage')?.addEventListener('input', (e) => {
+        const val = e.target.value;
+        const parsed = parseDamageFormulaAndType(val);
+        const typeSelect = document.getElementById('maptools-trap-damage-type');
+        if (typeSelect && parsed.type && parsed.type !== typeSelect.value) {
+            typeSelect.value = parsed.type;
+        }
+    });
+
     // Shape Selection Grid
     panel.querySelectorAll('.maptools-shape-btn').forEach((btn) => {
         btn.addEventListener('click', () => {
@@ -999,13 +1127,22 @@ export function setupMapToolsControls(state, callbacks = {}) {
     });
 
     // Target map dropdown change -> refresh portal dropdown
-    document.getElementById('maptools-portal-target-map')?.addEventListener('change', () => {
+    document.getElementById('maptools-portal-target-map')?.addEventListener('change', (e) => {
+        const chosenMap = e.target.value;
         populateTargetPortalsDropdown(
             portals,
             currentMapId,
             campaignState,
-            state.selectedMapToolItem?.type === 'portal' ? state.selectedMapToolItem.id : null
+            state.selectedMapToolItem?.type === 'portal' ? state.selectedMapToolItem.id : null,
+            chosenMap
         );
+        if (state.selectedMapToolItem && state.selectedMapToolItem.type === 'portal') {
+            const p = portals.find((item) => item.id === state.selectedMapToolItem.id);
+            if (p) {
+                p.targetMapId = chosenMap || currentMapId;
+                p.targetPortalId = document.getElementById('maptools-portal-target-portal')?.value || '';
+            }
+        }
     });
 
     // Facing angle slider & number input listeners
@@ -1327,6 +1464,20 @@ export function handleMapToolMouseUp(mouse, e, context = {}) {
     const portals = context.portals || [];
 
     if (activeResizeMapToolHandle) {
+        const item = activeResizeMapToolHandle.type === 'trap'
+            ? traps.find((t) => t.id === activeResizeMapToolHandle.id)
+            : portals.find((p) => p.id === activeResizeMapToolHandle.id);
+        if (item && activeResizeMapToolHandle.origGeom && context.mapToolUndoStack) {
+            context.mapToolUndoStack.push({
+                action: 'geom',
+                type: activeResizeMapToolHandle.type,
+                id: activeResizeMapToolHandle.id,
+                before: JSON.parse(JSON.stringify(activeResizeMapToolHandle.origGeom)),
+                after: JSON.parse(JSON.stringify(item.geom))
+            });
+            if (context.mapToolRedoStack) context.mapToolRedoStack.length = 0;
+        }
+
         if (activeResizeMapToolHandle.type === 'trap') {
             if (vtt.campaignState?.maps?.[currentMapId]) {
                 vtt.campaignState.maps[currentMapId].traps = traps;
@@ -1346,6 +1497,20 @@ export function handleMapToolMouseUp(mouse, e, context = {}) {
     }
 
     if (activeDragMapToolItem) {
+        const item = activeDragMapToolItem.type === 'trap'
+            ? traps.find((t) => t.id === activeDragMapToolItem.id)
+            : portals.find((p) => p.id === activeDragMapToolItem.id);
+        if (item && mapToolDragOriginalGeom && context.mapToolUndoStack) {
+            context.mapToolUndoStack.push({
+                action: 'geom',
+                type: activeDragMapToolItem.type,
+                id: activeDragMapToolItem.id,
+                before: JSON.parse(JSON.stringify(mapToolDragOriginalGeom)),
+                after: JSON.parse(JSON.stringify(item.geom))
+            });
+            if (context.mapToolRedoStack) context.mapToolRedoStack.length = 0;
+        }
+
         if (activeDragMapToolItem.type === 'trap') {
             if (vtt.campaignState?.maps?.[currentMapId]) {
                 vtt.campaignState.maps[currentMapId].traps = traps;
@@ -1383,4 +1548,104 @@ export function handleMapToolMouseUp(mouse, e, context = {}) {
     mapToolCurrentPoint = null;
     updateMapToolDrawingUI(false);
     renderAll();
+}
+
+export function mapToolUndo(options = {}) {
+    const mapToolUndoStack = options.mapToolUndoStack || [];
+    const mapToolRedoStack = options.mapToolRedoStack || [];
+    const traps = options.traps || [];
+    const portals = options.portals || [];
+    const currentMapId = options.currentMapId;
+    const campaignState = options.campaignState || {};
+    const socket = options.socket || null;
+
+    if (mapToolUndoStack.length === 0) return;
+    const op = mapToolUndoStack.pop();
+
+    if (op.action === 'geom') {
+        const list = op.type === 'trap' ? traps : portals;
+        const item = list.find((i) => i.id === op.id);
+        if (item) {
+            mapToolRedoStack.push({
+                action: 'geom',
+                type: op.type,
+                id: op.id,
+                before: JSON.parse(JSON.stringify(op.before)),
+                after: JSON.parse(JSON.stringify(op.after))
+            });
+            item.geom = JSON.parse(JSON.stringify(op.before));
+        }
+    } else if (op.action === 'delete') {
+        const list = op.type === 'trap' ? traps : portals;
+        list.push(JSON.parse(JSON.stringify(op.item)));
+        mapToolRedoStack.push({ action: 'delete', type: op.type, item: JSON.parse(JSON.stringify(op.item)) });
+    } else if (op.action === 'add') {
+        const list = op.type === 'trap' ? traps : portals;
+        const idx = list.findIndex((i) => i.id === op.item.id);
+        if (idx !== -1) {
+            const [removed] = list.splice(idx, 1);
+            mapToolRedoStack.push({ action: 'add', type: op.type, item: JSON.parse(JSON.stringify(removed)) });
+        }
+    }
+
+    if (campaignState?.maps?.[currentMapId]) {
+        campaignState.maps[currentMapId].traps = traps;
+        campaignState.maps[currentMapId].portals = portals;
+    }
+    if (socket) {
+        if (op.type === 'trap') socket.emit('traps:update', { mapId: currentMapId, traps });
+        else socket.emit('portals:update', { mapId: currentMapId, portals });
+    }
+    if (typeof options.onRenderLists === 'function') options.onRenderLists();
+    if (typeof options.renderAll === 'function') options.renderAll();
+}
+
+export function mapToolRedo(options = {}) {
+    const mapToolUndoStack = options.mapToolUndoStack || [];
+    const mapToolRedoStack = options.mapToolRedoStack || [];
+    const traps = options.traps || [];
+    const portals = options.portals || [];
+    const currentMapId = options.currentMapId;
+    const campaignState = options.campaignState || {};
+    const socket = options.socket || null;
+
+    if (mapToolRedoStack.length === 0) return;
+    const op = mapToolRedoStack.pop();
+
+    if (op.action === 'geom') {
+        const list = op.type === 'trap' ? traps : portals;
+        const item = list.find((i) => i.id === op.id);
+        if (item) {
+            mapToolUndoStack.push({
+                action: 'geom',
+                type: op.type,
+                id: op.id,
+                before: JSON.parse(JSON.stringify(op.before)),
+                after: JSON.parse(JSON.stringify(op.after))
+            });
+            item.geom = JSON.parse(JSON.stringify(op.after));
+        }
+    } else if (op.action === 'add') {
+        const list = op.type === 'trap' ? traps : portals;
+        list.push(JSON.parse(JSON.stringify(op.item)));
+        mapToolUndoStack.push({ action: 'add', type: op.type, item: JSON.parse(JSON.stringify(op.item)) });
+    } else if (op.action === 'delete') {
+        const list = op.type === 'trap' ? traps : portals;
+        const idx = list.findIndex((i) => i.id === op.item.id);
+        if (idx !== -1) {
+            const [removed] = list.splice(idx, 1);
+            mapToolUndoStack.push({ action: 'delete', type: op.type, item: JSON.parse(JSON.stringify(removed)) });
+        }
+    }
+
+    if (campaignState?.maps?.[currentMapId]) {
+        campaignState.maps[currentMapId].traps = traps;
+        campaignState.maps[currentMapId].portals = portals;
+    }
+    if (socket) {
+        if (op.type === 'trap') socket.emit('traps:update', { mapId: currentMapId, traps });
+        else socket.emit('portals:update', { mapId: currentMapId, portals });
+    }
+    if (typeof options.onRenderLists === 'function') options.onRenderLists();
+    if (typeof options.renderAll === 'function') options.renderAll();
 }

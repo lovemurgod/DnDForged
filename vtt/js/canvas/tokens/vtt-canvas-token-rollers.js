@@ -262,8 +262,8 @@ export function resolveSaveFromChat(saveResolveCard, applyHalf, msgId, options =
     const results = saveResolveCard.results || [];
 
     let anyChanged = false;
-    const affectedIds = [];
-    const affectedTokens = [];
+    const affectedIdsSet = new Set();
+    const affectedTokensMap = new Map();
 
     results.forEach((r) => {
         const token = tokens[r.tokenId];
@@ -278,9 +278,9 @@ export function resolveSaveFromChat(saveResolveCard, applyHalf, msgId, options =
             deducted = applyCardDamageToToken(token, targetDmgRolls, multiplier);
             if (deducted > 0) {
                 anyChanged = true;
-                affectedTokens.push(token);
+                affectedTokensMap.set(token.id, token);
             }
-            affectedIds.push(token.id);
+            affectedIdsSet.add(token.id);
 
             const { drawW, drawH } = getTokenDrawDimensions(token);
             triggerDamageFXAnimation(
@@ -294,17 +294,18 @@ export function resolveSaveFromChat(saveResolveCard, applyHalf, msgId, options =
     });
 
     if (anyChanged) {
-        syncTokensHpToCharacters(affectedTokens);
+        const uniqueAffectedTokens = Array.from(affectedTokensMap.values());
+        syncTokensHpToCharacters(uniqueAffectedTokens);
         if (typeof window !== 'undefined' && typeof window.emitTokenUpdates === 'function') {
             window.emitTokenUpdates(tokens);
         }
         renderAll();
     }
 
-    if (affectedIds.length > 0 && vtt.socket) {
+    if (affectedIdsSet.size > 0 && vtt.socket) {
         vtt.socket.emit('tokens:damage_fx', {
             mapId: currentMapId,
-            tokenIds: affectedIds,
+            tokenIds: Array.from(affectedIdsSet),
             damageTypes: damageTypes.length > 0 ? damageTypes : ['untyped']
         });
     }

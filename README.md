@@ -3,7 +3,7 @@
 > **Plug & Play Virtual Tabletop (VTT) for Dungeons & Dragons 5e**
 > A lightweight, self-hosted VTT application combining full 5e content lookup, interactive map canvas, token management, dynamic fog of war, 3D dice rolling, party combat tracking, and zero-config online tunneling.
 
-[![Version](https://img.shields.io/badge/version-1.4.0-gold.svg)](https://github.com/lovemurgod/DnDForged)
+[![Version](https://img.shields.io/badge/version-1.4.1-gold.svg)](https://github.com/lovemurgod/DnDForged)
 [![License](https://img.shields.io/badge/license-All%20Rights%20Reserved-red.svg)](https://github.com/lovemurgod/DnDForged)
 [![Node.js](https://img.shields.io/badge/node.js-%3E%3D18.0.0-green.svg)](https://nodejs.org/)
 [![Electron](https://img.shields.io/badge/electron-30.0.0-blue.svg)](https://www.electronjs.org/)
@@ -15,7 +15,7 @@
 ### Option 1: Desktop App (Recommended for GMs)
 ForgeDVTT is packaged as a **single-download Windows desktop app**. No Node.js installation or terminal commands required!
 
-1. **Download & Run**: Get the latest `ForgeDVTT-Setup-1.4.0.exe` or portable binary from **[ForgeDVTT Releases](https://github.com/lovemurgod/DnDForged/releases)**.
+1. **Download & Run**: Get the latest `ForgeDVTT-Setup-1.4.1.exe` or portable binary from **[ForgeDVTT Releases](https://github.com/lovemurgod/DnDForged/releases)**.
 2. **Choose Subdomain**: Launch the app, enter your desired game subdomain slug (e.g. `mygame` or `tavern`), and click **🚀 Start Online Tunnel**.
 3. **Play & Share**: 
    - Click **⚔️ Open VTT Window** to play directly inside the desktop app.
