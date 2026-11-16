@@ -113,6 +113,8 @@
                             dice and chat</a>
                         <a href="#guide-dice-engine" class="manual-toc-link"><i class="fa-solid fa-calculator"></i> Use
                             dice commands</a>
+                        <a href="#guide-mass-combat" class="manual-toc-link"><i class="fa-solid fa-users-rays"></i> Run
+                            mass combat &amp; squads</a>
                     </div>
 
                     <div class="manual-toc-group">
@@ -135,6 +137,8 @@
                             monsters and companions</a>
                         <a href="#guide-modals" class="manual-toc-link"><i class="fa-solid fa-map-location-dot"></i>
                             Manage maps and grids</a>
+                        <a href="#guide-roll-tables-decks" class="manual-toc-link"><i class="fa-solid fa-dice-d6"></i>
+                            Roll tables, decks &amp; flippable tokens</a>
                         <a href="#guide-weather-engine" class="manual-toc-link"><i class="fa-solid fa-cloud-bolt"></i>
                             Set map weather</a>
                         <a href="#guide-map-tools" class="manual-toc-link"><i class="fa-solid fa-dungeon"></i> Add
@@ -1319,6 +1323,80 @@
                     </div>
                 </section>
 
+                <!-- SECTION 2.4: MASS ROLLS, SQUAD SPLITTING & ARMY COMBAT -->
+                <section class="manual-section" id="guide-mass-combat">
+                    <div class="manual-section-header">
+                        <div class="manual-section-title-wrap">
+                            <div class="manual-section-icon"><i class="fa-solid fa-users-rays"></i></div>
+                            <h2 class="manual-section-title">Run mass combat and army squads</h2>
+                        </div>
+                        <span class="manual-section-badge gm">Hordes &amp; Mobs</span>
+                    </div>
+                    <p class="section-lead">When your party encounters an entire goblin war band, an army of skeletons,
+                        or casts Fireball into a packed room, rolling for each monster individually grinds the game to a
+                        halt. ForgeD lets you control dozens of enemies simultaneously with group saving throws, quick
+                        squad formations, and automated combat math.</p>
+
+                    <div class="doc-feature-grid">
+                        <div class="doc-feature-card" data-keywords="mass save fireball dc advantage area effect">
+                            <h3 class="doc-feature-title"><i class="fa-solid fa-fire-burner"></i> Mass Saving Throws in 3 Steps</h3>
+                            <div class="doc-feature-body">
+                                <p style="margin-bottom: 8px;"><em>Scenario: The wizard drops a 20-foot Fireball onto 12 cultists standing in a courtyard.</em></p>
+                                <ol style="padding-left: 18px; margin: 0 0 10px 0; font-size: 0.88rem; line-height: 1.5;">
+                                    <li><strong>Box-select all targets:</strong> Click and drag a selection box across the affected tokens on the canvas (or hold <span class="kbd-badge">Shift</span> and click each one).</li>
+                                    <li><strong>Open Mass Save:</strong> Right-click any selected token and click <strong>Mass Save</strong> from the radial context menu.</li>
+                                    <li><strong>Set the DC and roll:</strong> Choose the saving throw ability (e.g. Dexterity), enter the spell DC (e.g. 15), and click <strong>Roll Group</strong>.</li>
+                                </ol>
+                                <p style="font-size: 0.84rem; color: var(--text-muted); margin: 0;">ForgeD rolls for every defender in parallel, announces a single grouped chat card showing who passed and failed, and provides <strong>Apply Full Damage</strong> and <strong>Apply Half Damage</strong> buttons to adjust all hit points instantly.</p>
+                            </div>
+                        </div>
+
+                        <div class="doc-feature-card" data-keywords="quick split squad cluster proximity horde formation">
+                            <h3 class="doc-feature-title"><i class="fa-solid fa-people-group"></i> Split Armies into Tactical Squads</h3>
+                            <div class="doc-feature-body">
+                                <p style="margin-bottom: 8px;"><em>Scenario: You placed 16 orcs on the battlemap, but they naturally divide into two assault waves on opposite sides of the room.</em></p>
+                                <ol style="padding-left: 18px; margin: 0 0 10px 0; font-size: 0.88rem; line-height: 1.5;">
+                                    <li><strong>Select the whole horde:</strong> Box-select all 16 tokens at once.</li>
+                                    <li><strong>Click Quick Split:</strong> In the mass actions bar, choose <strong>Quick Split</strong>.</li>
+                                    <li><strong>Slide the distance slider:</strong> ForgeD looks at how close tokens are standing to each other and automatically clusters them into <em>Squad A</em> and <em>Squad B</em> with distinct name tags and shared initiative.</li>
+                                </ol>
+                                <p style="font-size: 0.84rem; color: var(--text-muted); margin: 0;">Each squad can be moved together in formation by dragging one token while preserving their battle positions.</p>
+                            </div>
+                        </div>
+
+                        <div class="doc-feature-card" data-keywords="mob attack swarm strikes mass attack ac hit miss">
+                            <h3 class="doc-feature-title"><i class="fa-solid fa-burst"></i> Mob Attacks &amp; Volleys</h3>
+                            <div class="doc-feature-body">
+                                <p style="margin-bottom: 8px;"><em>Scenario: Eight goblin archers all fire arrows at the party's paladin and rogue at once.</em></p>
+                                <ol style="padding-left: 18px; margin: 0 0 10px 0; font-size: 0.88rem; line-height: 1.5;">
+                                    <li><strong>Select the attacking squad:</strong> Click the archer mob.</li>
+                                    <li><strong>Choose the attack:</strong> Click <strong>Mass Attack</strong> and select their Shortbow action.</li>
+                                    <li><strong>Assign target defenders:</strong> Pick which party members they are shooting at.</li>
+                                </ol>
+                                <p style="font-size: 0.84rem; color: var(--text-muted); margin: 0;">ForgeD evaluates all d20 attack rolls against each player character's current Armor Class, reporting total hits, critical hits, and combined damage totals in chat.</p>
+                            </div>
+                        </div>
+
+                        <div class="doc-feature-card" data-keywords="smart resistance silvered magical adamantine bypass nonmagical">
+                            <h3 class="doc-feature-title"><i class="fa-solid fa-shield-halved"></i> Smart Damage &amp; Resistances</h3>
+                            <div class="doc-feature-body">
+                                <p style="margin-bottom: 8px;"><em>Scenario: The barbarian attacks a werewolf with a normal battleaxe, while the paladin strikes with a silvered longsword.</em></p>
+                                <p style="font-size: 0.88rem; line-height: 1.5; margin: 0 0 8px 0;">Never worry about pausing combat to calculate complex 5e physical defense rules. When damage lands on a creature with conditional resistances (such as <em>resistance to nonmagical bludgeoning, piercing, and slashing</em>), ForgeD automatically checks:</p>
+                                <ul style="padding-left: 18px; margin: 0 0 8px 0; font-size: 0.85rem; line-height: 1.5;">
+                                    <li><strong>Magical Attacks:</strong> Spells and magic weapons bypass nonmagical resistance cleanly.</li>
+                                    <li><strong>Silvered &amp; Adamantine:</strong> Bypasses werewolf and golem defenses automatically when tagged.</li>
+                                    <li><strong>Composite Damage:</strong> Correctly divides multi-type damage (like <code>2d6 slashing + 1d6 fire</code>), halving only the resisted portion.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="guide-callout" style="margin-top: 20px;">
+                        <span><strong>Tip for large battles:</strong><small>Combine Mass Saves with the Fast Dice bar to run encounters with 30+ participants in minutes without leaving the canvas view.</small></span>
+                        <i class="fa-solid fa-bolt" aria-hidden="true"></i>
+                    </div>
+                </section>
+
                 <!-- SECTION 3.1: CHARACTER BUILDER & LEVEL UP ASSISTANT -->
                 <section class="manual-section" id="guide-char-builder">
                     <div class="manual-section-header">
@@ -1626,6 +1704,19 @@
                                     weight bar adjust automatically.</p>
                             </div>
                         </div>
+                        <div class="doc-workflow-item"
+                            data-keywords="crit range threshold champion fighter save toggle bless bane aura container bag of holding">
+                            <div class="doc-workflow-badge">4</div>
+                            <div class="doc-workflow-content">
+                                <h3 class="">Fine-Tune Crit Ranges, Buff Toggles &amp; Containers</h3>
+                                <p>Click the gear icon next to your character's ability scores or combat stats to open <strong>Sheet Modifiers &amp; Settings</strong>:</p>
+                                <ul style="padding-left: 18px; margin: 4px 0 0 0; font-size: 0.88rem; line-height: 1.5;">
+                                    <li><strong>Custom Critical Hit Range:</strong> Playing a Champion Fighter or wielding a Keen weapon? Set your crit threshold to <code>19</code> (or <code>18</code>). Weapon attacks and spell strikes will automatically trigger critical hit banners on a 19 or 20.</li>
+                                    <li><strong>Active Save Toggles:</strong> Add temporary buffs like <em>Bless</em> (<code>+1d4</code>), <em>Bane</em> (<code>-1d4</code>), or a Paladin's <em>Aura of Protection</em>. Toggle them on or off with one click whenever you roll a saving throw.</li>
+                                    <li><strong>Containers &amp; Bags of Holding:</strong> Put items into backpacks, chests, or Bags of Holding to keep your inventory organized and automatically exclude container contents from encumbrance penalties.</li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="doc-section-subtitle">
@@ -1672,6 +1763,18 @@
                                     <td><code>Total Coins ÷ 50 = lbs</code></td>
                                     <td>N/A</td>
                                     <td>Added directly to total weight bar and encumbrance limits</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Crit Threshold</strong></td>
+                                    <td><code>Custom Range (18–20 / 19–20)</code></td>
+                                    <td>N/A</td>
+                                    <td>Triggers critical hits on designated d20 roll results in chat</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Save Toggles</strong></td>
+                                    <td><code>Formula Modifier (e.g. +1d4)</code></td>
+                                    <td>N/A</td>
+                                    <td>Applies active situational bonus (Bless, Bane, Aura) to d20 saves</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -2161,6 +2264,13 @@
                                     directly from their view.</p>
                             </div>
                         </div>
+                        <div class="doc-workflow-item" data-keywords="token drop preferences rolled hp average auto number senses darkvision gm layer">
+                            <div class="doc-workflow-badge">4</div>
+                            <div class="doc-workflow-content">
+                                <h3 class="">Customizing Monster Spawn Preferences</h3>
+                                <p>Click the gear icon in the Bestiary or Token Manager to open <strong>Token Drop Preferences</strong>. Choose whether dropped monsters use flat <strong>Average HP</strong> or automatically roll dynamic <strong>Rolled HP</strong> from their hit dice formula (e.g. <code>2d8 + 2</code>), enable <strong>Auto-Number Duplicates</strong> (so a dropped wolf pack automatically names them <em>Wolf 1</em>, <em>Wolf 2</em>, <em>Wolf 3</em>), import Darkvision and senses directly into token sight, and set disposition rings (Hostile, Neutral, Friendly).</p>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="doc-section-subtitle">
@@ -2181,6 +2291,21 @@
                                     <td><strong>Drag to Canvas</strong></td>
                                     <td>Spawns token on grid, generates creature instance and binds sheet</td>
                                     <td>Drag card from Bestiary sidebar onto map</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Rolled vs. Average HP</strong></td>
+                                    <td>Configures dropped monsters to take standard average HP or roll hit dice dynamically</td>
+                                    <td>Bestiary Token Drop Config Modal</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Auto-Number Duplicates</strong></td>
+                                    <td>Automatically suffixes sequential numbers (e.g. Goblin 1, Goblin 2) on spawn</td>
+                                    <td>Bestiary Token Drop Config Modal</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Auto-Import Senses</strong></td>
+                                    <td>Automatically reads Darkvision, Blindsight &amp; Tremorsense into token vision emitters</td>
+                                    <td>Auto-applied on monster drop</td>
                                 </tr>
                                 <tr>
                                     <td><strong>1-Click Attack</strong></td>
@@ -2246,6 +2371,76 @@
                                     grid alignment to align with artwork.</li>
                             </ul>
                         </div>
+                    </div>
+                </section>
+
+                <!-- SECTION 4.2B: ROLL TABLES, CARD DECKS & FLIPPABLE ASSETS -->
+                <section class="manual-section" id="guide-roll-tables-decks">
+                    <div class="manual-section-header">
+                        <div class="manual-section-title-wrap">
+                            <div class="manual-section-icon"><i class="fa-solid fa-dice-d6"></i></div>
+                            <h2 class="manual-section-title">Roll tables, card decks, and flippable tokens</h2>
+                        </div>
+                        <span class="manual-section-badge gm">Tabletop Extras</span>
+                    </div>
+                    <p class="section-lead">Whether you are dealing a prophetic Tarokka reading in Barovia, drawing cards
+                        from the legendary Deck of Many Things, rolling on a Wild Magic Surge table, or flipping a dungeon
+                        chest from locked to open, ForgeD brings tactile cards, randomizers, and multi-sided tokens
+                        directly onto your tabletop.</p>
+
+                    <div class="doc-feature-grid">
+                        <div class="doc-feature-card" data-keywords="roll table wild magic carousing trinkets whisper secret table">
+                            <h3 class="doc-feature-title"><i class="fa-solid fa-table-list"></i> Custom &amp; Prebuilt Roll Tables</h3>
+                            <div class="doc-feature-body">
+                                <p style="margin-bottom: 8px;"><em>Scenario: The sorcerer rolls on the Wild Magic Surge table, or you need a random tavern encounter fast.</em></p>
+                                <ol style="padding-left: 18px; margin: 0 0 10px 0; font-size: 0.88rem; line-height: 1.5;">
+                                    <li><strong>Open Tables &amp; Decks:</strong> Click the <strong>Roll Tables</strong> button on the left world tools dock.</li>
+                                    <li><strong>Create or load tables:</strong> Click <strong>New Table</strong> to set your own die formula (e.g. <code>1d100</code>, <code>2d6</code>, <code>1d20</code>) with custom weights and ranges, or click <strong>Load Presets</strong> to import pre-built 5e tables like <em>Wild Magic Surge</em>, <em>Carousing</em>, <em>Trinkets</em>, and <em>Dungeon Hazards</em>.</li>
+                                    <li><strong>Choose public or secret roll:</strong> Click <strong>Roll to Chat</strong> so players see the outcome, or choose <strong>Whisper to GM</strong> to keep wandering monsters, secret loot, and traps hidden behind your screen.</li>
+                                </ol>
+                            </div>
+                        </div>
+
+                        <div class="doc-feature-card" data-keywords="card decks tarot tarokka deck of many things illusions shuffle draw">
+                            <h3 class="doc-feature-title"><i class="fa-solid fa-clone"></i> Tangible Card Decks on the Table</h3>
+                            <div class="doc-feature-body">
+                                <p style="margin-bottom: 8px;"><em>Scenario: You want to perform a mysterious fortune-telling reading or let your party draw from the Deck of Many Things.</em></p>
+                                <ol style="padding-left: 18px; margin: 0 0 10px 0; font-size: 0.88rem; line-height: 1.5;">
+                                    <li><strong>Pick a prebuilt or custom deck:</strong> ForgeD includes beautifully illustrated, procedural vector decks with zero external image lag—including the <strong>Tarokka Deck</strong>, <strong>Deck of Many Things</strong>, <strong>Deck of Illusions</strong>, and <strong>Standard Playing Cards</strong>.</li>
+                                    <li><strong>Shuffle and draw:</strong> Click <strong>Shuffle</strong> to randomize the cards. Click <strong>Draw Card</strong> to announce a card draw to multiplayer chat.</li>
+                                    <li><strong>Discard and reset:</strong> Review cards in the <strong>View Cards</strong> modal, manage the discard pile, or click <strong>Recall Deck</strong> to gather and reshuffle the cards at any time.</li>
+                                </ol>
+                            </div>
+                        </div>
+
+                        <div class="doc-feature-card" data-keywords="flip card tabletop card canvas face down face up peek card">
+                            <h3 class="doc-feature-title"><i class="fa-solid fa-hand-holding-hand"></i> Place &amp; Flip Cards on the Map</h3>
+                            <div class="doc-feature-body">
+                                <p style="margin-bottom: 8px;"><em>Scenario: You want to deal face-down cards on the battlemap for an in-game puzzle, gambling minigame, or Tarokka cross layout.</em></p>
+                                <ol style="padding-left: 18px; margin: 0 0 10px 0; font-size: 0.88rem; line-height: 1.5;">
+                                    <li><strong>Play to canvas:</strong> Click <strong>Play to Canvas</strong> next to any deck or card to drop it onto any grid square.</li>
+                                    <li><strong>Right-click to flip:</strong> Right-click the tabletop card to select <strong>Flip Face-Up</strong> or <strong>Flip Face-Down</strong>. The card physically flips for all connected players in real time.</li>
+                                    <li><strong>Secret GM peek:</strong> Click <strong>Peek at Card</strong> to discreetly check what a face-down card is without revealing it to players, or select <strong>Discard</strong> to return it to the deck box.</li>
+                                </ol>
+                            </div>
+                        </div>
+
+                        <div class="doc-feature-card" data-keywords="multi sided token flippable tile asset table shapechanger disguise chest open closed">
+                            <h3 class="doc-feature-title"><i class="fa-solid fa-masks-theater"></i> Multi-Sided Flippable Tokens &amp; Tiles</h3>
+                            <div class="doc-feature-body">
+                                <p style="margin-bottom: 8px;"><em>Scenario: An NPC is a doppelgänger in disguise, a campfire goes from unlit to blazing, or a secret treasure chest snaps open.</em></p>
+                                <ol style="padding-left: 18px; margin: 0 0 10px 0; font-size: 0.88rem; line-height: 1.5;">
+                                    <li><strong>Build an Asset Table:</strong> In the Roll Tables manager, switch to <strong>Asset Tables</strong> and click <strong>New Asset Table</strong>. Select 2 or more artworks from your local asset library (e.g. <em>Chest Closed.webp</em> and <em>Chest Open.webp</em>).</li>
+                                    <li><strong>Drop onto the map:</strong> Drag your Asset Table onto the canvas as an interactive token or map tile.</li>
+                                    <li><strong>Switch appearances on the fly:</strong> Right-click the token and click <strong>Change Side</strong> to pick a specific appearance, cycle to the next state, or roll a random appearance on demand.</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="guide-callout" style="margin-top: 20px;">
+                        <span><strong>Interactive Tarokka readings:</strong><small>When running gothic horror adventures, place 5 face-down Tarokka cards in a cross on the map. Flip each card as Madame Eva delivers her prophecy to create unforgettable immersion.</small></span>
+                        <i class="fa-solid fa-hat-cowboy-side" aria-hidden="true"></i>
                     </div>
                 </section>
 
@@ -2549,15 +2744,18 @@
                             </div>
                         </div>
                         <div class="doc-workflow-item"
-                            data-keywords="portals teleporters inter-map spatial link pad non-euclidean">
+                            data-keywords="portals teleporters inter-map spatial link pad non-euclidean compass heading sight peeking orientation">
                             <div class="doc-workflow-badge">3</div>
                             <div class="doc-workflow-content">
-                                <h3 class="">Link Teleportation Portals Across Maps &amp; Rooms</h3>
+                                <h3 class="">Link Teleportation Portals, 360° Headings &amp; Sight Peeking</h3>
                                 <p>In the <strong>Map Tools</strong> drawer, switch to the <strong>Portals</strong> tab.
-                                    Place portal pads or line doorways with interactive rotation and resize handles.
-                                    Link the portal to a <strong>Target Map</strong> and <strong>Target Portal
-                                        ID</strong>. Moving a token into the portal instantly teleports it to the
-                                    destination coordinates across campaign scenes or between rooms on the same map.</p>
+                                    Place portal pads or line doorways with interactive rotation handles. Set exact
+                                    compass headings (North 0°, East 90°, South 180°, West 270°) to control exit angles.
+                                    Link the portal to a <strong>Target Map</strong> and <strong>Target Portal ID</strong>.
+                                    Moving a token into the portal instantly teleports it to the destination coordinates
+                                    while smoothly re-orienting the token into the new room. Best of all, player vision
+                                    automatically peers through open portal apertures so characters can see into the
+                                    next chamber before stepping through!</p>
                             </div>
                         </div>
                         <div class="doc-workflow-item"
@@ -2616,19 +2814,19 @@
                         </div>
 
                         <div class="btn-inspector-card"
-                            data-keywords="portal teleporter target map id destination spatial transit">
+                            data-keywords="portal teleporter target map id destination spatial transit compass rotation peeking sight frustum heading">
                             <div class="btn-inspector-header">
                                 <div class="btn-inspector-title-wrap">
                                     <div class="btn-inspector-icon blue"><i class="fa-solid fa-archway"></i></div>
-                                    <span class="btn-inspector-name">Spatial &amp; Inter-Map Portals</span>
+                                    <span class="btn-inspector-name">Spatial Portals &amp; Sight Peeking</span>
                                 </div>
-                                <span class="kbd-badge">Teleporters</span>
+                                <span class="kbd-badge">360° Portals</span>
                             </div>
                             <p class="btn-inspector-desc">Place paired portal gates that transport tokens between
-                                battlemap scenes or different chambers of a mega-dungeon, with automatic destination
-                                coordinate snapping and rotation handles.</p>
+                                battlemap scenes or dungeon chambers, with universal 360° compass heading alignment,
+                                automatic orientation adjustment on arrival, and dynamic sight peeking through open doorways.</p>
                             <div class="btn-inspector-action"><i class="fa-solid fa-arrows-split-up-and-left"></i>
-                                Inter-Map Transit</div>
+                                Two-Way Spatial Transit</div>
                         </div>
 
                         <div class="btn-inspector-card"
@@ -3617,6 +3815,30 @@
                                     <td>Opens custom dice quantity input (e.g. <code>4d6</code>, <code>8d6</code>).</td>
                                 </tr>
                                 <tr>
+                                    <td><strong>Group Formation Move</strong></td>
+                                    <td><span class="kbd-badge">Drag Selected Tokens</span></td>
+                                    <td>Canvas Tokens</td>
+                                    <td>Moves multiple selected tokens together across grid squares while preserving relative tactical formations.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Canvas Clipboard</strong></td>
+                                    <td><span class="kbd-badge">Ctrl + C</span> / <span class="kbd-badge">Ctrl + X</span> / <span class="kbd-badge">Ctrl + V</span></td>
+                                    <td>Canvas</td>
+                                    <td>Copy, cut, and paste tokens, drawings, and shapes across maps and layers.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Token Layering (Z-Order)</strong></td>
+                                    <td><span class="kbd-badge">Right Click ➔ Layering</span></td>
+                                    <td>Tokens</td>
+                                    <td>Bring token to front or send to back when tokens overlap on the map.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Flip Tabletop Card</strong></td>
+                                    <td><span class="kbd-badge">Right Click ➔ Flip</span></td>
+                                    <td>Card Decks</td>
+                                    <td>Physically flips a tabletop card face-up or face-down for all connected players in real time.</td>
+                                </tr>
+                                <tr>
                                     <td><strong>Dismiss Menus</strong></td>
                                     <td><span class="kbd-badge">Escape</span></td>
                                     <td>UI Modals</td>
@@ -3644,158 +3866,180 @@
                 style="color: #d4af37; text-decoration: underline;">Legal Notices &amp; OGC Disclaimers</a></p>
     </footer>
     <script>
-        const searchInput = document        .getElementById('manual-search-input');
-        const searchClearBtn =         document.getElementById('manual-search-clear');
-        const searchResu        lts = document.getElementById('manual-search-results');
-        const         searchStatus = document.getElementById('manual-search-status');
-                const mobileTocToggle = document.getElementById('mobile-toc-tog        gle');
-        const manualSidebar = document.querySelector('.manual        -sidebar');
-        const mobileTocArrow = document.getElementById('        mobile-toc-arrow');
-                const backToTopBtn = documen        t.getElementById('guide-bac            to-top');
+        const searchInput = document.getElementById('manual-search-input');
+        const searchClearBtn = document.getElementById('manual-search-clear');
+        const searchResults = document.getElementById('manual-search-results');
+        const searchStatus = document.getElementById('manual-search-status');
+        const mobileTocToggle = document.getElementById('mobile-toc-toggle');
+        const manualSidebar = document.querySelector('.manual-sidebar');
+        const mobileTocArrow = document.getElementById('mobile-toc-arrow');
+        const backToTopBtn = document.getElementById('guide-back-to-top');
 
         let guideSearchIndex = [];
         let activeResultIndex = -1;
 
-        function esc        ape        Html(str) {
-            return str.repl            e(/&/g, '&amp;').replace(/</g, '&lt;'            replace(/>/g, '&gt;').replace(/"/g,             quot;');
+        function escapeHtml(str) {
+            return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
         }
 
-        functio            highlightMatch(text, query) {
-                      if (!query) return escapeHtml(text);
-                      const qLower = query.toLo            rCase();
-            const tLower = text.toLowerCas            );
-            const idx = tLower.indexOf(qLow            );
+        function highlightMatch(text, query) {
+            if (!query) return escapeHtml(text);
+            const qLower = query.toLowerCase();
+            const tLower = text.toLowerCase();
+            const idx = tLower.indexOf(qLower);
             if (idx === -1) return escapeHtml(text);
             const before = text.slice(0, idx);
             const match = text.slice(idx, idx + query.length);
-            const a        fte        r = text.slice(idx + query.len            h);
-            return e            apeHtml(before) + '<mark style="background: rgba(245, 196, 83, 0                ; color: #fff; padding: 0 2px; border-radius: 2px;">' + esca                ml(match) + '</mark>' + escapeHtml(after);
+            const after = text.slice(idx + query.length);
+            return escapeHtml(before) + '<mark style="background: rgba(245, 196, 83, 0.35); color: #fff; padding: 0 2px; border-radius: 2px;">' + escapeHtml(match) + '</mark>' + escapeHtml(after);
         }
 
-                      nction buildSearchIndex() {
+        function buildSearchIndex() {
             guideSearchIndex = [];
 
-                        document.querySelectorAll('.manual-section').forEach((sec)                 
-                                  t titleEl = sec.querySelector('.manual-sec                    itle');
-                const badgeEl = sec.querySelector                    ual-section-badge');
-                const leadEl = se                    ySelector('.section-lead, .doc-section-lead');
-                                    iconEl = sec.querySelec                        nual-section-i                        
+            document.querySelectorAll('.manual-section').forEach((sec) => {
+                const titleEl = sec.querySelector('.manual-section-title');
+                const badgeEl = sec.querySelector('.manual-section-badge');
+                const leadEl = sec.querySelector('.section-lead, .doc-section-lead');
+                const iconEl = sec.querySelector('.manual-section-icon i');
 
-                i                        El) {
-                    cons                        = titleEl.text                        trim();
-                                    const b                        adgeEl ? badgeEl.textContent.trim() : '';
-                                     st l                = l                l ? leadEl.textContent.trim() : '';
-                    const ic                    conEl ? iconEl.className : 'fa-solid fa-book';
+                if (titleEl) {
+                    const title = titleEl.textContent.trim();
+                    const badge = badgeEl ? badgeEl.textContent.trim() : '';
+                    const lead = leadEl ? leadEl.textContent.trim() : '';
+                    const icon = iconEl ? iconEl.className : 'fa-solid fa-book';
 
-                                  guideSearchIndex.push({
-                        elemen                    ,
+                    guideSearchIndex.push({
+                        element: sec,
                         sectionId: sec.id,
-                                      category: badge || 'Section',
-                                      title: title,
-                        snippet: lead                                                          on: icon,
-                        keyword                        e + ' ' + badge + ' ' + lead).toLowerCase()
-                                    });
+                        category: badge || 'Section',
+                        title: title,
+                        snippet: lead,
+                        icon: icon,
+                        keywords: (title + ' ' + badge + ' ' + lead).toLowerCase()
+                    });
                 }
 
-                sec.querySelectorAll('.                        ector-card').forEach((card) => {
-                    const nameE                        .querySelector('.btn-inspector-name');
-                    const                          card.querySelector('.bt                            r-desc');
-                                      const kbdEl =                             Selector('.kbd-badge                                          const                             ard.querySelect                            nspector-ico                                             const kw = card.getAttribute('data-keywords') || ''                                                                  f (na                ) {
-                        const title = nameEl.textContent.t                    
-                        const desc = descEl ? descEl.text                    t.trim() : '';
-                        const kbd = kbdEl                    ' + kbdEl.textContent.trim() + ']' : '';
-                                      const icon = iconEl ? iconEl.className : 'fa-solid fa-                    x';
-                                        const catTitle = titleEl ? titleEl.te                        t.trim() : 'Tool';
+                sec.querySelectorAll('.btn-inspector-card').forEach((card) => {
+                    const nameEl = card.querySelector('.btn-inspector-name');
+                    const descEl = card.querySelector('.btn-inspector-desc');
+                    const kbdEl = card.querySelector('.kbd-badge');
+                    const iconEl = card.querySelector('.btn-inspector-icon i');
+                    const kw = card.getAttribute('data-keywords') || '';
+
+                    if (nameEl) {
+                        const title = nameEl.textContent.trim();
+                        const desc = descEl ? descEl.textContent.trim() : '';
+                        const kbd = kbdEl ? ' [' + kbdEl.textContent.trim() + ']' : '';
+                        const icon = iconEl ? iconEl.className : 'fa-solid fa-toolbox';
+                        const catTitle = titleEl ? titleEl.textContent.trim() : 'Tool';
 
                         guideSearchIndex.push({
-                                            element: card,
-                            sectionId: se                                                  category: catTitle,
+                            element: card,
+                            sectionId: sec.id,
+                            category: catTitle,
                             title: title + kbd,
                             snippet: desc,
-                                            icon:                                                                       keywords: (title +                              + ' ' + kbd + ' ' +                            erCase()
-                                          });
-                                                                                               sec.querySelectorAll('.doc-feature-card').for                        rd)                                                                const titleEl = card.querySelector('.doc-feature-title');
-                                  const bodyEl = card.queryS                    r('.doc-feature-body');
-                                  const iconEl = card.querySelector('.doc-feature-title i');                                   const kw = card.getAttribute('data-keyw                     || '';
-
-                                    if (titleEl) {
-                                        const title = titleEl.textContent.trim();
-                                        const body = bodyEl ? bodyEl.textContent.replace(/\s+/g, ' ').t                        '';
-                        const icon = iconEl ? iconEl.className : 'fa-solid fa-circle-check';
-                        const catTitle                         erySelector('.manual-sec                            ') ? sec.queryS                            manual-section-titl                            ntent.trim() : 'Feat                                                 guideSe                            push({
-                                                  ent: card,
-                                                 tionId: sec.id,
-                            category: catTitle,
-                                                                       itle:                le,
-                            snippet: body.slice(0, 110),                                           icon: icon,
-                                          keywords: (title +                     body + ' ' + kw).toLowerCase()
-                                      });
-                                    }
+                            icon: icon,
+                            keywords: (title + ' ' + desc + ' ' + kbd + ' ' + kw).toLowerCase()
+                        });
+                    }
                 });
 
-                                sec.querySelectorAll('.doc-workflow-item').forE                        m) => {
-                    const h3El = item.querySelector('h3');
-                                    const pEl = item.querySelector('p');
-                    const badgeEl = item.querySelector('.doc-workflow-badge');
-                                     onst kw = item.getAttrib                            keywords') || '                                          if (h                                                                            le = h3El.text                            im();
-                                                   t = pEl ? pE                            ent.trim() : '';
-                        cons                         bad                     '                 ' +                 eEl.textContent.trim() : 'Workflow';
-                        const                    tle = sec.querySelector('.manual-section-t                     ? sec.querySelector('.ma                        tion-title').textContent.trim() : 'Guide';
+                sec.querySelectorAll('.doc-feature-card').forEach((card) => {
+                    const titleEl = card.querySelector('.doc-feature-title');
+                    const bodyEl = card.querySelector('.doc-feature-body');
+                    const iconEl = card.querySelector('.doc-feature-title i');
+                    const kw = card.getAttribute('data-keywords') || '';
 
-                                        guideSearchIndex.push({
-                                            element: item,
-                            sec                        sec.id,
+                    if (titleEl) {
+                        const title = titleEl.textContent.trim();
+                        const body = bodyEl ? bodyEl.textContent.replace(/\s+/g, ' ').trim() : '';
+                        const icon = iconEl ? iconEl.className : 'fa-solid fa-circle-check';
+                        const catTitle = sec.querySelector('.manual-section-title') ? sec.querySelector('.manual-section-title').textContent.trim() : 'Feature';
+
+                        guideSearchIndex.push({
+                            element: card,
+                            sectionId: sec.id,
                             category: catTitle,
-                            title: step + ': ' + title,
-                            snippet: tex                        0, 110),
-                                              icon: 'fa-s                            st-check',
-                                              keywords:                              ' + text + ' ' + step + ' ' + kw).toLower                                                                                           }
-                                    ;
+                            title: title,
+                            snippet: body.slice(0, 110),
+                            icon: icon,
+                            keywords: (title + ' ' + body + ' ' + kw).toLowerCase()
+                        });
+                    }
+                });
 
-                sec.querySelectorAll('.manual-subcard').forEach                        => {                                                         c        ons        t h3El = card.querySelector('h            );
-                    const pEl = ca            .querySelector('p');
-                    const i            nEl = card.querySelector(            3 i');
+                sec.querySelectorAll('.doc-workflow-item').forEach((item) => {
+                    const h3El = item.querySelector('h3');
+                    const pEl = item.querySelector('p');
+                    const badgeEl = item.querySelector('.doc-workflow-badge');
+                    const kw = item.getAttribute('data-keywords') || '';
 
                     if (h3El) {
-                        const tit                 h3El.textContent.trim();
-                                      nst text = pEl ? pEl.textContent.trim() : '';
-                        const i                = iconEl ? iconEl.className : 'fa-solid fa-info-circle';
-                                             onst catTitle = sec.qu                elector('.manual-section-title') ? sec.querySelector('            anu            -section-title').textContent.trim() : 'Reference';
+                        const title = h3El.textContent.trim();
+                        const text = pEl ? pEl.textContent.trim() : '';
+                        const step = badgeEl ? 'Step ' + badgeEl.textContent.trim() : 'Workflow';
+                        const catTitle = sec.querySelector('.manual-section-title') ? sec.querySelector('.manual-section-title').textContent.trim() : 'Guide';
 
-                                  guideSearchIndex.push({
-                                       lement: card,
-                                      sectionId: sec.id,
-                                      category: catTit                                            title: title,
-                                                      snippet: text.slice(0, 110),
-                                    icon:            con,
-                            ke            ords: (title + ' ' + text).toLowerCase()
-                                    });
-                    }
-                            });
-
-                                querySelectorA                    anual-table tbody tr'                        h((row) => {
-                                        t cells = row.querySelectorAll                    ;
-                                  if (cells.length >= 2) {
-                                        nst action = cells[0].textContent.trim();
-                        const syntaxOrKe                    lls[1].t                ont                trim();
-                        const desc = cells[cells.leng                 1].textContent.tri                
-                        const catTit                    ec.querySelecto                    nual-section-title') ? sec.querySelector(                    al-section-title').textContent.                     : 'Shortcuts & Reference';
-
-                                      guideSearchIndex.push({
-                                          element: row,
-                                           ectionId: sec.id,
-                            c                    y: catTitle,
-                            titl                ction                 (' + syntaxOrKey + ')',
-                                        snippet: desc,
-                            icon: '                olid fa-keyboard',
-                                          keywords: (action + ' ' + syntaxOrKey + ' ' + desc).toLowerCase()
+                        guideSearchIndex.push({
+                            element: item,
+                            sectionId: sec.id,
+                            category: catTitle,
+                            title: step + ': ' + title,
+                            snippet: text.slice(0, 110),
+                            icon: 'fa-solid fa-list-check',
+                            keywords: (title + ' ' + text + ' ' + step + ' ' + kw).toLowerCase()
                         });
                     }
-                             );
+                });
+
+                sec.querySelectorAll('.manual-subcard').forEach((card) => {
+                    const h3El = card.querySelector('h3');
+                    const pEl = card.querySelector('p');
+                    const iconEl = card.querySelector('h3 i');
+
+                    if (h3El) {
+                        const title = h3El.textContent.trim();
+                        const text = pEl ? pEl.textContent.trim() : '';
+                        const icon = iconEl ? iconEl.className : 'fa-solid fa-info-circle';
+                        const catTitle = sec.querySelector('.manual-section-title') ? sec.querySelector('.manual-section-title').textContent.trim() : 'Reference';
+
+                        guideSearchIndex.push({
+                            element: card,
+                            sectionId: sec.id,
+                            category: catTitle,
+                            title: title,
+                            snippet: text.slice(0, 110),
+                            icon: icon,
+                            keywords: (title + ' ' + text).toLowerCase()
                         });
+                    }
+                });
+
+                sec.querySelectorAll('.manual-table tbody tr').forEach((row) => {
+                    const cells = row.querySelectorAll('td');
+                    if (cells.length >= 2) {
+                        const action = cells[0].textContent.trim();
+                        const syntaxOrKey = cells[1].textContent.trim();
+                        const desc = cells[cells.length - 1].textContent.trim();
+                        const catTitle = sec.querySelector('.manual-section-title') ? sec.querySelector('.manual-section-title').textContent.trim() : 'Shortcuts & Reference';
+
+                        guideSearchIndex.push({
+                            element: row,
+                            sectionId: sec.id,
+                            category: catTitle,
+                            title: action + ' (' + syntaxOrKey + ')',
+                            snippet: desc,
+                            icon: 'fa-solid fa-keyboard',
+                            keywords: (action + ' ' + syntaxOrKey + ' ' + desc).toLowerCase()
+                        });
+                    }
+                });
+            });
         }
 
-                            on selectResult(item) {
+        function selectResult(item) {
             if (!item || !item.element) return;
 
             if (searchResults) searchResults.hidden = true;
@@ -3803,91 +4047,103 @@
 
             if (manualSidebar && manualSidebar.classList.contains('toc-expanded')) {
                 manualSidebar.classList.remove('toc-expanded');
-                if (mobileTocToggle) mobileTocToggle.setAttribu                    ia-expanded', 'false');
-                              if (                leT                row) mobileTocA                .className = 'fa-solid fa-chevron-dow                              }
+                if (mobileTocToggle) mobileTocToggle.setAttribute('aria-expanded', 'false');
+                if (mobileTocArrow) mobileTocArrow.className = 'fa-solid fa-chevron-down';
+            }
 
             if (item.sectionId) {
-                history.replaceStat                        '', '#' + item.sectionId);
-                                         item.element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                history.replaceState(null, '', '#' + item.sectionId);
+            }
 
-            item.element.classList.remove('sear                        pulse');
+            item.element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+            item.element.classList.remove('search-target-pulse');
             void item.element.offsetWidth;
-            item.element.classL                        'search-tar                        e');
+            item.element.classList.add('search-target-pulse');
             setTimeout(() => {
-                item.element.classList.remove('sea                        rget-pulse                                        }, 2000);
+                item.element.classList.remove('search-target-pulse');
+            }, 2000);
         }
 
-                        searchDebounceTimer = null;
-                    function handleSearchInput() {
-            clearTimeout(searchDebounceTi                                searchDebounceTimer = setT                        ) => {
-                const query = searchInput.value.t                        LowerCase();
-                ac                    sult                x =             ;
+        let searchDebounceTimer = null;
+        function handleSearchInput() {
+            clearTimeout(searchDebounceTimer);
+            searchDebounceTimer = setTimeout(() => {
+                const query = searchInput.value.trim().toLowerCase();
+                activeResultIndex = -1;
 
-                                if (!query)                                 if (searchResults) {
-                                  searchResults.hidden = true;
-                                    searchResults.innerHTML = '';
+                if (!query) {
+                    if (searchResults) {
+                        searchResults.hidden = true;
+                        searchResults.innerHTML = '';
                     }
-                                     (searchClearBtn) searchClearB                ty            .disp            y = 'none';
-                    if (searchStatus)                rchStatus.textContent = 'Search by tool, task, or sh                ut';
+                    if (searchClearBtn) searchClearBtn.style.display = 'none';
+                    if (searchStatus) searchStatus.textContent = 'Search by tool, task, or shortcut';
                     return;
                 }
 
-                i                earchClearBtn) searchClear                    yle.display = 'block';
+                if (searchClearBtn) searchClearBtn.style.display = 'block';
 
-                              const scored = [];
-                              guideSearchIndex.forEach((item) => {
-                                  let score = 0;
+                const scored = [];
+                guideSearchIndex.forEach((item) => {
+                    let score = 0;
                     const tLower = item.title.toLowerCase();
-                                  const kLower =                m.keywords;
+                    const kLower = item.keywords;
 
-                    if                     r === query) score +                    
-                                            (tLower.startsWith(query)) score += 60;
-                                            (tLower.includes(query)) score += 40;
-                    else if (kLower.includes(                        score += 20;
+                    if (tLower === query) score += 100;
+                    else if (tLower.startsWith(query)) score += 60;
+                    else if (tLower.includes(query)) score += 40;
+                    else if (kLower.includes(query)) score += 20;
 
-                    if (score > 0) scored.push({                     sc                });
+                    if (score > 0) scored.push({ item, score });
                 });
 
-                              scored.sort((a, b)                     core - a.score);
-                                const topMatches = scored.slice(0, 8).map(s => s.item);
+                scored.sort((a, b) => b.score - a.score);
+                const topMatches = scored.slice(0, 8).map(s => s.item);
 
-                                     earchStatus) {
-                    searchStatus.textContent = topMatches.length ? to                        .length + ' topic' + (topMatches.length === 1 ? '' : 's') + ' f                    :                 matching topics';
-                                                 if (t                    hes.length === 0) {
-                                    searchResults.innerHTML = '<div class="search-em                        ><i class="fa-solid                     cl                es            on"         sty        le="color: var(--color            old); margin-bottom: 6px; display: block; font-si                1.2rem;"></i>No guide re                s for "<strong>' + es                    ml(query) + '</strong>".<br><                    tyle="font-size: 0.76rem; colo                ar                ext-muted);">Try searching a tool, map                 ure, or shortcut.</span></div>';
-                    searchResults.hidden = false;                                 retu            ;
-                                }
+                if (searchStatus) {
+                    searchStatus.textContent = topMatches.length ? topMatches.length + ' topic' + (topMatches.length === 1 ? '' : 's') + ' found' : 'No matching topics';
+                }
 
-                let html = '';                           topMatches.forEach((match, idx)                 
-                    html += '<div class="search            es        ult-i        tem" role="option" data-idx="' + idx + '            ' +
-                        '<div class="search-re                -header">' +
-                        '<span class="search-result-                e"><i class="' + match.icon + '"></i> ' + highlightMatch(match.ti                 query) + '</span>' +
-                                      '<span class="search-result-category">' + escapeHtml(match.category) + '</s                '                                                     '</div>' +
-                        '<p class="sea            h-result-snippet">' + highlightMatch(ma                snippet, query) + '</p>' +
+                if (topMatches.length === 0) {
+                    searchResults.innerHTML = '<div class="search-empty-msg"><i class="fa-solid fa-circle-question" style="color: var(--color-gold); margin-bottom: 6px; display: block; font-size: 1.2rem;"></i>No guide results for "<strong>' + escapeHtml(query) + '</strong>".<br><span style="font-size: 0.76rem; color: var(--text-muted);">Try searching a tool, map feature, or shortcut.</span></div>';
+                    searchResults.hidden = false;
+                    return;
+                }
+
+                let html = '';
+                topMatches.forEach((match, idx) => {
+                    html += '<div class="search-result-item" role="option" data-idx="' + idx + '">' +
+                        '<div class="search-result-header">' +
+                        '<span class="search-result-title"><i class="' + match.icon + '"></i> ' + highlightMatch(match.title, query) + '</span>' +
+                        '<span class="search-result-category">' + escapeHtml(match.category) + '</span>' +
+                        '</div>' +
+                        '<p class="search-result-snippet">' + highlightMatch(match.snippet, query) + '</p>' +
                         '</div>';
-                                ;
+                });
 
-                searchResults.innerHTML = htm                                 searchResults.hidden = false;
+                searchResults.innerHTML = html;
+                searchResults.hidden = false;
 
-                searchResults.que                    ctorAll('.search-result-item').forEach((row) => {
-                    row.a                en            iste        ner('        click', () => {
-                        co            t idx = parseInt(row                Attribute('data-idx'), 10);
-                        selectResult            op            tches[idx]);
+                searchResults.querySelectorAll('.search-result-item').forEach((row) => {
+                    row.addEventListener('click', () => {
+                        const idx = parseInt(row.getAttribute('data-idx'), 10);
+                        selectResult(topMatches[idx]);
                     });
                 });
-                       , 100);
+            }, 100);
         }
 
-                  if (searchInput) {
-                         earchInput.addEventListener('input', handleSearchInput);
-                        searchInput.            dE            ntListener('focus', (            => {
+        if (searchInput) {
+            searchInput.addEventListener('input', handleSearchInput);
+            searchInput.addEventListener('focus', () => {
                 if (searchInput.value.trim() && searchResults && searchResults.innerHTML) {
-                    searchResult        s.hidden = false;
-                        }
+                    searchResults.hidden = false;
+                }
             });
 
-                        archInput.addEventListener('keydown', (e) => {
-                if         (!search            sults || searchResul        ts.hidturn;
+            searchInput.addEventListener('keydown', (e) => {
+                if (!searchResults || searchResults.hidden) return;
                 const items = searchResults.querySelectorAll('.search-result-item');
                 if (e.key === 'Escape') {
                     searchResults.hidden = true;
