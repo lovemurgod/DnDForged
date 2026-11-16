@@ -79,7 +79,7 @@ app.use((req, res, next) => {
 // Desktop App Installer Download Routes
 app.get(['/download/installer', '/download/latest', '/download/setup', '/download/ForgeDVTT-Setup.exe'], (req, res) => {
   const distDir = path.join(rootDir, 'dist');
-  
+
   if (fs.existsSync(distDir)) {
     const files = fs.readdirSync(distDir);
     const setupFile = files.find(f => f.toLowerCase().endsWith('.exe') && !f.includes('uninstaller'));
@@ -145,7 +145,7 @@ app.use('/vtt-uploads', (req, res, next) => {
           return res.sendFile(cand);
         }
       }
-    } catch (e) {}
+    } catch (e) { }
   }
 
   res.status(404).send('Upload file not found');
@@ -259,6 +259,17 @@ app.post('/api/server/shutdown', (req, res) => {
 
 // Boot the server
 const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 5050;
+
+httpServer.on('error', (err) => {
+  if (err.code === 'EADDRINUSE') {
+    console.error(`[Server Error] Port ${PORT} is already in use (EADDRINUSE).`);
+    process.exit(98);
+  } else {
+    console.error('[Server Error] HTTP Server Error:', err);
+    process.exit(1);
+  }
+});
+
 httpServer.listen(PORT, async () => {
   console.log(`\n======================================================`);
   console.log(`  ForgeD VTT Local Server running on port ${PORT}`);

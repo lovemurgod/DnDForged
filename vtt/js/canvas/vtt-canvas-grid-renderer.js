@@ -21,6 +21,10 @@ export function getNearestHexFeatures(x, y, grid = {}, unitSize = 50) {
     let bestVx = x,
         bestVy = y;
 
+    let bestDistMidpoint = Infinity;
+    let bestMx = x,
+        bestMy = y;
+
     const checkHex = (cx, cy) => {
         const cDist = (cx - x) ** 2 + (cy - y) ** 2;
         if (cDist < bestDistCenter) {
@@ -28,16 +32,30 @@ export function getNearestHexFeatures(x, y, grid = {}, unitSize = 50) {
             bestCx = cx;
             bestCy = cy;
         }
+        const verts = [];
         for (let i = 0; i < 6; i++) {
             const angle_deg = isVert ? 60 * i - 30 : 60 * i;
             const angle_rad = (Math.PI / 180) * angle_deg;
             const vx = cx + R * Math.cos(angle_rad);
             const vy = cy + R * Math.sin(angle_rad);
+            verts.push({ x: vx, y: vy });
             const vDist = (vx - x) ** 2 + (vy - y) ** 2;
             if (vDist < bestDistVertex) {
                 bestDistVertex = vDist;
                 bestVx = vx;
                 bestVy = vy;
+            }
+        }
+        for (let i = 0; i < 6; i++) {
+            const v1 = verts[i];
+            const v2 = verts[(i + 1) % 6];
+            const mx = (v1.x + v2.x) / 2;
+            const my = (v1.y + v2.y) / 2;
+            const mDist = (mx - x) ** 2 + (my - y) ** 2;
+            if (mDist < bestDistMidpoint) {
+                bestDistMidpoint = mDist;
+                bestMx = mx;
+                bestMy = my;
             }
         }
     };
@@ -73,7 +91,17 @@ export function getNearestHexFeatures(x, y, grid = {}, unitSize = 50) {
             }
         }
     }
-    return { cx: bestCx, cy: bestCy, vx: bestVx, vy: bestVy };
+    return {
+        cx: bestCx,
+        cy: bestCy,
+        vx: bestVx,
+        vy: bestVy,
+        mx: bestMx,
+        my: bestMy,
+        bestDistCenter,
+        bestDistVertex,
+        bestDistMidpoint
+    };
 }
 
 export function snapToGrid(x, y, arg3 = false, arg4 = {}) {
@@ -145,6 +173,29 @@ export function snapToHalfGrid(x, y, grid = {}) {
         x: Math.round((x - offsetX) / halfSize) * halfSize + offsetX,
         y: Math.round((y - offsetY) / halfSize) * halfSize + offsetY
     };
+}
+
+export function snapToSmartGrid(x, y, grid = {}) {
+    if (!grid || !grid.size) return { x, y };
+    const unitSize = (grid.size || 50) * (grid.scale || 1);
+
+    if (isHexGrid(grid.type)) {
+        const hex = getNearestHexFeatures(x, y, grid, unitSize);
+        let bestPt = { x: hex.cx, y: hex.cy };
+        let minD = hex.bestDistCenter ?? (hex.cx - x) ** 2 + (hex.cy - y) ** 2;
+        const vDist = hex.bestDistVertex ?? (hex.vx - x) ** 2 + (hex.vy - y) ** 2;
+        if (vDist < minD) {
+            minD = vDist;
+            bestPt = { x: hex.vx, y: hex.vy };
+        }
+        const mDist = hex.bestDistMidpoint ?? (hex.mx - x) ** 2 + (hex.my - y) ** 2;
+        if (mDist < minD) {
+            bestPt = { x: hex.mx, y: hex.my };
+        }
+        return bestPt;
+    }
+
+    return snapToHalfGrid(x, y, grid);
 }
 
 export function renderGridLayer(canvasGrid, ctxGrid, grid = {}, width, height, state = {}) {

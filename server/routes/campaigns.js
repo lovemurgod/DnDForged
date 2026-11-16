@@ -248,11 +248,24 @@ campaignsRouter.post('/campaigns/:id/import-entity', verifyGmOrSecret, (req, res
             // It's a character (player sheet, companion, custom NPC)
             let charId = item.id;
             let charName = item.name || 'Imported Character';
-            if (!charId || campaign.characters[charId]) {
+            const isOverwrite =
+                item._overwrite !== undefined
+                    ? Boolean(item._overwrite)
+                    : item.overwrite !== undefined
+                      ? Boolean(item.overwrite)
+                      : Boolean(req.body.overwrite);
+            const existingByName = Object.values(campaign.characters).find(
+                (c) => c && (c.name === charName || c.characterName === charName)
+            );
+            if (!charId || (!isOverwrite && (campaign.characters[charId] || existingByName))) {
                 charId = `char_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
                 charName = `${charName} (Copy)`;
+            } else if (isOverwrite && existingByName && !campaign.characters[charId]) {
+                charId = existingByName.id;
             }
             const clonedChar = { ...item, id: charId, name: charName };
+            delete clonedChar._overwrite;
+            delete clonedChar.overwrite;
             campaign.characters[charId] = clonedChar;
             importedIds.push(charId);
         }

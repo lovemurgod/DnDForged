@@ -39,6 +39,10 @@ export function renderGmWallSegmentsPass(ctxInteraction, options = {}) {
     const isTokenMeasuring = Boolean(options.isTokenMeasuring);
     const resolveRulerPortalBending = options.resolveRulerPortalBending || null;
     const zoom = options.zoom || 1.0;
+    const panX = options.panX ?? 0;
+    const panY = options.panY ?? 0;
+    const ctxHud = options.ctxHud || null;
+    const targetMeasureCtx = ctxHud || ctxInteraction;
 
     // 1. Draw GM Wall Segments if in GM mode
     if (vtt.role === 'GM') {
@@ -310,6 +314,60 @@ export function renderGmWallSegmentsPass(ctxInteraction, options = {}) {
                 }
             }
         });
+
+        if (isLightingActive && selectedWallIdxs && selectedWallIdxs.size > 0) {
+            let minX = Infinity,
+                minY = Infinity,
+                maxX = -Infinity,
+                maxY = -Infinity;
+            selectedWallIdxs.forEach((idx) => {
+                const w = walls[idx];
+                if (w) {
+                    minX = Math.min(minX, w.x1, w.x2);
+                    minY = Math.min(minY, w.y1, w.y2);
+                    maxX = Math.max(maxX, w.x1, w.x2);
+                    maxY = Math.max(maxY, w.y1, w.y2);
+                }
+            });
+            if (minX !== Infinity && (maxX > minX || maxY > minY)) {
+                ctxInteraction.save();
+                const zoom = options.zoom || 1.0;
+                const currentZoom = Math.max(0.05, zoom);
+                const handleSize = 9 / currentZoom;
+                const halfHandle = handleSize / 2;
+                const lineW = 1.5 / currentZoom;
+                const w = Math.max(10, maxX - minX);
+                const h = Math.max(10, maxY - minY);
+
+                // Golden dashed bounding box
+                ctxInteraction.strokeStyle = 'rgba(212, 175, 55, 0.95)';
+                ctxInteraction.lineWidth = lineW;
+                ctxInteraction.setLineDash([6 / currentZoom, 4 / currentZoom]);
+                ctxInteraction.strokeRect(minX, minY, w, h);
+                ctxInteraction.setLineDash([]);
+
+                const handlePositions = [
+                    { x: minX, y: minY },
+                    { x: minX + w / 2, y: minY },
+                    { x: minX + w, y: minY },
+                    { x: minX + w, y: minY + h / 2 },
+                    { x: minX + w, y: minY + h },
+                    { x: minX + w / 2, y: minY + h },
+                    { x: minX, y: minY + h },
+                    { x: minX, y: minY + h / 2 }
+                ];
+                for (const hp of handlePositions) {
+                    ctxInteraction.fillStyle = '#ffffff';
+                    ctxInteraction.strokeStyle = '#d4af37';
+                    ctxInteraction.lineWidth = lineW;
+                    ctxInteraction.beginPath();
+                    ctxInteraction.rect(hp.x - halfHandle, hp.y - halfHandle, handleSize, handleSize);
+                    ctxInteraction.fill();
+                    ctxInteraction.stroke();
+                }
+                ctxInteraction.restore();
+            }
+        }
         // Draw current active wall segment/shape in progress
         if (isDrawingWall && wallStartPoint) {
             const mouse = getCanvasMouseCoords(lastMouseEvent);
@@ -420,7 +478,7 @@ export function renderGmWallSegmentsPass(ctxInteraction, options = {}) {
         const points =
             rawShape === 'line' && measureAnchorPoints.length > 0 ? [...measureAnchorPoints, localShapeEnd] : null;
         drawMeasurementTemplate(
-            ctxInteraction,
+            targetMeasureCtx,
             localShapeStart,
             localShapeEnd,
             rawShape,
@@ -433,7 +491,8 @@ export function renderGmWallSegmentsPass(ctxInteraction, options = {}) {
             true,
             grid,
             resolveRulerPortalBending,
-            zoom
+            zoom,
+            { panX, panY }
         );
     }
     if (localIsMeasuring && localMeasureStart && localMeasureEnd) {
@@ -444,7 +503,7 @@ export function renderGmWallSegmentsPass(ctxInteraction, options = {}) {
         const points =
             rawShape === 'line' && measureAnchorPoints.length > 0 ? [...measureAnchorPoints, localMeasureEnd] : null;
         drawMeasurementTemplate(
-            ctxInteraction,
+            targetMeasureCtx,
             localMeasureStart,
             localMeasureEnd,
             rawShape,
@@ -457,14 +516,19 @@ export function renderGmWallSegmentsPass(ctxInteraction, options = {}) {
             true,
             grid,
             resolveRulerPortalBending,
-            zoom
+            zoom,
+            { panX, panY }
         );
+    }
+    const liveMeasurePill = typeof document !== 'undefined' ? document.getElementById('vtt-live-measure-pill') : null;
+    if (liveMeasurePill && !localIsMeasuring && !localIsShaping) {
+        liveMeasurePill.style.display = 'none';
     }
     if (typeof otherMeasurements !== 'undefined') {
         Object.values(otherMeasurements).forEach((m) => {
             if (m.start && m.end && m.mapId === currentMapId) {
                 drawMeasurementTemplate(
-                    ctxInteraction,
+                    targetMeasureCtx,
                     m.start,
                     m.end,
                     m.shape || 'line',
@@ -477,7 +541,8 @@ export function renderGmWallSegmentsPass(ctxInteraction, options = {}) {
                     m.showDistance !== false,
                     grid,
                     resolveRulerPortalBending,
-                    zoom
+                    zoom,
+                    { panX, panY }
                 );
             }
         });

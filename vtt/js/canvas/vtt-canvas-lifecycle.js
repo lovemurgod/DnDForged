@@ -6,12 +6,16 @@ import { vttImageCache } from './vtt-canvas-cache.js';
 export function initCanvasLifecycle(options = {}) {
     const { onVisibilityChange = null, onPause = null, onResume = null, renderAll = null } = options;
 
+    const pauseReasons = new Set();
+    if (typeof document !== 'undefined' && document.hidden) {
+        pauseReasons.add('visibility');
+    }
+
     let isVisible = typeof document !== 'undefined' && typeof document.hidden === 'boolean' ? !document.hidden : true;
 
-    function handleVisibilityChange() {
-        if (typeof document === 'undefined') return;
-        const nowHidden = !!document.hidden;
-        const nowVisible = !nowHidden;
+    function syncState() {
+        const shouldBePaused = pauseReasons.size > 0;
+        const nowVisible = !shouldBePaused;
         const stateChanged = isVisible !== nowVisible;
 
         isVisible = nowVisible;
@@ -27,6 +31,26 @@ export function initCanvasLifecycle(options = {}) {
                 onVisibilityChange(isVisible);
             }
         }
+    }
+
+    function pause(reason = 'custom') {
+        pauseReasons.add(reason);
+        syncState();
+    }
+
+    function resume(reason = 'custom') {
+        pauseReasons.delete(reason);
+        syncState();
+    }
+
+    function handleVisibilityChange() {
+        if (typeof document === 'undefined') return;
+        if (document.hidden) {
+            pauseReasons.add('visibility');
+        } else {
+            pauseReasons.delete('visibility');
+        }
+        syncState();
     }
 
     if (typeof document !== 'undefined' && typeof document.addEventListener === 'function') {
@@ -46,6 +70,8 @@ export function initCanvasLifecycle(options = {}) {
     return {
         isCanvasVisible,
         destroy,
+        pause,
+        resume,
         handleVisibilityChange // exposed for testing
     };
 }

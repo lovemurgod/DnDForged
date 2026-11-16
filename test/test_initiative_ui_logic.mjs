@@ -149,7 +149,7 @@ test('Initiative Tracker Logic: Off-layer filtering and player privacy rules', (
     );
     assert.ok(
         tokenMenuJs.includes('window.VTT?.chatEngine?.updateCombatantLayer(id, targetLayer)') ||
-        tokenMenuJs.includes('window.VTT?.chatEngine?.updateCombatantLayer?.(id, targetLayer)'),
+            tokenMenuJs.includes('window.VTT?.chatEngine?.updateCombatantLayer?.(id, targetLayer)'),
         'Layer change must notify chatEngine.updateCombatantLayer'
     );
 
@@ -342,5 +342,27 @@ test('Fine-Tuning: Resize handle across all modes, horizontal ~720px sizing, tra
         chatJs,
         /initContainer\.style\.bottom\s*=\s*'auto';/s,
         'JS resize handler must release bottom constraint when resizing vertical docked tracker'
+    );
+
+    // 8. Horizontal View Resize Fixes
+    assert.match(
+        cssContent,
+        /\.init-resize-handle\s+i\s*\{[^}]*pointer-events:\s*none;/s,
+        'Resize handle icon must have pointer-events: none to prevent capture interception'
+    );
+    assert.match(
+        chatJs,
+        /btnResize\.setPointerCapture\s*\(\s*e\.pointerId\s*\)/,
+        'btnResize must capture pointer directly on pointerdown'
+    );
+    assert.match(
+        chatJs,
+        /initContainer\.style\.setProperty\('width',\s*`\$\{newW\}px`,\s*'important'\)/,
+        'Horizontal resize must apply width with !important to override stylesheet rules'
+    );
+    assert.match(
+        chatJs,
+        /const factor = isCentered \? 2 : 1;/,
+        'Centered horizontal resize must scale by 2 to keep handle locked to cursor'
     );
 });

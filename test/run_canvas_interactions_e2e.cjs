@@ -53,7 +53,7 @@ async function main() {
     const env = { ...process.env };
     delete env.ELECTRON_RUN_AS_NODE;
 
-    const testScript = path.join(__dirname, 'test_all_canvas_interactions.mjs');
+    const testScript = path.join(__dirname, 'e2e_all_canvas_interactions.mjs');
     const child = spawn('npx', ['electron', testScript], {
         env,
         shell: true,

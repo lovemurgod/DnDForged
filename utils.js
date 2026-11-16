@@ -47,7 +47,8 @@ export function createCampaignTemplate(id, name) {
     allowedUsers: [],
     knownPlayers: [],
     isPaused: false,
-    pauseState: { isPaused: false, source: null, by: null, at: null }
+    pauseState: { isPaused: false, source: null, by: null, at: null },
+    rollTables: { tables: [], assetTables: [], decks: [] }
   };
 }
 

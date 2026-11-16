@@ -237,6 +237,49 @@ export function ensureItemModalsExist(options = {}) {
                     <label style="display:block; margin-bottom:4px; font-size:0.85rem; color:var(--color-text-secondary);">Item Name</label>
                     <input type="text" id="pc-custom-item-name" style="width:100%;" class="form-control" placeholder="e.g. Health Potion">
                 </div>
+                <div>
+                    <label style="display:block; margin-bottom:4px; font-size:0.85rem; color:var(--color-text-secondary);">Item Type</label>
+                    <select id="pc-custom-item-type" style="width:100%;" class="form-control">
+                        <option value="gear">Mundane Gear / Item</option>
+                        <option value="weapon">Weapon</option>
+                        <option value="armor">Armor / Shield</option>
+                    </select>
+                </div>
+                <div id="pc-custom-item-weapon-fields" class="vtt-hidden" style="display:flex; flex-direction:column; gap:8px;">
+                    <div style="display:flex; gap:12px;">
+                        <div style="flex:1;">
+                            <label style="display:block; margin-bottom:4px; font-size:0.85rem; color:var(--color-text-secondary);">Damage Dice</label>
+                            <input type="text" id="pc-custom-item-dmg" style="width:100%;" class="form-control" placeholder="e.g. 1d8">
+                        </div>
+                        <div style="flex:1;">
+                            <label style="display:block; margin-bottom:4px; font-size:0.85rem; color:var(--color-text-secondary);">Damage Type</label>
+                            <input type="text" id="pc-custom-item-dmg-type" style="width:100%;" class="form-control" placeholder="e.g. Slashing">
+                        </div>
+                    </div>
+                    <div style="display:flex; gap:16px; align-items:center; margin-top:2px;">
+                        <label style="display:flex; align-items:center; gap:6px; font-size:0.8rem; cursor:pointer;">
+                            <input type="checkbox" id="pc-custom-item-finesse"> Finesse
+                        </label>
+                        <label style="display:flex; align-items:center; gap:6px; font-size:0.8rem; cursor:pointer;">
+                            <input type="checkbox" id="pc-custom-item-ranged"> Ranged
+                        </label>
+                    </div>
+                </div>
+                <div id="pc-custom-item-armor-fields" class="vtt-hidden" style="display:flex; gap:12px;">
+                    <div style="flex:1;">
+                        <label style="display:block; margin-bottom:4px; font-size:0.85rem; color:var(--color-text-secondary);">Base AC / Shield Bonus</label>
+                        <input type="number" id="pc-custom-item-ac" style="width:100%;" class="form-control" placeholder="e.g. 14 or 2" min="0">
+                    </div>
+                    <div style="flex:1;">
+                        <label style="display:block; margin-bottom:4px; font-size:0.85rem; color:var(--color-text-secondary);">Armor Category</label>
+                        <select id="pc-custom-item-armor-cat" style="width:100%;" class="form-control">
+                            <option value="light">Light Armor</option>
+                            <option value="medium">Medium Armor</option>
+                            <option value="heavy">Heavy Armor</option>
+                            <option value="shield">Shield</option>
+                        </select>
+                    </div>
+                </div>
                 <div style="display:flex; gap:12px;">
                     <div style="flex:1;">
                         <label style="display:block; margin-bottom:4px; font-size:0.85rem; color:var(--color-text-secondary);">Weight (lb)</label>
@@ -331,6 +374,12 @@ export function ensureItemModalsExist(options = {}) {
         }
     });
 
+    document.getElementById('pc-custom-item-type')?.addEventListener('change', (e) => {
+        const val = e.target.value;
+        document.getElementById('pc-custom-item-weapon-fields')?.classList.toggle('vtt-hidden', val !== 'weapon');
+        document.getElementById('pc-custom-item-armor-fields')?.classList.toggle('vtt-hidden', val !== 'armor');
+    });
+
     document.getElementById('pc-custom-item-modal-add')?.addEventListener('click', (e) => {
         const currentChar = getCurrentChar();
         if (!currentChar) return;
@@ -343,8 +392,11 @@ export function ensureItemModalsExist(options = {}) {
         const weight = document.getElementById('pc-custom-item-weight').value || '0';
         const qty = document.getElementById('pc-custom-item-qty').value || '1';
         const desc = document.getElementById('pc-custom-item-desc').value || '';
+        const itemType = document.getElementById('pc-custom-item-type')?.value || 'gear';
 
         const editIdx = e.currentTarget.dataset.editIdx;
+        const autoQueue = [];
+
         if (editIdx !== undefined) {
             const eq = currentChar.equipment[editIdx];
             if (eq) {
@@ -352,23 +404,107 @@ export function ensureItemModalsExist(options = {}) {
                 eq.weight = weight;
                 eq.qty = qty;
                 eq.description = desc;
+                eq.itemType = itemType;
+                if (itemType === 'weapon') {
+                    eq.isWeapon = true;
+                    eq.dmg1 = document.getElementById('pc-custom-item-dmg')?.value || '1d8';
+                    eq.dmgType = document.getElementById('pc-custom-item-dmg-type')?.value || 'Slashing';
+                    eq.isFinesse = !!document.getElementById('pc-custom-item-finesse')?.checked;
+                    eq.isRanged = !!document.getElementById('pc-custom-item-ranged')?.checked;
+                } else if (itemType === 'armor') {
+                    eq.isArmor = true;
+                    const cat = document.getElementById('pc-custom-item-armor-cat')?.value || 'medium';
+                    eq.armorCategory = cat;
+                    if (cat === 'shield') {
+                        eq.type = 'Shield';
+                        eq.rawType = 'S';
+                        eq.bonusAc = parseInt(document.getElementById('pc-custom-item-ac')?.value) || 2;
+                    } else {
+                        eq.type = 'Armor';
+                        eq.rawType = cat === 'light' ? 'LA' : cat === 'heavy' ? 'HA' : 'MA';
+                        eq.ac = parseInt(document.getElementById('pc-custom-item-ac')?.value) || 14;
+                    }
+                }
             }
         } else {
             if (!currentChar.equipment) currentChar.equipment = [];
-            currentChar.equipment.push({
+            const newItem = {
                 id: 'eq_' + Date.now() + Math.random().toString(36).substr(2, 5),
                 name: name,
                 qty: qty,
                 weight: weight,
-                description: desc
-            });
+                description: desc,
+                itemType: itemType
+            };
+
+            if (itemType === 'weapon') {
+                newItem.isWeapon = true;
+                newItem.type = 'Weapon';
+                newItem.dmg1 = document.getElementById('pc-custom-item-dmg')?.value || '1d8';
+                newItem.dmgType = document.getElementById('pc-custom-item-dmg-type')?.value || 'Slashing';
+                newItem.isFinesse = !!document.getElementById('pc-custom-item-finesse')?.checked;
+                newItem.isRanged = !!document.getElementById('pc-custom-item-ranged')?.checked;
+                newItem.properties = [];
+                if (newItem.isFinesse) newItem.properties.push('finesse');
+                if (newItem.isRanged) newItem.properties.push('ammunition', 'range');
+                newItem.macroTemplate = {
+                    attackStat: 'auto',
+                    isFinesse: newItem.isFinesse,
+                    isRanged: newItem.isRanged,
+                    damageRows: [
+                        {
+                            formula: newItem.dmg1,
+                            stat: 'auto',
+                            type: newItem.dmgType,
+                            label: ''
+                        }
+                    ]
+                };
+                autoQueue.push({
+                    type: 'weapon',
+                    item: newItem,
+                    name: newItem.name,
+                    desc: newItem.description
+                });
+            } else if (itemType === 'armor') {
+                newItem.isArmor = true;
+                const cat = document.getElementById('pc-custom-item-armor-cat')?.value || 'medium';
+                newItem.armorCategory = cat;
+                if (cat === 'shield') {
+                    newItem.type = 'Shield';
+                    newItem.rawType = 'S';
+                    newItem.bonusAc = parseInt(document.getElementById('pc-custom-item-ac')?.value) || 2;
+                } else {
+                    newItem.type = 'Armor';
+                    newItem.rawType = cat === 'light' ? 'LA' : cat === 'heavy' ? 'HA' : 'MA';
+                    newItem.ac = parseInt(document.getElementById('pc-custom-item-ac')?.value) || 14;
+                }
+                autoQueue.push({
+                    type: 'ac',
+                    item: newItem,
+                    name: newItem.name,
+                    desc: newItem.description
+                });
+            }
+
+            currentChar.equipment.push(newItem);
         }
+
         saveAndEmit(currentChar);
         renderSheetData(currentChar);
 
         document.getElementById('pc-custom-item-modal')?.classList.add('vtt-hidden');
         if (document.getElementById('pc-item-modal')?.classList.contains('vtt-hidden')) {
             document.getElementById('pc-item-overlay')?.classList.add('vtt-hidden');
+        }
+
+        if (autoQueue.length > 0) {
+            runItemAutomationWizard(autoQueue, {
+                getCurrentChar,
+                ensureItemModalsExist: () => ensureItemModalsExist(options),
+                saveAndEmit,
+                renderSheetData
+            });
         }
     });
 
@@ -631,24 +767,56 @@ export function openCustomItemModal(editIdx = null, options = {}) {
     let name = '',
         weight = '',
         qty = '1',
-        desc = '';
+        desc = '',
+        itemType = 'gear',
+        dmg = '',
+        dmgType = '',
+        isFinesse = false,
+        isRanged = false,
+        ac = '',
+        armorCat = 'medium';
+
     if (isEdit && currentChar.equipment && currentChar.equipment[editIdx]) {
         const eq = currentChar.equipment[editIdx];
         name = eq.name || '';
         weight = eq.weight || '';
         qty = eq.qty || '1';
         desc = eq.description || '';
+        itemType = eq.itemType || (eq.isWeapon ? 'weapon' : eq.isArmor ? 'armor' : 'gear');
+        dmg = eq.dmg1 || '';
+        dmgType = eq.dmgType || '';
+        isFinesse = !!eq.isFinesse;
+        isRanged = !!eq.isRanged;
+        ac = eq.bonusAc !== undefined ? eq.bonusAc : eq.ac !== undefined ? eq.ac : '';
+        armorCat = eq.armorCategory || (eq.type === 'Shield' || eq.rawType === 'S' ? 'shield' : 'medium');
     }
 
     const nameEl = document.getElementById('pc-custom-item-name');
     const weightEl = document.getElementById('pc-custom-item-weight');
     const qtyEl = document.getElementById('pc-custom-item-qty');
     const descEl = document.getElementById('pc-custom-item-desc');
+    const typeEl = document.getElementById('pc-custom-item-type');
+    const dmgEl = document.getElementById('pc-custom-item-dmg');
+    const dmgTypeEl = document.getElementById('pc-custom-item-dmg-type');
+    const finesseEl = document.getElementById('pc-custom-item-finesse');
+    const rangedEl = document.getElementById('pc-custom-item-ranged');
+    const acEl = document.getElementById('pc-custom-item-ac');
+    const armorCatEl = document.getElementById('pc-custom-item-armor-cat');
 
     if (nameEl) nameEl.value = name;
     if (weightEl) weightEl.value = weight;
     if (qtyEl) qtyEl.value = qty;
     if (descEl) descEl.value = desc;
+    if (typeEl) typeEl.value = itemType;
+    if (dmgEl) dmgEl.value = dmg;
+    if (dmgTypeEl) dmgTypeEl.value = dmgType;
+    if (finesseEl) finesseEl.checked = isFinesse;
+    if (rangedEl) rangedEl.checked = isRanged;
+    if (acEl) acEl.value = ac;
+    if (armorCatEl) armorCatEl.value = armorCat;
+
+    document.getElementById('pc-custom-item-weapon-fields')?.classList.toggle('vtt-hidden', itemType !== 'weapon');
+    document.getElementById('pc-custom-item-armor-fields')?.classList.toggle('vtt-hidden', itemType !== 'armor');
 
     const saveBtn = document.getElementById('pc-custom-item-modal-add');
     if (saveBtn) {

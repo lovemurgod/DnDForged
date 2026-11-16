@@ -13,40 +13,43 @@ import {
 } from '../vtt/js/canvas/tokens/vtt-canvas-mass-actions.js';
 
 test('Damage FX Integration: Queue fallback and mass action wiring', async (t) => {
-    await t.test('renderActiveDamageFXPass draws queued effects even when passed null, undefined, or empty array', () => {
-        let burstCalled = false;
+    await t.test(
+        'renderActiveDamageFXPass draws queued effects even when passed null, undefined, or empty array',
+        () => {
+            let burstCalled = false;
 
-        const mockCtx = {
-            save: () => { },
-            restore: () => { },
-            beginPath: () => { },
-            arc: () => { },
-            fill: () => { },
-            stroke: () => { },
-            strokeText: () => { },
-            fillText: () => { },
-            createRadialGradient: () => ({ addColorStop: () => { } }),
-            font: '',
-            textAlign: '',
-            textBaseline: '',
-            lineWidth: 1,
-            lineJoin: '',
-            strokeStyle: '',
-            fillStyle: '',
-            shadowColor: '',
-            shadowBlur: 0
-        };
+            const mockCtx = {
+                save: () => {},
+                restore: () => {},
+                beginPath: () => {},
+                arc: () => {},
+                fill: () => {},
+                stroke: () => {},
+                strokeText: () => {},
+                fillText: () => {},
+                createRadialGradient: () => ({ addColorStop: () => {} }),
+                font: '',
+                textAlign: '',
+                textBaseline: '',
+                lineWidth: 1,
+                lineJoin: '',
+                strokeStyle: '',
+                fillStyle: '',
+                shadowColor: '',
+                shadowBlur: 0
+            };
 
-        // Queue an effect
-        triggerDamageFXAnimation(250, 300, 35, ['fire'], { amount: 18, tokenId: 'tok_integration_1' });
+            // Queue an effect
+            triggerDamageFXAnimation(250, 300, 35, ['fire'], { amount: 18, tokenId: 'tok_integration_1' });
 
-        // Call renderActiveDamageFXPass with empty array (simulating what vtt-canvas previously passed)
-        renderActiveDamageFXPass(mockCtx, [], (ctx, x, y, r, p, o, type) => {
-            if (type === 'fire') burstCalled = true;
-        });
+            // Call renderActiveDamageFXPass with empty array (simulating what vtt-canvas previously passed)
+            renderActiveDamageFXPass(mockCtx, [], (ctx, x, y, r, p, o, type) => {
+                if (type === 'fire') burstCalled = true;
+            });
 
-        assert.equal(burstCalled, true, 'burst renderer must be called even if caller passes []');
-    });
+            assert.equal(burstCalled, true, 'burst renderer must be called even if caller passes []');
+        }
+    );
 
     await t.test('executeMassAttackResolution calls triggerDamageFXAnimation on damaging hit', () => {
         let fxTriggered = false;
@@ -70,7 +73,7 @@ test('Damage FX Integration: Queue fallback and mass action wiring', async (t) =
         };
 
         const mockTokens = {
-            'target_tok_1': {
+            target_tok_1: {
                 id: 'target_tok_1',
                 name: 'Goblin',
                 x: 100,
@@ -97,8 +100,8 @@ test('Damage FX Integration: Queue fallback and mass action wiring', async (t) =
                 triggeredTypes = types;
                 triggeredAmount = meta.amount;
             },
-            syncHpFn: () => { },
-            renderAll: () => { }
+            syncHpFn: () => {},
+            renderAll: () => {}
         });
 
         assert.equal(fxTriggered, true, 'executeMassAttackResolution should trigger damage FX on hit');
@@ -112,7 +115,7 @@ test('Damage FX Integration: Queue fallback and mass action wiring', async (t) =
         let triggeredAmount = 0;
 
         const mockTokens = {
-            'target_tok_2': {
+            target_tok_2: {
                 id: 'target_tok_2',
                 name: 'Orc',
                 x: 200,
@@ -129,8 +132,8 @@ test('Damage FX Integration: Queue fallback and mass action wiring', async (t) =
                 fxTriggered = true;
                 triggeredAmount = meta.amount;
             },
-            syncHpFn: () => { },
-            renderAll: () => { }
+            syncHpFn: () => {},
+            renderAll: () => {}
         });
 
         assert.equal(fxTriggered, true, 'applyCompositeDamageToTokens should trigger damage FX');
@@ -138,12 +141,12 @@ test('Damage FX Integration: Queue fallback and mass action wiring', async (t) =
         assert.equal(mockTokens['target_tok_2'].hp, 15, 'Token HP should be reduced to 15');
     });
 
-    await t.test('applyCompositeDamageToTokens assigns 20ms staggered delayMs across multiple targets', () => {
+    await t.test('applyCompositeDamageToTokens assigns 60ms staggered delayMs across multiple targets', () => {
         const delays = [];
         const mockTokens = {
-            't1': { id: 't1', x: 10, y: 10, hp: 10 },
-            't2': { id: 't2', x: 20, y: 20, hp: 10 },
-            't3': { id: 't3', x: 30, y: 30, hp: 10 }
+            t1: { id: 't1', x: 10, y: 10, hp: 10 },
+            t2: { id: 't2', x: 20, y: 20, hp: 10 },
+            t3: { id: 't3', x: 30, y: 30, hp: 10 }
         };
 
         applyCompositeDamageToTokens(['t1', 't2', 't3'], [{ roll: { total: 5 }, type: 'fire' }], 1.0, {
@@ -152,11 +155,11 @@ test('Damage FX Integration: Queue fallback and mass action wiring', async (t) =
             triggerDamageFXAnimation: (x, y, r, types, meta) => {
                 delays.push(meta.delayMs);
             },
-            syncHpFn: () => { },
-            renderAll: () => { }
+            syncHpFn: () => {},
+            renderAll: () => {}
         });
 
-        assert.deepEqual(delays, [0, 20, 40], 'Multi-target hits must stagger in 20ms increments');
+        assert.deepEqual(delays, [0, 60, 120], 'Multi-target hits must stagger in 60ms increments');
     });
 
     await t.test('triggerDamageFXAnimation schedules execution when delayMs > 0', async () => {

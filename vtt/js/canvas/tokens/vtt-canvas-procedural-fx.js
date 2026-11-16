@@ -319,7 +319,7 @@ export function generateDamageTypeSVG(type, radius = 25, options = {}) {
                 const curR = waveR + waveOffset;
                 const px = (half + Math.cos(th) * curR).toFixed(1);
                 const py = (half + Math.sin(th) * curR).toFixed(1);
-                pathD += (p === 0 ? `M ${px} ${py}` : ` L ${px} ${py}`);
+                pathD += p === 0 ? `M ${px} ${py}` : ` L ${px} ${py}`;
             }
             pathD += ' Z';
             waves += `
@@ -394,10 +394,11 @@ export function generateDamageTypeSVG(type, radius = 25, options = {}) {
 
     // Recommendation 4: Strike Angle & Direction Variance
     let transformStr = '';
-    const isDirectional = norm.includes('slashing') || norm.includes('piercing') || norm === 'untyped' || norm.includes('physical');
+    const isDirectional =
+        norm.includes('slashing') || norm.includes('piercing') || norm === 'untyped' || norm.includes('physical');
     if (isDirectional) {
         const angle = options.angle !== undefined ? options.angle : (Math.random() * 70 - 35).toFixed(1);
-        const flipX = options.flipX !== undefined ? options.flipX : (Math.random() > 0.5);
+        const flipX = options.flipX !== undefined ? options.flipX : Math.random() > 0.5;
         transformStr = `transform="rotate(${angle} ${half} ${half})${flipX ? ` translate(${size}, 0) scale(-1, 1)` : ''}"`;
     } else {
         const angle = options.angle !== undefined ? options.angle : (Math.random() * 360).toFixed(1);
@@ -413,15 +414,36 @@ export function generateDamageTypeSVG(type, radius = 25, options = {}) {
     `.trim();
 }
 
+export const MAX_CONCURRENT_PROCEDURAL_FX = 6;
+let activeProceduralFxCount = 0;
+const proceduralFxQueue = [];
+
+export function getActiveProceduralFxCount() {
+    return activeProceduralFxCount;
+}
+
+export function resetProceduralFxQueue() {
+    activeProceduralFxCount = 0;
+    proceduralFxQueue.length = 0;
+}
+
+function pumpProceduralFxQueue() {
+    while (activeProceduralFxCount < MAX_CONCURRENT_PROCEDURAL_FX && proceduralFxQueue.length > 0) {
+        const next = proceduralFxQueue.shift();
+        if (next) {
+            next();
+        }
+    }
+}
+
 /**
  * Mounts procedural vector SVG graphics directly into #vtt-html-overlays.
+ * Governed by MAX_CONCURRENT_PROCEDURAL_FX (6) to prevent screen flooding.
  */
 export function spawnProceduralCombatFX(x, y, radius, damageTypes, meta = {}, isHeal = false, isTempHp = false) {
     if (typeof document === 'undefined') return;
     const overlayContainer =
-        document.getElementById('vtt-html-overlays') ||
-        document.getElementById('canvas-container') ||
-        document.body;
+        document.getElementById('vtt-html-overlays') || document.getElementById('canvas-container') || document.body;
     if (!overlayContainer) return;
 
     let posX = x;
@@ -435,16 +457,17 @@ export function spawnProceduralCombatFX(x, y, radius, damageTypes, meta = {}, is
         if (tokenNode && tokenNode.style.left) {
             const left = parseFloat(tokenNode.style.left);
             const top = parseFloat(tokenNode.style.top);
-            const width = parseFloat(tokenNode.style.width) || ((radius || 25) * 2);
-            const height = parseFloat(tokenNode.style.height) || ((radius || 25) * 2);
+            const width = parseFloat(tokenNode.style.width) || (radius || 25) * 2;
+            const height = parseFloat(tokenNode.style.height) || (radius || 25) * 2;
             if (!isNaN(left) && !isNaN(top)) {
                 posX = left + width / 2;
                 posY = top + height / 2;
             }
         } else if (uiNode) {
-            const width = parseFloat(uiNode.style.width) || ((radius || 25) * 2);
-            const height = parseFloat(uiNode.style.height) || ((radius || 25) * 2);
-            const matrixMatch = uiNode.style.transform && uiNode.style.transform.match(/translate3d\(([-\d.]+)px,\s*([-\d.]+)px/);
+            const width = parseFloat(uiNode.style.width) || (radius || 25) * 2;
+            const height = parseFloat(uiNode.style.height) || (radius || 25) * 2;
+            const matrixMatch =
+                uiNode.style.transform && uiNode.style.transform.match(/translate3d\(([-\d.]+)px,\s*([-\d.]+)px/);
             if (matrixMatch) {
                 posX = parseFloat(matrixMatch[1]) + width / 2;
                 posY = parseFloat(matrixMatch[2]) + height / 2;
@@ -463,9 +486,21 @@ export function spawnProceduralCombatFX(x, y, radius, damageTypes, meta = {}, is
         typeClass = 'temphp';
     } else {
         const knownTypes = [
-            'fire', 'cold', 'ice', 'lightning', 'electric', 'thunder',
-            'acid', 'poison', 'radiant', 'necrotic', 'force', 'psychic',
-            'slashing', 'piercing', 'bludgeoning'
+            'fire',
+            'cold',
+            'ice',
+            'lightning',
+            'electric',
+            'thunder',
+            'acid',
+            'poison',
+            'radiant',
+            'necrotic',
+            'force',
+            'psychic',
+            'slashing',
+            'piercing',
+            'bludgeoning'
         ];
         for (const key of knownTypes) {
             if (rawType.includes(key)) {
@@ -483,13 +518,30 @@ export function spawnProceduralCombatFX(x, y, radius, damageTypes, meta = {}, is
         container.style.top = `${posY}px`;
         container.innerHTML = generateDamageTypeSVG(typeClass, radius || 25, meta);
 
+        let cleanedUp = false;
         const cleanup = () => {
+            if (cleanedUp) return;
+            cleanedUp = true;
+            activeProceduralFxCount = Math.max(0, activeProceduralFxCount - 1);
             if (typeof container.remove === 'function') container.remove();
-            else if (container.parentNode && typeof container.parentNode.removeChild === 'function') container.parentNode.removeChild(container);
+            else if (container.parentNode && typeof container.parentNode.removeChild === 'function')
+                container.parentNode.removeChild(container);
+            pumpProceduralFxQueue();
         };
         container.onanimationend = cleanup;
-        setTimeout(cleanup, 900);
-        overlayContainer.appendChild(container);
+        setTimeout(cleanup, 700);
+
+        const mountFn = () => {
+            activeProceduralFxCount++;
+            overlayContainer.appendChild(container);
+        };
+
+        if (activeProceduralFxCount >= MAX_CONCURRENT_PROCEDURAL_FX) {
+            proceduralFxQueue.push(mountFn);
+            setTimeout(pumpProceduralFxQueue, 60);
+        } else {
+            mountFn();
+        }
     } catch (e) {
         console.warn('[VTT] Error mounting procedural vector FX node:', e);
     }

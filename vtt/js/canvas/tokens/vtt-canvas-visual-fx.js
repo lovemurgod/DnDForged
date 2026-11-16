@@ -24,46 +24,74 @@ export function updateVisualFx(ctx) {
     // 1. ACTIVE INITIATIVE TOKEN SOLID OUTLINE (5% cell width, no glow/fade)
     // =====================================================================
     let glowNode = document.getElementById('vtt-active-initiative-glow');
+    const existingMultiActiveGlows = overlayContainer.querySelectorAll('.vtt-active-initiative-glow-multi');
+    existingMultiActiveGlows.forEach((el) => el.remove());
 
-    let activeToken = null;
+    let activeTokens = [];
     if (vtt.campaignState && vtt.campaignState.initiative && vtt.campaignState.initiative.combatants) {
         const combatants = vtt.campaignState.initiative.combatants;
         const activeIdx = vtt.campaignState.initiative.activeTurnIndex;
         if (activeIdx >= 0 && activeIdx < combatants.length) {
-            const tokenId = combatants[activeIdx].tokenId;
-            if (tokenId && tokens[tokenId]) {
-                activeToken = tokens[tokenId];
-            }
+            const combatant = combatants[activeIdx];
+            const activeIds =
+                Array.isArray(combatant.tokenIds) && combatant.tokenIds.length > 0
+                    ? combatant.tokenIds
+                    : combatant.tokenId
+                      ? [combatant.tokenId]
+                      : [];
+            activeTokens = activeIds.map((id) => tokens[id]).filter(Boolean);
         }
     }
 
-    if (activeToken && (activeToken.layer === activeLayer || vtt.role === 'GM')) {
-        if (!glowNode) {
-            glowNode = document.createElement('div');
-            glowNode.id = 'vtt-active-initiative-glow';
-            glowNode.style.position = 'absolute';
-            glowNode.style.pointerEvents = 'none';
-            glowNode.style.zIndex = '10';
-            overlayContainer.appendChild(glowNode);
-        }
-
-        const { drawW, drawH } = getTokenDrawDimensions(activeToken);
+    if (activeTokens.length > 0) {
         const cellWidth = grid && grid.size ? grid.size : 50;
         const outlineThickness = Math.max(2, Math.round(cellWidth * 0.05));
-        const category = getTokenCategory(activeToken);
-        const solidColor = getCategoryColor(category);
 
-        // Tightly hug the outer perimeter of the token without obscuring token art
-        glowNode.style.left = `${activeToken.x - outlineThickness}px`;
-        glowNode.style.top = `${activeToken.y - outlineThickness}px`;
-        glowNode.style.width = `${drawW + outlineThickness * 2}px`;
-        glowNode.style.height = `${drawH + outlineThickness * 2}px`;
-        glowNode.style.boxSizing = 'border-box';
-        glowNode.style.border = `${outlineThickness}px solid ${solidColor}`;
-        glowNode.style.borderRadius = !activeToken.isAsset ? '50%' : '0';
-        glowNode.style.boxShadow = 'none';
-        glowNode.style.backgroundColor = 'transparent';
-        glowNode.style.opacity = '1';
+        let renderedAny = false;
+        activeTokens.forEach((actTok) => {
+            if (actTok.layer !== activeLayer && vtt.role !== 'GM') return;
+
+            let targetNode;
+            if (!renderedAny) {
+                if (!glowNode) {
+                    glowNode = document.createElement('div');
+                    glowNode.id = 'vtt-active-initiative-glow';
+                    glowNode.style.position = 'absolute';
+                    glowNode.style.pointerEvents = 'none';
+                    glowNode.style.zIndex = '10';
+                    overlayContainer.appendChild(glowNode);
+                }
+                targetNode = glowNode;
+            } else {
+                targetNode = document.createElement('div');
+                targetNode.className = 'vtt-active-initiative-glow-multi';
+                targetNode.style.position = 'absolute';
+                targetNode.style.pointerEvents = 'none';
+                targetNode.style.zIndex = '10';
+                overlayContainer.appendChild(targetNode);
+            }
+            renderedAny = true;
+
+            const { drawW, drawH } = getTokenDrawDimensions(actTok);
+            const category = getTokenCategory(actTok);
+            const solidColor = getCategoryColor(category);
+
+            targetNode.style.display = 'block';
+            targetNode.style.left = `${actTok.x - outlineThickness}px`;
+            targetNode.style.top = `${actTok.y - outlineThickness}px`;
+            targetNode.style.width = `${drawW + outlineThickness * 2}px`;
+            targetNode.style.height = `${drawH + outlineThickness * 2}px`;
+            targetNode.style.boxSizing = 'border-box';
+            targetNode.style.border = `${outlineThickness}px solid ${solidColor}`;
+            targetNode.style.borderRadius = !actTok.isAsset ? '50%' : '0';
+            targetNode.style.boxShadow = 'none';
+            targetNode.style.backgroundColor = 'transparent';
+            targetNode.style.opacity = '1';
+        });
+
+        if (!renderedAny && glowNode) {
+            glowNode.remove();
+        }
     } else {
         if (glowNode) {
             glowNode.remove();
@@ -76,9 +104,27 @@ export function updateVisualFx(ctx) {
     let hoverNode = document.getElementById('vtt-initiative-hover-glow');
     let offscreenIndicator = document.getElementById('vtt-offscreen-indicator');
 
-    if (initiativeHoverTokenId && tokens[initiativeHoverTokenId]) {
-        const hToken = tokens[initiativeHoverTokenId];
-        if (hToken.layer === activeLayer || vtt.role === 'GM') {
+    const existingMultiHoverGlows = overlayContainer.querySelectorAll('.vtt-initiative-hover-glow-multi');
+    existingMultiHoverGlows.forEach((el) => el.remove());
+
+    const hoverIds = Array.isArray(initiativeHoverTokenId)
+        ? initiativeHoverTokenId.filter(Boolean)
+        : initiativeHoverTokenId
+          ? [initiativeHoverTokenId]
+          : [];
+
+    const validHoverTokens = hoverIds.map((id) => tokens[id]).filter(Boolean);
+
+    if (validHoverTokens.length > 0) {
+        if (offscreenIndicator) offscreenIndicator.style.display = 'none';
+
+        const cellWidth = grid && grid.size ? grid.size : 50;
+        const hOutline = Math.max(3, Math.round(cellWidth * 0.06));
+
+        let renderedAny = false;
+        validHoverTokens.forEach((hToken) => {
+            if (hToken.layer !== activeLayer && vtt.role !== 'GM') return;
+
             const { drawW: hW, drawH: hH } = getTokenDrawDimensions(hToken);
             const screenLeft = panX + hToken.x * zoom;
             const screenTop = panY + hToken.y * zoom;
@@ -88,14 +134,13 @@ export function updateVisualFx(ctx) {
             const vpH = window.innerHeight;
 
             const isOffScreen = screenRight < 40 || screenLeft > vpW - 40 || screenBottom < 40 || screenTop > vpH - 40;
+            if (isOffScreen) return;
+
             const hCat = getTokenCategory(hToken);
             const hColor = getCategoryColor(hCat);
 
-            if (offscreenIndicator) offscreenIndicator.style.display = 'none';
-
-            if (isOffScreen) {
-                if (hoverNode) hoverNode.style.display = 'none';
-            } else {
+            let node;
+            if (!renderedAny) {
                 if (!hoverNode) {
                     hoverNode = document.createElement('div');
                     hoverNode.id = 'vtt-initiative-hover-glow';
@@ -104,24 +149,31 @@ export function updateVisualFx(ctx) {
                     hoverNode.style.zIndex = '12';
                     overlayContainer.appendChild(hoverNode);
                 }
-
-                const cellWidth = grid && grid.size ? grid.size : 50;
-                const hOutline = Math.max(3, Math.round(cellWidth * 0.06));
-
-                hoverNode.style.display = 'block';
-                hoverNode.style.left = `${hToken.x - hOutline}px`;
-                hoverNode.style.top = `${hToken.y - hOutline}px`;
-                hoverNode.style.width = `${hW + hOutline * 2}px`;
-                hoverNode.style.height = `${hH + hOutline * 2}px`;
-                hoverNode.style.boxSizing = 'border-box';
-                hoverNode.style.border = `${hOutline}px solid ${hColor}`;
-                hoverNode.style.borderRadius = !hToken.isAsset ? '50%' : '0';
-                hoverNode.style.boxShadow = `0 0 16px ${hColor}, inset 0 0 8px ${hColor}`;
-                hoverNode.style.backgroundColor = 'transparent';
+                node = hoverNode;
+            } else {
+                node = document.createElement('div');
+                node.className = 'vtt-initiative-hover-glow-multi';
+                node.style.position = 'absolute';
+                node.style.pointerEvents = 'none';
+                node.style.zIndex = '12';
+                overlayContainer.appendChild(node);
             }
-        } else {
-            if (hoverNode) hoverNode.style.display = 'none';
-            if (offscreenIndicator) offscreenIndicator.style.display = 'none';
+            renderedAny = true;
+
+            node.style.display = 'block';
+            node.style.left = `${hToken.x - hOutline}px`;
+            node.style.top = `${hToken.y - hOutline}px`;
+            node.style.width = `${hW + hOutline * 2}px`;
+            node.style.height = `${hH + hOutline * 2}px`;
+            node.style.boxSizing = 'border-box';
+            node.style.border = `${hOutline}px solid ${hColor}`;
+            node.style.borderRadius = !hToken.isAsset ? '50%' : '0';
+            node.style.boxShadow = `0 0 16px ${hColor}, inset 0 0 8px ${hColor}`;
+            node.style.backgroundColor = 'transparent';
+        });
+
+        if (!renderedAny && hoverNode) {
+            hoverNode.style.display = 'none';
         }
     } else {
         if (hoverNode) hoverNode.style.display = 'none';

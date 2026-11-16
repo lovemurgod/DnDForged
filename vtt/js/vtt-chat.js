@@ -41,7 +41,7 @@ export function initVttChat(vtt, chatHistory) {
     let savedRollMode = 'normal';
     try {
         savedRollMode = localStorage.getItem('vtt_current_roll_mode') || 'normal';
-    } catch (e) { }
+    } catch (e) {}
     vtt.currentRollMode = savedRollMode;
     window.VTT = window.VTT || {};
     window.VTT.currentRollMode = savedRollMode;
@@ -84,7 +84,6 @@ export function initVttChat(vtt, chatHistory) {
     const initList = document.getElementById('init-list');
     const roundDisplay = document.getElementById('init-round-num');
     const btnToggleGlobalInit = document.getElementById('btn-toggle-initiative');
-    let updateScrollButtonsFn = null;
 
     // Combat state
     let combatants = [];
@@ -201,8 +200,8 @@ export function initVttChat(vtt, chatHistory) {
                     dr.roll && Array.isArray(dr.roll.diceList)
                         ? dr.roll.diceList
                         : Array.isArray(dr.diceList)
-                            ? dr.diceList
-                            : null;
+                          ? dr.diceList
+                          : null;
                 if (Array.isArray(dmgDice) && dmgDice.length > 0) {
                     dmgDice.forEach((d) => allDice.push({ ...d, damageType: dr.type || null }));
                 } else {
@@ -224,7 +223,13 @@ export function initVttChat(vtt, chatHistory) {
             // Apply visibility filtering for socket event handling
             if (msg.hidden && vtt.role !== 'GM') return;
             if (msg.whisperToGM && vtt.role !== 'GM' && msg.username !== vtt.username) return;
-            if (msg.whisperTo && vtt.role !== 'GM' && msg.username !== vtt.username && (!vtt.username || msg.whisperTo.toLowerCase() !== vtt.username.toLowerCase())) return;
+            if (
+                msg.whisperTo &&
+                vtt.role !== 'GM' &&
+                msg.username !== vtt.username &&
+                (!vtt.username || msg.whisperTo.toLowerCase() !== vtt.username.toLowerCase())
+            )
+                return;
 
             appendMessageToDom(msg);
 
@@ -268,7 +273,7 @@ export function initVttChat(vtt, chatHistory) {
                     if (row && row.dataset.cardData) {
                         try {
                             msgEl._saveResolveCardData = JSON.parse(decodeURIComponent(row.dataset.cardData));
-                        } catch (e) { }
+                        } catch (e) {}
                     }
                 }
                 if (msgEl._saveResolveCardData) {
@@ -294,7 +299,7 @@ export function initVttChat(vtt, chatHistory) {
                     if (row && row.dataset.cardData) {
                         try {
                             msgEl._massAttackCardData = JSON.parse(decodeURIComponent(row.dataset.cardData));
-                        } catch (e) { }
+                        } catch (e) {}
                     }
                 }
                 if (data.massAttackCard) {
@@ -325,7 +330,7 @@ export function initVttChat(vtt, chatHistory) {
                     if (row && row.dataset.cardData) {
                         try {
                             msgEl._macroCardData = JSON.parse(decodeURIComponent(row.dataset.cardData));
-                        } catch (e) { }
+                        } catch (e) {}
                     }
                 }
                 if (data.macroCard) {
@@ -399,7 +404,7 @@ export function initVttChat(vtt, chatHistory) {
                 window.VTT.currentRollMode = newMode;
                 try {
                     localStorage.setItem('vtt_current_roll_mode', newMode);
-                } catch (e) { }
+                } catch (e) {}
                 updateRollModeButtonsUI(newMode);
             });
         });
@@ -455,6 +460,38 @@ export function initVttChat(vtt, chatHistory) {
                 e.stopPropagation();
             }
 
+            // Linked Roll Table action button on macro card
+            const rollTableBtn = e.target.closest('.btn-chat-roll-table');
+            if (rollTableBtn) {
+                const tableId = rollTableBtn.dataset.tableId;
+                const charName = rollTableBtn.dataset.charName;
+                const abilityName = rollTableBtn.dataset.abilityName;
+                if (window.VTT?.rollTablesEngine?.rollLinkedTable) {
+                    window.VTT.rollTablesEngine.rollLinkedTable(tableId, { charName, abilityName });
+                }
+                e.stopPropagation();
+                return;
+            }
+
+            // Creature Table action button on pinged ability card
+            const rollCreatureTableBtn = e.target.closest('.btn-chat-roll-creature-table');
+            if (rollCreatureTableBtn) {
+                const rawJson = rollCreatureTableBtn.dataset.tableJson;
+                let tableData = null;
+                if (rawJson) {
+                    try {
+                        tableData = JSON.parse(decodeURIComponent(rawJson));
+                    } catch (err) {}
+                }
+                const cName = rollCreatureTableBtn.dataset.creature || 'Creature';
+                const aName = rollCreatureTableBtn.dataset.ability || 'Table';
+                if (window.VTT?.rollCreatureTableAction) {
+                    window.VTT.rollCreatureTableAction(cName, aName, tableData);
+                }
+                e.stopPropagation();
+                return;
+            }
+
             const hideBtn = e.target.closest('.btn-chat-toggle-hide');
             if (hideBtn) {
                 const msgEl = hideBtn.closest('.chat-message');
@@ -497,7 +534,7 @@ export function initVttChat(vtt, chatHistory) {
                 if (!cardData && rowEl && rowEl.dataset.cardData) {
                     try {
                         cardData = JSON.parse(decodeURIComponent(rowEl.dataset.cardData));
-                    } catch (err) { }
+                    } catch (err) {}
                 }
                 const action = actionBtn.dataset.action;
                 if (cardData && action) {
@@ -526,7 +563,7 @@ export function initVttChat(vtt, chatHistory) {
                 if (!cardData && rowEl && rowEl.dataset.cardData) {
                     try {
                         cardData = JSON.parse(decodeURIComponent(rowEl.dataset.cardData));
-                    } catch (err) { }
+                    } catch (err) {}
                 }
                 const action = saveResolveBtn.dataset.action;
                 if (cardData && action && window.VTT?.canvasEngine?.resolveSaveFromChat) {
@@ -550,7 +587,7 @@ export function initVttChat(vtt, chatHistory) {
                 if (!cardData && rowEl && rowEl.dataset.cardData) {
                     try {
                         cardData = JSON.parse(decodeURIComponent(rowEl.dataset.cardData));
-                    } catch (err) { }
+                    } catch (err) {}
                 }
                 if (cardData && window.VTT?.canvasEngine?.processMassAttackFromChat) {
                     massAttackBtn.disabled = true;
@@ -1092,21 +1129,31 @@ export function initVttChat(vtt, chatHistory) {
         // Save DC row
         let saveSection = '';
         const validAbilities = [
-            'STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA',
-            'STRENGTH', 'DEXTERITY', 'CONSTITUTION', 'INTELLIGENCE', 'WISDOM', 'CHARISMA'
+            'STR',
+            'DEX',
+            'CON',
+            'INT',
+            'WIS',
+            'CHA',
+            'STRENGTH',
+            'DEXTERITY',
+            'CONSTITUTION',
+            'INTELLIGENCE',
+            'WISDOM',
+            'CHARISMA'
         ];
         const rawSaveObj =
             mc.saveInfo || (mc.saveDc && mc.saveAbility ? { ability: mc.saveAbility, dc: mc.saveDc } : null);
         const saveObj =
             rawSaveObj &&
-                rawSaveObj.ability &&
-                validAbilities.includes(rawSaveObj.ability.trim().toUpperCase()) &&
-                !isNaN(parseInt(rawSaveObj.dc)) &&
-                parseInt(rawSaveObj.dc) > 0
+            rawSaveObj.ability &&
+            validAbilities.includes(rawSaveObj.ability.trim().toUpperCase()) &&
+            !isNaN(parseInt(rawSaveObj.dc)) &&
+            parseInt(rawSaveObj.dc) > 0
                 ? {
-                    ...rawSaveObj,
-                    ability: rawSaveObj.ability.trim().substring(0, 3).toUpperCase()
-                }
+                      ...rawSaveObj,
+                      ability: rawSaveObj.ability.trim().substring(0, 3).toUpperCase()
+                  }
                 : null;
         if (saveObj) {
             const abLabel = `${saveObj.ability} Save DC`;
@@ -1129,7 +1176,7 @@ export function initVttChat(vtt, chatHistory) {
                 const icon = dmgIcons[normalizedType] || dmgIcons[dr.type] || 'fa-solid fa-droplet';
                 const bd = dr.roll
                     ? dr.roll.breakdownStr ||
-                    (dr.roll.diceList ? `[${dr.roll.diceList.map((d) => d.val).join(', ')}]` : '')
+                      (dr.roll.diceList ? `[${dr.roll.diceList.map((d) => d.val).join(', ')}]` : '')
                     : '';
                 const total = dr.roll ? dr.roll.total : 0;
                 const formulaText = (dr.formula || '').toUpperCase();
@@ -1159,10 +1206,7 @@ export function initVttChat(vtt, chatHistory) {
         const isResolved = !!mc.resolved;
         let actionsRow = '';
         if (isResolved) {
-            let summaryText =
-                typeof mc.resolved === 'object' && mc.resolved.summary
-                    ? mc.resolved.summary
-                    : 'Resolved';
+            let summaryText = typeof mc.resolved === 'object' && mc.resolved.summary ? mc.resolved.summary : 'Resolved';
             if (summaryText.startsWith('Resolved:')) {
                 summaryText = summaryText.replace(/^Resolved:\s*/, '');
             }
@@ -1178,7 +1222,7 @@ export function initVttChat(vtt, chatHistory) {
             let encodedData = '';
             try {
                 encodedData = encodeURIComponent(JSON.stringify(mc));
-            } catch (err) { }
+            } catch (err) {}
             const dataMsgAttr = msgId ? ` data-msg-id="${escapeHtml(msgId)}"` : '';
             actionsRow = `
                 <div class="macro-card-actions-row" data-card-data="${encodedData}"${dataMsgAttr}>
@@ -1190,6 +1234,21 @@ export function initVttChat(vtt, chatHistory) {
                     </button>
                     <button type="button" class="macro-btn-action macro-btn-half" data-action="half" title="Apply half damage to selected tokens">
                         <i class="fa-solid fa-shield-halved"></i> Half
+                    </button>
+                </div>
+            `;
+        }
+
+        let linkedTableRow = '';
+        if (mc.linkedTable) {
+            linkedTableRow = `
+                <div class="macro-card-table-row" style="margin-top:8px; padding-top:6px; border-top:1px solid rgba(255,255,255,0.08); display:flex; justify-content:center;">
+                    <button type="button" class="btn btn-xs btn-primary btn-chat-roll-table" 
+                            data-table-id="${escapeHtml(mc.linkedTable.id || '')}" 
+                            data-char-name="${escapeHtml(mc.charName || '')}" 
+                            data-ability-name="${escapeHtml(mc.macroName || '')}"
+                            style="display:inline-flex; align-items:center; gap:6px; width:100%; justify-content:center; font-weight:600;">
+                        <i class="fa-solid fa-dice-d20"></i> Roll ${escapeHtml(mc.linkedTable.name || 'Table')}
                     </button>
                 </div>
             `;
@@ -1212,6 +1271,7 @@ export function initVttChat(vtt, chatHistory) {
                     ${saveSection}
                     ${dmgSections}
                 </div>
+                ${linkedTableRow}
                 ${actionsRow}
             </div>
         `;
@@ -1291,7 +1351,7 @@ export function initVttChat(vtt, chatHistory) {
             let encodedData = '';
             try {
                 encodedData = encodeURIComponent(JSON.stringify(src));
-            } catch (err) { }
+            } catch (err) {}
             footerHtml = `
                 <div class="save-resolve-prompt">Apply half damage to tokens that succeeded on the save?</div>
                 <div class="save-resolve-actions-row" data-card-data="${encodedData}" data-msg-id="${msgId}">
@@ -1465,7 +1525,7 @@ export function initVttChat(vtt, chatHistory) {
             let encodedData = '';
             try {
                 encodedData = encodeURIComponent(JSON.stringify(mac));
-            } catch (err) { }
+            } catch (err) {}
             footerHtml = `
                 <div class="mass-attack-prompt">Select target token(s) on canvas and click Process</div>
                 <div class="mass-attack-actions-row" data-card-data="${encodedData}" data-msg-id="${msgId}">
@@ -1503,7 +1563,13 @@ export function initVttChat(vtt, chatHistory) {
     function appendMessageToDom(msg, isHistorical = false) {
         if (msg.hidden && vtt.role !== 'GM') return;
         if (msg.whisperToGM && vtt.role !== 'GM' && msg.username !== vtt.username) return;
-        if (msg.whisperTo && vtt.role !== 'GM' && msg.username !== vtt.username && (!vtt.username || msg.whisperTo.toLowerCase() !== vtt.username.toLowerCase())) return;
+        if (
+            msg.whisperTo &&
+            vtt.role !== 'GM' &&
+            msg.username !== vtt.username &&
+            (!vtt.username || msg.whisperTo.toLowerCase() !== vtt.username.toLowerCase())
+        )
+            return;
 
         const isSelf = msg.username === vtt.username;
         const messageDiv = document.createElement('div');
@@ -1542,7 +1608,8 @@ export function initVttChat(vtt, chatHistory) {
         const safeUsername = escapeHtml(msg.username || 'Anonymous');
         let whisperLabel = '';
         if (msg.whisperToGM) {
-            whisperLabel = ' <span class="whisper-label" style="font-size:0.8rem; opacity:0.8; font-style:italic;">(Whisper to GM)</span>';
+            whisperLabel =
+                ' <span class="whisper-label" style="font-size:0.8rem; opacity:0.8; font-style:italic;">(Whisper to GM)</span>';
         } else if (msg.whisperTo) {
             const isTarget = vtt.username && msg.whisperTo.toLowerCase() === vtt.username.toLowerCase();
             whisperLabel = isTarget
@@ -1559,6 +1626,16 @@ export function initVttChat(vtt, chatHistory) {
             const creatureName = escapeHtml(ac.creatureName || 'Creature');
             const abilityName = escapeHtml(ac.abilityName || 'Ability');
 
+            const tableButtonHtml = ac.tableJson
+                ? `
+                <div class="ability-chat-actions" style="margin-top: 8px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 6px;">
+                    <button type="button" class="btn btn-xxs btn-secondary btn-chat-roll-creature-table" data-creature="${creatureName}" data-ability="${abilityName}" data-table-json="${escapeHtml(ac.tableJson)}" style="display:inline-flex; align-items:center; gap:4px; font-size:0.75rem; color:var(--color-gold-light); border-color:var(--color-gold-base); cursor:pointer;">
+                        <i class="fa-solid fa-dice-d20 text-gradient-gold"></i> Roll ${abilityName} Table
+                    </button>
+                </div>
+            `
+                : '';
+
             bodyText = `
                 <div class="ability-chat-card">
                     <div class="ability-chat-header">
@@ -1566,6 +1643,7 @@ export function initVttChat(vtt, chatHistory) {
                         <div class="ability-chat-name">${abilityName}</div>
                     </div>
                     <div class="ability-chat-desc">${descHtml}</div>
+                    ${tableButtonHtml}
                 </div>
             `;
         }
@@ -1579,8 +1657,9 @@ export function initVttChat(vtt, chatHistory) {
                 encodedData = encodeURIComponent(JSON.stringify({ ...tc, isTrap: true, damageType: dmgType }));
             } catch (err) {}
 
-            const actionButtonsHtml = (vtt.role === 'GM')
-                ? `
+            const actionButtonsHtml =
+                vtt.role === 'GM'
+                    ? `
                 <div class="trap-card-actions-row" data-card-data="${encodedData}" data-msg-id="${escapeHtml(msg.id || '')}">
                     <button type="button" class="trap-btn-action trap-btn-process" data-action="process" title="Process saving throw result and apply damage to victim">
                         <i class="fa-solid fa-play"></i> Process
@@ -1593,7 +1672,7 @@ export function initVttChat(vtt, chatHistory) {
                     </button>
                 </div>
                 `
-                : '';
+                    : '';
 
             bodyText = `
                 <div class="trap-chat-card">
@@ -1607,25 +1686,27 @@ export function initVttChat(vtt, chatHistory) {
                     </div>
                     <div class="trap-chat-details">
                         ${tc.saveAbility && tc.saveAbility !== 'NONE' ? `<span class="trap-chat-badge"><i class="fa-solid fa-shield"></i> DC ${escapeHtml(tc.saveDc)} ${escapeHtml(tc.saveAbility)} Save</span>` : ''}
-                        ${tc.damageRoll
-                    ? `
+                        ${
+                            tc.damageRoll
+                                ? `
                             <span class="trap-chat-badge" style="background: rgba(239, 68, 68, 0.25); border-color: rgba(239, 68, 68, 0.6); color: #fca5a5;">
                                 <i class="fa-solid fa-burst"></i> Damage: <strong>${escapeHtml(tc.damageRoll.total)}</strong> ${escapeHtml(dmgTypeLabel)} <span style="font-size: 0.85em; opacity: 0.85;">(${escapeHtml(tc.damageRoll.breakdownStr || tc.damageRoll.formula || tc.damage || '')})</span>
                             </span>
                         `
-                    : tc.damage
-                        ? `<span class="trap-chat-badge"><i class="fa-solid fa-burst"></i> ${escapeHtml(tc.damage)} ${escapeHtml(dmgTypeLabel)}</span>`
-                        : ''
-                }
+                                : tc.damage
+                                  ? `<span class="trap-chat-badge"><i class="fa-solid fa-burst"></i> ${escapeHtml(tc.damage)} ${escapeHtml(dmgTypeLabel)}</span>`
+                                  : ''
+                        }
                     </div>
-                    ${tc.saveAbility && tc.saveAbility !== 'NONE'
-                    ? `
+                    ${
+                        tc.saveAbility && tc.saveAbility !== 'NONE'
+                            ? `
                         <button type="button" class="trap-chat-save-btn" data-trap-id="${escapeHtml(tc.trapId)}" data-token-id="${escapeHtml(tc.tokenId)}" data-ability="${escapeHtml(tc.saveAbility)}" data-dc="${escapeHtml(tc.saveDc)}">
                             <i class="fa-solid fa-dice-d20"></i> Roll ${escapeHtml(tc.saveAbility)} Save (DC ${escapeHtml(tc.saveDc)})
                         </button>
                     `
-                    : ''
-                }
+                            : ''
+                    }
                     ${actionButtonsHtml}
                 </div>
             `;
@@ -1704,6 +1785,34 @@ export function initVttChat(vtt, chatHistory) {
             messageDiv._massAttackCardData = msg.massAttackCard;
             bodyText = renderMassAttackCardHtml(msg.massAttackCard, isHistorical, msg.id);
         }
+        // Roll Table Result Card
+        else if (msg.rollTableCard) {
+            const rtc = msg.rollTableCard;
+            bodyText = `
+                <div class="rolltable-chat-card" style="border: 1px solid var(--color-gold-base); border-radius: 6px; padding: 10px; background: rgba(18, 22, 33, 0.95); box-shadow: 0 4px 12px rgba(0,0,0,0.4);">
+                    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(212,175,55,0.3); padding-bottom:4px; margin-bottom:8px;">
+                        <span style="font-weight:bold; color:var(--color-gold-light); font-size:0.95rem;"><i class="fa-solid fa-dice-d20"></i> ${escapeHtml(rtc.tableName || 'Roll Table')}</span>
+                        <span style="font-size:0.8rem; background:rgba(212,175,55,0.15); border:1px solid rgba(212,175,55,0.4); border-radius:4px; padding:1px 6px; color:var(--color-gold-light); font-weight:600;">${escapeHtml(rtc.formula || '')} &rarr; ${escapeHtml(String(rtc.roll ?? ''))}</span>
+                    </div>
+                    <div style="font-weight:600; color:#fff; font-size:1rem; margin-bottom:4px;">${escapeHtml(rtc.entryName || '')}</div>
+                    ${rtc.entryText ? `<div style="font-size:0.85rem; color:#cbd5e1; line-height:1.4;">${escapeHtml(rtc.entryText)}</div>` : ''}
+                </div>
+            `;
+        }
+        // Card Deck Drawn Card
+        else if (msg.cardDrawCard) {
+            const cdc = msg.cardDrawCard;
+            bodyText = `
+                <div class="card-draw-chat" style="border: 1px solid var(--color-gold-base); border-radius: 8px; padding: 12px; background: rgba(18, 22, 33, 0.95); max-width: 260px; margin: 0 auto; text-align: center; box-shadow: 0 4px 16px rgba(0,0,0,0.5);">
+                    <div style="font-size:0.75rem; text-transform:uppercase; letter-spacing:1px; color:var(--color-gold-light); margin-bottom:6px;">${escapeHtml(cdc.deckName || 'Card Deck')}</div>
+                    <div style="width:140px; height:200px; margin:0 auto 10px auto; border-radius:6px; overflow:hidden; border:2px solid var(--color-gold-dark); background:#05070a; display:flex; align-items:center; justify-content:center;">
+                        <img src="${escapeHtml(cdc.cardImg || 'favicon.svg')}" alt="${escapeHtml(cdc.cardName || 'Card')}" style="width:100%; height:100%; object-fit:contain;" onerror="this.src='favicon.svg'">
+                    </div>
+                    <div style="font-weight:bold; color:#fff; font-size:1.1rem; margin-bottom:4px;">${escapeHtml(cdc.cardName || '')}</div>
+                    ${cdc.description ? `<div style="font-size:0.85rem; color:#cbd5e1; line-height:1.4;">${escapeHtml(cdc.description)}</div>` : ''}
+                </div>
+            `;
+        }
 
         const rawCardHtml = headerText + bodyText;
         if (typeof window !== 'undefined' && typeof window.vttSanitizeHtml === 'function') {
@@ -1770,8 +1879,8 @@ export function initVttChat(vtt, chatHistory) {
                     ? canvasEngine.getSelectedTokenIds
                         ? canvasEngine.getSelectedTokenIds()
                         : canvasEngine.getSelectedTokens
-                            ? canvasEngine.getSelectedTokens()
-                            : []
+                          ? canvasEngine.getSelectedTokens()
+                          : []
                     : [];
                 if (selectedTokenIds.length > 0) {
                     const canvasTokens = canvasEngine.getTokens ? canvasEngine.getTokens() : {};
@@ -1883,8 +1992,6 @@ export function initVttChat(vtt, chatHistory) {
         const btnDrag = document.getElementById('btn-init-drag');
         const btnOrientation = document.getElementById('btn-init-orientation');
         const btnResize = document.getElementById('init-resize-handle');
-        const btnScrollLeft = document.getElementById('btn-init-scroll-left');
-        const btnScrollRight = document.getElementById('btn-init-scroll-right');
 
         let currentOrientation = localStorage.getItem('vtt_initiative_orientation') || 'vertical';
 
@@ -1902,27 +2009,6 @@ export function initVttChat(vtt, chatHistory) {
                 nextIcon.className = 'fa-solid fa-chevron-down';
             }
         }
-
-        function updateScrollButtons() {
-            if (!btnScrollLeft || !btnScrollRight || !initList) return;
-            if (currentOrientation !== 'horizontal') {
-                btnScrollLeft.style.display = 'none';
-                btnScrollRight.style.display = 'none';
-                return;
-            }
-
-            const hasOverflow = initList.scrollWidth > initList.clientWidth + 5;
-            if (!hasOverflow) {
-                btnScrollLeft.style.display = 'none';
-                btnScrollRight.style.display = 'none';
-                return;
-            }
-
-            btnScrollLeft.style.display = initList.scrollLeft > 5 ? 'flex' : 'none';
-            btnScrollRight.style.display =
-                initList.scrollLeft + initList.clientWidth < initList.scrollWidth - 5 ? 'flex' : 'none';
-        }
-        updateScrollButtonsFn = updateScrollButtons;
 
         function setOrientation(orientation, forceCustom = false) {
             currentOrientation = orientation;
@@ -1945,7 +2031,6 @@ export function initVttChat(vtt, chatHistory) {
 
             const currentPos = localStorage.getItem('vtt_initiative_position_style') || 'right';
             updateChevronIcons(forceCustom ? 'custom' : currentPos);
-            setTimeout(updateScrollButtons, 50);
         }
 
         function setPositionStyle(pos, coords = null, size = null) {
@@ -1971,9 +2056,13 @@ export function initVttChat(vtt, chatHistory) {
                     if (savedW) {
                         initContainer.style.width = `${savedW}px`;
                         initContainer.style.maxWidth = `${savedW}px`;
+                        initContainer.style.setProperty('width', `${savedW}px`, 'important');
+                        initContainer.style.setProperty('max-width', `${savedW}px`, 'important');
                     } else {
                         initContainer.style.width = '';
                         initContainer.style.maxWidth = '';
+                        initContainer.style.removeProperty('width');
+                        initContainer.style.removeProperty('max-width');
                     }
                     initContainer.style.height = '';
                     initContainer.style.maxHeight = '';
@@ -1990,13 +2079,15 @@ export function initVttChat(vtt, chatHistory) {
                     }
                     initContainer.style.width = '';
                     initContainer.style.maxWidth = '';
+                    initContainer.style.removeProperty('width');
+                    initContainer.style.removeProperty('max-width');
                 }
             } else {
                 let finalCoords = coords;
                 if (!finalCoords) {
                     try {
                         finalCoords = JSON.parse(localStorage.getItem('vtt_initiative_custom_coords'));
-                    } catch (e) { }
+                    } catch (e) {}
                 }
                 if (!finalCoords) {
                     const rect = initContainer.getBoundingClientRect();
@@ -2011,6 +2102,8 @@ export function initVttChat(vtt, chatHistory) {
                 if (size && Number.isFinite(size.width)) {
                     initContainer.style.width = `${size.width}px`;
                     initContainer.style.maxWidth = `${size.width}px`;
+                    initContainer.style.setProperty('width', `${size.width}px`, 'important');
+                    initContainer.style.setProperty('max-width', `${size.width}px`, 'important');
                 }
                 if (size && Number.isFinite(size.height)) {
                     initContainer.style.height = `${size.height}px`;
@@ -2023,7 +2116,6 @@ export function initVttChat(vtt, chatHistory) {
             if (configPosition) configPosition.value = pos;
             if (hudPosition) hudPosition.value = pos;
             localStorage.setItem('vtt_initiative_position_style', pos);
-            setTimeout(updateScrollButtons, 50);
         }
 
         if (configPosition) {
@@ -2076,19 +2168,12 @@ export function initVttChat(vtt, chatHistory) {
             });
         }
 
-        // Scroll Buttons & Wheel Scroll for Horizontal Mode
-        if (btnScrollLeft && btnScrollRight && initList) {
-            btnScrollLeft.addEventListener('click', (e) => {
-                e.stopPropagation();
-                initList.scrollBy({ left: -180, behavior: 'smooth' });
-            });
-            btnScrollRight.addEventListener('click', (e) => {
-                e.stopPropagation();
-                initList.scrollBy({ left: 180, behavior: 'smooth' });
-            });
-            initList.addEventListener('scroll', () => {
-                updateScrollButtons();
-            });
+        function updateScrollButtons() {
+            // Scroll buttons permanently removed from DOM to avoid confusion with turn chevrons
+        }
+
+        // Wheel Scroll for Horizontal Mode
+        if (initList) {
             let wheelRafId = null;
             initList.addEventListener(
                 'wheel',
@@ -2182,7 +2267,6 @@ export function initVttChat(vtt, chatHistory) {
                     if (sel) sel.value = 'custom';
                 });
                 updateChevronIcons('custom');
-                updateScrollButtons();
             };
 
             [btnDrag, btnInitMinDrag].filter(Boolean).forEach((btn) => {
@@ -2208,14 +2292,14 @@ export function initVttChat(vtt, chatHistory) {
                 startX = e.clientX;
                 startY = e.clientY;
 
-                if (e.target.setPointerCapture && e.pointerId !== undefined) {
+                if (btnResize.setPointerCapture && e.pointerId !== undefined) {
                     try {
-                        e.target.setPointerCapture(e.pointerId);
-                    } catch (err) { }
+                        btnResize.setPointerCapture(e.pointerId);
+                    } catch (err) {}
                 }
 
-                document.addEventListener('pointermove', onResizeMove);
-                document.addEventListener('pointerup', onResizeUp);
+                window.addEventListener('pointermove', onResizeMove);
+                window.addEventListener('pointerup', onResizeUp);
                 e.preventDefault();
                 e.stopPropagation();
             };
@@ -2225,17 +2309,27 @@ export function initVttChat(vtt, chatHistory) {
                 const dw = e.clientX - startX;
                 const dh = e.clientY - startY;
 
-                if (currentOrientation === 'horizontal') {
-                    const newW = Math.max(520, Math.min(window.innerWidth * 0.95, startW + dw));
+                const isHorizontal =
+                    currentOrientation === 'horizontal' ||
+                    initContainer.classList.contains('orientation-horizontal') ||
+                    initContainer.classList.contains('pos-top') ||
+                    initContainer.classList.contains('pos-bottom');
+
+                if (isHorizontal) {
+                    const isCentered =
+                        initContainer.classList.contains('pos-top') || initContainer.classList.contains('pos-bottom');
+                    const factor = isCentered ? 2 : 1;
+                    const newW = Math.max(380, Math.min(window.innerWidth * 0.95, startW + dw * factor));
                     initContainer.style.width = `${newW}px`;
                     initContainer.style.maxWidth = `${newW}px`;
+                    initContainer.style.setProperty('width', `${newW}px`, 'important');
+                    initContainer.style.setProperty('max-width', `${newW}px`, 'important');
                 } else {
                     const newH = Math.max(160, Math.min(window.innerHeight - 80, startH + dh));
                     initContainer.style.height = `${newH}px`;
                     initContainer.style.maxHeight = `${newH}px`;
                     initContainer.style.bottom = 'auto';
                 }
-                updateScrollButtons();
             };
 
             const onResizeUp = (e) => {
@@ -2243,20 +2337,26 @@ export function initVttChat(vtt, chatHistory) {
                 isResizing = false;
                 initContainer.classList.remove('is-dragging');
                 document.body.style.userSelect = '';
-                if (e && e.target && e.target.releasePointerCapture && e.pointerId !== undefined) {
+                if (btnResize.releasePointerCapture && e && e.pointerId !== undefined) {
                     try {
-                        e.target.releasePointerCapture(e.pointerId);
-                    } catch (err) { }
+                        btnResize.releasePointerCapture(e.pointerId);
+                    } catch (err) {}
                 }
-                document.removeEventListener('pointermove', onResizeMove);
-                document.removeEventListener('pointerup', onResizeUp);
+                window.removeEventListener('pointermove', onResizeMove);
+                window.removeEventListener('pointerup', onResizeUp);
 
                 const rect = initContainer.getBoundingClientRect();
                 const currentPos = localStorage.getItem('vtt_initiative_position_style') || 'right';
+                const isHorizontal =
+                    currentOrientation === 'horizontal' ||
+                    initContainer.classList.contains('orientation-horizontal') ||
+                    initContainer.classList.contains('pos-top') ||
+                    initContainer.classList.contains('pos-bottom');
+
                 if (currentPos === 'custom') {
                     const size = { width: Math.round(rect.width), height: Math.round(rect.height) };
                     localStorage.setItem('vtt_initiative_custom_size', JSON.stringify(size));
-                } else if (currentOrientation === 'horizontal') {
+                } else if (isHorizontal) {
                     localStorage.setItem('vtt_initiative_docked_width', Math.round(rect.width));
                 } else {
                     localStorage.setItem('vtt_initiative_docked_height', Math.round(rect.height));
@@ -2279,7 +2379,7 @@ export function initVttChat(vtt, chatHistory) {
                 let savedSize = null;
                 try {
                     savedSize = JSON.parse(localStorage.getItem('vtt_initiative_custom_size'));
-                } catch (e) { }
+                } catch (e) {}
 
                 if (savedCoords) {
                     [configPosition, hudPosition].forEach((sel) => {
@@ -2320,7 +2420,7 @@ export function initVttChat(vtt, chatHistory) {
         });
     }
 
-    function addToInitiative(name, score, tokenId, customImg) {
+    function addToInitiative(name, score, tokenId, customImg, tokenIds = null) {
         if (!name) return;
 
         // Sanitize score to numeric value
@@ -2335,10 +2435,14 @@ export function initVttChat(vtt, chatHistory) {
         }
 
         const safeName = String(name).trim();
+        const memberIds = Array.isArray(tokenIds) && tokenIds.length > 0 ? tokenIds : tokenId ? [tokenId] : [];
 
         // Deduplicate: check if token or creature already exists in combatants
         const existingIdx = combatants.findIndex(
-            (c) => (tokenId && c.tokenId === tokenId) || (!tokenId && !c.tokenId && c.name === safeName)
+            (c) =>
+                (tokenId && (c.tokenId === tokenId || (Array.isArray(c.tokenIds) && c.tokenIds.includes(tokenId)))) ||
+                (!tokenId && !c.tokenId && c.name === safeName) ||
+                (c.name === safeName && (c.tokenId === tokenId || !c.tokenId))
         );
 
         let initImg = customImg || null;
@@ -2359,6 +2463,7 @@ export function initVttChat(vtt, chatHistory) {
             combatants[existingIdx].name = safeName;
             if (initImg) combatants[existingIdx].img = initImg;
             if (tokenId) combatants[existingIdx].tokenId = tokenId;
+            combatants[existingIdx].tokenIds = memberIds;
             combatants[existingIdx].layer = tokLayer;
             if (isPlayerTok) combatants[existingIdx].isPlayer = true;
         } else {
@@ -2368,6 +2473,7 @@ export function initVttChat(vtt, chatHistory) {
                 name: safeName,
                 score: numScore,
                 tokenId: tokenId || null,
+                tokenIds: memberIds,
                 img: initImg,
                 layer: tokLayer,
                 isPlayer: isPlayerTok
@@ -2674,8 +2780,8 @@ export function initVttChat(vtt, chatHistory) {
                         typeof window.getSafeVttUrl === 'function'
                             ? window.getSafeVttUrl(actTargetImg)
                             : actTargetImg.includes('discordapp.com') || actTargetImg.includes('discordapp.net')
-                                ? '/api/proxy-discord?url=' + encodeURIComponent(actTargetImg)
-                                : actTargetImg;
+                              ? '/api/proxy-discord?url=' + encodeURIComponent(actTargetImg)
+                              : actTargetImg;
                     const cleanTarget = actTargetImg.split('?')[0].toLowerCase();
                     const isTargetVideo = (actToken && actToken.isVideo) || !!cleanTarget.match(/\.(mp4|webm|ogg)$/i);
                     const isTargetYt = actTargetImg.includes('youtube.com') || actTargetImg.includes('youtu.be');
@@ -2726,7 +2832,12 @@ export function initVttChat(vtt, chatHistory) {
         renderList.forEach((c, idx) => {
             const row = document.createElement('div');
             const isActive = idx === visualActiveIndex;
-            const token = canvasEngine ? canvasEngine.getTokens()?.[c.tokenId] : null;
+            const memberIds =
+                Array.isArray(c.tokenIds) && c.tokenIds.length > 0 ? c.tokenIds : c.tokenId ? [c.tokenId] : [];
+            const memberTokens = memberIds
+                .map((id) => (canvasEngine ? canvasEngine.getTokens()?.[id] : null))
+                .filter(Boolean);
+            const token = canvasEngine ? canvasEngine.getTokens()?.[c.tokenId] || memberTokens[0] || null : null;
             const isGhost = Boolean(c.tokenId && (!canvasEngine || !canvasEngine.getTokens()?.[c.tokenId]));
 
             const isOffLayer = Boolean(
@@ -2758,35 +2869,66 @@ export function initVttChat(vtt, chatHistory) {
             let hpText = '';
             let hpColor = '#22c55e';
 
+            const getCentroid = () => {
+                if (memberTokens.length > 0) {
+                    const sumX = memberTokens.reduce((acc, t) => acc + t.x, 0);
+                    const sumY = memberTokens.reduce((acc, t) => acc + t.y, 0);
+                    return { x: sumX / memberTokens.length, y: sumY / memberTokens.length };
+                }
+                return token ? { x: token.x, y: token.y } : null;
+            };
+
             // Allow clicking token to pan canvas or open sheet
             row.addEventListener('click', (e) => {
-                if (token && window.VTT?.canvasEngine) {
-                    window.VTT.canvasEngine.panTo(token.x, token.y);
+                const center = getCentroid();
+                if (center && window.VTT?.canvasEngine) {
+                    window.VTT.canvasEngine.panTo(center.x, center.y);
                     if (e.shiftKey && vtt.role === 'GM') {
-                        window.VTT.canvasEngine.selectToken(token.id);
+                        if (memberIds.length > 1) {
+                            window.VTT.canvasEngine.selectToken(memberIds);
+                        } else if (token) {
+                            window.VTT.canvasEngine.selectToken(token.id);
+                        }
                     }
                 }
             });
 
             row.addEventListener('dblclick', (e) => {
                 e.stopPropagation();
+                const center = getCentroid();
                 if (token && window.VTT?.canvasEngine) {
-                    window.VTT.canvasEngine.panTo(token.x, token.y, null, 350);
+                    window.VTT.canvasEngine.panTo(center ? center.x : token.x, center ? center.y : token.y, null, 350);
                     const canSelect =
                         vtt.role === 'GM' || token.isPlayer || token.characterId === window.VTT?.activeCharacterId;
                     if (canSelect) {
-                        window.VTT.canvasEngine.selectToken(token.id);
+                        if (memberIds.length > 1) {
+                            window.VTT.canvasEngine.selectToken(memberIds);
+                        } else {
+                            window.VTT.canvasEngine.selectToken(token.id);
+                        }
                     }
                 }
             });
 
             // HP Calculation (strictly GM or Player Characters)
-            if (!isCreaturePlayerView && token && token.maxHp) {
-                hpText = `${token.hp}/${token.maxHp}`;
-                const ratio = token.hp / (token.maxHp || 1);
-                if (ratio > 0.5) hpColor = '#22c55e';
-                else if (ratio > 0.2) hpColor = '#eab308';
-                else hpColor = '#ef4444';
+            if (!isCreaturePlayerView) {
+                if (memberTokens.length > 1) {
+                    const totalHp = memberTokens.reduce((acc, t) => acc + (t.hp || 0), 0);
+                    const totalMaxHp = memberTokens.reduce((acc, t) => acc + (t.maxHp || 0), 0);
+                    if (totalMaxHp > 0) {
+                        hpText = `${totalHp}/${totalMaxHp}`;
+                        const ratio = totalHp / totalMaxHp;
+                        if (ratio > 0.5) hpColor = '#22c55e';
+                        else if (ratio > 0.2) hpColor = '#eab308';
+                        else hpColor = '#ef4444';
+                    }
+                } else if (token && token.maxHp) {
+                    hpText = `${token.hp}/${token.maxHp}`;
+                    const ratio = token.hp / (token.maxHp || 1);
+                    if (ratio > 0.5) hpColor = '#22c55e';
+                    else if (ratio > 0.2) hpColor = '#eab308';
+                    else hpColor = '#ef4444';
+                }
             }
 
             // Avatar construction
@@ -2805,8 +2947,8 @@ export function initVttChat(vtt, chatHistory) {
                     typeof window.getSafeVttUrl === 'function'
                         ? window.getSafeVttUrl(targetImg)
                         : targetImg.includes('discordapp.com') || targetImg.includes('discordapp.net')
-                            ? '/api/proxy-discord?url=' + encodeURIComponent(targetImg)
-                            : targetImg;
+                          ? '/api/proxy-discord?url=' + encodeURIComponent(targetImg)
+                          : targetImg;
 
                 if (isTargetYt) {
                     avatarHtml = `<div class="init-token-avatar init-avatar-yt" title="YouTube Token">📺</div>`;
@@ -2930,14 +3072,18 @@ export function initVttChat(vtt, chatHistory) {
             // Video hover listeners
             const videoEl = row.querySelector('video');
             if (videoEl) {
-                row.addEventListener('mouseenter', () => videoEl.play().catch(() => { }));
+                row.addEventListener('mouseenter', () => videoEl.play().catch(() => {}));
                 row.addEventListener('mouseleave', () => videoEl.pause());
             }
 
-            // Highlight token on canvas when hovering over card (only if token is alive on canvas)
+            // Highlight token(s) on canvas when hovering over card (only if tokens are alive on canvas)
             row.addEventListener('mouseenter', () => {
-                if (token && c.tokenId && window.VTT?.canvasEngine?.setInitiativeHoverToken) {
-                    window.VTT.canvasEngine.setInitiativeHoverToken(c.tokenId);
+                if (window.VTT?.canvasEngine?.setInitiativeHoverToken) {
+                    if (memberTokens.length > 1) {
+                        window.VTT.canvasEngine.setInitiativeHoverToken(memberTokens.map((t) => t.id));
+                    } else if (token && c.tokenId) {
+                        window.VTT.canvasEngine.setInitiativeHoverToken(c.tokenId);
+                    }
                 }
             });
             row.addEventListener('mouseleave', () => {
@@ -2948,10 +3094,6 @@ export function initVttChat(vtt, chatHistory) {
 
             initList.appendChild(row);
         });
-
-        if (typeof updateScrollButtonsFn === 'function') {
-            setTimeout(updateScrollButtonsFn, 50);
-        }
     }
 
     function appendWhisperMessage(msg, isHistorical = false) {
@@ -3077,14 +3219,14 @@ export function initVttChat(vtt, chatHistory) {
                 <div class="dice-menu-header">Roll d${targetFaces}</div>
                 <div class="dice-menu-options">
                     ${Array.from({ length: 10 }, (_, i) => i + 1)
-                    .map(
-                        (num) => `
+                        .map(
+                            (num) => `
                         <div class="dice-menu-option" data-count="${num}">
                             Roll ${num}d${targetFaces}
                         </div>
                     `
-                    )
-                    .join('')}
+                        )
+                        .join('')}
                 </div>
                 <div class="dice-menu-divider"></div>
                 <div class="dice-menu-custom">
@@ -3155,6 +3297,8 @@ export function initVttChat(vtt, chatHistory) {
         updateCombatantLayer,
         updateCombatantScore,
         updateCombatantTokenArt,
+        isCombatActive: () => combatants.length > 0,
+        getCombatants: () => [...combatants],
         refreshInitiative: renderInitiativeList,
         syncChatHistory: (newHistory) => {
             if (chatMessages && Array.isArray(newHistory)) {

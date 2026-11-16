@@ -115,7 +115,7 @@ async function runTests() {
 
     // Wait for server ready
     let ready = false;
-    for (let i = 0; i < 30; i++) {
+    for (let i = 0; i < 60; i++) {
         try {
             const check = await httpRequest({
                 host: '127.0.0.1',

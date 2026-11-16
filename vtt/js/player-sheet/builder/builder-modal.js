@@ -296,6 +296,7 @@ export async function openCharacterBuilderModal(char, options = {}) {
                 : 'create',
         allowLevelUpRebuildEquip: false
     };
+    window._activeBuilderChar = workingChar;
 
     // Helper: Automatically create attack macro for weapons
     function generateWeaponMacro(targetChar, item, catalogItem) {
@@ -414,14 +415,23 @@ export async function openCharacterBuilderModal(char, options = {}) {
             ? tmpl.isAdamantine
             : cat.isAdamantine || (item.name && /adamant/i.test(item.name)));
 
-        const hasProf = candidateProficiencies?.some((p) => {
-            const pLow = (p.label || p.name || '').toLowerCase();
-            if (pLow.includes('all weapons')) return true;
-            if (pLow.includes('simple') && (cat.weaponCategory === 'simple' || SIMPLE_WEAPONS.some((w) => itemLow.includes(w.toLowerCase())))) return true;
-            if (pLow.includes('martial') && (cat.weaponCategory === 'martial' || MARTIAL_WEAPONS.some((w) => itemLow.includes(w.toLowerCase())))) return true;
-            if (pLow.includes(itemLow)) return true;
-            return false;
-        }) ?? true;
+        const hasProf =
+            candidateProficiencies?.some((p) => {
+                const pLow = (p.label || p.name || '').toLowerCase();
+                if (pLow.includes('all weapons')) return true;
+                if (
+                    pLow.includes('simple') &&
+                    (cat.weaponCategory === 'simple' || SIMPLE_WEAPONS.some((w) => itemLow.includes(w.toLowerCase())))
+                )
+                    return true;
+                if (
+                    pLow.includes('martial') &&
+                    (cat.weaponCategory === 'martial' || MARTIAL_WEAPONS.some((w) => itemLow.includes(w.toLowerCase())))
+                )
+                    return true;
+                if (pLow.includes(itemLow)) return true;
+                return false;
+            }) ?? true;
 
         targetChar.macros.push({
             id: 'mac_' + Date.now() + Math.random().toString(36).substr(2, 5),
@@ -615,27 +625,55 @@ export async function openCharacterBuilderModal(char, options = {}) {
                     .replace(/\s*\([^)]*\).*$/, '')
                     .trim()
                     .toLowerCase();
-                return rBase === rawRaceName && !r.subraceName;
-            }) || builderCache?.races?.find((r) => (r.name || '').toLowerCase() === rawRaceName);
-
-        matchedSubrace = null;
-        if (rawSubraceName && builderCache?.races) {
-            matchedSubrace = builderCache.races.find((r) => {
+                return rBase === rawRaceName && !r.subraceName && (r.source === 'PHB' || r.source === 'XPHB');
+            }) ||
+            builderCache?.races?.find((r) => {
                 const rBase = (r.raceName || r.name || '')
                     .replace(/\s*\[.*?\]$/, '')
                     .replace(/\s*\([^)]*\).*$/, '')
                     .trim()
                     .toLowerCase();
-                const sName = (
-                    r.subraceName ||
-                    (r.name && r.name.includes('(') ? r.name.match(/\(([^)]+)\)/)?.[1] : '') ||
-                    ''
-                ).toLowerCase();
-                return (
-                    (rBase === rawRaceName || !rawRaceName) &&
-                    (sName === rawSubraceName || sName.includes(rawSubraceName) || rawSubraceName.includes(sName))
-                );
-            });
+                return rBase === rawRaceName && !r.subraceName;
+            }) ||
+            builderCache?.races?.find((r) => (r.name || '').toLowerCase() === rawRaceName);
+
+        matchedSubrace = null;
+        if (rawSubraceName && builderCache?.races) {
+            matchedSubrace =
+                builderCache.races.find((r) => {
+                    const rBase = (r.raceName || r.name || '')
+                        .replace(/\s*\[.*?\]$/, '')
+                        .replace(/\s*\([^)]*\).*$/, '')
+                        .trim()
+                        .toLowerCase();
+                    const sName = (
+                        r.subraceName ||
+                        (r.name && r.name.includes('(') ? r.name.match(/\(([^)]+)\)/)?.[1] : '') ||
+                        ''
+                    ).toLowerCase();
+                    return (
+                        (rBase === rawRaceName || !rawRaceName) &&
+                        sName === rawSubraceName &&
+                        (r.source === 'PHB' || r.source === 'XPHB')
+                    );
+                }) ||
+                builderCache.races.find((r) => {
+                    const rBase = (r.raceName || r.name || '')
+                        .replace(/\s*\[.*?\]$/, '')
+                        .replace(/\s*\([^)]*\).*$/, '')
+                        .trim()
+                        .toLowerCase();
+                    const sName = (
+                        r.subraceName ||
+                        (r.name && r.name.includes('(') ? r.name.match(/\(([^)]+)\)/)?.[1] : '') ||
+                        ''
+                    ).toLowerCase();
+                    return (
+                        (rBase === rawRaceName || !rawRaceName) &&
+                        sName &&
+                        (sName === rawSubraceName || sName.includes(rawSubraceName) || rawSubraceName.includes(sName))
+                    );
+                });
         }
 
         // Racial traits
@@ -775,7 +813,9 @@ export async function openCharacterBuilderModal(char, options = {}) {
                 });
             }
             if (matchedBg.languages) {
-                const bgLangs = Array.isArray(matchedBg.languages) ? matchedBg.languages : matchedBg.languages.split(',');
+                const bgLangs = Array.isArray(matchedBg.languages)
+                    ? matchedBg.languages
+                    : matchedBg.languages.split(',');
                 bgLangs.forEach((l) => {
                     const cleanL = typeof l === 'string' ? l.trim() : '';
                     if (cleanL && !candidateLanguages.includes(cleanL)) candidateLanguages.push(cleanL);
@@ -783,7 +823,9 @@ export async function openCharacterBuilderModal(char, options = {}) {
             }
 
             if (matchedBg.toolProficiencies) {
-                const bgTools = Array.isArray(matchedBg.toolProficiencies) ? matchedBg.toolProficiencies : [matchedBg.toolProficiencies];
+                const bgTools = Array.isArray(matchedBg.toolProficiencies)
+                    ? matchedBg.toolProficiencies
+                    : [matchedBg.toolProficiencies];
                 bgTools.forEach((tp) => {
                     if (typeof tp === 'string' && !candidateTools.includes(tp)) {
                         candidateTools.push(tp);
@@ -993,13 +1035,18 @@ export async function openCharacterBuilderModal(char, options = {}) {
             if (classes.length > 1) {
                 classes.slice(1).forEach((secCls, secIdx) => {
                     const cIdx = secIdx + 1;
-                    const rawSec = (secCls.name || '').toLowerCase().replace(/\s*\[.*?\]$/, '').trim();
+                    const rawSec = (secCls.name || '')
+                        .toLowerCase()
+                        .replace(/\s*\[.*?\]$/, '')
+                        .trim();
                     const mcRule = MULTICLASS_PROFICIENCIES[rawSec];
                     if (!mcRule) return;
 
                     // Armor
                     (mcRule.armor || []).forEach((arm) => {
-                        let cand = candidateProficiencies.find((p) => p.type === 'armor' && p.label.toLowerCase() === arm.toLowerCase());
+                        let cand = candidateProficiencies.find(
+                            (p) => p.type === 'armor' && p.label.toLowerCase() === arm.toLowerCase()
+                        );
                         if (cand) {
                             cand.checked = true;
                         } else {
@@ -1015,7 +1062,9 @@ export async function openCharacterBuilderModal(char, options = {}) {
 
                     // Weapons
                     (mcRule.weapons || []).forEach((wp) => {
-                        let cand = candidateProficiencies.find((p) => p.type === 'weapon' && p.label.toLowerCase() === wp.toLowerCase());
+                        let cand = candidateProficiencies.find(
+                            (p) => p.type === 'weapon' && p.label.toLowerCase() === wp.toLowerCase()
+                        );
                         if (cand) {
                             cand.checked = true;
                         } else {
@@ -1037,7 +1086,26 @@ export async function openCharacterBuilderModal(char, options = {}) {
                     // Skills (Bard: 1 of any, Ranger: 1 from list, Rogue: 1 from list)
                     if (mcRule.skills && mcRule.skills.count > 0) {
                         const fromList = mcRule.skills.from.includes('any')
-                            ? ['Acrobatics', 'Animal Handling', 'Arcana', 'Athletics', 'Deception', 'History', 'Insight', 'Intimidation', 'Investigation', 'Medicine', 'Nature', 'Perception', 'Performance', 'Persuasion', 'Religion', 'Sleight of Hand', 'Stealth', 'Survival']
+                            ? [
+                                  'Acrobatics',
+                                  'Animal Handling',
+                                  'Arcana',
+                                  'Athletics',
+                                  'Deception',
+                                  'History',
+                                  'Insight',
+                                  'Intimidation',
+                                  'Investigation',
+                                  'Medicine',
+                                  'Nature',
+                                  'Perception',
+                                  'Performance',
+                                  'Persuasion',
+                                  'Religion',
+                                  'Sleight of Hand',
+                                  'Stealth',
+                                  'Survival'
+                              ]
                             : mcRule.skills.from;
                         if (!selectedMulticlassSkills.has(cIdx)) {
                             selectedMulticlassSkills.set(cIdx, new Set());
@@ -1045,7 +1113,12 @@ export async function openCharacterBuilderModal(char, options = {}) {
                         const curSet = selectedMulticlassSkills.get(cIdx);
                         if (char.skills && typeof char.skills === 'object') {
                             fromList.forEach((sk) => {
-                                if (char.skills[sk] && !selectedClassSkills.has(sk) && !candidateSpeciesSkills.includes(sk) && !candidateBgSkills.includes(sk)) {
+                                if (
+                                    char.skills[sk] &&
+                                    !selectedClassSkills.has(sk) &&
+                                    !candidateSpeciesSkills.includes(sk) &&
+                                    !candidateBgSkills.includes(sk)
+                                ) {
                                     if (curSet.size < mcRule.skills.count) curSet.add(sk);
                                 }
                             });
@@ -1086,7 +1159,9 @@ export async function openCharacterBuilderModal(char, options = {}) {
                             id: 'eq_choice_' + eqIdx,
                             title: `Choice ${eqIdx + 1}`,
                             selectedOption: savedChoice?.selectedOption || 'a',
-                            selectedWeapon: savedChoice?.selectedWeapon || (isMartial ? 'Longsword' : isSimple ? 'Quarterstaff' : ''),
+                            selectedWeapon:
+                                savedChoice?.selectedWeapon ||
+                                (isMartial ? 'Longsword' : isSimple ? 'Quarterstaff' : ''),
                             selectedWeapon1: savedChoice?.selectedWeapon1 || '',
                             selectedWeapon2: savedChoice?.selectedWeapon2 || '',
                             options
@@ -1273,8 +1348,8 @@ export async function openCharacterBuilderModal(char, options = {}) {
                                     formula: scf.formula || '',
                                     formulaConfig: scf.formulaConfig || null,
                                     checked: userSelectedAbilities.has(key)
-                                    ? !!userSelectedAbilities.get(key)
-                                    : !existingAbilities.has(key)
+                                        ? !!userSelectedAbilities.get(key)
+                                        : !existingAbilities.has(key)
                                 });
                             }
                         }
@@ -1754,7 +1829,7 @@ export async function openCharacterBuilderModal(char, options = {}) {
                 const known = [2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 11, 11, 12, 12, 13, 13, 14, 14, 15, 15];
                 maxSpells = known[l - 1] || 2;
             } else if (raw === 'paladin' || raw === 'ranger') {
-                const is2024 = is2024Char || (c.source && c.source.includes('2024')) || (char.ruleset === '2024');
+                const is2024 = is2024Char || (c.source && c.source.includes('2024')) || char.ruleset === '2024';
                 const minLvl = is2024 ? 1 : 2;
                 if (l >= minLvl) {
                     isCaster = true;
@@ -1823,7 +1898,13 @@ export async function openCharacterBuilderModal(char, options = {}) {
                             isChecked = true;
                         }
                         return {
-                            id: 'sp_' + sp.name.replace(/\W+/g, '_') + '_' + cIdx,
+                            id:
+                                'sp_' +
+                                sp.name.replace(/\W+/g, '_') +
+                                '_' +
+                                (sp.source || 'phb').toLowerCase() +
+                                '_' +
+                                cIdx,
                             name: sp.name,
                             source: sp.source || '',
                             level: sLvl,
@@ -2677,7 +2758,12 @@ export async function openCharacterBuilderModal(char, options = {}) {
                     const sp = sec.spells.find((x) => x.id === spId);
                     if (sp) {
                         sp.checked = chk.checked;
-                        if (sp.name) userSelectedSpellMap.set(sp.name.toLowerCase().trim(), chk.checked);
+                        if (sp.name) {
+                            const curKey = sp.name.toLowerCase().trim();
+                            if (chk.checked || !userSelectedSpellMap.has(curKey)) {
+                                userSelectedSpellMap.set(curKey, chk.checked);
+                            }
+                        }
                     }
                 }
             });
@@ -2816,6 +2902,7 @@ export async function openCharacterBuilderModal(char, options = {}) {
     };
 
     const closeModal = () => {
+        window._activeBuilderChar = null;
         modal.classList.add('vtt-hidden');
         overlay.classList.add('vtt-hidden');
         applyBtn.disabled = false;
@@ -3854,7 +3941,7 @@ export async function openCharacterBuilderModal(char, options = {}) {
                             (existing) => (existing.name || '').toLowerCase() === sp.name.toLowerCase()
                         );
                         if (!exists) {
-                            const defaultPrepared = spLvl === 0 ? true : (!isPreparedCaster && !isWizard);
+                            const defaultPrepared = spLvl === 0 ? true : !isPreparedCaster && !isWizard;
                             char.spells[key].push({
                                 id: 'sp_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
                                 name: sp.name,

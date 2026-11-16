@@ -49,11 +49,7 @@ test('[Audit Fix 4] Paint eraser layer typo correction', async () => {
         path.join(process.cwd(), 'vtt/js/canvas/vtt-canvas-interaction.js'),
         'utf8'
     );
-    assert.doesNotMatch(
-        interactionContent,
-        /ctx\.activeLayer\s*===\s*'ctx\.notes'/,
-        "Typo 'ctx.notes' must be fixed"
-    );
+    assert.doesNotMatch(interactionContent, /ctx\.activeLayer\s*===\s*'ctx\.notes'/, "Typo 'ctx.notes' must be fixed");
     assert.match(
         interactionContent,
         /ctx\.activeLayer\s*===\s*'lighting'\s*\|\|\s*ctx\.activeLayer\s*===\s*'notes'/,
@@ -62,10 +58,7 @@ test('[Audit Fix 4] Paint eraser layer typo correction', async () => {
 });
 
 test('[Audit Fix 5] Touch drag completion multi-token parity', async () => {
-    const touchContent = fs.readFileSync(
-        path.join(process.cwd(), 'vtt/js/canvas/vtt-canvas-touch.js'),
-        'utf8'
-    );
+    const touchContent = fs.readFileSync(path.join(process.cwd(), 'vtt/js/canvas/vtt-canvas-touch.js'), 'utf8');
     assert.match(
         touchContent,
         /const\s+movedTokensList\s*=\s*Array\.from\(context\.selectedTokenIds\s*\|\|\s*\[\]\)/,
@@ -79,20 +72,14 @@ test('[Audit Fix 5] Touch drag completion multi-token parity', async () => {
 });
 
 test('[Audit Fix 6] Panel idempotency guards on map tools and paint ribbon', async () => {
-    const mapToolsContent = fs.readFileSync(
-        path.join(process.cwd(), 'vtt/js/canvas/vtt-canvas-map-tools.js'),
-        'utf8'
-    );
+    const mapToolsContent = fs.readFileSync(path.join(process.cwd(), 'vtt/js/canvas/vtt-canvas-map-tools.js'), 'utf8');
     assert.match(
         mapToolsContent,
         /if\s*\(panel\.dataset\.mapToolsInitialized\s*===\s*'true'\)\s*return;[\s\S]*?panel\.dataset\.mapToolsInitialized\s*=\s*'true';/,
         'setupMapToolsControls must guard against duplicate listener initialization'
     );
 
-    const drawingsContent = fs.readFileSync(
-        path.join(process.cwd(), 'vtt/js/canvas/vtt-canvas-drawings.js'),
-        'utf8'
-    );
+    const drawingsContent = fs.readFileSync(path.join(process.cwd(), 'vtt/js/canvas/vtt-canvas-drawings.js'), 'utf8');
     assert.match(
         drawingsContent,
         /if\s*\(ribbon\.dataset\.paintRibbonInitialized\s*===\s*'true'\)\s*return;[\s\S]*?ribbon\.dataset\.paintRibbonInitialized\s*=\s*'true';/,
@@ -101,10 +88,7 @@ test('[Audit Fix 6] Panel idempotency guards on map tools and paint ribbon', asy
 });
 
 test('[Audit Fix 7] Safe emitTokenUpdates fallback in portals and interaction', async () => {
-    const portalsContent = fs.readFileSync(
-        path.join(process.cwd(), 'vtt/js/canvas/vtt-canvas-portals.js'),
-        'utf8'
-    );
+    const portalsContent = fs.readFileSync(path.join(process.cwd(), 'vtt/js/canvas/vtt-canvas-portals.js'), 'utf8');
     assert.match(
         portalsContent,
         /if\s*\(typeof\s+window\s*!==\s*'undefined'\s*&&\s*typeof\s+window\.emitTokenUpdates\s*===\s*'function'\)[\s\S]*?context\.emitTokenUpdates\(tokens\)/,
@@ -119,5 +103,37 @@ test('[Audit Fix 7] Safe emitTokenUpdates fallback in portals and interaction', 
         interactionContent,
         /const\s+emitTokenUpdates\s*=\s*ctx\.emitTokenUpdates\s*\|\|/,
         'vtt-canvas-interaction.js must provide safe emitTokenUpdates fallback'
+    );
+});
+
+test('[Audit Fix 8] Paint tools desktop ribbon popup and mobile scoping integrity', async () => {
+    const mobileCss = fs.readFileSync(path.join(process.cwd(), 'vtt/css/vtt-mobile.css'), 'utf8');
+
+    // Ensure #panel-paint-ribbon is included in mobile media query
+    assert.match(
+        mobileCss,
+        /#panel-measure-config,\s*#panel-map-tools,\s*#panel-paint-ribbon\s*\{\s*display:\s*none\s*!important;\s*\}/,
+        'mobile media query must hide #panel-paint-ribbon on mobile devices'
+    );
+
+    // Ensure #panel-paint-ribbon is included in force-mobile-ui selector
+    assert.match(
+        mobileCss,
+        /html\.force-mobile-ui:not\(\.force-desktop-ui\)\s+#panel-paint-ribbon/,
+        'force-mobile-ui override must hide #panel-paint-ribbon'
+    );
+
+    // Ensure there is no root-level unscoped #panel-paint-ribbon hiding it on desktop
+    assert.doesNotMatch(
+        mobileCss,
+        /\n#panel-paint-ribbon\s*\{\s*display:\s*none\s*!important;\s*\}/,
+        'vtt-mobile.css must not contain unscoped #panel-paint-ribbon { display: none !important; }'
+    );
+
+    const toolsJs = fs.readFileSync(path.join(process.cwd(), 'vtt/js/canvas/vtt-canvas-interaction-tools.js'), 'utf8');
+    assert.match(
+        toolsJs,
+        /classList\.contains\('force-desktop-ui'\)\s*\?\s*false/,
+        'setupToolControls must respect force-desktop-ui and unhide paint ribbon'
     );
 });

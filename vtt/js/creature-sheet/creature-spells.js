@@ -319,9 +319,7 @@ export function wireSpellSlots(panel, m, ctx) {
 
     const isGm = vtt?.role === 'GM';
     const activeChar =
-        linkedCharacterId && vtt?.campaignState?.characters
-            ? vtt.campaignState.characters[linkedCharacterId]
-            : null;
+        linkedCharacterId && vtt?.campaignState?.characters ? vtt.campaignState.characters[linkedCharacterId] : null;
     const isAssigned = Boolean(
         activeChar &&
         activeChar.assignedPlayers &&
@@ -335,8 +333,7 @@ export function wireSpellSlots(panel, m, ctx) {
         currentCanvasToken &&
         (currentCanvasToken.ownerUsername === vtt?.username ||
             currentCanvasToken.playerOwner === vtt?.username ||
-            (currentCanvasToken.assignedPlayers &&
-                currentCanvasToken.assignedPlayers.includes(vtt?.username)))
+            (currentCanvasToken.assignedPlayers && currentCanvasToken.assignedPlayers.includes(vtt?.username)))
     );
     const canModifySlots = isGm || isAssigned || isTokenOwner;
 
@@ -1061,10 +1058,16 @@ export function buildSpellcastingHtml(m, linkedCharacterId = null) {
                 actionBadge = `<span class="badge" style="background:rgba(220,20,60,0.2); color:#ff6b81; border:1px solid rgba(220,20,60,0.3); font-size:0.75rem; padding:2px 7px; border-radius:4px;"><i class="fa-solid fa-crown" style="margin-right:3px;"></i>Legendary</span>`;
             }
 
-            const hEntries = sc.headerEntries ? sc.headerEntries.map((e) => formatRawEntry(e)).join('<br>') : '';
-            const fEntries = sc.footerEntries
-                ? '<br>' + sc.footerEntries.map((e) => formatRawEntry(e)).join('<br>')
-                : '';
+            const hEntries =
+                Array.isArray(sc.headerEntries) && sc.headerEntries.length > 0
+                    ? sc.headerEntries.map((e) => formatRawEntry(e)).join('<br>')
+                    : sc.header || sc.description || sc.desc || '';
+            const fEntries =
+                Array.isArray(sc.footerEntries) && sc.footerEntries.length > 0
+                    ? '<br>' + sc.footerEntries.map((e) => formatRawEntry(e)).join('<br>')
+                    : sc.footer
+                      ? '<br>' + sc.footer
+                      : '';
             const desc = injectDiceChips(parse5eMarkup(hEntries + fEntries));
 
             html += `
@@ -1337,8 +1340,11 @@ export function extractSpellcastingStats(m) {
 
     if (m.spellcasting && m.spellcasting.length > 0) {
         for (let sc of m.spellcasting) {
-            if (sc.headerEntries) {
-                const header = sc.headerEntries.join(' ');
+            const header =
+                Array.isArray(sc.headerEntries) && sc.headerEntries.length > 0
+                    ? sc.headerEntries.join(' ')
+                    : sc.header || sc.description || sc.desc || '';
+            if (header) {
                 const dcMatch = header.match(/DC\s+(\d+)/i);
                 if (dcMatch && !foundDc) {
                     stats.dc = parseInt(dcMatch[1]);
@@ -2044,8 +2050,7 @@ export function setupCsSpellListeners(panel, m, ctx) {
                 currentCanvasToken &&
                 (currentCanvasToken.ownerUsername === vtt?.username ||
                     currentCanvasToken.playerOwner === vtt?.username ||
-                    (currentCanvasToken.assignedPlayers &&
-                        currentCanvasToken.assignedPlayers.includes(vtt?.username)))
+                    (currentCanvasToken.assignedPlayers && currentCanvasToken.assignedPlayers.includes(vtt?.username)))
             );
             if (!isGm && !isAssigned && !isTokenOwner) return;
 
@@ -2089,7 +2094,9 @@ export function setupCsSpellListeners(panel, m, ctx) {
                 if (tok) {
                     tok.monsterData = curM;
                     const curMapId =
-                        window.VTT?.canvasEngine?.getCurrentMapId?.() || window.VTT?.canvasEngine?.currentMap?.id || null;
+                        window.VTT?.canvasEngine?.getCurrentMapId?.() ||
+                        window.VTT?.canvasEngine?.currentMap?.id ||
+                        null;
                     window.VTT.socket.emit('token:update', { mapId: curMapId, token: tok });
                 }
             }
@@ -2123,8 +2130,7 @@ export function setupCsSpellListeners(panel, m, ctx) {
                 currentCanvasToken &&
                 (currentCanvasToken.ownerUsername === vtt?.username ||
                     currentCanvasToken.playerOwner === vtt?.username ||
-                    (currentCanvasToken.assignedPlayers &&
-                        currentCanvasToken.assignedPlayers.includes(vtt?.username)))
+                    (currentCanvasToken.assignedPlayers && currentCanvasToken.assignedPlayers.includes(vtt?.username)))
             );
             if (!isGm && !isAssigned && !isTokenOwner) return;
 
@@ -2158,7 +2164,9 @@ export function setupCsSpellListeners(panel, m, ctx) {
                 if (tok) {
                     tok.monsterData = curM;
                     const curMapId =
-                        window.VTT?.canvasEngine?.getCurrentMapId?.() || window.VTT?.canvasEngine?.currentMap?.id || null;
+                        window.VTT?.canvasEngine?.getCurrentMapId?.() ||
+                        window.VTT?.canvasEngine?.currentMap?.id ||
+                        null;
                     window.VTT.socket.emit('token:update', { mapId: curMapId, token: tok });
                 }
             }

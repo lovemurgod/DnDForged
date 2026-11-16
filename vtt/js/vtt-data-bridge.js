@@ -1,4 +1,12 @@
 // DnDForged 5etools Data Bridge
+import {
+    getTokenDropConfig,
+    saveTokenDropConfig,
+    evaluateMonsterHp,
+    resolveDuplicateTokenName,
+    resolveDispositionColor,
+    DEFAULT_TOKEN_DROP_CONFIG
+} from './canvas/tokens/vtt-canvas-token-drop-config.js';
 
 export function initVttDataBridge(vtt) {
     const listContainer = document.getElementById('library-monster-list');
@@ -116,6 +124,8 @@ export function initVttDataBridge(vtt) {
             if (!catalogRes.ok) throw new Error('Could not load bestiary catalog');
 
             monsters = await catalogRes.json();
+            window.VTT = window.VTT || {};
+            window.VTT.bestiaryCatalog = monsters;
             populateFiltersUI();
             setupFilterListeners();
             applyMonsterFilters();
@@ -754,6 +764,43 @@ export function initVttDataBridge(vtt) {
         }
     }
 
+    function getCreatureDexScore(creature) {
+        if (!creature) return 10;
+        const dex = creature.dex !== undefined ? creature.dex : creature.monsterData?.dex;
+        if (typeof dex === 'number') return dex;
+        return 10;
+    }
+
+    function getCreatureDexModifier(creature) {
+        const dex = getCreatureDexScore(creature);
+        return Math.floor((dex - 10) / 2);
+    }
+
+    function maybeAutoRollInitiative(token, creatureData, dropConfig) {
+        if (!dropConfig?.autoRollInitiative) return;
+        const isCombatActive = Boolean(
+            window.VTT?.chatEngine?.isCombatActive
+                ? window.VTT.chatEngine.isCombatActive()
+                : window.VTT?.campaignState?.initiative?.combatants?.length > 0 ||
+                      (Array.isArray(window.VTT?.campaignState?.initiative) &&
+                          window.VTT.campaignState.initiative.length > 0)
+        );
+        if (
+            dropConfig.initiativeTrigger === 'always' ||
+            (dropConfig.initiativeTrigger === 'combat_active' && isCombatActive)
+        ) {
+            const dexScore = getCreatureDexScore(creatureData || token.monsterData);
+            const dexMod = Math.floor((dexScore - 10) / 2);
+            const d20 = Math.floor(Math.random() * 20) + 1;
+            const isTiebreaker = vtt?.campaignState?.settings?.initDexTiebreaker !== false;
+            const tiebreaker = isTiebreaker ? Math.round(dexScore) / 100 : 0;
+            const initScore = d20 + dexMod + tiebreaker;
+            if (window.VTT?.chatEngine?.addToInitiative) {
+                window.VTT.chatEngine.addToInitiative(token.name, initScore, token.id, token.img);
+            }
+        }
+    }
+
     // Resolve HP from formula or static averages
     function calculateMonsterHp(monster) {
         if (monster.hp && monster.hp.average) return monster.hp.average;
@@ -1005,18 +1052,39 @@ export function initVttDataBridge(vtt) {
 
                 const sizePx = data.size * grid.size * grid.scale;
 
+                // Load Bestiary drop configuration
+                const dropConfig = getTokenDropConfig('bestiary', vtt);
+
+                // Resolve creature HP based on mode (average, max, roll)
+                const hpEval = evaluateMonsterHp(data.monsterData || data, dropConfig.hpMode);
+                const tokenHp = hpEval.hp;
+                const tokenMaxHp = hpEval.maxHp;
+
+                // Resolve creature vision: import senses or fallback to 5 ft baseline
+                const resolvedSight = dropConfig.importSenses !== false ? parseMonsterVision(data.monsterData) : 5;
+
+                // Resolve token name with auto-numbering if enabled
+                const resolvedName = dropConfig.autoNumberDuplicates
+                    ? resolveDuplicateTokenName(data.name, canvasEngine.getTokens ? canvasEngine.getTokens() : {})
+                    : data.name;
+
+                // Resolve disposition ring color
+                const ringColor = resolveDispositionColor(dropConfig.dispositionRing, dropConfig.customRingColor);
+
                 const token = {
                     id: `token_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
-                    name: data.name,
+                    name: resolvedName,
                     x: mouse.x - sizePx / 2, // Center dropped entity
                     y: mouse.y - sizePx / 2,
-                    hp: data.hp,
-                    maxHp: data.maxHp,
+                    hp: tokenHp,
+                    maxHp: tokenMaxHp,
                     size: data.size,
-                    sightRange: parseMonsterVision(data.monsterData),
+                    sightRange: resolvedSight,
                     img: data.img,
                     isPlayer: false,
                     layer: canvasEngine.getActiveLayer(),
+                    hidden: !!dropConfig.defaultHidden,
+                    ringColor: ringColor || null,
                     isBorderless: true,
                     monsterData: data.monsterData || null // Full stat block
                 };
@@ -1028,14 +1096,29 @@ export function initVttDataBridge(vtt) {
 
                 canvasEngine.addToken(token);
 
+                // Announce HP roll in chat if enabled
+                if (hpEval.rollDetails && dropConfig.showHpRollInChat && window.VTT?.socket) {
+                    const formula = hpEval.rollDetails.formula || '';
+                    const rollsStr = hpEval.rollDetails.rolls ? `[${hpEval.rollDetails.rolls.join(', ')}]` : '';
+                    window.VTT.socket.emit('chat:msg', {
+                        text: `🎲 **Rolled HP for ${token.name}**: \`${formula}\` ${rollsStr} = **${token.hp} HP**`,
+                        whisperTo: 'GM'
+                    });
+                }
+
+                // Auto-Roll Initiative if enabled
+                maybeAutoRollInitiative(token, data.monsterData, dropConfig);
+
                 // Asynchronously hydrate token.monsterData with full normalized creature if needed
                 if (data.source && (data.id || data.name)) {
                     fetchFullCreature(data.source, data.id || data.name).then((fullMonster) => {
                         if (fullMonster) {
                             token.monsterData = fullMonster;
-                            const fullSight = parseMonsterVision(fullMonster);
-                            if (fullSight > token.sightRange) {
-                                token.sightRange = fullSight;
+                            if (dropConfig.importSenses !== false) {
+                                const fullSight = parseMonsterVision(fullMonster);
+                                if (fullSight > token.sightRange) {
+                                    token.sightRange = fullSight;
+                                }
                             }
                             if (window.VTT?.socket) {
                                 const curMapId =
@@ -1092,12 +1175,18 @@ export function initVttDataBridge(vtt) {
 
                 const finalSize = charRef && charRef.tokenSize !== undefined ? charRef.tokenSize : data.size;
 
+                // Determine drop configuration for Companions or Custom NPCs
+                const sectionKey = isCompanion ? 'companion' : isCustomNpc ? 'customNpc' : null;
+                const dropConfig = sectionKey ? getTokenDropConfig(sectionKey, vtt) : null;
+
                 // Determine sight range with self-healing migration:
                 // 1. If creature has monsterData, parse true senses (darkvision or 5 ft fallback)
                 // 2. If charRef.tokenSight was set, respect custom overrides unless corrupted by legacy passive perception bug
                 // 3. For player characters, extract from charRef.senses or fallback to 60 ft standard player sight
                 let resolvedSight = 5;
-                if (charRef?.monsterData) {
+                if (dropConfig && dropConfig.importSenses === false) {
+                    resolvedSight = 5;
+                } else if (charRef?.monsterData) {
                     const parsedMonsterSight = parseMonsterVision(charRef.monsterData);
                     if (charRef.tokenSight !== undefined && charRef.tokenSight !== null && charRef.tokenSight > 0) {
                         const rawPp = charRef.monsterData.passive || charRef.monsterData.senses?.passivePerception;
@@ -1138,13 +1227,52 @@ export function initVttDataBridge(vtt) {
                     resolvedSight = 60;
                 }
 
+                let tokenHp = data.hp;
+                let tokenMaxHp = data.maxHp;
+                let tokenName = data.name;
+                let isHidden = false;
+                let ringColor = null;
+
+                if (dropConfig) {
+                    // Evaluate HP if non-average mode or if generic NPC
+                    if (dropConfig.hpMode !== 'average' || isGeneric) {
+                        const creatureForHp = charRef?.monsterData || data.monsterData || charRef || data;
+                        const hpEval = evaluateMonsterHp(creatureForHp, dropConfig.hpMode);
+                        tokenHp = hpEval.hp;
+                        tokenMaxHp = hpEval.maxHp;
+
+                        if (hpEval.rollDetails && dropConfig.showHpRollInChat && window.VTT?.socket) {
+                            const formula = hpEval.rollDetails.formula || '';
+                            const rollsStr = hpEval.rollDetails.rolls ? `[${hpEval.rollDetails.rolls.join(', ')}]` : '';
+                            window.VTT.socket.emit('chat:msg', {
+                                text: `🎲 **Rolled HP for ${tokenName}**: \`${formula}\` ${rollsStr} = **${tokenHp} HP**`,
+                                whisperTo: 'GM'
+                            });
+                        }
+                    }
+
+                    // Auto-number duplicates
+                    if (dropConfig.autoNumberDuplicates) {
+                        tokenName = resolveDuplicateTokenName(
+                            tokenName,
+                            canvasEngine.getTokens ? canvasEngine.getTokens() : {}
+                        );
+                    }
+
+                    // Hidden state
+                    isHidden = !!dropConfig.defaultHidden;
+
+                    // Ring color
+                    ringColor = resolveDispositionColor(dropConfig.dispositionRing, dropConfig.customRingColor);
+                }
+
                 const token = {
                     id: `token_${isPlayer ? 'pc' : isCompanion ? 'comp' : 'npc'}_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
-                    name: data.name,
+                    name: tokenName,
                     x: mouse.x - sizePx / 2,
                     y: mouse.y - sizePx / 2,
-                    hp: data.hp,
-                    maxHp: data.maxHp,
+                    hp: tokenHp,
+                    maxHp: tokenMaxHp,
                     tempHp: data.tempHp || 0,
                     size: finalSize,
                     customWidth: charRef?.tokenCustomWidth || data.customWidth,
@@ -1176,6 +1304,8 @@ export function initVttDataBridge(vtt) {
                           )
                         : charRef?.monsterData || data.monsterData || null,
                     layer: canvasEngine.getActiveLayer(),
+                    hidden: isHidden,
+                    ringColor: ringColor || null,
                     isBorderless: true,
 
                     // Auras, Light and FX - fallback to charRef properties
@@ -1293,6 +1423,13 @@ export function initVttDataBridge(vtt) {
 
                 canvasEngine.addToken(token);
 
+                // Auto-Roll Initiative for Companions or Custom NPCs if enabled
+                maybeAutoRollInitiative(
+                    token,
+                    token.monsterData || charRef?.monsterData || data.monsterData || charRef,
+                    dropConfig
+                );
+
                 // Log spawn message
                 // window.VTT.socket.emit('chat:msg', {
                 //     text: `Player **${data.name}** joined the map.`
@@ -1376,6 +1513,73 @@ export function initVttDataBridge(vtt) {
                     img.onerror = () => spawnAsset(maxDim, maxDim);
                     img.src = data.url;
                 }
+            } else if (data.type === 'asset-table') {
+                const canvasEngine = window.VTT.canvasEngine;
+                const grid = canvasEngine.getGrid();
+                const mouse = canvasEngine.getCanvasMouseCoords(e);
+                const size = data.size || 1;
+                const sizePx = size * grid.size * grid.scale;
+                const token = {
+                    id: `token_table_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
+                    name: data.name,
+                    x: mouse.x - sizePx / 2,
+                    y: mouse.y - sizePx / 2,
+                    hp: 0,
+                    maxHp: 0,
+                    size: size,
+                    img: (data.entries && data.entries[0]?.url) || 'favicon.svg',
+                    tokenImages: (data.entries || []).map((en, idx) => ({
+                        url: en.url,
+                        name: en.name || `Side ${idx + 1}`
+                    })),
+                    activeTokenIndex: 0,
+                    isAssetTable: true,
+                    assetTableId: data.tableId,
+                    isPlayer: false,
+                    layer: canvasEngine.getActiveLayer() || 'token',
+                    isBorderless: true
+                };
+                const snap = snapToCoords(token.x, token.y, grid);
+                token.x = snap.x;
+                token.y = snap.y;
+                canvasEngine.addToken(token);
+                if (window.VTT.toast) window.VTT.toast(`Placed flippable table "${data.name}" on canvas.`);
+            } else if (data.type === 'card') {
+                const canvasEngine = window.VTT.canvasEngine;
+                const grid = canvasEngine.getGrid();
+                const mouse = canvasEngine.getCanvasMouseCoords(e);
+                const cardWidth = Math.round(140 * grid.scale);
+                const cardHeight = Math.round(210 * grid.scale);
+                const token = {
+                    id: `token_card_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
+                    name: data.name || 'Card',
+                    x: mouse.x - cardWidth / 2,
+                    y: mouse.y - cardHeight / 2,
+                    hp: 0,
+                    maxHp: 0,
+                    size: 1,
+                    pixelWidth: cardWidth,
+                    pixelHeight: cardHeight,
+                    img: data.frontImg || data.img,
+                    tokenImages: [
+                        { url: data.frontImg || data.img, name: `${data.name || 'Card'} (Face)` },
+                        {
+                            url: data.backImg || data.deckBackImg || 'favicon.svg',
+                            name: `${data.deckName || 'Deck'} (Back)`
+                        }
+                    ],
+                    activeTokenIndex: 0,
+                    isAsset: true,
+                    isBorderless: false,
+                    isCardToken: true,
+                    cardId: data.cardId,
+                    deckId: data.deckId,
+                    isPlayer: false,
+                    layer: canvasEngine.getActiveLayer() || 'map',
+                    imgRadius: '6px'
+                };
+                canvasEngine.addToken(token);
+                if (window.VTT.toast) window.VTT.toast(`Placed card "${token.name}" on canvas.`);
             }
         } catch (err) {
             console.error('Drop failed:', err);
@@ -1489,7 +1693,10 @@ export function initVttDataBridge(vtt) {
             };
         }
 
-        const hp = monster.hp || calculateMonsterHp(monster);
+        const dropConfig = getTokenDropConfig('bestiary', vtt);
+        const hpEval = evaluateMonsterHp(monster.monsterData || monster, dropConfig.hpMode);
+        const hp = hpEval.hp;
+        const maxHp = hpEval.maxHp;
         const size = translateSizeCategory(monster.sizeCategory || monster.size);
         let imageUrl = monster.tokenImg;
         if (!imageUrl && monster.tokenImages && monster.tokenImages.length > 0) {
@@ -1517,18 +1724,26 @@ export function initVttDataBridge(vtt) {
         let targetLayer = canvasEngine.getActiveLayer();
         if (targetLayer !== 'gm') targetLayer = 'token';
 
+        const tokenName = dropConfig.autoNumberDuplicates
+            ? resolveDuplicateTokenName(monster.name, canvasEngine.getTokens ? canvasEngine.getTokens() : {})
+            : monster.name;
+        const ringColor = resolveDispositionColor(dropConfig.dispositionRing, dropConfig.customRingColor);
+        const sightRange = dropConfig.importSenses !== false ? parseMonsterVision(monster.monsterData || monster) : 5;
+
         const token = {
             id: `token_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
-            name: monster.name,
+            name: tokenName,
             x: mouse.x - sizePx / 2,
             y: mouse.y - sizePx / 2,
             hp: hp,
-            maxHp: hp,
+            maxHp: maxHp,
             size: size,
-            sightRange: parseMonsterVision(monster.monsterData || monster),
+            sightRange: sightRange,
             img: imageUrl,
             isPlayer: false,
             layer: targetLayer,
+            hidden: !!dropConfig.defaultHidden,
+            ringColor: ringColor || null,
             isBorderless: true,
             monsterData: monster.monsterData || monster
         };
@@ -1538,6 +1753,16 @@ export function initVttDataBridge(vtt) {
         token.y = snap.y;
 
         canvasEngine.addToken(token);
+
+        if (hpEval.rollDetails && dropConfig.showHpRollInChat && window.VTT?.socket) {
+            const formula = hpEval.rollDetails.formula || '';
+            const rollsStr = hpEval.rollDetails.rolls ? `[${hpEval.rollDetails.rolls.join(', ')}]` : '';
+            window.VTT.socket.emit('chat:msg', {
+                text: `🎲 **Rolled HP for ${token.name}**: \`${formula}\` ${rollsStr} = **${token.hp} HP**`,
+                whisperTo: 'GM'
+            });
+        }
+        maybeAutoRollInitiative(token, token.monsterData || monster.monsterData || monster, dropConfig);
 
         // Asynchronously hydrate token.monsterData with full normalized creature if needed
         const source = monster.source || monster.monsterData?.source;
@@ -1572,14 +1797,35 @@ export function initVttDataBridge(vtt) {
 
         const grid = canvasEngine.getGrid();
         const isGeneric = npc.isGeneric === true;
+        const dropConfig = getTokenDropConfig('customNpc', vtt);
+
         const size =
             npc.tokenSize !== undefined
                 ? npc.tokenSize
                 : npc.monsterData
                   ? translateSizeCategory(npc.monsterData.size)
                   : 1;
-        const hp = isGeneric ? npc.hpMax || calculateMonsterHp(npc.monsterData) : npc.hpCurrent;
-        const maxHp = npc.hpMax || calculateMonsterHp(npc.monsterData);
+
+        let hp = isGeneric ? npc.hpMax || calculateMonsterHp(npc.monsterData) : npc.hpCurrent;
+        let maxHp = npc.hpMax || calculateMonsterHp(npc.monsterData);
+        let hpEval = null;
+        if (dropConfig.hpMode !== 'average' || isGeneric) {
+            hpEval = evaluateMonsterHp(npc.monsterData || npc, dropConfig.hpMode);
+            hp = hpEval.hp;
+            maxHp = hpEval.maxHp;
+        }
+
+        const sightRange =
+            dropConfig.importSenses === false
+                ? 5
+                : npc.tokenSight !== undefined && npc.tokenSight > 0
+                  ? npc.tokenSight
+                  : parseMonsterVision(npc.monsterData);
+
+        const tokenName = dropConfig.autoNumberDuplicates
+            ? resolveDuplicateTokenName(npc.name, canvasEngine.getTokens ? canvasEngine.getTokens() : {})
+            : npc.name;
+        const ringColor = resolveDispositionColor(dropConfig.dispositionRing, dropConfig.customRingColor);
 
         let tokenImg = null;
         if (npc.tokenImages && npc.tokenImages.length > 0 && npc.activeTokenIndex !== -1) {
@@ -1610,7 +1856,7 @@ export function initVttDataBridge(vtt) {
 
         const token = {
             id: isGeneric ? `token_${Date.now()}_${Math.random().toString(36).substr(2, 5)}` : `token_${npc.id}`,
-            name: npc.name,
+            name: tokenName,
             x: mouse.x - sizePx / 2,
             y: mouse.y - sizePx / 2,
             hp: hp,
@@ -1622,12 +1868,11 @@ export function initVttDataBridge(vtt) {
             isGeneric: isGeneric,
             isCustomNpc: true,
             isPlayer: false,
-            sightRange:
-                npc.tokenSight !== undefined && npc.tokenSight > 0
-                    ? npc.tokenSight
-                    : parseMonsterVision(npc.monsterData),
+            sightRange: sightRange,
             img: tokenImg,
             layer: targetLayer,
+            hidden: !!dropConfig.defaultHidden,
+            ringColor: ringColor || null,
             isBorderless: true,
             monsterData: npc.monsterData ? JSON.parse(JSON.stringify(npc.monsterData)) : null
         };
@@ -1637,6 +1882,16 @@ export function initVttDataBridge(vtt) {
         token.y = snap.y;
 
         canvasEngine.addToken(token);
+
+        if (hpEval?.rollDetails && dropConfig.showHpRollInChat && window.VTT?.socket) {
+            const formula = hpEval.rollDetails.formula || '';
+            const rollsStr = hpEval.rollDetails.rolls ? `[${hpEval.rollDetails.rolls.join(', ')}]` : '';
+            window.VTT.socket.emit('chat:msg', {
+                text: `🎲 **Rolled HP for ${token.name}**: \`${formula}\` ${rollsStr} = **${token.hp} HP**`,
+                whisperTo: 'GM'
+            });
+        }
+        maybeAutoRollInitiative(token, token.monsterData || npc.monsterData || npc, dropConfig);
 
         if (window.VTT?.mobileAdapter?.closeAllDrawers) {
             window.VTT.mobileAdapter.closeAllDrawers();
@@ -1708,13 +1963,44 @@ export function initVttDataBridge(vtt) {
         if (targetLayer !== 'gm') targetLayer = 'token';
 
         const isCompanion = !!char.isCompanion;
+        const dropConfig = isCompanion ? getTokenDropConfig('companion', vtt) : null;
+
+        let hp = char.hpCurrent || 0;
+        let maxHp = char.hpMax || 0;
+        let hpEval = null;
+        if (dropConfig && dropConfig.hpMode !== 'average') {
+            hpEval = evaluateMonsterHp(char.monsterData || char, dropConfig.hpMode);
+            hp = hpEval.hp;
+            maxHp = hpEval.maxHp;
+        }
+
+        let sightRange =
+            char.tokenSight !== undefined && char.tokenSight > 0
+                ? char.tokenSight
+                : char.monsterData
+                  ? parseMonsterVision(char.monsterData)
+                  : isCompanion
+                    ? 5
+                    : 60;
+        if (dropConfig && dropConfig.importSenses === false) {
+            sightRange = 5;
+        }
+
+        const tokenName = dropConfig?.autoNumberDuplicates
+            ? resolveDuplicateTokenName(char.name, canvasEngine.getTokens ? canvasEngine.getTokens() : {})
+            : char.name;
+        const ringColor = dropConfig
+            ? resolveDispositionColor(dropConfig.dispositionRing, dropConfig.customRingColor)
+            : null;
+        const hidden = dropConfig ? !!dropConfig.defaultHidden : false;
+
         const token = {
             id: `token_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
-            name: char.name,
+            name: tokenName,
             x: mouse.x - sizePx / 2,
             y: mouse.y - sizePx / 2,
-            hp: char.hpCurrent || 0,
-            maxHp: char.hpMax || 0,
+            hp: hp,
+            maxHp: maxHp,
             tempHp: char.tempHp || 0,
             size: size,
             customWidth: char.tokenCustomWidth,
@@ -1723,16 +2009,11 @@ export function initVttDataBridge(vtt) {
             sourceCharacterId: char.id,
             isCompanion: isCompanion,
             isPlayer: !isCompanion && !char.isCustomNpc,
-            sightRange:
-                char.tokenSight !== undefined && char.tokenSight > 0
-                    ? char.tokenSight
-                    : char.monsterData
-                      ? parseMonsterVision(char.monsterData)
-                      : isCompanion
-                        ? 5
-                        : 60,
+            sightRange: sightRange,
             img: tokenImg,
             layer: targetLayer,
+            hidden: hidden,
+            ringColor: ringColor || null,
             isBorderless: true,
             monsterData: char.monsterData ? JSON.parse(JSON.stringify(char.monsterData)) : null
         };
@@ -1742,6 +2023,16 @@ export function initVttDataBridge(vtt) {
         token.y = snap.y;
 
         canvasEngine.addToken(token);
+
+        if (hpEval?.rollDetails && dropConfig?.showHpRollInChat && window.VTT?.socket) {
+            const formula = hpEval.rollDetails.formula || '';
+            const rollsStr = hpEval.rollDetails.rolls ? `[${hpEval.rollDetails.rolls.join(', ')}]` : '';
+            window.VTT.socket.emit('chat:msg', {
+                text: `🎲 **Rolled HP for ${token.name}**: \`${formula}\` ${rollsStr} = **${token.hp} HP**`,
+                whisperTo: 'GM'
+            });
+        }
+        maybeAutoRollInitiative(token, token.monsterData || char.monsterData || char, dropConfig);
 
         if (window.VTT?.mobileAdapter?.closeAllDrawers) {
             window.VTT.mobileAdapter.closeAllDrawers();
@@ -2697,7 +2988,185 @@ export function initVttDataBridge(vtt) {
     const spawnCharacterAtCoords = (c, x, y) => spawnCharacterAtCenter(c, x, y);
     const spawnAssetAtCoords = (a, x, y) => spawnAssetAtCenter(a, x, y);
 
+    function initTokenDropSettingsModal() {
+        const modal = document.getElementById('modal-token-drop-settings');
+        if (!modal || typeof modal.querySelectorAll !== 'function') return;
+
+        const btnBestiary = document.getElementById('btn-bestiary-token-settings');
+        const btnCustomNpc = document.getElementById('btn-custom-npc-token-settings');
+        const btnCompanion = document.getElementById('btn-companion-token-settings');
+
+        const btnClose = document.getElementById('btn-close-token-drop-settings');
+        const btnCancel = document.getElementById('btn-cancel-token-drop-settings');
+        const btnSave = document.getElementById('btn-save-token-drop-settings');
+        const btnReset = document.getElementById('btn-reset-token-drop-settings');
+
+        const tabBtns = modal.querySelectorAll('.token-drop-tab-btn');
+        const panels = modal.querySelectorAll('.token-drop-panel');
+
+        function switchTab(section) {
+            tabBtns.forEach((btn) => {
+                const isActive = btn.dataset.tab === section;
+                btn.classList.toggle('active', isActive);
+                btn.style.borderBottom = isActive ? '2px solid var(--color-gold-base)' : '2px solid transparent';
+                btn.style.color = isActive ? 'var(--color-text-primary)' : 'var(--color-text-secondary)';
+            });
+            panels.forEach((p) => {
+                const isActive = p.dataset.panel === section;
+                p.classList.toggle('vtt-hidden', !isActive);
+            });
+        }
+
+        function syncUIFromConfig(config) {
+            ['bestiary', 'customNpc', 'companion'].forEach((sec) => {
+                const secConf = (config && config[sec]) || DEFAULT_TOKEN_DROP_CONFIG[sec];
+
+                const hpModeEl = document.getElementById(`td-${sec}-hp-mode`);
+                if (hpModeEl) hpModeEl.value = secConf.hpMode || 'average';
+
+                const hpChatEl = document.getElementById(`td-${sec}-hp-chat`);
+                if (hpChatEl) hpChatEl.checked = !!secConf.showHpRollInChat;
+
+                const sensesEl = document.getElementById(`td-${sec}-import-senses`);
+                if (sensesEl) sensesEl.checked = secConf.importSenses !== false;
+
+                const autonumberEl = document.getElementById(`td-${sec}-autonumber`);
+                if (autonumberEl) autonumberEl.checked = !!secConf.autoNumberDuplicates;
+
+                const hiddenEl = document.getElementById(`td-${sec}-hidden`);
+                if (hiddenEl) hiddenEl.checked = !!secConf.defaultHidden;
+
+                const autoInitEl = document.getElementById(`td-${sec}-auto-init`);
+                const initWrapEl = document.getElementById(`td-${sec}-init-trigger-wrap`);
+                if (autoInitEl) {
+                    autoInitEl.checked = !!secConf.autoRollInitiative;
+                    if (initWrapEl) initWrapEl.style.display = autoInitEl.checked ? 'block' : 'none';
+                }
+
+                const initTriggerEl = document.getElementById(`td-${sec}-init-trigger`);
+                if (initTriggerEl) initTriggerEl.value = secConf.initiativeTrigger || 'combat_active';
+
+                const dispositionEl = document.getElementById(`td-${sec}-disposition`);
+                const customWrapEl = document.getElementById(`td-${sec}-custom-color-wrap`);
+                if (dispositionEl) {
+                    dispositionEl.value = secConf.dispositionRing || 'none';
+                    if (customWrapEl) customWrapEl.style.display = dispositionEl.value === 'custom' ? 'flex' : 'none';
+                }
+
+                const customColorEl = document.getElementById(`td-${sec}-custom-color`);
+                if (customColorEl && secConf.customRingColor) {
+                    customColorEl.value = secConf.customRingColor;
+                }
+            });
+        }
+
+        function openModal(defaultSection = 'bestiary') {
+            const currentConfig = getTokenDropConfig(null, vtt);
+            syncUIFromConfig(currentConfig);
+            switchTab(defaultSection);
+            modal.classList.remove('vtt-hidden');
+        }
+
+        function closeModal() {
+            modal.classList.add('vtt-hidden');
+        }
+
+        // Attach openers
+        if (btnBestiary) btnBestiary.addEventListener('click', () => openModal('bestiary'));
+        if (btnCustomNpc) btnCustomNpc.addEventListener('click', () => openModal('customNpc'));
+        if (btnCompanion) btnCompanion.addEventListener('click', () => openModal('companion'));
+
+        // Attach tab switches
+        tabBtns.forEach((btn) => {
+            btn.addEventListener('click', () => {
+                switchTab(btn.dataset.tab);
+            });
+        });
+
+        // Dynamic change toggles
+        ['bestiary', 'customNpc', 'companion'].forEach((sec) => {
+            const autoInitEl = document.getElementById(`td-${sec}-auto-init`);
+            const initWrapEl = document.getElementById(`td-${sec}-init-trigger-wrap`);
+            if (autoInitEl && initWrapEl) {
+                autoInitEl.addEventListener('change', () => {
+                    initWrapEl.style.display = autoInitEl.checked ? 'block' : 'none';
+                });
+            }
+
+            const dispositionEl = document.getElementById(`td-${sec}-disposition`);
+            const customWrapEl = document.getElementById(`td-${sec}-custom-color-wrap`);
+            if (dispositionEl && customWrapEl) {
+                dispositionEl.addEventListener('change', () => {
+                    customWrapEl.style.display = dispositionEl.value === 'custom' ? 'flex' : 'none';
+                });
+            }
+        });
+
+        // Save
+        if (btnSave) {
+            btnSave.addEventListener('click', () => {
+                const newConfig = {
+                    bestiary: {},
+                    customNpc: {},
+                    companion: {}
+                };
+
+                ['bestiary', 'customNpc', 'companion'].forEach((sec) => {
+                    const hpModeEl = document.getElementById(`td-${sec}-hp-mode`);
+                    const hpChatEl = document.getElementById(`td-${sec}-hp-chat`);
+                    const sensesEl = document.getElementById(`td-${sec}-import-senses`);
+                    const autonumberEl = document.getElementById(`td-${sec}-autonumber`);
+                    const hiddenEl = document.getElementById(`td-${sec}-hidden`);
+                    const autoInitEl = document.getElementById(`td-${sec}-auto-init`);
+                    const initTriggerEl = document.getElementById(`td-${sec}-init-trigger`);
+                    const dispositionEl = document.getElementById(`td-${sec}-disposition`);
+                    const customColorEl = document.getElementById(`td-${sec}-custom-color`);
+
+                    newConfig[sec] = {
+                        hpMode: hpModeEl ? hpModeEl.value : 'average',
+                        showHpRollInChat: hpChatEl ? hpChatEl.checked : false,
+                        importSenses: sensesEl ? sensesEl.checked : true,
+                        autoNumberDuplicates: autonumberEl ? autonumberEl.checked : false,
+                        defaultHidden: hiddenEl ? hiddenEl.checked : false,
+                        autoRollInitiative: autoInitEl ? autoInitEl.checked : false,
+                        initiativeTrigger: initTriggerEl ? initTriggerEl.value : 'combat_active',
+                        dispositionRing: dispositionEl ? dispositionEl.value : 'none',
+                        customRingColor: customColorEl ? customColorEl.value : '#ef4444'
+                    };
+                });
+
+                saveTokenDropConfig(newConfig, vtt);
+                closeModal();
+                if (window.VTT?.toast) {
+                    window.VTT.toast('Token drop settings saved');
+                }
+            });
+        }
+
+        // Reset
+        if (btnReset) {
+            btnReset.addEventListener('click', () => {
+                if (confirm('Reset token drop customization settings to defaults?')) {
+                    syncUIFromConfig(DEFAULT_TOKEN_DROP_CONFIG);
+                    saveTokenDropConfig(DEFAULT_TOKEN_DROP_CONFIG, vtt);
+                    if (window.VTT?.toast) {
+                        window.VTT.toast('Token drop settings reset to defaults');
+                    }
+                }
+            });
+        }
+
+        // Close/Cancel
+        if (btnClose) btnClose.addEventListener('click', closeModal);
+        if (btnCancel) btnCancel.addEventListener('click', closeModal);
+    }
+
+    initTokenDropSettingsModal();
+
     window.VTT = window.VTT || {};
+    window.VTT.initTokenDropSettingsModal = initTokenDropSettingsModal;
+    window.VTT.getTokenDropConfig = (sec) => getTokenDropConfig(sec, vtt);
+    window.VTT.saveTokenDropConfig = (cfg) => saveTokenDropConfig(cfg, vtt);
     window.VTT.spawnMonsterAtCenter = spawnMonsterAtCenter;
     window.VTT.spawnCustomNpcAtCenter = spawnCustomNpcAtCenter;
     window.VTT.spawnCharacterAtCenter = spawnCharacterAtCenter;

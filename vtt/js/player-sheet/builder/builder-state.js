@@ -481,7 +481,7 @@ export const MULTICLASS_PROFICIENCIES = {
         armor: [],
         weapons: ['Simple Weapons', 'Shortswords'],
         skills: { count: 0, from: [] },
-        tools: ['One type of artisan\'s tools or one musical instrument']
+        tools: ["One type of artisan's tools or one musical instrument"]
     },
     paladin: {
         armor: ['Light Armor', 'Medium Armor', 'Shields'],
@@ -494,7 +494,16 @@ export const MULTICLASS_PROFICIENCIES = {
         weapons: ['Simple Weapons', 'Martial Weapons'],
         skills: {
             count: 1,
-            from: ['Animal Handling', 'Athletics', 'Insight', 'Investigation', 'Nature', 'Perception', 'Stealth', 'Survival']
+            from: [
+                'Animal Handling',
+                'Athletics',
+                'Insight',
+                'Investigation',
+                'Nature',
+                'Perception',
+                'Stealth',
+                'Survival'
+            ]
         },
         tools: []
     },
@@ -503,9 +512,21 @@ export const MULTICLASS_PROFICIENCIES = {
         weapons: [],
         skills: {
             count: 1,
-            from: ['Acrobatics', 'Athletics', 'Deception', 'Insight', 'Intimidation', 'Investigation', 'Perception', 'Performance', 'Persuasion', 'Sleight of Hand', 'Stealth']
+            from: [
+                'Acrobatics',
+                'Athletics',
+                'Deception',
+                'Insight',
+                'Intimidation',
+                'Investigation',
+                'Perception',
+                'Performance',
+                'Persuasion',
+                'Sleight of Hand',
+                'Stealth'
+            ]
         },
-        tools: ['Thieves\' tools']
+        tools: ["Thieves' tools"]
     },
     sorcerer: {
         armor: [],

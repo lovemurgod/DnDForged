@@ -3,7 +3,10 @@ import assert from 'node:assert/strict';
 import {
     generateDamageTypeSVG,
     spawnProceduralCombatFX,
-    DAMAGE_TYPE_COLORS
+    DAMAGE_TYPE_COLORS,
+    MAX_CONCURRENT_PROCEDURAL_FX,
+    getActiveProceduralFxCount,
+    resetProceduralFxQueue
 } from '../vtt/js/canvas/tokens/vtt-canvas-procedural-fx.js';
 import {
     triggerDamageFXAnimation,
@@ -47,9 +50,22 @@ describe('Procedural Vector Damage FX & SVG Engine', () => {
 
     it('All procedural damage types eliminate drop-shadow filters entirely for 60fps mobile compositing', () => {
         const types = [
-            'fire', 'cold', 'lightning', 'thunder', 'acid', 'poison',
-            'radiant', 'necrotic', 'force', 'psychic', 'slashing',
-            'piercing', 'bludgeoning', 'untyped', 'heal', 'temphp'
+            'fire',
+            'cold',
+            'lightning',
+            'thunder',
+            'acid',
+            'poison',
+            'radiant',
+            'necrotic',
+            'force',
+            'psychic',
+            'slashing',
+            'piercing',
+            'bludgeoning',
+            'untyped',
+            'heal',
+            'temphp'
         ];
         for (const t of types) {
             const svg = generateDamageTypeSVG(t, 25);
@@ -212,11 +228,48 @@ describe('Procedural Vector Damage FX & SVG Engine', () => {
 
     it('triggerHealingFXAnimation dispatches healing life bloom without violent shudder', () => {
         appendedChildren = [];
+        resetProceduralFxQueue();
         triggerHealingFXAnimation(120, 180, 25, 14, { tokenId: 'tok_heal' });
 
         assert.ok(appendedChildren.length >= 1);
         const container = appendedChildren.find((el) => el.className.includes('vtt-procedural-fx-container'));
         assert.ok(container);
         assert.ok(container.innerHTML.includes('vtt-sparkle-float'));
+    });
+
+    it('spawnProceduralCombatFX caps concurrent DOM elements at MAX_CONCURRENT_PROCEDURAL_FX (6) and queues surplus', () => {
+        appendedChildren = [];
+        resetProceduralFxQueue();
+
+        // Spawn 10 simultaneous combat FX
+        for (let i = 0; i < 10; i++) {
+            spawnProceduralCombatFX(100 + i * 10, 100, 25, ['fire'], { tokenId: `tok_${i}` });
+        }
+
+        // Exactly MAX_CONCURRENT_PROCEDURAL_FX (6) should be mounted
+        assert.equal(appendedChildren.length, MAX_CONCURRENT_PROCEDURAL_FX);
+        assert.equal(getActiveProceduralFxCount(), MAX_CONCURRENT_PROCEDURAL_FX);
+
+        // When one finishes and triggers animationend, next queued item mounts
+        const first = appendedChildren[0];
+        if (typeof first.onanimationend === 'function') {
+            first.onanimationend();
+        }
+
+        // Now container 7 has mounted to keep count at 6
+        assert.equal(appendedChildren.length, MAX_CONCURRENT_PROCEDURAL_FX);
+        assert.equal(getActiveProceduralFxCount(), MAX_CONCURRENT_PROCEDURAL_FX);
+
+        // Clean up all remaining
+        while (appendedChildren.length > 0) {
+            const el = appendedChildren[0];
+            if (typeof el.onanimationend === 'function') {
+                el.onanimationend();
+            } else {
+                el.remove();
+            }
+        }
+
+        assert.equal(getActiveProceduralFxCount(), 0);
     });
 });

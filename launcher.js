@@ -74,6 +74,44 @@ function isPortActive(port) {
   });
 }
 
+async function findAvailablePort(startPort, maxAttempts = 50) {
+  let port = parseInt(startPort, 10) || DEFAULT_PORT;
+  for (let i = 0; i < maxAttempts; i++) {
+    const candidate = port + i;
+    const active = await isPortActive(candidate);
+    if (!active) {
+      const isBindable = await new Promise((resolve) => {
+        const srv = net.createServer();
+        srv.once('error', () => resolve(false));
+        srv.once('listening', () => {
+          srv.close(() => resolve(true));
+        });
+        srv.listen(candidate, '127.0.0.1');
+      });
+      if (isBindable) return candidate;
+    }
+  }
+  return port;
+}
+
+function getRequestedPort(appConfig) {
+  const args = process.argv.slice(2);
+  const portArgIdx = args.findIndex(a => a === '--port' || a === '-p');
+  if (portArgIdx !== -1 && args[portArgIdx + 1]) {
+    const p = parseInt(args[portArgIdx + 1], 10);
+    if (!isNaN(p) && p >= 1024 && p <= 65535) return p;
+  }
+  if (process.env.PORT) {
+    const p = parseInt(process.env.PORT, 10);
+    if (!isNaN(p) && p >= 1024 && p <= 65535) return p;
+  }
+  if (appConfig?.serverPort) {
+    const p = parseInt(appConfig.serverPort, 10);
+    if (!isNaN(p) && p >= 1024 && p <= 65535) return p;
+  }
+  return DEFAULT_PORT;
+}
+
 function isValidTunnelToken(str) {
   if (!str || typeof str !== 'string') return false;
   const trimmed = str.trim();
@@ -168,15 +206,43 @@ async function main() {
   const hostname = subdomain === '@' ? 'forgedvtt.com' : `${subdomain}.forgedvtt.com`;
   const registeredUrl = `https://${hostname}`;
 
-  const alreadyRunning = await isPortActive(DEFAULT_PORT);
+  const requestedPort = getRequestedPort(appConfig);
+  let activePort = requestedPort;
+  const isOccupied = await isPortActive(requestedPort);
   let serverProcess = null;
 
-  if (alreadyRunning) {
-    console.log(`\nℹ️  ForgeDVTT server is already active on port ${DEFAULT_PORT}. Reusing existing instance.`);
-  } else {
-    console.log('\n🚀 Starting local ForgeDVTT Node server...');
+  if (isOccupied) {
+    let isForgeD = false;
+    try {
+      const res = await fetch(`http://127.0.0.1:${requestedPort}/api/server/data-dir`, {
+        signal: AbortSignal.timeout(1000)
+      });
+      if (res.ok) isForgeD = true;
+    } catch (e) {}
+
+    if (isForgeD) {
+      console.log(`\nℹ️  ForgeDVTT server is already active on port ${requestedPort}. Reusing existing instance.`);
+    } else {
+      const autoAssign = appConfig?.autoAssignPort !== false || process.argv.includes('--auto-port');
+      if (autoAssign) {
+        activePort = await findAvailablePort(requestedPort + 1);
+        console.log(`\n⚠️  Port ${requestedPort} is busy. Auto-assigning next free port: ${activePort}.`);
+      } else {
+        console.error(`\n❌ [Server Error] Port ${requestedPort} is already in use by another application.`);
+        console.error(`   Specify a different port via '--port <n>' or free port ${requestedPort}.\n`);
+        process.exit(1);
+      }
+    }
+  }
+
+  if (!isOccupied || activePort !== requestedPort) {
+    console.log(`\n🚀 Starting local ForgeDVTT Node server on port ${activePort}...`);
     serverProcess = spawn(process.execPath, ['server.js'], {
       cwd: __dirname,
+      env: {
+        ...process.env,
+        PORT: String(activePort)
+      },
       stdio: 'inherit'
     });
     serverProcess.on('error', (err) => {
@@ -195,7 +261,7 @@ async function main() {
   } else if (fs.existsSync(localConfig)) {
     tunnelArgs.push('--config', localConfig, 'tunnel', 'run');
   } else {
-    tunnelArgs.push('tunnel', '--url', `http://127.0.0.1:${DEFAULT_PORT}`);
+    tunnelArgs.push('tunnel', '--url', `http://127.0.0.1:${activePort}`);
   }
 
   const tunnelCwd = path.dirname(cloudflaredBin);
@@ -212,7 +278,7 @@ async function main() {
   console.log('   🎉  YOUR FORGEDVTT GAME IS ONLINE!');
   console.log(`   🌐  Selected Game URL: ${registeredUrl}/vtt.html`);
   console.log(`   🌐  Portal / Launcher: https://forgedvtt.com/`);
-  console.log(`   💻  Local Access:      http://localhost:${DEFAULT_PORT}/`);
+  console.log(`   💻  Local Access:      http://localhost:${activePort}/`);
   console.log('   🔒  Subdomain Isolation: ACTIVE');
   console.log('======================================================');
   console.log('\n💡 Tip: Any subdomain (e.g. mygame.forgedvtt.com) automatically loads');

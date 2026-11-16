@@ -4,8 +4,6 @@
  * and GM password gate dialog for ForgeDVTT.
  */
 
-import { vttAuthHeaders } from './vtt-globals.js';
-
 export function showLoginError(msg) {
     if (typeof document === 'undefined') return;
     const loginErrorBanner = document.getElementById('login-error-banner');
@@ -59,51 +57,67 @@ export function resetBtnJoin() {
 }
 
 export async function fetchActiveCampaigns(campaignSelect) {
-    if (!campaignSelect || typeof fetch === 'undefined') return;
-    try {
-        const res = await fetch('/api/campaigns', {
-            headers: {
-                'Bypass-Tunnel-Reminder': 'true',
-                'ngrok-skip-browser-warning': 'true'
-            }
-        });
-        if (res.ok) {
-            const contentType = res.headers.get('content-type');
-            if (contentType && contentType.indexOf('application/json') !== -1) {
-                const data = await res.json();
-                const list = Array.isArray(data) ? data : data.campaigns || [];
-                const activeSubdomain = !Array.isArray(data) ? data.activeSubdomain : null;
+    if (!campaignSelect) {
+        throw new Error('Campaign selector is unavailable.');
+    }
+    if (typeof fetch === 'undefined') {
+        throw new Error('Campaign service is unavailable.');
+    }
 
-                campaignSelect.innerHTML = '';
-                if (list.length === 0) {
-                    const opt = document.createElement('option');
-                    opt.value = 'default';
-                    opt.textContent = 'Default Campaign';
-                    campaignSelect.appendChild(opt);
-                } else {
-                    list.forEach((c) => {
-                        const opt = document.createElement('option');
-                        opt.value = c.id;
-                        opt.textContent = c.name;
-                        opt.title = c.name;
-                        campaignSelect.appendChild(opt);
-                    });
-                    if (activeSubdomain) {
-                        const matchedOpt = Array.from(campaignSelect.options).find((o) => o.value === activeSubdomain);
-                        if (matchedOpt) {
-                            campaignSelect.value = activeSubdomain;
-                        }
-                    }
-                    campaignSelect.title = campaignSelect.options[campaignSelect.selectedIndex]?.text || '';
-                    campaignSelect.addEventListener('change', () => {
-                        campaignSelect.title = campaignSelect.options[campaignSelect.selectedIndex]?.text || '';
-                    });
-                }
+    const res = await fetch('/api/campaigns', {
+        headers: {
+            'Bypass-Tunnel-Reminder': 'true',
+            'ngrok-skip-browser-warning': 'true'
+        }
+    });
+    if (!res.ok) {
+        throw new Error(`Campaign request failed with status ${res.status}.`);
+    }
+
+    const contentType = res.headers?.get?.('content-type') || '';
+    if (!contentType.includes('application/json')) {
+        throw new Error('Campaign response was not JSON.');
+    }
+
+    const data = await res.json();
+    const list = Array.isArray(data) ? data : data?.campaigns;
+    if (
+        !Array.isArray(list) ||
+        list.some(
+            (campaign) =>
+                !campaign ||
+                !['string', 'number'].includes(typeof campaign.id) ||
+                !String(campaign.id).trim() ||
+                typeof campaign.name !== 'string' ||
+                !campaign.name.trim()
+        )
+    ) {
+        throw new Error('Campaign response has an invalid format.');
+    }
+
+    const activeSubdomain = !Array.isArray(data) ? data.activeSubdomain : null;
+    campaignSelect.innerHTML = '';
+    if (list.length === 0) {
+        const opt = document.createElement('option');
+        opt.value = 'default';
+        opt.textContent = 'Default Campaign';
+        campaignSelect.appendChild(opt);
+    } else {
+        list.forEach((campaign) => {
+            const opt = document.createElement('option');
+            opt.value = String(campaign.id);
+            opt.textContent = campaign.name;
+            opt.title = campaign.name;
+            campaignSelect.appendChild(opt);
+        });
+        if (activeSubdomain) {
+            const matchedOpt = Array.from(campaignSelect.options).find((o) => o.value === activeSubdomain);
+            if (matchedOpt) {
+                campaignSelect.value = activeSubdomain;
             }
         }
-    } catch (e) {
-        console.warn('Could not query campaigns list, defaulting', e);
     }
+    campaignSelect.title = campaignSelect.options[campaignSelect.selectedIndex]?.text || '';
 }
 
 export function setupLoginHandlers(callbacks = {}) {
@@ -113,51 +127,66 @@ export function setupLoginHandlers(callbacks = {}) {
     const usernameInput = document.getElementById('login-username');
     const roleSelect = document.getElementById('login-role');
     const campaignSelect = document.getElementById('login-campaign');
-    const btnCreateCamp = document.getElementById('btn-create-campaign');
     const rememberCb = document.getElementById('login-remember');
+    const campaignLoadError = document.getElementById('campaign-load-error');
+    const btnRetryCampaigns = document.getElementById('btn-retry-campaigns');
+    let cancelGmPasswordConnection = null;
+    let campaignsLoaded = false;
+    let campaignLoadPromise = null;
 
     usernameInput?.addEventListener('input', clearLoginError);
     roleSelect?.addEventListener('change', clearLoginError);
-    campaignSelect?.addEventListener('change', clearLoginError);
+    campaignSelect?.addEventListener('change', () => {
+        clearLoginError();
+        campaignSelect.title = campaignSelect.options[campaignSelect.selectedIndex]?.text || '';
+    });
 
     // Restore saved credentials
     restoreRememberedCredentials();
 
-    // Query active campaigns list on backend
-    if (campaignSelect) {
-        fetchActiveCampaigns(campaignSelect);
-    }
+    const loadCampaigns = () => {
+        if (!campaignSelect) return Promise.resolve(false);
+        if (campaignLoadPromise) return campaignLoadPromise;
 
-    // Create campaign modal handling
-    const modalCreate = document.getElementById('modal-create-campaign');
-    const newCampName = document.getElementById('new-campaign-name');
-    if (btnCreateCamp) btnCreateCamp.addEventListener('click', () => modalCreate?.classList.remove('vtt-hidden'));
-    document
-        .getElementById('btn-modal-cancel')
-        ?.addEventListener('click', () => modalCreate?.classList.add('vtt-hidden'));
-    document.getElementById('btn-modal-submit')?.addEventListener('click', async () => {
-        const name = newCampName?.value?.trim();
-        if (!name) return alert('Please enter a campaign name');
-        try {
-            const res = await fetch('/api/campaigns', {
-                method: 'POST',
-                headers: vttAuthHeaders({ 'Content-Type': 'application/json' }),
-                body: JSON.stringify({ name })
-            });
-            if (res.ok) {
-                const camp = await res.json();
-                const opt = document.createElement('option');
-                opt.value = camp.id;
-                opt.textContent = camp.name;
-                campaignSelect?.appendChild(opt);
-                if (campaignSelect) campaignSelect.value = camp.id;
-                if (newCampName) newCampName.value = '';
-                modalCreate?.classList.add('vtt-hidden');
-            }
-        } catch (e) {
-            alert('Error creating campaign: ' + e.message);
+        campaignsLoaded = false;
+        campaignSelect.disabled = true;
+        campaignSelect.innerHTML = '';
+        campaignLoadError?.classList.add('vtt-hidden');
+        if (btnJoin) {
+            btnJoin.disabled = true;
+            btnJoin.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Loading campaigns...';
         }
+        if (btnRetryCampaigns) btnRetryCampaigns.disabled = true;
+
+        campaignLoadPromise = (async () => {
+            try {
+                await fetchActiveCampaigns(campaignSelect);
+                campaignsLoaded = true;
+                campaignLoadError?.classList.add('vtt-hidden');
+                clearLoginError();
+            } catch (err) {
+                console.warn('Could not query campaigns list:', err);
+                campaignSelect.innerHTML = '';
+                campaignSelect.title = '';
+                campaignLoadError?.classList.remove('vtt-hidden');
+            } finally {
+                campaignSelect.disabled = !campaignsLoaded;
+                if (btnJoin) {
+                    btnJoin.disabled = !campaignsLoaded;
+                    btnJoin.innerHTML = '<i class="fa-solid fa-door-open"></i> Enter Tabletop';
+                }
+                if (btnRetryCampaigns) btnRetryCampaigns.disabled = false;
+                campaignLoadPromise = null;
+            }
+            return campaignsLoaded;
+        })();
+        return campaignLoadPromise;
+    };
+
+    btnRetryCampaigns?.addEventListener('click', () => {
+        loadCampaigns();
     });
+    loadCampaigns();
 
     const modalGmPassword = document.getElementById('modal-gm-password');
     const inputGmPassword = document.getElementById('input-gm-password');
@@ -180,6 +209,8 @@ export function setupLoginHandlers(callbacks = {}) {
 
     if (btnCancelGmPassword) {
         btnCancelGmPassword.addEventListener('click', () => {
+            cancelGmPasswordConnection?.();
+            cancelGmPasswordConnection = null;
             modalGmPassword?.classList.add('vtt-hidden');
             resetBtnJoin();
         });
@@ -187,6 +218,10 @@ export function setupLoginHandlers(callbacks = {}) {
 
     const executeJoinGame = async () => {
         clearLoginError();
+        if (!campaignsLoaded) {
+            showLoginError('Campaigns must load successfully before you can join.');
+            return;
+        }
         let username = usernameInput ? usernameInput.value.trim() : '';
         const role = roleSelect ? roleSelect.value : 'GM';
         const campaignId = campaignSelect && campaignSelect.value ? campaignSelect.value : 'default';
@@ -241,41 +276,50 @@ export function setupLoginHandlers(callbacks = {}) {
         // If joining as GM, verify if server requires password verification
         if (role === 'GM') {
             try {
+                if (typeof fetch === 'undefined') {
+                    throw new Error('GM verification service is unavailable.');
+                }
                 const checkRes = await fetch(`/api/gm-auth-required?username=${encodeURIComponent(username)}`);
-                if (checkRes.ok) {
-                    const authInfo = await checkRes.json();
-                    if (authInfo.required && authInfo.hasPassword) {
-                        // Prompt the "Password?" dialogue box
-                        if (modalGmPassword) {
-                            modalGmPassword.classList.remove('vtt-hidden');
-                            if (inputGmPassword) {
-                                inputGmPassword.value = '';
-                                inputGmPassword.focus();
-                            }
-                            if (gmPasswordError) gmPasswordError.style.display = 'none';
-
-                            const submitHandler = () => {
-                                const pw = inputGmPassword ? inputGmPassword.value : '';
-                                if (btnSubmitGmPassword) {
-                                    btnSubmitGmPassword.disabled = true;
-                                    btnSubmitGmPassword.innerHTML =
-                                        '<i class="fa-solid fa-spinner fa-spin"></i> Validating...';
-                                }
-                                callbacks.onStartSocketConnection?.(campaignId, username, role, pw);
-                            };
-
-                            if (btnSubmitGmPassword) btnSubmitGmPassword.onclick = submitHandler;
-                            if (inputGmPassword) {
-                                inputGmPassword.onkeydown = (e) => {
-                                    if (e.key === 'Enter') submitHandler();
-                                };
-                            }
-                            return;
-                        }
+                if (!checkRes.ok) {
+                    throw new Error(`GM verification request failed with status ${checkRes.status}.`);
+                }
+                const authInfo = await checkRes.json();
+                if (!authInfo || typeof authInfo.required !== 'boolean' || typeof authInfo.hasPassword !== 'boolean') {
+                    throw new Error('GM verification response has an invalid format.');
+                }
+                if (authInfo.required && authInfo.hasPassword) {
+                    if (!modalGmPassword || !btnSubmitGmPassword) {
+                        throw new Error('GM password dialog is unavailable.');
                     }
+                    modalGmPassword.classList.remove('vtt-hidden');
+                    if (inputGmPassword) {
+                        inputGmPassword.value = '';
+                        inputGmPassword.focus();
+                    }
+                    if (gmPasswordError) gmPasswordError.style.display = 'none';
+
+                    const submitHandler = () => {
+                        const pw = inputGmPassword ? inputGmPassword.value : '';
+                        if (btnSubmitGmPassword) {
+                            btnSubmitGmPassword.disabled = true;
+                            btnSubmitGmPassword.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Validating...';
+                        }
+                        cancelGmPasswordConnection =
+                            callbacks.onStartSocketConnection?.(campaignId, username, role, pw) || null;
+                    };
+
+                    btnSubmitGmPassword.onclick = submitHandler;
+                    if (inputGmPassword) {
+                        inputGmPassword.onkeydown = (e) => {
+                            if (e.key === 'Enter') submitHandler();
+                        };
+                    }
+                    return;
                 }
             } catch (e) {
                 console.warn('Could not check GM auth requirement:', e);
+                showLoginError('Unable to verify GM requirements right now. Please try again.');
+                return;
             }
         }
 

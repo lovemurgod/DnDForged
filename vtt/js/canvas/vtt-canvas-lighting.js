@@ -356,7 +356,7 @@ export function setupLightingPanelControls(state = {}, callbacks = {}) {
                         l.animationSpeed = parseFloat(document.getElementById('light-speed')?.value) || 1.0;
                         l.animationIntensity = parseFloat(document.getElementById('light-intensity')?.value) || 0.1;
                         l.animationColor2 = document.getElementById('light-color2')?.value || '#ffe082';
-                        
+
                         if (socket) {
                             if (lightUpdateDebounceTimer) clearTimeout(lightUpdateDebounceTimer);
                             lightUpdateDebounceTimer = setTimeout(() => {

@@ -477,6 +477,10 @@ export function loadDatabase() {
                 c.knownPlayers = [];
                 migrated = true;
             }
+            if (!c.rollTables) {
+                c.rollTables = { tables: [], assetTables: [], decks: [] };
+                migrated = true;
+            }
         });
         if (migrated) {
             saveCampaigns(true);

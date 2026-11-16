@@ -8,6 +8,7 @@ import { spawn, execFileSync, execSync } from 'child_process';
 import net from 'net';
 import crypto from 'crypto';
 import { SourceManager } from './source-manager.js';
+import { isRoll20CharacterJson, convertRoll20Character } from './importers/roll20-importer.js';
 import { createCampaignTemplate, hashPassword } from '../utils.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -37,6 +38,10 @@ app.commandLine.appendSwitch('enable-zero-copy');
 app.commandLine.appendSwitch('ignore-gpu-blocklist');
 
 const DEFAULT_PORT = 5050;
+let activePort = DEFAULT_PORT;
+function getServerPort() {
+    return activePort || appConfig.serverPort || DEFAULT_PORT;
+}
 
 // Configuration persistence
 const configFilePath = path.join(app.getPath('userData'), 'forge-config.json');
@@ -51,6 +56,8 @@ function internalHeaders(extra = {}) {
 }
 
 let appConfig = {
+    serverPort: 5050,
+    autoAssignPort: true,
     campaignDataDir: path.join(app.getPath('userData'), '.dndforged-data'),
     backupsDir: path.join(app.getPath('documents'), 'ForgeDVTT-Backups'),
     hostingMode: 'forgedvtt', // 'forgedvtt' | 'custom'
@@ -69,6 +76,18 @@ function loadConfig() {
         if (fs.existsSync(configFilePath)) {
             const parsed = JSON.parse(fs.readFileSync(configFilePath, 'utf8'));
             appConfig = { ...appConfig, ...parsed };
+            if (parsed.serverPort) {
+                const p = parseInt(parsed.serverPort, 10);
+                if (!isNaN(p) && p >= 1024 && p <= 65535) {
+                    appConfig.serverPort = p;
+                } else {
+                    appConfig.serverPort = DEFAULT_PORT;
+                }
+            }
+            if (parsed.autoAssignPort !== undefined) {
+                appConfig.autoAssignPort = Boolean(parsed.autoAssignPort);
+            }
+            activePort = appConfig.serverPort || DEFAULT_PORT;
         }
     } catch (err) {
         console.error('Error loading config:', err);
@@ -167,7 +186,7 @@ function getCloudflaredPath() {
             .toString()
             .trim();
         if (output) return output.split('\r\n')[0].split('\n')[0];
-    } catch (e) { }
+    } catch (e) {}
 
     return null;
 }
@@ -214,9 +233,29 @@ function isPortActive(port) {
     });
 }
 
+async function findAvailablePort(startPort, maxAttempts = 50) {
+    let port = parseInt(startPort, 10) || DEFAULT_PORT;
+    for (let i = 0; i < maxAttempts; i++) {
+        const candidate = port + i;
+        const active = await isPortActive(candidate);
+        if (!active) {
+            const isBindable = await new Promise((resolve) => {
+                const srv = net.createServer();
+                srv.once('error', () => resolve(false));
+                srv.once('listening', () => {
+                    srv.close(() => resolve(true));
+                });
+                srv.listen(candidate, '127.0.0.1');
+            });
+            if (isBindable) return candidate;
+        }
+    }
+    return port;
+}
+
 async function syncConfigToServer() {
     try {
-        await fetch(`http://127.0.0.1:${DEFAULT_PORT}/api/server/sync-config`, {
+        await fetch(`http://127.0.0.1:${getServerPort()}/api/server/sync-config`, {
             method: 'POST',
             headers: internalHeaders({ 'Content-Type': 'application/json' }),
             body: JSON.stringify({
@@ -224,20 +263,20 @@ async function syncConfigToServer() {
                 campaignDataDir: appConfig.campaignDataDir
             })
         });
-    } catch (e) { }
+    } catch (e) {}
     await syncSourcesToServer();
 }
 
 async function syncSourcesToServer() {
     try {
-        await fetch(`http://127.0.0.1:${DEFAULT_PORT}/api/server/sync-sources`, {
+        await fetch(`http://127.0.0.1:${getServerPort()}/api/server/sync-sources`, {
             method: 'POST',
             headers: internalHeaders({ 'Content-Type': 'application/json' }),
             body: JSON.stringify({
                 disabledSources: sourceManager.config.disabledSources
             })
         });
-    } catch (e) { }
+    } catch (e) {}
 }
 
 async function isServerReady(port) {
@@ -246,7 +285,7 @@ async function isServerReady(port) {
             signal: AbortSignal.timeout(1000)
         });
         if (res.ok) return true;
-    } catch (e) { }
+    } catch (e) {}
     return false;
 }
 
@@ -256,20 +295,41 @@ async function startServer() {
         return true;
     }
 
-    const active = await isPortActive(DEFAULT_PORT);
+    const requestedPort = parseInt(appConfig.serverPort, 10) || DEFAULT_PORT;
+    let targetPort = requestedPort;
+
+    const active = await isPortActive(targetPort);
     if (active) {
-        const ready = await isServerReady(DEFAULT_PORT);
+        const ready = await isServerReady(targetPort);
         if (ready) {
-            appendLog(`Server already active on port ${DEFAULT_PORT} (external process). Attaching...`);
+            appendLog(`Server already active on port ${targetPort} (external process). Attaching...`);
+            activePort = targetPort;
+            registeredUrl = `http://localhost:${targetPort}`;
             isServerRunning = true;
             isServerManaged = false;
             await syncConfigToServer();
             notifyStatusChange();
             return true;
         }
+
+        // Port is occupied but not responding as ForgeDVTT
+        if (appConfig.autoAssignPort !== false) {
+            const nextFree = await findAvailablePort(targetPort + 1);
+            appendLog(`[Server Notice] Port ${targetPort} is occupied. Auto-assigning next free port: ${nextFree}.`);
+            targetPort = nextFree;
+        } else {
+            appendLog(
+                `[Server Error] Port ${targetPort} is already in use by another application. Free the port or enable Auto-assign in Server Settings.`
+            );
+            isServerRunning = false;
+            notifyStatusChange();
+            return false;
+        }
     }
 
-    appendLog('Starting ForgeDVTT local Node server process...');
+    activePort = targetPort;
+    registeredUrl = `http://localhost:${targetPort}`;
+    appendLog(`Starting ForgeDVTT local Node server process on port ${targetPort}...`);
     let serverScript = path.join(rootDir, 'server.js');
     let workingDir = rootDir;
 
@@ -291,6 +351,7 @@ async function startServer() {
             cwd: workingDir,
             env: {
                 ...process.env,
+                PORT: String(targetPort),
                 ELECTRON_RUN_AS_NODE: '1',
                 FORGEDVTT_DATA_DIR: appConfig.campaignDataDir,
                 FORGEDVTT_CONFIG_FILE: configFilePath,
@@ -333,9 +394,9 @@ async function startServer() {
 
     while (Date.now() - startTime < timeoutMs) {
         if (processExitedEarly) break;
-        const portActive = await isPortActive(DEFAULT_PORT);
+        const portActive = await isPortActive(targetPort);
         if (portActive) {
-            const ready = await isServerReady(DEFAULT_PORT);
+            const ready = await isServerReady(targetPort);
             if (ready) {
                 serverConfirmed = true;
                 break;
@@ -348,16 +409,21 @@ async function startServer() {
     serverProcess.removeListener('error', onEarlyError);
 
     if (!serverConfirmed || processExitedEarly) {
-        const reason = spawnError
-            ? spawnError.message
-            : processExitedEarly
-                ? `Server process exited prematurely with code ${earlyExitCode}`
-                : `Server did not become ready within ${timeoutMs / 1000} seconds`;
+        let reason = spawnError ? spawnError.message : '';
+        if (processExitedEarly) {
+            if (earlyExitCode === 98) {
+                reason = `Port ${targetPort} is already in use (EADDRINUSE).`;
+            } else {
+                reason = `Server process exited prematurely with code ${earlyExitCode}`;
+            }
+        } else if (!serverConfirmed) {
+            reason = `Server did not become ready on port ${targetPort} within ${timeoutMs / 1000} seconds`;
+        }
         appendLog(`[Server Error] Startup failed: ${reason}`);
         if (serverProcess) {
             try {
                 serverProcess.kill();
-            } catch (e) { }
+            } catch (e) {}
             serverProcess = null;
         }
         isServerRunning = false;
@@ -387,7 +453,7 @@ async function stopServer() {
         const proc = serverProcess;
         // 1. Attempt graceful shutdown via local HTTP endpoint
         try {
-            const shutdownPromise = fetch(`http://127.0.0.1:${DEFAULT_PORT}/api/server/shutdown`, {
+            const shutdownPromise = fetch(`http://127.0.0.1:${getServerPort()}/api/server/shutdown`, {
                 method: 'POST',
                 headers: internalHeaders({ 'Content-Type': 'application/json' })
             });
@@ -413,7 +479,7 @@ async function stopServer() {
                         isDone = true;
                         try {
                             proc.kill();
-                        } catch { }
+                        } catch {}
                         resolve();
                     }
                 }, 1500);
@@ -463,11 +529,11 @@ async function startTunnel(params = {}) {
     }
 
     // Ensure server is running and verified healthy
-    const serverHealthy = await isServerReady(DEFAULT_PORT);
+    const serverHealthy = await isServerReady(getServerPort());
     if (!serverHealthy) {
         appendLog('[Tunnel] Local server not responding or not started. Attempting to start server...');
         const started = await startServer();
-        if (!started || !(await isServerReady(DEFAULT_PORT))) {
+        if (!started || !(await isServerReady(getServerPort()))) {
             appendLog('[Tunnel Error] Aborting tunnel start because local server failed to start or is not healthy.');
             return { success: false, error: 'Local server failed to start or is not healthy' };
         }
@@ -491,16 +557,15 @@ async function startTunnel(params = {}) {
         if (fs.existsSync(localConfig)) {
             tunnelArgs.push('--config', localConfig, 'tunnel', 'run');
         } else {
-            tunnelArgs.push('tunnel', '--url', `http://127.0.0.1:${DEFAULT_PORT}`);
+            tunnelArgs.push('tunnel', '--url', `http://127.0.0.1:${getServerPort()}`);
         }
     }
 
     // In packaged ASAR builds, rootDir points into app.asar which is a virtual archive,
     // not a physical filesystem directory. Spawning an external OS binary with cwd inside
     // an .asar archive fails with ENOENT in libuv CreateProcess.
-    const tunnelCwd = app.isPackaged || rootDir.includes('app.asar')
-        ? (process.resourcesPath || path.dirname(cloudflared))
-        : rootDir;
+    const tunnelCwd =
+        app.isPackaged || rootDir.includes('app.asar') ? process.resourcesPath || path.dirname(cloudflared) : rootDir;
 
     try {
         tunnelProcess = spawn(cloudflared, tunnelArgs, {
@@ -561,7 +626,7 @@ function stopTunnel() {
         tunnelProcess = null;
     }
     isTunnelRunning = false;
-    registeredUrl = `http://localhost:${DEFAULT_PORT}`;
+    registeredUrl = `http://localhost:${getServerPort()}`;
     notifyStatusChange();
 }
 
@@ -573,17 +638,20 @@ function notifyStatusChange() {
 }
 
 function getStatusPayload() {
+    const port = getServerPort();
     return {
         isServerRunning,
         isServerManaged,
         isTunnelRunning,
-        port: DEFAULT_PORT,
+        port,
+        configuredPort: appConfig.serverPort || DEFAULT_PORT,
+        autoAssignPort: appConfig.autoAssignPort !== false,
         subdomain: currentSubdomain,
         hostingMode: appConfig.hostingMode || 'forgedvtt',
         customDomain: appConfig.customDomain || '',
         tunnelToken: appConfig.tunnelToken || '',
         registeredUrl,
-        localUrl: `http://localhost:${DEFAULT_PORT}`,
+        localUrl: `http://localhost:${port}`,
         dataDir: appConfig.campaignDataDir,
         backupsDir: appConfig.backupsDir,
         cloudflaredAvailable: !!getCloudflaredPath(),
@@ -676,7 +744,7 @@ function updateTrayMenu() {
         {
             label: 'Open VTT in Default Browser',
             click: async () => {
-                shell.openExternal(`http://localhost:${DEFAULT_PORT}/vtt/index.html`);
+                shell.openExternal(`http://localhost:${getServerPort()}/vtt/index.html`);
             }
         },
         { type: 'separator' },
@@ -720,7 +788,7 @@ function updateTrayMenu() {
 
 function openVTTWindow() {
     if (session.defaultSession) {
-        session.defaultSession.clearCache().catch(() => { });
+        session.defaultSession.clearCache().catch(() => {});
     }
     const vttWin = new BrowserWindow({
         width: 1400,
@@ -735,12 +803,42 @@ function openVTTWindow() {
     });
 
     vttWin.setMenuBarVisibility(false);
-    vttWin.loadURL(`http://localhost:${DEFAULT_PORT}/vtt/index.html`);
+    vttWin.loadURL(`http://localhost:${getServerPort()}/vtt/index.html`);
 }
 
 // Register IPC Handlers
 ipcMain.handle('get-status', () => getStatusPayload());
 ipcMain.handle('get-logs', () => consoleLogs);
+ipcMain.handle('config-update-port', async (_, { port, autoAssign }) => {
+    let changed = false;
+    if (port !== undefined) {
+        const parsed = parseInt(port, 10);
+        if (Number.isInteger(parsed) && parsed >= 1024 && parsed <= 65535) {
+            appConfig.serverPort = parsed;
+            if (!isServerRunning) {
+                activePort = parsed;
+                registeredUrl = `http://localhost:${parsed}`;
+            }
+            changed = true;
+        } else {
+            return { success: false, error: 'Port must be an integer between 1024 and 65535' };
+        }
+    }
+    if (autoAssign !== undefined) {
+        appConfig.autoAssignPort = Boolean(autoAssign);
+        changed = true;
+    }
+    if (changed) {
+        saveConfig();
+        notifyStatusChange();
+    }
+    return {
+        success: true,
+        port: getServerPort(),
+        configuredPort: appConfig.serverPort || DEFAULT_PORT,
+        autoAssign: appConfig.autoAssignPort !== false
+    };
+});
 ipcMain.handle('start-server', async () => await startServer());
 ipcMain.handle('stop-server', async () => await stopServer());
 ipcMain.handle('start-tunnel', async (_, params = {}) => {
@@ -757,7 +855,7 @@ ipcMain.handle('open-vtt-browser', async (_, url) => {
     if (!isServerRunning) {
         await startServer();
     }
-    const targetUrl = url || `http://localhost:${DEFAULT_PORT}/vtt/index.html`;
+    const targetUrl = url || `http://localhost:${getServerPort()}/vtt/index.html`;
     try {
         const parsed = new URL(targetUrl);
         if (parsed.protocol === 'http:' || parsed.protocol === 'https:') {
@@ -799,7 +897,7 @@ ipcMain.handle('select-data-folder', async () => {
             const files = fs.readdirSync(oldDir);
             oldHasData = files.some((f) => f === 'campaigns.json' || f === 'uploads' || f === 'chat-log.json');
         }
-    } catch (e) { }
+    } catch (e) {}
 
     let imported = false;
     if (oldHasData) {
@@ -839,7 +937,7 @@ ipcMain.handle('select-data-folder', async () => {
 
     // Seamlessly notify server process if running
     try {
-        await fetch(`http://127.0.0.1:${DEFAULT_PORT}/api/server/data-dir`, {
+        await fetch(`http://127.0.0.1:${getServerPort()}/api/server/data-dir`, {
             method: 'POST',
             headers: internalHeaders({ 'Content-Type': 'application/json' }),
             body: JSON.stringify({ dataDir: newDir })
@@ -1038,12 +1136,12 @@ async function restoreBackupFromFile(targetFile) {
 
         // Notify server to re-read or sync database
         try {
-            await fetch(`http://127.0.0.1:${DEFAULT_PORT}/api/server/data-dir`, {
+            await fetch(`http://127.0.0.1:${getServerPort()}/api/server/data-dir`, {
                 method: 'POST',
                 headers: internalHeaders({ 'Content-Type': 'application/json' }),
                 body: JSON.stringify({ dataDir: appConfig.campaignDataDir })
             });
-        } catch (e) { }
+        } catch (e) {}
 
         appendLog(`[Restore] Successfully restored ${restoredCount} campaign(s) and assets from ${targetFile}`);
         notifyStatusChange();
@@ -1054,7 +1152,7 @@ async function restoreBackupFromFile(targetFile) {
     } finally {
         try {
             fs.rmSync(tempDir, { recursive: true, force: true });
-        } catch (e) { }
+        } catch (e) {}
     }
 }
 
@@ -1184,7 +1282,7 @@ ipcMain.handle('backup-campaign', async () => {
     } finally {
         try {
             fs.rmSync(tempDir, { recursive: true, force: true });
-        } catch (e) { }
+        } catch (e) {}
     }
 });
 
@@ -1245,7 +1343,7 @@ ipcMain.handle('set-gm-credentials', async (_, { username, password, clearPasswo
 
     // Notify running server
     try {
-        await fetch(`http://127.0.0.1:${DEFAULT_PORT}/api/server/sync-config`, {
+        await fetch(`http://127.0.0.1:${getServerPort()}/api/server/sync-config`, {
             method: 'POST',
             headers: internalHeaders({ 'Content-Type': 'application/json' }),
             body: JSON.stringify({ gmCredentials: appConfig.gmCredentials })
@@ -1255,7 +1353,7 @@ ipcMain.handle('set-gm-credentials', async (_, { username, password, clearPasswo
                 ? `[GM Security] Updated master GM credentials for username "${cleanUsername}".`
                 : `[GM Security] Removed master GM password for username "${cleanUsername}".`
         );
-    } catch (e) { }
+    } catch (e) {}
 
     notifyStatusChange();
     return { success: true, username: cleanUsername, hasPassword: !!hash };
@@ -1264,14 +1362,14 @@ ipcMain.handle('set-gm-credentials', async (_, { username, password, clearPasswo
 // Campaign Management IPC (for GM Dashboard)
 ipcMain.handle('gm-get-campaigns', async () => {
     try {
-        const res = await fetch(`http://127.0.0.1:${DEFAULT_PORT}/api/campaigns`, {
+        const res = await fetch(`http://127.0.0.1:${getServerPort()}/api/campaigns`, {
             headers: internalHeaders()
         });
         if (res.ok) {
             const data = await res.json();
             return { success: true, campaigns: data.campaigns || [] };
         }
-    } catch (e) { }
+    } catch (e) {}
 
     // Fallback to local file
     try {
@@ -1289,20 +1387,20 @@ ipcMain.handle('gm-get-campaigns', async () => {
             }));
             return { success: true, campaigns: list };
         }
-    } catch (e) { }
+    } catch (e) {}
     return { success: true, campaigns: [] };
 });
 
 ipcMain.handle('gm-get-campaign-details', async (_, campId) => {
     try {
-        const res = await fetch(`http://127.0.0.1:${DEFAULT_PORT}/api/campaigns/${campId}`, {
+        const res = await fetch(`http://127.0.0.1:${getServerPort()}/api/campaigns/${campId}`, {
             headers: internalHeaders()
         });
         if (res.ok) {
             const data = await res.json();
             return { success: true, campaign: data };
         }
-    } catch (e) { }
+    } catch (e) {}
 
     // Fallback to local file
     try {
@@ -1313,13 +1411,13 @@ ipcMain.handle('gm-get-campaign-details', async (_, campId) => {
                 return { success: true, campaign: data[campId] };
             }
         }
-    } catch (e) { }
+    } catch (e) {}
     return { success: false, error: 'Campaign not found' };
 });
 
 ipcMain.handle('gm-save-campaign', async (_, campaignData) => {
     try {
-        const res = await fetch(`http://127.0.0.1:${DEFAULT_PORT}/api/campaigns/${campaignData.id}`, {
+        const res = await fetch(`http://127.0.0.1:${getServerPort()}/api/campaigns/${campaignData.id}`, {
             method: 'PUT',
             headers: internalHeaders({ 'Content-Type': 'application/json' }),
             body: JSON.stringify(campaignData)
@@ -1330,7 +1428,7 @@ ipcMain.handle('gm-save-campaign', async (_, campaignData) => {
         }
         const err = await res.json();
         return { success: false, error: err.error || 'Failed to save campaign' };
-    } catch (e) { }
+    } catch (e) {}
 
     // Fallback to direct local file
     try {
@@ -1354,7 +1452,7 @@ ipcMain.handle('gm-save-campaign', async (_, campaignData) => {
 
 ipcMain.handle('gm-create-campaign', async (_, newCampData) => {
     try {
-        const res = await fetch(`http://127.0.0.1:${DEFAULT_PORT}/api/campaigns`, {
+        const res = await fetch(`http://127.0.0.1:${getServerPort()}/api/campaigns`, {
             method: 'POST',
             headers: internalHeaders({ 'Content-Type': 'application/json' }),
             body: JSON.stringify(newCampData)
@@ -1365,19 +1463,25 @@ ipcMain.handle('gm-create-campaign', async (_, newCampData) => {
         }
         const err = await res.json();
         return { success: false, error: err.error || 'Failed to create campaign' };
-    } catch (e) { }
+    } catch (e) {}
 
     // Fallback to direct local file
     try {
         const { name, description, allowedUsers } = newCampData || {};
         if (!name || !name.trim()) return { success: false, error: 'Campaign name required' };
-        const id = name.trim().toLowerCase().replace(/[^a-z0-9]/gi, '_') + '_' + Date.now();
+        const id =
+            name
+                .trim()
+                .toLowerCase()
+                .replace(/[^a-z0-9]/gi, '_') +
+            '_' +
+            Date.now();
         const campFile = path.join(appConfig.campaignDataDir, 'campaigns.json');
         let all = {};
         if (fs.existsSync(campFile)) {
             try {
                 all = JSON.parse(fs.readFileSync(campFile, 'utf8'));
-            } catch (_) { }
+            } catch (_) {}
         }
         const newCamp = createCampaignTemplate(id, name.trim());
         if (description) newCamp.description = description;
@@ -1392,7 +1496,7 @@ ipcMain.handle('gm-create-campaign', async (_, newCampData) => {
 
 ipcMain.handle('gm-delete-campaign', async (_, campId) => {
     try {
-        const res = await fetch(`http://127.0.0.1:${DEFAULT_PORT}/api/campaigns/${campId}`, {
+        const res = await fetch(`http://127.0.0.1:${getServerPort()}/api/campaigns/${campId}`, {
             method: 'DELETE',
             headers: internalHeaders()
         });
@@ -1401,7 +1505,7 @@ ipcMain.handle('gm-delete-campaign', async (_, campId) => {
         }
         const err = await res.json();
         return { success: false, error: err.error || 'Failed to delete campaign' };
-    } catch (e) { }
+    } catch (e) {}
 
     // Fallback to direct local file
     try {
@@ -1425,17 +1529,20 @@ ipcMain.handle('gm-delete-campaign', async (_, campId) => {
 
 ipcMain.handle('gm-delete-entity', async (_, { campaignId, entityType, entityId }) => {
     try {
-        const res = await fetch(`http://127.0.0.1:${DEFAULT_PORT}/api/campaigns/${campaignId}/entities/${entityId}`, {
-            method: 'DELETE',
-            headers: internalHeaders()
-        });
+        const res = await fetch(
+            `http://127.0.0.1:${getServerPort()}/api/campaigns/${campaignId}/entities/${entityId}`,
+            {
+                method: 'DELETE',
+                headers: internalHeaders()
+            }
+        );
         if (res.ok) {
             const data = await res.json();
             return { success: true, deletedId: entityId, entityType: data.entityType || entityType };
         }
         const err = await res.json();
         return { success: false, error: err.error || 'Failed to delete entity' };
-    } catch (e) { }
+    } catch (e) {}
 
     // Fallback to direct local file
     try {
@@ -1508,14 +1615,15 @@ function unpackZipArchive(zipFilePath, targetDir) {
 function findReferencedUploads(dataObj) {
     const fileNames = new Set();
     const jsonStr = JSON.stringify(dataObj);
-    const regex = /(?:vtt-uploads|uploads|assets[/\\]tokens|tokens)[/\\]([^"'<>\r\n]+?\.(?:png|jpe?g|webp|svg|gif|mp3|ogg|wav|webm|mp4|json|m4a|opus))/gi;
+    const regex =
+        /(?:vtt-uploads|uploads|assets[/\\]tokens|tokens)[/\\]([^"'<>\r\n]+?\.(?:png|jpe?g|webp|svg|gif|mp3|ogg|wav|webm|mp4|json|m4a|opus))/gi;
     let match;
     while ((match = regex.exec(jsonStr)) !== null) {
         if (match[1]) {
             let fn = match[1];
             try {
                 fn = decodeURIComponent(fn);
-            } catch (_) { }
+            } catch (_) {}
             fn = path.basename(fn);
             if (fn) fileNames.add(fn);
         }
@@ -1574,7 +1682,7 @@ function unpackAssetsToCampaign(extractedAssetsDir, targetCampaignId, throwOnFai
                 if (!fs.existsSync(targetTokens)) fs.mkdirSync(targetTokens, { recursive: true });
                 try {
                     fs.copyFileSync(src, path.join(targetTokens, f));
-                } catch (_) { }
+                } catch (_) {}
             }
             count++;
         } catch (e) {
@@ -1590,7 +1698,7 @@ function unpackAssetsToCampaign(extractedAssetsDir, targetCampaignId, throwOnFai
 // Campaign Duplication IPC
 ipcMain.handle('gm-duplicate-campaign', async (_, campId) => {
     try {
-        const res = await fetch(`http://127.0.0.1:${DEFAULT_PORT}/api/campaigns/${campId}/duplicate`, {
+        const res = await fetch(`http://127.0.0.1:${getServerPort()}/api/campaigns/${campId}/duplicate`, {
             method: 'POST',
             headers: internalHeaders()
         });
@@ -1599,7 +1707,7 @@ ipcMain.handle('gm-duplicate-campaign', async (_, campId) => {
             appendLog(`[Campaigns] Duplicated campaign ${campId} -> ${data.campaign.name} (${data.campaign.id})`);
             return { success: true, campaign: data.campaign };
         }
-    } catch (e) { }
+    } catch (e) {}
 
     // Fallback to direct local file
     try {
@@ -1651,11 +1759,11 @@ ipcMain.handle('gm-export-campaign', async (_, campId) => {
     // 1. Fetch full campaign data
     let campaign = null;
     try {
-        const res = await fetch(`http://127.0.0.1:${DEFAULT_PORT}/api/campaigns/${campId}`, {
+        const res = await fetch(`http://127.0.0.1:${getServerPort()}/api/campaigns/${campId}`, {
             headers: internalHeaders()
         });
         if (res.ok) campaign = await res.json();
-    } catch (e) { }
+    } catch (e) {}
 
     if (!campaign) {
         try {
@@ -1664,7 +1772,7 @@ ipcMain.handle('gm-export-campaign', async (_, campId) => {
                 const all = JSON.parse(fs.readFileSync(campFile, 'utf8'));
                 campaign = all[campId];
             }
-        } catch (e) { }
+        } catch (e) {}
     }
 
     if (!campaign) return { success: false, error: 'Campaign not found' };
@@ -1676,7 +1784,7 @@ ipcMain.handle('gm-export-campaign', async (_, campId) => {
     if (!hasLocalUploads && fs.existsSync(campUploadsDir)) {
         try {
             hasLocalUploads = fs.readdirSync(campUploadsDir).length > 0;
-        } catch (e) { }
+        } catch (e) {}
     }
 
     const safeName = (campaign.name || 'Campaign').replace(/[^a-z0-9_\-]/gi, '_');
@@ -1733,7 +1841,7 @@ ipcMain.handle('gm-export-campaign', async (_, campId) => {
     } finally {
         try {
             fs.rmSync(tempDir, { recursive: true, force: true });
-        } catch (e) { }
+        } catch (e) {}
     }
 });
 
@@ -1813,13 +1921,13 @@ ipcMain.handle('gm-import-campaign', async (_, explicitFilePath) => {
 
         let saved = false;
         try {
-            const res = await fetch(`http://127.0.0.1:${DEFAULT_PORT}/api/campaigns/import`, {
+            const res = await fetch(`http://127.0.0.1:${getServerPort()}/api/campaigns/import`, {
                 method: 'POST',
                 headers: internalHeaders({ 'Content-Type': 'application/json' }),
                 body: JSON.stringify({ campaign: newCamp })
             });
             if (res.ok) saved = true;
-        } catch (e) { }
+        } catch (e) {}
 
         if (!saved) {
             const campFile = path.join(appConfig.campaignDataDir, 'campaigns.json');
@@ -1839,7 +1947,7 @@ ipcMain.handle('gm-import-campaign', async (_, explicitFilePath) => {
     } finally {
         try {
             fs.rmSync(tempDir, { recursive: true, force: true });
-        } catch (e) { }
+        } catch (e) {}
     }
 });
 
@@ -1849,11 +1957,11 @@ ipcMain.handle('gm-export-granular', async (_, { campaignId, entityType, entityI
 
     let campaign = null;
     try {
-        const res = await fetch(`http://127.0.0.1:${DEFAULT_PORT}/api/campaigns/${campaignId}`, {
+        const res = await fetch(`http://127.0.0.1:${getServerPort()}/api/campaigns/${campaignId}`, {
             headers: internalHeaders()
         });
         if (res.ok) campaign = await res.json();
-    } catch (e) { }
+    } catch (e) {}
 
     if (!campaign) {
         try {
@@ -1862,7 +1970,7 @@ ipcMain.handle('gm-export-granular', async (_, { campaignId, entityType, entityI
                 const all = JSON.parse(fs.readFileSync(campFile, 'utf8'));
                 campaign = all[campaignId];
             }
-        } catch (e) { }
+        } catch (e) {}
     }
 
     if (!campaign) return { success: false, error: 'Campaign not found' };
@@ -1984,14 +2092,19 @@ ipcMain.handle('gm-export-granular', async (_, { campaignId, entityType, entityI
     } finally {
         try {
             fs.rmSync(tempDir, { recursive: true, force: true });
-        } catch (e) { }
+        } catch (e) {}
     }
 });
 
 // Granular Entity Import IPC
 ipcMain.handle('gm-import-granular', async (_, { campaignId, explicitFilePath }) => {
-    let targetFile = explicitFilePath;
-    if (!targetFile) {
+    let targetFiles = explicitFilePath
+        ? Array.isArray(explicitFilePath)
+            ? explicitFilePath
+            : [explicitFilePath]
+        : null;
+
+    if (!targetFiles) {
         if (!mainWindow) return { canceled: true };
         const { canceled, filePaths } = await dialog.showOpenDialog(mainWindow, {
             title: 'Select Item to Import (*.zip, *.json)',
@@ -1999,12 +2112,155 @@ ipcMain.handle('gm-import-granular', async (_, { campaignId, explicitFilePath })
                 { name: 'ForgeDVTT Item (*.zip, *.json)', extensions: ['zip', 'json'] },
                 { name: 'All Files', extensions: ['*'] }
             ],
-            properties: ['openFile']
+            properties: ['openFile', 'multiSelections']
         });
         if (canceled || !filePaths || filePaths.length === 0) return { canceled: true };
-        targetFile = filePaths[0];
+        targetFiles = filePaths;
     }
 
+    if (targetFiles.length === 0) return { canceled: true };
+
+    // Check if any selected files are Roll20 character JSONs
+    const roll20Candidates = [];
+    const standardFiles = [];
+
+    for (const fPath of targetFiles) {
+        if (!fs.existsSync(fPath)) continue;
+        const ext = path.extname(fPath).toLowerCase();
+        if (ext === '.json') {
+            try {
+                const parsed = JSON.parse(fs.readFileSync(fPath, 'utf8'));
+                if (isRoll20CharacterJson(parsed)) {
+                    roll20Candidates.push({ filePath: fPath, data: parsed });
+                    continue;
+                }
+            } catch {}
+        }
+        standardFiles.push(fPath);
+    }
+
+    if (roll20Candidates.length > 0) {
+        const campFile = path.join(appConfig.campaignDataDir, 'campaigns.json');
+        let currentCamp = null;
+        let allCamps = null;
+        if (fs.existsSync(campFile)) {
+            try {
+                allCamps = JSON.parse(fs.readFileSync(campFile, 'utf8'));
+                currentCamp = allCamps[campaignId];
+            } catch {}
+        }
+
+        const convertedChars = [];
+        const uploadsDir = path.join(appConfig.campaignDataDir, 'campaigns', campaignId, 'uploads');
+
+        for (const item of roll20Candidates) {
+            try {
+                const rawCharName = (
+                    item.data.character?.attributes?.name ||
+                    item.data.character?.name ||
+                    item.data.name ||
+                    item.data.character?.attribs?.find((a) => a?.name === 'character_name')?.current ||
+                    'Imported Character'
+                ).trim();
+                let overwriteExistingId = null;
+
+                if (currentCamp && currentCamp.characters) {
+                    const existing = Object.entries(currentCamp.characters).find(
+                        ([, c]) => (c.name || '').trim().toLowerCase() === rawCharName.toLowerCase()
+                    );
+                    if (existing) {
+                        const [existingId] = existing;
+                        if (mainWindow) {
+                            const { response } = await dialog.showMessageBox(mainWindow, {
+                                type: 'question',
+                                buttons: ['Import as New Copy', 'Overwrite Existing', 'Skip'],
+                                defaultId: 0,
+                                cancelId: 2,
+                                title: 'Character Name Conflict',
+                                message: `A character named "${rawCharName}" already exists in this campaign.`,
+                                detail: 'Would you like to import this character as a new copy or overwrite the existing character?'
+                            });
+                            if (response === 2) {
+                                continue; // Skip
+                            } else if (response === 1) {
+                                overwriteExistingId = existingId;
+                            }
+                        }
+                    }
+                }
+
+                const converted = await convertRoll20Character(item.data, campaignId, {
+                    sourceManager,
+                    uploadsDir
+                });
+
+                if (overwriteExistingId) {
+                    converted.id = overwriteExistingId;
+                    converted.name = rawCharName;
+                    converted._overwrite = true;
+                } else if (
+                    currentCamp &&
+                    currentCamp.characters &&
+                    Object.values(currentCamp.characters).some(
+                        (c) => (c.name || '').trim().toLowerCase() === converted.name.trim().toLowerCase()
+                    )
+                ) {
+                    converted.name = `${converted.name} (Copy)`;
+                }
+
+                convertedChars.push(converted);
+            } catch (err) {
+                appendLog(`[Import Error] Failed importing Roll20 character "${item.filePath}": ${err.message}`);
+            }
+        }
+
+        if (convertedChars.length > 0) {
+            let resData = null;
+            try {
+                const res = await fetch(
+                    `http://127.0.0.1:${getServerPort()}/api/campaigns/${campaignId}/import-entity`,
+                    {
+                        method: 'POST',
+                        headers: internalHeaders({ 'Content-Type': 'application/json' }),
+                        body: JSON.stringify({ entityType: 'player', entities: convertedChars })
+                    }
+                );
+                if (res.ok) resData = await res.json();
+            } catch (e) {}
+
+            if (!resData && allCamps && currentCamp) {
+                if (!currentCamp.characters) currentCamp.characters = {};
+                for (const char of convertedChars) {
+                    const cleanChar = { ...char };
+                    delete cleanChar._overwrite;
+                    delete cleanChar.overwrite;
+                    currentCamp.characters[cleanChar.id] = cleanChar;
+                }
+                fs.writeFileSync(campFile, JSON.stringify(allCamps, null, 2), 'utf8');
+                resData = {
+                    success: true,
+                    count: convertedChars.length,
+                    importedIds: convertedChars.map((c) => c.id),
+                    campaign: currentCamp
+                };
+            }
+
+            if (resData && resData.success) {
+                appendLog(`[Import] Successfully imported ${resData.count} character(s) into campaign ${campaignId}`);
+                if (standardFiles.length === 0) {
+                    return resData;
+                }
+            }
+        } else if (standardFiles.length === 0) {
+            return { canceled: true };
+        }
+    }
+
+    if (standardFiles.length === 0) {
+        return { canceled: true };
+    }
+
+    const targetFile = standardFiles[0];
     if (!fs.existsSync(targetFile)) return { success: false, error: 'File not found' };
 
     const ext = path.extname(targetFile).toLowerCase();
@@ -2063,13 +2319,13 @@ ipcMain.handle('gm-import-granular', async (_, { campaignId, explicitFilePath })
 
         let resData = null;
         try {
-            const res = await fetch(`http://127.0.0.1:${DEFAULT_PORT}/api/campaigns/${campaignId}/import-entity`, {
+            const res = await fetch(`http://127.0.0.1:${getServerPort()}/api/campaigns/${campaignId}/import-entity`, {
                 method: 'POST',
                 headers: internalHeaders({ 'Content-Type': 'application/json' }),
                 body: JSON.stringify({ entityType, entities: items })
             });
             if (res.ok) resData = await res.json();
-        } catch (e) { }
+        } catch (e) {}
 
         if (!resData) {
             const campFile = path.join(appConfig.campaignDataDir, 'campaigns.json');
@@ -2120,7 +2376,7 @@ ipcMain.handle('gm-import-granular', async (_, { campaignId, explicitFilePath })
     } finally {
         try {
             fs.rmSync(tempDir, { recursive: true, force: true });
-        } catch (e) { }
+        } catch (e) {}
     }
 });
 

@@ -1390,13 +1390,19 @@ export function rollSpell(sp, slKey, casterObj = {}, options = {}) {
         }
         formula += atkToggleFormula;
 
+        const rawSpellGlobal = parseInt(casterObj.spellSettings?.critRange);
+        const globalSpellCrit = Math.max(1, Math.min(20, isNaN(rawSpellGlobal) ? 20 : rawSpellGlobal));
+        const rawSpellCrit = parseInt(sp.critRange);
+        const spellCrit = Math.max(1, Math.min(20, isNaN(rawSpellCrit) ? 20 : rawSpellCrit));
+        const spellCritRange = Math.min(spellCrit, globalSpellCrit);
+
         if (window.vttPlayerSheetAPI && window.vttPlayerSheetAPI.simulateRoll) {
-            atkRoll = window.vttPlayerSheetAPI.simulateRoll(formula);
+            atkRoll = window.vttPlayerSheetAPI.simulateRoll(formula, spellCritRange);
         } else if (typeof window !== 'undefined' && typeof window.simulateRoll === 'function') {
-            atkRoll = window.simulateRoll(formula);
+            atkRoll = window.simulateRoll(formula, spellCritRange);
         } else {
             const r = Math.floor(Math.random() * 20) + 1;
-            atkRoll = { total: r, rolls: [r], formula };
+            atkRoll = { total: r, rolls: [r], formula, isCritSuccess: r >= spellCritRange, isCritFail: r === 1 };
         }
     }
 
@@ -2031,6 +2037,10 @@ export function initVttSpellManager(vtt) {
                             <label>Add'l Dmg Mod</label>
                             <input type="number" id="modal-settings-dmg" value="0" style="width:100%;">
                         </div>
+                        <div class="form-group" style="flex:1; min-width:80px;">
+                            <label>Crit Threshold</label>
+                            <input type="number" id="modal-settings-crit-range" value="20" min="2" max="20" style="width:100%;">
+                        </div>
                     </div>
                     <div style="border-top:1px solid var(--color-border-subtle); padding-top:16px;">
                         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
@@ -2100,6 +2110,10 @@ export function initVttSpellManager(vtt) {
                         <div class="form-group" style="flex:1; min-width:100px;">
                             <label>Global DC Mod</label>
                             <input type="number" id="modal-attack-settings-dc" value="0" style="width:100%;">
+                        </div>
+                        <div class="form-group" style="flex:1; min-width:100px;">
+                            <label>Crit Threshold</label>
+                            <input type="number" id="modal-attack-settings-crit-range" value="20" min="2" max="20" style="width:100%;">
                         </div>
                     </div>
                     <div style="border-top:1px solid var(--color-border-subtle); padding-top:16px;">
@@ -4014,6 +4028,8 @@ export function initVttSpellManager(vtt) {
             currentChar.attackSettings.dmgMod =
                 parseInt(document.getElementById('modal-attack-settings-dmg').value) || 0;
             currentChar.attackSettings.dcMod = parseInt(document.getElementById('modal-attack-settings-dc').value) || 0;
+            const rawAtkCrit = parseInt(document.getElementById('modal-attack-settings-crit-range')?.value);
+            currentChar.attackSettings.critRange = Math.max(1, Math.min(20, isNaN(rawAtkCrit) ? 20 : rawAtkCrit));
             saveAndEmit(currentChar);
             renderSheetData(currentChar);
             document.getElementById('pc-attack-settings-modal').classList.add('vtt-hidden');
@@ -4070,6 +4086,8 @@ export function initVttSpellManager(vtt) {
             currentChar.spellSettings.atkMod = parseInt(document.getElementById('modal-settings-atk').value) || 0;
             currentChar.spellSettings.dcMod = parseInt(document.getElementById('modal-settings-dc').value) || 0;
             currentChar.spellSettings.dmgMod = parseInt(document.getElementById('modal-settings-dmg').value) || 0;
+            const rawSpellCrit = parseInt(document.getElementById('modal-settings-crit-range')?.value);
+            currentChar.spellSettings.critRange = Math.max(1, Math.min(20, isNaN(rawSpellCrit) ? 20 : rawSpellCrit));
             saveAndEmit(currentChar);
             renderSheetData(currentChar);
             document.getElementById('pc-spell-settings-modal').classList.add('vtt-hidden');

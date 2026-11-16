@@ -71,7 +71,7 @@ export function injectDiceChips(html) {
     return parts.join('');
 }
 
-export function simulateRoll(formula, critRange = 20, optEvent = null) {
+export function simulateRoll(formula, critRange = 20, optEvent = null, rollContext = {}) {
     if (!formula || typeof formula !== 'string') {
         return {
             formula: formula || '0',
@@ -80,31 +80,53 @@ export function simulateRoll(formula, critRange = 20, optEvent = null) {
             breakdownStr: '0',
             compactBreakdown: '0',
             isCritSuccess: false,
-            isCritFail: false
+            isCritFail: false,
+            rollMode: 'normal'
         };
     }
 
     let activeFormula = formula.trim();
     if (activeFormula.startsWith('+')) activeFormula = activeFormula.slice(1).trim();
 
+    const char =
+        rollContext.char ||
+        (typeof window !== 'undefined' && window.vttPlayerSheetAPI?.getCurrentCharacter?.()) ||
+        null;
+
     // Advantage / Disadvantage handling
     let isAdvantage = false;
     let isDisadvantage = false;
+    let rollMode = 'normal';
 
     if (activeFormula.match(/(?:^|[^0-9])(?:1)?d20/i)) {
-        let rollMode = 'normal';
-        try {
-            rollMode =
-                (window.VTT && window.VTT.currentRollMode) || localStorage.getItem('vtt_current_roll_mode') || 'normal';
-        } catch (e) {
-            rollMode = (window.VTT && window.VTT.currentRollMode) || 'normal';
+        if (char && char.activeRollMode) {
+            rollMode = char.activeRollMode;
+        } else if (rollContext.rollMode) {
+            rollMode = rollContext.rollMode;
+        } else {
+            try {
+                if (typeof window !== 'undefined') {
+                    rollMode =
+                        (window.VTT && window.VTT.currentRollMode) ||
+                        (typeof localStorage !== 'undefined' && localStorage.getItem('vtt_current_roll_mode')) ||
+                        'normal';
+                }
+            } catch (e) {
+                rollMode = 'normal';
+            }
         }
 
-        const evt = optEvent || window.event;
+        const evt = optEvent || (typeof window !== 'undefined' ? window.event : null);
         const isShift =
-            (evt && evt.shiftKey) || (typeof window.VTT_isShiftPressed === 'function' && window.VTT_isShiftPressed());
+            (evt && evt.shiftKey) ||
+            (typeof window !== 'undefined' &&
+                typeof window.VTT_isShiftPressed === 'function' &&
+                window.VTT_isShiftPressed());
         const isCtrl =
-            (evt && evt.ctrlKey) || (typeof window.VTT_isCtrlPressed === 'function' && window.VTT_isCtrlPressed());
+            (evt && evt.ctrlKey) ||
+            (typeof window !== 'undefined' &&
+                typeof window.VTT_isCtrlPressed === 'function' &&
+                window.VTT_isCtrlPressed());
 
         if (isShift) rollMode = 'adv';
         else if (isCtrl) rollMode = 'dis';
@@ -113,8 +135,38 @@ export function simulateRoll(formula, critRange = 20, optEvent = null) {
         if (rollMode === 'dis') isDisadvantage = true;
     }
 
-    if (isAdvantage) activeFormula = activeFormula.replace(/(^|[^0-9])(?:1)?d20/gi, '$12d20kh1');
-    if (isDisadvantage) activeFormula = activeFormula.replace(/(^|[^0-9])(?:1)?d20/gi, '$12d20kl1');
+    const isElvenAccuracy = Boolean(char?.settings?.elvenAccuracy);
+    const isHalflingLucky = Boolean(char?.settings?.halflingLucky);
+    const isAttackRoll = Boolean(
+        rollContext.isAttack ||
+        rollContext.type === 'attack' ||
+        activeFormula.match(/\[atk\]|\[attack\]/i) ||
+        (optEvent && (optEvent.target?.closest?.('.pc-macro-attack') || optEvent.target?.closest?.('.pc-weapon-roll')))
+    );
+
+    const useSuperAdvantage = isAdvantage && isElvenAccuracy && isAttackRoll;
+
+    if (useSuperAdvantage) {
+        if (isHalflingLucky) {
+            activeFormula = activeFormula.replace(/(^|[^0-9])(?:1)?d20/gi, '$13d20ro1kh1');
+        } else {
+            activeFormula = activeFormula.replace(/(^|[^0-9])(?:1)?d20/gi, '$13d20kh1');
+        }
+    } else if (isAdvantage) {
+        if (isHalflingLucky) {
+            activeFormula = activeFormula.replace(/(^|[^0-9])(?:1)?d20/gi, '$12d20ro1kh1');
+        } else {
+            activeFormula = activeFormula.replace(/(^|[^0-9])(?:1)?d20/gi, '$12d20kh1');
+        }
+    } else if (isDisadvantage) {
+        if (isHalflingLucky) {
+            activeFormula = activeFormula.replace(/(^|[^0-9])(?:1)?d20/gi, '$12d20ro1kl1');
+        } else {
+            activeFormula = activeFormula.replace(/(^|[^0-9])(?:1)?d20/gi, '$12d20kl1');
+        }
+    } else if (isHalflingLucky) {
+        activeFormula = activeFormula.replace(/(^|[^0-9])(?:1)?d20/gi, '$11d20ro1');
+    }
 
     if (!activeFormula) {
         return {
@@ -124,7 +176,8 @@ export function simulateRoll(formula, critRange = 20, optEvent = null) {
             breakdownStr: '',
             compactBreakdown: '',
             isCritSuccess: false,
-            isCritFail: false
+            isCritFail: false,
+            rollMode
         };
     }
 
@@ -226,11 +279,16 @@ export function simulateRoll(formula, critRange = 20, optEvent = null) {
 
     let isCritSuccess = false;
     let isCritFail = false;
+    const effectiveCrit = Math.min(
+        parseInt(critRange) || 20,
+        parseInt(char?.settings?.critRange) || 20,
+        parseInt(char?.attackSettings?.critRange) || 20
+    );
     const diceList = rollResult.diceList || [];
     if (strippedFormula.match(/d20/i) && diceList.length > 0) {
         const activeD20s = diceList.filter((d) => d.faces === 20 && !d.isDropped);
         if (activeD20s.length > 0) {
-            if (activeD20s.some((d) => d.val >= (critRange || 20))) isCritSuccess = true;
+            if (activeD20s.some((d) => d.val >= effectiveCrit)) isCritSuccess = true;
             if (activeD20s.some((d) => d.val === 1) && !isCritSuccess) isCritFail = true;
         }
     } else {
@@ -245,7 +303,11 @@ export function simulateRoll(formula, critRange = 20, optEvent = null) {
         breakdownStr: rollResult.breakdownStr || `<strong>${rollResult.total}</strong>`,
         compactBreakdown: rollResult.compactBreakdown || `${rollResult.total}`,
         isCritSuccess,
-        isCritFail
+        isCritFail,
+        rollMode,
+        isAdvantage,
+        isDisadvantage,
+        isSuperAdvantage: useSuperAdvantage
     };
 }
 

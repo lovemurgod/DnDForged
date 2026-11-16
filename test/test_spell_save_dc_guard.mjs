@@ -11,7 +11,13 @@ const __dirname = path.dirname(__filename);
 if (typeof globalThis.window === 'undefined') {
     globalThis.window = {
         simulateRoll: (f) => {
-            return { total: 15, breakdownStr: '10 + 5', diceList: [{ val: 10, type: 20 }], isCritSuccess: false, isCritFail: false };
+            return {
+                total: 15,
+                breakdownStr: '10 + 5',
+                diceList: [{ val: 10, type: 20 }],
+                isCritSuccess: false,
+                isCritFail: false
+            };
         },
         vttPlayerSheetAPI: {
             simulateRoll: (f) => ({ total: 8, breakdownStr: '8' })
@@ -31,11 +37,11 @@ import { processCardFullResolution } from '../vtt/js/canvas/tokens/vtt-canvas-ma
 test('Spell Save DC Guard: Kasimir Velikov Fire Bolt does not generate spurious saveInfo', () => {
     const bestiaryPath = path.join(__dirname, '../vtt/data/bestiary-normalized/bestiary-cos.json');
     const cosData = JSON.parse(fs.readFileSync(bestiaryPath, 'utf8'));
-    const kasimir = cosData.find(c => c.name.includes('Kasimir Velikov'));
+    const kasimir = cosData.find((c) => c.name.includes('Kasimir Velikov'));
     assert.ok(kasimir, 'Kasimir Velikov exists in bestiary-cos.json');
 
     const sc = kasimir.spellcasting[0];
-    const fireBolt = sc.spellsByLevel['0'].spells.find(s => s.name === 'Fire Bolt');
+    const fireBolt = sc.spellsByLevel['0'].spells.find((s) => s.name === 'Fire Bolt');
     assert.ok(fireBolt, 'Fire Bolt cantrip found on Kasimir');
     assert.equal(fireBolt.saveAbility, '');
     assert.equal(fireBolt.dc, null);
@@ -51,7 +57,9 @@ test('Spell Save DC Guard: Kasimir Velikov Fire Bolt does not generate spurious 
     const resultCard = rollSpell(fireBolt, 'cantrip', kasimir, {
         type: 'roll',
         castLvl: 0,
-        postCardFn: (c) => { emittedCard = c; }
+        postCardFn: (c) => {
+            emittedCard = c;
+        }
     });
 
     const card = emittedCard || resultCard;
@@ -65,18 +73,20 @@ test('Spell Save DC Guard: Kasimir Velikov Fire Bolt does not generate spurious 
 test('Spell Save DC Guard: Strahd von Zarovich Ray of Frost does not generate spurious saveInfo', () => {
     const bestiaryPath = path.join(__dirname, '../vtt/data/bestiary-normalized/bestiary-cos.json');
     const cosData = JSON.parse(fs.readFileSync(bestiaryPath, 'utf8'));
-    const strahd = cosData.find(c => c.name.includes('Strahd von Zarovich'));
+    const strahd = cosData.find((c) => c.name.includes('Strahd von Zarovich'));
     assert.ok(strahd, 'Strahd von Zarovich exists in bestiary-cos.json');
 
     const sc = strahd.spellcasting[0];
-    const rayOfFrost = sc.spellsByLevel['0'].spells.find(s => s.name === 'Ray of Frost');
+    const rayOfFrost = sc.spellsByLevel['0'].spells.find((s) => s.name === 'Ray of Frost');
     assert.ok(rayOfFrost, 'Ray of Frost cantrip found on Strahd');
 
     let emittedCard = null;
     const resultCard = rollSpell(rayOfFrost, 'cantrip', strahd, {
         type: 'roll',
         castLvl: 0,
-        postCardFn: (c) => { emittedCard = c; }
+        postCardFn: (c) => {
+            emittedCard = c;
+        }
     });
 
     const card = emittedCard || resultCard;
@@ -89,17 +99,19 @@ test('Spell Save DC Guard: Strahd von Zarovich Ray of Frost does not generate sp
 test('Spell Save DC Guard: Fireball properly generates saveInfo', () => {
     const bestiaryPath = path.join(__dirname, '../vtt/data/bestiary-normalized/bestiary-cos.json');
     const cosData = JSON.parse(fs.readFileSync(bestiaryPath, 'utf8'));
-    const kasimir = cosData.find(c => c.name.includes('Kasimir Velikov'));
+    const kasimir = cosData.find((c) => c.name.includes('Kasimir Velikov'));
 
     const sc = kasimir.spellcasting[0];
-    const fireball = sc.spellsByLevel['3'].spells.find(s => s.name === 'Fireball');
+    const fireball = sc.spellsByLevel['3'].spells.find((s) => s.name === 'Fireball');
     assert.ok(fireball, 'Fireball found on Kasimir');
 
     let emittedCard = null;
     const resultCard = rollSpell(fireball, 3, kasimir, {
         type: 'roll',
         castLvl: 3,
-        postCardFn: (c) => { emittedCard = c; }
+        postCardFn: (c) => {
+            emittedCard = c;
+        }
     });
 
     const card = emittedCard || resultCard;
@@ -133,7 +145,9 @@ test('Spell Save DC Guard: Dual Attack + Save spell (Ice Knife style) preserves 
     const resultCard = rollSpell(iceKnife, 1, caster, {
         type: 'roll',
         castLvl: 1,
-        postCardFn: (c) => { emittedCard = c; }
+        postCardFn: (c) => {
+            emittedCard = c;
+        }
     });
 
     const card = emittedCard || resultCard;

@@ -64,10 +64,7 @@ test('[Overhaul 2] Spatial index synchronization on wall additions and deletions
         'Wall segment creation must invoke syncWallSpatialIndex'
     );
 
-    const canvasContent = fs.readFileSync(
-        path.join(process.cwd(), 'vtt/js/vtt-canvas.js'),
-        'utf8'
-    );
+    const canvasContent = fs.readFileSync(path.join(process.cwd(), 'vtt/js/vtt-canvas.js'), 'utf8');
     assert.match(
         canvasContent,
         /onWallsUpdated:\s*\(\)\s*=>\s*\{[\s\S]*?syncWallSpatialIndex\(\)/,
@@ -81,25 +78,15 @@ test('[Overhaul 2] Spatial index synchronization on wall additions and deletions
 });
 
 test('[Overhaul 3] Measurement template screen-space scaling & double click consolidation', async () => {
-    const measureContent = fs.readFileSync(
-        path.join(process.cwd(), 'vtt/js/canvas/vtt-canvas-measure.js'),
-        'utf8'
-    );
-    assert.match(
-        measureContent,
-        /zoomLevel\s*=\s*1\.0/,
-        'drawMeasurementTemplate must accept zoomLevel parameter'
-    );
+    const measureContent = fs.readFileSync(path.join(process.cwd(), 'vtt/js/canvas/vtt-canvas-measure.js'), 'utf8');
+    assert.match(measureContent, /zoomLevel\s*=\s*1\.0/, 'drawMeasurementTemplate must accept zoomLevel parameter');
     assert.match(
         measureContent,
         /const\s+zoom\s*=\s*zoomLevel[\s\S]*?ctx\.scale\(1\s*\/\s*zoom,\s*1\s*\/\s*zoom\)/,
         'Distance pill badge must scale inversely by zoomLevel'
     );
 
-    const canvasContent = fs.readFileSync(
-        path.join(process.cwd(), 'vtt/js/vtt-canvas.js'),
-        'utf8'
-    );
+    const canvasContent = fs.readFileSync(path.join(process.cwd(), 'vtt/js/vtt-canvas.js'), 'utf8');
     assert.doesNotMatch(
         canvasContent,
         /canvasInteraction\.addEventListener\('dblclick'[\s\S]*?canvasInteraction\.addEventListener\('dblclick'/,
@@ -108,20 +95,9 @@ test('[Overhaul 3] Measurement template screen-space scaling & double click cons
 });
 
 test('[Overhaul 4] Flood fill vector contour tracing and drawing z-index handlers', async () => {
-    const drawingsContent = fs.readFileSync(
-        path.join(process.cwd(), 'vtt/js/canvas/vtt-canvas-drawings.js'),
-        'utf8'
-    );
-    assert.match(
-        drawingsContent,
-        /menu-draw-forward/,
-        'menu-draw-forward click handler must be implemented'
-    );
-    assert.match(
-        drawingsContent,
-        /menu-draw-backward/,
-        'menu-draw-backward click handler must be implemented'
-    );
+    const drawingsContent = fs.readFileSync(path.join(process.cwd(), 'vtt/js/canvas/vtt-canvas-drawings.js'), 'utf8');
+    assert.match(drawingsContent, /menu-draw-forward/, 'menu-draw-forward click handler must be implemented');
+    assert.match(drawingsContent, /menu-draw-backward/, 'menu-draw-backward click handler must be implemented');
     assert.match(
         drawingsContent,
         /simplifyDP/,
@@ -130,20 +106,10 @@ test('[Overhaul 4] Flood fill vector contour tracing and drawing z-index handler
 });
 
 test('[Overhaul 5] Lighting slider debounce and scratchpad memory reuse', async () => {
-    const lightingContent = fs.readFileSync(
-        path.join(process.cwd(), 'vtt/js/canvas/vtt-canvas-lighting.js'),
-        'utf8'
-    );
-    assert.match(
-        lightingContent,
-        /lightUpdateDebounceTimer/,
-        'Light property input sliders must be debounced'
-    );
+    const lightingContent = fs.readFileSync(path.join(process.cwd(), 'vtt/js/canvas/vtt-canvas-lighting.js'), 'utf8');
+    assert.match(lightingContent, /lightUpdateDebounceTimer/, 'Light property input sliders must be debounced');
 
-    const fogContent = fs.readFileSync(
-        path.join(process.cwd(), 'vtt/js/canvas/vtt-canvas-fog.js'),
-        'utf8'
-    );
+    const fogContent = fs.readFileSync(path.join(process.cwd(), 'vtt/js/canvas/vtt-canvas-fog.js'), 'utf8');
     assert.match(
         fogContent,
         /ctxScratchLight\.clearRect\(0,\s*0,\s*d,\s*d\)/,

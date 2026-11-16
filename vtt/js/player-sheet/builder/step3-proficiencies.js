@@ -169,7 +169,8 @@ export function renderStep3(ctx) {
                                 const isGrantedByBg = candidateBgSkills.includes(s);
                                 const isAlreadyGranted = isGrantedBySpecies || isGrantedByBg;
                                 const isChecked = selectedClassSkills.has(s);
-                                const isDisabled = isAlreadyGranted || (!isChecked && selectedClassSkills.size >= classSkillLimit);
+                                const isDisabled =
+                                    isAlreadyGranted || (!isChecked && selectedClassSkills.size >= classSkillLimit);
                                 return `
                                 <label class="builder-badge-check ${isChecked || isAlreadyGranted ? 'is-checked' : ''} ${isDisabled ? 'is-disabled' : ''}" style="margin:0; cursor:${isAlreadyGranted ? 'default' : 'pointer'};" title="${isGrantedBySpecies ? 'Already granted by Species' : isGrantedByBg ? 'Already granted by Background' : ''}">
                                     <input type="checkbox" class="pc-wiz-class-skill-chk" data-skill="${s}" ${isChecked ? 'checked' : ''} ${isDisabled ? 'disabled' : ''} style="accent-color:var(--color-gold-base);">
@@ -195,7 +196,10 @@ export function renderStep3(ctx) {
                         <div style="display:flex; flex-wrap:wrap; gap:6px;">
                             ${sec.from
                                 .map((s) => {
-                                    const isGrantedElsewhere = candidateSpeciesSkills.includes(s) || candidateBgSkills.includes(s) || selectedClassSkills.has(s);
+                                    const isGrantedElsewhere =
+                                        candidateSpeciesSkills.includes(s) ||
+                                        candidateBgSkills.includes(s) ||
+                                        selectedClassSkills.has(s);
                                     const isChecked = curSet.has(s);
                                     const isDisabled = isGrantedElsewhere || (!isChecked && curSet.size >= sec.limit);
                                     return `

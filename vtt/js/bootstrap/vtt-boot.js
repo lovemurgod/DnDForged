@@ -30,7 +30,7 @@ moduleInitPromise
 // 3. Initialize UI event handlers and login gateway
 setupLoginHandlers({
     onStartSocketConnection: (campaignId, username, role, gmPassword) => {
-        startSocketConnection(campaignId, username, role, gmPassword, {
+        return startSocketConnection(campaignId, username, role, gmPassword, {
             moduleInitPromise,
             updateTabletopPauseUI
         });

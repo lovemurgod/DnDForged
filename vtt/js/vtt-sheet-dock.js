@@ -12,17 +12,231 @@
  * - Clean native sheet rendering with zero layout modification
  */
 
-function isVideoMedia(url) {
+export function escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
+export function isVideoMedia(url) {
     if (!url || typeof url !== 'string') return false;
     const clean = url.split('?')[0].toLowerCase();
     return (
         clean.endsWith('.mp4') ||
         clean.endsWith('.webm') ||
         clean.endsWith('.ogg') ||
+        clean.endsWith('.m4v') ||
+        clean.endsWith('.mov') ||
         clean.includes('pinimg.com/videos') ||
         clean.includes('youtube.com') ||
         clean.includes('youtu.be')
     );
+}
+
+export function isAnimatedMedia(url) {
+    if (!url || typeof url !== 'string') return false;
+    const clean = url.split('?')[0].toLowerCase();
+    return clean.endsWith('.gif') || isVideoMedia(url);
+}
+
+export function getMonogramData(name, roleCategory = 'generic') {
+    const raw = (name || '?').trim();
+    const parts = raw.split(/\s+/).filter(Boolean);
+    let initials = '';
+    if (parts.length >= 2) {
+        initials = (parts[0][0] + parts[1][0]).toUpperCase();
+    } else if (parts.length === 1 && parts[0].length >= 2) {
+        initials = parts[0].substring(0, 2).toUpperCase();
+    } else if (parts.length === 1 && parts[0].length === 1) {
+        initials = parts[0][0].toUpperCase();
+    } else {
+        initials = '?';
+    }
+    return {
+        initials,
+        roleClass: `role-${roleCategory}`,
+        html: `<div class="tab-handle-monogram role-${roleCategory}" title="${escapeHtml(raw)}">${escapeHtml(initials)}</div>`
+    };
+}
+
+export class StaticPortraitCache {
+    constructor(maxEntries = 60, storageKey = 'forgedvtt_tab_thumbs') {
+        this.maxEntries = maxEntries;
+        this.storageKey = storageKey;
+        this.memoryCache = new Map();
+        this.pendingResolutions = new Set();
+        this.loadStorage();
+    }
+
+    loadStorage() {
+        try {
+            if (typeof localStorage === 'undefined') return;
+            const raw = localStorage.getItem(this.storageKey);
+            if (!raw) return;
+            const parsed = JSON.parse(raw);
+            if (parsed && typeof parsed === 'object') {
+                for (const [url, item] of Object.entries(parsed)) {
+                    if (item && item.dataUrl) {
+                        this.memoryCache.set(url, item);
+                    }
+                }
+            }
+        } catch (e) {
+            console.warn('[StaticPortraitCache] Error loading storage cache:', e);
+        }
+    }
+
+    saveStorage() {
+        try {
+            if (typeof localStorage === 'undefined') return;
+            if (this.memoryCache.size > this.maxEntries) {
+                const sorted = Array.from(this.memoryCache.entries()).sort(
+                    (a, b) => (a[1].timestamp || 0) - (b[1].timestamp || 0)
+                );
+                while (sorted.length > this.maxEntries) {
+                    const oldest = sorted.shift();
+                    this.memoryCache.delete(oldest[0]);
+                }
+            }
+            const obj = {};
+            for (const [url, item] of this.memoryCache.entries()) {
+                obj[url] = item;
+            }
+            localStorage.setItem(this.storageKey, JSON.stringify(obj));
+        } catch (e) {
+            console.warn('[StaticPortraitCache] Error saving storage cache:', e);
+        }
+    }
+
+    get(url) {
+        if (!url) return null;
+        const entry = this.memoryCache.get(url);
+        if (entry) {
+            entry.timestamp = Date.now();
+            return entry.dataUrl;
+        }
+        return null;
+    }
+
+    set(url, dataUrl) {
+        if (!url || !dataUrl) return;
+        this.memoryCache.set(url, { dataUrl, timestamp: Date.now() });
+        this.saveStorage();
+    }
+
+    resolve(url, activeNode, onResolved) {
+        if (!url || this.get(url)) {
+            if (onResolved) onResolved(this.get(url));
+            return;
+        }
+
+        if (activeNode && typeof document !== 'undefined') {
+            try {
+                const isNodeVideo = activeNode.tagName === 'VIDEO';
+                const isReady = isNodeVideo ? activeNode.readyState >= 2 : true;
+                if (isReady) {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = 16;
+                    canvas.height = 16;
+                    const ctx = canvas.getContext('2d');
+                    if (ctx) {
+                        ctx.drawImage(activeNode, 0, 0, 16, 16);
+                        const dataUrl = canvas.toDataURL('image/png');
+                        if (dataUrl && dataUrl.startsWith('data:image/png')) {
+                            this.set(url, dataUrl);
+                            if (onResolved) onResolved(dataUrl);
+                            return;
+                        }
+                    }
+                }
+            } catch (err) {
+                // Tainted canvas or draw failure, continue to offscreen
+            }
+        }
+
+        if (this.pendingResolutions.has(url)) return;
+        this.pendingResolutions.add(url);
+
+        if (typeof document === 'undefined') {
+            this.pendingResolutions.delete(url);
+            return;
+        }
+
+        const isVideo = isVideoMedia(url);
+        if (isVideo) {
+            const video = document.createElement('video');
+            video.crossOrigin = 'anonymous';
+            video.muted = true;
+            video.playsInline = true;
+            video.preload = 'metadata';
+            const cleanUrl = url.includes('#') ? url : `${url}#t=0.001`;
+            video.src = cleanUrl;
+
+            let resolved = false;
+            const cleanup = () => {
+                this.pendingResolutions.delete(url);
+                video.onerror = null;
+                video.onloadeddata = null;
+                video.onseeked = null;
+                video.src = '';
+            };
+
+            const capture = () => {
+                if (resolved) return;
+                resolved = true;
+                try {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = 16;
+                    canvas.height = 16;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(video, 0, 0, 16, 16);
+                    const dataUrl = canvas.toDataURL('image/png');
+                    this.set(url, dataUrl);
+                    cleanup();
+                    if (onResolved) onResolved(dataUrl);
+                } catch (e) {
+                    cleanup();
+                }
+            };
+
+            video.onloadeddata = capture;
+            video.onseeked = capture;
+            video.onerror = cleanup;
+            setTimeout(cleanup, 4000);
+        } else {
+            const img = new Image();
+            img.crossOrigin = 'anonymous';
+
+            const cleanup = () => {
+                this.pendingResolutions.delete(url);
+                img.onload = null;
+                img.onerror = null;
+            };
+
+            img.onload = () => {
+                try {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = 16;
+                    canvas.height = 16;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, 16, 16);
+                    const dataUrl = canvas.toDataURL('image/png');
+                    this.set(url, dataUrl);
+                    cleanup();
+                    if (onResolved) onResolved(dataUrl);
+                } catch (e) {
+                    cleanup();
+                }
+            };
+            img.onerror = cleanup;
+            img.src = url;
+            setTimeout(cleanup, 4000);
+        }
+    }
 }
 
 export class SheetDockManager {
@@ -35,6 +249,7 @@ export class SheetDockManager {
         this._internalCall = false;
         this.draggedTabKey = null;
         this.orderStorageKey = `forgedvtt_tab_order_${vtt.campaignId || 'default'}`;
+        this.portraitCache = new StaticPortraitCache(60, `forgedvtt_tab_thumbs_${vtt.campaignId || 'default'}`);
 
         this.initDOM();
         this.setupPanelSync();
@@ -79,7 +294,8 @@ export class SheetDockManager {
             const observer = new MutationObserver(this.updatePosition);
             const creaturePanel = document.getElementById('creature-sheet-panel');
             const playerPanel = document.getElementById('player-sheet-panel');
-            if (creaturePanel) observer.observe(creaturePanel, { attributes: true, attributeFilter: ['class', 'style'] });
+            if (creaturePanel)
+                observer.observe(creaturePanel, { attributes: true, attributeFilter: ['class', 'style'] });
             if (playerPanel) observer.observe(playerPanel, { attributes: true, attributeFilter: ['class', 'style'] });
         }
 
@@ -140,7 +356,8 @@ export class SheetDockManager {
         // 1. Player Character -> Individual Tab
         if (type === 'player' && !isCompanion && !isCustomNpc) {
             roleCategory = 'player';
-            tabKey = `pc_${id || characterId}`;
+            const rawId = id || characterId || 'default';
+            tabKey = `pc_${String(rawId).replace(/^pc_/, '')}`;
             if (this.vtt.campaignState?.characters?.[id || characterId]) {
                 const c = this.vtt.campaignState.characters[id || characterId];
                 tabName = c.name || tabName;
@@ -193,9 +410,25 @@ export class SheetDockManager {
             isGeneric !== undefined
                 ? isGeneric
                 : charRef?.isGeneric !== undefined
-                    ? charRef.isGeneric
-                    : roleCategory === 'generic'
+                  ? charRef.isGeneric
+                  : roleCategory === 'generic'
         );
+
+        let tabStaticAvatar = null;
+        if (charRef) {
+            const candidates = [charRef.portrait, charRef.avatar, charRef.tokenImage].filter(
+                (u) => u && typeof u === 'string' && u !== 'img/logo.png' && !isAnimatedMedia(u)
+            );
+            if (candidates.length > 0) tabStaticAvatar = candidates[0];
+        }
+        if (
+            !tabStaticAvatar &&
+            monsterData?.img &&
+            !isAnimatedMedia(monsterData.img) &&
+            monsterData.img !== 'img/logo.png'
+        ) {
+            tabStaticAvatar = monsterData.img;
+        }
 
         let tab = this.tabs.get(tabKey);
         if (!tab) {
@@ -207,12 +440,13 @@ export class SheetDockManager {
                 characterId: characterId || (roleCategory === 'player' ? id : null),
                 name: tabName,
                 avatar: tabAvatar,
+                staticAvatar: tabStaticAvatar,
                 monsterData,
                 isGeneric: effectiveIsGeneric,
                 activeTokenId: tokenId,
                 linkedTokenIds: tokenId ? [tokenId] : [],
                 isTurnActive: false,
-                isVideo: Boolean(params.isVideo || isVideoMedia(tabAvatar))
+                isVideo: Boolean(params.isVideo || isAnimatedMedia(tabAvatar))
             };
             this.tabs.set(tabKey, tab);
             if (!this.tabOrder.includes(tabKey)) {
@@ -222,9 +456,10 @@ export class SheetDockManager {
         } else {
             if (tokenId) tab.activeTokenId = tokenId;
             if (monsterData) tab.monsterData = monsterData;
+            if (tabStaticAvatar) tab.staticAvatar = tabStaticAvatar;
             if (tabAvatar && tabAvatar !== 'img/logo.png') {
                 tab.avatar = tabAvatar;
-                tab.isVideo = Boolean(params.isVideo || isVideoMedia(tabAvatar));
+                tab.isVideo = Boolean(params.isVideo || isAnimatedMedia(tabAvatar));
             }
             if (tabName) tab.name = tabName;
             tab.isGeneric = effectiveIsGeneric;
@@ -271,12 +506,12 @@ export class SheetDockManager {
         // Sync avatar and video status from active token if available
         if (tab.activeTokenId && allTokens[tab.activeTokenId]) {
             const activeTok = allTokens[tab.activeTokenId];
-            if (activeTok.img && (!tab.avatar || tab.avatar === 'img/logo.png')) {
+            if (activeTok.img && (!tab.avatar || tab.avatar === 'img/logo.png' || tab.isGeneric)) {
                 tab.avatar = activeTok.img;
             }
             if (activeTok.isVideo !== undefined) {
                 tab.isVideo = !!activeTok.isVideo;
-            } else if (isVideoMedia(activeTok.img || tab.avatar)) {
+            } else if (isAnimatedMedia(activeTok.img || tab.avatar)) {
                 tab.isVideo = true;
             }
         }
@@ -312,6 +547,7 @@ export class SheetDockManager {
         if (!tab) return;
 
         tab.activeTokenId = tokenId;
+        this.updateLinkedTokens(tab);
         this.highlightTokenOnCanvas(tokenId, true);
 
         if (this.vtt.creatureSheet) {
@@ -319,6 +555,37 @@ export class SheetDockManager {
         }
 
         this.renderTabs();
+    }
+
+    updateHandleAvatar(tabKey, dataUrl, name, roleClass) {
+        if (!this.containerEl || !dataUrl) return;
+        const handle = this.containerEl.querySelector(
+            `.slideout-tab-wrapper[data-tab-key="${tabKey}"] .slideout-tab-handle`
+        );
+        if (!handle) return;
+        const currentAvatar = handle.querySelector('.tab-handle-avatar, .tab-handle-monogram');
+        const chevron = handle.querySelector('.tab-handle-chevron');
+        const role = (roleClass || '').replace(/^role-/, '') || 'generic';
+        const monogramHtml = getMonogramData(name, role).html;
+
+        const newImg = document.createElement('img');
+        newImg.src = dataUrl;
+        newImg.alt = name;
+        newImg.className = 'tab-handle-avatar';
+        newImg.dataset.tabKey = tabKey;
+        newImg.addEventListener(
+            'error',
+            () => {
+                newImg.outerHTML = monogramHtml;
+            },
+            { once: true }
+        );
+
+        if (currentAvatar) {
+            currentAvatar.replaceWith(newImg);
+        } else if (chevron) {
+            chevron.insertAdjacentElement('beforebegin', newImg);
+        }
     }
 
     closeTab(tabKey) {
@@ -493,7 +760,13 @@ export class SheetDockManager {
                 instanceChipsHtml = '<div class="tooltip-instance-row">';
                 tab.linkedTokenIds.forEach((tId, idx) => {
                     const tok = allTokens[tId];
-                    const tokHp = tok ? (tok.hpCurrent ?? tok.hp ?? (typeof tab.monsterData?.hp === 'number' ? tab.monsterData.hp : tab.monsterData?.hp?.average ?? '')) : '';
+                    const tokHp = tok
+                        ? (tok.hpCurrent ??
+                          tok.hp ??
+                          (typeof tab.monsterData?.hp === 'number'
+                              ? tab.monsterData.hp
+                              : (tab.monsterData?.hp?.average ?? '')))
+                        : '';
                     const isChipActive = tId === tab.activeTokenId;
                     instanceChipsHtml += `
                         <button class="tab-instance-chip ${isChipActive ? 'active' : ''}" 
@@ -507,10 +780,51 @@ export class SheetDockManager {
                 instanceChipsHtml += '</div>';
             }
 
-            const isVideo = Boolean(tab.isVideo || isVideoMedia(tab.avatar));
-            const mediaHtml = isVideo
-                ? `<video src="${tab.avatar}" autoplay muted loop playsinline class="tab-handle-avatar" onerror="this.style.display='none'"></video>`
-                : `<img src="${tab.avatar || 'img/logo.png'}" alt="${tab.name}" class="tab-handle-avatar" onerror="this.src='img/logo.png'">`;
+            const role = tab.roleCategory || 'generic';
+            const monogramObj = getMonogramData(tab.name, role);
+            const monogramHtml = monogramObj.html;
+
+            // Resolve best static image
+            let targetStaticUrl = null;
+            if (tab.staticAvatar) {
+                targetStaticUrl = tab.staticAvatar;
+            } else if (tab.activeTokenId && allTokens[tab.activeTokenId]) {
+                const activeTok = allTokens[tab.activeTokenId];
+                if (activeTok.poster && !isAnimatedMedia(activeTok.poster)) {
+                    targetStaticUrl = activeTok.poster;
+                } else if (activeTok.thumbnail && !isAnimatedMedia(activeTok.thumbnail)) {
+                    targetStaticUrl = activeTok.thumbnail;
+                }
+            }
+
+            if (!targetStaticUrl) {
+                const rawAvatar = tab.avatar && tab.avatar !== 'img/logo.png' ? tab.avatar : null;
+                if (rawAvatar) {
+                    if (!isAnimatedMedia(rawAvatar)) {
+                        targetStaticUrl = rawAvatar;
+                    } else {
+                        // Animated media (video or GIF)
+                        const cached = this.portraitCache ? this.portraitCache.get(rawAvatar) : null;
+                        if (cached) {
+                            targetStaticUrl = cached;
+                        } else if (this.portraitCache) {
+                            const activeNode = tab.activeTokenId
+                                ? typeof document !== 'undefined'
+                                    ? document.getElementById('asset_node_' + tab.activeTokenId)
+                                    : null
+                                : null;
+                            this.portraitCache.resolve(rawAvatar, activeNode, (dataUrl) => {
+                                this.updateHandleAvatar(tab.key, dataUrl, tab.name, roleClass);
+                            });
+                        }
+                    }
+                }
+            }
+
+            const safeName = escapeHtml(tab.name);
+            const mediaHtml = targetStaticUrl
+                ? `<img src="${targetStaticUrl}" alt="${safeName}" class="tab-handle-avatar" data-tab-key="${tab.key}">`
+                : monogramHtml;
 
             html += `
                 <div class="slideout-tab-wrapper" data-tab-key="${tab.key}" draggable="true">
@@ -541,6 +855,22 @@ export class SheetDockManager {
 
     attachListeners() {
         if (!this.containerEl) return;
+
+        // 0. Image error fallback to role-themed monogram badge
+        this.containerEl.querySelectorAll('img.tab-handle-avatar').forEach((img) => {
+            img.addEventListener(
+                'error',
+                () => {
+                    const tabKey = img.dataset.tabKey;
+                    const tab = tabKey ? this.tabs.get(tabKey) : null;
+                    const role = tab?.roleCategory || 'generic';
+                    const name = tab?.name || img.getAttribute('alt') || '?';
+                    const monogramHtml = getMonogramData(name, role).html;
+                    img.outerHTML = monogramHtml;
+                },
+                { once: true }
+            );
+        });
 
         // 1. Click on tab handle -> toggle / open sheet
         this.containerEl.querySelectorAll('.slideout-tab-handle').forEach((btn) => {

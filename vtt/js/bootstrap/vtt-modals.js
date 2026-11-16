@@ -201,6 +201,16 @@ export function setupUniversalModalDismissal() {
                     }
                     return;
                 }
+
+                // 5. Floating tool panels (.floating-tool-panel:not(.vtt-hidden))
+                const openFloatingPanels = Array.from(
+                    document.querySelectorAll('.floating-tool-panel:not(.vtt-hidden)')
+                );
+                if (openFloatingPanels.length > 0) {
+                    openFloatingPanels.forEach((p) => p.classList.add('vtt-hidden'));
+                    e.stopPropagation();
+                    return;
+                }
             }
         });
     }

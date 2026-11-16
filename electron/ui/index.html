@@ -39,7 +39,8 @@
       </nav>
 
       <div class="header-status">
-        <button type="button" class="btn-help-header" id="btn-open-app-guide" title="Open Desktop App &amp; Homebrew Guide">
+        <button type="button" class="btn-help-header" id="btn-open-app-guide"
+          title="Open Desktop App &amp; Homebrew Guide">
           <span>📖</span> App Guide
         </button>
         <div class="status-badge" id="overall-status-badge">
@@ -69,6 +70,27 @@
             <div class="url-box">
               <span class="url-label">Local Access:</span>
               <code id="local-url-text">http://localhost:5050</code>
+            </div>
+
+            <!-- Server Port & Networking Settings -->
+            <div class="server-port-config-box" style="margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 10px;">
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+                <div style="display: flex; flex-direction: column; gap: 2px;">
+                  <label for="server-port-input" style="font-size: 12px; font-weight: 500; color: var(--text-muted);">Localhost Port</label>
+                  <span class="field-hint" style="font-size: 11px; color: var(--text-dim);">Custom port (1024 - 65535)</span>
+                </div>
+                <input type="number" id="server-port-input" min="1024" max="65535" value="5050" style="width: 90px; text-align: center; background: rgba(0, 0, 0, 0.3); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 6px 8px; color: var(--text-main); font-family: var(--font-mono); font-size: 13px; outline: none;" />
+              </div>
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+                <div style="display: flex; flex-direction: column; gap: 2px;">
+                  <span style="font-size: 12px; font-weight: 500; color: var(--text-muted);">Auto-assign if busy</span>
+                  <span class="field-hint" style="font-size: 11px; color: var(--text-dim);">Automatically use next open port if occupied</span>
+                </div>
+                <label class="switch-label" style="display: flex; align-items: center; cursor: pointer; margin: 0;">
+                  <input type="checkbox" id="server-auto-port-check" checked />
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
             </div>
           </div>
         </section>

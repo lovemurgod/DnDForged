@@ -359,7 +359,11 @@ export function renderPlacedTrapsList(traps, selectedMapToolItem, callbacks = {}
         }
 
         const iconColor = isDisarmed ? '#38bdf8' : isSpent ? '#94a3b8' : '#ef4444';
-        const iconClass = isDisarmed ? 'fa-shield-halved' : isSpent ? 'fa-bolt-lightning text-muted' : 'fa-triangle-exclamation';
+        const iconClass = isDisarmed
+            ? 'fa-shield-halved'
+            : isSpent
+              ? 'fa-bolt-lightning text-muted'
+              : 'fa-triangle-exclamation';
 
         card.innerHTML = `
             <div class="maptools-item-info">
@@ -437,7 +441,11 @@ export function renderPlacedTrapsList(traps, selectedMapToolItem, callbacks = {}
             e.stopPropagation();
             const [deleted] = traps.splice(idx, 1);
             if (callbacks.mapToolUndoStack && deleted) {
-                callbacks.mapToolUndoStack.push({ action: 'delete', type: 'trap', item: JSON.parse(JSON.stringify(deleted)) });
+                callbacks.mapToolUndoStack.push({
+                    action: 'delete',
+                    type: 'trap',
+                    item: JSON.parse(JSON.stringify(deleted))
+                });
                 if (callbacks.mapToolRedoStack) callbacks.mapToolRedoStack.length = 0;
             }
             if (vtt.campaignState?.maps?.[currentMapId]) {
@@ -561,7 +569,11 @@ export function showTrapContextMenu(trapId, clientX, clientY, context = {}) {
             if (idx !== -1) {
                 const [deleted] = traps.splice(idx, 1);
                 if (context.mapToolUndoStack && deleted) {
-                    context.mapToolUndoStack.push({ action: 'delete', type: 'trap', item: JSON.parse(JSON.stringify(deleted)) });
+                    context.mapToolUndoStack.push({
+                        action: 'delete',
+                        type: 'trap',
+                        item: JSON.parse(JSON.stringify(deleted))
+                    });
                     if (context.mapToolRedoStack) context.mapToolRedoStack.length = 0;
                 }
                 syncTraps();

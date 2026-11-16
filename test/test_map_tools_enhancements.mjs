@@ -156,9 +156,7 @@ describe('Map Tools Enhancements: Delete Shortcut, Elevation Filter, Rearm/Disar
     });
 
     it('5. Map Tool Undo / Redo restores geometry and handles deletion recovery', () => {
-        const traps = [
-            { id: 'trap_a', shape: 'rect', geom: { x: 10, y: 10, w: 50, h: 50 } }
-        ];
+        const traps = [{ id: 'trap_a', shape: 'rect', geom: { x: 10, y: 10, w: 50, h: 50 } }];
         const portals = [];
         const mapToolUndoStack = [];
         const mapToolRedoStack = [];

@@ -161,11 +161,8 @@ export function moveTouchTokenDrag(clientX, clientY, context = {}) {
                               : 45;
                     const threshSq = Math.max(pRad * pRad * 1.5, 55 * 55);
                     return (
-                        distToSegmentSq(
-                            calcPortalCenter(po),
-                            { x: wall.x1, y: wall.y1 },
-                            { x: wall.x2, y: wall.y2 }
-                        ) <= threshSq
+                        distToSegmentSq(calcPortalCenter(po), { x: wall.x1, y: wall.y1 }, { x: wall.x2, y: wall.y2 }) <=
+                        threshSq
                     );
                 })
             )
@@ -279,6 +276,14 @@ export function endTouchTokenDrag(clientX, clientY, context = {}) {
     }
 
     let didMove = false;
+    const leadToken = (context.dragTargetId && context.tokens?.[context.dragTargetId]) || movedTokensList[0];
+    const leadOrig = (leadToken && context.tokenDragOriginalPositions?.[leadToken.id]) ||
+        (movedTokensList[0] && context.tokenDragOriginalPositions?.[movedTokensList[0].id]) || { x: 0, y: 0 };
+    const leadDx = leadToken ? leadToken.x - leadOrig.x : 0;
+    const leadDy = leadToken ? leadToken.y - leadOrig.y : 0;
+    const leadDist = Math.hypot(leadDx, leadDy);
+    const moveDuration = Math.min(450, Math.max(160, Math.round(140 + leadDist * 0.28)));
+
     movedTokensList.forEach((t) => {
         const originalPos = context.tokenDragOriginalPositions?.[t.id] || { x: t.x, y: t.y };
         if (originalPos.x !== t.x || originalPos.y !== t.y) {
@@ -293,10 +298,10 @@ export function endTouchTokenDrag(clientX, clientY, context = {}) {
                     context.selectedTokenId = t.id;
                 }
             } else {
-                const leadOrig =
+                const leadOrigPos =
                     (context.dragTargetId && context.tokenDragOriginalPositions?.[context.dragTargetId]) || originalPos;
-                const offX = originalPos.x - leadOrig.x;
-                const offY = originalPos.y - leadOrig.y;
+                const offX = originalPos.x - leadOrigPos.x;
+                const offY = originalPos.y - leadOrigPos.y;
                 const baseWaypoints = context.isTokenMeasuring ? context.measureAnchorPoints?.slice(1) || [] : [];
                 const tokenWaypoints =
                     t.id === context.dragTargetId || (offX === 0 && offY === 0)
@@ -310,7 +315,7 @@ export function endTouchTokenDrag(clientX, clientY, context = {}) {
                     endY: t.y,
                     waypoints: tokenWaypoints,
                     timestamp: Date.now(),
-                    duration: 500
+                    duration: moveDuration
                 };
             }
         }

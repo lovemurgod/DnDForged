@@ -1,5 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
+
+const rootDir = process.cwd();
 
 import {
     _hasResistanceType,
@@ -67,61 +71,64 @@ test('Mass Rolls Audit Remediation: Combat Math, Defenses, and Pipeline Verifica
         assert.equal(tooltipAc, 18, 'getTokenAC must include acMod and active acToggles');
     });
 
-    await t.test('3. executeMassRolls preserves weapon metadata (isMagic, isSilvered, isAdamantine, isSpell)', async () => {
-        const emittedMessages = [];
-        const mockCtx = {
-            getVtt: () => ({
-                username: 'GM',
-                socket: {
-                    emit(evt, data) {
-                        emittedMessages.push({ evt, data });
+    await t.test(
+        '3. executeMassRolls preserves weapon metadata (isMagic, isSilvered, isAdamantine, isSpell)',
+        async () => {
+            const emittedMessages = [];
+            const mockCtx = {
+                getVtt: () => ({
+                    username: 'GM',
+                    socket: {
+                        emit(evt, data) {
+                            emittedMessages.push({ evt, data });
+                        }
                     }
-                }
-            }),
-            getVisibilitySetting: () => 'public',
-            getMonster: () => ({
-                name: 'Solar',
-                str: 26,
-                dex: 22
-            })
-        };
+                }),
+                getVisibilitySetting: () => 'public',
+                getMonster: () => ({
+                    name: 'Solar',
+                    str: 26,
+                    dex: 22
+                })
+            };
 
-        const preParsedMacro = {
-            isAttack: true,
-            attackBonus: 15,
-            isMagic: true,
-            isSpell: true,
-            damages: [
-                { formula: '4d6+8', type: 'Slashing', isMagic: true, isSpell: true },
-                { formula: '6d8', type: 'Radiant', isMagic: true, isSpell: true }
-            ]
-        };
+            const preParsedMacro = {
+                isAttack: true,
+                attackBonus: 15,
+                isMagic: true,
+                isSpell: true,
+                damages: [
+                    { formula: '4d6+8', type: 'Slashing', isMagic: true, isSpell: true },
+                    { formula: '6d8', type: 'Radiant', isMagic: true, isSpell: true }
+                ]
+            };
 
-        executeMassRolls({
-            count: 2,
-            rollMode: 'normal',
-            abilityName: 'Greatsword',
-            rawEntries: [],
-            abilityText: 'Melee Weapon Attack',
-            charName: 'Solar',
-            preParsedMacro,
-            ctx: mockCtx
-        });
+            executeMassRolls({
+                count: 2,
+                rollMode: 'normal',
+                abilityName: 'Greatsword',
+                rawEntries: [],
+                abilityText: 'Melee Weapon Attack',
+                charName: 'Solar',
+                preParsedMacro,
+                ctx: mockCtx
+            });
 
-        // executeMassRolls spaces out rolls with 150ms intervals
-        await new Promise((resolve) => setTimeout(resolve, 450));
+            // executeMassRolls spaces out rolls with 150ms intervals
+            await new Promise((resolve) => setTimeout(resolve, 450));
 
-        // Last emitted message is the massAttackCard
-        const massMsg = emittedMessages.find((m) => m.data?.massAttackCard);
-        assert.ok(massMsg, 'massAttackCard message must be emitted');
+            // Last emitted message is the massAttackCard
+            const massMsg = emittedMessages.find((m) => m.data?.massAttackCard);
+            assert.ok(massMsg, 'massAttackCard message must be emitted');
 
-        const card = massMsg.data.massAttackCard;
-        assert.equal(card.attacks.length, 2);
-        assert.equal(card.attacks[0].dmgRolls[0].isMagic, true, 'isMagic metadata must be preserved');
-        assert.equal(card.attacks[0].dmgRolls[0].isSpell, true, 'isSpell metadata must be preserved');
-        assert.equal(card.attacks[0].dmgRolls[1].isMagic, true, 'isMagic metadata must be preserved');
-        assert.equal(card.attacks[0].dmgRolls[1].isSpell, true, 'isSpell metadata must be preserved');
-    });
+            const card = massMsg.data.massAttackCard;
+            assert.equal(card.attacks.length, 2);
+            assert.equal(card.attacks[0].dmgRolls[0].isMagic, true, 'isMagic metadata must be preserved');
+            assert.equal(card.attacks[0].dmgRolls[0].isSpell, true, 'isSpell metadata must be preserved');
+            assert.equal(card.attacks[0].dmgRolls[1].isMagic, true, 'isMagic metadata must be preserved');
+            assert.equal(card.attacks[0].dmgRolls[1].isSpell, true, 'isSpell metadata must be preserved');
+        }
+    );
 
     await t.test('4. Full overkill damage is counted consistently across damage application paths', () => {
         const token1 = { id: 'tok_low_hp', hp: 3, maxHp: 10, tempHp: 0 };
@@ -178,8 +185,8 @@ test('Mass Rolls Audit Remediation: Combat Math, Defenses, and Pipeline Verifica
         executeMassAttackResolution(massAttackCard, 'damage_equal', 'msg_test', {
             tokens,
             targetTokenIds: ['paladin_tok', 'goblin_tok'],
-            syncTokensHpToCharacters: () => { },
-            renderAll: () => { }
+            syncTokensHpToCharacters: () => {},
+            renderAll: () => {}
         });
 
         // Paladin was missed by the attack aimed at them, so Paladin must NOT take damage!
@@ -208,8 +215,8 @@ test('Mass Rolls Audit Remediation: Combat Math, Defenses, and Pipeline Verifica
         executeMassAttackResolution(massAttackCard, 'damage_random', 'msg_rnd', {
             tokens,
             targetTokenIds: ['high_ac'],
-            syncTokensHpToCharacters: () => { },
-            renderAll: () => { }
+            syncTokensHpToCharacters: () => {},
+            renderAll: () => {}
         });
 
         // Attack roll 15 against AC 30 must miss
@@ -270,82 +277,100 @@ test('Mass Rolls Audit Remediation: Combat Math, Defenses, and Pipeline Verifica
         assert.equal(typeof promptQuickSplitModal, 'function');
     });
 
-    await t.test('9. damage_equal triggers save riders strictly for each hitting attack target without N x M duplication', async () => {
-        const tokens = {
-            tok_a: { id: 'tok_a', name: 'Target A', hp: 50, maxHp: 50, ac: 10, monsterData: { ac: 10 } },
-            tok_b: { id: 'tok_b', name: 'Target B', hp: 50, maxHp: 50, ac: 10, monsterData: { ac: 10 } }
-        };
+    await t.test(
+        '9. damage_equal triggers save riders strictly for each hitting attack target without N x M duplication',
+        async () => {
+            const tokens = {
+                tok_a: { id: 'tok_a', name: 'Target A', hp: 50, maxHp: 50, ac: 10, monsterData: { ac: 10 } },
+                tok_b: { id: 'tok_b', name: 'Target B', hp: 50, maxHp: 50, ac: 10, monsterData: { ac: 10 } }
+            };
 
-        const massAttackCard = {
-            attacks: [
-                {
-                    index: 1,
-                    atkRoll: { total: 18, isCritSuccess: false, isCritFail: false },
-                    dmgRolls: [{ type: 'piercing', roll: { total: 10 } }, { type: 'poison', roll: { total: 6 }, saveRider: true }],
-                    saveInfo: { dc: 13, ability: 'CON' }
-                },
-                {
-                    index: 2,
-                    atkRoll: { total: 18, isCritSuccess: false, isCritFail: false },
-                    dmgRolls: [{ type: 'piercing', roll: { total: 10 } }, { type: 'poison', roll: { total: 6 }, saveRider: true }],
-                    saveInfo: { dc: 13, ability: 'CON' }
+            const massAttackCard = {
+                attacks: [
+                    {
+                        index: 1,
+                        atkRoll: { total: 18, isCritSuccess: false, isCritFail: false },
+                        dmgRolls: [
+                            { type: 'piercing', roll: { total: 10 } },
+                            { type: 'poison', roll: { total: 6 }, saveRider: true }
+                        ],
+                        saveInfo: { dc: 13, ability: 'CON' }
+                    },
+                    {
+                        index: 2,
+                        atkRoll: { total: 18, isCritSuccess: false, isCritFail: false },
+                        dmgRolls: [
+                            { type: 'piercing', roll: { total: 10 } },
+                            { type: 'poison', roll: { total: 6 }, saveRider: true }
+                        ],
+                        saveInfo: { dc: 13, ability: 'CON' }
+                    }
+                ]
+            };
+
+            let cardPosted = null;
+            const mockSocket = {
+                emit(evt, data) {
+                    if (data?.saveResolveCard) {
+                        cardPosted = data.saveResolveCard;
+                    }
                 }
-            ]
-        };
+            };
 
-        let cardPosted = null;
-        const mockSocket = {
-            emit(evt, data) {
-                if (data?.saveResolveCard) {
-                    cardPosted = data.saveResolveCard;
-                }
-            }
-        };
+            executeMassAttackResolution(massAttackCard, 'damage_equal', 'msg_rider_test', {
+                tokens,
+                targetTokenIds: ['tok_a', 'tok_b'],
+                vtt: { role: 'GM', socket: mockSocket },
+                syncHpFn() {},
+                renderAll() {},
+                triggerDamageFXAnimation() {}
+            });
 
-        executeMassAttackResolution(massAttackCard, 'damage_equal', 'msg_rider_test', {
-            tokens,
-            targetTokenIds: ['tok_a', 'tok_b'],
-            vtt: { role: 'GM', socket: mockSocket },
-            syncHpFn() { },
-            renderAll() { },
-            triggerDamageFXAnimation() { }
-        });
+            // Riders are rolled asynchronously with 150ms delays
+            await new Promise((resolve) => setTimeout(resolve, 450));
 
-        // Riders are rolled asynchronously with 150ms delays
-        await new Promise((resolve) => setTimeout(resolve, 450));
+            assert.ok(cardPosted, 'postSaveResolutionChatCard must be called');
+            // Exactly 2 attacks hit across 2 targets -> exactly 2 save results, NOT 4 (which was the N x M bug)
+            assert.equal(cardPosted.results.length, 2, 'Exactly 2 saves must be rolled for 2 hitting attacks');
+            assert.equal(cardPosted.results[0].tokenId, 'tok_a', 'Attack 1 save must target tok_a');
+            assert.equal(cardPosted.results[1].tokenId, 'tok_b', 'Attack 2 save must target tok_b');
+        }
+    );
 
-        assert.ok(cardPosted, 'postSaveResolutionChatCard must be called');
-        // Exactly 2 attacks hit across 2 targets -> exactly 2 save results, NOT 4 (which was the N x M bug)
-        assert.equal(cardPosted.results.length, 2, 'Exactly 2 saves must be rolled for 2 hitting attacks');
-        assert.equal(cardPosted.results[0].tokenId, 'tok_a', 'Attack 1 save must target tok_a');
-        assert.equal(cardPosted.results[1].tokenId, 'tok_b', 'Attack 2 save must target tok_b');
-    });
+    await t.test(
+        '10. clusterTokensByProximity clusters 2D tokens strictly by map proximity without mixing separate clusters',
+        () => {
+            // Interleaved list of tokens: 3 in West room, 3 in East room
+            const tok_w1 = { id: 'w1', x: 10, y: 10, width: 50, height: 50 };
+            const tok_w2 = { id: 'w2', x: 20, y: 10, width: 50, height: 50 };
+            const tok_w3 = { id: 'w3', x: 15, y: 25, width: 50, height: 50 };
 
-    await t.test('10. clusterTokensByProximity clusters 2D tokens strictly by map proximity without mixing separate clusters', () => {
-        // Interleaved list of tokens: 3 in West room, 3 in East room
-        const tok_w1 = { id: 'w1', x: 10, y: 10, width: 50, height: 50 };
-        const tok_w2 = { id: 'w2', x: 20, y: 10, width: 50, height: 50 };
-        const tok_w3 = { id: 'w3', x: 15, y: 25, width: 50, height: 50 };
+            const tok_e1 = { id: 'e1', x: 500, y: 500, width: 50, height: 50 };
+            const tok_e2 = { id: 'e2', x: 510, y: 500, width: 50, height: 50 };
+            const tok_e3 = { id: 'e3', x: 505, y: 520, width: 50, height: 50 };
 
-        const tok_e1 = { id: 'e1', x: 500, y: 500, width: 50, height: 50 };
-        const tok_e2 = { id: 'e2', x: 510, y: 500, width: 50, height: 50 };
-        const tok_e3 = { id: 'e3', x: 505, y: 520, width: 50, height: 50 };
+            const mixedList = [tok_w1, tok_e1, tok_w2, tok_e2, tok_w3, tok_e3];
+            const squads = clusterTokensByProximity(mixedList, 2);
 
-        const mixedList = [tok_w1, tok_e1, tok_w2, tok_e2, tok_w3, tok_e3];
-        const squads = clusterTokensByProximity(mixedList, 2);
+            assert.equal(squads.length, 2, 'Must create 2 squads');
+            assert.equal(squads[0].length, 3, 'Squad 1 must have 3 tokens');
+            assert.equal(squads[1].length, 3, 'Squad 2 must have 3 tokens');
 
-        assert.equal(squads.length, 2, 'Must create 2 squads');
-        assert.equal(squads[0].length, 3, 'Squad 1 must have 3 tokens');
-        assert.equal(squads[1].length, 3, 'Squad 2 must have 3 tokens');
+            // Squad 1 must be the West cluster (sorted west to east)
+            const squad1Ids = new Set(squads[0].map((t) => t.id));
+            assert.ok(
+                squad1Ids.has('w1') && squad1Ids.has('w2') && squad1Ids.has('w3'),
+                'Squad 1 must contain all West tokens'
+            );
 
-        // Squad 1 must be the West cluster (sorted west to east)
-        const squad1Ids = new Set(squads[0].map((t) => t.id));
-        assert.ok(squad1Ids.has('w1') && squad1Ids.has('w2') && squad1Ids.has('w3'), 'Squad 1 must contain all West tokens');
-
-        // Squad 2 must be the East cluster
-        const squad2Ids = new Set(squads[1].map((t) => t.id));
-        assert.ok(squad2Ids.has('e1') && squad2Ids.has('e2') && squad2Ids.has('e3'), 'Squad 2 must contain all East tokens');
-    });
+            // Squad 2 must be the East cluster
+            const squad2Ids = new Set(squads[1].map((t) => t.id));
+            assert.ok(
+                squad2Ids.has('e1') && squad2Ids.has('e2') && squad2Ids.has('e3'),
+                'Squad 2 must contain all East tokens'
+            );
+        }
+    );
 
     await t.test('11. clusterTokensByProximity handles edge cases (single token, k >= n, k <= 1)', () => {
         const t1 = { id: 't1', x: 0, y: 0 };
@@ -353,8 +378,60 @@ test('Mass Rolls Audit Remediation: Combat Math, Defenses, and Pipeline Verifica
         assert.equal(clusterTokensByProximity([], 2).length, 1);
         assert.equal(clusterTokensByProximity([t1], 1).length, 1);
 
-        const list = [{ id: 'a', x: 0, y: 0 }, { id: 'b', x: 10, y: 0 }];
+        const list = [
+            { id: 'a', x: 0, y: 0 },
+            { id: 'b', x: 10, y: 0 }
+        ];
         const result = clusterTokensByProximity(list, 5);
         assert.equal(result.length, 2, 'Cannot exceed number of tokens');
+    });
+
+    await t.test(
+        '12. Group Initiative and squad splitting emit exactly 1 combatant per squad with linked tokenIds',
+        () => {
+            const massActionsContent = fs.readFileSync(
+                path.join(rootDir, 'vtt', 'js', 'canvas', 'tokens', 'vtt-canvas-mass-actions.js'),
+                'utf8'
+            );
+            const chatJsContent = fs.readFileSync(path.join(rootDir, 'vtt', 'js', 'vtt-chat.js'), 'utf8');
+
+            // Verify unsplit group initiative emits 1 combatant with tokenIds array
+            assert.match(
+                massActionsContent,
+                /window\.VTT\.chatEngine\.addToInitiative\(\s*name,\s*resultTotal,\s*rep\.id,\s*rep\.img,\s*tokensList\.map\(\(t\)\s*=>\s*t\.id\)\s*\);/s,
+                'Unsplit group initiative must emit a single combatant with all member token IDs'
+            );
+
+            // Verify split squads emit 1 combatant per squad with squad member token IDs
+            assert.match(
+                massActionsContent,
+                /window\.VTT\.chatEngine\.addToInitiative\(\s*`\$\{name\}\s*\(Squad\s*\$\{s\s*\+\s*1\}\)`,\s*resultTotal,\s*rep\.id,\s*rep\.img,\s*squadTokens\.map\(\(t\)\s*=>\s*t\.id\)\s*\);/s,
+                'Split squad initiative must emit a single combatant per squad with squad member token IDs'
+            );
+
+            // Verify addToInitiative accepts and assigns tokenIds
+            assert.match(
+                chatJsContent,
+                /function addToInitiative\(name,\s*score,\s*tokenId,\s*customImg,\s*tokenIds\s*=\s*null\)/,
+                'addToInitiative must accept optional tokenIds parameter'
+            );
+            assert.match(
+                chatJsContent,
+                /combatants\[existingIdx\]\.tokenIds\s*=\s*memberIds;/,
+                'addToInitiative must persist memberIds on existing combatant'
+            );
+            assert.match(
+                chatJsContent,
+                /tokenIds:\s*memberIds,/,
+                'addToInitiative must store memberIds on new combatant'
+            );
+        }
+    );
+
+    await t.test('13. Scroll chevrons are permanently removed from index.html to avoid turn advance confusion', () => {
+        const indexHtml = fs.readFileSync(path.join(rootDir, 'vtt', 'index.html'), 'utf8');
+
+        assert.ok(!indexHtml.includes('id="btn-init-scroll-left"'), 'btn-init-scroll-left must be removed from DOM');
+        assert.ok(!indexHtml.includes('id="btn-init-scroll-right"'), 'btn-init-scroll-right must be removed from DOM');
     });
 });

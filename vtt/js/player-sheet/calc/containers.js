@@ -98,14 +98,20 @@ export function calculateCharacterTotalWeight(char) {
 
 /**
  * Calculates encumbrance state against STR capacity
+ * @param {number} strScore - Character Strength score
+ * @param {number} totalWeight - Current inventory weight
+ * @param {string} rule - 'standard' or 'variant'
+ * @param {number} [carryMultiplier=1] - Multiplier for carry capacity (e.g. 2 for Powerful Build)
  */
-export function calculateEncumbrance(strScore, totalWeight, rule = 'standard') {
+export function calculateEncumbrance(strScore, totalWeight, rule = 'standard', carryMultiplier = 1) {
     const str = Math.max(1, parseInt(strScore) || 10);
     const wt = parseFloat(totalWeight) || 0;
+    const mult = Math.max(0.1, parseFloat(carryMultiplier) || 1);
 
-    const maxThreshold = str * 15;
-    const heavyThreshold = str * 10;
-    const encumberedThreshold = str * 5;
+    const maxThreshold = Math.round(str * 15 * mult * 100) / 100;
+    const heavyThreshold = Math.round(str * 10 * mult * 100) / 100;
+    const encumberedThreshold = Math.round(str * 5 * mult * 100) / 100;
+    const pushDragLift = Math.round(str * 30 * mult * 100) / 100;
 
     if (rule === 'variant') {
         if (wt > maxThreshold) {
@@ -116,7 +122,9 @@ export function calculateEncumbrance(strScore, totalWeight, rule = 'standard') {
                 statusColor: 'var(--color-danger)',
                 maxThreshold,
                 heavyThreshold,
-                encumberedThreshold
+                encumberedThreshold,
+                pushDragLift,
+                carryMultiplier: mult
             };
         } else if (wt > heavyThreshold) {
             return {
@@ -126,7 +134,9 @@ export function calculateEncumbrance(strScore, totalWeight, rule = 'standard') {
                 statusColor: 'var(--color-danger)',
                 maxThreshold,
                 heavyThreshold,
-                encumberedThreshold
+                encumberedThreshold,
+                pushDragLift,
+                carryMultiplier: mult
             };
         } else if (wt > encumberedThreshold) {
             return {
@@ -136,7 +146,9 @@ export function calculateEncumbrance(strScore, totalWeight, rule = 'standard') {
                 statusColor: 'var(--color-warning)',
                 maxThreshold,
                 heavyThreshold,
-                encumberedThreshold
+                encumberedThreshold,
+                pushDragLift,
+                carryMultiplier: mult
             };
         }
         return {
@@ -146,7 +158,9 @@ export function calculateEncumbrance(strScore, totalWeight, rule = 'standard') {
             statusColor: 'var(--color-success)',
             maxThreshold,
             heavyThreshold,
-            encumberedThreshold
+            encumberedThreshold,
+            pushDragLift,
+            carryMultiplier: mult
         };
     }
 
@@ -157,7 +171,9 @@ export function calculateEncumbrance(strScore, totalWeight, rule = 'standard') {
             statusKey: 'over',
             statusText: 'Over-encumbered (0 speed)',
             statusColor: 'var(--color-danger)',
-            maxThreshold
+            maxThreshold,
+            pushDragLift,
+            carryMultiplier: mult
         };
     }
     return {
@@ -165,6 +181,8 @@ export function calculateEncumbrance(strScore, totalWeight, rule = 'standard') {
         statusKey: 'normal',
         statusText: 'Normal',
         statusColor: 'var(--color-success)',
-        maxThreshold
+        maxThreshold,
+        pushDragLift,
+        carryMultiplier: mult
     };
 }

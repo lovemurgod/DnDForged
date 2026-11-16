@@ -8,10 +8,7 @@ import {
     syncTokensHpToCharacters
 } from '../vtt/js/canvas/tokens/vtt-canvas-mass-actions.js';
 
-import {
-    getTokenAC,
-    getResolvedCreatureMonsterData
-} from '../vtt/js/canvas/vtt-canvas-tooltips-notes.js';
+import { getTokenAC, getResolvedCreatureMonsterData } from '../vtt/js/canvas/vtt-canvas-tooltips-notes.js';
 
 test('Process Button & Entity Linking: Generic vs Named HP sync and Card Resolution', async (t) => {
     await t.test('Generic creature damage does NOT mutate campaign character template or sibling tokens', () => {
@@ -31,7 +28,7 @@ test('Process Button & Entity Linking: Generic vs Named HP sync and Card Resolut
                 }
             },
             socket: {
-                emit: () => { }
+                emit: () => {}
             }
         };
 
@@ -163,8 +160,8 @@ test('Process Button & Entity Linking: Generic vs Named HP sync and Card Resolut
             vtt,
             tokens,
             msgId: 'msg_test_123',
-            syncHpFn: () => { },
-            renderAll: () => { }
+            syncHpFn: () => {},
+            renderAll: () => {}
         });
 
         assert.equal(handled, true);
@@ -178,50 +175,53 @@ test('Process Button & Entity Linking: Generic vs Named HP sync and Card Resolut
         assert.match(macroResolvedEvent.data.resolution.summary, /Hit! Dealt 8 DMG/);
     });
 
-    await t.test('processCardFullResolution evaluates miss, marks card resolved without damage, and emits chat:macro_resolved', () => {
-        const emittedSocketEvents = [];
-        const vtt = {
-            role: 'GM',
-            socket: {
-                emit(evt, data) {
-                    emittedSocketEvents.push({ evt, data });
+    await t.test(
+        'processCardFullResolution evaluates miss, marks card resolved without damage, and emits chat:macro_resolved',
+        () => {
+            const emittedSocketEvents = [];
+            const vtt = {
+                role: 'GM',
+                socket: {
+                    emit(evt, data) {
+                        emittedSocketEvents.push({ evt, data });
+                    }
                 }
-            }
-        };
+            };
 
-        const tokens = {
-            knight_1: {
-                id: 'knight_1',
-                name: 'Knight',
-                hp: 50,
-                maxHp: 50,
-                ac: 18
-            }
-        };
+            const tokens = {
+                knight_1: {
+                    id: 'knight_1',
+                    name: 'Knight',
+                    hp: 50,
+                    maxHp: 50,
+                    ac: 18
+                }
+            };
 
-        const cardData = {
-            atkRoll: { total: 14, isCritSuccess: false, isCritFail: false },
-            dmgRolls: [{ type: 'slashing', roll: { total: 12 } }]
-        };
+            const cardData = {
+                atkRoll: { total: 14, isCritSuccess: false, isCritFail: false },
+                dmgRolls: [{ type: 'slashing', roll: { total: 12 } }]
+            };
 
-        const handled = processCardFullResolution(cardData, ['knight_1'], {
-            vtt,
-            tokens,
-            msgId: 'msg_test_miss',
-            syncHpFn: () => { },
-            renderAll: () => { }
-        });
+            const handled = processCardFullResolution(cardData, ['knight_1'], {
+                vtt,
+                tokens,
+                msgId: 'msg_test_miss',
+                syncHpFn: () => {},
+                renderAll: () => {}
+            });
 
-        assert.equal(handled, true);
-        assert.equal(tokens.knight_1.hp, 50, 'Knight took no damage on miss');
-        assert.ok(cardData.resolved, 'Card must be marked as resolved');
-        assert.match(cardData.resolved.summary, /Attack \(14\) missed selected token\(s\)/);
+            assert.equal(handled, true);
+            assert.equal(tokens.knight_1.hp, 50, 'Knight took no damage on miss');
+            assert.ok(cardData.resolved, 'Card must be marked as resolved');
+            assert.match(cardData.resolved.summary, /Attack \(14\) missed selected token\(s\)/);
 
-        const macroResolvedEvent = emittedSocketEvents.find((e) => e.evt === 'chat:macro_resolved');
-        assert.ok(macroResolvedEvent, 'chat:macro_resolved socket event should be emitted');
-        assert.equal(macroResolvedEvent.data.id, 'msg_test_miss');
-        assert.match(macroResolvedEvent.data.resolution.summary, /missed selected token/);
-    });
+            const macroResolvedEvent = emittedSocketEvents.find((e) => e.evt === 'chat:macro_resolved');
+            assert.ok(macroResolvedEvent, 'chat:macro_resolved socket event should be emitted');
+            assert.equal(macroResolvedEvent.data.id, 'msg_test_miss');
+            assert.match(macroResolvedEvent.data.resolution.summary, /missed selected token/);
+        }
+    );
 
     await t.test('handleCardAction with "full" and "half" damage resolves card and emits chat:macro_resolved', () => {
         const emittedSocketEvents = [];
@@ -247,8 +247,8 @@ test('Process Button & Entity Linking: Generic vs Named HP sync and Card Resolut
             tokens,
             selectedTokenIds: new Set(['t1']),
             msgId: 'msg_full_dmg',
-            syncHpFn: () => { },
-            renderAll: () => { }
+            syncHpFn: () => {},
+            renderAll: () => {}
         });
 
         assert.equal(handledFull, true);
@@ -264,8 +264,8 @@ test('Process Button & Entity Linking: Generic vs Named HP sync and Card Resolut
             tokens,
             selectedTokenIds: new Set(['t1']),
             msgId: 'msg_half_dmg',
-            syncHpFn: () => { },
-            renderAll: () => { }
+            syncHpFn: () => {},
+            renderAll: () => {}
         });
 
         assert.equal(handledHalf, true);

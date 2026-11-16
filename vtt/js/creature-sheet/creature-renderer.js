@@ -1,6 +1,7 @@
 // ForgeDVTT Creature Sheet — Renderer Subsystem
 // Handles panel DOM rendering, stat blocks, HP tracking, token avatars, legendary sections, and panel resizing.
 
+import { escapeHtml } from '../vtt-utils.js';
 import {
     buildTypeString,
     buildSpeedString,
@@ -83,7 +84,7 @@ export function setupPanelResizing(panel) {
             if (resizeHandle.hasPointerCapture(e.pointerId)) {
                 resizeHandle.releasePointerCapture(e.pointerId);
             }
-        } catch (err) { }
+        } catch (err) {}
         const currentComputed = Math.round(panel.getBoundingClientRect().width);
         if (currentComputed >= 280) {
             localStorage.setItem('vtt_cs_panel_width', currentComputed);
@@ -395,9 +396,7 @@ export function wireHpControls(panel, m, initial, max, ctx = {}, initialTemp = 0
 
     const isGm = vtt?.role === 'GM';
     const activeChar =
-        linkedCharacterId && vtt?.campaignState?.characters
-            ? vtt.campaignState.characters[linkedCharacterId]
-            : null;
+        linkedCharacterId && vtt?.campaignState?.characters ? vtt.campaignState.characters[linkedCharacterId] : null;
     const isAssigned = Boolean(
         activeChar &&
         activeChar.assignedPlayers &&
@@ -411,8 +410,7 @@ export function wireHpControls(panel, m, initial, max, ctx = {}, initialTemp = 0
         currentCanvasToken &&
         (currentCanvasToken.ownerUsername === vtt?.username ||
             currentCanvasToken.playerOwner === vtt?.username ||
-            (currentCanvasToken.assignedPlayers &&
-                currentCanvasToken.assignedPlayers.includes(vtt?.username)))
+            (currentCanvasToken.assignedPlayers && currentCanvasToken.assignedPlayers.includes(vtt?.username)))
     );
     const isGenericEntity = Boolean(activeChar ? activeChar.isGeneric === true : m.isGeneric === true);
     const isGenericTemplateWithoutToken = Boolean(isGenericEntity && !linkedTokenId);
@@ -656,6 +654,130 @@ export function extractLairTitle(text) {
     return '';
 }
 
+export function detectCreatureAbilityTable(entry, name = '', rawEntries = [], cleanText = '') {
+    const lowerName = (name || '').toLowerCase();
+
+    // 1. Eye Rays (Beholders, Spectators, etc.)
+    if (lowerName.includes('eye ray') || lowerName.includes('eye rays')) {
+        const items = [];
+        const findList = (arr) => {
+            if (!Array.isArray(arr)) return;
+            arr.forEach((item) => {
+                if (item?.type === 'list' && Array.isArray(item.items)) {
+                    item.items.forEach((sub, idx) => {
+                        const subName = sub.name || `Ray ${idx + 1}`;
+                        const subEntry = sub.entry || (Array.isArray(sub.entries) ? sub.entries.join(' ') : '');
+                        items.push({
+                            roll: idx + 1,
+                            name: subName.replace(/^\d+\.\s*/, ''),
+                            fullName: subName,
+                            desc: parse5eMarkup(subEntry)
+                        });
+                    });
+                } else if (item?.entries) {
+                    findList(item.entries);
+                }
+            });
+        };
+        findList(rawEntries);
+
+        if (items.length > 0) {
+            return {
+                type: 'eye-rays',
+                formula: `1d${items.length}`,
+                diceSides: items.length,
+                items
+            };
+        }
+    }
+
+    // 2. Flesh Warping / Warp Creature (Sibriex, Demon Ichor)
+    if (lowerName.includes('warp creature') || lowerName.includes('flesh warping')) {
+        return {
+            type: 'flesh-warping',
+            formula: '1d100',
+            diceSides: 100,
+            tableName: 'Flesh Warping (Demon Ichor)'
+        };
+    }
+
+    // 3. Embedded table in entry
+    const findTable = (arr) => {
+        if (!Array.isArray(arr)) return null;
+        for (const item of arr) {
+            if (item?.type === 'table' && Array.isArray(item.rows) && item.rows.length > 0) {
+                return item;
+            }
+            if (item?.entries) {
+                const res = findTable(item.entries);
+                if (res) return res;
+            }
+        }
+        return null;
+    };
+    const embeddedTable = findTable(rawEntries);
+    if (embeddedTable) {
+        const rows = embeddedTable.rows.map((r, idx) => {
+            const cells = Array.isArray(r) ? r : [r];
+            return {
+                roll: idx + 1,
+                name: String(cells[0] || `Option ${idx + 1}`),
+                desc: cells
+                    .slice(1)
+                    .map((c) => String(c))
+                    .join(' — ')
+            };
+        });
+        return {
+            type: 'embedded-table',
+            formula: `1d${rows.length}`,
+            diceSides: rows.length,
+            items: rows
+        };
+    }
+
+    // 4. Numbered list in entry (e.g. 1. ... 2. ... up to N)
+    const findNumberedList = (arr) => {
+        if (!Array.isArray(arr)) return null;
+        for (const item of arr) {
+            if (item?.type === 'list' && Array.isArray(item.items) && item.items.length >= 2) {
+                const isNumbered = item.items.every((it, i) => {
+                    const n = String(it?.name || it || '');
+                    return n.startsWith(`${i + 1}.`) || n.startsWith(`${i + 1} `) || /^\d+/.test(n);
+                });
+                if (isNumbered) return item.items;
+            }
+            if (item?.entries) {
+                const res = findNumberedList(item.entries);
+                if (res) return res;
+            }
+        }
+        return null;
+    };
+    const numList = findNumberedList(rawEntries);
+    if (numList) {
+        const items = numList.map((sub, idx) => {
+            const subName = typeof sub === 'string' ? sub : sub.name || `Option ${idx + 1}`;
+            const subDesc =
+                typeof sub === 'string' ? '' : sub.entry || (Array.isArray(sub.entries) ? sub.entries.join(' ') : '');
+            return {
+                roll: idx + 1,
+                name: subName.replace(/^\d+\.\s*/, ''),
+                fullName: subName,
+                desc: parse5eMarkup(subDesc)
+            };
+        });
+        return {
+            type: 'numbered-list',
+            formula: `1d${items.length}`,
+            diceSides: items.length,
+            items
+        };
+    }
+
+    return null;
+}
+
 export function buildAbilityEntryHtml(entry) {
     if (!entry) return '';
     if (typeof entry === 'string') {
@@ -687,6 +809,21 @@ export function buildAbilityEntryHtml(entry) {
     const macroJson = entry.macro ? encodeURIComponent(JSON.stringify(entry.macro)) : '';
     const isPassive = isPassiveAbility(name, rawEntries, cleanText, entry.macro);
 
+    const tableInfo = detectCreatureAbilityTable(entry, name, rawEntries, cleanText);
+    const tableChipHtml = tableInfo
+        ? `
+        <button type="button" class="btn btn-xxs btn-secondary cs-ability-table-chip" 
+                data-ability-name="${escapeHtml(name)}"
+                data-table-type="${tableInfo.type}"
+                data-formula="${tableInfo.formula}"
+                data-table-json="${encodeURIComponent(JSON.stringify(tableInfo))}"
+                title="Roll ${escapeHtml(name)} Table"
+                style="margin-left: auto; margin-right: 6px; display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; background: rgba(212, 175, 55, 0.15); border: 1px solid var(--color-gold-base); color: var(--color-gold-light); cursor: pointer;">
+            <i class="fa-solid fa-dice-d20 text-gradient-gold"></i> Roll Table
+        </button>
+    `
+        : '';
+
     const nameSectionHtml = isPassive
         ? `
         <div class="cs-ability-name cs-passive-trigger" title="Click to expand details" style="cursor: pointer; flex: 0 0 auto; display: inline-flex; align-items: center; gap: 6px;">
@@ -704,7 +841,8 @@ export function buildAbilityEntryHtml(entry) {
             <div class="cs-ability-header">
                 <i class="cs-card-chevron fa-solid fa-chevron-right"></i>
                 ${nameSectionHtml}
-                <div class="cs-ability-info-btn" title="Ping description to chat" style="cursor: pointer; color: var(--color-text-muted); display: flex; align-items: center; justify-content: center; width: 20px; height: 20px; border-radius: 4px; transition: background 0.2s, color 0.2s; margin-left: auto;">
+                ${tableChipHtml}
+                <div class="cs-ability-info-btn" title="Ping description to chat" style="cursor: pointer; color: var(--color-text-muted); display: flex; align-items: center; justify-content: center; width: 20px; height: 20px; border-radius: 4px; transition: background 0.2s, color 0.2s; ${tableInfo ? '' : 'margin-left: auto;'}">
                     <i class="fa-solid fa-comment-dots"></i>
                 </div>
             </div>
@@ -733,10 +871,10 @@ export function buildLegendarySection(m) {
     const legEntries = Array.isArray(m.legendaryActions)
         ? m.legendaryActions
         : Array.isArray(m.legendaryActions?.entries)
-            ? m.legendaryActions.entries
-            : Array.isArray(m.legendary)
-                ? m.legendary
-                : [];
+          ? m.legendaryActions.entries
+          : Array.isArray(m.legendary)
+            ? m.legendary
+            : [];
     if (legEntries && legEntries.length > 0) {
         const lairBadge = m.legendaryActionsLair
             ? ` <span class="badge" style="font-size:0.75rem; background:rgba(255,215,0,0.15); color:#ffd700; border:1px solid rgba(255,215,0,0.4); border-radius:3px; padding:1px 5px; margin-left:6px;">${m.legendaryActions?.count || 3} (${m.legendaryActionsLair} in Lair)</span>`
@@ -744,8 +882,8 @@ export function buildLegendarySection(m) {
         const legDesc = m.legendaryActions?.description
             ? `<p class="cs-legendary-desc">${m.legendaryActions.description}</p>`
             : m.legendaryHeader
-                ? `<p class="cs-legendary-desc">${cleanTags(flattenEntriesToText(m.legendaryHeader))}</p>`
-                : '';
+              ? `<p class="cs-legendary-desc">${cleanTags(flattenEntriesToText(m.legendaryHeader))}</p>`
+              : '';
         const rows = legEntries.map((entry) => buildAbilityEntryHtml(entry)).join('');
         html += `
             <div class="cs-section cs-legendary-section">
@@ -761,16 +899,16 @@ export function buildLegendarySection(m) {
     const mythicEntries = Array.isArray(m.mythicActions)
         ? m.mythicActions
         : Array.isArray(m.mythicActions?.entries)
-            ? m.mythicActions.entries
-            : Array.isArray(m.mythic)
-                ? m.mythic
-                : [];
+          ? m.mythicActions.entries
+          : Array.isArray(m.mythic)
+            ? m.mythic
+            : [];
     if (mythicEntries && mythicEntries.length > 0) {
         const mythicDesc = m.mythicActions?.description
             ? `<p class="cs-legendary-desc">${m.mythicActions.description}</p>`
             : m.mythicHeader
-                ? `<p class="cs-legendary-desc">${cleanTags(flattenEntriesToText(m.mythicHeader))}</p>`
-                : '';
+              ? `<p class="cs-legendary-desc">${cleanTags(flattenEntriesToText(m.mythicHeader))}</p>`
+              : '';
         const rows = mythicEntries.map((entry) => buildAbilityEntryHtml(entry)).join('');
         html += `
             <div class="cs-section cs-mythic-section" style="margin-top:12px;">
@@ -786,10 +924,10 @@ export function buildLegendarySection(m) {
     const lairEntries = Array.isArray(m.lairActions)
         ? m.lairActions
         : Array.isArray(m.lairActions?.entries)
-            ? m.lairActions.entries
-            : Array.isArray(m.lair)
-                ? m.lair
-                : [];
+          ? m.lairActions.entries
+          : Array.isArray(m.lair)
+            ? m.lair
+            : [];
     if (lairEntries && lairEntries.length > 0) {
         const lairDesc =
             m.lairHeader ||
@@ -894,28 +1032,34 @@ export function renderStatBlock(m, panel = null, ctx = {}) {
         if (linkedTokenId) {
             hpCurrent = getLinkedTokenHp(m, ctx) ?? (m.hp?.average || (typeof m.hp === 'number' ? m.hp : 0));
             const token = window.VTT?.canvasEngine?.getTokens()?.[linkedTokenId];
-            hpMax = (token && token.maxHp !== undefined) ? token.maxHp : (m.hp?.average || (typeof m.hp === 'number' ? m.hp : 0));
+            hpMax =
+                token && token.maxHp !== undefined
+                    ? token.maxHp
+                    : m.hp?.average || (typeof m.hp === 'number' ? m.hp : 0);
         } else {
             // Generic template view without token context
-            hpCurrent = typeof m.hp === 'number' ? m.hp : (m.hp?.average || char?.hpCurrent || char?.hpMax || 0);
-            hpMax = char?.hpMax ?? (typeof m.hp === 'number' ? m.hp : (m.hp?.average || hpCurrent));
+            hpCurrent = typeof m.hp === 'number' ? m.hp : m.hp?.average || char?.hpCurrent || char?.hpMax || 0;
+            hpMax = char?.hpMax ?? (typeof m.hp === 'number' ? m.hp : m.hp?.average || hpCurrent);
         }
     } else {
         // Named Entity: campaign character is ground truth
         if (char) {
-            hpCurrent = char.hpCurrent ?? (typeof m.hp === 'number' ? m.hp : (m.hp?.average || 0));
-            hpMax = char.hpMax ?? (typeof m.hp === 'number' ? m.hp : (m.hp?.average || 0));
+            hpCurrent = char.hpCurrent ?? (typeof m.hp === 'number' ? m.hp : m.hp?.average || 0);
+            hpMax = char.hpMax ?? (typeof m.hp === 'number' ? m.hp : m.hp?.average || 0);
         } else if (linkedTokenId) {
             hpCurrent = getLinkedTokenHp(m, ctx) ?? (m.hp?.average || (typeof m.hp === 'number' ? m.hp : 0));
             const token = window.VTT?.canvasEngine?.getTokens()?.[linkedTokenId];
-            hpMax = (token && token.maxHp !== undefined) ? token.maxHp : (m.hp?.average || (typeof m.hp === 'number' ? m.hp : 0));
+            hpMax =
+                token && token.maxHp !== undefined
+                    ? token.maxHp
+                    : m.hp?.average || (typeof m.hp === 'number' ? m.hp : 0);
         } else {
-            hpCurrent = typeof m.hp === 'number' ? m.hp : (m.hp?.average || 0);
+            hpCurrent = typeof m.hp === 'number' ? m.hp : m.hp?.average || 0;
             hpMax = hpCurrent;
         }
     }
 
-    const crStr = m.cr ? (typeof m.cr === 'object' ? (m.cr.cr || m.cr.coven || m.cr.lair || '0') : m.cr) : '0';
+    const crStr = m.cr ? (typeof m.cr === 'object' ? m.cr.cr || m.cr.coven || m.cr.lair || '0' : m.cr) : '0';
     const typeStr = buildTypeString(m);
     const hpFormula = m.hp?.formula || '';
     const hpTemp = getLinkedTokenTempHp(m, ctx) || 0;

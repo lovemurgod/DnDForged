@@ -151,49 +151,54 @@ export function setupViewportControls(context = {}) {
     const viewport =
         context.viewport || (typeof document !== 'undefined' ? document.getElementById('vtt-canvas-viewport') : null);
 
-    canvasInteraction.addEventListener('wheel', (e) => {
-        e.preventDefault();
-        context.cancelCameraAnimation?.();
-        context.hideGmTokenTooltip?.();
+    canvasInteraction.addEventListener(
+        'wheel',
+        (e) => {
+            e.preventDefault();
+            context.cancelCameraAnimation?.();
+            context.hideGmTokenTooltip?.();
 
-        const isZoomGesture = e.ctrlKey || e.deltaMode !== 0 || Math.abs(e.deltaY) >= 50;
+            const isZoomGesture = e.ctrlKey || e.deltaMode !== 0 || Math.abs(e.deltaY) >= 50;
 
-        if (isZoomGesture) {
-            // Zoom gesture (Pinch-to-zoom, Ctrl+Wheel, or notched mousewheel)
-            const zoomFactor = e.ctrlKey
-                ? Math.exp(-e.deltaY * 0.01)
-                : e.deltaY > 0
-                  ? 0.9
-                  : 1.1;
+            if (isZoomGesture) {
+                // Zoom gesture (Pinch-to-zoom, Ctrl+Wheel, or notched mousewheel)
+                const zoomFactor = e.ctrlKey ? Math.exp(-e.deltaY * 0.01) : e.deltaY > 0 ? 0.9 : 1.1;
 
-            if (!viewport) return;
-            const vr = viewport.getBoundingClientRect();
-            const mouseX = e.clientX - vr.left;
-            const mouseY = e.clientY - vr.top;
+                if (!viewport) return;
+                const vr = viewport.getBoundingClientRect();
+                const mouseX = e.clientX - vr.left;
+                const mouseY = e.clientY - vr.top;
 
-            const targetX = (mouseX - context.panX) / context.zoom;
-            const targetY = (mouseY - context.panY) / context.zoom;
+                const targetX = (mouseX - context.panX) / context.zoom;
+                const targetY = (mouseY - context.panY) / context.zoom;
 
-            const nextZoom = Math.min(5.0, Math.max(0.1, context.zoom * zoomFactor));
-            context.zoom = nextZoom;
+                const nextZoom = Math.min(5.0, Math.max(0.1, context.zoom * zoomFactor));
+                context.zoom = nextZoom;
 
-            context.panX = mouseX - targetX * context.zoom;
-            context.panY = mouseY - targetY * context.zoom;
+                context.panX = mouseX - targetX * context.zoom;
+                context.panY = mouseY - targetY * context.zoom;
 
-            context.updateContainerTransform?.();
-            context.renderAll?.();
-        } else {
-            // Two-finger trackpad panning (Modern CAD / Figma / Roll20 style)
-            context.panX -= e.deltaX;
-            context.panY -= e.deltaY;
-            context.updateContainerTransform?.();
-            context.renderAll?.();
-        }
-    }, { passive: false });
+                context.updateContainerTransform?.();
+                context.renderAll?.();
+            } else {
+                // Two-finger trackpad panning (Modern CAD / Figma / Roll20 style)
+                context.panX -= e.deltaX;
+                context.panY -= e.deltaY;
+                context.updateContainerTransform?.();
+                context.renderAll?.();
+            }
+        },
+        { passive: false }
+    );
 
     canvasInteraction.addEventListener('contextmenu', (e) => {
         e.preventDefault();
         if (context.hasPanned) return;
+
+        if (context.localIsMeasuring || context.localIsShaping || context.isTokenMeasuring) {
+            e.stopPropagation();
+            return;
+        }
 
         const mouse = context.getCanvasMouseCoords?.(e) || { x: 0, y: 0 };
         const vtt = context.vtt || (typeof window !== 'undefined' ? window.VTT : {});
@@ -343,9 +348,13 @@ export function setupToolControls(context = {}) {
                     document.getElementById('panel-measure-config')?.classList.remove('vtt-hidden');
                 } else if (context.activeTool === 'paint') {
                     const isMobile =
-                        (typeof window !== 'undefined' && window.innerWidth <= 768) ||
-                        (typeof document !== 'undefined' &&
-                            document.documentElement.classList.contains('force-mobile-ui'));
+                        typeof window !== 'undefined' &&
+                        (document.documentElement.classList.contains('force-desktop-ui')
+                            ? false
+                            : Boolean(vtt?.mobileAdapter?.isMobileViewport?.()) ||
+                              Boolean(window.VTT?.mobileAdapter?.isMobileViewport?.()) ||
+                              document.documentElement.classList.contains('force-mobile-ui') ||
+                              window.innerWidth <= 900);
                     if (!isMobile) {
                         const ribbon = document.getElementById('panel-paint-ribbon');
                         if (ribbon) {
@@ -375,6 +384,28 @@ export function setupToolControls(context = {}) {
             vtt.socket?.emit('measure:clear', { mapId: context.currentMapId, username: vtt.username });
         }
     });
+
+    if (typeof document !== 'undefined') {
+        document.addEventListener('pointerdown', (e) => {
+            const openPanels = document.querySelectorAll('.floating-tool-panel:not(.vtt-hidden)');
+            if (!openPanels || openPanels.length === 0) return;
+
+            for (const panel of openPanels) {
+                if (panel.contains(e.target)) return;
+            }
+
+            if (
+                e.target.closest &&
+                e.target.closest(
+                    '#vtt-controls, #btn-layers, #vtt-mobile-tools-fab, #vtt-mobile-tools-menu, .mobile-tool-item'
+                )
+            ) {
+                return;
+            }
+
+            hideAllToolPanels();
+        });
+    }
 }
 
 export function setupLayersControls(context = {}) {

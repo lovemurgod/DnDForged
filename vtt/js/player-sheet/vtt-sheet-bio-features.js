@@ -3,6 +3,7 @@
 
 import { evaluateAbilityFormula, extractTextFromEntries, simulateRoll } from './vtt-sheet-rolls.js';
 import { switchModalTab } from './vtt-sheet-importers.js';
+import { escapeHtml } from '../vtt-utils.js';
 
 /**
  * Clean a proficiency entry string
@@ -157,6 +158,40 @@ export function formatAbilityCardDescription(card) {
     return safe;
 }
 
+export function getEffectiveLinkedTable(card) {
+    if (!card) return null;
+    if (card.linkedTable && card.linkedTable !== 'auto' && card.linkedTable !== 'none') {
+        return typeof card.linkedTable === 'object' ? card.linkedTable.id : card.linkedTable;
+    }
+    if (card.linkedTable === 'none') {
+        return null;
+    }
+    const name = (card.name || '').toLowerCase();
+    const desc = (card.desc || card.description || '').toLowerCase();
+
+    if (
+        name.includes('wild magic') &&
+        (name.includes('barbarian') ||
+            name.includes('rage') ||
+            name.includes('raging') ||
+            name.includes('tce') ||
+            desc.includes('barbarian') ||
+            desc.includes('rage'))
+    ) {
+        return 'compendium:wild_magic_barbarian';
+    }
+    if (
+        name.includes('wild magic surge') ||
+        name.includes('tides of chaos') ||
+        desc.includes('wild magic surge') ||
+        name === 'wild magic' ||
+        name === 'wild magic table'
+    ) {
+        return 'compendium:wild_magic_sorcerer';
+    }
+    return null;
+}
+
 /**
  * Render single ability row HTML
  */
@@ -181,6 +216,15 @@ export function renderAbilityRowHtml(card, i, char) {
     `
         : '';
 
+    const effectiveTable = getEffectiveLinkedTable(card);
+    const tableChipHtml = effectiveTable
+        ? `
+        <button type="button" class="btn btn-xxs btn-secondary pc-ability-table-chip" data-idx="${i}" data-table="${effectiveTable}" title="Click to Roll Table" style="border-color:var(--color-gold-base); font-size:0.75rem; padding:2px 6px; display:inline-flex; align-items:center; gap:4px; font-weight:600; color:var(--color-gold-light);">
+            <i class="fa-solid fa-dice-d20 text-gradient-gold"></i> Roll Table
+        </button>
+    `
+        : '';
+
     return `
     <div class="ability-row glass-flat" data-idx="${i}" data-category-id="${card.categoryId || ''}" draggable="true" style="padding:8px; display:flex; flex-direction:column; gap:4px; transition: border-color 0.15s, box-shadow 0.15s, opacity 0.15s;">
         <div style="display:flex; justify-content:space-between; align-items:center;">
@@ -195,6 +239,7 @@ export function renderAbilityRowHtml(card, i, char) {
                 </div>
             </div>
             <div style="display:flex; gap:6px; align-items:center;">
+                ${tableChipHtml}
                 ${rollChipHtml}
                 ${
                     card.hasCounter
@@ -460,6 +505,19 @@ export function wireAbilityCardsEvents(char, ctx) {
             document.getElementById('modal-ability-reset-type').value = 'long';
 
         if (ctx.renderAbilityFields) ctx.renderAbilityFields([]);
+
+        const tableSel = document.getElementById('modal-ability-linked-table');
+        if (tableSel) {
+            const optgroupCamp = document.getElementById('optgroup-campaign-tables');
+            if (optgroupCamp) {
+                const tables = vtt?.campaignState?.rollTables?.tables || [];
+                optgroupCamp.innerHTML = tables
+                    .map((t) => `<option value="${t.id}">${escapeHtml(t.name)}</option>`)
+                    .join('');
+            }
+            tableSel.value = '';
+        }
+
         switchModalTab('manual');
         if (ctx.initializeImportTab) ctx.initializeImportTab();
         document.getElementById('pc-ability-modal')?.classList.remove('vtt-hidden');
@@ -516,6 +574,19 @@ export function wireAbilityCardsEvents(char, ctx) {
                 document.getElementById('modal-ability-reset-type').value = ab.resetType || 'long';
 
             if (ctx.renderAbilityFields) ctx.renderAbilityFields(ab.customFields || []);
+
+            const tableSel = document.getElementById('modal-ability-linked-table');
+            if (tableSel) {
+                const optgroupCamp = document.getElementById('optgroup-campaign-tables');
+                if (optgroupCamp) {
+                    const tables = vtt?.campaignState?.rollTables?.tables || [];
+                    optgroupCamp.innerHTML = tables
+                        .map((t) => `<option value="${t.id}">${escapeHtml(t.name)}</option>`)
+                        .join('');
+                }
+                tableSel.value = ab.linkedTable || '';
+            }
+
             switchModalTab('manual');
             if (ctx.initializeImportTab) ctx.initializeImportTab();
             document.getElementById('pc-ability-modal')?.classList.remove('vtt-hidden');
@@ -662,9 +733,40 @@ export function wireAbilityCardsEvents(char, ctx) {
                 ];
             }
 
+            const effectiveTable = getEffectiveLinkedTable(ab);
+            if (effectiveTable) {
+                const campTables = vtt?.campaignState?.rollTables?.tables || [];
+                const campMatch = campTables.find((t) => t.id === effectiveTable);
+                let tableName = 'Table';
+                if (effectiveTable === 'compendium:wild_magic_sorcerer') tableName = 'Wild Magic Surge';
+                else if (effectiveTable === 'compendium:wild_magic_barbarian') tableName = 'Wild Magic';
+                else if (campMatch) tableName = campMatch.name;
+
+                mc.linkedTable = {
+                    id: effectiveTable,
+                    name: tableName
+                };
+            }
+
             vtt.socket.emit('chat:msg', {
                 macroCard: mc
             });
+        })
+    );
+
+    // 1-Click Table Roll Chip
+    document.querySelectorAll('.pc-ability-table-chip').forEach((chip) =>
+        chip.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const idx = e.currentTarget.dataset.idx;
+            const ab = char.abilityCards[idx];
+            const tableId = e.currentTarget.dataset.table || getEffectiveLinkedTable(ab);
+            if (tableId && window.VTT?.rollTablesEngine?.rollLinkedTable) {
+                window.VTT.rollTablesEngine.rollLinkedTable(tableId, {
+                    charName: char.name,
+                    abilityName: ab?.name
+                });
+            }
         })
     );
 

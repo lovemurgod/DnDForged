@@ -18,6 +18,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   stopTunnel: () => ipcRenderer.invoke('stop-tunnel'),
   openVttApp: () => ipcRenderer.invoke('open-vtt-app'),
   openVttBrowser: (url) => ipcRenderer.invoke('open-vtt-browser', url),
+  updateServerPort: (params) => ipcRenderer.invoke('config-update-port', params),
   openDataFolder: () => ipcRenderer.invoke('open-data-folder'),
   openBackupsFolder: () => ipcRenderer.invoke('open-backups-folder'),
   selectDataFolder: () => ipcRenderer.invoke('select-data-folder'),

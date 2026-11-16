@@ -297,7 +297,8 @@ export function setupSocketSync(ctx = {}) {
                 }
                 return;
             }
-            const isBeingDragged = tokenId === ctx.dragTargetId || (ctx.dragTargetId && ctx.selectedTokenIds?.has(tokenId));
+            const isBeingDragged =
+                tokenId === ctx.dragTargetId || (ctx.dragTargetId && ctx.selectedTokenIds?.has(tokenId));
             if (isBeingDragged) return;
 
             if (ctx.tokens[tokenId]) {
@@ -425,6 +426,16 @@ export function setupSocketSync(ctx = {}) {
             if (typeof ctx.syncWallSpatialIndex === 'function') {
                 ctx.syncWallSpatialIndex();
             }
+            if (ctx.wallsVersion !== undefined) {
+                ctx.wallsVersion++;
+            }
+            if (ctx.tokens) {
+                for (const id in ctx.tokens) {
+                    if (ctx.tokens[id]) {
+                        delete ctx.tokens[id]._losPolyCache;
+                    }
+                }
+            }
             ctx.renderAll();
         }
     });
@@ -450,6 +461,7 @@ export function setupSocketSync(ctx = {}) {
     });
 
     socket.on('map:pinged', (data) => {
+        if (data && data.mapId && ctx.currentMapId && data.mapId !== ctx.currentMapId) return;
         ctx.triggerPingAnimation(data.x, data.y, data.username, data.role);
     });
 
@@ -482,7 +494,8 @@ export function setupSocketSync(ctx = {}) {
 
     socket.on('tokens:damage_fx', (data) => {
         if (!data || !Array.isArray(data.tokenIds)) return;
-        data.tokenIds.forEach((tokenId) => {
+        if (data.origin && socket && data.origin === socket.id) return;
+        data.tokenIds.forEach((tokenId, index) => {
             const token = ctx.tokens[tokenId];
             if (!token) return;
             const { drawW, drawH } = ctx.getTokenDrawDimensions
@@ -490,16 +503,19 @@ export function setupSocketSync(ctx = {}) {
                 : { drawW: token.width || 50, drawH: token.height || 50 };
             const tx = token.x + drawW / 2;
             const ty = token.y + drawH / 2;
+            const delayMs = Math.min(360, index * 60);
             ctx.triggerDamageFXAnimation(tx, ty, Math.max(drawW, drawH) / 2, data.damageTypes || ['untyped'], {
                 amount: data.amount !== undefined ? data.amount : null,
-                tokenId: tokenId
+                tokenId: tokenId,
+                delayMs
             });
         });
     });
 
     socket.on('tokens:heal_fx', (data) => {
         if (!data || !Array.isArray(data.tokenIds) || !ctx.triggerHealingFXAnimation) return;
-        data.tokenIds.forEach((tokenId) => {
+        if (data.origin && socket && data.origin === socket.id) return;
+        data.tokenIds.forEach((tokenId, index) => {
             const token = ctx.tokens[tokenId];
             if (!token) return;
             const { drawW, drawH } = ctx.getTokenDrawDimensions
@@ -507,9 +523,11 @@ export function setupSocketSync(ctx = {}) {
                 : { drawW: token.width || 50, drawH: token.height || 50 };
             const tx = token.x + drawW / 2;
             const ty = token.y + drawH / 2;
+            const delayMs = Math.min(360, index * 60);
             ctx.triggerHealingFXAnimation(tx, ty, Math.max(drawW, drawH) / 2, data.amount || 0, {
                 tokenId: tokenId,
-                isTempHp: Boolean(data.isTempHp)
+                isTempHp: Boolean(data.isTempHp),
+                delayMs
             });
         });
     });
@@ -708,6 +726,9 @@ export function setupSocketSync(ctx = {}) {
 
     socket.on('settings:updated', (data) => {
         ctx.campaignSettings = data.settings;
+        if (vtt.campaignState) {
+            vtt.campaignState.settings = data.settings;
+        }
         if (ctx.syncHpSettingsInputs) ctx.syncHpSettingsInputs();
         if (ctx.syncPlayerTokenSettingsUI) ctx.syncPlayerTokenSettingsUI();
         if (vtt.role === 'GM' && ctx.syncGmTokenSettingsUI) {

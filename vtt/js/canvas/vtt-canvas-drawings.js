@@ -634,7 +634,10 @@ export function performCanvasFloodFill(startX, startY, options = {}) {
             if (lineLenSq === 0) {
                 d = Math.hypot(pts[i].x - p1.x, pts[i].y - p1.y);
             } else {
-                const t = Math.max(0, Math.min(1, ((pts[i].x - p1.x) * (p2.x - p1.x) + (pts[i].y - p1.y) * (p2.y - p1.y)) / lineLenSq));
+                const t = Math.max(
+                    0,
+                    Math.min(1, ((pts[i].x - p1.x) * (p2.x - p1.x) + (pts[i].y - p1.y) * (p2.y - p1.y)) / lineLenSq)
+                );
                 d = Math.hypot(pts[i].x - (p1.x + t * (p2.x - p1.x)), pts[i].y - (p1.y + t * (p2.y - p1.y)));
             }
             if (d > dmax) {
@@ -651,7 +654,8 @@ export function performCanvasFloodFill(startX, startY, options = {}) {
     }
 
     function traceVisitedContour() {
-        let firstX = -1, firstY = -1;
+        let firstX = -1,
+            firstY = -1;
         for (let py = minY; py <= maxY; py++) {
             const rOffset = py * mapW;
             for (let px = minX; px <= maxX; px++) {
@@ -668,7 +672,9 @@ export function performCanvasFloodFill(startX, startY, options = {}) {
         const cdx = [0, 1, 1, 1, 0, -1, -1, -1];
         const cdy = [-1, -1, 0, 1, 1, 1, 0, -1];
         const raw = [{ x: firstX, y: firstY }];
-        let curX = firstX, curY = firstY, cDir = 7;
+        let curX = firstX,
+            curY = firstY,
+            cDir = 7;
         let cStep = 0;
         const maxCSteps = 20000;
 
@@ -883,7 +889,10 @@ export function eraseDrawingsAtPoint(pt, drawings, options = {}) {
             const p1 = d.startPoint || { x: d.x || 0, y: d.y || 0 };
             const p2 = d.endPoint || { x: (d.x || 0) + (d.width || 0), y: (d.y || 0) + (d.height || 0) };
             const l2 = Math.hypot(p2.x - p1.x, p2.y - p1.y) ** 2;
-            const t = l2 === 0 ? 0 : Math.max(0, Math.min(1, ((pt.x - p1.x) * (p2.x - p1.x) + (pt.y - p1.y) * (p2.y - p1.y)) / l2));
+            const t =
+                l2 === 0
+                    ? 0
+                    : Math.max(0, Math.min(1, ((pt.x - p1.x) * (p2.x - p1.x) + (pt.y - p1.y) * (p2.y - p1.y)) / l2));
             const dist = Math.hypot(pt.x - (p1.x + t * (p2.x - p1.x)), pt.y - (p1.y + t * (p2.y - p1.y)));
             if (dist <= radius + (d.strokeWidth || 4) / 2) hit = true;
         } else if (d.type === 'polygon') {
@@ -893,7 +902,13 @@ export function eraseDrawingsAtPoint(pt, drawings, options = {}) {
                 const p1 = pts[i];
                 const p2 = pts[(i + 1) % pts.length];
                 const l2 = Math.hypot(p2.x - p1.x, p2.y - p1.y) ** 2;
-                const t = l2 === 0 ? 0 : Math.max(0, Math.min(1, ((pt.x - p1.x) * (p2.x - p1.x) + (pt.y - p1.y) * (p2.y - p1.y)) / l2));
+                const t =
+                    l2 === 0
+                        ? 0
+                        : Math.max(
+                              0,
+                              Math.min(1, ((pt.x - p1.x) * (p2.x - p1.x) + (pt.y - p1.y) * (p2.y - p1.y)) / l2)
+                          );
                 const dist = Math.hypot(pt.x - (p1.x + t * (p2.x - p1.x)), pt.y - (p1.y + t * (p2.y - p1.y)));
                 if (dist <= thresh) {
                     hit = true;

@@ -900,6 +900,32 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    const btnBatchCreateTable = document.getElementById('btn-asset-batch-create-table');
+    if (btnBatchCreateTable) {
+        btnBatchCreateTable.addEventListener('click', () => {
+            const items = Array.from(selectedAssets.values()).filter((i) => i.type !== 'folder');
+            if (items.length === 0) {
+                alert('Select at least one image asset.');
+                return;
+            }
+            if (window.VTT?.rollTablesEngine?.openAssetTableWithAssets) {
+                window.VTT.rollTablesEngine.openAssetTableWithAssets(items);
+            }
+        });
+    }
+
+    const btnBatchAddTable = document.getElementById('btn-asset-batch-add-table');
+    if (btnBatchAddTable) {
+        btnBatchAddTable.addEventListener('click', () => {
+            const items = Array.from(selectedAssets.values()).filter((i) => i.type !== 'folder');
+            if (items.length === 0) {
+                alert('Select at least one image asset.');
+                return;
+            }
+            promptAddToAssetTable(items);
+        });
+    }
+
     // Move Destination Picker Modal
     function openMoveDestinationModal(itemsToMove) {
         if (!modalMove || !moveFolderList) return;
@@ -1119,6 +1145,262 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Edit error', err);
         }
     });
+
+    // Context Menu: Create Asset Table
+    document.getElementById('btn-asset-ctx-create-table')?.addEventListener('click', () => {
+        document.getElementById('vtt-asset-context-menu').classList.add('vtt-hidden');
+        const items =
+            selectedAssets.size > 0
+                ? Array.from(selectedAssets.values()).filter((i) => i.type !== 'folder')
+                : assetContextMenuTarget?.item?.type !== 'folder'
+                  ? [assetContextMenuTarget.item]
+                  : [];
+        if (items.length === 0) return;
+        if (window.VTT?.rollTablesEngine?.openAssetTableWithAssets) {
+            window.VTT.rollTablesEngine.openAssetTableWithAssets(items);
+        }
+    });
+
+    // Context Menu: Add to Asset Table...
+    document.getElementById('btn-asset-ctx-add-to-table')?.addEventListener('click', () => {
+        document.getElementById('vtt-asset-context-menu').classList.add('vtt-hidden');
+        const items =
+            selectedAssets.size > 0
+                ? Array.from(selectedAssets.values()).filter((i) => i.type !== 'folder')
+                : assetContextMenuTarget?.item?.type !== 'folder'
+                  ? [assetContextMenuTarget.item]
+                  : [];
+        if (items.length === 0) return;
+        promptAddToAssetTable(items);
+    });
+
+    function promptAddToAssetTable(items) {
+        const campaignState = window.VTT?.campaignState;
+        const tables = campaignState?.rollTables?.assetTables || campaignState?.assetTables || [];
+
+        let modal = document.getElementById('modal-add-to-asset-table');
+        if (!modal) {
+            modal = document.createElement('div');
+            modal.id = 'modal-add-to-asset-table';
+            modal.className = 'vtt-modal vtt-hidden';
+            modal.style.zIndex = '2800';
+            modal.innerHTML = `
+                <div class="modal-content glassmorphism" style="max-width: 440px; padding: 20px; border: 1px solid var(--color-gold-base);">
+                    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:10px; margin-bottom:14px;">
+                        <h4 style="margin:0; color:var(--color-gold-base); font-size:1.05rem; display:flex; align-items:center; gap:8px;">
+                            <i class="fa-solid fa-layer-group text-gradient-gold"></i> Add to Asset Table
+                        </h4>
+                        <button type="button" class="btn btn-xs btn-ghost btn-close-add-table"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                    <div style="font-size:0.85rem; color:var(--color-text-secondary); margin-bottom:14px;">
+                        Adding <strong style="color:#fff;" id="modal-add-table-count">1</strong> item(s) to an Asset Table.
+                    </div>
+                    <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:16px;">
+                        <div>
+                            <label style="display:block; font-size:0.75rem; text-transform:uppercase; color:var(--color-gold-light); margin-bottom:4px;">Target Asset Table</label>
+                            <select id="modal-add-table-select" style="width:100%; padding:8px; border-radius:4px; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); color:#fff; font-size:0.85rem;"></select>
+                        </div>
+                        <div id="modal-add-table-weight-group">
+                            <label style="display:block; font-size:0.75rem; text-transform:uppercase; color:var(--color-gold-light); margin-bottom:4px;">Weight</label>
+                            <input type="number" id="modal-add-table-weight" value="1" min="1" max="100" style="width:100%; padding:6px 10px; border-radius:4px; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); color:#fff; font-size:0.85rem;">
+                        </div>
+                    </div>
+                    <div style="display:flex; justify-content:flex-end; gap:8px;">
+                        <button type="button" class="btn btn-xs btn-secondary btn-close-add-table">Cancel</button>
+                        <button type="button" class="btn btn-xs btn-primary btn-confirm-add-table">Confirm</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            modal
+                .querySelectorAll('.btn-close-add-table')
+                .forEach((b) => b.addEventListener('click', () => modal.classList.add('vtt-hidden')));
+        }
+
+        const countEl = modal.querySelector('#modal-add-table-count');
+        if (countEl) countEl.textContent = items.length;
+
+        const select = modal.querySelector('#modal-add-table-select');
+        const weightInput = modal.querySelector('#modal-add-table-weight');
+        const confirmBtn = modal.querySelector('.btn-confirm-add-table');
+
+        let selectOptionsHtml = '<option value="__new__">+ Create New Asset Table...</option>';
+        tables.forEach((t, idx) => {
+            selectOptionsHtml += `<option value="${idx}">${escapeHtml(t.name)} (${t.entries?.length || 0} items)</option>`;
+        });
+        select.innerHTML = selectOptionsHtml;
+        if (tables.length > 0) {
+            select.value = '0';
+        } else {
+            select.value = '__new__';
+        }
+
+        confirmBtn.onclick = () => {
+            modal.classList.add('vtt-hidden');
+            const choice = select.value;
+            if (choice === '__new__') {
+                if (window.VTT?.rollTablesEngine?.openAssetTableWithAssets) {
+                    window.VTT.rollTablesEngine.openAssetTableWithAssets(items);
+                }
+                return;
+            }
+
+            const targetTable = tables[parseInt(choice, 10)];
+            if (!targetTable) return;
+            if (!targetTable.entries) targetTable.entries = [];
+
+            const weight = parseInt(weightInput.value, 10) || 1;
+            items.forEach((item, i) => {
+                const cleanName = (item.name || `Side ${targetTable.entries.length + 1}`).replace(/\.[^/.]+$/, '');
+                targetTable.entries.push({
+                    id: `side_${Date.now()}_${targetTable.entries.length + i}`,
+                    name: cleanName,
+                    url: item.url || '',
+                    weight: weight
+                });
+            });
+
+            if (window.VTT?.rollTablesEngine?.broadcastState) {
+                window.VTT.rollTablesEngine.broadcastState();
+            } else if (window.VTT?.socket) {
+                window.VTT.socket.emit('rolltables:update', {
+                    rollTables: campaignState?.rollTables || { tables: [], assetTables: tables, decks: [] }
+                });
+            }
+
+            if (window.VTT?.toast) {
+                window.VTT.toast(`Added ${items.length} artwork(s) to "${targetTable.name}"`);
+            }
+        };
+
+        modal.classList.remove('vtt-hidden');
+    }
+
+    function flattenAllImageAssets(tree, result = []) {
+        if (!tree) return result;
+        if (Array.isArray(tree)) {
+            tree.forEach((t) => flattenAllImageAssets(t, result));
+            return result;
+        }
+        if (tree.type === 'file' || tree.type === 'url') {
+            if (tree.url) result.push(tree);
+        }
+        if (Array.isArray(tree.children)) {
+            tree.children.forEach((c) => flattenAllImageAssets(c, result));
+        }
+        return result;
+    }
+
+    async function openAssetPickerModal({ multiSelect = false, onSelect } = {}) {
+        if (!assetTree || (Array.isArray(assetTree) && assetTree.length === 0)) {
+            await fetchAssetTree();
+        }
+
+        let modal = document.getElementById('modal-gallery-asset-picker');
+        if (!modal) {
+            modal = document.createElement('div');
+            modal.id = 'modal-gallery-asset-picker';
+            modal.className = 'vtt-modal vtt-hidden';
+            modal.style.zIndex = '2500';
+            modal.innerHTML = `
+                <div class="modal-content glassmorphism" style="max-width: 650px; width: 90vw; height: 75vh; display: flex; flex-direction: column; padding: 18px 22px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--color-border-subtle); padding-bottom:10px; margin-bottom:10px;">
+                        <h4 style="margin:0; color:var(--color-gold-base); font-size:1.1rem; display:flex; align-items:center; gap:8px;">
+                            <i class="fa-solid fa-images text-gradient-gold"></i> Pick Asset from Gallery
+                        </h4>
+                        <button type="button" class="btn btn-xs btn-ghost btn-close-asset-picker"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                    <div style="margin-bottom:10px;">
+                        <input type="text" id="gallery-picker-search" placeholder="Search gallery assets..." style="width:100%; padding:6px 10px; font-size:0.8rem; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); border-radius:4px; color:#fff;">
+                    </div>
+                    <div id="gallery-picker-grid" class="scroll-styled" style="flex:1; overflow-y:auto; display:grid; grid-template-columns:repeat(auto-fill, minmax(90px, 1fr)); gap:8px; padding:4px;">
+                    </div>
+                    <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid rgba(255,255,255,0.08); padding-top:10px; margin-top:10px;">
+                        <span id="gallery-picker-selected-count" style="font-size:0.75rem; color:var(--color-gold-light);">0 selected</span>
+                        <div class="flex-row" style="gap:6px;">
+                            <button type="button" class="btn btn-xs btn-secondary btn-close-asset-picker">Cancel</button>
+                            <button type="button" class="btn btn-xs btn-primary btn-confirm-asset-picker">Confirm Selection</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+
+            modal.querySelectorAll('.btn-close-asset-picker').forEach((b) => {
+                b.addEventListener('click', () => modal.classList.add('vtt-hidden'));
+            });
+        }
+
+        const allImages = flattenAllImageAssets(assetTree);
+        const searchInput = modal.querySelector('#gallery-picker-search');
+        const grid = modal.querySelector('#gallery-picker-grid');
+        const countSpan = modal.querySelector('#gallery-picker-selected-count');
+        const confirmBtn = modal.querySelector('.btn-confirm-asset-picker');
+
+        const localSelected = new Set();
+
+        const renderGrid = () => {
+            const query = (searchInput?.value || '').toLowerCase().trim();
+            const filtered = allImages.filter((img) => !query || (img.name || '').toLowerCase().includes(query));
+
+            if (filtered.length === 0) {
+                grid.innerHTML =
+                    '<div style="grid-column: 1/-1; text-align:center; padding:32px; color:var(--color-text-muted);">No images found in asset gallery.</div>';
+                return;
+            }
+
+            grid.innerHTML = filtered
+                .map((item, idx) => {
+                    const isSel = localSelected.has(item);
+                    return `
+                    <div class="picker-asset-thumb" data-idx="${idx}" style="border: 2px solid ${isSel ? 'var(--color-gold-base)' : 'rgba(255,255,255,0.1)'}; border-radius: 6px; overflow: hidden; background: #0c0a14; cursor: pointer; display: flex; flex-direction: column; align-items: center; padding: 4px; box-shadow: ${isSel ? '0 0 8px rgba(212,175,55,0.4)' : 'none'};">
+                        <img src="${item.url}" alt="${escapeHtml(item.name)}" style="width:100%; height:75px; object-fit:cover; border-radius:4px;" onerror="this.src='favicon.svg'">
+                        <div style="font-size:0.65rem; color:#fff; text-align:center; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; width:100%; margin-top:2px;">
+                            ${escapeHtml(item.name)}
+                        </div>
+                    </div>
+                `;
+                })
+                .join('');
+
+            grid.querySelectorAll('.picker-asset-thumb').forEach((thumb) => {
+                thumb.addEventListener('click', () => {
+                    const idx = parseInt(thumb.dataset.idx, 10);
+                    const item = filtered[idx];
+                    if (!multiSelect) {
+                        localSelected.clear();
+                        localSelected.add(item);
+                        renderGrid();
+                    } else {
+                        if (localSelected.has(item)) localSelected.delete(item);
+                        else localSelected.add(item);
+                        renderGrid();
+                    }
+                    if (countSpan) countSpan.textContent = `${localSelected.size} selected`;
+                });
+            });
+        };
+
+        if (searchInput) {
+            searchInput.value = '';
+            searchInput.oninput = () => renderGrid();
+        }
+
+        confirmBtn.onclick = () => {
+            modal.classList.add('vtt-hidden');
+            if (typeof onSelect === 'function') {
+                onSelect(Array.from(localSelected));
+            }
+        };
+
+        renderGrid();
+        modal.classList.remove('vtt-hidden');
+    }
+
+    if (typeof window !== 'undefined') {
+        if (!window.VTT) window.VTT = {};
+        window.VTT.openAssetPickerModal = openAssetPickerModal;
+    }
 
     // Context Menu: Delete
     document.getElementById('btn-asset-ctx-delete')?.addEventListener('click', async () => {

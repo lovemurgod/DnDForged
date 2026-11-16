@@ -84,12 +84,18 @@ const existingChar = {
     currency: { gp: 50 }
 };
 const workingCharLevelUp = {
-    builderMode: (existingChar.level > 1 || (existingChar.equipment && existingChar.equipment.length > 0)) ? 'levelup' : 'create',
+    builderMode:
+        existingChar.level > 1 || (existingChar.equipment && existingChar.equipment.length > 0) ? 'levelup' : 'create',
     allowLevelUpRebuildEquip: false
 };
 assert.strictEqual(workingCharLevelUp.builderMode, 'levelup', 'Existing character correctly detected in levelup mode');
-const shouldImportStartingEquip = workingCharLevelUp.builderMode === 'create' || workingCharLevelUp.allowLevelUpRebuildEquip;
-assert.strictEqual(shouldImportStartingEquip, false, 'Starting equipment and starter gold must be skipped in levelup mode');
+const shouldImportStartingEquip =
+    workingCharLevelUp.builderMode === 'create' || workingCharLevelUp.allowLevelUpRebuildEquip;
+assert.strictEqual(
+    shouldImportStartingEquip,
+    false,
+    'Starting equipment and starter gold must be skipped in levelup mode'
+);
 console.log('  ✓ Level-up mode successfully prevents starting inventory and gold duplication.');
 
 // 7. Spells Prepared vs Repertoire Decoupling Test
@@ -119,7 +125,7 @@ const importedSpells = [];
     const isPreparedCaster = sec.casterType === 'prepared' || sec.isPrepared;
     const isWizard = sec.casterType === 'wizard' || sec.isWizard;
     sec.spells.forEach((sp) => {
-        const defaultPrepared = sp.level === 0 ? true : (!isPreparedCaster && !isWizard);
+        const defaultPrepared = sp.level === 0 ? true : !isPreparedCaster && !isWizard;
         importedSpells.push({ name: sp.name, level: sp.level, prepared: defaultPrepared });
     });
 });
@@ -133,7 +139,9 @@ assert.strictEqual(sf.prepared, true, 'Cantrips are always prepared');
 assert.strictEqual(bless.prepared, false, 'Cleric leveled spells imported ready for daily preparation on sheet');
 assert.strictEqual(vm.prepared, true, 'Bard cantrip is prepared');
 assert.strictEqual(dw.prepared, true, 'Bard known leveled spell is marked prepared');
-console.log('  ✓ Spells successfully decoupled: Cantrips and Known spells are prepared, Divine spells are imported ready for daily preparation.');
+console.log(
+    '  ✓ Spells successfully decoupled: Cantrips and Known spells are prepared, Divine spells are imported ready for daily preparation.'
+);
 
 // 8. Identity & Multi-Token Art Commit Test
 console.log('\n[Test 8] Multi-Token Art Commit...');

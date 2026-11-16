@@ -14,7 +14,10 @@ test('Error Discovery Fixes: Tier 1 & 2 Verification Suite', async (t) => {
         const assetsRouteSrc = fs.readFileSync(path.join(rootDir, 'server', 'routes', 'assets.js'), 'utf8');
 
         // Check isAuthorizedGmOrSecret imported and used
-        assert.ok(assetsRouteSrc.includes('isAuthorizedGmOrSecret'), 'Must import isAuthorizedGmOrSecret in assets router');
+        assert.ok(
+            assetsRouteSrc.includes('isAuthorizedGmOrSecret'),
+            'Must import isAuthorizedGmOrSecret in assets router'
+        );
 
         // Check non-GM targetPath enforcement
         assert.ok(
@@ -41,7 +44,10 @@ test('Error Discovery Fixes: Tier 1 & 2 Verification Suite', async (t) => {
         );
 
         const template = createCampaignTemplate('test_camp', 'Test Campaign');
-        assert.ok(template.initiative && typeof template.initiative === 'object' && !Array.isArray(template.initiative), 'Template initiative must be an object');
+        assert.ok(
+            template.initiative && typeof template.initiative === 'object' && !Array.isArray(template.initiative),
+            'Template initiative must be an object'
+        );
         assert.deepEqual(template.initiative.combatants, [], 'Initiative combatants must default to empty array');
         assert.equal(template.initiative.currentRound, 1, 'Initiative currentRound must default to 1');
         assert.equal(template.initiative.activeTurnIndex, -1, 'Initiative activeTurnIndex must default to -1');
@@ -49,7 +55,10 @@ test('Error Discovery Fixes: Tier 1 & 2 Verification Suite', async (t) => {
 
     await t.test('3. Mobile Slideout Tabs Offset to 130px to Clear FAB and Menu', () => {
         const mobileCss = fs.readFileSync(path.join(rootDir, 'vtt', 'css', 'vtt-mobile.css'), 'utf8');
-        const creatureCss = fs.readFileSync(path.join(rootDir, 'vtt', 'css', 'components', 'creature-sheet.css'), 'utf8');
+        const creatureCss = fs.readFileSync(
+            path.join(rootDir, 'vtt', 'css', 'components', 'creature-sheet.css'),
+            'utf8'
+        );
 
         assert.match(
             mobileCss,
@@ -70,7 +79,10 @@ test('Error Discovery Fixes: Tier 1 & 2 Verification Suite', async (t) => {
 
         // Check HTML elements inside mobile paint drawer
         assert.ok(indexHtml.includes('id="btn-mobile-paint-gridsnap"'), 'HTML must include mobile grid snap button');
-        assert.ok(indexHtml.includes('class="mobile-paint-fillmode-btns"'), 'HTML must include mobile fill mode buttons container');
+        assert.ok(
+            indexHtml.includes('class="mobile-paint-fillmode-btns"'),
+            'HTML must include mobile fill mode buttons container'
+        );
         assert.ok(indexHtml.includes('data-fillmode="stroke"'), 'HTML must include stroke fill mode');
         assert.ok(indexHtml.includes('data-fillmode="both"'), 'HTML must include both fill mode');
         assert.ok(indexHtml.includes('data-fillmode="fill"'), 'HTML must include fill only mode');
@@ -111,4 +123,3 @@ test('Error Discovery Fixes: Tier 1 & 2 Verification Suite', async (t) => {
         );
     });
 });
-

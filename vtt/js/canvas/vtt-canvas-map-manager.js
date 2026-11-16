@@ -19,6 +19,25 @@ export function hasMapManagerDataChanged(camp, lastFingerprint = '') {
     return fp;
 }
 
+export function isMapBackgroundAsset(token, mapId) {
+    if (!token || token.layer !== 'map') return false;
+    return token.isBackground === true || token.id === `asset_${mapId}_bg` || token.id === `asset_${mapId}_map`;
+}
+
+export function clearMapArtwork(map, mapId) {
+    if (!map) return [];
+    map.mapImage = '';
+    map.thumbnail = '';
+
+    const removedAssetIds = [];
+    Object.entries(map.tokens || {}).forEach(([id, token]) => {
+        if (!isMapBackgroundAsset(token, mapId)) return;
+        delete map.tokens[id];
+        removedAssetIds.push(id);
+    });
+    return removedAssetIds;
+}
+
 export function escapeMapHtml(str) {
     if (!str) return '';
     return String(str)
@@ -40,7 +59,10 @@ export function getPlayerMapOverride(camp, username) {
 }
 
 export async function probeMediaDimensions(src, isVideoHint = false) {
-    const isVideo = isVideoHint || !!String(src || '').match(/\.(mp4|webm|ogg)(\?.*)?$/i) || String(src || '').includes('pinimg.com/videos');
+    const isVideo =
+        isVideoHint ||
+        !!String(src || '').match(/\.(mp4|webm|ogg)(\?.*)?$/i) ||
+        String(src || '').includes('pinimg.com/videos');
     if (typeof document === 'undefined') {
         return { width: isVideo ? 1920 : 2000, height: isVideo ? 1080 : 1500 };
     }
@@ -135,9 +157,12 @@ export function buildMapThumbnailMarkup(map, safeThumb, isVideo, isGif, iconSize
                    muted 
                    playsinline 
                    loop 
-                   style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;"
-                   onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='block';">
+                   style="width: 100%; height: 100%; object-fit: cover; pointer-events: none; display: none;"
+                   onerror="this.style.display='none';">
             </video>
+            <div class="map-thumb-video-placeholder" style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle, #0e111a 0%, #171b26 100%);">
+                <i class="fa-solid fa-film" style="font-size: ${iconSize}; color: rgba(212,175,55,0.45);"></i>
+            </div>
             <i class="fa-solid fa-map" style="display: none; font-size: ${iconSize}; color: rgba(212,175,55,0.25);"></i>
         `;
     }
@@ -156,46 +181,90 @@ export function buildMapThumbnailMarkup(map, safeThumb, isVideo, isGif, iconSize
     }
 
     return `
-        <img src="${escapeMapHtml(safeThumb)}" 
+        <img class="map-thumb-img" 
+             data-src="${escapeMapHtml(safeThumb)}" 
              loading="lazy" 
              alt="${escapeMapHtml(map.name)}" 
-             style="width: 100%; height: 100%; object-fit: cover;" 
-             onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='block';">
-        <i class="fa-solid fa-map" style="display: none; font-size: ${iconSize}; color: rgba(212,175,55,0.25);"></i>
+             style="width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 0.2s ease;" 
+             onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='flex';">
+        <div class="map-thumb-img-placeholder" style="display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; position: absolute; inset: 0; pointer-events: none;">
+            <i class="fa-solid fa-map" style="font-size: ${iconSize}; color: rgba(212,175,55,0.25);"></i>
+        </div>
     `;
 }
 
-export function observeCardThumbnail(card) {
-    if (!card || typeof document === 'undefined' || typeof IntersectionObserver === 'undefined') return;
-    const video = card.querySelector('video.map-thumb-video[data-src]');
-    if (video) {
-        if (!window._mapThumbVideoObserver) {
-            window._mapThumbVideoObserver = new IntersectionObserver(
-                (entries) => {
-                    entries.forEach((entry) => {
-                        const v = entry.target;
-                        if (entry.isIntersecting) {
-                            if (!v.src && v.dataset.src) {
-                                v.src = v.dataset.src;
-                                v.preload = 'metadata';
-                            }
-                        } else {
-                            if (!v.paused) {
-                                v.pause();
-                            }
-                        }
-                    });
-                },
-                { rootMargin: '300px' }
-            );
-        }
-        window._mapThumbVideoObserver.observe(video);
+export function cleanupMapGridMedia(container) {
+    if (!container || typeof document === 'undefined') return;
+    if (container._thumbnailObserver) {
+        try {
+            container._thumbnailObserver.disconnect();
+        } catch (_) {}
+        container._thumbnailObserver = null;
     }
+    container.querySelectorAll('video').forEach((v) => {
+        try {
+            v.pause();
+            v.removeAttribute('src');
+            v.src = '';
+            v.load();
+        } catch (_) {}
+    });
+}
+
+export function observeCardThumbnail(card, container = null) {
+    if (!card || typeof document === 'undefined') return;
+    const parentContainer =
+        container || (typeof card.closest === 'function' ? card.closest('#maps-list-container') : null);
+
+    const img = card.querySelector('img.map-thumb-img[data-src]');
+    if (!img) return;
+
+    if (!parentContainer || typeof IntersectionObserver === 'undefined') {
+        if (!img.src && img.dataset.src) {
+            img.src = img.dataset.src;
+            img.style.opacity = '1';
+            const ph = card.querySelector('.map-thumb-img-placeholder');
+            if (ph) ph.style.display = 'none';
+        }
+        return;
+    }
+
+    if (!parentContainer._thumbnailObserver) {
+        parentContainer._thumbnailObserver = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        const targetCard = entry.target;
+                        const targetImg = targetCard.querySelector('img.map-thumb-img[data-src]');
+                        if (targetImg && !targetImg.src && targetImg.dataset.src) {
+                            targetImg.src = targetImg.dataset.src;
+                            targetImg.onload = () => {
+                                targetImg.style.opacity = '1';
+                                const ph = targetCard.querySelector('.map-thumb-img-placeholder');
+                                if (ph) ph.style.display = 'none';
+                            };
+                            targetImg.onerror = () => {
+                                targetImg.style.display = 'none';
+                                const ph = targetCard.querySelector('.map-thumb-img-placeholder');
+                                if (ph) ph.style.display = 'flex';
+                            };
+                        }
+                        if (parentContainer._thumbnailObserver) {
+                            parentContainer._thumbnailObserver.unobserve(targetCard);
+                        }
+                    }
+                });
+            },
+            { root: parentContainer, rootMargin: '100px' }
+        );
+    }
+    parentContainer._thumbnailObserver.observe(card);
 }
 
 export function attachThumbnailHoverPreview(thumbWrap) {
     if (!thumbWrap || typeof document === 'undefined') return;
     const video = thumbWrap.querySelector('video.map-thumb-video');
+    const videoPlaceholder = thumbWrap.querySelector('.map-thumb-video-placeholder');
     const gifCanvas = thumbWrap.querySelector('canvas.map-thumb-gif-canvas');
     const gifImg = thumbWrap.querySelector('img.map-thumb-gif-img');
 
@@ -203,21 +272,9 @@ export function attachThumbnailHoverPreview(thumbWrap) {
         const ensureVideoSource = () => {
             if (!video.src && video.dataset.src) {
                 video.src = video.dataset.src;
-                video.preload = 'metadata';
+                video.preload = 'auto';
             }
         };
-
-        const setInitialFrame = () => {
-            try {
-                if (video.currentTime === 0) video.currentTime = 0.001;
-            } catch (_) { }
-        };
-        if (video.readyState >= 1) {
-            setInitialFrame();
-        } else {
-            video.addEventListener('loadeddata', setInitialFrame, { once: true });
-            video.addEventListener('loadedmetadata', setInitialFrame, { once: true });
-        }
 
         let playPromise = null;
         let isHovered = false;
@@ -225,35 +282,30 @@ export function attachThumbnailHoverPreview(thumbWrap) {
         thumbWrap.addEventListener('mouseenter', () => {
             isHovered = true;
             ensureVideoSource();
+            if (videoPlaceholder) videoPlaceholder.style.display = 'none';
+            video.style.display = 'block';
             playPromise = video.play();
             if (playPromise !== undefined) {
-                playPromise.catch(() => { });
+                playPromise.catch(() => {});
             }
         });
 
         thumbWrap.addEventListener('mouseleave', () => {
             isHovered = false;
+            const stopVideo = () => {
+                if (!isHovered) {
+                    video.pause();
+                    try {
+                        video.currentTime = 0;
+                    } catch (_) {}
+                    video.style.display = 'none';
+                    if (videoPlaceholder) videoPlaceholder.style.display = 'flex';
+                }
+            };
             if (playPromise !== null) {
-                playPromise
-                    .then(() => {
-                        if (!isHovered) {
-                            video.pause();
-                            try {
-                                video.currentTime = 0.001;
-                            } catch (_) { }
-                        }
-                    })
-                    .catch(() => {
-                        video.pause();
-                        try {
-                            video.currentTime = 0.001;
-                        } catch (_) { }
-                    });
+                playPromise.then(stopVideo).catch(stopVideo);
             } else {
-                video.pause();
-                try {
-                    video.currentTime = 0.001;
-                } catch (_) { }
+                stopVideo();
             }
         });
     }
@@ -315,6 +367,11 @@ export function initMapManagerControls(managerState, options = {}) {
     if (btnCloseIcon && mapModal) {
         btnCloseIcon.addEventListener('click', () => {
             mapModal.classList.add('vtt-hidden');
+            const container = document.getElementById('maps-list-container');
+            cleanupMapGridMedia(container);
+            if (typeof effectiveOptions.resumeCanvas === 'function') {
+                effectiveOptions.resumeCanvas();
+            }
         });
     }
 
@@ -667,7 +724,14 @@ export function executeMapReorder(mapId, action, camp, managerState, options) {
     renderMapGrid(managerState, options);
 }
 
-export function createMapCard(map, allFolderNames, managerState, options = {}, folderOptionsHtml = '') {
+export function createMapCard(
+    map,
+    allFolderNames,
+    managerState,
+    options = {},
+    folderOptionsHtml = '',
+    container = null
+) {
     if (typeof document === 'undefined') return null;
 
     const camp = options.vtt?.campaignState || {};
@@ -765,14 +829,15 @@ export function createMapCard(map, allFolderNames, managerState, options = {}, f
                 ${isGmViewing ? '<span style="font-size: 0.65rem; background: var(--color-gold-base); color: #111; padding: 2px 7px; border-radius: 10px; font-weight: bold; flex-shrink: 0;"><i class="fa-solid fa-eye"></i> Viewing</span>' : ''}
             </div>
             <div style="display: flex; gap: 4px; align-items: center; flex-shrink: 0;">
-                ${!isGmViewing
-                ? `
+                ${
+                    !isGmViewing
+                        ? `
                     <button class="btn-view-map btn btn-secondary btn-xxs" title="GM View" style="padding: 4px 7px; font-size: 0.72rem;"><i class="fa-solid fa-eye"></i> View</button>
                 `
-                : `
+                        : `
                     <button class="btn btn-secondary btn-xxs" disabled style="padding: 4px 7px; font-size: 0.72rem; opacity: 0.5;"><i class="fa-solid fa-check"></i> Viewing</button>
                 `
-            }
+                }
                 <button class="btn-activate-map btn btn-primary btn-xxs" title="${isPlayerActive ? 'Push more players' : 'Push players to map'}" style="padding: 4px 7px; font-size: 0.72rem; ${isPlayerActive ? `background: ${activeClass}; border-color: transparent;` : ''}">
                     <i class="fa-solid fa-bullhorn"></i> ${isPlayerActive ? 'Push +' : 'Push'}
                 </button>
@@ -817,14 +882,15 @@ export function createMapCard(map, allFolderNames, managerState, options = {}, f
                 </div>
                 <!-- Tight Button Row (No huge gap) -->
                 <div class="map-card-compact-buttons">
-                    ${!isGmViewing
-                ? `
+                    ${
+                        !isGmViewing
+                            ? `
                         <button class="btn-view-map btn btn-secondary btn-xxs" style="flex: 1; min-width: 0; justify-content: center; font-size: 0.72rem; padding: 4px 6px;"><i class="fa-solid fa-eye"></i> View</button>
                     `
-                : `
+                            : `
                         <button class="btn btn-secondary btn-xxs" disabled style="flex: 1; min-width: 0; justify-content: center; font-size: 0.72rem; opacity: 0.5; padding: 4px 6px;"><i class="fa-solid fa-check"></i> Viewing</button>
                     `
-            }
+                    }
                     <button class="btn-activate-map btn btn-primary btn-xxs" style="flex: 1; min-width: 0; justify-content: center; font-size: 0.72rem; padding: 4px 6px; ${isPlayerActive ? `background: ${activeClass}; border-color: transparent;` : ''}">
                         <i class="fa-solid fa-bullhorn"></i> ${isPlayerActive ? 'Push +' : 'Push'}
                     </button>
@@ -839,7 +905,7 @@ export function createMapCard(map, allFolderNames, managerState, options = {}, f
     if (thumbBox && (isVideo || isGif)) {
         attachThumbnailHoverPreview(thumbBox);
     }
-    observeCardThumbnail(el);
+    observeCardThumbnail(el, container);
 
     // Folder Dropdown Change Handler
     const quickFolderSelect = el.querySelector('.map-quick-folder-select');
@@ -951,7 +1017,9 @@ export function createMapCard(map, allFolderNames, managerState, options = {}, f
                 );
                 if (!confirmed) return;
             } else {
-                if (!confirm(`Are you absolutely sure you want to delete map "${map.name}"? This action is permanent.`)) {
+                if (
+                    !confirm(`Are you absolutely sure you want to delete map "${map.name}"? This action is permanent.`)
+                ) {
                     return;
                 }
             }
@@ -1114,6 +1182,7 @@ export function renderMapGrid(managerState, options = {}) {
         btnList.classList.toggle('active', managerState.currentMapViewMode === 'list');
     }
 
+    cleanupMapGridMedia(container);
     container.innerHTML = '';
     let allMaps = Object.values(camp.maps);
     const totalAll = allMaps.length;
@@ -1232,7 +1301,14 @@ export function renderMapGrid(managerState, options = {}) {
         const frag = document.createDocumentFragment();
         nextBatch.forEach((map) => {
             try {
-                const card = createMapCard(map, allFolderNames, managerState, effectiveOptions, folderOptionsHtml);
+                const card = createMapCard(
+                    map,
+                    allFolderNames,
+                    managerState,
+                    effectiveOptions,
+                    folderOptionsHtml,
+                    container
+                );
                 if (card) frag.appendChild(card);
             } catch (err) {
                 console.error('Error rendering map item:', map, err);
@@ -1265,7 +1341,7 @@ export function renderMapGrid(managerState, options = {}) {
                             renderNextBatch();
                         }
                     },
-                    { root: container, rootMargin: '200px' }
+                    { root: container, rootMargin: '60px' }
                 );
                 obs.observe(sentinel);
                 managerState._batchScrollObserver = obs;
@@ -1347,13 +1423,15 @@ export function setupEditMapModal(managerState, options = {}) {
         map.thumbnail = urlVal;
         map.mapImage = urlVal;
         if (!map.tokens) map.tokens = {};
-        let bgToken = Object.values(map.tokens).find((t) => t.layer === 'map' && (t.isBackground || t.isAsset));
-        if (bgToken && urlVal) {
+        let bgToken = Object.values(map.tokens).find((t) => isMapBackgroundAsset(t, mapId));
+        if (!urlVal) {
+            clearMapArtwork(map, mapId);
+        } else if (bgToken) {
             bgToken.img = urlVal;
             const isVideo = !!urlVal.match(/\.(mp4|webm|ogg)(\?.*)?$/i) || urlVal.includes('pinimg.com/videos');
             const isYoutube = urlVal.includes('youtube.com') || urlVal.includes('youtu.be');
             bgToken.isVideo = isVideo || isYoutube;
-        } else if (urlVal && !bgToken) {
+        } else {
             const assetId = `asset_${mapId}_map`;
             map.tokens[assetId] = {
                 id: assetId,
@@ -1456,7 +1534,7 @@ export function setupEditMapModal(managerState, options = {}) {
             if (options.vtt?.weatherEngine) {
                 options.vtt.weatherEngine.setWeather(map.weather);
             }
-            if (options.setMapBackground && map.mapImage) {
+            if (options.setMapBackground) {
                 options.setMapBackground(map.mapImage);
             }
             if (options.renderAll) {
@@ -1512,7 +1590,7 @@ export function openEditMapModal(map, managerState, options = {}) {
         `;
         editFolderEl.value = map.folder || '';
     }
-    const bgToken = Object.values(map.tokens || {}).find((t) => t.layer === 'map' && (t.isBackground || t.isAsset));
+    const bgToken = Object.values(map.tokens || {}).find((t) => isMapBackgroundAsset(t, map.id));
     const effectiveMapUrl = bgToken?.img || map.mapImage || map.thumbnail || '';
     document.getElementById('edit-map-url').value = effectiveMapUrl;
     document.getElementById('edit-map-grid-width').value = map.gridWidth || '';
@@ -1673,8 +1751,20 @@ export function setupMapUploadControls(managerState, options = {}) {
         datalist.innerHTML = folders.map((f) => `<option value="${escapeMapHtml(f)}"></option>`).join('');
     };
 
+    const closeModal = () => {
+        if (modal) modal.classList.add('vtt-hidden');
+        const container = document.getElementById('maps-list-container');
+        cleanupMapGridMedia(container);
+        if (typeof options.resumeCanvas === 'function') {
+            options.resumeCanvas();
+        }
+    };
+
     if (btnChangeMap) {
         btnChangeMap.addEventListener('click', () => {
+            if (typeof options.pauseCanvas === 'function') {
+                options.pauseCanvas();
+            }
             if (modal) modal.classList.remove('vtt-hidden');
             if (createPanel) createPanel.classList.add('vtt-hidden');
             updateFolderDatalist();
@@ -1704,7 +1794,7 @@ export function setupMapUploadControls(managerState, options = {}) {
                 if (createDrawer && !createDrawer.classList.contains('vtt-hidden')) {
                     createDrawer.classList.add('vtt-hidden');
                 } else {
-                    uploadModal.classList.add('vtt-hidden');
+                    closeModal();
                 }
             }
         });
@@ -1712,12 +1802,12 @@ export function setupMapUploadControls(managerState, options = {}) {
 
     if (cancel)
         cancel.addEventListener('click', () => {
-            if (modal) modal.classList.add('vtt-hidden');
+            closeModal();
         });
     const closeIcon = document.getElementById('btn-map-modal-close-icon');
     if (closeIcon)
         closeIcon.addEventListener('click', () => {
-            if (modal) modal.classList.add('vtt-hidden');
+            closeModal();
         });
 
     if (btnOpenImport) {

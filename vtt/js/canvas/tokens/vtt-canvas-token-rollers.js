@@ -283,11 +283,13 @@ export function resolveSaveFromChat(saveResolveCard, applyHalf, msgId, options =
             affectedIdsSet.add(token.id);
 
             const { drawW, drawH } = getTokenDrawDimensions(token);
+            const delayMs = Math.min(360, (affectedTokensMap.size - 1) * 60);
             triggerDamageFXAnimation(
                 token.x + drawW / 2,
                 token.y + drawH / 2,
                 Math.max(drawW, drawH) / 2,
-                targetDamageTypes.length > 0 ? targetDamageTypes : ['untyped']
+                targetDamageTypes.length > 0 ? targetDamageTypes : ['untyped'],
+                { delayMs: Math.max(0, delayMs), tokenId: token.id }
             );
         }
         r.deductedHp = deducted;
@@ -306,7 +308,8 @@ export function resolveSaveFromChat(saveResolveCard, applyHalf, msgId, options =
         vtt.socket.emit('tokens:damage_fx', {
             mapId: currentMapId,
             tokenIds: Array.from(affectedIdsSet),
-            damageTypes: damageTypes.length > 0 ? damageTypes : ['untyped']
+            damageTypes: damageTypes.length > 0 ? damageTypes : ['untyped'],
+            origin: vtt.socket.id
         });
     }
 

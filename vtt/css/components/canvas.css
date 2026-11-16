@@ -641,6 +641,7 @@
     position: fixed;
     z-index: 11000;
     min-width: 200px;
+    max-height: calc(100vh - 24px);
     background: rgba(18, 22, 33, 0.96);
     backdrop-filter: var(--glass-blur);
     -webkit-backdrop-filter: var(--glass-blur);
@@ -652,7 +653,22 @@
     color: var(--color-text-primary);
     user-select: none;
     font-size: 0.82rem;
+    box-sizing: border-box;
     animation: tokenMenuFadeIn 0.12s ease-out;
+}
+
+.vtt-token-context-menu::-webkit-scrollbar {
+    width: 4px;
+}
+.vtt-token-context-menu::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+}
+.vtt-token-context-menu::-webkit-scrollbar-thumb {
+    background: var(--color-text-muted);
+    border-radius: 2px;
+}
+.vtt-token-context-menu::-webkit-scrollbar-thumb:hover {
+    background: var(--color-gold-base);
 }
 
 @keyframes tokenMenuFadeIn {
@@ -780,6 +796,16 @@
     box-shadow: 0 10px 32px rgba(0, 0, 0, 0.6);
     min-width: 180px;
     z-index: 11100;
+}
+
+.vtt-token-menu-item .vtt-token-submenu.flip-left {
+    left: auto;
+    right: 99%;
+}
+
+.vtt-token-menu-item .vtt-token-submenu.flip-up {
+    top: auto;
+    bottom: -4px;
 }
 
 .vtt-token-menu-item:hover > .vtt-token-submenu {

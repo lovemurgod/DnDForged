@@ -11,7 +11,10 @@ import {
     cancelCameraAnimation as cancelCameraAnimationExt,
     updateContainerTransform as updateContainerTransformExt
 } from './vtt-canvas-camera.js';
-import { snapToGridCenter as snapToGridCenterExt } from './vtt-canvas-grid-renderer.js';
+import {
+    snapToGridCenter as snapToGridCenterExt,
+    snapToSmartGrid as snapToSmartGridExt
+} from './vtt-canvas-grid-renderer.js';
 
 export function setupKeyboardShortcuts(ctx = {}) {
     const vtt = ctx.vtt || (typeof window !== 'undefined' ? window.VTT : {});
@@ -25,6 +28,7 @@ export function setupKeyboardShortcuts(ctx = {}) {
         ctx.getTokenDrawDimensions || ((t) => ({ drawW: t?.width || 50, drawH: t?.height || 50 }));
     const cancelMapToolDrawing = ctx.cancelMapToolDrawing || (() => {});
     const snapToGridCenter = ctx.snapToGridCenter || ((x, y) => snapToGridCenterExt(x, y, ctx.grid));
+    const snapToSmartGrid = ctx.snapToSmartGrid || ((x, y) => snapToSmartGridExt(x, y, ctx.grid));
 
     function deleteSelection() {
         if (ctx.selectedMapToolItem && typeof ctx.deleteSelectedMapToolItem === 'function') {
@@ -34,6 +38,7 @@ export function setupKeyboardShortcuts(ctx = {}) {
         }
 
         let changedTokens = false;
+        let changedMapArtwork = false;
         let changedShapes = false;
         let changedWalls = false;
         let changedLights = false;
@@ -41,15 +46,20 @@ export function setupKeyboardShortcuts(ctx = {}) {
         if (ctx.selectedTokenIds.size > 0) {
             ctx.selectedTokenIds.forEach((id) => {
                 const t = ctx.tokens[id];
-                if (t && (t.layer === 'map' || t.isBackground) && t.isAsset) return; // Protect map artwork
+                if (t && ((t.layer === 'map' && t.isAsset) || t.isBackground)) {
+                    if (typeof ctx.deleteMapBackgroundAsset === 'function' && ctx.deleteMapBackgroundAsset(id)) {
+                        changedMapArtwork = true;
+                    }
+                    return;
+                }
                 if (ctx.isTokenControlledByPlayer(t)) {
                     if (typeof ctx.cleanupYouTubePingPongForId === 'function') ctx.cleanupYouTubePingPongForId(id);
                     delete ctx.tokens[id];
+                    changedTokens = true;
                 }
             });
             ctx.selectedTokenIds.clear();
             ctx.selectedTokenId = null;
-            changedTokens = true;
         }
 
         if (typeof ctx.selectedShapeIds !== 'undefined' && ctx.selectedShapeIds.size > 0) {
@@ -84,20 +94,28 @@ export function setupKeyboardShortcuts(ctx = {}) {
             changedWalls = true;
         }
 
-        if (ctx.selectedLightId && Array.isArray(ctx.lights)) {
-            const idx = ctx.lights.findIndex((l) => l.id === ctx.selectedLightId);
-            if (idx !== -1) {
-                ctx.lights.splice(idx, 1);
+        if ((ctx.selectedLightIds && ctx.selectedLightIds.size > 0) || ctx.selectedLightId) {
+            const idsToDelete = new Set(ctx.selectedLightIds ? Array.from(ctx.selectedLightIds) : []);
+            if (ctx.selectedLightId) idsToDelete.add(ctx.selectedLightId);
+            if (Array.isArray(ctx.lights)) {
+                ctx.lights = ctx.lights.filter((l) => !idsToDelete.has(l.id));
                 ctx.selectedLightId = null;
+                if (ctx.selectedLightIds) ctx.selectedLightIds.clear();
                 ctx.hoveredLightId = null;
                 changedLights = true;
             }
         }
 
         // Notes deletion
-        if (ctx.selectedNoteId && ctx.activeLayer === 'notes') {
-            ctx.notes = ctx.notes.filter((n) => n.id !== ctx.selectedNoteId);
+        if (
+            (ctx.selectedNoteId || (ctx.selectedNoteIds && ctx.selectedNoteIds.size > 0)) &&
+            ctx.activeLayer === 'notes'
+        ) {
+            const noteIdsToDelete = new Set(ctx.selectedNoteIds ? Array.from(ctx.selectedNoteIds) : []);
+            if (ctx.selectedNoteId) noteIdsToDelete.add(ctx.selectedNoteId);
+            ctx.notes = (ctx.notes || []).filter((n) => !noteIdsToDelete.has(n.id));
             ctx.selectedNoteId = null;
+            if (ctx.selectedNoteIds) ctx.selectedNoteIds.clear();
             if ('hoveredNoteId' in ctx) ctx.hoveredNoteId = null;
             vtt.socket.emit('notes:update', { mapId: ctx.currentMapId, notes: ctx.notes });
             ctx.renderAll();
@@ -135,7 +153,7 @@ export function setupKeyboardShortcuts(ctx = {}) {
             if (typeof ctx.syncWallSpatialIndex === 'function') ctx.syncWallSpatialIndex();
             vtt.socket.emit('walls:update', { mapId: ctx.currentMapId, walls: ctx.walls });
         }
-        if (changedTokens || changedShapes || changedWalls || changedLights) ctx.renderAll();
+        if (changedTokens || changedMapArtwork || changedShapes || changedWalls || changedLights) ctx.renderAll();
     }
 
     function copySelectionToClipboard() {
@@ -308,16 +326,26 @@ export function setupKeyboardShortcuts(ctx = {}) {
 
     if (typeof window !== 'undefined') {
         window.addEventListener('keydown', (e) => {
+            const activeEl = typeof document !== 'undefined' ? document.activeElement : null;
             const isInputActive =
-                ['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName) ||
+                ['INPUT', 'TEXTAREA', 'SELECT'].includes(activeEl?.tagName) ||
                 ['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target?.tagName) ||
-                document.activeElement?.isContentEditable ||
+                activeEl?.isContentEditable ||
                 e.target?.isContentEditable;
             const isModalActive = Boolean(
                 typeof document !== 'undefined' &&
-                document.querySelector('.modal.show, .swal2-container, #vtt-token-edit-modal:not(.vtt-hidden), #panel-character-sheet:not(.vtt-hidden)')
+                document.querySelector?.(
+                    '.modal.show, .swal2-container, #vtt-token-edit-modal:not(.vtt-hidden), #panel-character-sheet:not(.vtt-hidden)'
+                )
             );
-            if (isInputActive || isModalActive) return;
+            if (ctx.isTokenMeasuring || ctx.localIsMeasuring || ctx.localIsShaping) {
+                const isTypingText =
+                    activeEl?.tagName === 'TEXTAREA' ||
+                    (activeEl?.tagName === 'INPUT' &&
+                        !['checkbox', 'radio', 'button', 'submit', 'color', 'range'].includes(activeEl?.type)) ||
+                    activeEl?.isContentEditable;
+                if (isTypingText || isModalActive) return;
+            } else if (isInputActive || isModalActive) return;
 
             const isCtrl = e.ctrlKey || e.metaKey;
             const key = e.key ? e.key.toLowerCase() : '';
@@ -542,13 +570,40 @@ export function setupKeyboardShortcuts(ctx = {}) {
                     ((activeTool === 'measure' || activeTool === 'shape') && rawShapeMeasure === 'line')
                 ) {
                     e.preventDefault();
-                    (ctx.measureAnchorPoints = ctx.measureAnchorPoints || []).push(
-                        e.altKey
-                            ? ctx.currentMouseCoords
-                            : snapToGridCenter(ctx.currentMouseCoords.x, ctx.currentMouseCoords.y)
-                    );
-                    if (ctx.localIsMeasuring) ctx.localMeasureEnd = ctx.currentMouseCoords;
-                    if (ctx.localIsShaping) ctx.localShapeEnd = ctx.currentMouseCoords;
+                    const mouseCoords = ctx.currentMouseCoords || { x: 0, y: 0 };
+                    const pt = e.altKey ? { ...mouseCoords } : snapToSmartGrid(mouseCoords.x, mouseCoords.y);
+                    if (!ctx.measureAnchorPoints || ctx.measureAnchorPoints.length === 0) {
+                        const startPt = ctx.localIsMeasuring
+                            ? ctx.localMeasureStart
+                            : ctx.localIsShaping
+                              ? ctx.localShapeStart
+                              : pt;
+                        ctx.measureAnchorPoints = startPt ? [{ ...startPt }] : [];
+                    }
+                    ctx.measureAnchorPoints.push(pt);
+                    if (ctx.localIsMeasuring) {
+                        ctx.localMeasureEnd = pt;
+                        if (typeof ctx.emitMeasureUpdateThrottled === 'function') {
+                            const color = document.getElementById('measure-color')?.value || '#00ffff';
+                            const anchor = document.getElementById('measure-square-anchor')?.value || 'center';
+                            const beamW = parseFloat(document.getElementById('measure-beam-width')?.value || 5);
+                            const broadcast = document.getElementById('measure-broadcast')?.checked ?? true;
+                            if (broadcast) {
+                                ctx.emitMeasureUpdateThrottled({
+                                    mapId: ctx.currentMapId,
+                                    username: vtt.username,
+                                    start: ctx.localMeasureStart,
+                                    end: ctx.localMeasureEnd,
+                                    shape: 'line',
+                                    color,
+                                    squareAnchor: anchor,
+                                    beamWidth: beamW,
+                                    points: [...ctx.measureAnchorPoints, ctx.localMeasureEnd]
+                                });
+                            }
+                        }
+                    }
+                    if (ctx.localIsShaping) ctx.localShapeEnd = pt;
                     ctx.renderAll();
                     return;
                 }
@@ -561,6 +616,25 @@ export function setupKeyboardShortcuts(ctx = {}) {
                 e.preventDefault();
                 if (ctx.measureAnchorPoints && ctx.measureAnchorPoints.length > 1) {
                     ctx.measureAnchorPoints.pop();
+                    if (ctx.localIsMeasuring && typeof ctx.emitMeasureUpdateThrottled === 'function') {
+                        const color = document.getElementById('measure-color')?.value || '#00ffff';
+                        const anchor = document.getElementById('measure-square-anchor')?.value || 'center';
+                        const beamW = parseFloat(document.getElementById('measure-beam-width')?.value || 5);
+                        const broadcast = document.getElementById('measure-broadcast')?.checked ?? true;
+                        if (broadcast) {
+                            ctx.emitMeasureUpdateThrottled({
+                                mapId: ctx.currentMapId,
+                                username: vtt.username,
+                                start: ctx.localMeasureStart,
+                                end: ctx.localMeasureEnd,
+                                shape: 'line',
+                                color,
+                                squareAnchor: anchor,
+                                beamWidth: beamW,
+                                points: [...ctx.measureAnchorPoints, ctx.localMeasureEnd]
+                            });
+                        }
+                    }
                     ctx.renderAll();
                 }
                 return;
@@ -585,7 +659,10 @@ export function setupKeyboardShortcuts(ctx = {}) {
                 // Clear active measurements or ctx.shapes
                 const dragTargetId = ctx.dragTargetId;
                 if (ctx.localIsMeasuring || ctx.localIsShaping || ctx.isTokenMeasuring || dragTargetId) {
-                    if (dragTargetId || (ctx.tokenDragOriginalPositions && Object.keys(ctx.tokenDragOriginalPositions).length > 0)) {
+                    if (
+                        dragTargetId ||
+                        (ctx.tokenDragOriginalPositions && Object.keys(ctx.tokenDragOriginalPositions).length > 0)
+                    ) {
                         let hadMoved = false;
                         Object.entries(ctx.tokenDragOriginalPositions || {}).forEach(([id, orig]) => {
                             if (ctx.tokens[id] && orig) {
@@ -793,23 +870,43 @@ export function setupKeyboardShortcuts(ctx = {}) {
                 return;
             }
 
-            const isArrow = e.key === 'ArrowUp' || e.key === 'ArrowDown' || e.key === 'ArrowLeft' || e.key === 'ArrowRight';
+            const isArrow =
+                e.key === 'ArrowUp' || e.key === 'ArrowDown' || e.key === 'ArrowLeft' || e.key === 'ArrowRight';
             const isWasdMove = !e.shiftKey && !isCtrl && !e.altKey && ['w', 'a', 's', 'd'].includes(key);
 
             if (isArrow || isWasdMove) {
-                if (
-                    ctx.selectedTokenIds.size > 0 ||
+                const hasSelectedTokens = ctx.selectedTokenIds && ctx.selectedTokenIds.size > 0;
+                const hasSelectedShapes =
                     (typeof ctx.selectedShapeIds !== 'undefined' && ctx.selectedShapeIds.size > 0) ||
-                    ctx.selectedShapeId ||
-                    ctx.selectedDrawingId ||
-                    (typeof ctx.selectedDrawingIds !== 'undefined' && ctx.selectedDrawingIds.size > 0)
+                    !!ctx.selectedShapeId;
+                const hasSelectedDrawings =
+                    (typeof ctx.selectedDrawingIds !== 'undefined' && ctx.selectedDrawingIds.size > 0) ||
+                    !!ctx.selectedDrawingId;
+                const hasSelectedWalls =
+                    (typeof ctx.selectedWallIdxs !== 'undefined' && ctx.selectedWallIdxs.size > 0) ||
+                    (typeof ctx.selectedWallIdx === 'number' && ctx.selectedWallIdx >= 0);
+                const hasSelectedLights =
+                    (ctx.selectedLightIds && ctx.selectedLightIds.size > 0) || !!ctx.selectedLightId;
+                const hasSelectedNotes = (ctx.selectedNoteIds && ctx.selectedNoteIds.size > 0) || !!ctx.selectedNoteId;
+                const hasSelectedMapTools =
+                    !!ctx.selectedMapToolItem || (ctx.selectedMapToolItems && ctx.selectedMapToolItems.size > 0);
+
+                if (
+                    hasSelectedTokens ||
+                    hasSelectedShapes ||
+                    hasSelectedDrawings ||
+                    hasSelectedWalls ||
+                    hasSelectedLights ||
+                    hasSelectedNotes ||
+                    hasSelectedMapTools
                 ) {
                     e.preventDefault();
                     let dx = 0;
                     let dy = 0;
-                    const unitSize =
+                    const fullGrid =
                         (ctx.grid && ctx.grid.size ? ctx.grid.size : 50) *
                         (ctx.grid && ctx.grid.scale ? ctx.grid.scale : 1);
+                    const unitSize = e.shiftKey && isArrow ? Math.max(1, Math.round(fullGrid / 10)) : fullGrid;
                     if (e.key === 'ArrowUp' || key === 'w') dy = -unitSize;
                     if (e.key === 'ArrowDown' || key === 's') dy = unitSize;
                     if (e.key === 'ArrowLeft' || key === 'a') dx = -unitSize;
@@ -818,6 +915,10 @@ export function setupKeyboardShortcuts(ctx = {}) {
                     let changedTokens = false;
                     let changedShapes = false;
                     let changedDrawings = false;
+                    let changedWalls = false;
+                    let changedLights = false;
+                    let changedNotes = false;
+                    let changedMapTools = false;
 
                     const drawingsToNudge = new Set(ctx.selectedDrawingIds || []);
                     if (ctx.selectedDrawingId) drawingsToNudge.add(ctx.selectedDrawingId);
@@ -938,6 +1039,11 @@ export function setupKeyboardShortcuts(ctx = {}) {
                                         ctx.selectedTokenId = id;
                                     }
                                 } else {
+                                    const nudgeDist = Math.hypot(t.x - originalPos.x, t.y - originalPos.y);
+                                    const nudgeDuration = Math.min(
+                                        300,
+                                        Math.max(160, Math.round(140 + nudgeDist * 0.28))
+                                    );
                                     t._animReq = {
                                         startX: originalPos.x,
                                         startY: originalPos.y,
@@ -945,7 +1051,7 @@ export function setupKeyboardShortcuts(ctx = {}) {
                                         endY: t.y,
                                         waypoints: [],
                                         timestamp: Date.now(),
-                                        duration: 300
+                                        duration: nudgeDuration
                                     };
                                 }
                                 changedTokens = true;
@@ -973,6 +1079,76 @@ export function setupKeyboardShortcuts(ctx = {}) {
                         });
                     }
 
+                    const wallsToNudge = new Set(ctx.selectedWallIdxs ? Array.from(ctx.selectedWallIdxs) : []);
+                    if (
+                        typeof ctx.selectedWallIdx === 'number' &&
+                        ctx.selectedWallIdx >= 0 &&
+                        ctx.walls &&
+                        ctx.selectedWallIdx < ctx.walls.length
+                    ) {
+                        wallsToNudge.add(ctx.selectedWallIdx);
+                    }
+                    if (wallsToNudge.size > 0 && Array.isArray(ctx.walls)) {
+                        wallsToNudge.forEach((idx) => {
+                            const w = ctx.walls[idx];
+                            if (w) {
+                                w.x1 += dx;
+                                w.y1 += dy;
+                                w.x2 += dx;
+                                w.y2 += dy;
+                                changedWalls = true;
+                            }
+                        });
+                    }
+
+                    const lightsToNudge = new Set(ctx.selectedLightIds ? Array.from(ctx.selectedLightIds) : []);
+                    if (ctx.selectedLightId) lightsToNudge.add(ctx.selectedLightId);
+                    if (lightsToNudge.size > 0 && Array.isArray(ctx.lights)) {
+                        lightsToNudge.forEach((id) => {
+                            const l = ctx.lights.find((item) => item.id === id);
+                            if (l) {
+                                l.x += dx;
+                                l.y += dy;
+                                changedLights = true;
+                            }
+                        });
+                    }
+
+                    const notesToNudge = new Set(ctx.selectedNoteIds ? Array.from(ctx.selectedNoteIds) : []);
+                    if (ctx.selectedNoteId) notesToNudge.add(ctx.selectedNoteId);
+                    if (notesToNudge.size > 0 && Array.isArray(ctx.notes)) {
+                        notesToNudge.forEach((id) => {
+                            const n = ctx.notes.find((item) => item.id === id);
+                            if (n) {
+                                n.x += dx;
+                                n.y += dy;
+                                changedNotes = true;
+                            }
+                        });
+                    }
+
+                    const mapToolsToNudge = [];
+                    if (ctx.selectedMapToolItems && ctx.selectedMapToolItems.size > 0) {
+                        ctx.selectedMapToolItems.forEach((item) => mapToolsToNudge.push(item));
+                    } else if (ctx.selectedMapToolItem) {
+                        mapToolsToNudge.push(ctx.selectedMapToolItem);
+                    }
+                    if (mapToolsToNudge.length > 0) {
+                        mapToolsToNudge.forEach((itemRef) => {
+                            const list = itemRef.type === 'trap' ? ctx.traps || [] : ctx.portals || [];
+                            const item = list.find((it) => it.id === itemRef.id);
+                            if (item && item.geom) {
+                                if (item.geom.x !== undefined) item.geom.x += dx;
+                                if (item.geom.y !== undefined) item.geom.y += dy;
+                                if (item.geom.x1 !== undefined) item.geom.x1 += dx;
+                                if (item.geom.y1 !== undefined) item.geom.y1 += dy;
+                                if (item.geom.x2 !== undefined) item.geom.x2 += dx;
+                                if (item.geom.y2 !== undefined) item.geom.y2 += dy;
+                                changedMapTools = true;
+                            }
+                        });
+                    }
+
                     if (changedTokens) {
                         if (typeof window !== 'undefined' && typeof window.emitTokenUpdates === 'function') {
                             window.emitTokenUpdates(ctx.tokens);
@@ -989,7 +1165,36 @@ export function setupKeyboardShortcuts(ctx = {}) {
                     if (changedDrawings && typeof ctx.emitDrawingsUpdate === 'function') {
                         ctx.emitDrawingsUpdate();
                     }
-                    if (changedTokens || changedShapes || changedDrawings) {
+                    if (changedWalls) {
+                        if (vtt?.socket?.emit) {
+                            vtt.socket.emit('walls:update', { mapId: ctx.currentMapId, walls: ctx.walls });
+                        }
+                        if (typeof ctx.rebuildWallSpatialIndex === 'function') {
+                            ctx.rebuildWallSpatialIndex();
+                        }
+                    }
+                    if (changedLights && vtt?.socket?.emit) {
+                        vtt.socket.emit('lights:update', { mapId: ctx.currentMapId, lights: ctx.lights });
+                    }
+                    if (changedNotes && vtt?.socket?.emit) {
+                        vtt.socket.emit('notes:update', { mapId: ctx.currentMapId, notes: ctx.notes });
+                    }
+                    if (changedMapTools && vtt?.socket?.emit) {
+                        vtt.socket.emit('maptools:update', {
+                            mapId: ctx.currentMapId,
+                            traps: ctx.traps,
+                            portals: ctx.portals
+                        });
+                    }
+                    if (
+                        changedTokens ||
+                        changedShapes ||
+                        changedDrawings ||
+                        changedWalls ||
+                        changedLights ||
+                        changedNotes ||
+                        changedMapTools
+                    ) {
                         if (typeof ctx.renderAll === 'function') ctx.renderAll();
                     }
                 }

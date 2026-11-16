@@ -35,7 +35,7 @@ export class VTTDiceParser {
 
         // Tokenize terms: parentheses, operators, dice expressions, numbers, and optional bracketed label [LABEL]
         const tokenRegex =
-            /\s*(\(|\)|[+\-*/]|[0-9]*d[0-9]+(?:(?:kh|kl|dl|dh)[0-9]*)?(?:ro(?:<=|>=|<|>|=)?[0-9]+)?!?|[0-9]+(?:\.[0-9]+)?)(?:\s*\[([^\]]*)\])?/gi;
+            /\s*(\(|\)|[+\-*/]|[0-9]*d[0-9]+(?:(?:kh|kl|dl|dh)[0-9]*|ro(?:<=|>=|<|>|=)?[0-9]+)*!?|[0-9]+(?:\.[0-9]+)?)(?:\s*\[([^\]]*)\])?/gi;
 
         let evalExpression = '';
         let match;
@@ -80,17 +80,36 @@ export class VTTDiceParser {
                 continue;
             }
 
-            // Check if token is a dice expression
-            const diceMatch = token.match(/^(\d*)d(\d+)(?:(kh|kl|dl|dh)(\d*))?(?:ro(<=|>=|<|>|=)?(\d+))?(!)?$/i);
-            if (diceMatch) {
-                const countStr = diceMatch[1];
-                const facesStr = diceMatch[2];
-                const keepDropType = diceMatch[3];
-                const keepDropNumStr = diceMatch[4];
-                const roComp = diceMatch[5];
-                const roTargetStr = diceMatch[6];
-                const explode = diceMatch[7];
+            // Check if token is a dice expression (supporting keep/drop and reroll in any sequence)
+            const diceMatch = token.match(/^(\d*)d(\d+)(.*?)(!)?$/i);
+            let countStr = null;
+            let facesStr = null;
+            let keepDropType = null;
+            let keepDropNumStr = null;
+            let roComp = null;
+            let roTargetStr = null;
+            let explode = null;
 
+            if (diceMatch) {
+                countStr = diceMatch[1];
+                facesStr = diceMatch[2];
+                const mods = diceMatch[3] || '';
+                explode = diceMatch[4];
+
+                const kdMatch = mods.match(/(kh|kl|dl|dh)(\d*)/i);
+                if (kdMatch) {
+                    keepDropType = kdMatch[1].toLowerCase();
+                    keepDropNumStr = kdMatch[2];
+                }
+
+                const roMatch = mods.match(/ro(<=|>=|<|>|=)?(\d+)/i);
+                if (roMatch) {
+                    roComp = roMatch[1];
+                    roTargetStr = roMatch[2];
+                }
+            }
+
+            if (diceMatch) {
                 const count = parseInt(countStr || '1', 10);
                 const faces = parseInt(facesStr, 10);
                 const rolled = [];

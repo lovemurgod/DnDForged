@@ -130,14 +130,15 @@
                         <div class="form-group">
                             <label for="login-campaign"><i class="fa-solid fa-book-bookmark"></i> Select
                                 Campaign</label>
-                            <div class="flex-row">
-                                <select id="login-campaign">
-                                    <option value="default">Default Campaign</option>
-                                </select>
-                                <button id="btn-create-campaign" class="btn btn-secondary" title="Create New Campaign">
-                                    <i class="fa-solid fa-plus"></i>
-                                </button>
-                            </div>
+                            <select id="login-campaign">
+                                <option value="default">Default Campaign</option>
+                            </select>
+                        </div>
+
+                        <div id="campaign-load-error" class="vtt-login-error vtt-hidden" role="alert">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                            <span>Campaigns could not be loaded. Retry before joining.</span>
+                            <button id="btn-retry-campaigns" class="btn btn-secondary" type="button">Retry</button>
                         </div>
 
                         <div class="form-group login-remember-group">
@@ -196,6 +197,27 @@
                         <i class="fa-solid fa-unlock"></i> Validate
                     </button>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recoverable initialization failure; reload avoids retrying partial module setup. -->
+    <div id="vtt-init-error" class="vtt-overlay-panel vtt-hidden" role="alertdialog" aria-modal="true"
+        aria-labelledby="vtt-init-error-title" style="z-index: 10010;">
+        <div class="login-card glassmorphism" style="max-width: 640px; width: 100%;">
+            <div class="login-header">
+                <i class="fa-solid fa-triangle-exclamation"
+                    style="font-size: 2rem; color: #ef4444; margin-bottom: 8px;"></i>
+                <h2 id="vtt-init-error-title" class="login-title">VTT initialization failed</h2>
+                <p>The tabletop could not finish loading. Reload the VTT to start from a clean state.</p>
+            </div>
+            <div class="login-body">
+                <details>
+                    <summary>Technical details</summary>
+                    <pre id="vtt-init-error-details"
+                        style="max-height: 35vh; overflow: auto; white-space: pre-wrap;"></pre>
+                </details>
+                <button id="btn-vtt-init-reload" class="btn btn-primary btn-block" type="button">Reload VTT</button>
             </div>
         </div>
     </div>
@@ -513,12 +535,14 @@
                     </div>
                     <div style="display: flex; gap: 8px; margin-bottom: 6px;">
                         <div class="form-group" style="flex: 1.2;">
-                            <label for="mobile-trap-damage-input" style="font-size: 0.78rem; color: #94a3b8;">Damage Dice</label>
+                            <label for="mobile-trap-damage-input" style="font-size: 0.78rem; color: #94a3b8;">Damage
+                                Dice</label>
                             <input type="text" id="mobile-trap-damage-input" value="4d6" class="form-control"
                                 style="font-size: 0.9rem; padding: 8px 10px; width: 100%;">
                         </div>
                         <div class="form-group" style="flex: 1;">
-                            <label for="mobile-trap-damage-type-select" style="font-size: 0.78rem; color: #94a3b8;">Damage Type</label>
+                            <label for="mobile-trap-damage-type-select"
+                                style="font-size: 0.78rem; color: #94a3b8;">Damage Type</label>
                             <select id="mobile-trap-damage-type-select"
                                 style="width: 100%; height: 42px; border-radius: 8px; font-size: 0.88rem;">
                                 <option value="piercing" selected>Piercing</option>
@@ -726,6 +750,18 @@
                 <!-- Actual Sheet Content (hidden initially) -->
                 <div id="player-sheet-active" class="vtt-hidden"
                     style="flex: 1; display: flex; flex-direction: column; overflow: hidden;">
+                    <!-- Player Sheet Header Control Bar (Roll Mode, Whisper, Settings) -->
+                    <div id="ps-top-control-bar" class="ps-top-control-bar">
+                        <div class="ps-segmented-capsule" role="group" aria-label="Sheet Roll Mode">
+                            <button type="button" class="ps-roll-mode-btn" data-mode="adv" title="Advantage (rolls with advantage)"><i class="fa-solid fa-angles-up"></i> Adv</button>
+                            <button type="button" class="ps-roll-mode-btn active" data-mode="normal" title="Normal (1d20)">Norm</button>
+                            <button type="button" class="ps-roll-mode-btn" data-mode="dis" title="Disadvantage (rolls with disadvantage)"><i class="fa-solid fa-angles-down"></i> Dis</button>
+                        </div>
+                        <div class="ps-actions-group">
+                            <button type="button" class="ps-whisper-btn" id="ps-btn-gm-whisper" title="Whisper rolls from this sheet to GM only"><i class="fa-solid fa-user-secret"></i> GM</button>
+                            <button type="button" class="ps-settings-cog-btn" id="ps-btn-sheet-settings" title="Sheet Settings"><i class="fa-solid fa-gear"></i></button>
+                        </div>
+                    </div>
                     <!-- Inner Tabs Header -->
                     <div class="ps-tabs-header"
                         style="display: flex; flex-shrink: 0; background: rgba(0,0,0,0.2); border-bottom: 1px solid var(--color-border-subtle);">
@@ -829,6 +865,18 @@
                 <canvas id="vtt-canvas-interaction"></canvas>
             </div>
 
+            <!-- True Screen-Space HUD Projection Canvas -->
+            <canvas id="vtt-canvas-hud"
+                style="position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 14;"></canvas>
+
+            <!-- True Screen-Space Token & Measurement HUD Projection Layer -->
+            <div id="vtt-token-hud-layer"
+                style="position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; z-index: 15;">
+                <div id="vtt-live-measure-pill"
+                    style="display: none; position: absolute; top: 0; left: 0; pointer-events: none; z-index: 20; background: rgba(15, 15, 20, 0.88); border: 1.5px solid #00ffff; border-radius: 12px; padding: 2px 10px; color: #ffffff; font-family: Inter, Arial, sans-serif; font-size: 13px; font-weight: bold; white-space: nowrap; box-shadow: 0 2px 6px rgba(0,0,0,0.6); transform-origin: top left;">
+                </div>
+            </div>
+
             <!-- Unified Bottom-Left Canvas HUD (Coordinates & Broadcast) -->
             <div id="vtt-coordinates-indicator" class="glassmorphism font-code">
                 <span class="vtt-coords-display">X: <span id="val-coord-x">0</span> Y: <span
@@ -850,6 +898,12 @@
                 </button>
                 <button id="btn-asset-ctx-move" class="btn btn-ctx-item">
                     <i class="fa-solid fa-arrow-right-to-bracket"></i> <span>Move to Folder...</span>
+                </button>
+                <button id="btn-asset-ctx-create-table" class="btn btn-ctx-item">
+                    <i class="fa-solid fa-layer-group"></i> <span>Create Asset Table</span>
+                </button>
+                <button id="btn-asset-ctx-add-to-table" class="btn btn-ctx-item">
+                    <i class="fa-solid fa-plus"></i> <span>Add to Asset Table...</span>
                 </button>
                 <button id="btn-asset-ctx-copy-url" class="btn btn-ctx-item">
                     <i class="fa-solid fa-copy"></i> <span>Copy Asset URL</span>
@@ -887,22 +941,12 @@
                 </button>
             </div>
 
-            <!-- Tracking Icons with Scroll Controls -->
+            <!-- Tracking Icons Carousel -->
             <div id="init-scroll-wrapper" class="init-scroll-wrapper">
-                <button id="btn-init-scroll-left"
-                    class="btn btn-icon btn-secondary init-scroll-btn init-scroll-btn-left" title="Scroll Left"
-                    style="display: none;">
-                    <i class="fa-solid fa-chevron-left"></i>
-                </button>
                 <div id="init-list" class="init-carousel-list scroll-styled">
                     <div class="init-empty-state">No creatures in combat yet. Drag creatures onto map or click "Add".
                     </div>
                 </div>
-                <button id="btn-init-scroll-right"
-                    class="btn btn-icon btn-secondary init-scroll-btn init-scroll-btn-right" title="Scroll Right"
-                    style="display: none;">
-                    <i class="fa-solid fa-chevron-right"></i>
-                </button>
             </div>
 
             <!-- Bottom Controls -->
@@ -977,6 +1021,9 @@
                 </button>
                 <button class="tab-header gm-only" data-tab="tab-assets" title="Asset Gallery (Drag & Drop)">
                     <i class="fa-solid fa-photo-film"></i>
+                </button>
+                <button class="tab-header gm-only" data-tab="tab-tables" title="Roll Tables & Card Decks">
+                    <i class="fa-solid fa-dice-d20"></i>
                 </button>
                 <button class="tab-header" data-tab="tab-config" title="Settings & Preferences">
                     <i class="fa-solid fa-gears"></i>
@@ -1064,6 +1111,10 @@
                                     <span id="bestiary-filter-badge"
                                         style="display: none; position: absolute; top: -5px; right: -5px; background: var(--color-gold-base); color: #000; font-size: 0.65rem; font-weight: 700; border-radius: 50%; width: 16px; height: 16px; align-items: center; justify-content: center; line-height: 1; box-shadow: 0 0 4px rgba(0,0,0,0.5);"></span>
                                 </button>
+                                <button id="btn-bestiary-token-settings" class="btn btn-secondary btn-icon"
+                                    title="Bestiary Token Drop Settings" style="flex-shrink: 0; padding: 0 10px;">
+                                    <i class="fa-solid fa-gear"></i>
+                                </button>
                             </div>
 
                             <!-- Tabular Bestiary Table Container -->
@@ -1102,9 +1153,13 @@
                         <div id="lib-custom" class="lib-tab-content vtt-hidden"
                             style="display: flex; flex-direction: column; height: 100%;">
                             <div
-                                style="padding: 12px 0; border-bottom: 1px solid var(--color-border-subtle); flex-shrink: 0;">
-                                <button id="btn-add-custom-npc" class="btn btn-secondary btn-sm" style="width: 100%;">
+                                style="padding: 12px 0; border-bottom: 1px solid var(--color-border-subtle); flex-shrink: 0; display: flex; gap: 8px;">
+                                <button id="btn-add-custom-npc" class="btn btn-secondary btn-sm" style="flex: 1;">
                                     <i class="fa-solid fa-plus"></i> Import & Customize NPC
+                                </button>
+                                <button id="btn-custom-npc-token-settings" class="btn btn-secondary btn-icon"
+                                    title="Custom NPC Token Drop Settings" style="flex-shrink: 0; padding: 0 10px;">
+                                    <i class="fa-solid fa-gear"></i>
                                 </button>
                             </div>
                             <div id="library-custom-list" class="library-items scroll-styled"
@@ -1117,114 +1172,235 @@
                 </div>
 
                 <!-- Asset Gallery Panel (GM Only) -->
-                <div id="tab-assets" class="tab-panel gm-only">
-                    <div class="panel-header">
-                        <h3><i class="fa-solid fa-photo-film text-gradient-gold"></i> Asset Gallery</h3>
-                        <div class="header-actions" style="display: flex; gap: 4px; align-items: center;">
-                            <button id="btn-asset-view-toggle" class="btn btn-xxs btn-secondary"
-                                title="Toggle Grid / List View">
-                                <i class="fa-solid fa-list"></i>
+                <div id="tab-assets" class="tab-panel gm-only" style="display: flex; flex-direction: column;">
+                    <div class="panel-header" style="padding-bottom: 0;">
+                        <div class="library-tabs-header"
+                            style="display: flex; flex-shrink: 0; background: rgba(0,0,0,0.2); border-bottom: 1px solid var(--color-border-subtle); width: 100%; margin-left: -16px; margin-right: -16px; padding: 0 16px;">
+                            <button class="asset-subtab-btn active" data-subtab="asset-gallery-view"
+                                style="flex:1; padding:8px 0; background:transparent; border:none; color:var(--color-text-primary); cursor:pointer; font-weight:600; border-bottom: 2px solid var(--color-gold-base); transition: all 0.2s;">
+                                <i class="fa-solid fa-photo-film"></i> Gallery
                             </button>
-                            <button id="btn-asset-new-folder" class="btn btn-xxs btn-secondary" title="New Folder">
-                                <i class="fa-solid fa-folder-plus"></i>
+                            <button class="asset-subtab-btn" data-subtab="asset-tables-view"
+                                style="flex:1; padding:8px 0; background:transparent; border:none; color:var(--color-text-secondary); cursor:pointer; font-weight:600; border-bottom: 2px solid transparent; transition: all 0.2s;">
+                                <i class="fa-solid fa-table-cells-large"></i> Asset Tables
                             </button>
                         </div>
                     </div>
 
-                    <div class="panel-body flex-col h-100" style="position: relative;">
-                        <!-- Upload Actions Row -->
-                        <div class="asset-actions flex-row" style="gap: 6px; margin-bottom: 6px;">
-                            <label for="asset-file-upload" class="btn btn-xs btn-primary"
-                                style="flex: 1; text-align: center; cursor: pointer; white-space: nowrap; padding: 4px 6px;"
-                                title="Upload Multiple Files">
-                                <i class="fa-solid fa-file-arrow-up"></i> Files
-                            </label>
-                            <input type="file" id="asset-file-upload" class="vtt-hidden" multiple
-                                accept="image/*,video/*,.gif,.webp">
-
-                            <label for="asset-folder-upload" class="btn btn-xs btn-primary"
-                                style="flex: 1; text-align: center; cursor: pointer; white-space: nowrap; padding: 4px 6px;"
-                                title="Upload Entire Folder Hierarchy">
-                                <i class="fa-solid fa-folder-arrow-up"></i> Folder
-                            </label>
-                            <input type="file" id="asset-folder-upload" class="vtt-hidden" webkitdirectory directory
-                                multiple accept="image/*,video/*,.gif,.webp">
-
-                            <button id="btn-asset-add-url" class="btn btn-xs btn-secondary"
-                                style="flex: 1; white-space: nowrap; padding: 4px 6px;" title="Add External Media URL">
-                                <i class="fa-solid fa-link"></i> URL
-                            </button>
+                    <!-- Sub-view 1: Gallery -->
+                    <div id="asset-gallery-view" class="asset-subtab-content flex-col h-100"
+                        style="position: relative; display: flex; flex-direction: column; flex: 1; min-height: 0;">
+                        <div class="panel-header" style="padding-top: 8px;">
+                            <h3 style="font-size: 0.95rem;"><i class="fa-solid fa-photo-film text-gradient-gold"></i>
+                                Media Files</h3>
+                            <div class="header-actions" style="display: flex; gap: 4px; align-items: center;">
+                                <button id="btn-asset-view-toggle" class="btn btn-xxs btn-secondary"
+                                    title="Toggle Grid / List View">
+                                    <i class="fa-solid fa-list"></i>
+                                </button>
+                                <button id="btn-asset-new-folder" class="btn btn-xxs btn-secondary" title="New Folder">
+                                    <i class="fa-solid fa-folder-plus"></i>
+                                </button>
+                            </div>
                         </div>
 
-                        <!-- Search & Zoom Toolbar -->
-                        <div class="flex-row" style="gap: 6px; margin-bottom: 6px; align-items: center;">
+                        <div class="panel-body flex-col h-100"
+                            style="position: relative; flex: 1; min-height: 0; display: flex; flex-direction: column;">
+                            <!-- Upload Actions Row -->
+                            <div class="asset-actions flex-row" style="gap: 6px; margin-bottom: 6px;">
+                                <label for="asset-file-upload" class="btn btn-xs btn-primary"
+                                    style="flex: 1; text-align: center; cursor: pointer; white-space: nowrap; padding: 4px 6px;"
+                                    title="Upload Multiple Files">
+                                    <i class="fa-solid fa-file-arrow-up"></i> Files
+                                </label>
+                                <input type="file" id="asset-file-upload" class="vtt-hidden" multiple
+                                    accept="image/*,video/*,.gif,.webp">
+
+                                <label for="asset-folder-upload" class="btn btn-xs btn-primary"
+                                    style="flex: 1; text-align: center; cursor: pointer; white-space: nowrap; padding: 4px 6px;"
+                                    title="Upload Entire Folder Hierarchy">
+                                    <i class="fa-solid fa-folder-arrow-up"></i> Folder
+                                </label>
+                                <input type="file" id="asset-folder-upload" class="vtt-hidden" webkitdirectory directory
+                                    multiple accept="image/*,video/*,.gif,.webp">
+
+                                <button id="btn-asset-add-url" class="btn btn-xs btn-secondary"
+                                    style="flex: 1; white-space: nowrap; padding: 4px 6px;"
+                                    title="Add External Media URL">
+                                    <i class="fa-solid fa-link"></i> URL
+                                </button>
+                            </div>
+
+                            <!-- Search & Zoom Toolbar -->
+                            <div class="flex-row" style="gap: 6px; margin-bottom: 6px; align-items: center;">
+                                <div class="search-box" style="flex: 1;">
+                                    <input type="text" id="asset-search" placeholder="Search assets...">
+                                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                                </div>
+                                <div class="asset-zoom-wrap flex-row"
+                                    style="align-items: center; gap: 4px; font-size: 0.7rem; color: var(--color-text-muted); background: rgba(0,0,0,0.25); padding: 4px 6px; border-radius: 4px; border: 1px solid var(--color-border-subtle);"
+                                    title="Thumbnail Size">
+                                    <i class="fa-solid fa-image" style="font-size: 0.65rem;"></i>
+                                    <input type="range" id="asset-zoom-slider" min="60" max="140" value="80" step="5"
+                                        style="width: 50px; height: 3px; accent-color: var(--color-gold-base); cursor: pointer;">
+                                </div>
+                            </div>
+
+                            <!-- Batch Selection Action Bar (Shown when 1+ assets selected) -->
+                            <div id="asset-batch-toolbar" class="asset-batch-bar vtt-hidden flex-row"
+                                style="justify-content: space-between; align-items: center; padding: 4px 8px; background: rgba(212, 175, 55, 0.15); border: 1px solid var(--color-gold-base); border-radius: 6px; margin-bottom: 6px; font-size: 0.75rem;">
+                                <span id="asset-batch-count" style="font-weight: 600; color: var(--color-gold-light);">0
+                                    selected</span>
+                                <div class="flex-row" style="gap: 4px;">
+                                    <button id="btn-asset-batch-move" class="btn btn-xxs btn-secondary"
+                                        title="Move selected assets"><i class="fa-solid fa-arrow-right-to-bracket"></i>
+                                        Move</button>
+                                    <button id="btn-asset-batch-create-table" class="btn btn-xxs btn-primary"
+                                        title="Create Asset Table from selected assets"><i class="fa-solid fa-layer-group"></i>
+                                        Create Table</button>
+                                    <button id="btn-asset-batch-add-table" class="btn btn-xxs btn-secondary"
+                                        title="Add selected assets to an existing Asset Table"><i class="fa-solid fa-plus"></i>
+                                        Add to Table</button>
+                                    <button id="btn-asset-batch-delete" class="btn btn-xxs btn-danger"
+                                        title="Delete selected assets"><i class="fa-solid fa-trash"></i> Delete</button>
+                                    <button id="btn-asset-batch-clear" class="btn btn-xxs btn-ghost"
+                                        title="Clear selection"><i class="fa-solid fa-xmark"></i></button>
+                                </div>
+                            </div>
+
+                            <!-- Breadcrumbs -->
+                            <div class="asset-breadcrumbs" id="asset-breadcrumbs"
+                                style="font-size: 0.75rem; padding: 4px 0; color: var(--color-gold-light); display: flex; align-items: center; flex-wrap: wrap; gap: 4px;">
+                                <span class="breadcrumb-link" data-path="">Root</span>
+                            </div>
+
+                            <!-- Gallery Grid Container with Drop Overlay -->
+                            <div id="asset-gallery-container" class="asset-gallery-container"
+                                style="position: relative; flex: 1; display: flex; flex-direction: column; overflow: hidden; min-height: 0;">
+                                <!-- Drop Overlay -->
+                                <div id="asset-drop-overlay" class="asset-drop-overlay vtt-hidden">
+                                    <i class="fa-solid fa-cloud-arrow-up asset-drop-icon"></i>
+                                    <span id="asset-drop-overlay-text">Drop files or folders to upload</span>
+                                </div>
+
+                                <!-- List / Grid Content -->
+                                <div id="asset-gallery-list" class="asset-items scroll-styled"
+                                    style="flex: 1; display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 8px; align-content: start; overflow-y: auto;">
+                                    <div class="init-empty-state" style="grid-column: 1 / -1;">Loading assets...</div>
+                                </div>
+                            </div>
+
+                            <!-- Upload Progress Bar Toast -->
+                            <div id="asset-upload-progress" class="asset-upload-progress vtt-hidden"
+                                style="margin-top: 6px; background: rgba(18, 22, 33, 0.95); border: 1px solid var(--color-gold-base); border-radius: 6px; padding: 6px 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.5);">
+                                <div class="flex-row"
+                                    style="justify-content: space-between; align-items: center; font-size: 0.75rem; margin-bottom: 4px;">
+                                    <span id="asset-progress-label"
+                                        style="color: var(--color-text-main); font-weight: 500;"><i
+                                            class="fa-solid fa-spinner fa-spin text-gradient-gold"></i>
+                                        Uploading...</span>
+                                    <span id="asset-progress-percent"
+                                        style="color: var(--color-gold-light); font-weight: bold;">0%</span>
+                                </div>
+                                <div
+                                    style="width: 100%; height: 5px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden;">
+                                    <div id="asset-progress-bar-fill"
+                                        style="width: 0%; height: 100%; background: linear-gradient(90deg, var(--color-gold-base), #f0d879); transition: width 0.15s ease;">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sub-view 2: Asset Tables (Flippable Tokens) -->
+                    <div id="asset-tables-view" class="asset-subtab-content vtt-hidden flex-col h-100"
+                        style="position: relative; display: flex; flex-direction: column; flex: 1; min-height: 0; padding-top: 8px;">
+                        <div class="flex-row" style="gap: 6px; margin-bottom: 8px; align-items: center;">
                             <div class="search-box" style="flex: 1;">
-                                <input type="text" id="asset-search" placeholder="Search assets...">
+                                <input type="text" id="search-asset-tables" placeholder="Search asset tables...">
                                 <i class="fa-solid fa-magnifying-glass search-icon"></i>
                             </div>
-                            <div class="asset-zoom-wrap flex-row"
-                                style="align-items: center; gap: 4px; font-size: 0.7rem; color: var(--color-text-muted); background: rgba(0,0,0,0.25); padding: 4px 6px; border-radius: 4px; border: 1px solid var(--color-border-subtle);"
-                                title="Thumbnail Size">
-                                <i class="fa-solid fa-image" style="font-size: 0.65rem;"></i>
-                                <input type="range" id="asset-zoom-slider" min="60" max="140" value="80" step="5"
-                                    style="width: 50px; height: 3px; accent-color: var(--color-gold-base); cursor: pointer;">
-                            </div>
+                            <button id="btn-new-asset-table" class="btn btn-xs btn-primary"
+                                title="Create New Asset Table">
+                                <i class="fa-solid fa-plus"></i> New
+                            </button>
                         </div>
-
-                        <!-- Batch Selection Action Bar (Shown when 1+ assets selected) -->
-                        <div id="asset-batch-toolbar" class="asset-batch-bar vtt-hidden flex-row"
-                            style="justify-content: space-between; align-items: center; padding: 4px 8px; background: rgba(212, 175, 55, 0.15); border: 1px solid var(--color-gold-base); border-radius: 6px; margin-bottom: 6px; font-size: 0.75rem;">
-                            <span id="asset-batch-count" style="font-weight: 600; color: var(--color-gold-light);">0
-                                selected</span>
-                            <div class="flex-row" style="gap: 4px;">
-                                <button id="btn-asset-batch-move" class="btn btn-xxs btn-secondary"
-                                    title="Move selected assets"><i class="fa-solid fa-arrow-right-to-bracket"></i>
-                                    Move</button>
-                                <button id="btn-asset-batch-delete" class="btn btn-xxs btn-danger"
-                                    title="Delete selected assets"><i class="fa-solid fa-trash"></i> Delete</button>
-                                <button id="btn-asset-batch-clear" class="btn btn-xxs btn-ghost"
-                                    title="Clear selection"><i class="fa-solid fa-xmark"></i></button>
-                            </div>
+                        <div id="asset-tables-list" class="scroll-styled"
+                            style="flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; min-height: 0;">
+                            <!-- Dynamic Asset Tables loaded here -->
                         </div>
+                    </div>
+                </div>
 
-                        <!-- Breadcrumbs -->
-                        <div class="asset-breadcrumbs" id="asset-breadcrumbs"
-                            style="font-size: 0.75rem; padding: 4px 0; color: var(--color-gold-light); display: flex; align-items: center; flex-wrap: wrap; gap: 4px;">
-                            <span class="breadcrumb-link" data-path="">Root</span>
+                <!-- Roll Tables & Card Decks Panel (GM Only) -->
+                <div id="tab-tables" class="tab-panel gm-only"
+                    style="display: flex; flex-direction: column; height: 100%;">
+                    <div class="panel-header" style="padding-bottom: 0;">
+                        <div class="tables-tabs-header"
+                            style="display: flex; flex-shrink: 0; background: rgba(0,0,0,0.2); border-bottom: 1px solid var(--color-border-subtle); width: 100%; margin-left: -16px; margin-right: -16px; padding: 0 16px;">
+                            <button class="tables-subtab-btn active" data-subtab="subtab-roll-tables"
+                                style="flex:1; padding:8px 0; background:transparent; border:none; color:var(--color-text-primary); cursor:pointer; font-weight:600; border-bottom: 2px solid var(--color-gold-base); transition: all 0.2s;">
+                                <i class="fa-solid fa-dice-d20"></i> Roll Tables
+                            </button>
+                            <button class="tables-subtab-btn" data-subtab="subtab-card-decks"
+                                style="flex:1; padding:8px 0; background:transparent; border:none; color:var(--color-text-secondary); cursor:pointer; font-weight:600; border-bottom: 2px solid transparent; transition: all 0.2s;">
+                                <i class="fa-solid fa-layer-group"></i> Card Decks
+                            </button>
                         </div>
+                    </div>
 
-                        <!-- Gallery Grid Container with Drop Overlay -->
-                        <div id="asset-gallery-container" class="asset-gallery-container"
-                            style="position: relative; flex: 1; display: flex; flex-direction: column; overflow: hidden; min-height: 0;">
-                            <!-- Drop Overlay -->
-                            <div id="asset-drop-overlay" class="asset-drop-overlay vtt-hidden">
-                                <i class="fa-solid fa-cloud-arrow-up asset-drop-icon"></i>
-                                <span id="asset-drop-overlay-text">Drop files or folders to upload</span>
-                            </div>
-
-                            <!-- List / Grid Content -->
-                            <div id="asset-gallery-list" class="asset-items scroll-styled"
-                                style="flex: 1; display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 8px; align-content: start; overflow-y: auto;">
-                                <div class="init-empty-state" style="grid-column: 1 / -1;">Loading assets...</div>
-                            </div>
-                        </div>
-
-                        <!-- Upload Progress Bar Toast -->
-                        <div id="asset-upload-progress" class="asset-upload-progress vtt-hidden"
-                            style="margin-top: 6px; background: rgba(18, 22, 33, 0.95); border: 1px solid var(--color-gold-base); border-radius: 6px; padding: 6px 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.5);">
+                    <div class="panel-body flex-col h-100"
+                        style="position: relative; flex: 1; overflow: hidden; padding-top: 8px; display: flex; flex-direction: column;">
+                        <!-- 1. ROLL TABLES VIEW -->
+                        <div id="subtab-roll-tables" class="tables-subtab-content flex-col h-100"
+                            style="display: flex; flex-direction: column; flex: 1; min-height: 0;">
+                            <!-- Actions Toolbar -->
                             <div class="flex-row"
-                                style="justify-content: space-between; align-items: center; font-size: 0.75rem; margin-bottom: 4px;">
-                                <span id="asset-progress-label"
-                                    style="color: var(--color-text-main); font-weight: 500;"><i
-                                        class="fa-solid fa-spinner fa-spin text-gradient-gold"></i> Uploading...</span>
-                                <span id="asset-progress-percent"
-                                    style="color: var(--color-gold-light); font-weight: bold;">0%</span>
-                            </div>
-                            <div
-                                style="width: 100%; height: 5px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden;">
-                                <div id="asset-progress-bar-fill"
-                                    style="width: 0%; height: 100%; background: linear-gradient(90deg, var(--color-gold-base), #f0d879); transition: width 0.15s ease;">
+                                style="gap: 6px; margin-bottom: 8px; align-items: center; flex-wrap: wrap;">
+                                <div class="search-box" style="flex: 1; min-width: 120px;">
+                                    <input type="text" id="search-roll-tables" placeholder="Search tables...">
+                                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
                                 </div>
+                                <button id="btn-new-roll-table" class="btn btn-xs btn-primary" title="Create New Table">
+                                    <i class="fa-solid fa-plus"></i> New Table
+                                </button>
+                                <button id="btn-load-preset-tables" class="btn btn-xs btn-secondary"
+                                    title="Browse and Load Tables">
+                                    <i class="fa-solid fa-folder-open"></i> Load Table
+                                </button>
+                            </div>
+
+                            <!-- List -->
+                            <div id="roll-tables-list" class="scroll-styled"
+                                style="flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; min-height: 0;">
+                                <!-- Dynamic Roll Tables loaded here -->
+                            </div>
+                        </div>
+
+                        <!-- 2. CARD DECKS VIEW -->
+                        <div id="subtab-card-decks" class="tables-subtab-content vtt-hidden flex-col h-100"
+                            style="display: flex; flex-direction: column; flex: 1; min-height: 0;">
+                            <!-- Actions Toolbar -->
+                            <div class="flex-row"
+                                style="gap: 6px; margin-bottom: 8px; align-items: center; flex-wrap: wrap;">
+                                <div class="search-box" style="flex: 1; min-width: 120px;">
+                                    <input type="text" id="search-card-decks" placeholder="Search decks...">
+                                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                                </div>
+                                <button id="btn-new-card-deck" class="btn btn-xs btn-primary"
+                                    title="Create New Card Deck">
+                                    <i class="fa-solid fa-plus"></i> New Deck
+                                </button>
+                                <button id="btn-load-preset-decks" class="btn btn-xs btn-secondary"
+                                    title="Browse and Load Decks">
+                                    <i class="fa-solid fa-folder-open"></i> Load Deck
+                                </button>
+                            </div>
+
+                            <!-- List -->
+                            <div id="card-decks-list" class="scroll-styled"
+                                style="flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; min-height: 0;">
+                                <!-- Dynamic Card Decks loaded here -->
                             </div>
                         </div>
                     </div>
@@ -1241,6 +1417,10 @@
                             <button id="btn-char-add-companion" class="btn btn-xxs btn-secondary gm-only"
                                 title="Add Player Companion">
                                 <i class="fa-solid fa-paw"></i> Companion
+                            </button>
+                            <button id="btn-companion-token-settings" class="btn btn-xxs btn-secondary gm-only"
+                                title="Companion Token Drop Settings">
+                                <i class="fa-solid fa-gear"></i>
                             </button>
                         </div>
                     </div>
@@ -2336,24 +2516,9 @@
         </div>
     </div>
 
-    <!-- Create Campaign Modal -->
-    <div id="modal-create-campaign" class="vtt-modal vtt-hidden">
-        <div class="modal-content glassmorphism">
-            <h3>Create New Campaign</h3>
-            <div class="form-group">
-                <label for="new-campaign-name">Campaign Name</label>
-                <input type="text" id="new-campaign-name" placeholder="Enter campaign title...">
-            </div>
-            <div class="modal-buttons">
-                <button id="btn-modal-cancel" class="btn btn-secondary">Cancel</button>
-                <button id="btn-modal-submit" class="btn btn-primary">Create</button>
-            </div>
-        </div>
-    </div>
-
     <!-- Map Manager Modal -->
     <div id="modal-upload-map" class="vtt-modal vtt-hidden">
-        <div class="modal-content glassmorphism map-manager-modal-content">
+        <div class="modal-content map-manager-modal-content">
             <div class="modal-header-row map-manager-header-row">
                 <div style="display: flex; align-items: center; gap: 10px;">
                     <h3 style="margin: 0; font-size: 1.15rem;"><i class="fa-solid fa-map text-gradient-gold"></i>
@@ -2690,6 +2855,367 @@
                 <div id="view-handout-desc"
                     style="white-space: pre-wrap; font-size: 0.9rem; line-height: 1.5; color: var(--color-text-primary);">
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Roll Table Editor Modal (GM Only) -->
+    <div id="modal-edit-roll-table" class="vtt-modal vtt-hidden" style="z-index: 2000;">
+        <div class="modal-content glassmorphism" style="max-width: 600px; width: 90vw;">
+            <h3 id="modal-edit-roll-table-title"><i class="fa-solid fa-dice-d20 text-gradient-gold"></i> Roll Table
+                Editor</h3>
+            <div class="form-group">
+                <label for="edit-table-name">Table Name</label>
+                <input type="text" id="edit-table-name" placeholder="e.g. Tavern Rumors, Critical Hit">
+            </div>
+            <div class="form-group">
+                <label for="edit-table-desc">Description / Notes</label>
+                <input type="text" id="edit-table-desc" placeholder="Brief description of this table...">
+            </div>
+            <div class="form-group flex-row" style="align-items: center; gap: 8px;">
+                <input type="checkbox" id="edit-table-allow-players" style="accent-color: var(--color-gold-base);">
+                <label for="edit-table-allow-players" style="margin: 0; font-size: 0.85rem; cursor: pointer;">Allow
+                    Players to roll from this table</label>
+            </div>
+            <div id="edit-table-entries-container" style="margin-top: 12px;"></div>
+            <div class="modal-buttons" style="margin-top: 16px; display: flex; justify-content: flex-end; gap: 8px;">
+                <button type="button" class="btn btn-secondary vtt-modal-close"
+                    onclick="document.getElementById('modal-edit-roll-table').classList.add('vtt-hidden')">Cancel</button>
+                <button type="button" id="btn-save-roll-table" class="btn btn-primary">Save Table</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Asset Table Editor Modal (GM Only) -->
+    <div id="modal-edit-asset-table" class="vtt-modal vtt-hidden" style="z-index: 2000;">
+        <div class="modal-content glassmorphism" style="max-width: 620px; width: 90vw;">
+            <h3><i class="fa-solid fa-table-cells-large text-gradient-gold"></i> Asset Table Editor (Flippable Token)
+            </h3>
+            <div class="form-group">
+                <label for="edit-asset-table-name">Table / Token Name</label>
+                <input type="text" id="edit-asset-table-name"
+                    placeholder="e.g. Dungeon Brazier, Crypt Door, Shapeshifter">
+            </div>
+            <div class="form-group">
+                <label for="edit-asset-table-size">Default Token Size (Grid Units)</label>
+                <select id="edit-asset-table-size"
+                    style="width: 100%; padding: 6px; background: rgba(0,0,0,0.3); border: 1px solid var(--color-border-subtle); color: var(--color-text-primary); border-radius: 4px;">
+                    <option value="0.5">Tiny (0.5x0.5)</option>
+                    <option value="1" selected>Medium / Small (1x1)</option>
+                    <option value="2">Large (2x2)</option>
+                    <option value="3">Huge (3x3)</option>
+                    <option value="4">Gargantuan (4x4)</option>
+                </select>
+            </div>
+            <div id="edit-asset-table-entries-container" style="margin-top: 12px;"></div>
+            <div class="modal-buttons" style="margin-top: 16px; display: flex; justify-content: flex-end; gap: 8px;">
+                <button type="button" class="btn btn-secondary vtt-modal-close"
+                    onclick="document.getElementById('modal-edit-asset-table').classList.add('vtt-hidden')">Cancel</button>
+                <button type="button" id="btn-save-asset-table" class="btn btn-primary">Save Asset Table</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Card Deck Editor Modal (GM Only) -->
+    <div id="modal-edit-card-deck" class="vtt-modal vtt-hidden" style="z-index: 2000;">
+        <div class="modal-content glassmorphism" style="max-width: 680px; width: 90vw;">
+            <h3><i class="fa-solid fa-layer-group text-gradient-gold"></i> Card Deck Editor</h3>
+            <div class="form-group">
+                <label for="edit-deck-name">Deck Name</label>
+                <input type="text" id="edit-deck-name" placeholder="e.g. Tarot of Fate, Deck of Horrors">
+            </div>
+            <div class="form-group">
+                <label for="edit-deck-back">Card Back Image URL</label>
+                <input type="text" id="edit-deck-back" placeholder="https://... card back image">
+            </div>
+            <div id="edit-deck-cards-container" style="margin-top: 12px;"></div>
+            <div class="modal-buttons" style="margin-top: 16px; display: flex; justify-content: flex-end; gap: 8px;">
+                <button type="button" class="btn btn-secondary vtt-modal-close"
+                    onclick="document.getElementById('modal-edit-card-deck').classList.add('vtt-hidden')">Cancel</button>
+                <button type="button" id="btn-save-card-deck" class="btn btn-primary">Save Deck</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Inspect Drawn & Discarded Cards Modal -->
+    <div id="modal-view-deck-cards" class="vtt-modal vtt-hidden" style="z-index: 2000;">
+        <div class="modal-content glassmorphism"
+            style="max-width: 720px; width: 90vw; max-height: 85vh; display: flex; flex-direction: column;">
+            <div
+                style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--color-border-subtle); padding-bottom: 10px; margin-bottom: 12px;">
+                <h3 style="margin: 0; color: var(--color-gold-base);"><i class="fa-solid fa-layer-group"></i> <span
+                        id="view-deck-title">Deck Cards</span></h3>
+                <button type="button" class="btn btn-xs btn-ghost vtt-modal-close"
+                    onclick="document.getElementById('modal-view-deck-cards').classList.add('vtt-hidden')"><i
+                        class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="scroll-styled"
+                style="flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 14px;">
+                <div>
+                    <h4 style="margin: 0 0 6px 0; font-size: 0.85rem; color: #60a5fa;"><i
+                            class="fa-solid fa-hand-holding"></i> Currently Drawn / In Play:</h4>
+                    <div id="view-deck-drawn-cards" class="flex-row scroll-styled"
+                        style="gap: 8px; flex-wrap: wrap; min-height: 50px; background: rgba(0,0,0,0.2); padding: 8px; border-radius: 6px;">
+                    </div>
+                </div>
+                <div>
+                    <h4 style="margin: 0 0 6px 0; font-size: 0.85rem; color: #f87171;"><i
+                            class="fa-solid fa-trash-can"></i> Discard Pile:</h4>
+                    <div id="view-deck-discard-cards" class="flex-row scroll-styled"
+                        style="gap: 8px; flex-wrap: wrap; min-height: 50px; background: rgba(0,0,0,0.2); padding: 8px; border-radius: 6px;">
+                    </div>
+                </div>
+            </div>
+            <div style="display: flex; justify-content: flex-end; margin-top: 12px;">
+                <button type="button" class="btn btn-secondary vtt-modal-close"
+                    onclick="document.getElementById('modal-view-deck-cards').classList.add('vtt-hidden')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Unified Table Picker & Importer Modal -->
+    <div id="modal-table-picker" class="vtt-modal vtt-hidden" style="z-index: 2000;">
+        <div class="modal-content glassmorphism"
+            style="max-width: 900px; width: 95vw; height: 85vh; display: flex; flex-direction: column; padding: 18px 24px;">
+            <!-- Header -->
+            <div
+                style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--color-border-subtle); padding-bottom: 12px; margin-bottom: 12px; flex-shrink: 0; flex-wrap: wrap; gap: 8px;">
+                <h3
+                    style="margin: 0; color: var(--color-gold-base); font-size: 1.2rem; display: flex; align-items: center; gap: 8px;">
+                    <i class="fa-solid fa-folder-open text-gradient-gold"></i> Table Library & Importer
+                </h3>
+                <div class="flex-row" style="gap: 8px; align-items: center;">
+                    <label for="file-import-rolltables-json" class="btn btn-xxs btn-secondary"
+                        title="Import Tables & Decks from JSON" style="margin:0; cursor:pointer;">
+                        <i class="fa-solid fa-file-import"></i> Import JSON
+                    </label>
+                    <input type="file" id="file-import-rolltables-json" class="vtt-hidden" accept=".json">
+                    <button id="btn-modal-export-json" class="btn btn-xxs btn-secondary"
+                        title="Export All Tables & Decks as JSON">
+                        <i class="fa-solid fa-file-export"></i> Export JSON
+                    </button>
+                    <button type="button" class="btn btn-xs btn-ghost vtt-modal-close"
+                        onclick="document.getElementById('modal-table-picker').classList.add('vtt-hidden')">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tab Switcher -->
+            <div class="flex-row"
+                style="border-bottom: 1px solid rgba(255,255,255,0.08); margin-bottom: 12px; gap: 8px; flex-shrink: 0;">
+                <button type="button" class="picker-tab-btn active" data-tab="compendium"
+                    style="padding: 6px 14px; background: transparent; border: none; color: var(--color-text-primary); font-weight: 600; border-bottom: 2px solid var(--color-gold-base); cursor: pointer; transition: all 0.2s;">
+                    <i class="fa-solid fa-book"></i> Compendium Tables
+                </button>
+                <button type="button" class="picker-tab-btn" data-tab="decks"
+                    style="padding: 6px 14px; background: transparent; border: none; color: var(--color-text-secondary); font-weight: 600; border-bottom: 2px solid transparent; cursor: pointer; transition: all 0.2s;">
+                    <i class="fa-solid fa-layer-group"></i> Compendium Decks
+                </button>
+            </div>
+
+            <!-- Tab Content: 1. Compendium Tables -->
+            <div id="picker-tab-content-compendium" class="picker-tab-content flex-col"
+                style="flex: 1; display: flex; flex-direction: column; min-height: 0;">
+                <!-- Filter Bar -->
+                <div class="flex-row"
+                    style="gap: 8px; margin-bottom: 12px; flex-shrink: 0; align-items: center; flex-wrap: wrap;">
+                    <div class="search-box" style="flex: 2; min-width: 180px;">
+                        <input type="text" id="picker-search-input" placeholder="Search table name or entries...">
+                        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                    </div>
+                    <select id="picker-source-select"
+                        style="flex: 1; min-width: 130px; font-size: 0.8rem; padding: 6px 10px; border-radius: 4px; background: rgba(0,0,0,0.4); border: 1px solid var(--color-border-subtle); color: #fff;">
+                        <option value="">All Sources</option>
+                    </select>
+                    <select id="picker-dice-select"
+                        style="flex: 1; min-width: 100px; font-size: 0.8rem; padding: 6px 10px; border-radius: 4px; background: rgba(0,0,0,0.4); border: 1px solid var(--color-border-subtle); color: #fff;">
+                        <option value="">All Dice</option>
+                        <option value="d4">d4</option>
+                        <option value="d6">d6</option>
+                        <option value="d8">d8</option>
+                        <option value="d10">d10</option>
+                        <option value="d12">d12</option>
+                        <option value="d20">d20</option>
+                        <option value="d100">d100</option>
+                    </select>
+                    <span id="picker-count-label"
+                        style="font-size: 0.75rem; color: var(--color-text-muted); align-self: center; white-space: nowrap;">0
+                        tables</span>
+                </div>
+
+                <!-- Main Body (Table List + Split Preview Drawer) -->
+                <div style="flex: 1; display: flex; gap: 14px; min-height: 0; overflow: hidden;">
+                    <!-- Tabular List -->
+                    <div
+                        style="flex: 1.3; display: flex; flex-direction: column; border: 1px solid var(--color-border-subtle); border-radius: 6px; overflow: hidden; background: rgba(0,0,0,0.25);">
+                        <!-- Table Header with Sortable Columns -->
+                        <div class="picker-table-header"
+                            style="display: flex; background: rgba(0,0,0,0.5); border-bottom: 1px solid rgba(255,255,255,0.1); padding: 8px 12px; font-size: 0.75rem; font-weight: bold; text-transform: uppercase; color: var(--color-gold-light); user-select: none;">
+                            <div class="picker-th sortable sorted" data-sort="name"
+                                style="flex: 2; cursor: pointer; display: flex; align-items: center; gap: 4px;"
+                                title="Sort by Name">
+                                <span>Table Name</span>
+                                <i class="fa-solid fa-arrow-down-a-z sort-icon"></i>
+                            </div>
+                            <div class="picker-th sortable" data-sort="source"
+                                style="width: 80px; text-align: center; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px;"
+                                title="Sort by Source">
+                                <span>Source</span>
+                                <i class="fa-solid fa-sort sort-icon" style="opacity: 0.4;"></i>
+                            </div>
+                            <div class="picker-th sortable" data-sort="dice"
+                                style="width: 80px; text-align: center; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px;"
+                                title="Sort by Dice Type">
+                                <span>Dice</span>
+                                <i class="fa-solid fa-sort sort-icon" style="opacity: 0.4;"></i>
+                            </div>
+                            <div style="width: 140px; text-align: right;">Actions</div>
+                        </div>
+
+                        <!-- Table Rows Container -->
+                        <div id="picker-table-rows" class="scroll-styled" style="flex: 1; overflow-y: auto;">
+                            <!-- Dynamic Table Rows loaded here -->
+                            <div class="p-3 text-muted" style="text-align: center; padding: 24px 0;">
+                                <i class="fa-solid fa-spinner fa-spin"></i> Loading tables...
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Split Preview Drawer -->
+                    <div id="picker-preview-drawer" class="glassmorphism"
+                        style="flex: 1; display: flex; flex-direction: column; border: 1px solid var(--color-border-subtle); border-radius: 6px; padding: 12px; background: rgba(18,22,33,0.7); min-width: 260px;">
+                        <div id="picker-preview-placeholder"
+                            style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--color-text-muted); text-align: center; padding: 20px;">
+                            <i class="fa-solid fa-table-list"
+                                style="font-size: 2.5rem; opacity: 0.2; margin-bottom: 10px;"></i>
+                            <p style="font-size: 0.85rem; margin: 0;">Select any table from the list to preview entries
+                                and roll results.</p>
+                        </div>
+
+                        <div id="picker-preview-content" class="vtt-hidden"
+                            style="flex: 1; display: flex; flex-direction: column; min-height: 0;">
+                            <div
+                                style="border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px; margin-bottom: 8px;">
+                                <div class="flex-row"
+                                    style="justify-content: space-between; align-items: flex-start; gap: 6px;">
+                                    <h4 id="preview-table-name"
+                                        style="margin: 0; color: #fff; font-size: 0.95rem; font-weight: 600;">Table Name
+                                    </h4>
+                                    <span id="preview-table-source"
+                                        style="font-size: 0.7rem; padding: 2px 6px; border-radius: 4px; background: rgba(212,175,55,0.15); border: 1px solid rgba(212,175,55,0.3); color: var(--color-gold-light); font-weight: 600;">PHB</span>
+                                </div>
+                                <div class="flex-row"
+                                    style="gap: 8px; margin-top: 4px; font-size: 0.75rem; color: var(--color-text-muted);">
+                                    <span id="preview-table-dice" style="color: #60a5fa; font-weight: 600;">1d20</span>
+                                    <span>•</span>
+                                    <span id="preview-table-count">20 entries</span>
+                                </div>
+                            </div>
+
+                            <!-- Preview Table Breakdown -->
+                            <div class="scroll-styled"
+                                style="flex: 1; overflow-y: auto; margin-bottom: 10px; border: 1px solid rgba(255,255,255,0.06); border-radius: 4px; background: rgba(0,0,0,0.3);">
+                                <table id="preview-entries-table"
+                                    style="width: 100%; border-collapse: collapse; font-size: 0.75rem;">
+                                    <!-- Dynamic breakdown loaded here -->
+                                </table>
+                            </div>
+
+                            <!-- Preview Actions -->
+                            <div class="flex-row" style="gap: 8px; flex-shrink: 0;">
+                                <button type="button" id="btn-preview-roll-chat" class="btn btn-xs btn-secondary"
+                                    style="flex: 1;" title="Roll table directly to chat">
+                                    <i class="fa-solid fa-dice-d20"></i> Roll to Chat
+                                </button>
+                                <button type="button" id="btn-preview-load-camp" class="btn btn-xs btn-primary"
+                                    style="flex: 1;" title="Add this table into your campaign">
+                                    <i class="fa-solid fa-download"></i> Load to Campaign
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab Content: 2. Compendium Decks -->
+            <div id="picker-tab-content-decks" class="picker-tab-content vtt-hidden flex-col"
+                style="flex: 1; display: flex; flex-direction: column; min-height: 0;">
+                <!-- Filter Bar -->
+                <div class="flex-row"
+                    style="gap: 8px; margin-bottom: 12px; flex-shrink: 0; align-items: center; flex-wrap: wrap;">
+                    <div class="search-box" style="flex: 2; min-width: 180px;">
+                        <input type="text" id="picker-deck-search-input" placeholder="Search card decks...">
+                        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                    </div>
+                    <span id="picker-deck-count-label"
+                        style="font-size: 0.75rem; color: var(--color-text-muted); align-self: center; white-space: nowrap;">0
+                        decks</span>
+                </div>
+
+                <!-- Main Body (Decks List + Split Preview Drawer) -->
+                <div style="flex: 1; display: flex; gap: 14px; min-height: 0; overflow: hidden;">
+                    <!-- Deck Cards List -->
+                    <div id="picker-deck-list" class="scroll-styled"
+                        style="flex: 1.2; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; padding-right: 4px;">
+                        <div class="p-3 text-muted" style="text-align: center; padding: 24px 0;">
+                            <i class="fa-solid fa-spinner fa-spin"></i> Loading compendium card decks...
+                        </div>
+                    </div>
+
+                    <!-- Split Deck Preview Drawer -->
+                    <div id="picker-deck-preview-drawer" class="glassmorphism"
+                        style="flex: 1; display: flex; flex-direction: column; border: 1px solid var(--color-border-subtle); border-radius: 6px; padding: 12px; background: rgba(18,22,33,0.7); min-width: 280px;">
+                        <div id="picker-deck-preview-placeholder"
+                            style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--color-text-muted); text-align: center; padding: 20px;">
+                            <i class="fa-solid fa-layer-group"
+                                style="font-size: 2.5rem; opacity: 0.2; margin-bottom: 10px;"></i>
+                            <p style="font-size: 0.85rem; margin: 0;">Select a card deck to preview its cards, suits, and
+                                artwork.</p>
+                        </div>
+
+                        <div id="picker-deck-preview-content" class="vtt-hidden"
+                            style="flex: 1; display: flex; flex-direction: column; min-height: 0;">
+                            <div
+                                style="border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px; margin-bottom: 8px;">
+                                <div class="flex-row"
+                                    style="justify-content: space-between; align-items: flex-start; gap: 6px;">
+                                    <h4 id="preview-deck-name"
+                                        style="margin: 0; color: #fff; font-size: 0.95rem; font-weight: 600;">Deck Name
+                                    </h4>
+                                    <span id="preview-deck-source"
+                                        style="font-size: 0.7rem; padding: 2px 6px; border-radius: 4px; background: rgba(212,175,55,0.15); border: 1px solid rgba(212,175,55,0.3); color: var(--color-gold-light); font-weight: 600;">CoS</span>
+                                </div>
+                                <div id="preview-deck-desc"
+                                    style="font-size: 0.75rem; color: var(--color-text-secondary); margin-top: 4px; line-height: 1.3;">
+                                </div>
+                                <div style="font-size: 0.75rem; color: #60a5fa; font-weight: 600; margin-top: 4px;">
+                                    <span id="preview-deck-card-count">0</span> cards
+                                </div>
+                            </div>
+
+                            <!-- Preview Cards Grid -->
+                            <div id="preview-deck-cards-container" class="scroll-styled"
+                                style="flex: 1; overflow-y: auto; margin-bottom: 10px; border: 1px solid rgba(255,255,255,0.06); border-radius: 4px; background: rgba(0,0,0,0.3); padding: 8px; display: grid; grid-template-columns: repeat(auto-fill, minmax(75px, 1fr)); gap: 8px; align-content: flex-start;">
+                            </div>
+
+                            <!-- Preview Actions -->
+                            <div class="flex-row" style="gap: 8px; flex-shrink: 0;">
+                                <button type="button" id="btn-preview-load-deck" class="btn btn-xs btn-primary"
+                                    style="flex: 1;" title="Load this deck with full cards into your campaign">
+                                    <i class="fa-solid fa-download"></i> Load Deck into Campaign
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Close -->
+            <div
+                style="display: flex; justify-content: flex-end; margin-top: 12px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.08); flex-shrink: 0;">
+                <button type="button" class="btn btn-secondary vtt-modal-close"
+                    onclick="document.getElementById('modal-table-picker').classList.add('vtt-hidden')">Close</button>
             </div>
         </div>
     </div>
@@ -4262,6 +4788,367 @@
                     style="padding:6px 16px;">
                     Close
                 </button>
+            </div>
+        </div>
+    </div>
+    <!-- Token Drop & Canvas Customization Modal -->
+    <div id="modal-token-drop-settings" class="vtt-overlay-panel vtt-hidden" style="z-index: 10006;">
+        <div class="login-card glassmorphism animated-fade-in"
+            style="width: 580px; max-width: 92vw; max-height: 88vh; display: flex; flex-direction: column; text-align: left; padding: 20px;">
+            <div class="login-header"
+                style="margin-bottom: 12px; flex-shrink: 0; display: flex; justify-content: space-between; align-items: center;">
+                <h2 class="login-title"
+                    style="font-size: 1.25rem; margin: 0; display: flex; align-items: center; gap: 8px;">
+                    <span class="title-gold"><i class="fa-solid fa-sliders"></i> Token Drop Settings</span>
+                </h2>
+                <button type="button" class="btn-close-modal" id="btn-close-token-drop-settings"
+                    style="background: none; border: none; color: var(--color-text-secondary); font-size: 1.2rem; cursor: pointer;">
+                    <i class="fa-solid fa-times"></i>
+                </button>
+            </div>
+
+            <!-- Tab Headers for Section Selection -->
+            <div class="token-drop-tabs-header"
+                style="display: flex; gap: 6px; border-bottom: 1px solid var(--color-border-subtle); margin-bottom: 16px; flex-shrink: 0;">
+                <button type="button" class="token-drop-tab-btn active" data-tab="bestiary"
+                    style="flex: 1; padding: 8px 12px; background: transparent; border: none; border-bottom: 2px solid var(--color-gold-base); color: var(--color-text-primary); font-weight: 600; cursor: pointer; transition: all 0.2s;">
+                    <i class="fa-solid fa-book-skull"></i> Bestiary
+                </button>
+                <button type="button" class="token-drop-tab-btn" data-tab="customNpc"
+                    style="flex: 1; padding: 8px 12px; background: transparent; border: none; border-bottom: 2px solid transparent; color: var(--color-text-secondary); font-weight: 600; cursor: pointer; transition: all 0.2s;">
+                    <i class="fa-solid fa-user-ninja"></i> Custom NPCs
+                </button>
+                <button type="button" class="token-drop-tab-btn" data-tab="companion"
+                    style="flex: 1; padding: 8px 12px; background: transparent; border: none; border-bottom: 2px solid transparent; color: var(--color-text-secondary); font-weight: 600; cursor: pointer; transition: all 0.2s;">
+                    <i class="fa-solid fa-paw"></i> Companions
+                </button>
+            </div>
+
+            <!-- Body Area containing controls for the active section -->
+            <div id="token-drop-settings-body" class="scroll-styled"
+                style="flex: 1; overflow-y: auto; padding-right: 6px; display: flex; flex-direction: column; gap: 14px;">
+                <!-- Bestiary Settings Panel -->
+                <div class="token-drop-panel" data-panel="bestiary"
+                    style="display: flex; flex-direction: column; gap: 14px;">
+                    <div class="form-group">
+                        <label style="font-weight: 600; color: var(--color-gold-light);"><i
+                                class="fa-solid fa-heart-pulse"></i> HP Calculation Mode</label>
+                        <select id="td-bestiary-hp-mode" class="vtt-select" style="width: 100%;">
+                            <option value="average">Average HP (Standard Statblock)</option>
+                            <option value="max">Max Possible HP (Maximum Dice Roll)</option>
+                            <option value="roll">Roll HP (Random Hit Dice on Drop)</option>
+                        </select>
+                        <label class="checkbox-label"
+                            style="display: flex; align-items: center; gap: 8px; margin-top: 6px; font-size: 0.85rem; cursor: pointer;">
+                            <input type="checkbox" id="td-bestiary-hp-chat">
+                            <span>Announce rolled HP formula in GM Chat</span>
+                        </label>
+                    </div>
+
+                    <div class="form-group"
+                        style="border-top: 1px solid var(--color-border-subtle); padding-top: 10px;">
+                        <label class="checkbox-label"
+                            style="display: flex; align-items: center; gap: 8px; font-weight: 600; cursor: pointer;">
+                            <input type="checkbox" id="td-bestiary-import-senses" checked>
+                            <span style="color: var(--color-gold-light);"><i class="fa-solid fa-eye"></i> Import
+                                Creature Senses</span>
+                        </label>
+                        <small
+                            style="color: var(--color-text-muted); display: block; margin-left: 24px; margin-top: 2px;">
+                            Imports darkvision, blindsight, and truesight as token vision. When unchecked, falls back to
+                            standard 5 ft vision.
+                        </small>
+                    </div>
+
+                    <div class="form-group"
+                        style="border-top: 1px solid var(--color-border-subtle); padding-top: 10px;">
+                        <label class="checkbox-label"
+                            style="display: flex; align-items: center; gap: 8px; font-weight: 600; cursor: pointer;">
+                            <input type="checkbox" id="td-bestiary-autonumber" checked>
+                            <span style="color: var(--color-gold-light);"><i class="fa-solid fa-arrow-down-1-9"></i>
+                                Auto-Number Duplicate Tokens</span>
+                        </label>
+                        <small
+                            style="color: var(--color-text-muted); display: block; margin-left: 24px; margin-top: 2px;">
+                            Automatically suffixes duplicate tokens (e.g. Goblin 1, Goblin 2) when spawned on the
+                            canvas.
+                        </small>
+                    </div>
+
+                    <div class="form-group"
+                        style="border-top: 1px solid var(--color-border-subtle); padding-top: 10px;">
+                        <label class="checkbox-label"
+                            style="display: flex; align-items: center; gap: 8px; font-weight: 600; cursor: pointer;">
+                            <input type="checkbox" id="td-bestiary-hidden">
+                            <span style="color: var(--color-gold-light);"><i class="fa-solid fa-eye-slash"></i> Spawn as
+                                Hidden / GM Only</span>
+                        </label>
+                        <small
+                            style="color: var(--color-text-muted); display: block; margin-left: 24px; margin-top: 2px;">
+                            Token is placed in hidden state, invisible to players until revealed.
+                        </small>
+                    </div>
+
+                    <div class="form-group"
+                        style="border-top: 1px solid var(--color-border-subtle); padding-top: 10px;">
+                        <label class="checkbox-label"
+                            style="display: flex; align-items: center; gap: 8px; font-weight: 600; cursor: pointer;">
+                            <input type="checkbox" id="td-bestiary-auto-init">
+                            <span style="color: var(--color-gold-light);"><i class="fa-solid fa-dice-d20"></i> Auto-Roll
+                                Initiative on Drop</span>
+                        </label>
+                        <div id="td-bestiary-init-trigger-wrap"
+                            style="margin-left: 24px; margin-top: 6px; display: none;">
+                            <label
+                                style="font-size: 0.78rem; color: var(--color-text-secondary); display: block; margin-bottom: 2px;">Initiative
+                                Trigger Condition:</label>
+                            <select id="td-bestiary-init-trigger" class="vtt-select" style="width: 100%;">
+                                <option value="combat_active">Only when Combat is already active</option>
+                                <option value="always">Always (Adds to initiative tracker immediately)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group"
+                        style="border-top: 1px solid var(--color-border-subtle); padding-top: 10px;">
+                        <label style="font-weight: 600; color: var(--color-gold-light);"><i
+                                class="fa-solid fa-ring"></i> Token Ring / Disposition Border</label>
+                        <select id="td-bestiary-disposition" class="vtt-select" style="width: 100%;">
+                            <option value="hostile">Hostile (Red #ef4444)</option>
+                            <option value="neutral">Neutral (Yellow #eab308)</option>
+                            <option value="friendly">Friendly (Green #22c55e)</option>
+                            <option value="custom">Custom Color...</option>
+                            <option value="none">None (Default Border)</option>
+                        </select>
+                        <div id="td-bestiary-custom-color-wrap"
+                            style="display: none; align-items: center; gap: 8px; margin-top: 6px;">
+                            <input type="color" id="td-bestiary-custom-color" value="#ef4444"
+                                style="width: 38px; height: 28px; border: none; border-radius: 4px; cursor: pointer;">
+                            <span style="font-size: 0.8rem; color: var(--color-text-muted);">Custom ring color
+                                hex</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Custom NPCs Settings Panel -->
+                <div class="token-drop-panel vtt-hidden" data-panel="customNpc"
+                    style="display: flex; flex-direction: column; gap: 14px;">
+                    <div class="form-group">
+                        <label style="font-weight: 600; color: var(--color-gold-light);"><i
+                                class="fa-solid fa-heart-pulse"></i> HP Calculation Mode</label>
+                        <select id="td-customNpc-hp-mode" class="vtt-select" style="width: 100%;">
+                            <option value="average">Average HP (Standard Statblock)</option>
+                            <option value="max">Max Possible HP (Maximum Dice Roll)</option>
+                            <option value="roll">Roll HP (Random Hit Dice on Drop)</option>
+                        </select>
+                        <label class="checkbox-label"
+                            style="display: flex; align-items: center; gap: 8px; margin-top: 6px; font-size: 0.85rem; cursor: pointer;">
+                            <input type="checkbox" id="td-customNpc-hp-chat">
+                            <span>Announce rolled HP formula in GM Chat</span>
+                        </label>
+                    </div>
+
+                    <div class="form-group"
+                        style="border-top: 1px solid var(--color-border-subtle); padding-top: 10px;">
+                        <label class="checkbox-label"
+                            style="display: flex; align-items: center; gap: 8px; font-weight: 600; cursor: pointer;">
+                            <input type="checkbox" id="td-customNpc-import-senses" checked>
+                            <span style="color: var(--color-gold-light);"><i class="fa-solid fa-eye"></i> Import
+                                Creature Senses</span>
+                        </label>
+                        <small
+                            style="color: var(--color-text-muted); display: block; margin-left: 24px; margin-top: 2px;">
+                            Imports darkvision, blindsight, and truesight as token vision. When unchecked, falls back to
+                            standard 5 ft vision.
+                        </small>
+                    </div>
+
+                    <div class="form-group"
+                        style="border-top: 1px solid var(--color-border-subtle); padding-top: 10px;">
+                        <label class="checkbox-label"
+                            style="display: flex; align-items: center; gap: 8px; font-weight: 600; cursor: pointer;">
+                            <input type="checkbox" id="td-customNpc-autonumber">
+                            <span style="color: var(--color-gold-light);"><i class="fa-solid fa-arrow-down-1-9"></i>
+                                Auto-Number Duplicate Tokens</span>
+                        </label>
+                        <small
+                            style="color: var(--color-text-muted); display: block; margin-left: 24px; margin-top: 2px;">
+                            Automatically numbers duplicate tokens (e.g. Guard 1, Guard 2) when spawned on the canvas.
+                        </small>
+                    </div>
+
+                    <div class="form-group"
+                        style="border-top: 1px solid var(--color-border-subtle); padding-top: 10px;">
+                        <label class="checkbox-label"
+                            style="display: flex; align-items: center; gap: 8px; font-weight: 600; cursor: pointer;">
+                            <input type="checkbox" id="td-customNpc-hidden">
+                            <span style="color: var(--color-gold-light);"><i class="fa-solid fa-eye-slash"></i> Spawn as
+                                Hidden / GM Only</span>
+                        </label>
+                        <small
+                            style="color: var(--color-text-muted); display: block; margin-left: 24px; margin-top: 2px;">
+                            Token is placed in hidden state, invisible to players until revealed.
+                        </small>
+                    </div>
+
+                    <div class="form-group"
+                        style="border-top: 1px solid var(--color-border-subtle); padding-top: 10px;">
+                        <label class="checkbox-label"
+                            style="display: flex; align-items: center; gap: 8px; font-weight: 600; cursor: pointer;">
+                            <input type="checkbox" id="td-customNpc-auto-init">
+                            <span style="color: var(--color-gold-light);"><i class="fa-solid fa-dice-d20"></i> Auto-Roll
+                                Initiative on Drop</span>
+                        </label>
+                        <div id="td-customNpc-init-trigger-wrap"
+                            style="margin-left: 24px; margin-top: 6px; display: none;">
+                            <label
+                                style="font-size: 0.78rem; color: var(--color-text-secondary); display: block; margin-bottom: 2px;">Initiative
+                                Trigger Condition:</label>
+                            <select id="td-customNpc-init-trigger" class="vtt-select" style="width: 100%;">
+                                <option value="combat_active">Only when Combat is already active</option>
+                                <option value="always">Always (Adds to initiative tracker immediately)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group"
+                        style="border-top: 1px solid var(--color-border-subtle); padding-top: 10px;">
+                        <label style="font-weight: 600; color: var(--color-gold-light);"><i
+                                class="fa-solid fa-ring"></i> Token Ring / Disposition Border</label>
+                        <select id="td-customNpc-disposition" class="vtt-select" style="width: 100%;">
+                            <option value="neutral">Neutral (Yellow #eab308)</option>
+                            <option value="hostile">Hostile (Red #ef4444)</option>
+                            <option value="friendly">Friendly (Green #22c55e)</option>
+                            <option value="custom">Custom Color...</option>
+                            <option value="none">None (Default Border)</option>
+                        </select>
+                        <div id="td-customNpc-custom-color-wrap"
+                            style="display: none; align-items: center; gap: 8px; margin-top: 6px;">
+                            <input type="color" id="td-customNpc-custom-color" value="#eab308"
+                                style="width: 38px; height: 28px; border: none; border-radius: 4px; cursor: pointer;">
+                            <span style="font-size: 0.8rem; color: var(--color-text-muted);">Custom ring color
+                                hex</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Companions Settings Panel -->
+                <div class="token-drop-panel vtt-hidden" data-panel="companion"
+                    style="display: flex; flex-direction: column; gap: 14px;">
+                    <div class="form-group">
+                        <label style="font-weight: 600; color: var(--color-gold-light);"><i
+                                class="fa-solid fa-heart-pulse"></i> HP Calculation Mode</label>
+                        <select id="td-companion-hp-mode" class="vtt-select" style="width: 100%;">
+                            <option value="average">Average HP (Standard Statblock)</option>
+                            <option value="max">Max Possible HP (Maximum Dice Roll)</option>
+                            <option value="roll">Roll HP (Random Hit Dice on Drop)</option>
+                        </select>
+                        <label class="checkbox-label"
+                            style="display: flex; align-items: center; gap: 8px; margin-top: 6px; font-size: 0.85rem; cursor: pointer;">
+                            <input type="checkbox" id="td-companion-hp-chat">
+                            <span>Announce rolled HP formula in GM Chat</span>
+                        </label>
+                    </div>
+
+                    <div class="form-group"
+                        style="border-top: 1px solid var(--color-border-subtle); padding-top: 10px;">
+                        <label class="checkbox-label"
+                            style="display: flex; align-items: center; gap: 8px; font-weight: 600; cursor: pointer;">
+                            <input type="checkbox" id="td-companion-import-senses" checked>
+                            <span style="color: var(--color-gold-light);"><i class="fa-solid fa-eye"></i> Import
+                                Creature Senses</span>
+                        </label>
+                        <small
+                            style="color: var(--color-text-muted); display: block; margin-left: 24px; margin-top: 2px;">
+                            Imports darkvision, blindsight, and truesight as token vision. When unchecked, falls back to
+                            standard 5 ft vision.
+                        </small>
+                    </div>
+
+                    <div class="form-group"
+                        style="border-top: 1px solid var(--color-border-subtle); padding-top: 10px;">
+                        <label class="checkbox-label"
+                            style="display: flex; align-items: center; gap: 8px; font-weight: 600; cursor: pointer;">
+                            <input type="checkbox" id="td-companion-autonumber">
+                            <span style="color: var(--color-gold-light);"><i class="fa-solid fa-arrow-down-1-9"></i>
+                                Auto-Number Duplicate Tokens</span>
+                        </label>
+                        <small
+                            style="color: var(--color-text-muted); display: block; margin-left: 24px; margin-top: 2px;">
+                            Automatically numbers duplicate tokens when spawned on the canvas.
+                        </small>
+                    </div>
+
+                    <div class="form-group"
+                        style="border-top: 1px solid var(--color-border-subtle); padding-top: 10px;">
+                        <label class="checkbox-label"
+                            style="display: flex; align-items: center; gap: 8px; font-weight: 600; cursor: pointer;">
+                            <input type="checkbox" id="td-companion-hidden">
+                            <span style="color: var(--color-gold-light);"><i class="fa-solid fa-eye-slash"></i> Spawn as
+                                Hidden / GM Only</span>
+                        </label>
+                        <small
+                            style="color: var(--color-text-muted); display: block; margin-left: 24px; margin-top: 2px;">
+                            Token is placed in hidden state, invisible to players until revealed.
+                        </small>
+                    </div>
+
+                    <div class="form-group"
+                        style="border-top: 1px solid var(--color-border-subtle); padding-top: 10px;">
+                        <label class="checkbox-label"
+                            style="display: flex; align-items: center; gap: 8px; font-weight: 600; cursor: pointer;">
+                            <input type="checkbox" id="td-companion-auto-init">
+                            <span style="color: var(--color-gold-light);"><i class="fa-solid fa-dice-d20"></i> Auto-Roll
+                                Initiative on Drop</span>
+                        </label>
+                        <div id="td-companion-init-trigger-wrap"
+                            style="margin-left: 24px; margin-top: 6px; display: none;">
+                            <label
+                                style="font-size: 0.78rem; color: var(--color-text-secondary); display: block; margin-bottom: 2px;">Initiative
+                                Trigger Condition:</label>
+                            <select id="td-companion-init-trigger" class="vtt-select" style="width: 100%;">
+                                <option value="combat_active">Only when Combat is already active</option>
+                                <option value="always">Always (Adds to initiative tracker immediately)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group"
+                        style="border-top: 1px solid var(--color-border-subtle); padding-top: 10px;">
+                        <label style="font-weight: 600; color: var(--color-gold-light);"><i
+                                class="fa-solid fa-ring"></i> Token Ring / Disposition Border</label>
+                        <select id="td-companion-disposition" class="vtt-select" style="width: 100%;">
+                            <option value="friendly">Friendly (Green #22c55e)</option>
+                            <option value="neutral">Neutral (Yellow #eab308)</option>
+                            <option value="hostile">Hostile (Red #ef4444)</option>
+                            <option value="custom">Custom Color...</option>
+                            <option value="none">None (Default Border)</option>
+                        </select>
+                        <div id="td-companion-custom-color-wrap"
+                            style="display: none; align-items: center; gap: 8px; margin-top: 6px;">
+                            <input type="color" id="td-companion-custom-color" value="#22c55e"
+                                style="width: 38px; height: 28px; border: none; border-radius: 4px; cursor: pointer;">
+                            <span style="font-size: 0.8rem; color: var(--color-text-muted);">Custom ring color
+                                hex</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Buttons -->
+            <div
+                style="display: flex; justify-content: space-between; align-items: center; margin-top: 16px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 12px; flex-shrink: 0;">
+                <button type="button" id="btn-reset-token-drop-settings" class="btn btn-secondary btn-sm"
+                    title="Restore default settings for all sections">
+                    <i class="fa-solid fa-rotate-left"></i> Reset Defaults
+                </button>
+                <div style="display: flex; gap: 8px;">
+                    <button type="button" id="btn-cancel-token-drop-settings"
+                        class="btn btn-secondary btn-sm">Cancel</button>
+                    <button type="button" id="btn-save-token-drop-settings" class="btn btn-primary btn-sm">
+                        <i class="fa-solid fa-check"></i> Save Settings
+                    </button>
+                </div>
             </div>
         </div>
     </div>

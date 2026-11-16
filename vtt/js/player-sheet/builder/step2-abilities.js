@@ -429,7 +429,9 @@ export function renderStep2(ctx) {
             const st = e.target.dataset.stat;
             const newVal = parseInt(e.target.value) || 10;
             const oldVal = workingChar.standardArrayAssignments[st];
-            const duplicateStat = statList.find((other) => other !== st && workingChar.standardArrayAssignments[other] === newVal);
+            const duplicateStat = statList.find(
+                (other) => other !== st && workingChar.standardArrayAssignments[other] === newVal
+            );
             if (duplicateStat) {
                 workingChar.standardArrayAssignments[duplicateStat] = oldVal;
             }
@@ -483,7 +485,9 @@ export function renderStep2(ctx) {
             const idx = parseInt(e.target.dataset.idx);
             const newStat = e.target.value;
             const oldStat = workingChar.rolledScores[idx].assignedStat;
-            const duplicatePool = workingChar.rolledScores.find((r, rIdx) => rIdx !== idx && r.assignedStat === newStat);
+            const duplicatePool = workingChar.rolledScores.find(
+                (r, rIdx) => rIdx !== idx && r.assignedStat === newStat
+            );
             if (duplicatePool) {
                 duplicatePool.assignedStat = oldStat;
             }

@@ -15,7 +15,10 @@ export function _hasResistanceType(arr, dmgType, attackMeta = {}) {
     if (!arr || !dmgType) return false;
     let list = arr;
     if (typeof list === 'string') {
-        list = list.split(',').map((s) => s.trim()).filter(Boolean);
+        list = list
+            .split(',')
+            .map((s) => s.trim())
+            .filter(Boolean);
     } else if (!Array.isArray(list) && typeof list === 'object') {
         list = [list];
     }
@@ -130,7 +133,7 @@ export function applyDamageToTokens(tokenIds, amount, type, mode, attackMeta = {
         tokens = {},
         currentMapId = null,
         syncHpFn = syncTokensHpToCharacters,
-        renderAll = () => { },
+        renderAll = () => {},
         getTokenDrawDimensions = () => ({ drawW: 50, drawH: 50 }),
         triggerDamageFXAnimation = null,
         triggerHealingFXAnimation = null
@@ -194,7 +197,10 @@ export function applyDamageToTokens(tokenIds, amount, type, mode, attackMeta = {
                             token.y + drawH / 2,
                             Math.max(drawW, drawH) / 2,
                             healed,
-                            { tokenId: token.id }
+                            {
+                                tokenId: token.id,
+                                delayMs: Math.min(360, Math.max(0, appliedCount - 1) * 60)
+                            }
                         );
                     }
                 }
@@ -226,7 +232,7 @@ export function applyDamageToTokens(tokenIds, amount, type, mode, attackMeta = {
                         {
                             amount: totalDeducted > 0 ? totalDeducted : amount,
                             tokenId: token.id,
-                            delayMs: Math.min(200, Math.max(0, appliedCount - 1) * 20)
+                            delayMs: Math.min(360, Math.max(0, appliedCount - 1) * 60)
                         }
                     );
                 }
@@ -246,14 +252,16 @@ export function applyDamageToTokens(tokenIds, amount, type, mode, attackMeta = {
                 vtt.socket.emit('tokens:heal_fx', {
                     mapId: currentMapId,
                     tokenIds: affectedTokens.map((t) => t.id),
-                    amount: affectedTokens.length === 1 ? lastDeductedAmount : null
+                    amount: affectedTokens.length === 1 ? lastDeductedAmount : null,
+                    origin: vtt.socket.id
                 });
             } else {
                 vtt.socket.emit('tokens:damage_fx', {
                     mapId: currentMapId,
                     tokenIds: affectedTokens.map((t) => t.id),
                     damageTypes: [type || 'untyped'],
-                    amount: affectedTokens.length === 1 ? lastDeductedAmount : null
+                    amount: affectedTokens.length === 1 ? lastDeductedAmount : null,
+                    origin: vtt.socket.id
                 });
             }
         }
@@ -325,12 +333,13 @@ export function applyCompositeDamageToTokens(tokenIds, dmgRolls, multiplier = 1.
         tokens = {},
         currentMapId = null,
         getTokenDrawDimensions = () => ({ drawW: 50, drawH: 50 }),
-        triggerDamageFXAnimation = () => { },
+        triggerDamageFXAnimation = () => {},
         syncHpFn = syncTokensHpToCharacters,
-        renderAll = () => { }
+        renderAll = () => {}
     } = options;
 
-    if (!tokenIds || tokenIds.length === 0 || !tokens) return { anyApplied: false, affectedTokens: [], totalDeducted: 0 };
+    if (!tokenIds || tokenIds.length === 0 || !tokens)
+        return { anyApplied: false, affectedTokens: [], totalDeducted: 0 };
     const damageTypes = (dmgRolls || []).map((dr) => dr.type || 'untyped').filter(Boolean);
     let anyApplied = false;
     const affectedTokens = [];
@@ -356,7 +365,7 @@ export function applyCompositeDamageToTokens(tokenIds, dmgRolls, multiplier = 1.
             {
                 amount: deducted,
                 tokenId: token.id,
-                delayMs: Math.min(200, index * 20)
+                delayMs: Math.min(360, index * 60)
             }
         );
     });
@@ -373,7 +382,8 @@ export function applyCompositeDamageToTokens(tokenIds, dmgRolls, multiplier = 1.
         vtt.socket.emit('tokens:damage_fx', {
             mapId: currentMapId,
             tokenIds,
-            damageTypes: damageTypes.length > 0 ? damageTypes : ['untyped']
+            damageTypes: damageTypes.length > 0 ? damageTypes : ['untyped'],
+            origin: vtt.socket.id
         });
     }
 
@@ -430,21 +440,29 @@ export function resolveTokenAC(token, options = {}) {
     if (charId && vtt?.campaignState?.characters) {
         const char = vtt.campaignState.characters[charId];
         if (char) {
-            let base = char.baseAc !== undefined && char.baseAc !== null ? parseInt(char.baseAc, 10) : (parseInt(char.ac, 10) || 10);
+            let base =
+                char.baseAc !== undefined && char.baseAc !== null
+                    ? parseInt(char.baseAc, 10)
+                    : parseInt(char.ac, 10) || 10;
             const mod = parseInt(char.acMod, 10) || 0;
             let toggleBonus = 0;
             if (Array.isArray(char.acToggles)) {
-                char.acToggles.filter((t) => t && t.enabled).forEach((t) => {
-                    if (t.formula) {
-                        const str = String(t.formula).trim();
-                        const matches = str.match(/[+-]?\s*\d+/g);
-                        if (matches) {
-                            toggleBonus += matches.reduce((sum, term) => sum + (parseInt(term.replace(/\s+/g, ''), 10) || 0), 0);
+                char.acToggles
+                    .filter((t) => t && t.enabled)
+                    .forEach((t) => {
+                        if (t.formula) {
+                            const str = String(t.formula).trim();
+                            const matches = str.match(/[+-]?\s*\d+/g);
+                            if (matches) {
+                                toggleBonus += matches.reduce(
+                                    (sum, term) => sum + (parseInt(term.replace(/\s+/g, ''), 10) || 0),
+                                    0
+                                );
+                            }
+                        } else if (typeof t.bonus === 'number') {
+                            toggleBonus += t.bonus;
                         }
-                    } else if (typeof t.bonus === 'number') {
-                        toggleBonus += t.bonus;
-                    }
-                });
+                    });
             }
             const effective = Math.max(1, base + mod + toggleBonus);
             if (!isNaN(effective)) return effective;
@@ -646,9 +664,9 @@ export function executeMassAttackResolution(massAttackCard, distribution, msgId,
         tokens = {},
         currentMapId = null,
         getTokenDrawDimensions = () => ({ drawW: 50, drawH: 50 }),
-        triggerDamageFXAnimation = () => { },
+        triggerDamageFXAnimation = () => {},
         syncHpFn = syncTokensHpToCharacters,
-        renderAll = () => { },
+        renderAll = () => {},
         getResolvedCreatureMonsterData = (t) => t?.monsterData || null
     } = options;
 
@@ -759,9 +777,7 @@ export function executeMassAttackResolution(massAttackCard, distribution, msgId,
 
             let hit = false;
             if (attack.atkRoll) {
-                hit =
-                    attack.atkRoll.isCritSuccess ||
-                    (!attack.atkRoll.isCritFail && attack.atkRoll.total >= targetAC);
+                hit = attack.atkRoll.isCritSuccess || (!attack.atkRoll.isCritFail && attack.atkRoll.total >= targetAC);
             } else {
                 hit = true;
             }
@@ -798,9 +814,7 @@ export function executeMassAttackResolution(massAttackCard, distribution, msgId,
 
             let hit = false;
             if (attack.atkRoll) {
-                hit =
-                    attack.atkRoll.isCritSuccess ||
-                    (!attack.atkRoll.isCritFail && attack.atkRoll.total >= targetAC);
+                hit = attack.atkRoll.isCritSuccess || (!attack.atkRoll.isCritFail && attack.atkRoll.total >= targetAC);
             } else {
                 hit = true;
             }
@@ -837,9 +851,7 @@ export function executeMassAttackResolution(massAttackCard, distribution, msgId,
 
             let hit = false;
             if (attack.atkRoll) {
-                hit =
-                    attack.atkRoll.isCritSuccess ||
-                    (!attack.atkRoll.isCritFail && attack.atkRoll.total >= targetAC);
+                hit = attack.atkRoll.isCritSuccess || (!attack.atkRoll.isCritFail && attack.atkRoll.total >= targetAC);
             } else {
                 hit = true;
             }
@@ -878,9 +890,7 @@ export function executeMassAttackResolution(massAttackCard, distribution, msgId,
 
             let hit = false;
             if (attack.atkRoll) {
-                hit =
-                    attack.atkRoll.isCritSuccess ||
-                    (!attack.atkRoll.isCritFail && attack.atkRoll.total >= targetAC);
+                hit = attack.atkRoll.isCritSuccess || (!attack.atkRoll.isCritFail && attack.atkRoll.total >= targetAC);
             } else {
                 hit = true;
             }
@@ -1003,7 +1013,7 @@ export function executeMassAttackResolution(massAttackCard, distribution, msgId,
             {
                 amount: deducted,
                 tokenId: token.id,
-                delayMs: Math.min(200, index * 20)
+                delayMs: Math.min(360, index * 60)
             }
         );
     });
@@ -1020,7 +1030,8 @@ export function executeMassAttackResolution(massAttackCard, distribution, msgId,
         vtt.socket.emit('tokens:damage_fx', {
             mapId: currentMapId,
             tokenIds: affectedIds,
-            damageTypes: allDamageTypes.size > 0 ? Array.from(allDamageTypes) : ['untyped']
+            damageTypes: allDamageTypes.size > 0 ? Array.from(allDamageTypes) : ['untyped'],
+            origin: vtt.socket.id
         });
     }
 
@@ -1122,9 +1133,9 @@ export function processCardFullResolution(cardData, selectedIds, options = {}) {
         tokens = {},
         currentMapId = null,
         getTokenDrawDimensions = () => ({ drawW: 50, drawH: 50 }),
-        triggerDamageFXAnimation = () => { },
+        triggerDamageFXAnimation = () => {},
         syncHpFn = syncTokensHpToCharacters,
-        renderAll = () => { },
+        renderAll = () => {},
         getResolvedCreatureMonsterData = (t) => t?.monsterData || null,
         msgId = options.msgId || null
     } = options;
@@ -1134,25 +1145,36 @@ export function processCardFullResolution(cardData, selectedIds, options = {}) {
     const rawSaveObj =
         cardData.saveInfo || (cardData.saveDc ? { dc: cardData.saveDc, ability: cardData.saveAbility } : null);
     const validAbilities = [
-        'STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA',
-        'STRENGTH', 'DEXTERITY', 'CONSTITUTION', 'INTELLIGENCE', 'WISDOM', 'CHARISMA'
+        'STR',
+        'DEX',
+        'CON',
+        'INT',
+        'WIS',
+        'CHA',
+        'STRENGTH',
+        'DEXTERITY',
+        'CONSTITUTION',
+        'INTELLIGENCE',
+        'WISDOM',
+        'CHARISMA'
     ];
     const saveObj =
         rawSaveObj &&
-            rawSaveObj.ability &&
-            validAbilities.includes(rawSaveObj.ability.trim().toUpperCase()) &&
-            !isNaN(parseInt(rawSaveObj.dc)) &&
-            parseInt(rawSaveObj.dc) > 0
+        rawSaveObj.ability &&
+        validAbilities.includes(rawSaveObj.ability.trim().toUpperCase()) &&
+        !isNaN(parseInt(rawSaveObj.dc)) &&
+        parseInt(rawSaveObj.dc) > 0
             ? {
-                ...rawSaveObj,
-                ability: rawSaveObj.ability.trim().substring(0, 3).toUpperCase()
-            }
+                  ...rawSaveObj,
+                  ability: rawSaveObj.ability.trim().substring(0, 3).toUpperCase()
+              }
             : null;
 
-    const targetNames = selectedIds
-        .map((id) => tokens[id]?.name || 'Target')
-        .slice(0, 3)
-        .join(', ') + (selectedIds.length > 3 ? ` +${selectedIds.length - 3} more` : '');
+    const targetNames =
+        selectedIds
+            .map((id) => tokens[id]?.name || 'Target')
+            .slice(0, 3)
+            .join(', ') + (selectedIds.length > 3 ? ` +${selectedIds.length - 3} more` : '');
 
     const atkHitMap = {};
     if (hasAttack) {
@@ -1210,7 +1232,7 @@ export function processCardFullResolution(cardData, selectedIds, options = {}) {
                     {
                         amount: deducted,
                         tokenId: token.id,
-                        delayMs: Math.min(200, index * 20)
+                        delayMs: Math.min(360, index * 60)
                     }
                 );
             });
@@ -1227,7 +1249,8 @@ export function processCardFullResolution(cardData, selectedIds, options = {}) {
                 vtt.socket.emit('tokens:damage_fx', {
                     mapId: currentMapId,
                     tokenIds: affectedIds,
-                    damageTypes: hitDamageTypes.length > 0 ? hitDamageTypes : ['untyped']
+                    damageTypes: hitDamageTypes.length > 0 ? hitDamageTypes : ['untyped'],
+                    origin: vtt.socket.id
                 });
             }
         }
@@ -1239,10 +1262,11 @@ export function processCardFullResolution(cardData, selectedIds, options = {}) {
         const abKey = ability.toLowerCase();
         const targetIds = hitTargetIds;
 
-        const hitNames = hitTargetIds
-            .map((id) => tokens[id]?.name || 'Target')
-            .slice(0, 3)
-            .join(', ') + (hitTargetIds.length > 3 ? ` +${hitTargetIds.length - 3} more` : '');
+        const hitNames =
+            hitTargetIds
+                .map((id) => tokens[id]?.name || 'Target')
+                .slice(0, 3)
+                .join(', ') + (hitTargetIds.length > 3 ? ` +${hitTargetIds.length - 3} more` : '');
         const summary = hasAttack
             ? `Hit! Dealt ${grandTotalDeducted} DMG to ${hitNames} (Saving Throw triggered)`
             : `Saving Throw triggered for ${targetNames}`;
@@ -1337,10 +1361,11 @@ export function processCardFullResolution(cardData, selectedIds, options = {}) {
         }
         return true;
     } else {
-        const hitNames = hitTargetIds
-            .map((id) => tokens[id]?.name || 'Target')
-            .slice(0, 3)
-            .join(', ') + (hitTargetIds.length > 3 ? ` +${hitTargetIds.length - 3} more` : '');
+        const hitNames =
+            hitTargetIds
+                .map((id) => tokens[id]?.name || 'Target')
+                .slice(0, 3)
+                .join(', ') + (hitTargetIds.length > 3 ? ` +${hitTargetIds.length - 3} more` : '');
         const summary = `Hit! Dealt ${grandTotalDeducted} DMG to ${hitNames}`;
         cardData.resolved = { summary, timestamp: Date.now() };
         if (vtt.socket && msgId) {
@@ -1382,15 +1407,18 @@ export function handleCardAction(cardData, action, options = {}) {
             dmgRolls = [{ roll: cardData.damageRoll, type: cardData.damageType || 'piercing' }];
         } else if (cardData.damage) {
             const amt = parseInt(cardData.damage) || 0;
-            dmgRolls = [{ formula: String(cardData.damage), roll: { total: amt }, type: cardData.damageType || 'piercing' }];
+            dmgRolls = [
+                { formula: String(cardData.damage), roll: { total: amt }, type: cardData.damageType || 'piercing' }
+            ];
         }
     }
 
     const tokens = options.tokens || {};
-    const targetNames = selectedIds
-        .map((id) => tokens[id]?.name || 'Target')
-        .slice(0, 3)
-        .join(', ') + (selectedIds.length > 3 ? ` +${selectedIds.length - 3} more` : '');
+    const targetNames =
+        selectedIds
+            .map((id) => tokens[id]?.name || 'Target')
+            .slice(0, 3)
+            .join(', ') + (selectedIds.length > 3 ? ` +${selectedIds.length - 3} more` : '');
 
     const isTrapCard = Boolean(cardData.isTrap || cardData.trapId);
 
@@ -1494,7 +1522,7 @@ export function changeMassTokenZOrder(tokenIds, action, options = {}) {
     const {
         vtt = (typeof window !== 'undefined' ? window.VTT : null) || {},
         tokens = {},
-        renderAll = () => { }
+        renderAll = () => {}
     } = options;
 
     const tokenList = Object.values(tokens);
@@ -1964,9 +1992,15 @@ export function promptQuickSplitModal(groups, targetTokens, onConfirm, onCancel)
 
     updateSplit(numSubgroups, { mode: 'count', value: numSubgroups });
 
-    inputEl.addEventListener('input', () => updateSplit(inputEl.value, { mode: 'count', value: parseInt(inputEl.value) || 1 }));
-    dialog.querySelector('#split-minus').addEventListener('click', () => updateSplit(numSubgroups - 1, { mode: 'count', value: numSubgroups - 1 }));
-    dialog.querySelector('#split-plus').addEventListener('click', () => updateSplit(numSubgroups + 1, { mode: 'count', value: numSubgroups + 1 }));
+    inputEl.addEventListener('input', () =>
+        updateSplit(inputEl.value, { mode: 'count', value: parseInt(inputEl.value) || 1 })
+    );
+    dialog
+        .querySelector('#split-minus')
+        .addEventListener('click', () => updateSplit(numSubgroups - 1, { mode: 'count', value: numSubgroups - 1 }));
+    dialog
+        .querySelector('#split-plus')
+        .addEventListener('click', () => updateSplit(numSubgroups + 1, { mode: 'count', value: numSubgroups + 1 }));
 
     dialog.querySelectorAll('.mass-roll-preset-chip').forEach((chip) => {
         chip.addEventListener('click', () => {
@@ -2025,10 +2059,10 @@ export function showMassRollContextMenu(tokenIds, clientX, clientY, options = {}
         selectedTokenIds = new Set(),
         campaignSettings = {},
         isMobileViewport = () => false,
-        triggerSplashForSelection = () => { },
+        triggerSplashForSelection = () => {},
         getTokenDrawDimensions = () => ({ drawW: 50, drawH: 50 }),
         snapToGrid = (x, y) => ({ x, y }),
-        renderAll = () => { },
+        renderAll = () => {},
         getResolvedCreatureMonsterData = (t) => t?.monsterData || null
     } = options;
 
@@ -2207,36 +2241,44 @@ export function showMassRollContextMenu(tokenIds, clientX, clientY, options = {}
         </div>
     `;
 
-    // 6. Transform options (All Users)
+    // 6. Transform options (All Users - grouped cascading submenu)
     html += `
         <div class="vtt-token-menu-divider"></div>
-        <div class="vtt-token-menu-item" id="menu-flip-h">
-            <span><i class="fa-solid fa-arrows-left-right item-icon"></i> Flip Horizontally</span>
-        </div>
-        <div class="vtt-token-menu-item" id="menu-flip-v">
-            <span><i class="fa-solid fa-arrows-up-down item-icon"></i> Flip Vertically</span>
-        </div>
-        <div class="vtt-token-menu-item" id="menu-reset-rotation">
-            <span><i class="fa-solid fa-rotate-left item-icon"></i> Reset Rotation</span>
+        <div class="vtt-token-menu-item" id="menu-ctx-transform">
+            <span><i class="fa-solid fa-arrows-rotate item-icon"></i> Transform</span>
+            <i class="fa-solid fa-chevron-right chevron-icon"></i>
+            <div class="vtt-token-submenu" style="min-width: 190px;">
+                <div class="vtt-token-submenu-list scroll-styled">
+                    <div class="vtt-submenu-item" id="menu-flip-h">
+                        <span><i class="fa-solid fa-arrows-left-right" style="width: 16px; text-align: center; margin-right: 8px;"></i> Flip Horizontally</span>
+                    </div>
+                    <div class="vtt-submenu-item" id="menu-flip-v">
+                        <span><i class="fa-solid fa-arrows-up-down" style="width: 16px; text-align: center; margin-right: 8px;"></i> Flip Vertically</span>
+                    </div>
+                    <div class="vtt-submenu-item" id="menu-reset-rotation">
+                        <span><i class="fa-solid fa-rotate-left" style="width: 16px; text-align: center; margin-right: 8px;"></i> Reset Rotation</span>
+                    </div>
+                </div>
+            </div>
         </div>
     `;
 
-    // 7. Z-ordering & Layers & Conversions & Delete (GM Only)
+    // 7. Z-ordering & Layers & Conversions & Delete (GM Only - grouped cascading submenu)
     if (vtt.role === 'GM') {
         html += `
             <div class="vtt-token-menu-divider"></div>
-            <div class="vtt-token-menu-item" id="menu-move-front">
-                <span><i class="fa-solid fa-layer-group item-icon"></i> Move to Front</span>
-            </div>
-            <div class="vtt-token-menu-item" id="menu-move-back">
-                <span><i class="fa-solid fa-layer-group item-icon"></i> Move to Back</span>
-            </div>
-            <div class="vtt-token-menu-divider"></div>
-            <div class="vtt-token-menu-item">
-                <span><i class="fa-solid fa-layer-group item-icon"></i> Move to Layer</span>
+            <div class="vtt-token-menu-item" id="menu-ctx-arrange">
+                <span><i class="fa-solid fa-layer-group item-icon"></i> Arrange & Layer</span>
                 <i class="fa-solid fa-chevron-right chevron-icon"></i>
-                <div class="vtt-token-submenu" style="min-width: 180px;">
+                <div class="vtt-token-submenu" style="min-width: 200px;">
                     <div class="vtt-token-submenu-list scroll-styled">
+                        <div class="vtt-submenu-item" id="menu-move-front">
+                            <span><i class="fa-solid fa-layer-group" style="width: 16px; text-align: center; margin-right: 8px;"></i> Move to Front</span>
+                        </div>
+                        <div class="vtt-submenu-item" id="menu-move-back">
+                            <span><i class="fa-solid fa-layer-group" style="width: 16px; text-align: center; margin-right: 8px;"></i> Move to Back</span>
+                        </div>
+                        <div class="vtt-token-menu-divider"></div>
                         <div class="vtt-submenu-item menu-ctx-move-layer" data-layer="token">
                             <span><i class="fa-solid fa-users" style="width: 16px; text-align: center; margin-right: 8px;"></i> Token Layer</span>
                         </div>
@@ -2310,21 +2352,65 @@ export function showMassRollContextMenu(tokenIds, clientX, clientY, options = {}
         menu.style.top = '50%';
         menu.style.transform = 'translate(-50%, -50%)';
     } else {
-        const menuRect = menu.getBoundingClientRect();
+        const PADDING = 12;
         const screenW = window.innerWidth;
         const screenH = window.innerHeight;
+
+        // Measure unscaled layout dimensions to avoid CSS entrance animation scaling distortion (scale(0.96))
+        const menuWidth = menu.offsetWidth || menu.getBoundingClientRect().width || 200;
+        const menuHeight = menu.offsetHeight || menu.getBoundingClientRect().height || 350;
+
+        // Safety max-height for ultra-short viewports (< 500px)
+        const maxAllowedHeight = Math.max(160, screenH - PADDING * 2);
+        menu.style.maxHeight = `${maxAllowedHeight}px`;
+        if (menu.scrollHeight > maxAllowedHeight || menuHeight > maxAllowedHeight) {
+            menu.style.overflowY = 'auto';
+            menu.style.overflowX = 'hidden';
+        }
+
         let adjustedX = clientX;
         let adjustedY = clientY;
-        if (clientX + menuRect.width > screenW) {
-            adjustedX = screenW - menuRect.width - 10;
+
+        // Clamp horizontally
+        if (clientX + menuWidth > screenW - PADDING) {
+            adjustedX = Math.max(PADDING, screenW - menuWidth - PADDING);
         }
-        if (clientY + menuRect.height > screenH) {
-            adjustedY = screenH - menuRect.height - 10;
+
+        // Clamp vertically: flip up or shift up with safety margin if overflowing screen bottom
+        if (clientY + menuHeight > screenH - PADDING) {
+            adjustedY = Math.max(PADDING, screenH - menuHeight - PADDING);
         }
-        adjustedX = Math.max(10, adjustedX);
-        adjustedY = Math.max(10, adjustedY);
+
+        adjustedX = Math.max(PADDING, adjustedX);
+        adjustedY = Math.max(PADDING, adjustedY);
+
         menu.style.left = `${adjustedX}px`;
         menu.style.top = `${adjustedY}px`;
+
+        // Viewport-aware submenu flip (left/up) on hover
+        menu.querySelectorAll('.vtt-token-menu-item').forEach((item) => {
+            const submenu = item.querySelector('.vtt-token-submenu');
+            if (!submenu) return;
+            item.addEventListener('mouseenter', () => {
+                const itemRect = item.getBoundingClientRect();
+                const subWidth = submenu.offsetWidth || 200;
+                const subHeight = submenu.offsetHeight || 220;
+
+                // Flip left if overflowing right edge
+                if (itemRect.right + subWidth > window.innerWidth - 8) {
+                    submenu.classList.add('flip-left');
+                } else {
+                    submenu.classList.remove('flip-left');
+                }
+
+                // Flip upwards if overflowing bottom edge
+                if (itemRect.top + subHeight > window.innerHeight - 8) {
+                    submenu.classList.add('flip-up');
+                } else {
+                    submenu.classList.remove('flip-up');
+                }
+            });
+        });
     }
 
     const getResolvedMonsterData = (t) => {
@@ -2487,7 +2573,8 @@ export function showMassRollContextMenu(tokenIds, clientX, clientY, options = {}
                                 dexScore = char.monsterData?.dex || 10;
                                 let mod = Math.floor((dexScore - 10) / 2);
                                 if (char.monsterData?.initiative !== undefined) {
-                                    if (typeof char.monsterData.initiative === 'number') mod = char.monsterData.initiative;
+                                    if (typeof char.monsterData.initiative === 'number')
+                                        mod = char.monsterData.initiative;
                                     else if (typeof char.monsterData.initiative?.bonus === 'number')
                                         mod = char.monsterData.initiative.bonus;
                                 }
@@ -2514,9 +2601,13 @@ export function showMassRollContextMenu(tokenIds, clientX, clientY, options = {}
                         const resultTotal = rollFromToken(formula, label, rep.id, dexTiebreaker, { vtt, optEvent: e });
 
                         if (typeof window !== 'undefined' && window.VTT?.chatEngine) {
-                            tokensList.forEach((t) => {
-                                window.VTT.chatEngine.addToInitiative(t.name, resultTotal, t.id);
-                            });
+                            window.VTT.chatEngine.addToInitiative(
+                                name,
+                                resultTotal,
+                                rep.id,
+                                rep.img,
+                                tokensList.map((t) => t.id)
+                            );
                         }
                     } else {
                         // [GEOGRAPHIC SQUAD CLUSTERING]: Cluster tokens by map coordinates so each squad is adjacent
@@ -2526,12 +2617,19 @@ export function showMassRollContextMenu(tokenIds, clientX, clientY, options = {}
                             const rep = squadTokens[0];
                             const { formula, dexTiebreaker } = repFormula(rep);
                             const label = `${name} (Squad ${s + 1}): Initiative`;
-                            const resultTotal = rollFromToken(formula, label, rep.id, dexTiebreaker, { vtt, optEvent: e });
+                            const resultTotal = rollFromToken(formula, label, rep.id, dexTiebreaker, {
+                                vtt,
+                                optEvent: e
+                            });
 
                             if (typeof window !== 'undefined' && window.VTT?.chatEngine) {
-                                squadTokens.forEach((t) => {
-                                    window.VTT.chatEngine.addToInitiative(`${t.name} (Squad ${s + 1})`, resultTotal, t.id);
-                                });
+                                window.VTT.chatEngine.addToInitiative(
+                                    `${name} (Squad ${s + 1})`,
+                                    resultTotal,
+                                    rep.id,
+                                    rep.img,
+                                    squadTokens.map((t) => t.id)
+                                );
                             }
                         });
                     }

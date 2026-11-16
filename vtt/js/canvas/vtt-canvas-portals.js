@@ -30,10 +30,11 @@ export function getPortalNormalVector(portal, approachVector = null) {
 
     let dx = 0,
         dy = -1;
+    // Standard compass heading: 0° = North (dx:0, dy:-1), 90° = East (dx:1, dy:0), 180° = South, 270° = West
     if (portal.facingAngle !== undefined && portal.facingAngle !== null && !isNaN(portal.facingAngle)) {
         const rad = (portal.facingAngle * Math.PI) / 180;
-        dx = Math.cos(rad);
-        dy = Math.sin(rad);
+        dx = Math.sin(rad);
+        dy = -Math.cos(rad);
     } else if (portal.shape === 'line') {
         const g = portal.geom;
         const lx = g.x2 - g.x1;
@@ -41,6 +42,10 @@ export function getPortalNormalVector(portal, approachVector = null) {
         const len = Math.hypot(lx, ly) || 1;
         dx = -ly / len;
         dy = lx / len;
+        if (dy > 0 && Math.abs(dx) < 0.001) {
+            dx = -dx;
+            dy = -dy;
+        }
     } else {
         dx = 0;
         dy = -1;
@@ -50,8 +55,8 @@ export function getPortalNormalVector(portal, approachVector = null) {
         dx = -dx;
         dy = -dy;
     }
-    if (Object.is(dx, -0)) dx = 0;
-    if (Object.is(dy, -0)) dy = 0;
+    if (Object.is(dx, -0) || Math.abs(dx) < 1e-10) dx = 0;
+    if (Object.is(dy, -0) || Math.abs(dy) < 1e-10) dy = 0;
     return { dx, dy };
 }
 
@@ -68,11 +73,13 @@ export function getPortalRotationHandlePos(portal) {
         radius = g.points.reduce((max, p) => Math.max(max, Math.hypot(p.x - center.x, p.y - center.y)), 30);
     }
     const dist = Math.max(35, radius + 24);
+    // Universal compass angle where 0° is North (dx=0, dy=-1)
+    const angleDeg = Math.round(((Math.atan2(norm.dx, -norm.dy) * 180) / Math.PI + 360) % 360);
     return {
         center,
         x: center.x + norm.dx * dist,
         y: center.y + norm.dy * dist,
-        angleDeg: Math.round(((Math.atan2(norm.dy, norm.dx) * 180) / Math.PI + 360) % 360)
+        angleDeg
     };
 }
 
@@ -105,7 +112,9 @@ export function isTokenCollidingWithPortal(token, portal, fromPos = null, toPos 
             if (hit) return true;
         }
         const effectiveRadius = Math.max(4, Math.min(drawW, drawH) / 2);
-        return distToSegmentSq(evalCenter, { x: g.x1, y: g.y1 }, { x: g.x2, y: g.y2 }) <= (effectiveRadius * effectiveRadius);
+        return (
+            distToSegmentSq(evalCenter, { x: g.x1, y: g.y1 }, { x: g.x2, y: g.y2 }) <= effectiveRadius * effectiveRadius
+        );
     } else if (portal.shape === 'rect') {
         if (isPointInsideGeometry(evalCenter, 'rect', g)) return true;
         if (fromPos && toPos && findEarliestPathIntersection(fromPos, toPos, 'rect', g)) return true;
@@ -185,8 +194,8 @@ export function calcSpatialPortalDestination(
         targetCenterY = centerB.y + relY;
     } else {
         // Relative orientation rotation between Portal A and Portal B (angleB - angleA)
-        const angleA = Math.atan2(normA.dy, normA.dx);
-        const angleB = Math.atan2(normB.dy, normB.dx);
+        const angleA = Math.atan2(normA.dx, -normA.dy);
+        const angleB = Math.atan2(normB.dx, -normB.dy);
         const thetaRot = angleB - angleA;
 
         const relX = toCenter.x - centerA.x;
@@ -486,6 +495,7 @@ export function drawTargetRoomContent(
         vtt = {},
         imageCache = {},
         grid = { size: 50, scale: 1 },
+        zoom = options.zoom || 1,
         getOrLoadTokenImage: customGetImage = null,
         getTokenDrawDimensions = options.getTokenDrawDimensions ||
             ((t) => {
@@ -579,18 +589,16 @@ export function drawTargetRoomContent(
         ctx.strokeStyle = tGrid.color || '#ffffff';
         ctx.globalAlpha = (tGrid.opacity !== undefined ? tGrid.opacity : 0.25) * 0.7;
         ctx.lineWidth = 1;
+        ctx.beginPath();
         for (let x = 0; x <= targetW; x += gSize) {
-            ctx.beginPath();
             ctx.moveTo(x, 0);
             ctx.lineTo(x, targetH);
-            ctx.stroke();
         }
         for (let y = 0; y <= targetH; y += gSize) {
-            ctx.beginPath();
             ctx.moveTo(0, y);
             ctx.lineTo(targetW, y);
-            ctx.stroke();
         }
+        ctx.stroke();
         ctx.restore();
     }
 
@@ -635,7 +643,9 @@ export function drawTargetRoomContent(
                     null,
                     s.points || null,
                     false,
-                    tGrid
+                    tGrid,
+                    null,
+                    zoom
                 );
             } catch (shapeErr) {
                 // Ignore transient shape render issues in target room projection
@@ -730,7 +740,17 @@ export function getPortalAperturePoints(portal, observerPoint) {
     if (!portal || !portal.geom) return null;
     const g = portal.geom;
     if (portal.shape === 'line') {
-        return { p1: { x: g.x1, y: g.y1 }, p2: { x: g.x2, y: g.y2 } };
+        const p1 = { x: g.x1, y: g.y1 };
+        const p2 = { x: g.x2, y: g.y2 };
+        const a1 = Math.atan2(p1.y - observerPoint.y, p1.x - observerPoint.x);
+        const a2 = Math.atan2(p2.y - observerPoint.y, p2.x - observerPoint.x);
+        let diff = (a2 - a1) % (Math.PI * 2);
+        if (diff < -Math.PI) diff += Math.PI * 2;
+        if (diff > Math.PI) diff -= Math.PI * 2;
+        if (diff < 0) {
+            return { p1: p2, p2: p1 };
+        }
+        return { p1, p2 };
     }
     const center = calcPortalCenter(portal);
     if (portal.shape === 'circle') {
@@ -744,26 +764,47 @@ export function getPortalAperturePoints(portal, observerPoint) {
             };
         }
         const angC = Math.atan2(center.y - observerPoint.y, center.x - observerPoint.x);
+        const dTangent = Math.sqrt(Math.max(1, dEye * dEye - r * r));
         const alpha = Math.asin(Math.min(0.999, r / dEye));
         return {
-            p1: { x: observerPoint.x + Math.cos(angC - alpha) * dEye, y: observerPoint.y + Math.sin(angC - alpha) * dEye },
-            p2: { x: observerPoint.x + Math.cos(angC + alpha) * dEye, y: observerPoint.y + Math.sin(angC + alpha) * dEye }
+            p1: {
+                x: observerPoint.x + Math.cos(angC - alpha) * dTangent,
+                y: observerPoint.y + Math.sin(angC - alpha) * dTangent
+            },
+            p2: {
+                x: observerPoint.x + Math.cos(angC + alpha) * dTangent,
+                y: observerPoint.y + Math.sin(angC + alpha) * dTangent
+            }
         };
     }
     if (portal.shape === 'rect' || (portal.shape === 'polygon' && g?.points?.length >= 3)) {
-        const pts = portal.shape === 'rect'
-            ? [{ x: g.x, y: g.y }, { x: g.x + g.w, y: g.y }, { x: g.x + g.w, y: g.y + g.h }, { x: g.x, y: g.y + g.h }]
-            : g.points;
-        let minA = Infinity, maxA = -Infinity;
-        let minP = pts[0], maxP = pts[0];
+        const pts =
+            portal.shape === 'rect'
+                ? [
+                      { x: g.x, y: g.y },
+                      { x: g.x + g.w, y: g.y },
+                      { x: g.x + g.w, y: g.y + g.h },
+                      { x: g.x, y: g.y + g.h }
+                  ]
+                : g.points;
+        let minA = Infinity,
+            maxA = -Infinity;
+        let minP = pts[0],
+            maxP = pts[0];
         const refA = Math.atan2(center.y - observerPoint.y, center.x - observerPoint.x);
         pts.forEach((p) => {
             const a = Math.atan2(p.y - observerPoint.y, p.x - observerPoint.x);
             let diff = (a - refA) % (Math.PI * 2);
             if (diff < -Math.PI) diff += Math.PI * 2;
             if (diff > Math.PI) diff -= Math.PI * 2;
-            if (diff < minA) { minA = diff; minP = p; }
-            if (diff > maxA) { maxA = diff; maxP = p; }
+            if (diff < minA) {
+                minA = diff;
+                minP = p;
+            }
+            if (diff > maxA) {
+                maxA = diff;
+                maxP = p;
+            }
         });
         return { p1: minP, p2: maxP };
     }
@@ -774,7 +815,12 @@ export function getPortalAperturePoints(portal, observerPoint) {
     };
 }
 
-export function computePortalSightFrustum(portal, sourceCenter, remainingSight) {
+const sightFrustumCache = new Map();
+export function clearSightFrustumCache() {
+    sightFrustumCache.clear();
+}
+
+export function computePortalSightFrustum(portal, sourceCenter, remainingSight, walls = []) {
     const ap = getPortalAperturePoints(portal, sourceCenter);
     if (!ap) return null;
     const { p1, p2 } = ap;
@@ -782,34 +828,80 @@ export function computePortalSightFrustum(portal, sourceCenter, remainingSight) 
     const d1X = p1.x - sourceCenter.x;
     const d1Y = p1.y - sourceCenter.y;
     const len1 = Math.hypot(d1X, d1Y) || 1;
-    const e1 = {
-        x: p1.x + (d1X / len1) * remainingSight,
-        y: p1.y + (d1Y / len1) * remainingSight
-    };
+    const reach1 = len1 + remainingSight;
 
     const d2X = p2.x - sourceCenter.x;
     const d2Y = p2.y - sourceCenter.y;
     const len2 = Math.hypot(d2X, d2Y) || 1;
-    const e2 = {
-        x: p2.x + (d2X / len2) * remainingSight,
-        y: p2.y + (d2Y / len2) * remainingSight
-    };
+    const reach2 = len2 + remainingSight;
 
-    const ang1 = Math.atan2(e1.y - sourceCenter.y, e1.x - sourceCenter.x);
-    const ang2 = Math.atan2(e2.y - sourceCenter.y, e2.x - sourceCenter.x);
+    const ang1 = Math.atan2(d1Y, d1X);
+    const ang2 = Math.atan2(d2Y, d2X);
     let span = (ang2 - ang1) % (Math.PI * 2);
     if (span < -Math.PI) span += Math.PI * 2;
     if (span > Math.PI) span -= Math.PI * 2;
 
-    const steps = Math.max(4, Math.round(Math.abs(span) * 8));
+    const steps = Math.max(6, Math.round(Math.abs(span) * 12));
     const arcPts = [];
-    const totalDist = Math.max(len1, len2) + remainingSight;
+
+    const activeWalls = (Array.isArray(walls) ? walls : []).filter((w) => {
+        if (w.isOpen) return false;
+        if (isWallCoincidentWithPortal(w, portal)) return false;
+        return true;
+    });
+
+    function clipRayToWalls(ax, ay, maxDist, minThreshold = 0) {
+        let bestT = 1.0;
+        const targetX = sourceCenter.x + ax * maxDist;
+        const targetY = sourceCenter.y + ay * maxDist;
+        for (let i = 0; i < activeWalls.length; i++) {
+            const w = activeWalls[i];
+            const hit = checkLineIntersection(
+                sourceCenter,
+                { x: targetX, y: targetY },
+                { x: w.x1, y: w.y1 },
+                { x: w.x2, y: w.y2 }
+            );
+            if (hit) {
+                const dHit = Math.hypot(hit.x - sourceCenter.x, hit.y - sourceCenter.y);
+                // Ignore hits at or before the doorframe itself (threshold + 1.5px) to prevent diagonal cutoff
+                if (dHit > minThreshold + 1.5) {
+                    const t = dHit / maxDist;
+                    if (t > 0.001 && t < bestT) {
+                        bestT = t;
+                    }
+                }
+            }
+        }
+        return {
+            x: sourceCenter.x + ax * maxDist * bestT,
+            y: sourceCenter.y + ay * maxDist * bestT
+        };
+    }
+
+    const e1 = clipRayToWalls(d1X / len1, d1Y / len1, reach1, len1);
+    const e2 = clipRayToWalls(d2X / len2, d2Y / len2, reach2, len2);
+
     for (let s = 1; s < steps; s++) {
-        const a = ang1 + (span * s) / steps;
-        arcPts.push({
-            x: sourceCenter.x + Math.cos(a) * totalDist,
-            y: sourceCenter.y + Math.sin(a) * totalDist
-        });
+        const frac = s / steps;
+        const a = ang1 + span * frac;
+        const rDist = reach1 + (reach2 - reach1) * frac;
+        const cosA = Math.cos(a);
+        const sinA = Math.sin(a);
+
+        let dAp = len1 + (len2 - len1) * frac;
+        const apHit = checkLineIntersection(
+            sourceCenter,
+            { x: sourceCenter.x + cosA * rDist, y: sourceCenter.y + sinA * rDist },
+            p1,
+            p2
+        );
+        if (apHit) {
+            dAp = Math.hypot(apHit.x - sourceCenter.x, apHit.y - sourceCenter.y);
+        }
+
+        const pt = clipRayToWalls(cosA, sinA, rDist, dAp);
+        arcPts.push(pt);
     }
 
     return [p1, e1, ...arcPts, e2, p2];
@@ -830,6 +922,284 @@ export function isWallCoincidentWithPortal(w, p) {
         if (distToSegmentSq(c, { x: w.x1, y: w.y1 }, { x: w.x2, y: w.y2 }) <= 400) return true;
     }
     return false;
+}
+
+const portalProjectionCache = new Map();
+export function clearPortalProjectionCache() {
+    portalProjectionCache.clear();
+}
+
+export function invalidatePortalCaches() {
+    clearSightFrustumCache();
+    clearPortalProjectionCache();
+}
+
+export function computeProjectedPortalData(
+    portal,
+    targetPortal,
+    sourceCenter,
+    remainingSight,
+    walls = [],
+    targetWalls = [],
+    options = {}
+) {
+    if (!portal || !targetPortal) return null;
+    const cacheKey = `${portal.id}_${targetPortal.id}_${Math.round(sourceCenter.x)}_${Math.round(sourceCenter.y)}_${Math.round(remainingSight)}_${portal.facingAngle || 0}_${targetPortal.facingAngle || 0}`;
+    if (portalProjectionCache.has(cacheKey)) {
+        return portalProjectionCache.get(cacheKey);
+    }
+
+    const { getWallCoordinatesForRaycasting = null, getLineIntersection = getLineIntersectionInternal } = options;
+
+    const centerA = calcPortalCenter(portal);
+    const normA = getPortalNormalVector(portal);
+    const centerB = calcPortalCenter(targetPortal);
+    const normB = getPortalNormalVector(targetPortal);
+
+    const angleA = Math.atan2(normA.dx, -normA.dy);
+    const angleB = Math.atan2(normB.dx, -normB.dy);
+    let thetaRot = angleB - angleA;
+    while (thetaRot > Math.PI) thetaRot -= Math.PI * 2;
+    while (thetaRot <= -Math.PI) thetaRot += Math.PI * 2;
+
+    const relX = sourceCenter.x - centerA.x;
+    const relY = sourceCenter.y - centerA.y;
+
+    // Position virtual camera strictly BEHIND Portal B looking forward into Room B (+normB)
+    let virtEyeB;
+    if (!portal.isRadial && !targetPortal.isRadial) {
+        const tangentA = { dx: -normA.dy, dy: normA.dx };
+        const distNormA = relX * normA.dx + relY * normA.dy;
+        const distTanA = relX * tangentA.dx + relY * tangentA.dy;
+
+        const tangentB = { dx: -normB.dy, dy: normB.dx };
+        const eyeBehindDist = Math.max(15, Math.abs(distNormA));
+        virtEyeB = {
+            x: centerB.x - normB.dx * eyeBehindDist + tangentB.dx * distTanA,
+            y: centerB.y - normB.dy * eyeBehindDist + tangentB.dy * distTanA
+        };
+    } else {
+        const cosInv = Math.cos(-thetaRot);
+        const sinInv = Math.sin(-thetaRot);
+        virtEyeB = {
+            x: centerB.x + (relX * cosInv - relY * sinInv),
+            y: centerB.y + (relX * sinInv + relY * cosInv)
+        };
+    }
+
+    const gB = targetPortal.geom;
+    let p1B = null,
+        p2B = null;
+    if (targetPortal.shape === 'line' && gB) {
+        p1B = { x: gB.x1, y: gB.y1 };
+        p2B = { x: gB.x2, y: gB.y2 };
+    } else if (targetPortal.shape === 'circle' && gB) {
+        const r = gB.r !== undefined ? gB.r : 25;
+        const dEye = Math.hypot(centerB.x - virtEyeB.x, centerB.y - virtEyeB.y) || 1;
+        if (dEye <= r) {
+            p1B = { x: centerB.x - normB.dy * r, y: centerB.y + normB.dx * r };
+            p2B = { x: centerB.x + normB.dy * r, y: centerB.y - normB.dx * r };
+        } else {
+            const angC = Math.atan2(centerB.y - virtEyeB.y, centerB.x - virtEyeB.x);
+            const alpha = Math.asin(Math.min(0.999, r / dEye));
+            p1B = {
+                x: virtEyeB.x + Math.cos(angC - alpha) * dEye,
+                y: virtEyeB.y + Math.sin(angC - alpha) * dEye
+            };
+            p2B = {
+                x: virtEyeB.x + Math.cos(angC + alpha) * dEye,
+                y: virtEyeB.y + Math.sin(angC + alpha) * dEye
+            };
+        }
+    } else if (targetPortal.shape === 'rect' && gB) {
+        const pts = [
+            { x: gB.x, y: gB.y },
+            { x: gB.x + gB.w, y: gB.y },
+            { x: gB.x + gB.w, y: gB.y + gB.h },
+            { x: gB.x, y: gB.y + gB.h }
+        ];
+        let minA = Infinity,
+            maxA = -Infinity;
+        let minP = pts[0],
+            maxP = pts[0];
+        const refA = Math.atan2(centerB.y - virtEyeB.y, centerB.x - virtEyeB.x);
+        pts.forEach((p) => {
+            const a = Math.atan2(p.y - virtEyeB.y, p.x - virtEyeB.x);
+            let diff = (a - refA) % (Math.PI * 2);
+            if (diff < -Math.PI) diff += Math.PI * 2;
+            if (diff > Math.PI) diff -= Math.PI * 2;
+            if (diff < minA) {
+                minA = diff;
+                minP = p;
+            }
+            if (diff > maxA) {
+                maxA = diff;
+                maxP = p;
+            }
+        });
+        p1B = minP;
+        p2B = maxP;
+    } else if (targetPortal.shape === 'polygon' && gB?.points?.length >= 3) {
+        const pts = gB.points;
+        let minA = Infinity,
+            maxA = -Infinity;
+        let minP = pts[0],
+            maxP = pts[0];
+        const refA = Math.atan2(centerB.y - virtEyeB.y, centerB.x - virtEyeB.x);
+        pts.forEach((p) => {
+            const a = Math.atan2(p.y - virtEyeB.y, p.x - virtEyeB.x);
+            let diff = (a - refA) % (Math.PI * 2);
+            if (diff < -Math.PI) diff += Math.PI * 2;
+            if (diff > Math.PI) diff -= Math.PI * 2;
+            if (diff < minA) {
+                minA = diff;
+                minP = p;
+            }
+            if (diff > maxA) {
+                maxA = diff;
+                maxP = p;
+            }
+        });
+        p1B = minP;
+        p2B = maxP;
+    } else {
+        p1B = { x: centerB.x - normB.dy * 25, y: centerB.y + normB.dx * 25 };
+        p2B = { x: centerB.x + normB.dy * 25, y: centerB.y - normB.dx * 25 };
+    }
+
+    let room2VisPoly = null;
+    if (p1B && p2B) {
+        const angMid = Math.atan2(centerB.y - virtEyeB.y, centerB.x - virtEyeB.x);
+        const getRelAngle = (a) => ((((a - angMid + Math.PI) % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2)) - Math.PI;
+
+        const ang1 = Math.atan2(p1B.y - virtEyeB.y, p1B.x - virtEyeB.x);
+        const ang2 = Math.atan2(p2B.y - virtEyeB.y, p2B.x - virtEyeB.x);
+        const rel1 = getRelAngle(ang1);
+        const rel2 = getRelAngle(ang2);
+        const minRel = Math.min(rel1, rel2);
+        const maxRel = Math.max(rel1, rel2);
+        const apertureSpan = maxRel - minRel;
+
+        if (apertureSpan > 0.001 && apertureSpan < Math.PI * 0.999) {
+            const startPoint = rel1 <= rel2 ? p1B : p2B;
+            const endPoint = rel1 <= rel2 ? p2B : p1B;
+
+            const relAngles = new Set();
+            relAngles.add(minRel);
+            relAngles.add(maxRel);
+
+            const numSteps = Math.max(24, Math.round((apertureSpan * 60) / Math.PI));
+            const stepSize = apertureSpan / numSteps;
+            for (let s = 1; s < numSteps; s++) {
+                relAngles.add(minRel + s * stepSize);
+            }
+
+            const distEyeToCenter = Math.hypot(virtEyeB.x - centerB.x, virtEyeB.y - centerB.y);
+            const rayReach = remainingSight + distEyeToCenter;
+            const maxReachSq = (rayReach + 50) * (rayReach + 50);
+
+            const candidateWalls = [];
+            targetWalls.forEach((w) => {
+                if (isWallCoincidentWithPortal(w, targetPortal)) return;
+                const d1 = (w.x1 - virtEyeB.x) ** 2 + (w.y1 - virtEyeB.y) ** 2;
+                const d2 = (w.x2 - virtEyeB.x) ** 2 + (w.y2 - virtEyeB.y) ** 2;
+                if (d1 > maxReachSq && d2 > maxReachSq) return;
+
+                if (getWallCoordinatesForRaycasting) {
+                    const wallType = w.type || (w.isDoor ? 'door' : w.isWindow ? 'window' : 'wall');
+                    const coords = getWallCoordinatesForRaycasting({ ...w, type: wallType }, virtEyeB.x, virtEyeB.y);
+                    if (coords) candidateWalls.push(coords);
+                } else {
+                    candidateWalls.push({ x1: w.x1, y1: w.y1, x2: w.x2, y2: w.y2 });
+                }
+            });
+
+            candidateWalls.forEach((cw) => {
+                if (relAngles.size >= 48) return;
+                [
+                    { x: cw.x1, y: cw.y1 },
+                    { x: cw.x2, y: cw.y2 }
+                ].forEach((pt) => {
+                    if (relAngles.size >= 48) return;
+                    const distPastPortal = (pt.x - centerB.x) * normB.dx + (pt.y - centerB.y) * normB.dy;
+                    if (distPastPortal >= -5) {
+                        const angPt = Math.atan2(pt.y - virtEyeB.y, pt.x - virtEyeB.x);
+                        const rPt = getRelAngle(angPt);
+                        if (rPt >= minRel && rPt <= maxRel) {
+                            relAngles.add(rPt);
+                            if (rPt - 0.0001 >= minRel && relAngles.size < 48) relAngles.add(rPt - 0.0001);
+                            if (rPt + 0.0001 <= maxRel && relAngles.size < 48) relAngles.add(rPt + 0.0001);
+                        }
+                    }
+                });
+            });
+
+            const sortedRelAngles = Array.from(relAngles).sort((a, b) => a - b);
+            const fanPoints = [];
+
+            sortedRelAngles.forEach((r) => {
+                const absAng = angMid + r;
+                const rdx = Math.cos(absAng);
+                const rdy = Math.sin(absAng);
+                const rx = virtEyeB.x + rdx * rayReach;
+                const ry = virtEyeB.y + rdy * rayReach;
+
+                let minThresholdB = 0;
+                const apHitB = getLineIntersection(virtEyeB.x, virtEyeB.y, rx, ry, p1B.x, p1B.y, p2B.x, p2B.y);
+                if (apHitB) {
+                    minThresholdB = Math.hypot(apHitB.x - virtEyeB.x, apHitB.y - virtEyeB.y);
+                } else {
+                    minThresholdB = Math.hypot(centerB.x - virtEyeB.x, centerB.y - virtEyeB.y);
+                }
+
+                let closestT = 1.0;
+                let hitX = rx;
+                let hitY = ry;
+
+                for (let i = 0; i < candidateWalls.length; i++) {
+                    const cw = candidateWalls[i];
+                    const hit = getLineIntersection(virtEyeB.x, virtEyeB.y, rx, ry, cw.x1, cw.y1, cw.x2, cw.y2);
+                    if (hit && hit.t < closestT) {
+                        const distHitFromEye = Math.hypot(hit.x - virtEyeB.x, hit.y - virtEyeB.y);
+                        // Ignore hits at or before the target doorway to prevent diagonal cuts in Room B
+                        if (distHitFromEye > minThresholdB + 1.5) {
+                            const dHit = (hit.x - centerB.x) * normB.dx + (hit.y - centerB.y) * normB.dy;
+                            if (dHit >= -2) {
+                                closestT = hit.t;
+                                hitX = hit.x;
+                                hitY = hit.y;
+                            }
+                        }
+                    }
+                }
+                const dHit = (hitX - centerB.x) * normB.dx + (hitY - centerB.y) * normB.dy;
+                if (dHit < 0 && !targetPortal.isRadial) {
+                    hitX -= normB.dx * dHit;
+                    hitY -= normB.dy * dHit;
+                }
+                fanPoints.push({ x: hitX, y: hitY });
+            });
+
+            room2VisPoly = [startPoint, ...fanPoints, endPoint];
+        }
+    }
+
+    const frustum = computePortalSightFrustum(portal, sourceCenter, remainingSight, walls);
+
+    const result = {
+        frustum,
+        room2VisPoly,
+        virtEyeB,
+        thetaRot,
+        centerA,
+        normA,
+        centerB,
+        normB
+    };
+
+    if (portalProjectionCache.size > 200) portalProjectionCache.clear();
+    portalProjectionCache.set(cacheKey, result);
+    return result;
 }
 
 export function renderProjectedPortals(ctx, portals, options = {}) {
@@ -916,9 +1286,9 @@ export function renderProjectedPortals(ctx, portals, options = {}) {
         const centerB = calcPortalCenter(targetPortal);
         const normB = getPortalNormalVector(targetPortal);
 
-        const angleA = Math.atan2(normA.dy, normA.dx);
-        const angleB = Math.atan2(normB.dy, normB.dx);
-        let thetaRot = isReflect ? 0 : angleA - angleB + Math.PI;
+        const angleA = Math.atan2(normA.dx, -normA.dy);
+        const angleB = Math.atan2(normB.dx, -normB.dy);
+        let thetaRot = isReflect ? 0 : angleB - angleA;
         while (thetaRot > Math.PI) thetaRot -= Math.PI * 2;
         while (thetaRot <= -Math.PI) thetaRot += Math.PI * 2;
 
@@ -953,6 +1323,9 @@ export function renderProjectedPortals(ctx, portals, options = {}) {
             return false;
         }
 
+        let didDrawReflect = false;
+        const activeProjections = [];
+
         visionSources.forEach((source) => {
             const sourceCenter = getTokenCenter(source);
             const vInX = centerA.x - sourceCenter.x;
@@ -968,7 +1341,7 @@ export function renderProjectedPortals(ctx, portals, options = {}) {
             if (isDaylightMode) sightFeet = 99999;
             const sightDistPx = (sightFeet / (grid.feetPerSquare || 5)) * (grid.size || 50) * (grid.scale || 1);
             const maxSightDist = sightFeet > 0 ? tokenRadius + sightDistPx : isDaylightMode ? 99999 : 0;
-            if (distToA > maxSightDist && !isDaylightMode && (!isGM || gmTokenVisionMode)) return;
+            if (distToA > maxSightDist && !isDaylightMode) return;
 
             let blocked = false;
             for (let i = 0; i < walls.length; i++) {
@@ -980,10 +1353,11 @@ export function renderProjectedPortals(ctx, portals, options = {}) {
                     break;
                 }
             }
-            if (blocked && (!isGM || gmTokenVisionMode)) return;
+            if (blocked) return;
 
-            // 1. REFLECT PASS
-            if (isReflect) {
+            // 1. REFLECT PASS (Drawn once per portal)
+            if (isReflect && !didDrawReflect) {
+                didDrawReflect = true;
                 ctx.save();
                 ctx.beginPath();
                 if (portal.shape === 'circle' && gA) {
@@ -1029,255 +1403,78 @@ export function renderProjectedPortals(ctx, portals, options = {}) {
             const remainingSight = maxSightDist - distToA;
             if (isViewThrough && !isReflect && remainingSight > 10) {
                 let canView = true;
-                if (portal.isOneWay && !portal.isRadial) {
-                    const inDot = vInX * normA.dx + vInY * normA.dy;
-                    if (inDot >= 0) canView = false;
+                if (!portal.isRadial && portal.isOneWay) {
+                    const distNormA = (sourceCenter.x - centerA.x) * normA.dx + (sourceCenter.y - centerA.y) * normA.dy;
+                    if (distNormA < -2) {
+                        canView = false;
+                    } else if (distToA > 25) {
+                        const inDot = vInX * normA.dx + vInY * normA.dy;
+                        if (inDot >= 0) canView = false;
+                    }
                 }
 
                 if (canView) {
-                    const relX = sourceCenter.x - centerA.x;
-                    const relY = sourceCenter.y - centerA.y;
-                    const cosInv = Math.cos(-thetaRot);
-                    const sinInv = Math.sin(-thetaRot);
-                    const virtEyeB = {
-                        x: centerB.x + (relX * cosInv - relY * sinInv),
-                        y: centerB.y + (relX * sinInv + relY * cosInv)
-                    };
-
-                    const gB = targetPortal.geom;
-                    let p1B = null,
-                        p2B = null;
-                    if (targetPortal.shape === 'line' && gB) {
-                        p1B = { x: gB.x1, y: gB.y1 };
-                        p2B = { x: gB.x2, y: gB.y2 };
-                    } else if (targetPortal.shape === 'circle' && gB) {
-                        const r = gB.r !== undefined ? gB.r : 25;
-                        const dEye = Math.hypot(centerB.x - virtEyeB.x, centerB.y - virtEyeB.y) || 1;
-                        if (dEye <= r) {
-                            p1B = { x: centerB.x - normB.dy * r, y: centerB.y + normB.dx * r };
-                            p2B = { x: centerB.x + normB.dy * r, y: centerB.y - normB.dx * r };
-                        } else {
-                            const angC = Math.atan2(centerB.y - virtEyeB.y, centerB.x - virtEyeB.x);
-                            const alpha = Math.asin(Math.min(0.999, r / dEye));
-                            p1B = {
-                                x: virtEyeB.x + Math.cos(angC - alpha) * dEye,
-                                y: virtEyeB.y + Math.sin(angC - alpha) * dEye
-                            };
-                            p2B = {
-                                x: virtEyeB.x + Math.cos(angC + alpha) * dEye,
-                                y: virtEyeB.y + Math.sin(angC + alpha) * dEye
-                            };
-                        }
-                    } else if (targetPortal.shape === 'rect' && gB) {
-                        const pts = [
-                            { x: gB.x, y: gB.y },
-                            { x: gB.x + gB.w, y: gB.y },
-                            { x: gB.x + gB.w, y: gB.y + gB.h },
-                            { x: gB.x, y: gB.y + gB.h }
-                        ];
-                        let minA = Infinity,
-                            maxA = -Infinity;
-                        let minP = pts[0],
-                            maxP = pts[0];
-                        const refA = Math.atan2(centerB.y - virtEyeB.y, centerB.x - virtEyeB.x);
-                        pts.forEach((p) => {
-                            const a = Math.atan2(p.y - virtEyeB.y, p.x - virtEyeB.x);
-                            let diff = (a - refA) % (Math.PI * 2);
-                            if (diff < -Math.PI) diff += Math.PI * 2;
-                            if (diff > Math.PI) diff -= Math.PI * 2;
-                            if (diff < minA) {
-                                minA = diff;
-                                minP = p;
-                            }
-                            if (diff > maxA) {
-                                maxA = diff;
-                                maxP = p;
-                            }
-                        });
-                        p1B = minP;
-                        p2B = maxP;
-                    } else if (targetPortal.shape === 'polygon' && gB?.points?.length >= 3) {
-                        const pts = gB.points;
-                        let minA = Infinity,
-                            maxA = -Infinity;
-                        let minP = pts[0],
-                            maxP = pts[0];
-                        const refA = Math.atan2(centerB.y - virtEyeB.y, centerB.x - virtEyeB.x);
-                        pts.forEach((p) => {
-                            const a = Math.atan2(p.y - virtEyeB.y, p.x - virtEyeB.x);
-                            let diff = (a - refA) % (Math.PI * 2);
-                            if (diff < -Math.PI) diff += Math.PI * 2;
-                            if (diff > Math.PI) diff -= Math.PI * 2;
-                            if (diff < minA) {
-                                minA = diff;
-                                minP = p;
-                            }
-                            if (diff > maxA) {
-                                maxA = diff;
-                                maxP = p;
-                            }
-                        });
-                        p1B = minP;
-                        p2B = maxP;
-                    } else {
-                        p1B = { x: centerB.x - normB.dy * 25, y: centerB.y + normB.dx * 25 };
-                        p2B = { x: centerB.x + normB.dy * 25, y: centerB.y - normB.dx * 25 };
-                    }
-
-                    let room2VisPoly = null;
-                    if (p1B && p2B) {
-                        const angMid = Math.atan2(centerB.y - virtEyeB.y, centerB.x - virtEyeB.x);
-                        const getRelAngle = (a) =>
-                            ((((a - angMid + Math.PI) % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2)) - Math.PI;
-
-                        const ang1 = Math.atan2(p1B.y - virtEyeB.y, p1B.x - virtEyeB.x);
-                        const ang2 = Math.atan2(p2B.y - virtEyeB.y, p2B.x - virtEyeB.x);
-                        const rel1 = getRelAngle(ang1);
-                        const rel2 = getRelAngle(ang2);
-                        const minRel = Math.min(rel1, rel2);
-                        const maxRel = Math.max(rel1, rel2);
-                        const apertureSpan = maxRel - minRel;
-
-                        if (apertureSpan > 0.001 && apertureSpan < Math.PI * 0.999) {
-                            const startPoint = rel1 <= rel2 ? p1B : p2B;
-                            const endPoint = rel1 <= rel2 ? p2B : p1B;
-
-                            const relAngles = new Set();
-                            relAngles.add(minRel);
-                            relAngles.add(maxRel);
-
-                            const numSteps = Math.max(24, Math.round((apertureSpan * 60) / Math.PI));
-                            const stepSize = apertureSpan / numSteps;
-                            for (let s = 1; s < numSteps; s++) {
-                                relAngles.add(minRel + s * stepSize);
-                            }
-
-                            const candidateWalls = [];
-                            targetWalls.forEach((w) => {
-                                if (isWallCoincidentWithPortal(w, targetPortal)) return;
-                                if (getWallCoordinatesForRaycasting) {
-                                    const wallType = w.type || (w.isDoor ? 'door' : w.isWindow ? 'window' : 'wall');
-                                    const coords = getWallCoordinatesForRaycasting(
-                                        { ...w, type: wallType },
-                                        virtEyeB.x,
-                                        virtEyeB.y
-                                    );
-                                    if (coords) candidateWalls.push(coords);
-                                } else {
-                                    candidateWalls.push({ x1: w.x1, y1: w.y1, x2: w.x2, y2: w.y2 });
-                                }
-                            });
-
-                            candidateWalls.push({ x1: 0, y1: 0, x2: targetW, y2: 0 });
-                            candidateWalls.push({ x1: targetW, y1: 0, x2: targetW, y2: targetH });
-                            candidateWalls.push({ x1: targetW, y1: targetH, x2: 0, y2: targetH });
-                            candidateWalls.push({ x1: 0, y1: targetH, x2: 0, y2: 0 });
-
-                            candidateWalls.forEach((cw) => {
-                                [
-                                    { x: cw.x1, y: cw.y1 },
-                                    { x: cw.x2, y: cw.y2 }
-                                ].forEach((pt) => {
-                                    const distPastPortal =
-                                        (pt.x - centerB.x) * normB.dx + (pt.y - centerB.y) * normB.dy;
-                                    if (distPastPortal >= -5) {
-                                        const angPt = Math.atan2(pt.y - virtEyeB.y, pt.x - virtEyeB.x);
-                                        const rPt = getRelAngle(angPt);
-                                        if (rPt >= minRel && rPt <= maxRel) {
-                                            relAngles.add(rPt);
-                                            if (rPt - 0.0001 >= minRel) relAngles.add(rPt - 0.0001);
-                                            if (rPt + 0.0001 <= maxRel) relAngles.add(rPt + 0.0001);
-                                        }
-                                    }
-                                });
-                            });
-
-                            const sortedRelAngles = Array.from(relAngles).sort((a, b) => a - b);
-                            const distEyeToCenter = Math.hypot(virtEyeB.x - centerB.x, virtEyeB.y - centerB.y);
-                            const rayReach = remainingSight + distEyeToCenter;
-                            const fanPoints = [];
-
-                            sortedRelAngles.forEach((r) => {
-                                const absAng = angMid + r;
-                                const rdx = Math.cos(absAng);
-                                const rdy = Math.sin(absAng);
-                                const rx = virtEyeB.x + rdx * rayReach;
-                                const ry = virtEyeB.y + rdy * rayReach;
-
-                                let closestT = 1.0;
-                                let hitX = rx;
-                                let hitY = ry;
-
-                                for (let i = 0; i < candidateWalls.length; i++) {
-                                    const cw = candidateWalls[i];
-                                    const hit = getLineIntersection(
-                                        virtEyeB.x,
-                                        virtEyeB.y,
-                                        rx,
-                                        ry,
-                                        cw.x1,
-                                        cw.y1,
-                                        cw.x2,
-                                        cw.y2
-                                    );
-                                    if (hit && hit.t < closestT) {
-                                        const dHit = (hit.x - centerB.x) * normB.dx + (hit.y - centerB.y) * normB.dy;
-                                        if (dHit >= -2) {
-                                            closestT = hit.t;
-                                            hitX = hit.x;
-                                            hitY = hit.y;
-                                        }
-                                    }
-                                }
-                                fanPoints.push({ x: hitX, y: hitY });
-                            });
-
-                            room2VisPoly = [startPoint, ...fanPoints, endPoint];
-                        }
-                    }
-
-                    const frustum = computePortalSightFrustum(portal, sourceCenter, remainingSight);
-                    if (!frustum || frustum.length < 3) return;
-
-                    ctx.save();
-                    ctx.beginPath();
-                    ctx.moveTo(frustum[0].x, frustum[0].y);
-                    for (let pi = 1; pi < frustum.length; pi++) {
-                        ctx.lineTo(frustum[pi].x, frustum[pi].y);
-                    }
-                    ctx.closePath();
-                    ctx.clip();
-
-                    ctx.translate(centerA.x, centerA.y);
-                    if (thetaRot !== 0) ctx.rotate(thetaRot);
-                    ctx.translate(-centerB.x, -centerB.y);
-
-                    if (Array.isArray(room2VisPoly) && room2VisPoly.length >= 3) {
-                        ctx.beginPath();
-                        ctx.moveTo(room2VisPoly[0].x, room2VisPoly[0].y);
-                        for (let pi = 1; pi < room2VisPoly.length; pi++) {
-                            ctx.lineTo(room2VisPoly[pi].x, room2VisPoly[pi].y);
-                        }
-                        ctx.closePath();
-                        ctx.clip();
-                    }
-
-                    drawTargetRoomContentFn(
-                        ctx,
-                        targetMap,
-                        targetMapId,
-                        targetW,
-                        targetH,
-                        targetTokens,
+                    const projData = computeProjectedPortalData(
+                        portal,
+                        targetPortal,
+                        sourceCenter,
+                        remainingSight,
+                        walls,
                         targetWalls,
-                        centerA,
-                        centerB,
-                        options
+                        { getWallCoordinatesForRaycasting, getLineIntersection }
                     );
-                    ctx.restore();
+                    if (projData && projData.frustum && projData.frustum.length >= 3) {
+                        activeProjections.push(projData);
+                    }
                 }
             }
         });
+
+        // Batch render all active projections viewing this portal in a single pass
+        if (activeProjections.length > 0) {
+            ctx.save();
+            ctx.beginPath();
+            activeProjections.forEach((proj) => {
+                const fr = proj.frustum;
+                ctx.moveTo(fr[0].x, fr[0].y);
+                for (let pi = 1; pi < fr.length; pi++) {
+                    ctx.lineTo(fr[pi].x, fr[pi].y);
+                }
+                ctx.closePath();
+            });
+            ctx.clip();
+
+            ctx.translate(centerA.x, centerA.y);
+            if (thetaRot !== 0) ctx.rotate(thetaRot);
+            ctx.translate(-centerB.x, -centerB.y);
+
+            ctx.beginPath();
+            activeProjections.forEach((proj) => {
+                const rPoly = proj.room2VisPoly;
+                if (Array.isArray(rPoly) && rPoly.length >= 3) {
+                    ctx.moveTo(rPoly[0].x, rPoly[0].y);
+                    for (let pi = 1; pi < rPoly.length; pi++) {
+                        ctx.lineTo(rPoly[pi].x, rPoly[pi].y);
+                    }
+                    ctx.closePath();
+                }
+            });
+            ctx.clip();
+
+            drawTargetRoomContentFn(
+                ctx,
+                targetMap,
+                targetMapId,
+                targetW,
+                targetH,
+                targetTokens,
+                targetWalls,
+                centerA,
+                centerB,
+                options
+            );
+            ctx.restore();
+        }
     });
 }
 
@@ -1773,7 +1970,7 @@ export function showPortalContextMenu(portalId, clientX, clientY, context = {}) 
     });
 }
 
-export function checkTokenMoveTriggers(token, originalPos, context = {}) {
+export function checkTokenMoveTriggers(token, originalPos, context = {}, waypoints = null) {
     if (!token || !originalPos) return null;
     const vtt = context.vtt || {};
     const currentMapId = context.currentMapId;
@@ -1821,6 +2018,18 @@ export function checkTokenMoveTriggers(token, originalPos, context = {}) {
     const to = { x: token.x + drawW / 2, y: token.y + drawH / 2 };
     if (from.x === to.x && from.y === to.y) return null;
 
+    const pathPoints = [from];
+    if (Array.isArray(waypoints) && waypoints.length > 0) {
+        waypoints.forEach((wp) => {
+            const wx = wp.x !== undefined ? wp.x : wp[0];
+            const wy = wp.y !== undefined ? wp.y : wp[1];
+            if (wx !== undefined && wy !== undefined) {
+                pathPoints.push({ x: wx + drawW / 2, y: wy + drawH / 2 });
+            }
+        });
+    }
+    pathPoints.push(to);
+
     // Debounce cleanup: clear debounce once token has physically stepped off destination portal
     if (tokenPortalDebounce.has(token.id)) {
         const db = tokenPortalDebounce.get(token.id);
@@ -1866,7 +2075,13 @@ export function checkTokenMoveTriggers(token, originalPos, context = {}) {
         const isInside = isPointInsideGeometry(to, tr.shape, tr.geom);
         if (wasInside && !isInside) return;
 
-        let hit = findEarliestPathIntersection(from, to, tr.shape, tr.geom);
+        let hit = null;
+        for (let i = 0; i < pathPoints.length - 1; i++) {
+            const pA = pathPoints[i];
+            const pB = pathPoints[i + 1];
+            hit = findEarliestPathIntersection(pA, pB, tr.shape, tr.geom);
+            if (hit) break;
+        }
         if (!hit && isInside) {
             hit = { x: to.x, y: to.y, t: 1 };
         }
@@ -1877,32 +2092,44 @@ export function checkTokenMoveTriggers(token, originalPos, context = {}) {
 
     // 2. Walk-Through Portals
     portals.forEach((po) => {
-        if (!po.walkThrough) return;
+        if (!po.walkThrough || po.isLocked) return;
 
         if (po.shape === 'line') {
             if (tokenPortalDebounce.has(token.id) && tokenPortalDebounce.get(token.id).portalId === po.id) {
-                const hitCheck = checkLineIntersection(
-                    from,
-                    to,
-                    { x: po.geom.x1, y: po.geom.y1 },
-                    { x: po.geom.x2, y: po.geom.y2 }
-                );
-                if (!hitCheck) {
+                let anyIntersect = false;
+                for (let i = 0; i < pathPoints.length - 1; i++) {
+                    if (
+                        checkLineIntersection(
+                            pathPoints[i],
+                            pathPoints[i + 1],
+                            { x: po.geom.x1, y: po.geom.y1 },
+                            { x: po.geom.x2, y: po.geom.y2 }
+                        )
+                    ) {
+                        anyIntersect = true;
+                        break;
+                    }
+                }
+                if (!anyIntersect) {
                     tokenPortalDebounce.delete(token.id);
                 }
                 return;
             }
 
-            if (!checkOneWayPortalEntry(po, from, to)) return;
-
-            const hit = checkLineIntersection(
-                from,
-                to,
-                { x: po.geom.x1, y: po.geom.y1 },
-                { x: po.geom.x2, y: po.geom.y2 }
-            );
-            if (hit) {
-                hits.push({ type: 'portal', entity: po, hit });
+            for (let i = 0; i < pathPoints.length - 1; i++) {
+                const pA = pathPoints[i];
+                const pB = pathPoints[i + 1];
+                if (!checkOneWayPortalEntry(po, pA, pB)) continue;
+                const hit = checkLineIntersection(
+                    pA,
+                    pB,
+                    { x: po.geom.x1, y: po.geom.y1 },
+                    { x: po.geom.x2, y: po.geom.y2 }
+                );
+                if (hit) {
+                    hits.push({ type: 'portal', entity: po, hit });
+                    break;
+                }
             }
         } else {
             const wasInside = isTokenInsidePortal(token.id, po.id) || isPointInsideGeometry(from, po.shape, po.geom);
@@ -1923,9 +2150,15 @@ export function checkTokenMoveTriggers(token, originalPos, context = {}) {
 
             if (!wasInside) {
                 if (tokenPortalDebounce.has(token.id) && tokenPortalDebounce.get(token.id).portalId === po.id) return;
-                if (!checkOneWayPortalEntry(po, from, to)) return;
 
-                let hit = findEarliestPathIntersection(from, to, po.shape, po.geom);
+                let hit = null;
+                for (let i = 0; i < pathPoints.length - 1; i++) {
+                    const pA = pathPoints[i];
+                    const pB = pathPoints[i + 1];
+                    if (!checkOneWayPortalEntry(po, pA, pB)) continue;
+                    hit = findEarliestPathIntersection(pA, pB, po.shape, po.geom);
+                    if (hit) break;
+                }
                 if (!hit && isInsideNow) {
                     hit = { x: to.x, y: to.y, t: 1 };
                 }
@@ -1991,7 +2224,10 @@ export function checkTokenMoveTriggers(token, originalPos, context = {}) {
 
             const parsedDamageType =
                 trap.damageType ||
-                (rawDamage.replace(match ? match[0] : '', '').trim().toLowerCase()) ||
+                rawDamage
+                    .replace(match ? match[0] : '', '')
+                    .trim()
+                    .toLowerCase() ||
                 'piercing';
 
             vtt.socket.emit('trap:trigger', {

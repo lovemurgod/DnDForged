@@ -90,7 +90,8 @@ export function renderEquipmentHtml(char, ctx) {
     const strScore = getTotalStat(char, 'str') || 10;
     const encRule =
         (typeof document !== 'undefined' && document.getElementById('config-encumbrance-rule')?.value) || 'standard';
-    const encResult = calculateEncumbrance(strScore, totalWeight, encRule);
+    const carryMult = char.settings?.carryWeightMultiplier || char.carryWeightMultiplier || 1;
+    const encResult = calculateEncumbrance(strScore, totalWeight, encRule, carryMult);
     const encumbranceStatus = `<span style="color:${encResult.statusColor}; ${encResult.statusKey === 'over' ? 'font-weight:bold;' : ''}">${encResult.statusText}</span>`;
 
     let html = `
@@ -201,7 +202,8 @@ export function renderEquipmentHtml(char, ctx) {
         <div style="margin-top:16px; padding:8px; border-top:1px solid var(--color-border-subtle); display:flex; justify-content:space-between; align-items:center;">
             <div>
                 <span style="font-size:0.9rem; font-family:var(--font-heading); color:var(--color-gold-light);">Total Wt:</span>
-                <span style="font-weight:bold; font-size:1.1rem; margin-left:4px;" title="Includes ${coinWeight.toFixed(2)} lb from coins">${totalWeight.toFixed(1)} lb</span>
+                <span style="font-weight:bold; font-size:1.1rem; margin-left:4px;" title="Includes ${coinWeight.toFixed(2)} lb from coins">${totalWeight.toFixed(1)} / ${encResult.maxThreshold} lb</span>
+                ${carryMult !== 1 ? `<span class="badge" style="background:var(--color-primary, #6366f1); color:#fff; font-size:0.7rem; padding:2px 6px; border-radius:4px; margin-left:6px;" title="Carry Weight Multiplier">${carryMult}x</span>` : ''}
             </div>
             <div style="font-size:0.8rem;">
                 Status: ${encumbranceStatus}

@@ -755,6 +755,12 @@ export function initVttPlayerSheet(vtt) {
     }
 
     window.vttPlayerSheetAPI = {
+        getCurrentCharacter: () => currentChar,
+        getCurrentChar: () => currentChar,
+        saveAndEmit: (c) => saveAndEmit(c || currentChar),
+        renderSheetData: (c) => renderSheetData(c || currentChar),
+        applyShortRest: (c) => applyShortRestCalc(c || currentChar),
+        applyLongRest: (c) => applyLongRestCalc(c || currentChar),
         getSpellCache: () =>
             spellCache || (window.VTTSpellManager?.getSpellCache ? window.VTTSpellManager.getSpellCache() : null),
         setSpellCache: (cache) => {
@@ -865,6 +871,9 @@ export function initVttPlayerSheet(vtt) {
             `;
         }
     };
+
+    window.saveAndEmit = (c) => saveAndEmit(c || currentChar);
+    window.renderSheetData = (c) => renderSheetData(c || currentChar);
 
     function showVttPrompt(title, defaultValue, callback) {
         const overlay = document.createElement('div');
@@ -3581,10 +3590,13 @@ export function initVttPlayerSheet(vtt) {
                 html += `<div style="font-family:var(--font-heading); font-size:0.8rem; color:var(--color-text-muted); margin:4px 0 4px 8px; text-transform:uppercase; letter-spacing:1px;">Player Characters</div>`;
             }
             html += pcs
-                .map(
-                    (c) => {
-                        const canDelete = vtt.role === 'GM' || c.owner === vtt.username || c.ownerUsername === vtt.username || (c.assignedPlayers && c.assignedPlayers.includes(vtt.username));
-                        return `
+                .map((c) => {
+                    const canDelete =
+                        vtt.role === 'GM' ||
+                        c.owner === vtt.username ||
+                        c.ownerUsername === vtt.username ||
+                        (c.assignedPlayers && c.assignedPlayers.includes(vtt.username));
+                    return `
                 <div class="init-row char-row" data-id="${c.id}" draggable="true" style="cursor:pointer; display:flex; flex-direction:column; align-items:flex-start; padding:12px; gap:6px;">
                     <div style="display:flex; justify-content:space-between; width:100%; align-items:center;">
                         <span class="init-name" style="font-size:1.05rem;">${c.name}</span>
@@ -3600,8 +3612,7 @@ export function initVttPlayerSheet(vtt) {
                     </div>
                 </div>
             `;
-                    }
-                )
+                })
                 .join('');
         }
 
@@ -3635,10 +3646,13 @@ export function initVttPlayerSheet(vtt) {
                 html += `<div style="font-family:var(--font-heading); font-size:0.8rem; color:var(--color-text-muted); margin:12px 0 4px 8px; text-transform:uppercase; letter-spacing:1px;">Player Companions</div>`;
             }
             html += companions
-                .map(
-                    (c) => {
-                        const canDelete = vtt.role === 'GM' || c.owner === vtt.username || c.ownerUsername === vtt.username || (c.assignedPlayers && c.assignedPlayers.includes(vtt.username));
-                        return `
+                .map((c) => {
+                    const canDelete =
+                        vtt.role === 'GM' ||
+                        c.owner === vtt.username ||
+                        c.ownerUsername === vtt.username ||
+                        (c.assignedPlayers && c.assignedPlayers.includes(vtt.username));
+                    return `
                 <div class="init-row char-row" data-id="${c.id}" data-is-companion="true" draggable="true" style="cursor:pointer; display:flex; flex-direction:column; align-items:flex-start; padding:12px; gap:6px; border-left:3px solid var(--color-gold-base);">
                     <div style="display:flex; justify-content:space-between; width:100%; align-items:center;">
                         <span class="init-name" style="font-size:1.05rem;"><i class="fa-solid fa-paw" style="margin-right:4px; font-size:0.8rem;"></i> ${c.name}</span>
@@ -3654,8 +3668,7 @@ export function initVttPlayerSheet(vtt) {
                     </div>
                 </div>
             `;
-                    }
-                )
+                })
                 .join('');
         }
 

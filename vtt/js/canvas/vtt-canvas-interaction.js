@@ -89,6 +89,28 @@ export function setupPointerInteraction(ctx = {}) {
     if (!ctx.selectedTokenIds) ctx.selectedTokenIds = new Set();
     if (!ctx.selectedShapeIds) ctx.selectedShapeIds = new Set();
     if (!ctx.selectedDrawingIds) ctx.selectedDrawingIds = new Set();
+    if (!ctx.selectedWallIdxs) ctx.selectedWallIdxs = new Set();
+    if (!ctx.selectedLightIds) ctx.selectedLightIds = new Set();
+    if (!ctx.selectedNoteIds) ctx.selectedNoteIds = new Set();
+    if (!ctx.selectedMapToolItems) ctx.selectedMapToolItems = new Set();
+
+    ctx.clearAllSelections = () => {
+        ctx.selectedTokenIds?.clear();
+        ctx.selectedTokenId = null;
+        ctx.selectedShapeIds?.clear();
+        ctx.selectedShapeId = null;
+        ctx.selectedShapeComponent = null;
+        ctx.selectedDrawingIds?.clear();
+        ctx.selectedDrawingId = null;
+        ctx.selectedWallIdxs?.clear();
+        ctx.selectedWallIdx = -1;
+        ctx.selectedLightIds?.clear();
+        ctx.selectedLightId = null;
+        ctx.selectedNoteIds?.clear();
+        ctx.selectedNoteId = null;
+        ctx.selectedMapToolItems?.clear();
+        ctx.selectedMapToolItem = null;
+    };
 
     // Transient interaction state variables
     let lastMouseEvent = null;
@@ -96,10 +118,18 @@ export function setupPointerInteraction(ctx = {}) {
     let pingForceSelectTimeout = null;
     let startPanX = 0;
     let startPanY = 0;
+    let isSpacePressed = false;
+    let isSpacePanning = false;
     if (!ctx.measureAnchorPoints) ctx.measureAnchorPoints = [];
     let boxSelectAdditive = false;
     let shapeDragOriginalPositions = {};
     let drawingDragOriginalPositions = {};
+    let wallDragOriginalPositions = {};
+    let lightDragOriginalPositions = {};
+    let noteDragOriginalPositions = {};
+    let mapToolDragOriginalGeoms = {};
+    let activeGroupResize = null;
+    let hoveredGroupResizeHandle = null;
     let activeDrawingResizeHandle = null;
     let drawingOriginalState = null;
     let drawingResizeOriginalBBox = null;
@@ -130,6 +160,186 @@ export function setupPointerInteraction(ctx = {}) {
     let tokenTooltipPendingId = null;
     let pendingFocusTokenId = null;
     let pendingFocusTokenExpiry = 0;
+
+    function isOnlyArtAssetsSelected() {
+        if (!ctx.selectedTokenIds || ctx.selectedTokenIds.size === 0) return false;
+        for (const id of ctx.selectedTokenIds) {
+            const t = ctx.tokens ? ctx.tokens[id] : null;
+            if (!t || (!t.isAsset && t.layer !== 'map' && !t.isBackground)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    function isOnlyWallsSelected() {
+        if (!ctx.selectedWallIdxs || ctx.selectedWallIdxs.size === 0) return false;
+        if (ctx.activeLayer !== 'lighting') return false;
+        return true;
+    }
+
+    function getArtAssetsGroupBoundingBox(tokenIds) {
+        if (!tokenIds || tokenIds.size === 0) return null;
+        let minX = Infinity,
+            minY = Infinity,
+            maxX = -Infinity,
+            maxY = -Infinity;
+        tokenIds.forEach((id) => {
+            const t = ctx.tokens ? ctx.tokens[id] : null;
+            if (t) {
+                const dims = getTokenDrawDimensions(t);
+                const w = dims.drawW || 50;
+                const h = dims.drawH || 50;
+                if (t.x < minX) minX = t.x;
+                if (t.y < minY) minY = t.y;
+                if (t.x + w > maxX) maxX = t.x + w;
+                if (t.y + h > maxY) maxY = t.y + h;
+            }
+        });
+        if (minX === Infinity) return null;
+        return { minX, minY, maxX, maxY, width: maxX - minX, height: maxY - minY };
+    }
+
+    function getWallsGroupBoundingBox(wallIdxs) {
+        if (!wallIdxs || wallIdxs.size === 0 || !Array.isArray(ctx.walls)) return null;
+        let minX = Infinity,
+            minY = Infinity,
+            maxX = -Infinity,
+            maxY = -Infinity;
+        wallIdxs.forEach((idx) => {
+            const w = ctx.walls[idx];
+            if (w) {
+                minX = Math.min(minX, w.x1, w.x2);
+                minY = Math.min(minY, w.y1, w.y2);
+                maxX = Math.max(maxX, w.x1, w.x2);
+                maxY = Math.max(maxY, w.y1, w.y2);
+            }
+        });
+        if (minX === Infinity) return null;
+        return { minX, minY, maxX, maxY, width: maxX - minX, height: maxY - minY };
+    }
+
+    function getGroupResizeHandles(bbox) {
+        if (!bbox) return null;
+        const { minX, minY, maxX, maxY } = bbox;
+        const midX = (minX + maxX) / 2;
+        const midY = (minY + maxY) / 2;
+        return {
+            nw: { id: 'nw', x: minX, y: minY, cursor: 'nwse-resize' },
+            n: { id: 'n', x: midX, y: minY, cursor: 'ns-resize' },
+            ne: { id: 'ne', x: maxX, y: minY, cursor: 'nesw-resize' },
+            e: { id: 'e', x: maxX, y: midY, cursor: 'ew-resize' },
+            se: { id: 'se', x: maxX, y: maxY, cursor: 'nwse-resize' },
+            s: { id: 's', x: midX, y: maxY, cursor: 'ns-resize' },
+            sw: { id: 'sw', x: minX, y: maxY, cursor: 'nesw-resize' },
+            w: { id: 'w', x: minX, y: midY, cursor: 'ew-resize' }
+        };
+    }
+
+    function getGroupResizeHandleAtPoint(handles, mouse, zoom = 1.0) {
+        if (!handles || !mouse) return null;
+        const currentZoom = Math.max(0.05, zoom || 1);
+        const threshold = Math.max(12 / currentZoom, 10);
+        for (const h of Object.values(handles)) {
+            if (Math.hypot(mouse.x - h.x, mouse.y - h.y) <= threshold) {
+                return h;
+            }
+        }
+        return null;
+    }
+
+    function computeGroupScaledBounds(origBBox, handle, mouse, isShift, isAlt) {
+        let mx = mouse.x;
+        let my = mouse.y;
+        if (!isAlt && ctx.grid) {
+            const snapped = snapToGrid(mx, my);
+            mx = snapped.x;
+            my = snapped.y;
+        }
+        const { minX, minY, maxX, maxY, width: origW, height: origH } = origBBox;
+        let newMinX = minX;
+        let newMinY = minY;
+        let newMaxX = maxX;
+        let newMaxY = maxY;
+
+        const isCorner = handle === 'nw' || handle === 'ne' || handle === 'se' || handle === 'sw';
+        const safeW = Math.max(10, origW);
+        const safeH = Math.max(10, origH);
+
+        if (isCorner) {
+            if (!isShift) {
+                // Proportional 2D scaling by default
+                let scale = 1.0;
+                if (handle === 'se') {
+                    const dx = mx - minX;
+                    const dy = my - minY;
+                    scale = Math.max(dx / safeW, dy / safeH);
+                    scale = Math.max(0.05, scale);
+                    newMinX = minX;
+                    newMaxX = minX + safeW * scale;
+                    newMinY = minY;
+                    newMaxY = minY + safeH * scale;
+                } else if (handle === 'nw') {
+                    const dx = maxX - mx;
+                    const dy = maxY - my;
+                    scale = Math.max(dx / safeW, dy / safeH);
+                    scale = Math.max(0.05, scale);
+                    newMaxX = maxX;
+                    newMinX = maxX - safeW * scale;
+                    newMaxY = maxY;
+                    newMinY = maxY - safeH * scale;
+                } else if (handle === 'ne') {
+                    const dx = mx - minX;
+                    const dy = maxY - my;
+                    scale = Math.max(dx / safeW, dy / safeH);
+                    scale = Math.max(0.05, scale);
+                    newMinX = minX;
+                    newMaxX = minX + safeW * scale;
+                    newMaxY = maxY;
+                    newMinY = maxY - safeH * scale;
+                } else if (handle === 'sw') {
+                    const dx = maxX - mx;
+                    const dy = my - minY;
+                    scale = Math.max(dx / safeW, dy / safeH);
+                    scale = Math.max(0.05, scale);
+                    newMaxX = maxX;
+                    newMinX = maxX - safeW * scale;
+                    newMinY = minY;
+                    newMaxY = minY + safeH * scale;
+                }
+            } else {
+                // Freeform corner scaling
+                if (handle === 'se') {
+                    newMaxX = Math.max(mx, minX + 10);
+                    newMaxY = Math.max(my, minY + 10);
+                } else if (handle === 'nw') {
+                    newMinX = Math.min(mx, maxX - 10);
+                    newMinY = Math.min(my, maxY - 10);
+                } else if (handle === 'ne') {
+                    newMaxX = Math.max(mx, minX + 10);
+                    newMinY = Math.min(my, maxY - 10);
+                } else if (handle === 'sw') {
+                    newMinX = Math.min(mx, maxX - 10);
+                    newMaxY = Math.max(my, minY + 10);
+                }
+            }
+        } else {
+            // Edge handles: 1D scaling
+            if (handle === 'n') newMinY = Math.min(my, maxY - 10);
+            else if (handle === 's') newMaxY = Math.max(my, minY + 10);
+            else if (handle === 'w') newMinX = Math.min(mx, maxX - 10);
+            else if (handle === 'e') newMaxX = Math.max(mx, minX + 10);
+        }
+
+        return {
+            minX: newMinX,
+            minY: newMinY,
+            maxX: newMaxX,
+            maxY: newMaxY,
+            width: Math.max(10, newMaxX - newMinX),
+            height: Math.max(10, newMaxY - newMinY)
+        };
+    }
     const getPaintSubTool = () => ctx.paintSubTool || 'pencil';
     const getPaintStrokeColor = () => ctx.paintStrokeColor || '#eab308';
     const getPaintFillColor = () => ctx.paintFillColor || '#eab308';
@@ -184,6 +394,7 @@ export function setupPointerInteraction(ctx = {}) {
     const snapToGrid = ctx.snapToGrid || ((x, y) => ({ x, y }));
     const snapToGridCenter = ctx.snapToGridCenter || ((x, y) => ({ x, y }));
     const snapToHalfGrid = ctx.snapToHalfGrid || ((x, y) => ({ x, y }));
+    const snapToSmartGrid = ctx.snapToSmartGrid || ((x, y) => ({ x, y }));
     const isPointVisible = ctx.isPointVisible || (() => true);
     const getWallCoordinatesForRaycasting =
         ctx.getWallCoordinatesForRaycasting || ((w) => ({ x1: w.x1, y1: w.y1, x2: w.x2, y2: w.y2 }));
@@ -311,6 +522,7 @@ export function setupPointerInteraction(ctx = {}) {
             : false;
 
     function getInteractiveDoorAtCoord(x, y) {
+        if (!Array.isArray(ctx.walls)) return null;
         for (let i = ctx.walls.length - 1; i >= 0; i--) {
             const wall = ctx.walls[i];
             const activeCoords = getWallCoordinatesForRaycasting(wall) || {
@@ -376,7 +588,7 @@ export function setupPointerInteraction(ctx = {}) {
             lastMouseEvent = e;
             const mouse = getCanvasMouseCoords(e);
 
-            if (e.button === 0) {
+            if (e.button === 0 && !isSpacePressed) {
                 if (pingHoldTimeout) {
                     clearTimeout(pingHoldTimeout);
                     pingHoldTimeout = null;
@@ -428,7 +640,7 @@ export function setupPointerInteraction(ctx = {}) {
                     return;
                 }
                 const wall = ctx.walls[doorAction.wallIdx];
-                if (e.button === 0) {
+                if (e.button === 0 && !isSpacePressed) {
                     // left click
                     if (doorAction.action === 'toggleOpen') {
                         if (wall.isLocked && vtt.role !== 'GM') {
@@ -458,7 +670,8 @@ export function setupPointerInteraction(ctx = {}) {
                 return;
             }
 
-            if (e.button === 1 || e.button === 2) {
+            const isPanButton = e.button === 1 || e.button === 2 || (e.button === 0 && isSpacePressed);
+            if (isPanButton) {
                 if (e.button === 2 && ctx.activeTool === 'select' && ctx.dragTargetId) {
                     const t = ctx.tokens[ctx.dragTargetId];
                     const tOriginalPos = ctx.tokenDragOriginalPositions[ctx.dragTargetId];
@@ -488,9 +701,37 @@ export function setupPointerInteraction(ctx = {}) {
                         (ctx.activeTool === 'shape' && rawShapeMeasure === 'line')
                     ) {
                         if (ctx.localIsMeasuring || ctx.localIsShaping) {
-                            ctx.measureAnchorPoints.push(e.altKey ? mouse : snapToGridCenter(mouse.x, mouse.y));
-                            if (ctx.localIsMeasuring) ctx.localMeasureEnd = mouse;
-                            if (ctx.localIsShaping) ctx.localShapeEnd = mouse;
+                            const pt = e.altKey ? mouse : snapToSmartGrid(mouse.x, mouse.y);
+                            if (!ctx.measureAnchorPoints || ctx.measureAnchorPoints.length === 0) {
+                                const startPt = ctx.localIsMeasuring
+                                    ? ctx.localMeasureStart
+                                    : ctx.localIsShaping
+                                      ? ctx.localShapeStart
+                                      : pt;
+                                ctx.measureAnchorPoints = startPt ? [{ ...startPt }] : [];
+                            }
+                            ctx.measureAnchorPoints.push(pt);
+                            if (ctx.localIsMeasuring) {
+                                ctx.localMeasureEnd = pt;
+                                const color = document.getElementById('measure-color')?.value || '#00ffff';
+                                const anchor = document.getElementById('measure-square-anchor')?.value || 'center';
+                                const beamW = parseFloat(document.getElementById('measure-beam-width')?.value || 5);
+                                const broadcast = document.getElementById('measure-broadcast')?.checked ?? true;
+                                if (broadcast) {
+                                    emitMeasureUpdateThrottled({
+                                        mapId: ctx.currentMapId,
+                                        username: vtt.username,
+                                        start: ctx.localMeasureStart,
+                                        end: ctx.localMeasureEnd,
+                                        shape: 'line',
+                                        color,
+                                        squareAnchor: anchor,
+                                        beamWidth: beamW,
+                                        points: [...ctx.measureAnchorPoints, ctx.localMeasureEnd]
+                                    });
+                                }
+                            }
+                            if (ctx.localIsShaping) ctx.localShapeEnd = pt;
                             renderAll();
                             return;
                         }
@@ -506,8 +747,14 @@ export function setupPointerInteraction(ctx = {}) {
                 hideGmTokenTooltip();
                 ctx.isPanning = true;
                 ctx.hasPanned = false;
+                ctx.panStartPanX = ctx.panX;
+                ctx.panStartPanY = ctx.panY;
+                isSpacePanning = e.button === 0 && isSpacePressed;
                 startPanX = e.clientX - ctx.panX;
                 startPanY = e.clientY - ctx.panY;
+                if (canvasInteraction && isSpacePanning) {
+                    canvasInteraction.style.cursor = 'grabbing';
+                }
                 return;
             }
 
@@ -518,7 +765,9 @@ export function setupPointerInteraction(ctx = {}) {
                     const canOpen = isGm || isTokenControlledByPlayer(token, true);
                     if (!canOpen) {
                         if (window.VTT?.chatEngine?.addSystemMessage) {
-                            window.VTT.chatEngine.addSystemMessage("You do not have permission to inspect this creature's stat block.");
+                            window.VTT.chatEngine.addSystemMessage(
+                                "You do not have permission to inspect this creature's stat block."
+                            );
                         }
                         return;
                     }
@@ -608,6 +857,18 @@ export function setupPointerInteraction(ctx = {}) {
                 const clickedNoteId = getNoteAtCoord(mouse.x, mouse.y);
                 if (clickedNoteId) {
                     if (vtt.role === 'GM') {
+                        if (e.ctrlKey || e.shiftKey) {
+                            if (ctx.selectedNoteIds.has(clickedNoteId)) {
+                                if (e.ctrlKey) ctx.selectedNoteIds.delete(clickedNoteId);
+                            } else {
+                                ctx.selectedNoteIds.add(clickedNoteId);
+                            }
+                        } else {
+                            if (!ctx.selectedNoteIds.has(clickedNoteId)) {
+                                ctx.selectedNoteIds.clear();
+                                ctx.selectedNoteIds.add(clickedNoteId);
+                            }
+                        }
                         ctx.selectedNoteId = clickedNoteId;
                         const note = ctx.notes.find((n) => n.id === clickedNoteId);
                         if (note) {
@@ -616,6 +877,11 @@ export function setupPointerInteraction(ctx = {}) {
                             ctx.noteDragOffsetY = mouse.y - note.y;
                             noteDragStartMouse = { x: mouse.x, y: mouse.y };
                         }
+                        noteDragOriginalPositions = {};
+                        ctx.selectedNoteIds.forEach((id) => {
+                            const n = ctx.notes.find((item) => item.id === id);
+                            if (n) noteDragOriginalPositions[id] = { x: n.x, y: n.y };
+                        });
                         renderAll();
                         return;
                     } else {
@@ -624,13 +890,16 @@ export function setupPointerInteraction(ctx = {}) {
                         return;
                     }
                 } else if (vtt.role === 'GM' && ctx.activeLayer === 'notes') {
-                    ctx.selectedNoteId = null;
+                    if (!e.ctrlKey && !e.shiftKey) {
+                        ctx.selectedNoteId = null;
+                        ctx.selectedNoteIds.clear();
+                    }
                     renderAll();
                 }
             }
 
             // Check for clicking light rotation handle
-            if (e.button === 0) {
+            if (e.button === 0 && !isSpacePressed) {
                 if (ctx.selectedLightId) {
                     const l = ctx.lights.find((item) => item.id === ctx.selectedLightId);
                     if (l && l.lightAngle && l.lightAngle < 360) {
@@ -670,6 +939,29 @@ export function setupPointerInteraction(ctx = {}) {
 
             if (ctx.activeTool === 'select') {
                 if (ctx.activeLayer === 'lighting') {
+                    // Check if clicking a group resize handle for lighting walls
+                    if (isOnlyWallsSelected() && e.button === 0) {
+                        const wBBox = getWallsGroupBoundingBox(ctx.selectedWallIdxs);
+                        if (wBBox && (wBBox.width > 0 || wBBox.height > 0)) {
+                            const wHandles = getGroupResizeHandles(wBBox);
+                            const hitHandle = getGroupResizeHandleAtPoint(wHandles, mouse, ctx.zoom);
+                            if (hitHandle) {
+                                activeGroupResize = {
+                                    type: 'walls',
+                                    handle: hitHandle.id,
+                                    origBBox: { ...wBBox },
+                                    startMouse: { x: mouse.x, y: mouse.y },
+                                    origItems: Array.from(ctx.selectedWallIdxs).map((idx) => {
+                                        const w = ctx.walls[idx];
+                                        return { idx, x1: w.x1, y1: w.y1, x2: w.x2, y2: w.y2 };
+                                    })
+                                };
+                                renderAll();
+                                return;
+                            }
+                        }
+                    }
+
                     if (ctx.hoveredLightId) {
                         ctx.selectedLightId = ctx.hoveredLightId;
                         ctx.activeDragLightId = ctx.hoveredLightId;
@@ -680,9 +972,24 @@ export function setupPointerInteraction(ctx = {}) {
                             syncLightPanelWithLight(light);
                             document.getElementById('lighting-light-options')?.classList.remove('vtt-hidden');
                         }
-                        if (!e.ctrlKey && !e.shiftKey) {
+                        if (e.ctrlKey || e.shiftKey) {
+                            if (ctx.selectedLightIds.has(ctx.hoveredLightId)) {
+                                if (e.ctrlKey) ctx.selectedLightIds.delete(ctx.hoveredLightId);
+                            } else {
+                                ctx.selectedLightIds.add(ctx.hoveredLightId);
+                            }
+                        } else {
+                            if (!ctx.selectedLightIds.has(ctx.hoveredLightId)) {
+                                ctx.selectedLightIds.clear();
+                                ctx.selectedLightIds.add(ctx.hoveredLightId);
+                            }
                             ctx.selectedWallIdxs.clear();
                         }
+                        lightDragOriginalPositions = {};
+                        ctx.selectedLightIds.forEach((id) => {
+                            const sl = ctx.lights.find((item) => item.id === id);
+                            if (sl) lightDragOriginalPositions[id] = { x: sl.x, y: sl.y };
+                        });
                         renderAll();
                     } else if (ctx.hoveredWallVertex) {
                         ctx.activeDragWallVertex = ctx.hoveredWallVertex;
@@ -692,12 +999,24 @@ export function setupPointerInteraction(ctx = {}) {
                         ctx.selectedWallIdx = ctx.hoveredWallIdx;
                         ctx.activeDragWallSegmentIdx = ctx.hoveredWallIdx;
                         ctx.selectedLightId = null;
+                        if (ctx.selectedLightIds) ctx.selectedLightIds.clear();
                         if (!e.ctrlKey && !e.shiftKey) {
-                            ctx.selectedWallIdxs.clear();
-                            ctx.selectedWallIdxs.add(ctx.hoveredWallIdx);
+                            if (!ctx.selectedWallIdxs.has(ctx.hoveredWallIdx)) {
+                                ctx.selectedWallIdxs.clear();
+                                ctx.selectedWallIdxs.add(ctx.hoveredWallIdx);
+                            }
                         } else {
-                            ctx.selectedWallIdxs.add(ctx.hoveredWallIdx);
+                            if (ctx.selectedWallIdxs.has(ctx.hoveredWallIdx)) {
+                                if (e.ctrlKey) ctx.selectedWallIdxs.delete(ctx.hoveredWallIdx);
+                            } else {
+                                ctx.selectedWallIdxs.add(ctx.hoveredWallIdx);
+                            }
                         }
+                        wallDragOriginalPositions = {};
+                        ctx.selectedWallIdxs.forEach((idx) => {
+                            const sw = ctx.walls[idx];
+                            if (sw) wallDragOriginalPositions[idx] = { x1: sw.x1, y1: sw.y1, x2: sw.x2, y2: sw.y2 };
+                        });
                         const w = ctx.walls[ctx.hoveredWallIdx];
                         wallDragOffsetX1 = mouse.x - w.x1;
                         wallDragOffsetY1 = mouse.y - w.y1;
@@ -707,6 +1026,7 @@ export function setupPointerInteraction(ctx = {}) {
                     } else if (e.button === 0) {
                         ctx.selectedWallIdx = -1;
                         ctx.selectedLightId = null;
+                        if (ctx.selectedLightIds) ctx.selectedLightIds.clear();
                         boxSelectAdditive = e.ctrlKey || e.shiftKey;
                         if (!boxSelectAdditive) {
                             ctx.selectedWallIdxs.clear();
@@ -760,6 +1080,13 @@ export function setupPointerInteraction(ctx = {}) {
                         drawingOriginalState = JSON.parse(JSON.stringify(clickedDrawing));
                         drawingResizeOriginalBBox = getDrawingBoundingBox(clickedDrawing);
                         drawingDragStart = { x: mouse.x, y: mouse.y };
+                        drawingDragOriginalPositions = {};
+                        ctx.selectedDrawingIds.forEach((id) => {
+                            const d = ctx.drawings ? ctx.drawings[id] : null;
+                            if (d) {
+                                drawingDragOriginalPositions[id] = JSON.parse(JSON.stringify(d));
+                            }
+                        });
                         renderAll();
                         return;
                     } else if (e.button === 0 && !ctx.hoveredShapeComponent) {
@@ -852,16 +1179,46 @@ export function setupPointerInteraction(ctx = {}) {
                         }
                     }
 
+                    // Check if group resizing only art assets
+                    if (isOnlyArtAssetsSelected() && e.button === 0) {
+                        const artBBox = getArtAssetsGroupBoundingBox(ctx.selectedTokenIds);
+                        if (artBBox && (artBBox.width > 0 || artBBox.height > 0)) {
+                            const artHandles = getGroupResizeHandles(artBBox);
+                            const hitHandle = getGroupResizeHandleAtPoint(artHandles, mouse, ctx.zoom);
+                            if (hitHandle) {
+                                activeGroupResize = {
+                                    type: 'art',
+                                    handle: hitHandle.id,
+                                    origBBox: { ...artBBox },
+                                    startMouse: { x: mouse.x, y: mouse.y },
+                                    origItems: Array.from(ctx.selectedTokenIds).map((id) => {
+                                        const tok = ctx.tokens[id];
+                                        const dims = getTokenDrawDimensions(tok);
+                                        return {
+                                            id,
+                                            x: tok.x,
+                                            y: tok.y,
+                                            pixelWidth: dims.drawW || 50,
+                                            pixelHeight: dims.drawH || 50
+                                        };
+                                    })
+                                };
+                                renderAll();
+                                return;
+                            }
+                        }
+                    }
+
                     let clickedResizeTokenId = null;
                     let clickedResizeTokenHandle = null;
                     let clickedRotateTokenId = null;
-                    if (e.button === 0) {
+                    if (e.button === 0 && !isSpacePressed) {
                         ctx.selectedTokenIds.forEach((id) => {
                             const t = ctx.tokens[id];
                             const tokenLayer = t?.layer || 'token';
                             if (t && isTokenControlledByPlayer(t) && tokenLayer === ctx.activeLayer) {
                                 const isResizable = t.isAsset || t.layer === 'map' || t.isBackground;
-                                if (isResizable) {
+                                if (isResizable && ctx.selectedTokenIds.size === 1) {
                                     const rh = getTokenResizeHandleAt(t, mouse, ctx.zoom);
                                     if (rh) {
                                         clickedResizeTokenId = id;
@@ -934,7 +1291,8 @@ export function setupPointerInteraction(ctx = {}) {
                                         ctx.dragTargetId = null;
                                     }
                                     if (ctx.selectedTokenId === clickedId) {
-                                        ctx.selectedTokenId = ctx.selectedTokenIds.size > 0 ? Array.from(ctx.selectedTokenIds)[0] : null;
+                                        ctx.selectedTokenId =
+                                            ctx.selectedTokenIds.size > 0 ? Array.from(ctx.selectedTokenIds)[0] : null;
                                     }
                                 }
                             } else {
@@ -945,16 +1303,13 @@ export function setupPointerInteraction(ctx = {}) {
                             if (!ctx.selectedTokenIds.has(clickedId)) {
                                 ctx.selectedTokenIds.clear();
                                 ctx.selectedTokenIds.add(clickedId);
-                            } else if (ctx.selectedTokenIds.size > 1 && !e.ctrlKey && !e.shiftKey) {
-                                // If clicking an already-selected token in a multi-selection without modifiers,
-                                // isolate selection to this token so dragging only moves this token
-                                ctx.selectedTokenIds.clear();
-                                ctx.selectedTokenIds.add(clickedId);
                             }
+                            // Retain existing multi-selection when clicking down on an already-selected token
                             ctx.selectedTokenId = clickedId;
                         }
 
                         ctx.tokenDragOriginalPositions = {};
+                        ctx.tokenDragTrail = {};
                         if (ctx.selectedTokenIds) {
                             ctx.selectedTokenIds.forEach((id) => {
                                 const selected = ctx.tokens ? ctx.tokens[id] : null;
@@ -1083,13 +1438,13 @@ export function setupPointerInteraction(ctx = {}) {
                 triggerPingAnimation(mouse.x, mouse.y, vtt.username, vtt.role);
             } else if (ctx.activeTool === 'measure') {
                 ctx.localIsMeasuring = true;
-                ctx.localMeasureStart = e.altKey ? mouse : snapToGridCenter(mouse.x, mouse.y);
+                ctx.localMeasureStart = e.altKey ? mouse : snapToSmartGrid(mouse.x, mouse.y);
                 ctx.localMeasureEnd = ctx.localMeasureStart;
                 ctx.measureAnchorPoints = [ctx.localMeasureStart];
                 renderAll();
             } else if (ctx.activeTool === 'shape') {
                 ctx.localIsShaping = true;
-                ctx.localShapeStart = e.altKey ? mouse : snapToGridCenter(mouse.x, mouse.y);
+                ctx.localShapeStart = e.altKey ? mouse : snapToSmartGrid(mouse.x, mouse.y);
                 ctx.localShapeEnd = ctx.localShapeStart;
                 ctx.measureAnchorPoints = [ctx.localShapeStart];
                 renderAll();
@@ -1213,9 +1568,7 @@ export function setupPointerInteraction(ctx = {}) {
                         points: [{ x: mouse.x, y: mouse.y }],
                         strokeWidth: Math.max(16, strokeWidth * 3),
                         layer:
-                            ctx.activeLayer === 'lighting' || ctx.activeLayer === 'notes'
-                                ? 'token'
-                                : ctx.activeLayer,
+                            ctx.activeLayer === 'lighting' || ctx.activeLayer === 'notes' ? 'token' : ctx.activeLayer,
                         ownerUsername: vtt.username,
                         timestamp: Date.now()
                     };
@@ -1233,9 +1586,7 @@ export function setupPointerInteraction(ctx = {}) {
                         strokeColor: strokeColor,
                         strokeWidth: w,
                         layer:
-                            ctx.activeLayer === 'lighting' || ctx.activeLayer === 'notes'
-                                ? 'token'
-                                : ctx.activeLayer,
+                            ctx.activeLayer === 'lighting' || ctx.activeLayer === 'notes' ? 'token' : ctx.activeLayer,
                         ownerUsername: vtt.username,
                         timestamp: Date.now()
                     };
@@ -1255,9 +1606,7 @@ export function setupPointerInteraction(ctx = {}) {
                         strokeWidth: strokeWidth,
                         fillMode: fillMode,
                         layer:
-                            ctx.activeLayer === 'lighting' || ctx.activeLayer === 'notes'
-                                ? 'token'
-                                : ctx.activeLayer,
+                            ctx.activeLayer === 'lighting' || ctx.activeLayer === 'notes' ? 'token' : ctx.activeLayer,
                         ownerUsername: vtt.username,
                         timestamp: Date.now()
                     };
@@ -1284,6 +1633,12 @@ export function setupPointerInteraction(ctx = {}) {
                 ctx.panX = e.clientX - startPanX;
                 ctx.panY = e.clientY - startPanY;
                 updateContainerTransform();
+                const deltaX = ctx.panX - (ctx.panStartPanX !== undefined ? ctx.panStartPanX : ctx.panX);
+                const deltaY = ctx.panY - (ctx.panStartPanY !== undefined ? ctx.panStartPanY : ctx.panY);
+                const hud = typeof document !== 'undefined' ? document.getElementById('vtt-token-hud-layer') : null;
+                if (hud) {
+                    hud.style.transform = `translate3d(${deltaX}px, ${deltaY}px, 0)`;
+                }
                 return;
             }
 
@@ -1384,6 +1739,51 @@ export function setupPointerInteraction(ctx = {}) {
             if (ctx.activeTool === 'select') {
                 const mouse = getCanvasMouseCoords(e);
 
+                // Group resize in progress (art assets or dynamic lighting walls)
+                if (activeGroupResize) {
+                    const newBounds = computeGroupScaledBounds(
+                        activeGroupResize.origBBox,
+                        activeGroupResize.handle,
+                        mouse,
+                        e.shiftKey,
+                        e.altKey
+                    );
+                    const origW = activeGroupResize.origBBox.width || 1;
+                    const origH = activeGroupResize.origBBox.height || 1;
+                    const scaleX = newBounds.width / origW;
+                    const scaleY = newBounds.height / origH;
+
+                    if (activeGroupResize.type === 'art') {
+                        activeGroupResize.origItems.forEach((item) => {
+                            const tok = ctx.tokens ? ctx.tokens[item.id] : null;
+                            if (tok) {
+                                const relX = item.x - activeGroupResize.origBBox.minX;
+                                const relY = item.y - activeGroupResize.origBBox.minY;
+                                tok.x = newBounds.minX + relX * scaleX;
+                                tok.y = newBounds.minY + relY * scaleY;
+                                const nw = Math.max(10, Math.round(item.pixelWidth * scaleX));
+                                const nh = Math.max(10, Math.round(item.pixelHeight * scaleY));
+                                tok.pixelWidth = nw;
+                                tok.pixelHeight = nh;
+                                tok.width = nw;
+                                tok.height = nh;
+                            }
+                        });
+                    } else if (activeGroupResize.type === 'walls') {
+                        activeGroupResize.origItems.forEach((item) => {
+                            const w = ctx.walls ? ctx.walls[item.idx] : null;
+                            if (w) {
+                                w.x1 = newBounds.minX + (item.x1 - activeGroupResize.origBBox.minX) * scaleX;
+                                w.y1 = newBounds.minY + (item.y1 - activeGroupResize.origBBox.minY) * scaleY;
+                                w.x2 = newBounds.minX + (item.x2 - activeGroupResize.origBBox.minX) * scaleX;
+                                w.y2 = newBounds.minY + (item.y2 - activeGroupResize.origBBox.minY) * scaleY;
+                            }
+                        });
+                    }
+                    renderAll();
+                    return;
+                }
+
                 // Map tool resize in progress
                 if (ctx.activeResizeMapToolHandle) {
                     const item =
@@ -1471,27 +1871,42 @@ export function setupPointerInteraction(ctx = {}) {
                     } else if (drawingDragStart) {
                         const dx = mouse.x - drawingDragStart.x;
                         const dy = mouse.y - drawingDragStart.y;
-                        if (drawingOriginalState.points) {
-                            d.points = drawingOriginalState.points.map((p) => ({ x: p.x + dx, y: p.y + dy }));
-                        }
-                        if (drawingOriginalState.startPoint) {
-                            d.startPoint = {
-                                x: drawingOriginalState.startPoint.x + dx,
-                                y: drawingOriginalState.startPoint.y + dy
-                            };
-                        }
-                        if (drawingOriginalState.endPoint) {
-                            d.endPoint = {
-                                x: drawingOriginalState.endPoint.x + dx,
-                                y: drawingOriginalState.endPoint.y + dy
-                            };
-                        }
-                        if (drawingOriginalState.x !== undefined) {
-                            d.x = drawingOriginalState.x + dx;
-                        }
-                        if (drawingOriginalState.y !== undefined) {
-                            d.y = drawingOriginalState.y + dy;
-                        }
+                        const drawingsToMove =
+                            ctx.selectedDrawingIds &&
+                            ctx.selectedDrawingIds.has(ctx.activeDragDrawingId) &&
+                            ctx.selectedDrawingIds.size > 1
+                                ? Array.from(ctx.selectedDrawingIds)
+                                : [ctx.activeDragDrawingId];
+
+                        drawingsToMove.forEach((id) => {
+                            const dItem = ctx.drawings[id];
+                            const orig =
+                                drawingDragOriginalPositions[id] ||
+                                (id === ctx.activeDragDrawingId ? drawingOriginalState : null);
+                            if (dItem && orig) {
+                                if (orig.points) {
+                                    dItem.points = orig.points.map((p) => ({ x: p.x + dx, y: p.y + dy }));
+                                }
+                                if (orig.startPoint) {
+                                    dItem.startPoint = {
+                                        x: orig.startPoint.x + dx,
+                                        y: orig.startPoint.y + dy
+                                    };
+                                }
+                                if (orig.endPoint) {
+                                    dItem.endPoint = {
+                                        x: orig.endPoint.x + dx,
+                                        y: orig.endPoint.y + dy
+                                    };
+                                }
+                                if (orig.x !== undefined) {
+                                    dItem.x = orig.x + dx;
+                                }
+                                if (orig.y !== undefined) {
+                                    dItem.y = orig.y + dy;
+                                }
+                            }
+                        });
                     }
                     renderAll();
                     return;
@@ -1499,10 +1914,32 @@ export function setupPointerInteraction(ctx = {}) {
 
                 // Note pin drag
                 if (draggingNoteId) {
-                    const note = ctx.notes.find((n) => n.id === draggingNoteId);
-                    if (note) {
-                        note.x = mouse.x - ctx.noteDragOffsetX;
-                        note.y = mouse.y - ctx.noteDragOffsetY;
+                    const leadNote = ctx.notes.find((n) => n.id === draggingNoteId);
+                    if (leadNote) {
+                        const targetX = mouse.x - ctx.noteDragOffsetX;
+                        const targetY = mouse.y - ctx.noteDragOffsetY;
+                        const leadOrig = noteDragOriginalPositions[draggingNoteId] || { x: leadNote.x, y: leadNote.y };
+                        const dx = targetX - leadOrig.x;
+                        const dy = targetY - leadOrig.y;
+
+                        const notesToMove =
+                            ctx.selectedNoteIds &&
+                            ctx.selectedNoteIds.has(draggingNoteId) &&
+                            ctx.selectedNoteIds.size > 1
+                                ? Array.from(ctx.selectedNoteIds)
+                                : [draggingNoteId];
+
+                        notesToMove.forEach((id) => {
+                            const n = ctx.notes.find((item) => item.id === id);
+                            const orig = noteDragOriginalPositions[id];
+                            if (n && orig) {
+                                n.x = orig.x + dx;
+                                n.y = orig.y + dy;
+                            } else if (n) {
+                                n.x += dx;
+                                n.y += dy;
+                            }
+                        });
                         renderAll();
                     }
                     return;
@@ -1554,13 +1991,50 @@ export function setupPointerInteraction(ctx = {}) {
                 let newHoveredResizeTokenId = null;
                 let newHoveredResizeTokenHandle = null;
                 let newHoveredRotateTokenId = null;
-                if (ctx.activeTool === 'select' && !ctx.dragTargetId && !activeRotateTokenId && !activeResizeTokenId) {
+                let newHoveredGroupHandle = null;
+
+                if (ctx.activeTool === 'select' && !activeGroupResize && !ctx.dragTargetId) {
+                    if (isOnlyArtAssetsSelected()) {
+                        const artBBox = getArtAssetsGroupBoundingBox(ctx.selectedTokenIds);
+                        if (artBBox && (artBBox.width > 0 || artBBox.height > 0)) {
+                            newHoveredGroupHandle = getGroupResizeHandleAtPoint(
+                                getGroupResizeHandles(artBBox),
+                                mouse,
+                                ctx.zoom
+                            );
+                        }
+                    } else if (isOnlyWallsSelected()) {
+                        const wBBox = getWallsGroupBoundingBox(ctx.selectedWallIdxs);
+                        if (wBBox && (wBBox.width > 0 || wBBox.height > 0)) {
+                            newHoveredGroupHandle = getGroupResizeHandleAtPoint(
+                                getGroupResizeHandles(wBBox),
+                                mouse,
+                                ctx.zoom
+                            );
+                        }
+                    }
+                }
+
+                if (newHoveredGroupHandle) {
+                    hoveredGroupResizeHandle = newHoveredGroupHandle;
+                    canvasInteraction.style.cursor = newHoveredGroupHandle.cursor;
+                } else {
+                    hoveredGroupResizeHandle = null;
+                }
+
+                if (
+                    ctx.activeTool === 'select' &&
+                    !ctx.dragTargetId &&
+                    !activeRotateTokenId &&
+                    !activeResizeTokenId &&
+                    !newHoveredGroupHandle
+                ) {
                     ctx.selectedTokenIds.forEach((id) => {
                         const token = ctx.tokens[id];
                         const tokenLayer = token?.layer || 'token';
                         if (token && isTokenControlledByPlayer(token) && tokenLayer === ctx.activeLayer) {
                             const isResizable = token.isAsset || token.layer === 'map' || token.isBackground;
-                            if (isResizable) {
+                            if (isResizable && ctx.selectedTokenIds.size === 1) {
                                 const rh = getTokenResizeHandleAt(token, mouse, ctx.zoom);
                                 if (rh) {
                                     newHoveredResizeTokenId = id;
@@ -1583,14 +2057,14 @@ export function setupPointerInteraction(ctx = {}) {
                 ) {
                     hoveredResizeTokenId = newHoveredResizeTokenId;
                     hoveredResizeTokenHandle = newHoveredResizeTokenHandle;
-                    if (hoveredResizeTokenHandle) {
+                    if (hoveredResizeTokenHandle && !hoveredGroupResizeHandle) {
                         canvasInteraction.style.cursor = hoveredResizeTokenHandle.cursor || 'nwse-resize';
                     }
                     renderAll();
                 }
                 if (hoveredRotateTokenId !== newHoveredRotateTokenId) {
                     hoveredRotateTokenId = newHoveredRotateTokenId;
-                    if (hoveredRotateTokenId) canvasInteraction.style.cursor = 'grab';
+                    if (hoveredRotateTokenId && !hoveredGroupResizeHandle) canvasInteraction.style.cursor = 'grab';
                     renderAll();
                 }
                 // Interactive doors/windows hover
@@ -1622,6 +2096,7 @@ export function setupPointerInteraction(ctx = {}) {
                 }
 
                 if (
+                    !hoveredGroupResizeHandle &&
                     !hoveredResizeTokenId &&
                     !hoveredRotateTokenId &&
                     !ctx.hoverTokenId &&
@@ -1711,15 +2186,40 @@ export function setupPointerInteraction(ctx = {}) {
                     if (ctx.activeDragLightId) {
                         const nx = mouse.x;
                         const ny = mouse.y;
-                        const light = ctx.lights.find((l) => l.id === ctx.activeDragLightId);
-                        if (light) {
-                            light.x = nx - ctx.lightDragOffsetX;
-                            light.y = ny - ctx.lightDragOffsetY;
+                        const leadLight = ctx.lights.find((l) => l.id === ctx.activeDragLightId);
+                        if (leadLight) {
+                            let targetX = nx - ctx.lightDragOffsetX;
+                            let targetY = ny - ctx.lightDragOffsetY;
                             if (!e.altKey && ctx.grid) {
-                                const snapped = snapToGrid(light.x, light.y);
-                                light.x = snapped.x;
-                                light.y = snapped.y;
+                                const snapped = snapToGrid(targetX, targetY);
+                                targetX = snapped.x;
+                                targetY = snapped.y;
                             }
+                            const leadOrig = lightDragOriginalPositions[ctx.activeDragLightId] || {
+                                x: leadLight.x,
+                                y: leadLight.y
+                            };
+                            const dx = targetX - leadOrig.x;
+                            const dy = targetY - leadOrig.y;
+
+                            const lightsToMove =
+                                ctx.selectedLightIds &&
+                                ctx.selectedLightIds.has(ctx.activeDragLightId) &&
+                                ctx.selectedLightIds.size > 1
+                                    ? Array.from(ctx.selectedLightIds)
+                                    : [ctx.activeDragLightId];
+
+                            lightsToMove.forEach((id) => {
+                                const l = ctx.lights.find((item) => item.id === id);
+                                const orig = lightDragOriginalPositions[id];
+                                if (l && orig) {
+                                    l.x = orig.x + dx;
+                                    l.y = orig.y + dy;
+                                } else if (l) {
+                                    l.x += dx;
+                                    l.y += dy;
+                                }
+                            });
                         }
                         renderAll();
                     } else if (ctx.activeDragWallVertex) {
@@ -1741,11 +2241,34 @@ export function setupPointerInteraction(ctx = {}) {
                             nx = snapped.x;
                             ny = snapped.y;
                         }
-                        const w = ctx.walls[ctx.activeDragWallSegmentIdx];
-                        w.x1 = nx - wallDragOffsetX1;
-                        w.y1 = ny - wallDragOffsetY1;
-                        w.x2 = nx - wallDragOffsetX2;
-                        w.y2 = ny - wallDragOffsetY2;
+                        const leadOrig =
+                            wallDragOriginalPositions[ctx.activeDragWallSegmentIdx] ||
+                            ctx.walls[ctx.activeDragWallSegmentIdx];
+                        const dx = nx - wallDragOffsetX1 - leadOrig.x1;
+                        const dy = ny - wallDragOffsetY1 - leadOrig.y1;
+
+                        const wallsToMove =
+                            ctx.selectedWallIdxs &&
+                            ctx.selectedWallIdxs.has(ctx.activeDragWallSegmentIdx) &&
+                            ctx.selectedWallIdxs.size > 1
+                                ? Array.from(ctx.selectedWallIdxs)
+                                : [ctx.activeDragWallSegmentIdx];
+
+                        wallsToMove.forEach((idx) => {
+                            const w = ctx.walls[idx];
+                            const orig = wallDragOriginalPositions[idx];
+                            if (w && orig) {
+                                w.x1 = orig.x1 + dx;
+                                w.y1 = orig.y1 + dy;
+                                w.x2 = orig.x2 + dx;
+                                w.y2 = orig.y2 + dy;
+                            } else if (w) {
+                                w.x1 += dx;
+                                w.y1 += dy;
+                                w.x2 += dx;
+                                w.y2 += dy;
+                            }
+                        });
                         renderAll();
                     } else {
                         ctx.hoveredWallVertex = getWallVertexAtCoord(mouse.x, mouse.y);
@@ -2100,9 +2623,15 @@ export function setupPointerInteraction(ctx = {}) {
                                     ctx.localMeasureEnd.y - ctx.localMeasureStart.y
                                 )
                             );
-                            const dragPill = document.getElementById('vtt-mobile-drag-pill');
+                            const dragPill =
+                                typeof document !== 'undefined'
+                                    ? document.getElementById('vtt-mobile-drag-pill')
+                                    : null;
                             if (dragPill) {
-                                const distSpan = document.getElementById('vtt-mobile-drag-dist');
+                                const distSpan =
+                                    typeof document !== 'undefined'
+                                        ? document.getElementById('vtt-mobile-drag-dist')
+                                        : null;
                                 if (distSpan) distSpan.textContent = distInfo.label;
                                 dragPill.style.left = `${e.clientX || 0}px`;
                                 dragPill.style.top = `${(e.clientY || 0) - 20}px`;
@@ -2114,7 +2643,7 @@ export function setupPointerInteraction(ctx = {}) {
                 }
             } else if (ctx.localIsMeasuring && (ctx.activeTool === 'measure' || ctx.isTokenMeasuring)) {
                 const mouse = getCanvasMouseCoords(e);
-                ctx.localMeasureEnd = e.altKey ? mouse : snapToGridCenter(mouse.x, mouse.y);
+                ctx.localMeasureEnd = e.altKey ? mouse : snapToSmartGrid(mouse.x, mouse.y);
                 const rawShape = ctx.isTokenMeasuring
                     ? 'line'
                     : document.getElementById('measure-shape')?.value || 'line';
@@ -2142,7 +2671,7 @@ export function setupPointerInteraction(ctx = {}) {
                 renderAll();
             } else if (ctx.localIsShaping && ctx.activeTool === 'shape') {
                 const mouse = getCanvasMouseCoords(e);
-                ctx.localShapeEnd = e.altKey ? mouse : snapToGridCenter(mouse.x, mouse.y);
+                ctx.localShapeEnd = e.altKey ? mouse : snapToSmartGrid(mouse.x, mouse.y);
                 renderAll();
             } else if (ctx.activeTool === 'lighting') {
                 const mouse = getCanvasMouseCoords(e);
@@ -2270,6 +2799,15 @@ export function setupPointerInteraction(ctx = {}) {
             }
             if (ctx.isPanning) {
                 ctx.isPanning = false;
+                isSpacePanning = false;
+                if (canvasInteraction) {
+                    canvasInteraction.style.cursor = isSpacePressed ? 'grab' : '';
+                }
+                const tokenHudLayer =
+                    typeof document !== 'undefined' ? document.getElementById('vtt-token-hud-layer') : null;
+                if (tokenHudLayer) {
+                    tokenHudLayer.style.transform = '';
+                }
                 if (ctx.hasPanned) {
                     renderAll();
                 }
@@ -2299,6 +2837,24 @@ export function setupPointerInteraction(ctx = {}) {
                 }
                 vtt.socket.emit('portals:update', { mapId: ctx.currentMapId, portals: livePortals });
                 ctx.activeRotatePortalId = null;
+                renderAll();
+                return;
+            }
+
+            if (activeGroupResize) {
+                if (activeGroupResize.type === 'art') {
+                    if (vtt.socket) {
+                        emitTokenUpdates(ctx.tokens);
+                    }
+                } else if (activeGroupResize.type === 'walls') {
+                    if (vtt.socket) {
+                        vtt.socket.emit('walls:update', { mapId: ctx.currentMapId, walls: ctx.walls });
+                    }
+                    if (typeof ctx.rebuildWallSpatialIndex === 'function') {
+                        ctx.rebuildWallSpatialIndex();
+                    }
+                }
+                activeGroupResize = null;
                 renderAll();
                 return;
             }
@@ -2365,7 +2921,41 @@ export function setupPointerInteraction(ctx = {}) {
                                 light.y >= bounds.y1 &&
                                 light.y <= bounds.y2
                             ) {
+                                ctx.selectedLightIds.add(light.id);
                                 ctx.selectedLightId = light.id;
+                            }
+                        });
+                    } else if (ctx.activeTool === 'select' && ctx.activeLayer === 'notes') {
+                        if (!boxSelectAdditive) {
+                            ctx.selectedNoteIds.clear();
+                            ctx.selectedNoteId = null;
+                        }
+                        (ctx.notes || []).forEach((n) => {
+                            if (n.x >= bounds.x1 && n.x <= bounds.x2 && n.y >= bounds.y1 && n.y <= bounds.y2) {
+                                ctx.selectedNoteIds.add(n.id);
+                                ctx.selectedNoteId = n.id;
+                            }
+                        });
+                    } else if (
+                        ctx.activeTool === 'select' &&
+                        (ctx.activeLayer === 'portals' || ctx.activeLayer === 'traps')
+                    ) {
+                        if (!boxSelectAdditive) {
+                            ctx.selectedMapToolItems?.clear();
+                            ctx.selectedMapToolItem = null;
+                        }
+                        const toolList = ctx.activeLayer === 'traps' ? ctx.traps || traps : ctx.portals || portals;
+                        toolList.forEach((item) => {
+                            const center = calcPortalCenter(item);
+                            if (
+                                center.x >= bounds.x1 &&
+                                center.x <= bounds.x2 &&
+                                center.y >= bounds.y1 &&
+                                center.y <= bounds.y2
+                            ) {
+                                const toolType = ctx.activeLayer === 'traps' ? 'trap' : 'portal';
+                                ctx.selectedMapToolItems?.add({ type: toolType, id: item.id });
+                                selectMapToolItem(toolType, item.id);
                             }
                         });
                     } else {
@@ -2463,6 +3053,7 @@ export function setupPointerInteraction(ctx = {}) {
                 }
                 draggingNoteId = null;
                 noteDragStartMouse = null;
+                noteDragOriginalPositions = {};
             } else if (ctx.activeDragDrawingId && ctx.activeTool === 'select') {
                 const d = ctx.drawings[ctx.activeDragDrawingId];
                 if (d && drawingOriginalState) {
@@ -2484,9 +3075,10 @@ export function setupPointerInteraction(ctx = {}) {
             } else if (ctx.activeResizeMapToolHandle) {
                 const liveTraps = ctx.traps || traps;
                 const livePortals = ctx.portals || portals;
-                const item = ctx.activeResizeMapToolHandle.type === 'trap'
-                    ? liveTraps.find((t) => t.id === ctx.activeResizeMapToolHandle.id)
-                    : livePortals.find((p) => p.id === ctx.activeResizeMapToolHandle.id);
+                const item =
+                    ctx.activeResizeMapToolHandle.type === 'trap'
+                        ? liveTraps.find((t) => t.id === ctx.activeResizeMapToolHandle.id)
+                        : livePortals.find((p) => p.id === ctx.activeResizeMapToolHandle.id);
                 if (item && ctx.activeResizeMapToolHandle.origGeom && ctx.mapToolUndoStack) {
                     ctx.mapToolUndoStack.push({
                         action: 'geom',
@@ -2516,9 +3108,10 @@ export function setupPointerInteraction(ctx = {}) {
             } else if (ctx.activeDragMapToolItem) {
                 const liveTraps = ctx.traps || traps;
                 const livePortals = ctx.portals || portals;
-                const item = ctx.activeDragMapToolItem.type === 'trap'
-                    ? liveTraps.find((t) => t.id === ctx.activeDragMapToolItem.id)
-                    : livePortals.find((p) => p.id === ctx.activeDragMapToolItem.id);
+                const item =
+                    ctx.activeDragMapToolItem.type === 'trap'
+                        ? liveTraps.find((t) => t.id === ctx.activeDragMapToolItem.id)
+                        : livePortals.find((p) => p.id === ctx.activeDragMapToolItem.id);
                 if (item && mapToolDragOriginalGeom && ctx.mapToolUndoStack) {
                     ctx.mapToolUndoStack.push({
                         action: 'geom',
@@ -2670,6 +3263,15 @@ export function setupPointerInteraction(ctx = {}) {
                         renderAll();
                     }
                 } else {
+                    // Calculate synchronized adaptive duration based on lead move distance
+                    const leadToken = (ctx.dragTargetId && ctx.tokens[ctx.dragTargetId]) || movedTokensList[0];
+                    const leadDragOrig = (leadToken && ctx.tokenDragOriginalPositions[leadToken.id]) ||
+                        (movedTokensList[0] && ctx.tokenDragOriginalPositions[movedTokensList[0].id]) || { x: 0, y: 0 };
+                    const leadDx = leadToken ? leadToken.x - leadDragOrig.x : 0;
+                    const leadDy = leadToken ? leadToken.y - leadDragOrig.y : 0;
+                    const leadDist = Math.hypot(leadDx, leadDy);
+                    const moveDuration = Math.min(450, Math.max(160, Math.round(140 + leadDist * 0.28)));
+
                     // Regular triggers (traps, intra-map portals) for each moved token
                     movedTokensList.forEach((t) => {
                         const originalPos = ctx.tokenDragOriginalPositions[t.id] || { x: t.x, y: t.y };
@@ -2686,7 +3288,17 @@ export function setupPointerInteraction(ctx = {}) {
                                 });
                                 if (insideSet.size === 0) tokenInsidePortals.delete(t.id);
                             }
-                            const triggerRes = checkTokenMoveTriggers(t, originalPos);
+                            const leadOrig =
+                                (ctx.dragTargetId && ctx.tokenDragOriginalPositions[ctx.dragTargetId]) || originalPos;
+                            const offX = originalPos.x - leadOrig.x;
+                            const offY = originalPos.y - leadOrig.y;
+                            const baseWaypoints = ctx.isTokenMeasuring ? ctx.measureAnchorPoints.slice(1) : [];
+                            const tokenWaypoints =
+                                t.id === ctx.dragTargetId || (offX === 0 && offY === 0)
+                                    ? baseWaypoints
+                                    : baseWaypoints.map((wp) => ({ x: wp.x + offX, y: wp.y + offY }));
+
+                            const triggerRes = checkTokenMoveTriggers(t, originalPos, tokenWaypoints);
                             if (triggerRes?.action === 'teleport' || triggerRes?.action === 'trap') {
                                 delete t._animReq;
                                 if (ctx.tokenAnimations[t.id]) delete ctx.tokenAnimations[t.id];
@@ -2696,16 +3308,6 @@ export function setupPointerInteraction(ctx = {}) {
                                     ctx.selectedTokenId = t.id;
                                 }
                             } else {
-                                const leadOrig =
-                                    (ctx.dragTargetId && ctx.tokenDragOriginalPositions[ctx.dragTargetId]) || originalPos;
-                                const offX = originalPos.x - leadOrig.x;
-                                const offY = originalPos.y - leadOrig.y;
-                                const baseWaypoints = ctx.isTokenMeasuring ? ctx.measureAnchorPoints.slice(1) : [];
-                                const tokenWaypoints =
-                                    t.id === ctx.dragTargetId || (offX === 0 && offY === 0)
-                                        ? baseWaypoints
-                                        : baseWaypoints.map((wp) => ({ x: wp.x + offX, y: wp.y + offY }));
-
                                 t._animReq = {
                                     startX: originalPos.x,
                                     startY: originalPos.y,
@@ -2713,7 +3315,7 @@ export function setupPointerInteraction(ctx = {}) {
                                     endY: t.y,
                                     waypoints: tokenWaypoints,
                                     timestamp: Date.now(),
-                                    duration: 500
+                                    duration: moveDuration
                                 };
                             }
                         }
@@ -2729,9 +3331,11 @@ export function setupPointerInteraction(ctx = {}) {
                 }
                 ctx.dragTargetId = null;
                 ctx.tokenDragOriginalPositions = {};
+                ctx.tokenDragTrail = {};
                 shapeDragOriginalPositions = {};
                 drawingDragOriginalPositions = {};
-                const dragPill = document.getElementById('vtt-mobile-drag-pill');
+                const dragPill =
+                    typeof document !== 'undefined' ? document.getElementById('vtt-mobile-drag-pill') : null;
                 if (dragPill) dragPill.classList.add('vtt-hidden');
                 if (ctx.isTokenMeasuring) {
                     ctx.isTokenMeasuring = false;
@@ -2755,12 +3359,17 @@ export function setupPointerInteraction(ctx = {}) {
                 if (ctx.activeDragLightId) {
                     vtt.socket.emit('lights:update', { mapId: ctx.currentMapId, lights: ctx.lights });
                     ctx.activeDragLightId = null;
+                    lightDragOriginalPositions = {};
                 } else if (ctx.activeDragWallVertex) {
                     vtt.socket.emit('walls:update', { mapId: ctx.currentMapId, walls: ctx.walls });
                     ctx.activeDragWallVertex = null;
                 } else if (ctx.activeDragWallSegmentIdx !== -1) {
                     vtt.socket.emit('walls:update', { mapId: ctx.currentMapId, walls: ctx.walls });
+                    if (typeof ctx.rebuildWallSpatialIndex === 'function') {
+                        ctx.rebuildWallSpatialIndex();
+                    }
                     ctx.activeDragWallSegmentIdx = -1;
+                    wallDragOriginalPositions = {};
                 } else if (ctx.isDrawingWall) {
                     ctx.isDrawingWall = false;
                     if (ctx.wallStartPoint) {
@@ -2909,6 +3518,78 @@ export function setupPointerInteraction(ctx = {}) {
             }
             ctx.currentMouseCoords = null;
             if (ctx.activeTool === 'paint') renderAll();
+        });
+
+        window.addEventListener('keydown', (e) => {
+            if (e.code === 'Space' || e.key === ' ') {
+                const activeEl = typeof document !== 'undefined' ? document.activeElement : null;
+                const isInputActive =
+                    ['INPUT', 'TEXTAREA', 'SELECT'].includes(activeEl?.tagName) ||
+                    ['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target?.tagName) ||
+                    activeEl?.isContentEditable ||
+                    e.target?.isContentEditable;
+                const isModalActive = Boolean(
+                    typeof document !== 'undefined' &&
+                    document.querySelector?.(
+                        '.modal.show, .swal2-container, #vtt-token-edit-modal:not(.vtt-hidden), #panel-character-sheet:not(.vtt-hidden)'
+                    )
+                );
+                if (
+                    !isInputActive &&
+                    !isModalActive &&
+                    !ctx.isTokenMeasuring &&
+                    !ctx.localIsMeasuring &&
+                    !ctx.localIsShaping
+                ) {
+                    isSpacePressed = true;
+                    if (canvasInteraction && !ctx.isPanning) {
+                        canvasInteraction.style.cursor = 'grab';
+                    }
+                }
+            }
+        });
+
+        window.addEventListener('keyup', (e) => {
+            if (e.code === 'Space' || e.key === ' ') {
+                isSpacePressed = false;
+                if (canvasInteraction && !ctx.isPanning) {
+                    canvasInteraction.style.cursor = '';
+                }
+                if (ctx.isPanning && isSpacePanning) {
+                    ctx.isPanning = false;
+                    isSpacePanning = false;
+                    if (canvasInteraction) {
+                        canvasInteraction.style.cursor = '';
+                    }
+                    const tokenHudLayer =
+                        typeof document !== 'undefined' ? document.getElementById('vtt-token-hud-layer') : null;
+                    if (tokenHudLayer) {
+                        tokenHudLayer.style.transform = '';
+                    }
+                    if (ctx.hasPanned) {
+                        renderAll();
+                    }
+                }
+            }
+        });
+
+        window.addEventListener('blur', () => {
+            isSpacePressed = false;
+            if (canvasInteraction) {
+                canvasInteraction.style.cursor = '';
+            }
+            if (ctx.isPanning) {
+                ctx.isPanning = false;
+                isSpacePanning = false;
+                const tokenHudLayer =
+                    typeof document !== 'undefined' ? document.getElementById('vtt-token-hud-layer') : null;
+                if (tokenHudLayer) {
+                    tokenHudLayer.style.transform = '';
+                }
+                if (ctx.hasPanned) {
+                    renderAll();
+                }
+            }
         });
     }
 

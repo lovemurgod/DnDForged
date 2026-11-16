@@ -222,7 +222,9 @@ export function calculateCharacterSpellSlots(classes, is2024 = false, existingSl
     if (isSingleThirdCaster) {
         row = SINGLE_CLASS_THIRD_CASTER_TABLE[Math.min(20, thirdCasterLevels)] || SINGLE_CLASS_THIRD_CASTER_TABLE[0];
     } else if (isSingleHalfCaster && !is2024) {
-        row = SINGLE_CLASS_HALF_CASTER_TABLE_2014[Math.min(20, halfCasterLevels)] || SINGLE_CLASS_HALF_CASTER_TABLE_2014[0];
+        row =
+            SINGLE_CLASS_HALF_CASTER_TABLE_2014[Math.min(20, halfCasterLevels)] ||
+            SINGLE_CLASS_HALF_CASTER_TABLE_2014[0];
     } else {
         row = MULTICLASS_SPELL_SLOT_TABLE[totalCasterLevel] || MULTICLASS_SPELL_SLOT_TABLE[0];
     }

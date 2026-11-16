@@ -23,7 +23,8 @@ export function preloadVttModules() {
                 mobileMod,
                 themesMod,
                 dockMod,
-                weatherMod
+                weatherMod,
+                rollTablesMod
             ] = await Promise.all([
                 import(`../vtt-canvas.js?v=${_v}`),
                 import(`../vtt-creature-sheet.js?v=${_v}`),
@@ -36,7 +37,8 @@ export function preloadVttModules() {
                 import(`../vtt-mobile-adapter.js?v=${_v}`),
                 import(`../vtt-themes.js?v=${_v}`),
                 import(`../vtt-sheet-dock.js?v=${_v}`),
-                import(`../vtt-weather.js?v=${_v}`)
+                import(`../vtt-weather.js?v=${_v}`),
+                import(`../vtt-roll-tables.js?v=${_v}`)
             ]);
 
             return {
@@ -51,7 +53,8 @@ export function preloadVttModules() {
                 initVttMobileAdapter: mobileMod.initVttMobileAdapter,
                 initVttThemes: themesMod.initVttThemes,
                 initVttSheetDock: dockMod.initVttSheetDock,
-                initVttWeather: weatherMod.initVttWeather
+                initVttWeather: weatherMod.initVttWeather,
+                initVttRollTables: rollTablesMod.initVttRollTables
             };
         } catch (err) {
             console.error('VTT Module Import Error:', err);
@@ -169,6 +172,7 @@ export function startSocketConnection(campaignId, username, role, gmPassword = n
     });
 
     let hasJoinedSession = false;
+    let isCancelled = false;
 
     // Override emit to automatically inject whisperToGM state from the UI toggle
     const originalEmit = socket.emit;
@@ -204,27 +208,28 @@ export function startSocketConnection(campaignId, username, role, gmPassword = n
 
     socket.on('disconnect', (reason) => {
         console.warn('[Socket] Disconnected from server:', reason);
-        if (hasJoinedSession) {
+        if (!isCancelled && hasJoinedSession) {
             updateConnectionStatus('reconnecting', 'Connection paused — Reconnecting...');
         }
     });
 
     if (socket.io) {
         socket.io.on('reconnect_attempt', (attempt) => {
-            if (hasJoinedSession) {
+            if (!isCancelled && hasJoinedSession) {
                 updateConnectionStatus('reconnecting', `Reconnecting... (Attempt ${attempt})`);
             }
         });
 
         socket.io.on('reconnect', () => {
             console.log('[Socket] Reconnected successfully to backend!');
-            if (hasJoinedSession) {
+            if (!isCancelled && hasJoinedSession) {
                 updateConnectionStatus('connected', 'Reconnected!');
             }
         });
     }
 
     socket.on('connect_error', (err) => {
+        if (isCancelled) return;
         console.warn('[Socket] connect_error:', err?.message || err);
         if (!hasJoinedSession) {
             clearTimeout(connTimeout);
@@ -236,6 +241,7 @@ export function startSocketConnection(campaignId, username, role, gmPassword = n
     });
 
     socket.on('connect', () => {
+        if (isCancelled) return;
         clearTimeout(connTimeout);
         clearLoginError();
         console.log('Connected to VTT backend!');
@@ -247,6 +253,7 @@ export function startSocketConnection(campaignId, username, role, gmPassword = n
     const gmPasswordError = document.getElementById('gm-password-error');
 
     socket.on('join_rejected', ({ reason, code }) => {
+        if (isCancelled) return;
         clearTimeout(connTimeout);
         resetBtnJoin();
         if (modalGmPassword && !modalGmPassword.classList.contains('vtt-hidden')) {
@@ -264,6 +271,7 @@ export function startSocketConnection(campaignId, username, role, gmPassword = n
     });
 
     socket.on('allowlist:updated', ({ allowedUsers }) => {
+        if (isCancelled) return;
         if (window.VTT.campaignState) {
             window.VTT.campaignState.allowedUsers = allowedUsers;
             renderAllowlist(allowedUsers);
@@ -271,10 +279,12 @@ export function startSocketConnection(campaignId, username, role, gmPassword = n
     });
 
     socket.on('game:pause_state', (pauseState) => {
+        if (isCancelled) return;
         updateTabletopPauseUI?.(pauseState, true);
     });
 
     socket.on('joined', async ({ role: serverRole, userRole, campaignState, chatHistory, gmSessionToken }) => {
+        if (isCancelled) return;
         hasJoinedSession = true;
         updateConnectionStatus('connected', 'Connected!');
         clearTimeout(connTimeout);
@@ -315,11 +325,18 @@ export function startSocketConnection(campaignId, username, role, gmPassword = n
             );
         }
 
+        if (
+            window.VTT._modulesInitializationState === 'initializing' ||
+            window.VTT._modulesInitializationState === 'failed'
+        ) {
+            return;
+        }
+
         document.getElementById('login-overlay')?.classList.add('vtt-hidden');
         document.getElementById('vtt-workspace')?.classList.remove('vtt-hidden');
 
         // IDEMPOTENCY GUARD: If modules are already initialized, do NOT re-run init!
-        if (window.VTT._modulesInitialized) {
+        if (window.VTT._modulesInitialized || window.VTT._modulesInitializationState === 'initialized') {
             console.log(
                 '[vtt.html] Session re-joined. Synchronizing campaign state and UI without re-binding listeners.'
             );
@@ -338,7 +355,7 @@ export function startSocketConnection(campaignId, username, role, gmPassword = n
             }
             return;
         }
-        window.VTT._modulesInitialized = true;
+        window.VTT._modulesInitializationState = 'initializing';
 
         // Boot VTT Modules
         try {
@@ -364,6 +381,7 @@ export function startSocketConnection(campaignId, username, role, gmPassword = n
             if (mods.initVttMobileAdapter) window.VTT.mobileAdapter = mods.initVttMobileAdapter(window.VTT);
             if (mods.initVttThemes) window.VTT.themesEngine = mods.initVttThemes(window.VTT);
             if (mods.initVttSheetDock) window.VTT.sheetDock = mods.initVttSheetDock(window.VTT);
+            if (mods.initVttRollTables) window.VTT.rollTablesEngine = mods.initVttRollTables(window.VTT);
 
             // Fail-safe initial sync of weather in case map was already loaded
             if (window.VTT.weatherEngine && window.VTT.campaignState?.maps) {
@@ -405,16 +423,28 @@ export function startSocketConnection(campaignId, username, role, gmPassword = n
                 window.VTTSpellManager.invalidateSpellCache();
                 window.VTTSpellManager.loadSpells?.(currentCampId);
             }
+            window.VTT._modulesInitialized = true;
+            window.VTT._modulesInitializationState = 'initialized';
         } catch (err) {
-            alert('INIT ERROR: ' + err.message + '\n' + err.stack);
-            document.body.innerHTML =
-                "<div style='color:red; background:white; padding: 20px; font-size:24px; position:absolute; z-index:999999; top:0; left:0; width:100vw; height:100vh;'><pre>" +
-                err.stack +
-                '</pre></div>';
+            window.VTT._modulesInitialized = false;
+            window.VTT._modulesInitializationState = 'failed';
+            console.error('VTT initialization failed:', err);
+            const details = document.getElementById('vtt-init-error-details');
+            if (details) {
+                details.textContent = err instanceof Error ? err.stack || err.message : String(err);
+            }
+            const errorOverlay = document.getElementById('vtt-init-error');
+            errorOverlay?.classList.remove('vtt-hidden');
+            const reloadButton = document.getElementById('btn-vtt-init-reload');
+            if (reloadButton) {
+                reloadButton.onclick = () => window.location.reload();
+                reloadButton.focus();
+            }
         }
     });
 
     socket.on('sys_message', (msg) => {
+        if (isCancelled) return;
         if (window.VTT.chatEngine) {
             window.VTT.chatEngine.appendSystemMessage(msg.text, msg.timestamp);
         }
@@ -422,8 +452,20 @@ export function startSocketConnection(campaignId, username, role, gmPassword = n
 
     // Private whisper (GM-only rolls from creature sheet)
     socket.on('chat:whisper', (msg) => {
+        if (isCancelled) return;
         if (window.VTT.chatEngine) {
             window.VTT.chatEngine.appendWhisperMessage(msg);
         }
     });
+
+    return () => {
+        if (isCancelled) return;
+        isCancelled = true;
+        clearTimeout(connTimeout);
+        socket.disconnect();
+        if (window.VTT?.socket === socket) {
+            window.VTT.socket = null;
+        }
+        resetBtnJoin();
+    };
 }

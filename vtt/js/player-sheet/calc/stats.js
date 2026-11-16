@@ -82,6 +82,12 @@ export function evaluateAttackRoll(char, m, isSpell = false, optEvent = null) {
             });
     }
 
+    const rawGlobal = parseInt(isSpell ? char.spellSettings?.critRange || 20 : char.attackSettings?.critRange || 20);
+    const globalCrit = Math.max(1, Math.min(20, isNaN(rawGlobal) ? 20 : rawGlobal));
+    const rawMacroCrit = parseInt(m.critRange);
+    const macroCrit = Math.max(1, Math.min(20, isNaN(rawMacroCrit) ? 20 : rawMacroCrit));
+    const effectiveCritRange = Math.min(macroCrit, globalCrit);
+
     let atkStat = m.attackStat || 'none';
     if (atkStat === 'spell') {
         atkStat = char.spellSettings?.ability || char.spellAbility || 'INT';
@@ -92,7 +98,7 @@ export function evaluateAttackRoll(char, m, isSpell = false, optEvent = null) {
         const formula = raw.includes('d') ? raw : `1d20${raw.startsWith('+') || raw.startsWith('-') ? raw : '+' + raw}`;
         return simulateRoll(
             formula + (globalAtkMod ? (globalAtkMod >= 0 ? '+' : '') + globalAtkMod + '[Global]' : '') + atkFormula,
-            m.critRange || 20,
+            effectiveCritRange,
             optEvent
         );
     }
@@ -104,7 +110,7 @@ export function evaluateAttackRoll(char, m, isSpell = false, optEvent = null) {
                 : `1d20${m.attackBonus.startsWith('+') || m.attackBonus.startsWith('-') ? m.attackBonus : '+' + m.attackBonus}`;
             return simulateRoll(
                 formula + (globalAtkMod ? (globalAtkMod >= 0 ? '+' : '') + globalAtkMod + '[Global]' : '') + atkFormula,
-                m.critRange || 20,
+                effectiveCritRange,
                 optEvent
             );
         }
@@ -133,7 +139,7 @@ export function evaluateAttackRoll(char, m, isSpell = false, optEvent = null) {
     }
     formula += atkFormula;
 
-    return simulateRoll(formula, m.critRange || 20, optEvent);
+    return simulateRoll(formula, effectiveCritRange, optEvent);
 }
 
 export function evaluateSaveDc(char, m, isSpell = false) {

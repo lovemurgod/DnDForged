@@ -4,10 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 test('[Re-Audit 1] Vision & Fog of War integrity', async () => {
-    const canvasContent = fs.readFileSync(
-        path.join(process.cwd(), 'vtt/js/vtt-canvas.js'),
-        'utf8'
-    );
+    const canvasContent = fs.readFileSync(path.join(process.cwd(), 'vtt/js/vtt-canvas.js'), 'utf8');
     // isPointVisible returns true if fogOfWar is false
     assert.match(
         canvasContent,
@@ -21,10 +18,7 @@ test('[Re-Audit 1] Vision & Fog of War integrity', async () => {
         'isPointVisible must return true in daylight when no vision polygons exist'
     );
 
-    const fogContent = fs.readFileSync(
-        path.join(process.cwd(), 'vtt/js/canvas/vtt-canvas-fog.js'),
-        'utf8'
-    );
+    const fogContent = fs.readFileSync(path.join(process.cwd(), 'vtt/js/canvas/vtt-canvas-fog.js'), 'utf8');
     // Verify that GM vision mode is strictly gated behind gmVisionMode and dead line 93 is removed
     assert.doesNotMatch(
         fogContent,
@@ -50,10 +44,7 @@ test('[Re-Audit 2] Multi-Token Drag Formation & Socket Guard', async () => {
         'Escape key must restore all tokens tracked in tokenDragOriginalPositions'
     );
 
-    const touchContent = fs.readFileSync(
-        path.join(process.cwd(), 'vtt/js/canvas/vtt-canvas-touch.js'),
-        'utf8'
-    );
+    const touchContent = fs.readFileSync(path.join(process.cwd(), 'vtt/js/canvas/vtt-canvas-touch.js'), 'utf8');
     // cancelTokenDrag restores all dragged tokens
     assert.match(
         touchContent,
@@ -61,10 +52,7 @@ test('[Re-Audit 2] Multi-Token Drag Formation & Socket Guard', async () => {
         'cancelTokenDrag must restore all tokens tracked in tokenDragOriginalPositions'
     );
 
-    const socketContent = fs.readFileSync(
-        path.join(process.cwd(), 'vtt/js/canvas/vtt-canvas-socket-sync.js'),
-        'utf8'
-    );
+    const socketContent = fs.readFileSync(path.join(process.cwd(), 'vtt/js/canvas/vtt-canvas-socket-sync.js'), 'utf8');
     // token:updated and token:updated_delta guards
     assert.match(
         socketContent,
@@ -86,20 +74,14 @@ test('[Re-Audit 3] Motion Animation Loop Guard', async () => {
 });
 
 test('[Re-Audit 4] Drawing Eraser Destination-Out Pixel Masking & Layer Isolation', async () => {
-    const drawingsContent = fs.readFileSync(
-        path.join(process.cwd(), 'vtt/js/canvas/vtt-canvas-drawings.js'),
-        'utf8'
-    );
+    const drawingsContent = fs.readFileSync(path.join(process.cwd(), 'vtt/js/canvas/vtt-canvas-drawings.js'), 'utf8');
     assert.match(
         drawingsContent,
         /targetLayer\s*=\s*options\.activeLayer[\s\S]*?\(d\.layer\s*\|\|\s*'token'\)\s*!==\s*targetLayer\)\s*return;/,
         'eraseDrawingsAtPoint must isolate erasing to the active layer'
     );
 
-    const canvasContent = fs.readFileSync(
-        path.join(process.cwd(), 'vtt/js/vtt-canvas.js'),
-        'utf8'
-    );
+    const canvasContent = fs.readFileSync(path.join(process.cwd(), 'vtt/js/vtt-canvas.js'), 'utf8');
     // Eraser strokes rendered to ctxInteraction
     assert.doesNotMatch(
         canvasContent,
@@ -137,10 +119,7 @@ test('[Re-Audit 5] Zoom-Aware Hit Testing, Circular Hitboxes & CAD Panning', asy
         'getInteractiveDoorAtCoord must scale click thresholds inversely by zoom factor'
     );
 
-    const canvasContent = fs.readFileSync(
-        path.join(process.cwd(), 'vtt/js/vtt-canvas.js'),
-        'utf8'
-    );
+    const canvasContent = fs.readFileSync(path.join(process.cwd(), 'vtt/js/vtt-canvas.js'), 'utf8');
     // Wall vertex zoom scaling
     assert.match(
         canvasContent,

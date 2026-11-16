@@ -7,7 +7,12 @@
 import { CONDITION_ICONS } from './vtt-canvas-token-rollers.js';
 import { getSafeVttUrl } from '../../vtt-utils.js';
 import { loadPlayerTokenPrefs } from './vtt-canvas-token-config.js';
-import { spawnProceduralCombatFX } from './vtt-canvas-procedural-fx.js';
+import {
+    spawnProceduralCombatFX,
+    MAX_CONCURRENT_PROCEDURAL_FX,
+    getActiveProceduralFxCount,
+    resetProceduralFxQueue
+} from './vtt-canvas-procedural-fx.js';
 
 // Module-level context for animation loops and renderer utilities
 const tokenRendererContext = {
@@ -596,6 +601,11 @@ export function renderTokensLayer(context = {}) {
         context.playerTokenPrefs || (typeof loadPlayerTokenPrefs === 'function' ? loadPlayerTokenPrefs() : {});
     const gmTokenPrefs = context.gmTokenPrefs || (typeof loadGmTokenPrefs === 'function' ? loadGmTokenPrefs() : {});
 
+    const globalTokenHudLayer = typeof document !== 'undefined' ? document.getElementById('vtt-token-hud-layer') : null;
+    if (globalTokenHudLayer && !context.isPanning && globalTokenHudLayer.style.transform) {
+        globalTokenHudLayer.style.transform = '';
+    }
+
     // 2. Draw Tokens Layer
     // Partition visible vs off-screen tokens before sorting to eliminate O(N log N) sort overhead for culled tokens
     const visibleTokens = [];
@@ -831,7 +841,10 @@ export function renderTokensLayer(context = {}) {
                 if (!token.isAsset) {
                     node.style.borderRadius = '50%';
                     node.style.objectFit = 'cover';
-                    if (!token.isBorderless) {
+                    if (token.ringColor && token.ringColor !== 'none' && token.ringColor !== 'transparent') {
+                        node.style.border = `3px solid ${token.ringColor}`;
+                        node.style.boxSizing = 'border-box';
+                    } else if (!token.isBorderless) {
                         const borderColor = token.isPlayer ? 'rgba(0, 123, 255, 0.8)' : 'rgba(220, 53, 69, 0.8)';
                         node.style.border = `2px solid ${borderColor}`;
                         node.style.boxSizing = 'border-box';
@@ -1147,12 +1160,15 @@ export function renderTokensLayer(context = {}) {
 
             // Render token border frame
             if (!isActuallyVideo) {
-                ctxInteraction.strokeStyle = token.isPlayer ? 'rgba(0, 123, 255, 0.8)' : 'rgba(220, 53, 69, 0.8)';
-                if (token.isAsset || token.isBorderless) ctxInteraction.strokeStyle = 'transparent'; // No border for freeform image assets or borderless tokens
-                ctxInteraction.lineWidth = 2;
-                if (token.isAsset || token.isBorderless) {
-                    // No default border for assets or borderless tokens
-                } else {
+                if (token.ringColor && token.ringColor !== 'none' && token.ringColor !== 'transparent') {
+                    ctxInteraction.strokeStyle = token.ringColor;
+                    ctxInteraction.lineWidth = 3;
+                    ctxInteraction.beginPath();
+                    ctxInteraction.arc(tx, ty, tokenRadius - 1.5, 0, Math.PI * 2);
+                    ctxInteraction.stroke();
+                } else if (!token.isAsset && !token.isBorderless) {
+                    ctxInteraction.strokeStyle = token.isPlayer ? 'rgba(0, 123, 255, 0.8)' : 'rgba(220, 53, 69, 0.8)';
+                    ctxInteraction.lineWidth = 2;
                     ctxInteraction.beginPath();
                     ctxInteraction.arc(tx, ty, tokenRadius - 1, 0, Math.PI * 2);
                     ctxInteraction.stroke();
@@ -1173,7 +1189,10 @@ export function renderTokensLayer(context = {}) {
             }
 
             // --- DOM Overlay Sync for Token UI ---
-            if (htmlOverlayLayer) {
+            const tokenHudLayer =
+                (typeof document !== 'undefined' ? document.getElementById('vtt-token-hud-layer') : null) ||
+                htmlOverlayLayer;
+            if (tokenHudLayer) {
                 const uiNodeId = 'token_ui_' + id;
                 let uiNode = document.getElementById(uiNodeId);
 
@@ -1213,29 +1232,50 @@ export function renderTokensLayer(context = {}) {
                             <div class="token-health-bar-container" style="display:none;"></div>
                             <div class="token-health-text" style="display:none;"></div>
                         `;
-                        htmlOverlayLayer.appendChild(uiNode);
+                        tokenHudLayer.appendChild(uiNode);
+                    } else if (uiNode.parentElement !== tokenHudLayer) {
+                        tokenHudLayer.appendChild(uiNode);
                     }
 
                     // 1. Position Container using hardware-accelerated transform
                     const { drawW, drawH } = getTokenDrawDimensions(token);
-                    const currentZoom = Math.max(0.1, zoom || 1);
+                    const currentZoom = Math.max(0.05, zoom || 1);
+                    const isScreenProjected = Boolean(document.getElementById('vtt-token-hud-layer'));
 
-                    // Billboard Screen-Space sizing helper: guarantees exact physical display pixels on screen
-                    const getScreenPx = (targetScreenPx) => targetScreenPx / currentZoom;
+                    // Screen resolution scale based on 1080p (1920x1080) baseline
+                    const screenResScale =
+                        typeof window !== 'undefined' && window.innerWidth
+                            ? Math.max(0.8, Math.min(2.0, window.innerWidth / 1920))
+                            : 1.0;
 
-                    uiNode.style.transform = `translate3d(${renderPos.x}px, ${renderPos.y}px, 0)`;
-                    uiNode.style.width = `${drawW}px`;
-                    uiNode.style.height = `${drawH}px`;
+                    const screenX = isScreenProjected ? panX + renderPos.x * currentZoom : renderPos.x;
+                    const screenY = isScreenProjected ? panY + renderPos.y * currentZoom : renderPos.y;
+                    const screenW = isScreenProjected ? drawW * currentZoom : drawW;
+                    const screenH = isScreenProjected ? drawH * currentZoom : drawH;
+
+                    // Safe screen-to-world pixel calculator (fallback when not screen projected)
+                    const getSafeUiPx = (targetScreenPx, minWorldPx, maxWorldPxRatio = null) => {
+                        const base = Math.round(targetScreenPx * screenResScale);
+                        let val;
+                        if (currentZoom >= 1.0) {
+                            val = Math.max(minWorldPx, base);
+                        } else {
+                            const counterScaled = Math.round(base / currentZoom);
+                            val = Math.max(minWorldPx, counterScaled);
+                        }
+                        if (maxWorldPxRatio !== null && drawW > 0) {
+                            val = Math.min(val, Math.max(minWorldPx, Math.round(drawW * maxWorldPxRatio)));
+                        }
+                        return val;
+                    };
+
+                    uiNode.style.transform = `translate3d(${screenX}px, ${screenY}px, 0)`;
+                    uiNode.style.width = `${screenW}px`;
+                    uiNode.style.height = `${screenH}px`;
+                    uiNode.style.opacity = '1.0';
+                    uiNode.style.display = 'block';
 
                     const isHovered = id === hoverTokenId;
-
-                    // Smooth Macro-Zoom Opacity Fade (zoom < 0.25 smoothly fades to 0.10, reveals 100% on hover)
-                    let overlayOpacity = 1.0;
-                    if (currentZoom < 0.25) {
-                        overlayOpacity = isHovered ? 1.0 : Math.max(0, Math.min(1, (currentZoom - 0.1) / (0.25 - 0.1)));
-                    }
-                    uiNode.style.opacity = `${overlayOpacity}`;
-                    uiNode.style.display = overlayOpacity > 0.02 ? 'block' : 'none';
 
                     const isGM = vtt.role === 'GM';
                     const targetType = token.isPlayer ? 'Player' : 'Monster';
@@ -1324,8 +1364,12 @@ export function renderTokensLayer(context = {}) {
                     if (nameNode.textContent !== token.name) {
                         nameNode.textContent = token.name;
                     }
-                    const effectiveNameFontSize = Math.round(getScreenPx(12));
-                    const effectiveNameMaxWidth = Math.round(getScreenPx(180));
+                    const effectiveNameFontSize = isScreenProjected
+                        ? Math.max(10, Math.min(13, Math.round(12 * screenResScale)))
+                        : getSafeUiPx(12, 10, 0.4);
+                    const effectiveNameMaxWidth = isScreenProjected
+                        ? Math.max(Math.round(screenW * 1.5), Math.round(180 * screenResScale))
+                        : Math.max(Math.round(drawW * 1.5), Math.round(180 * screenResScale));
                     nameNode.style.fontSize = `${effectiveNameFontSize}px`;
                     nameNode.style.left = '50%';
                     nameNode.style.right = 'auto';
@@ -1335,27 +1379,31 @@ export function renderTokensLayer(context = {}) {
                     nameNode.style.overflow = 'hidden';
                     nameNode.style.textOverflow = 'ellipsis';
                     nameNode.style.whiteSpace = 'nowrap';
-                    nameNode.style.padding = `${Math.round(getScreenPx(2))}px ${Math.round(getScreenPx(6))}px`;
-                    nameNode.style.borderRadius = `${Math.round(getScreenPx(4))}px`;
+                    const namePadY = Math.max(1, Math.min(3, Math.round(2 * screenResScale)));
+                    const namePadX = Math.max(3, Math.min(8, Math.round(6 * screenResScale)));
+                    nameNode.style.padding = `${namePadY}px ${namePadX}px`;
+                    nameNode.style.borderRadius = `${Math.max(2, Math.min(4, Math.round(4 * screenResScale)))}px`;
 
-                    const effectiveBarHeight = Math.round(getScreenPx(7));
-                    const nameGap = Math.round(getScreenPx(4));
+                    const effectiveBarHeight = isScreenProjected
+                        ? Math.max(5, Math.min(10, Math.round((barHeight || 8) * screenResScale)))
+                        : getSafeUiPx(barHeight || 7, 4, 0.22);
+                    const nameGap = Math.max(2, Math.min(5, Math.round(4 * screenResScale)));
 
                     if (namePos === 'above' && barPos === 'above') {
-                        nameNode.style.top = `-${effectiveBarHeight + Math.round(getScreenPx(24))}px`;
+                        nameNode.style.top = `-${effectiveBarHeight + Math.round(24 * screenResScale)}px`;
                         nameNode.style.bottom = 'auto';
                     } else if (namePos === 'below' && barPos === 'below') {
-                        nameNode.style.top = `calc(100% + ${effectiveBarHeight + Math.round(getScreenPx(7))}px)`;
+                        nameNode.style.top = `calc(100% + ${effectiveBarHeight + Math.round(7 * screenResScale)}px)`;
                         nameNode.style.bottom = 'auto';
                     } else if (namePos === 'top' && barPos === 'top') {
-                        nameNode.style.top = `${Math.round(getScreenPx(22))}px`;
+                        nameNode.style.top = `${Math.round(22 * screenResScale)}px`;
                         nameNode.style.bottom = 'auto';
                     } else if (namePos === 'bottom' && barPos === 'bottom') {
                         nameNode.style.top = 'auto';
-                        nameNode.style.bottom = `${effectiveBarHeight + Math.round(getScreenPx(7))}px`;
+                        nameNode.style.bottom = `${effectiveBarHeight + Math.round(7 * screenResScale)}px`;
                     } else {
                         if (namePos === 'above') {
-                            nameNode.style.top = `-${Math.round(getScreenPx(20))}px`;
+                            nameNode.style.top = `-${Math.round(20 * screenResScale)}px`;
                             nameNode.style.bottom = 'auto';
                         } else if (namePos === 'top') {
                             nameNode.style.top = `${nameGap}px`;
@@ -1405,23 +1453,23 @@ export function renderTokensLayer(context = {}) {
                             let barBottomStyle = 'auto';
 
                             if (namePos === 'above' && barPos === 'above') {
-                                barTopStyle = `-${effectiveBarHeight + Math.round(getScreenPx(4))}px`;
+                                barTopStyle = `-${effectiveBarHeight + nameGap}px`;
                             } else if (namePos === 'below' && barPos === 'below') {
-                                barTopStyle = `calc(100% + ${Math.round(getScreenPx(4))}px)`;
+                                barTopStyle = `calc(100% + ${nameGap}px)`;
                             } else if (namePos === 'top' && barPos === 'top') {
-                                barTopStyle = `${Math.round(getScreenPx(22))}px`;
+                                barTopStyle = `${Math.round(22 * screenResScale)}px`;
                             } else if (namePos === 'bottom' && barPos === 'bottom') {
-                                barBottomStyle = `${Math.round(getScreenPx(4))}px`;
+                                barBottomStyle = `${nameGap}px`;
                             } else {
-                                if (barPos === 'above')
-                                    barTopStyle = `-${effectiveBarHeight + Math.round(getScreenPx(4))}px`;
-                                else if (barPos === 'top') barTopStyle = `${Math.round(getScreenPx(4))}px`;
-                                else if (barPos === 'bottom') barBottomStyle = `${Math.round(getScreenPx(4))}px`;
-                                else if (barPos === 'below')
-                                    barTopStyle = `calc(100% + ${Math.round(getScreenPx(4))}px)`;
+                                if (barPos === 'above') barTopStyle = `-${effectiveBarHeight + nameGap}px`;
+                                else if (barPos === 'top') barTopStyle = `${nameGap}px`;
+                                else if (barPos === 'bottom') barBottomStyle = `${nameGap}px`;
+                                else if (barPos === 'below') barTopStyle = `calc(100% + ${nameGap}px)`;
                             }
 
-                            const barSidePad = Math.round(getScreenPx(4));
+                            const barSidePad = isScreenProjected
+                                ? 0
+                                : Math.max(2, Math.min(4, Math.round(drawW * 0.08)));
                             hpContainer.style.left = `${barSidePad}px`;
                             hpContainer.style.right = `${barSidePad}px`;
                             hpContainer.style.width = 'auto';
@@ -1455,22 +1503,22 @@ export function renderTokensLayer(context = {}) {
                                 const tempHpPct = Math.max(0, tempHp / totalMax);
 
                                 hpContainer.style.right = 'auto';
-                                hpContainer.style.width = `calc(${maxHpPct} * (100% - 8px))`;
+                                hpContainer.style.width = `calc(${maxHpPct} * (100% - ${barSidePad * 2}px))`;
                                 const hpFillPct = Math.max(0, token.hp / token.maxHp);
                                 hpFill.style.width = `${hpFillPct * 100}%`;
 
-                                tempHpWrapper.style.left = `calc(4px + ${maxHpPct} * (100% - 8px))`;
-                                tempHpWrapper.style.width = `calc(${tempHpPct} * (100% - 8px))`;
+                                tempHpWrapper.style.left = `calc(${barSidePad}px + ${maxHpPct} * (100% - ${barSidePad * 2}px))`;
+                                tempHpWrapper.style.width = `calc(${tempHpPct} * (100% - ${barSidePad * 2}px))`;
                                 tempHpWrapper.style.right = 'auto';
                                 tempHpFill.style.width = '100%';
                             } else if (style === 'split' && showTempBar && tempHp > 0) {
                                 hpContainer.style.right = 'auto';
-                                hpContainer.style.width = `calc(0.5 * (100% - 8px))`;
+                                hpContainer.style.width = `calc(0.5 * (100% - ${barSidePad * 2}px))`;
                                 const hpFillPct = Math.max(0, Math.min(1, token.hp / token.maxHp));
                                 hpFill.style.width = `${hpFillPct * 100}%`;
 
                                 tempHpWrapper.style.left = `calc(50%)`;
-                                tempHpWrapper.style.width = `calc(0.5 * (100% - 8px))`;
+                                tempHpWrapper.style.width = `calc(0.5 * (100% - ${barSidePad * 2}px))`;
                                 tempHpWrapper.style.right = 'auto';
                                 const tempFillPct = Math.max(0, Math.min(1, tempHp / token.maxHp));
                                 tempHpFill.style.width = `${tempFillPct * 100}%`;
@@ -1521,12 +1569,16 @@ export function renderTokensLayer(context = {}) {
                                 if (hpText.textContent !== hpString) {
                                     hpText.textContent = hpString;
                                 }
-                                const effectiveHpFontSize = Math.round(getScreenPx(10));
+                                const effectiveHpFontSize = isScreenProjected
+                                    ? Math.max(6, Math.min(10, Math.floor(screenW * 0.18)))
+                                    : getSafeUiPx(10, 9, 0.35);
                                 hpText.style.top = barTopStyle;
                                 hpText.style.bottom = barBottomStyle;
                                 hpText.style.lineHeight = `${effectiveBarHeight}px`;
                                 hpText.style.fontSize = `${effectiveHpFontSize}px`;
                                 hpText.style.textShadow = '0 0 2px black, 0 0 3px black, 0 0 4px black';
+                                hpText.style.overflow = 'visible';
+                                hpText.style.textOverflow = 'clip';
                             } else {
                                 hpText.style.display = 'none';
                             }
@@ -1545,8 +1597,10 @@ export function renderTokensLayer(context = {}) {
                     const condContainer = uiNode.querySelector('.token-condition-container');
                     const hasConditions = token.conditions && token.conditions.length > 0;
                     if (hasConditions) {
-                        const condBadgeSize = Math.round(getScreenPx(20));
-                        const condFontSize = Math.round(getScreenPx(11));
+                        const condBadgeSize = isScreenProjected
+                            ? Math.round(20 * screenResScale)
+                            : getSafeUiPx(20, 12, 0.42);
+                        const condFontSize = Math.max(8, Math.round(condBadgeSize * 0.55));
 
                         const maxVisibleConditions = 3;
                         let visibleConditions = token.conditions;
@@ -1579,8 +1633,10 @@ export function renderTokensLayer(context = {}) {
                         if (condContainer.innerHTML !== iconsHtml) condContainer.innerHTML = iconsHtml;
                         condContainer.style.display = 'flex';
 
-                        const condOffsetOutside = `-${Math.round(getScreenPx(18))}px`;
-                        const condOffsetInside = `${Math.round(getScreenPx(4))}px`;
+                        const condOffsetOutside = `-${Math.round(condBadgeSize * 0.85)}px`;
+                        const condOffsetInside = isScreenProjected
+                            ? '2px'
+                            : `${Math.max(2, Math.round(drawW * 0.08))}px`;
 
                         if (condPos === 'outside-tr') {
                             condContainer.style.top = condOffsetOutside;
@@ -1613,9 +1669,11 @@ export function renderTokensLayer(context = {}) {
                     const flightContainer = uiNode.querySelector('.token-flight-container');
                     const altitude = token.flightHeight || token.altitude || 0;
                     if (altitude !== 0) {
-                        const flightBadgeSize = Math.round(getScreenPx(24));
-                        const flightIconSize = Math.round(getScreenPx(10));
-                        const flightFontSize = Math.round(getScreenPx(9));
+                        const flightBadgeSize = isScreenProjected
+                            ? Math.round(24 * screenResScale)
+                            : getSafeUiPx(24, 14, 0.48);
+                        const flightIconSize = Math.max(8, Math.round(flightBadgeSize * 0.42));
+                        const flightFontSize = Math.max(7, Math.round(flightBadgeSize * 0.38));
                         flightContainer.style.width = `${flightBadgeSize}px`;
                         flightContainer.style.height = `${flightBadgeSize}px`;
 
@@ -1630,8 +1688,10 @@ export function renderTokensLayer(context = {}) {
                         }
                         flightContainer.style.display = 'flex';
 
-                        const flightOffsetOutside = `-${Math.round(getScreenPx(18))}px`;
-                        const flightOffsetInside = `${Math.round(getScreenPx(4))}px`;
+                        const flightOffsetOutside = `-${Math.round(flightBadgeSize * 0.85)}px`;
+                        const flightOffsetInside = isScreenProjected
+                            ? '2px'
+                            : `${Math.max(2, Math.round(drawW * 0.08))}px`;
 
                         if (flightPos === 'outside-tl') {
                             flightContainer.style.top = flightOffsetOutside;
@@ -1659,9 +1719,16 @@ export function renderTokensLayer(context = {}) {
             }
             // Draw 8-Way Resize Handles & Bounding Box for Assets / Maps
             const isResizable = token.isAsset || token.layer === 'map' || token.isBackground;
+            const isMultiArtSelected =
+                selectedTokenIds.size > 1 &&
+                Array.from(selectedTokenIds).every((sId) => {
+                    const tok = tokens[sId];
+                    return tok && (tok.isAsset || tok.layer === 'map' || tok.isBackground);
+                });
             if (
                 isResizable &&
                 isTokenSelected &&
+                !isMultiArtSelected &&
                 activeTool === 'select' &&
                 (vtt.role === 'GM' || tokenLayer !== 'gm')
             ) {
@@ -1717,53 +1784,159 @@ export function renderTokensLayer(context = {}) {
                 ctxInteraction.restore();
             }
         });
+
+    if (selectedTokenIds && selectedTokenIds.size > 1 && activeTool === 'select') {
+        let allArt = true;
+        let minX = Infinity,
+            minY = Infinity,
+            maxX = -Infinity,
+            maxY = -Infinity;
+        for (const sId of selectedTokenIds) {
+            const tok = tokens[sId];
+            if (!tok || (!tok.isAsset && tok.layer !== 'map' && !tok.isBackground)) {
+                allArt = false;
+                break;
+            }
+            const dims = getTokenDrawDimensions(tok);
+            const w = dims.drawW || 50;
+            const h = dims.drawH || 50;
+            if (tok.x < minX) minX = tok.x;
+            if (tok.y < minY) minY = tok.y;
+            if (tok.x + w > maxX) maxX = tok.x + w;
+            if (tok.y + h > maxY) maxY = tok.y + h;
+        }
+        if (allArt && minX !== Infinity) {
+            ctxInteraction.save();
+            const currentZoom = Math.max(0.05, zoom || 1);
+            const handleSize = 9 / currentZoom;
+            const halfHandle = handleSize / 2;
+            const lineW = 1.5 / currentZoom;
+            const w = maxX - minX;
+            const h = maxY - minY;
+
+            // Accent bounding outline
+            ctxInteraction.strokeStyle = 'rgba(212, 175, 55, 0.95)';
+            ctxInteraction.lineWidth = lineW;
+            ctxInteraction.setLineDash([6 / currentZoom, 4 / currentZoom]);
+            ctxInteraction.strokeRect(minX, minY, w, h);
+            ctxInteraction.setLineDash([]);
+
+            const handlePositions = [
+                { x: minX, y: minY },
+                { x: minX + w / 2, y: minY },
+                { x: maxX, y: minY },
+                { x: maxX, y: minY + h / 2 },
+                { x: maxX, y: maxY },
+                { x: minX + w / 2, y: maxY },
+                { x: minX, y: maxY },
+                { x: minX, y: minY + h / 2 }
+            ];
+            for (const hp of handlePositions) {
+                ctxInteraction.fillStyle = '#ffffff';
+                ctxInteraction.strokeStyle = '#d4af37';
+                ctxInteraction.lineWidth = lineW;
+                ctxInteraction.beginPath();
+                ctxInteraction.rect(hp.x - halfHandle, hp.y - halfHandle, handleSize, handleSize);
+                ctxInteraction.fill();
+                ctxInteraction.stroke();
+            }
+            ctxInteraction.restore();
+        }
+    }
 }
 
 // ==========================================
 // Active Visual Pings & Damage FX Rendering
 // ==========================================
-export function renderActivePingsPass(ctxInteraction, pings = activePings) {
-    // Render active pings
-    if (activePings && activePings.length > 0) {
-        const now = Date.now();
-        activePings.forEach((p) => {
-            const elapsed = now - p.startTime;
-            if (elapsed >= p.duration) return;
+export function renderActivePingsPass(ctxInteraction, pings = null, options = {}) {
+    if (pings && !Array.isArray(pings) && typeof pings === 'object') {
+        options = pings;
+        pings = null;
+    }
+    const list = Array.isArray(pings) && pings.length > 0 ? pings : activePings;
+    if (!ctxInteraction || !list || list.length === 0) return;
+    const now = Date.now();
+    const panX = options.panX ?? tokenRendererContext.panX ?? 0;
+    const panY = options.panY ?? tokenRendererContext.panY ?? 0;
+    const zoom = options.zoom ?? tokenRendererContext.zoom ?? 1;
 
-            const progress = elapsed / p.duration;
-            // Easing out sine wave for smooth expansion
-            const easeOut = Math.sin((progress * Math.PI) / 2);
-            const radius = 5 + easeOut * 80;
-            const opacity = 1.0 - progress;
+    // Detect screen-space projection
+    const isHudCanvas = ctxInteraction.canvas && ctxInteraction.canvas.id === 'vtt-canvas-hud';
+    const isInteractionCanvas = ctxInteraction.canvas && ctxInteraction.canvas.id === 'vtt-canvas-interaction';
+    const isScreenSpace = isHudCanvas || (options.panX !== undefined && !isInteractionCanvas);
+    const screenResScale =
+        typeof window !== 'undefined' && window.innerWidth
+            ? Math.max(0.8, Math.min(2.0, window.innerWidth / 1920))
+            : 1.0;
 
-            ctxInteraction.save();
-            const color = p.role === 'GM' ? '255, 60, 60' : '60, 160, 255';
+    list.forEach((p) => {
+        const elapsed = now - p.startTime;
+        if (elapsed >= p.duration) return;
 
-            // Outer expanding ring
+        const progress = elapsed / p.duration;
+        const easeOut = Math.sin((progress * Math.PI) / 2);
+        const opacity = Math.max(0, 1.0 - progress);
+
+        const screenX = isScreenSpace ? panX + p.x * zoom : p.x;
+        const screenY = isScreenSpace ? panY + p.y * zoom : p.y;
+
+        // Constant physical screen size: Expanding radius (8px to 70px)
+        const radius = isScreenSpace ? (8 + easeOut * 62) * screenResScale : 5 + easeOut * 80;
+        const ringLineW = isScreenSpace ? Math.max(1.5, 3.5 * screenResScale) : 4;
+        const centerDotR = isScreenSpace ? Math.max(3, 6 * screenResScale) : 6;
+
+        ctxInteraction.save();
+        const color = p.role === 'GM' ? '255, 60, 60' : '60, 160, 255';
+
+        // Outer expanding ring
+        ctxInteraction.beginPath();
+        ctxInteraction.arc(screenX, screenY, radius, 0, Math.PI * 2);
+        ctxInteraction.strokeStyle = `rgba(${color}, ${opacity})`;
+        ctxInteraction.lineWidth = ringLineW;
+        ctxInteraction.stroke();
+
+        // Inner static dot
+        ctxInteraction.beginPath();
+        ctxInteraction.arc(screenX, screenY, centerDotR, 0, Math.PI * 2);
+        ctxInteraction.fillStyle = `rgba(${color}, ${opacity})`;
+        ctxInteraction.fill();
+
+        // Username badge
+        if (p.username) {
+            const fontSize = isScreenSpace ? Math.round(13 * screenResScale) : 13;
+            ctxInteraction.font = `bold ${fontSize}px Inter, Arial, sans-serif`;
+            ctxInteraction.textAlign = 'center';
+            ctxInteraction.textBaseline = 'middle';
+
+            const tw = ctxInteraction.measureText(p.username).width;
+            const padX = isScreenSpace ? Math.round(8 * screenResScale) : 6;
+            const pillW = tw + padX * 2;
+            const pillH = isScreenSpace ? Math.round(22 * screenResScale) : 18;
+            const tagY =
+                screenY -
+                Math.max(radius, 20 * (isScreenSpace ? screenResScale : 1)) -
+                10 * (isScreenSpace ? screenResScale : 1);
+
+            // Pill background
+            ctxInteraction.fillStyle = `rgba(15, 15, 20, ${opacity * 0.88})`;
             ctxInteraction.beginPath();
-            ctxInteraction.arc(p.x, p.y, radius, 0, Math.PI * 2);
-            ctxInteraction.strokeStyle = `rgba(${color}, ${opacity})`;
-            ctxInteraction.lineWidth = 4;
-            ctxInteraction.stroke();
-
-            // Inner static dot
-            ctxInteraction.beginPath();
-            ctxInteraction.arc(p.x, p.y, 6, 0, Math.PI * 2);
-            ctxInteraction.fillStyle = `rgba(${color}, ${opacity})`;
+            const r = pillH / 2;
+            ctxInteraction.arc(screenX - pillW / 2 + r, tagY, r, Math.PI / 2, Math.PI * 1.5);
+            ctxInteraction.arc(screenX + pillW / 2 - r, tagY, r, -Math.PI / 2, Math.PI / 2);
+            ctxInteraction.closePath();
             ctxInteraction.fill();
 
-            // Username label
-            if (p.username) {
-                ctxInteraction.font = 'bold 13px var(--font-primary)';
-                ctxInteraction.fillStyle = `rgba(255, 255, 255, ${opacity})`;
-                ctxInteraction.textAlign = 'center';
-                ctxInteraction.shadowColor = 'rgba(0,0,0,1)';
-                ctxInteraction.shadowBlur = 4;
-                ctxInteraction.fillText(p.username, p.x, p.y - Math.max(radius, 20) - 8);
-            }
-            ctxInteraction.restore();
-        });
-    }
+            // Border
+            ctxInteraction.strokeStyle = `rgba(${color}, ${opacity})`;
+            ctxInteraction.lineWidth = Math.max(1, 1.5 * (isScreenSpace ? screenResScale : 1));
+            ctxInteraction.stroke();
+
+            // Text
+            ctxInteraction.fillStyle = `rgba(255, 255, 255, ${opacity})`;
+            ctxInteraction.fillText(p.username, screenX, tagY);
+        }
+        ctxInteraction.restore();
+    });
 }
 
 export function renderActiveDamageFXPass(ctxInteraction, fxList = null, renderDamageFXBurstFn = renderDamageFXBurst) {
@@ -1802,7 +1975,8 @@ export function cleanupOrphanedTokenOverlays(tokens = {}, force = false) {
     const validTokenIds = new Set(keys);
     const overlayContainers = [
         document.getElementById('vtt-html-overlays'),
-        document.getElementById('vtt-map-html-overlays')
+        document.getElementById('vtt-map-html-overlays'),
+        document.getElementById('vtt-token-hud-layer')
     ].filter(Boolean);
 
     overlayContainers.forEach((container) => {
@@ -2429,8 +2603,13 @@ function processTokenAnimReqs(tokensObj) {
                 segments.push({ start: points[i], end: points[i + 1], dist: dist });
                 totalDist += dist;
             }
+            const duration =
+                Number.isFinite(req.duration) && req.duration > 0
+                    ? req.duration
+                    : Math.min(450, Math.max(160, Math.round(140 + totalDist * 0.28)));
             tokenAnimations[id] = {
                 ...req,
+                duration,
                 startTime: now,
                 segments,
                 totalDist,
@@ -2468,7 +2647,9 @@ function animateTokens() {
             continue;
         }
 
-        const targetDist = progress * anim.totalDist;
+        // Cubic Ease-Out deceleration into destination: 1 - (1 - t)^3
+        const easedProgress = 1 - Math.pow(1 - progress, 3);
+        const targetDist = easedProgress * anim.totalDist;
         let currentDist = 0;
         let currentPos = { x: anim.endX, y: anim.endY };
 
@@ -2726,6 +2907,9 @@ export {
     triggerTokenShudder,
     getTokenShudderOffset,
     spawnProceduralCombatFX,
+    MAX_CONCURRENT_PROCEDURAL_FX,
+    getActiveProceduralFxCount,
+    resetProceduralFxQueue,
     triggerDamageFXAnimation,
     triggerHealingFXAnimation,
     animateDamageFX,

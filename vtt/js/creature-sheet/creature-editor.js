@@ -1,7 +1,13 @@
 // ForgeDVTT Creature Sheet — Editor Subsystem
 // Handles companion editing, creature stat customization, token gallery, and defense configurations.
 
-import { STANDARD_DAMAGE_TYPES, formatDamageList, entryToPlainText, calcDiceAverage, getProfBonus } from './creature-parser.js';
+import {
+    STANDARD_DAMAGE_TYPES,
+    formatDamageList,
+    entryToPlainText,
+    calcDiceAverage,
+    getProfBonus
+} from './creature-parser.js';
 import { resolveSpellcastingType, get5eSlotsForCaster } from './creature-spells.js';
 
 export const DND_5E_SKILLS = [
@@ -740,8 +746,8 @@ export function openEditModal(m, charId, ctx = {}) {
             typeof t === 'string'
                 ? { url: t, name: 'Imported Token' }
                 : t && typeof t === 'object'
-                    ? t
-                    : { url: '', name: 'Unknown' }
+                  ? t
+                  : { url: '', name: 'Unknown' }
         );
     } else {
         char.tokenImages = [];
@@ -753,7 +759,7 @@ export function openEditModal(m, charId, ctx = {}) {
     if (!defaultTokenUrl && typeof window !== 'undefined' && window.Renderer?.monster?.getTokenUrl) {
         try {
             defaultTokenUrl = window.Renderer.monster.getTokenUrl(m);
-        } catch (e) { }
+        } catch (e) {}
     }
     if (!defaultTokenUrl && (m.source || m.name)) {
         const cleanName =
@@ -780,7 +786,7 @@ export function openEditModal(m, charId, ctx = {}) {
     const saves = m.save || {};
 
     const existingSkills = m.skill || m.skills || {};
-    const crStr = m.cr ? (typeof m.cr === 'object' ? (m.cr.cr || m.cr.coven || m.cr.lair || '0') : m.cr) : '0';
+    const crStr = m.cr ? (typeof m.cr === 'object' ? m.cr.cr || m.cr.coven || m.cr.lair || '0' : m.cr) : '0';
     const pb = getProfBonus(crStr);
 
     const getSkillVal = (k) => {
@@ -1024,15 +1030,15 @@ export function openEditModal(m, charId, ctx = {}) {
                 <h4 style="margin:0 0 8px 0; color:var(--color-text-secondary);">Core Stats</h4>
                 <div style="display:grid; grid-template-columns:repeat(6, 1fr); gap:8px;">
                     ${['str', 'dex', 'con', 'int', 'wis', 'cha']
-            .map(
-                (ab) => `
+                        .map(
+                            (ab) => `
                         <div>
                             <label style="display:block; font-size:0.8rem; margin-bottom:4px; text-transform:uppercase;">${ab}</label>
                             <input type="number" class="vtt-input cs-edit-stat" data-stat="${ab}" style="width:100%;" value="${m[ab] || 10}">
                         </div>
                     `
-            )
-            .join('')}
+                        )
+                        .join('')}
                 </div>
             </div>
 
@@ -1124,15 +1130,15 @@ export function openEditModal(m, charId, ctx = {}) {
                 <h4 style="margin:0 0 8px 0; color:var(--color-text-secondary);">Saving Throws (Modifiers)</h4>
                 <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:8px;">
                     ${['str', 'dex', 'con', 'int', 'wis', 'cha']
-            .map(
-                (ab) => `
+                        .map(
+                            (ab) => `
                         <div>
                             <label style="display:block; font-size:0.8rem; margin-bottom:4px; text-transform:uppercase;">${ab}</label>
                             <input type="text" class="vtt-input cs-edit-save" data-ability="${ab}" style="width:100%;" value="${saves[ab] || ''}" placeholder="+0">
                         </div>
                     `
-            )
-            .join('')}
+                        )
+                        .join('')}
                 </div>
             </div>
 
@@ -1198,7 +1204,7 @@ export function openEditModal(m, charId, ctx = {}) {
     // Wire Skills grid interactions
     function getStatMod(ability) {
         const statInput = content.querySelector(`.cs-edit-stat[data-stat="${ability}"]`);
-        const score = statInput ? parseInt(statInput.value) || 10 : (m[ability] || 10);
+        const score = statInput ? parseInt(statInput.value) || 10 : m[ability] || 10;
         return Math.floor((score - 10) / 2);
     }
 
@@ -1300,8 +1306,8 @@ export function openEditModal(m, charId, ctx = {}) {
         Array.isArray(m.lairActions)
             ? m.lairActions
             : Array.isArray(m.lairActions?.entries)
-                ? m.lairActions.entries
-                : []
+              ? m.lairActions.entries
+              : []
     );
 
     // Render Spellcasting Blocks in Modal
@@ -1320,6 +1326,9 @@ export function openEditModal(m, charId, ctx = {}) {
             const rechargeRule = sc.rechargeRule || (currentType === 'pact' ? 'short_rest' : 'long_rest');
             const abVal = (sc.ability || 'int').toLowerCase();
             const casterLvl = sc.casterLevel !== undefined ? sc.casterLevel : m.casterLevel || 0;
+            const scHeader =
+                sc.header ||
+                (Array.isArray(sc.headerEntries) ? sc.headerEntries.join('\n') : sc.description || sc.desc || '');
 
             const initialSections = [];
             if (currentType === 'innate') {
@@ -1396,6 +1405,16 @@ export function openEditModal(m, charId, ctx = {}) {
                 </div>
 
                 <div class="sc-edit-slot-preview" style="display:${currentType !== 'innate' ? 'block' : 'none'}; font-size:0.75rem; color:var(--color-text-muted); font-style:italic; margin-top:2px;"></div>
+
+                <div style="margin-top:6px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2px;">
+                        <label style="font-size:0.75rem; color:var(--color-text-muted); margin:0;">Introductory / Component Notes</label>
+                        <button type="button" class="btn btn-xxs btn-secondary sc-edit-autogen-header" style="padding:1px 6px; font-size:0.7rem;" title="Auto-generate standard 5e phrasing based on block settings">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i> Auto-generate 5e Text
+                        </button>
+                    </div>
+                    <textarea class="vtt-input sc-edit-header" rows="2" style="width:100%; resize:vertical; font-size:0.82rem; padding:4px 6px; box-sizing:border-box;" placeholder="e.g. The creature can innately cast the following spells, requiring no material components:">${scHeader}</textarea>
+                </div>
             `;
 
             const typeSelect = card.querySelector('.sc-edit-type');
@@ -1404,6 +1423,80 @@ export function openEditModal(m, charId, ctx = {}) {
             const addSectionBtn = card.querySelector('.sc-edit-add-section-btn');
             const slotPreview = card.querySelector('.sc-edit-slot-preview');
             const casterLvlInput = card.querySelector('.sc-edit-caster-level');
+            const autogenBtn = card.querySelector('.sc-edit-autogen-header');
+            const headerTextarea = card.querySelector('.sc-edit-header');
+
+            if (autogenBtn && headerTextarea) {
+                autogenBtn.addEventListener('click', () => {
+                    const curName = card.querySelector('.sc-edit-name')?.value?.trim() || 'Spellcasting';
+                    const curType = typeSelect.value;
+                    const curAb = card.querySelector('.sc-edit-ability')?.value || 'int';
+                    const curLvl = parseInt(casterLvlInput.value) || 0;
+                    const curDcRaw = card.querySelector('.sc-edit-dc')?.value?.trim();
+                    const curAtkRaw = card.querySelector('.sc-edit-atk-mod')?.value?.trim();
+
+                    const creatureName = m.name || char.name || 'The creature';
+                    const abilityNames = {
+                        int: 'Intelligence',
+                        wis: 'Wisdom',
+                        cha: 'Charisma',
+                        con: 'Constitution',
+                        str: 'Strength',
+                        dex: 'Dexterity'
+                    };
+                    const abName = abilityNames[curAb] || 'Intelligence';
+                    const abScore = m[curAb] ?? m.abilities?.[curAb]?.score ?? 10;
+                    const abMod = Math.floor((abScore - 10) / 2);
+                    const pb = getProfBonus(m.cr ? m.cr.cr || m.cr : '0');
+                    const calcDc = 8 + pb + abMod;
+                    const calcAtk = pb + abMod;
+                    const effDc = curDcRaw !== '' && !isNaN(parseInt(curDcRaw)) ? parseInt(curDcRaw) : calcDc;
+                    const effAtk = curAtkRaw !== '' && !isNaN(parseInt(curAtkRaw)) ? parseInt(curAtkRaw) : calcAtk;
+                    const atkSign = effAtk >= 0 ? '+' : '';
+
+                    let generated = '';
+                    if (curType === 'innate' || /innate|psionic/i.test(curName)) {
+                        const isPsionic = /psionic/i.test(curName);
+                        const compClause = isPsionic
+                            ? 'requiring no spell components'
+                            : 'requiring no material components';
+                        generated = `${creatureName}'s innate spellcasting ability is ${abName} (spell save DC ${effDc}${effAtk !== null && effAtk !== undefined ? `, ${atkSign}${effAtk} to hit with spell attacks` : ''}). ${creatureName} can innately cast the following spells, ${compClause}:`;
+                    } else if (curType === 'pact') {
+                        generated = `${creatureName} is a ${curLvl ? `${curLvl}th-level` : ''} warlock spellcaster. Its spellcasting ability is ${abName} (spell save DC ${effDc}, ${atkSign}${effAtk} to hit with spell attacks). ${creatureName} has the following warlock spells prepared:`;
+                    } else {
+                        const ordinals = [
+                            '',
+                            '1st',
+                            '2nd',
+                            '3rd',
+                            '4th',
+                            '5th',
+                            '6th',
+                            '7th',
+                            '8th',
+                            '9th',
+                            '10th',
+                            '11th',
+                            '12th',
+                            '13th',
+                            '14th',
+                            '15th',
+                            '16th',
+                            '17th',
+                            '18th',
+                            '19th',
+                            '20th'
+                        ];
+                        const lvlStr = ordinals[curLvl] || (curLvl ? `${curLvl}th` : '');
+                        if (lvlStr) {
+                            generated = `${creatureName} is a ${lvlStr}-level spellcaster. Its spellcasting ability is ${abName} (spell save DC ${effDc}, ${atkSign}${effAtk} to hit with spell attacks). ${creatureName} has the following wizard spells prepared:`;
+                        } else {
+                            generated = `${creatureName}'s spellcasting ability is ${abName} (spell save DC ${effDc}, ${atkSign}${effAtk} to hit with spell attacks). ${creatureName} has the following spells prepared:`;
+                        }
+                    }
+                    headerTextarea.value = generated;
+                });
+            }
 
             function updateSlotPreview() {
                 const t = typeSelect.value;
@@ -1488,6 +1581,7 @@ export function openEditModal(m, charId, ctx = {}) {
             type: 'innate',
             ability: 'cha',
             casterLevel: 0,
+            header: '',
             headerEntries: [],
             will: []
         });
@@ -1529,8 +1623,8 @@ export function openEditModal(m, charId, ctx = {}) {
                 typeof window !== 'undefined' && typeof window.getSafeVttUrl === 'function'
                     ? window.getSafeVttUrl(url)
                     : url && (url.includes('discordapp.com') || url.includes('discordapp.net'))
-                        ? '/api/proxy-discord?url=' + encodeURIComponent(url)
-                        : url;
+                      ? '/api/proxy-discord?url=' + encodeURIComponent(url)
+                      : url;
             let mediaEl;
             if (isVideo) {
                 mediaEl = document.createElement('video');
@@ -1592,7 +1686,7 @@ export function openEditModal(m, charId, ctx = {}) {
             });
 
             gal.appendChild(wrapper);
-            if (isVideo) mediaEl.play().catch(() => { });
+            if (isVideo) mediaEl.play().catch(() => {});
         });
     }
     renderCompanionTokenGallery();
@@ -1627,8 +1721,8 @@ export function openEditModal(m, charId, ctx = {}) {
             typeof window !== 'undefined' && typeof window.vttAuthHeaders === 'function'
                 ? window.vttAuthHeaders()
                 : window.VTT?.gmSessionToken
-                    ? { 'x-gm-token': window.VTT.gmSessionToken }
-                    : {};
+                  ? { 'x-gm-token': window.VTT.gmSessionToken }
+                  : {};
 
         try {
             const res = await fetch('/api/assets/upload', {
@@ -1750,9 +1844,9 @@ export function saveCompanionEdits(m, charId = null, ctx = {}) {
     let finalTypeStr = typeSel === 'custom' ? typeCustom || 'humanoid' : typeSel;
     let tagsArr = tagsRaw
         ? tagsRaw
-            .split(',')
-            .map((s) => s.trim())
-            .filter(Boolean)
+              .split(',')
+              .map((s) => s.trim())
+              .filter(Boolean)
         : [];
 
     if (tagsArr.length > 0) {
@@ -2079,6 +2173,7 @@ export function saveCompanionEdits(m, charId = null, ctx = {}) {
         const atkRaw = card.querySelector('.sc-edit-atk-mod').value.trim();
 
         const existingBlock = m.spellcasting && m.spellcasting[idx] ? m.spellcasting[idx] : {};
+        const scHeader = card.querySelector('.sc-edit-header')?.value?.trim() || '';
         const block = {
             id: existingBlock.id || `sc_${idx}`,
             name: scName,
@@ -2086,8 +2181,11 @@ export function saveCompanionEdits(m, charId = null, ctx = {}) {
             rechargeRule: scRecharge,
             ability: abStat,
             casterLevel: casterLvlVal,
-            headerEntries: existingBlock.headerEntries || []
+            header: scHeader,
+            headerEntries: scHeader ? [scHeader] : []
         };
+        if (existingBlock.footer) block.footer = existingBlock.footer;
+        if (existingBlock.footerEntries) block.footerEntries = existingBlock.footerEntries;
 
         if (scType === 'slot' || scType === 'pact') {
             block.spellsByLevel = existingBlock.spellsByLevel || {};

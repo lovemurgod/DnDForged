@@ -55,6 +55,9 @@ import {
     animatePings as animatePingsExt,
     triggerDamageFXAnimation as triggerDamageFXAnimationExt,
     triggerHealingFXAnimation as triggerHealingFXAnimationExt,
+    getActiveProceduralFxCount as getActiveProceduralFxCountExt,
+    resetProceduralFxQueue as resetProceduralFxQueueExt,
+    MAX_CONCURRENT_PROCEDURAL_FX as MAX_CONCURRENT_PROCEDURAL_FX_EXT,
     animateDamageFX as animateDamageFXExt,
     renderDamageFXBurst as renderDamageFXBurstExt,
     processTokenAnimReqs as processTokenAnimReqsExt,
@@ -256,6 +259,8 @@ import { setupTokenLocatorPanel as setupTokenLocatorPanelExt } from './canvas/vt
 import {
     syncGridConfigInputs as syncGridConfigInputsExt,
     hasMapManagerDataChanged as hasMapManagerDataChangedExt,
+    isMapBackgroundAsset,
+    clearMapArtwork,
     escapeMapHtml as escapeMapHtmlExt,
     detectMapMediaType as detectMapMediaTypeExt,
     buildMapThumbnailMarkup as buildMapThumbnailMarkupExt,
@@ -276,6 +281,7 @@ import {
     snapToGrid as snapToGridExt,
     snapToGridCenter as snapToGridCenterExt,
     snapToHalfGrid as snapToHalfGridExt,
+    snapToSmartGrid as snapToSmartGridExt,
     renderGridLayer as renderGridLayerExt
 } from './canvas/vtt-canvas-grid-renderer.js';
 import {
@@ -320,12 +326,14 @@ export function initVttCanvas(vtt) {
     const canvasFog = document.getElementById('vtt-canvas-fog');
 
     const canvasInteraction = document.getElementById('vtt-canvas-interaction');
+    const canvasHud = document.getElementById('vtt-canvas-hud');
 
     const ctxFloorEffects = canvasFloorEffects ? canvasFloorEffects.getContext('2d') : null;
     const ctxGrid = canvasGrid.getContext('2d');
     const ctxPortals = canvasPortals ? canvasPortals.getContext('2d') : null;
     const ctxFog = canvasFog.getContext('2d');
     const ctxInteraction = canvasInteraction.getContext('2d');
+    const ctxHud = canvasHud ? canvasHud.getContext('2d') : null;
 
     // Bounded LRU image & texture cache
     const imageCache = vttImageCache;
@@ -368,14 +376,14 @@ export function initVttCanvas(vtt) {
                     ?.forEach((v) => {
                         try {
                             v.pause();
-                        } catch (e) { }
+                        } catch (e) {}
                     });
             }
             if (typeof ytPingPongControllers !== 'undefined' && ytPingPongControllers) {
                 Object.values(ytPingPongControllers).forEach((c) => {
                     try {
                         c?.pause?.();
-                    } catch (e) { }
+                    } catch (e) {}
                 });
             }
         },
@@ -661,14 +669,14 @@ export function initVttCanvas(vtt) {
                 Number.isFinite(token.pixelWidth) && token.pixelWidth > 0
                     ? token.pixelWidth
                     : (parseTokenDimension(token.customWidth) ?? parseTokenDimension(token.size) ?? 1) *
-                    grid.size *
-                    grid.scale;
+                      grid.size *
+                      grid.scale;
             drawH =
                 Number.isFinite(token.pixelHeight) && token.pixelHeight > 0
                     ? token.pixelHeight
                     : (parseTokenDimension(token.customHeight) ?? parseTokenDimension(token.size) ?? 1) *
-                    grid.size *
-                    grid.scale;
+                      grid.size *
+                      grid.scale;
         } else {
             const widthUnits = parseTokenDimension(token.customWidth) ?? parseTokenDimension(token.size) ?? 1;
             const heightUnits = parseTokenDimension(token.customHeight) ?? parseTokenDimension(token.size) ?? 1;
@@ -1056,7 +1064,9 @@ export function initVttCanvas(vtt) {
                 null,
                 s.points || null,
                 false,
-                grid
+                grid,
+                null,
+                zoom
             );
             if (isControlled) {
                 drawShapeComponentHandles(ctxInteraction, s, s.id, {
@@ -1237,6 +1247,12 @@ export function initVttCanvas(vtt) {
             renderAll,
             selectMapToolItem,
             deleteSelectedMapToolItem,
+            get activeTool() {
+                return activeTool;
+            },
+            set activeTool(v) {
+                activeTool = v;
+            },
             mapToolUndoStack,
             mapToolRedoStack
         });
@@ -1449,7 +1465,8 @@ export function initVttCanvas(vtt) {
         triggerTokenStepThroughAnimationExt(id, sx, sy, ex, ey, dur, tokenAnimations, renderAll);
     const precacheConnectedMapAssets = () =>
         precacheConnectedMapAssetsExt(portals, vtt.campaignState, currentMapId, mapAssetPrecache, getSafeVttUrl);
-    const checkTokenMoveTriggers = (tok, orig) => checkTokenMoveTriggersExt(tok, orig, triggerContext);
+    const checkTokenMoveTriggers = (tok, orig, waypoints = null) =>
+        checkTokenMoveTriggersExt(tok, orig, triggerContext, waypoints);
     const postTrapTriggerChatCard = (d) => postTrapTriggerChatCardExt(d);
     const rollTrapSave = (id, tokId, ab, dc) => rollTrapSaveExt(id, tokId, ab, dc, { tokens, vtt });
     const triggerTrapSpringFX = (d) => triggerTrapSpringFXExt(d);
@@ -1529,6 +1546,12 @@ export function initVttCanvas(vtt) {
             currentMapId,
             campaignState: vtt.campaignState,
             socket: vtt.socket,
+            get activeTool() {
+                return activeTool;
+            },
+            set activeTool(v) {
+                activeTool = v;
+            },
             mapToolUndoStack,
             mapToolRedoStack,
             onRenderLists: () => {
@@ -1539,6 +1562,12 @@ export function initVttCanvas(vtt) {
         });
     const mapToolUndo = () =>
         mapToolUndoExt({
+            get activeTool() {
+                return activeTool;
+            },
+            set activeTool(v) {
+                activeTool = v;
+            },
             mapToolUndoStack,
             mapToolRedoStack,
             traps,
@@ -1554,6 +1583,12 @@ export function initVttCanvas(vtt) {
         });
     const mapToolRedo = () =>
         mapToolRedoExt({
+            get activeTool() {
+                return activeTool;
+            },
+            set activeTool(v) {
+                activeTool = v;
+            },
             mapToolUndoStack,
             mapToolRedoStack,
             traps,
@@ -1591,6 +1626,12 @@ export function initVttCanvas(vtt) {
             currentMapId,
             campaignState: vtt.campaignState,
             socket: vtt.socket,
+            get activeTool() {
+                return activeTool;
+            },
+            set activeTool(v) {
+                activeTool = v;
+            },
             mapToolUndoStack,
             mapToolRedoStack,
             onRenderLists: () => {
@@ -1689,6 +1730,12 @@ export function initVttCanvas(vtt) {
             onPanTo: panTo,
             onUpdate: renderPlacedTrapsList,
             onDeselect: deselectMapToolItem,
+            get activeTool() {
+                return activeTool;
+            },
+            set activeTool(v) {
+                activeTool = v;
+            },
             mapToolUndoStack,
             mapToolRedoStack,
             renderAll,
@@ -1794,8 +1841,8 @@ export function initVttCanvas(vtt) {
                         filterType === 'pc'
                             ? 'player character(s)'
                             : filterType === 'npc'
-                                ? 'monster/NPC(s)'
-                                : 'creature(s)';
+                              ? 'monster/NPC(s)'
+                              : 'creature(s)';
                     if (vtt.chatEngine?.appendSystemMessage) {
                         vtt.chatEngine.appendSystemMessage(
                             `Selected ${targetIds.length} ${label} within ${s.shape || 'shape'}.`
@@ -1894,11 +1941,6 @@ export function initVttCanvas(vtt) {
         const colorSelect = document.getElementById('measure-color');
         if (colorSelect) colorSelect.addEventListener('change', () => renderAll());
     }
-
-    // Ping Animation State
-    let activePings = [];
-    let pingAnimFrame = null;
-    let pingForceSelectTimeout = null;
 
     // Grid alignment settings
     let grid = { size: 50, offsetX: 0, offsetY: 0, scale: 1.0, feetPerSquare: 5 };
@@ -2100,16 +2142,7 @@ export function initVttCanvas(vtt) {
         if (mapData.mapImage && mapData.mapImage.trim() !== '') {
             const imgUrl = mapData.mapImage.trim();
             if (!mapData.tokens) mapData.tokens = {};
-            const cleanUrl = (u) =>
-                (u || '')
-                    .trim()
-                    .replace(/^[/\\]+/, '')
-                    .split('?')[0]
-                    .toLowerCase();
-            const normImgUrl = cleanUrl(imgUrl);
-            const existingAsset = Object.values(mapData.tokens).find(
-                (t) => t.layer === 'map' && (t.isBackground || t.isAsset || cleanUrl(t.img) === normImgUrl)
-            );
+            const existingAsset = Object.values(mapData.tokens).find((t) => isMapBackgroundAsset(t, mapData.id));
             if (!existingAsset) {
                 const isVideo = !!imgUrl.match(/\.(mp4|webm|ogg)(\?.*)?$/i) || imgUrl.includes('pinimg.com/videos');
                 const isYoutube = imgUrl.includes('youtube.com') || imgUrl.includes('youtu.be');
@@ -2242,8 +2275,8 @@ export function initVttCanvas(vtt) {
             const destCenter = destPortal
                 ? calcPortalCenter(destPortal)
                 : tok
-                    ? { x: tok.x + drawW / 2, y: tok.y + drawH / 2 }
-                    : { x: mapW / 2, y: mapH / 2 };
+                  ? { x: tok.x + drawW / 2, y: tok.y + drawH / 2 }
+                  : { x: mapW / 2, y: mapH / 2 };
 
             // Initialize camera directly aligned with destination portal threshold
             panX = w / 2 - destCenter.x;
@@ -2665,18 +2698,40 @@ export function initVttCanvas(vtt) {
         const isGmViewing = vtt.role === 'GM';
         ctxInteraction.clearRect(0, 0, canvasInteraction.width, canvasInteraction.height);
 
+        if (canvasHud && ctxHud) {
+            const vW = viewport ? viewport.clientWidth || window.innerWidth : window.innerWidth;
+            const vH = viewport ? viewport.clientHeight || window.innerHeight : window.innerHeight;
+            if (canvasHud.width !== vW || canvasHud.height !== vH) {
+                canvasHud.width = vW;
+                canvasHud.height = vH;
+            }
+            ctxHud.clearRect(0, 0, canvasHud.width, canvasHud.height);
+        }
+
         // 1.9 Active Initiative Token Highlight removed (handled via DOM in animateVisualFx)
 
         if (isBoxSelecting && boxSelectStart && boxSelectEnd) {
             const bounds = getSelectionBounds(boxSelectStart, boxSelectEnd);
-            ctxInteraction.save();
-            ctxInteraction.fillStyle = 'rgba(32, 138, 255, 0.12)';
-            ctxInteraction.strokeStyle = 'rgba(32, 138, 255, 0.8)';
-            ctxInteraction.lineWidth = 2;
-            ctxInteraction.setLineDash([6, 4]);
-            ctxInteraction.fillRect(bounds.x1, bounds.y1, bounds.x2 - bounds.x1, bounds.y2 - bounds.y1);
-            ctxInteraction.strokeRect(bounds.x1, bounds.y1, bounds.x2 - bounds.x1, bounds.y2 - bounds.y1);
-            ctxInteraction.restore();
+            const targetCtx = ctxHud || ctxInteraction;
+            targetCtx.save();
+            targetCtx.fillStyle = 'rgba(32, 138, 255, 0.12)';
+            targetCtx.strokeStyle = 'rgba(32, 138, 255, 0.85)';
+            targetCtx.setLineDash([6, 4]);
+
+            if (ctxHud && targetCtx === ctxHud) {
+                const sx1 = panX + bounds.x1 * zoom;
+                const sy1 = panY + bounds.y1 * zoom;
+                const sx2 = panX + bounds.x2 * zoom;
+                const sy2 = panY + bounds.y2 * zoom;
+                targetCtx.lineWidth = 1.5;
+                targetCtx.fillRect(sx1, sy1, sx2 - sx1, sy2 - sy1);
+                targetCtx.strokeRect(sx1, sy1, sx2 - sx1, sy2 - sy1);
+            } else {
+                targetCtx.lineWidth = 2 / zoom;
+                targetCtx.fillRect(bounds.x1, bounds.y1, bounds.x2 - bounds.x1, bounds.y2 - bounds.y1);
+                targetCtx.strokeRect(bounds.x1, bounds.y1, bounds.x2 - bounds.x1, bounds.y2 - bounds.y1);
+            }
+            targetCtx.restore();
         }
 
         const htmlOverlayLayer = document.getElementById('vtt-html-overlays');
@@ -2717,7 +2772,10 @@ export function initVttCanvas(vtt) {
             drawMeasurementTemplate,
             resolveRulerPortalBending,
             grid,
-            zoom
+            zoom,
+            panX,
+            panY,
+            ctxHud
         });
 
         renderStandaloneLightsInteractionPass(ctxInteraction, {
@@ -2798,7 +2856,7 @@ export function initVttCanvas(vtt) {
         });
 
         // Render active visual pings & damage FX animations
-        renderActivePingsPassExt(ctxInteraction, activePings);
+        renderActivePingsPassExt(ctxHud || ctxInteraction, null, { panX, panY, zoom });
         renderActiveDamageFXPassExt(ctxInteraction);
         cleanupOrphanedTokenOverlaysExt(tokens);
 
@@ -2819,30 +2877,60 @@ export function initVttCanvas(vtt) {
                     ctxInteraction.lineTo(currentMouseCoords.x, currentMouseCoords.y);
                 }
                 ctxInteraction.stroke();
-                polygonPoints.forEach((p, idx) => {
-                    ctxInteraction.beginPath();
-                    ctxInteraction.arc(p.x, p.y, (idx === 0 ? 5.5 : 4) / zoom, 0, Math.PI * 2);
-                    ctxInteraction.fillStyle = idx === 0 ? '#10b981' : '#ffd700';
-                    ctxInteraction.fill();
-                    ctxInteraction.strokeStyle = '#ffffff';
-                    ctxInteraction.lineWidth = 1 / zoom;
-                    ctxInteraction.stroke();
-                });
                 ctxInteraction.restore();
+
+                const targetPointsCtx = ctxHud || ctxInteraction;
+                targetPointsCtx.save();
+                polygonPoints.forEach((p, idx) => {
+                    targetPointsCtx.beginPath();
+                    if (ctxHud && targetPointsCtx === ctxHud) {
+                        const sx = panX + p.x * zoom;
+                        const sy = panY + p.y * zoom;
+                        targetPointsCtx.arc(sx, sy, idx === 0 ? 5.5 : 4, 0, Math.PI * 2);
+                        targetPointsCtx.fillStyle = idx === 0 ? '#10b981' : '#ffd700';
+                        targetPointsCtx.fill();
+                        targetPointsCtx.strokeStyle = '#ffffff';
+                        targetPointsCtx.lineWidth = 1;
+                        targetPointsCtx.stroke();
+                    } else {
+                        targetPointsCtx.arc(p.x, p.y, (idx === 0 ? 5.5 : 4) / zoom, 0, Math.PI * 2);
+                        targetPointsCtx.fillStyle = idx === 0 ? '#10b981' : '#ffd700';
+                        targetPointsCtx.fill();
+                        targetPointsCtx.strokeStyle = '#ffffff';
+                        targetPointsCtx.lineWidth = 1 / zoom;
+                        targetPointsCtx.stroke();
+                    }
+                });
+                targetPointsCtx.restore();
             }
 
             if (paintSubTool === 'eraser' && currentMouseCoords) {
                 const eraseR = Math.max(16, paintStrokeWidth * 3) / 2;
-                ctxInteraction.save();
-                ctxInteraction.strokeStyle = '#ffffff';
-                ctxInteraction.lineWidth = 1.5 / zoom;
-                ctxInteraction.beginPath();
-                ctxInteraction.arc(currentMouseCoords.x, currentMouseCoords.y, eraseR, 0, Math.PI * 2);
-                ctxInteraction.stroke();
-                ctxInteraction.strokeStyle = '#000000';
-                ctxInteraction.setLineDash([3 / zoom, 3 / zoom]);
-                ctxInteraction.stroke();
-                ctxInteraction.restore();
+                const targetEraserCtx = ctxHud || ctxInteraction;
+                targetEraserCtx.save();
+                if (ctxHud && targetEraserCtx === ctxHud) {
+                    const sx = panX + currentMouseCoords.x * zoom;
+                    const sy = panY + currentMouseCoords.y * zoom;
+                    const sr = eraseR * zoom;
+                    targetEraserCtx.strokeStyle = '#ffffff';
+                    targetEraserCtx.lineWidth = 1.5;
+                    targetEraserCtx.beginPath();
+                    targetEraserCtx.arc(sx, sy, sr, 0, Math.PI * 2);
+                    targetEraserCtx.stroke();
+                    targetEraserCtx.strokeStyle = '#000000';
+                    targetEraserCtx.setLineDash([3, 3]);
+                    targetEraserCtx.stroke();
+                } else {
+                    targetEraserCtx.strokeStyle = '#ffffff';
+                    targetEraserCtx.lineWidth = 1.5 / zoom;
+                    targetEraserCtx.beginPath();
+                    targetEraserCtx.arc(currentMouseCoords.x, currentMouseCoords.y, eraseR, 0, Math.PI * 2);
+                    targetEraserCtx.stroke();
+                    targetEraserCtx.strokeStyle = '#000000';
+                    targetEraserCtx.setLineDash([3 / zoom, 3 / zoom]);
+                    targetEraserCtx.stroke();
+                }
+                targetEraserCtx.restore();
             }
         }
 
@@ -2853,6 +2941,25 @@ export function initVttCanvas(vtt) {
         if (activeTool === 'maptools' || activeTool === 'map-tools') {
             renderMapToolDrawingPreview(ctxInteraction);
         }
+    }
+
+    function deleteMapBackgroundAsset(tokenId) {
+        if (vtt.role !== 'GM') return false;
+        const mapData = vtt.campaignState?.maps?.[currentMapId];
+        const token = tokens[tokenId];
+        if (!mapData || !isMapBackgroundAsset(token, currentMapId)) return false;
+
+        mapData.tokens = tokens;
+        clearMapArtwork(mapData, currentMapId);
+        vtt.socket?.emit('map:edit', {
+            mapId: currentMapId,
+            updates: {
+                mapImage: '',
+                thumbnail: '',
+                tokens: mapData.tokens
+            }
+        });
+        return true;
     }
 
     async function setMapBackground(url) {
@@ -3093,6 +3200,9 @@ export function initVttCanvas(vtt) {
         triggerPingAnimation: (...args) => triggerPingAnimation(...args),
         triggerDamageFXAnimation: (...args) => triggerDamageFXAnimation(...args),
         triggerHealingFXAnimation: (...args) => triggerHealingFXAnimation(...args),
+        getActiveProceduralFxCount: () => getActiveProceduralFxCountExt(),
+        resetProceduralFxQueue: () => resetProceduralFxQueueExt(),
+        maxConcurrentProceduralFx: MAX_CONCURRENT_PROCEDURAL_FX_EXT,
         renderPlacedTrapsList: () => renderPlacedTrapsList(),
         renderPlacedPortalsList: () => renderPlacedPortalsList(),
         processTokenAnimReqs: (t) => processTokenAnimReqs(t),
@@ -3190,7 +3300,17 @@ export function initVttCanvas(vtt) {
             getSafeVttUrl,
             loadMap: (id) => switchMapTo(id),
             openPushPlayersModal,
-            renderMapGrid
+            renderMapGrid,
+            pauseCanvas: () => {
+                if (lifecycle && typeof lifecycle.pause === 'function') {
+                    lifecycle.pause('map_manager');
+                }
+            },
+            resumeCanvas: () => {
+                if (lifecycle && typeof lifecycle.resume === 'function') {
+                    lifecycle.resume('map_manager');
+                }
+            }
         };
     }
 
@@ -3202,8 +3322,15 @@ export function initVttCanvas(vtt) {
         renderMapSidebarExt(allMaps, allFolders, activeFolder, mapManagerState, getMapManagerOptions());
     }
 
-    function createMapCard(map, allFolderNames) {
-        return createMapCardExt(map, allFolderNames, mapManagerState, getMapManagerOptions());
+    function createMapCard(map, allFolderNames, folderOptionsHtml = '', container = null) {
+        return createMapCardExt(
+            map,
+            allFolderNames,
+            mapManagerState,
+            getMapManagerOptions(),
+            folderOptionsHtml,
+            container
+        );
     }
 
     function renderMapGrid() {
@@ -3486,12 +3613,12 @@ export function initVttCanvas(vtt) {
                     ?.forEach((v) => {
                         try {
                             v.pause();
-                        } catch (e) { }
+                        } catch (e) {}
                     });
                 Object.values(ytPingPongControllers).forEach((c) => {
                     try {
                         c?.pause?.();
-                    } catch (e) { }
+                    } catch (e) {}
                 });
             }
             renderAll();
@@ -3548,9 +3675,26 @@ export function initVttCanvas(vtt) {
         getSelectedTokenIds: () => Array.from(selectedTokenIds),
         selectToken: (tokenId) => {
             selectedTokenIds.clear();
-            if (tokenId) {
+            if (Array.isArray(tokenId)) {
+                tokenId.forEach((id) => {
+                    if (id) selectedTokenIds.add(id);
+                });
+                selectedTokenId = tokenId[0] || null;
+            } else if (tokenId) {
                 selectedTokenIds.add(tokenId);
                 selectedTokenId = tokenId;
+            } else {
+                selectedTokenId = null;
+            }
+            renderAll();
+        },
+        selectTokens: (tokenIds) => {
+            selectedTokenIds.clear();
+            if (Array.isArray(tokenIds)) {
+                tokenIds.forEach((id) => {
+                    if (id) selectedTokenIds.add(id);
+                });
+                selectedTokenId = tokenIds[0] || null;
             }
             renderAll();
         },
@@ -3563,7 +3707,11 @@ export function initVttCanvas(vtt) {
             renderAll();
         },
         getCanvasMouseCoords,
+        getActiveTool: () => activeTool,
         getActiveLayer: () => activeLayer,
+        switchActiveLayer: (layer) => switchActiveLayer(layer),
+        getDrawings: () => drawings,
+        getShapes: () => shapes,
         getCurrentMapId: () => currentMapId,
         setTokens: (newTokens) => {
             tokens = newTokens;
@@ -3606,6 +3754,7 @@ export function initVttCanvas(vtt) {
         cancelTouchTokenDrag: cancelTokenDrag,
         centerOnToken: (...args) => centerOnTokenOrMap(...args),
         broadcastViewToPlayers: (...args) => broadcastViewToPlayers(...args),
+        checkTokenMoveTriggers: (tok, orig, waypoints = null) => checkTokenMoveTriggers(tok, orig, waypoints),
         getCampaignSettings: () => campaignSettings,
         setInitiativeHoverToken: (tokenId) => {
             initiativeHoverTokenId = tokenId;
@@ -3806,11 +3955,13 @@ export function initVttCanvas(vtt) {
             currentMapId,
             renderAll,
             openTokenConfigModal: (tokenId) => openTokenEditModal(tokenId),
-            openTokenBulkConfigModal: () => { },
+            openTokenBulkConfigModal: () => {},
             showAddCustomConditionModal,
             showApplyDamageModal,
             showMassRollContextMenu,
-            changeTokenZOrder
+            changeTokenZOrder,
+            deleteMapBackgroundAsset,
+            isMobileViewport
         });
     const changeTokenZOrder = (id, a) => changeTokenZOrderExt(id, a, { tokens, currentMapId, vtt, renderAll });
     const showMassRollContextMenu = (arg1, arg2, arg3 = null) => {
@@ -4292,6 +4443,9 @@ export function initVttCanvas(vtt) {
     }
     function snapToHalfGrid(x, y) {
         return snapToHalfGridExt(x, y, grid);
+    }
+    function snapToSmartGrid(x, y) {
+        return snapToSmartGridExt(x, y, grid);
     }
     const hideAllToolPanels = () => hideAllToolPanelsExt();
     function setupViewportControls() {
@@ -5103,6 +5257,7 @@ export function initVttCanvas(vtt) {
             snapToGrid: (...args) => snapToGrid(...args),
             snapToGridCenter: (...args) => snapToGridCenter(...args),
             snapToHalfGrid: (...args) => snapToHalfGrid(...args),
+            snapToSmartGrid: (...args) => snapToSmartGrid(...args),
             getTokenAtPoint: (...args) => getTokenAtPoint(...args),
             isTokenControlledByPlayer: (...args) => isTokenControlledByPlayer(...args),
             isShapeControlledByPlayer: (...args) => isShapeControlledByPlayer(...args),
@@ -5346,6 +5501,8 @@ export function initVttCanvas(vtt) {
             getTokenDrawDimensions: (t) => getTokenDrawDimensions(t),
             cancelMapToolDrawing: () => cancelMapToolDrawing(),
             snapToGridCenter: (x, y) => snapToGridCenter(x, y),
+            snapToSmartGrid: (x, y) => snapToSmartGrid(x, y),
+            emitMeasureUpdateThrottled: (...args) => emitMeasureUpdateThrottled(...args),
             emitTokenUpdates: (...args) => window.emitTokenUpdates(...args),
             get tokens() {
                 return tokens;
@@ -5537,6 +5694,7 @@ export function initVttCanvas(vtt) {
                 return selectedMapToolItem;
             },
             deleteSelectedMapToolItem: (type) => deleteSelectedMapToolItem(type),
+            deleteMapBackgroundAsset,
             deselectMapToolItem: () => deselectMapToolItem(),
             mapToolUndo: () => mapToolUndo(),
             mapToolRedo: () => mapToolRedo(),
@@ -5557,7 +5715,7 @@ export function initVttCanvas(vtt) {
             get grid() {
                 return grid;
             },
-            checkTokenMoveTriggers: (t, o) => checkTokenMoveTriggers(t, o),
+            checkTokenMoveTriggers: (t, o, w) => checkTokenMoveTriggers(t, o, w),
             get tokenAnimations() {
                 return tokenAnimations;
             },

@@ -20,27 +20,13 @@ globalThis.MutationObserver = dom.window.MutationObserver;
 // Mock prompt helper
 globalThis.window.showVttPrompt = (msg, def, cb) => cb(def);
 
-import {
-    getLinkedTokenHp,
-    wireHpControls,
-    renderStatBlock
-} from '../vtt/js/creature-sheet/creature-renderer.js';
+import { getLinkedTokenHp, wireHpControls, renderStatBlock } from '../vtt/js/creature-sheet/creature-renderer.js';
 
-import {
-    DND_5E_SKILLS,
-    openEditModal,
-    saveCompanionEdits
-} from '../vtt/js/creature-sheet/creature-editor.js';
+import { DND_5E_SKILLS, openEditModal, saveCompanionEdits } from '../vtt/js/creature-sheet/creature-editor.js';
 
-import {
-    formatDefenseEntry,
-    entryToPlainText
-} from '../vtt/js/creature-sheet/creature-parser.js';
+import { formatDefenseEntry, entryToPlainText } from '../vtt/js/creature-sheet/creature-parser.js';
 
-import {
-    wireInitiativeRoll,
-    getVisibilitySetting
-} from '../vtt/js/creature-sheet/creature-roller.js';
+import { wireInitiativeRoll, getVisibilitySetting } from '../vtt/js/creature-sheet/creature-roller.js';
 
 import { initVttSheetDock } from '../vtt/js/vtt-sheet-dock.js';
 
@@ -326,8 +312,20 @@ test('SheetDock preserves isGeneric for Custom NPCs and Companions, enabling ins
         },
         canvasEngine: {
             getTokens: () => ({
-                tok_gob_1: { id: 'tok_gob_1', sourceCharacterId: 'npc_goblin', name: 'Goblin Scout', hp: 22, maxHp: 22 },
-                tok_gob_2: { id: 'tok_gob_2', sourceCharacterId: 'npc_goblin', name: 'Goblin Scout', hp: 15, maxHp: 22 },
+                tok_gob_1: {
+                    id: 'tok_gob_1',
+                    sourceCharacterId: 'npc_goblin',
+                    name: 'Goblin Scout',
+                    hp: 22,
+                    maxHp: 22
+                },
+                tok_gob_2: {
+                    id: 'tok_gob_2',
+                    sourceCharacterId: 'npc_goblin',
+                    name: 'Goblin Scout',
+                    hp: 15,
+                    maxHp: 22
+                },
                 tok_bear: { id: 'tok_bear', characterId: 'comp_bear', name: 'Barnaby the Bear', hp: 34, maxHp: 34 }
             })
         },
@@ -360,7 +358,10 @@ test('SheetDock preserves isGeneric for Custom NPCs and Companions, enabling ins
     assert.equal(instanceChips.length, 2, 'Should render 2 instance switcher chips in dock');
     assert.ok(instanceChips[0].textContent.includes('22 HP'), 'Chip #1 should display 22 HP');
     assert.ok(instanceChips[1].textContent.includes('15 HP'), 'Chip #2 should display 15 HP');
-    assert.ok(!dock.containerEl.innerHTML.includes('[object Object]'), 'Instance chip must never contain [object Object]');
+    assert.ok(
+        !dock.containerEl.innerHTML.includes('[object Object]'),
+        'Instance chip must never contain [object Object]'
+    );
 
     // 2. Open Named Companion
     const namedTab = dock.openSheet({

@@ -12,8 +12,20 @@ import {
 } from './vtt-canvas-portals.js';
 
 export const STANDARD_DAMAGE_TYPES = [
-    'piercing', 'slashing', 'bludgeoning', 'fire', 'poison', 'acid',
-    'cold', 'lightning', 'necrotic', 'radiant', 'force', 'psychic', 'thunder', 'untyped'
+    'piercing',
+    'slashing',
+    'bludgeoning',
+    'fire',
+    'poison',
+    'acid',
+    'cold',
+    'lightning',
+    'necrotic',
+    'radiant',
+    'force',
+    'psychic',
+    'thunder',
+    'untyped'
 ];
 
 export function parseDamageFormulaAndType(rawDamage = '', explicitType = '') {
@@ -36,9 +48,7 @@ export function populateTargetMapsDropdown(campaignState, currentMapId, selected
     const mapSelect = document.getElementById('maptools-portal-target-map');
     if (!mapSelect) return;
 
-    const currentVal = selectedTargetMapId !== null
-        ? selectedTargetMapId
-        : (mapSelect.value || currentMapId);
+    const currentVal = selectedTargetMapId !== null ? selectedTargetMapId : mapSelect.value || currentMapId;
 
     mapSelect.innerHTML = '';
     const intraOpt = document.createElement('option');
@@ -398,7 +408,7 @@ export function selectMapToolItem(type, id, state, callbacks = {}) {
         const radialEl = document.getElementById('maptools-portal-radial');
         if (radialEl) radialEl.checked = portal.isRadial === true;
         const angleVal =
-            portal.facingAngle !== undefined && portal.facingAngle !== null ? Math.round(portal.facingAngle) : 270;
+            portal.facingAngle !== undefined && portal.facingAngle !== null ? Math.round(portal.facingAngle) : 0;
         const angleSlider = document.getElementById('maptools-portal-facing-angle');
         const angleNum = document.getElementById('maptools-portal-facing-angle-num');
         const angleText = document.getElementById('maptools-portal-facing-angle-val');
@@ -529,13 +539,25 @@ export function saveSelectedMapToolItem(type, state, callbacks = {}) {
 
         if (newTargetPortalId) {
             if (portal.linkBack) {
+                let targetReflect = 'none';
+                if (portal.reflectMode === 'two-way') targetReflect = 'two-way';
+                else if (portal.reflectMode === 'one-way') targetReflect = 'none';
+
+                let targetViewThrough = false;
+                if (portal.viewThrough) {
+                    targetViewThrough = !portal.isOneWay;
+                }
+
                 if (newTargetMapId === currentMapId) {
                     const target = portals.find((p) => p.id === newTargetPortalId);
                     if (target) {
                         target.targetPortalId = portal.id;
                         target.targetMapId = currentMapId;
                         target.linkBack = true;
-                        if (portal.viewThrough) target.viewThrough = true;
+                        target.viewThrough = targetViewThrough;
+                        target.reflectMode = targetReflect;
+                        target.walkThrough = portal.walkThrough;
+                        target.isOneWay = portal.isOneWay;
                     }
                 } else if (campaignState?.maps?.[newTargetMapId]?.portals) {
                     const targetList = campaignState.maps[newTargetMapId].portals;
@@ -544,7 +566,10 @@ export function saveSelectedMapToolItem(type, state, callbacks = {}) {
                         target.targetPortalId = portal.id;
                         target.targetMapId = currentMapId;
                         target.linkBack = true;
-                        if (portal.viewThrough) target.viewThrough = true;
+                        target.viewThrough = targetViewThrough;
+                        target.reflectMode = targetReflect;
+                        target.walkThrough = portal.walkThrough;
+                        target.isOneWay = portal.isOneWay;
                         if (socket) socket.emit('portals:update', { mapId: newTargetMapId, portals: targetList });
                     }
                 }
@@ -582,7 +607,15 @@ export function saveSelectedMapToolItem(type, state, callbacks = {}) {
 export function deleteSelectedMapToolItem(type, state, callbacks = {}) {
     if (!state.selectedMapToolItem || state.selectedMapToolItem.type !== type) return;
     const id = state.selectedMapToolItem.id;
-    const { traps = [], portals = [], currentMapId = null, campaignState = {}, socket = null, mapToolUndoStack = null, mapToolRedoStack = null } = callbacks;
+    const {
+        traps = [],
+        portals = [],
+        currentMapId = null,
+        campaignState = {},
+        socket = null,
+        mapToolUndoStack = null,
+        mapToolRedoStack = null
+    } = callbacks;
 
     if (type === 'trap') {
         const idx = traps.findIndex((t) => t.id === id);
@@ -779,18 +812,34 @@ export function commitNewMapToolItem(start, end, polyPts, state, callbacks = {})
 
         portals.push(newPortal);
         if (callbacks.mapToolUndoStack) {
-            callbacks.mapToolUndoStack.push({ action: 'add', type: 'portal', item: JSON.parse(JSON.stringify(newPortal)) });
+            callbacks.mapToolUndoStack.push({
+                action: 'add',
+                type: 'portal',
+                item: JSON.parse(JSON.stringify(newPortal))
+            });
             if (callbacks.mapToolRedoStack) callbacks.mapToolRedoStack.length = 0;
         }
 
         if (linkBack && targetPortalId) {
+            let targetReflect = 'none';
+            if (reflectMode === 'two-way') targetReflect = 'two-way';
+            else if (reflectMode === 'one-way') targetReflect = 'none';
+
+            let targetViewThrough = false;
+            if (viewThrough) {
+                targetViewThrough = !isOneWay;
+            }
+
             if (targetMapId === currentMapId) {
                 const target = portals.find((p) => p.id === targetPortalId);
                 if (target) {
                     target.targetPortalId = id;
                     target.targetMapId = currentMapId;
                     target.linkBack = true;
-                    if (viewThrough) target.viewThrough = true;
+                    target.viewThrough = targetViewThrough;
+                    target.reflectMode = targetReflect;
+                    target.walkThrough = walkThrough;
+                    target.isOneWay = isOneWay;
                 }
             } else if (campaignState?.maps?.[targetMapId]?.portals) {
                 const targetList = campaignState.maps[targetMapId].portals;
@@ -799,7 +848,10 @@ export function commitNewMapToolItem(start, end, polyPts, state, callbacks = {})
                     target.targetPortalId = id;
                     target.targetMapId = currentMapId;
                     target.linkBack = true;
-                    if (viewThrough) target.viewThrough = true;
+                    target.viewThrough = targetViewThrough;
+                    target.reflectMode = targetReflect;
+                    target.walkThrough = walkThrough;
+                    target.isOneWay = isOneWay;
                     if (socket) socket.emit('portals:update', { mapId: targetMapId, portals: targetList });
                 }
             }
@@ -1185,13 +1237,111 @@ export function setupMapToolsControls(state, callbacks = {}) {
         }
     });
 
-    // Reflect mode select
+    // Reflect mode select: mutually exclusive with View-Through
     document.getElementById('maptools-portal-reflect-mode')?.addEventListener('change', (e) => {
         const reflectMode = e.target.value;
+        if (reflectMode !== 'none') {
+            const viewEl = document.getElementById('maptools-portal-viewthrough');
+            if (viewEl) viewEl.checked = false;
+        }
         if (state.selectedMapToolItem && state.selectedMapToolItem.type === 'portal') {
             const p = portals.find((item) => item.id === state.selectedMapToolItem.id);
             if (p) {
                 p.reflectMode = reflectMode;
+                if (reflectMode !== 'none') {
+                    p.viewThrough = false;
+                }
+                if (p.linkBack && p.targetPortalId) {
+                    let targetReflect = 'none';
+                    if (p.reflectMode === 'two-way') targetReflect = 'two-way';
+                    else if (p.reflectMode === 'one-way') targetReflect = 'none';
+
+                    const syncTarget = (target) => {
+                        target.reflectMode = targetReflect;
+                        target.viewThrough = p.viewThrough ? !p.isOneWay : false;
+                    };
+
+                    if (p.targetMapId === currentMapId) {
+                        const target = portals.find((tp) => tp.id === p.targetPortalId);
+                        if (target) syncTarget(target);
+                    } else if (campaignState?.maps?.[p.targetMapId]?.portals) {
+                        const targetList = campaignState.maps[p.targetMapId].portals;
+                        const target = targetList.find((tp) => tp.id === p.targetPortalId);
+                        if (target) {
+                            syncTarget(target);
+                            if (socket) socket.emit('portals:update', { mapId: p.targetMapId, portals: targetList });
+                        }
+                    }
+                }
+                if (socket) socket.emit('portals:update', { mapId: currentMapId, portals });
+                if (renderAll) renderAll();
+            }
+        }
+    });
+
+    // View-through checkbox: mutually exclusive with Reflect Mode
+    document.getElementById('maptools-portal-viewthrough')?.addEventListener('change', (e) => {
+        const viewThrough = e.target.checked;
+        if (viewThrough) {
+            const reflectEl = document.getElementById('maptools-portal-reflect-mode');
+            if (reflectEl) reflectEl.value = 'none';
+        }
+        if (state.selectedMapToolItem && state.selectedMapToolItem.type === 'portal') {
+            const p = portals.find((item) => item.id === state.selectedMapToolItem.id);
+            if (p) {
+                p.viewThrough = viewThrough;
+                if (viewThrough) {
+                    p.reflectMode = 'none';
+                }
+                if (p.linkBack && p.targetPortalId) {
+                    const syncTarget = (target) => {
+                        target.reflectMode = 'none';
+                        target.viewThrough = p.viewThrough ? !p.isOneWay : false;
+                    };
+
+                    if (p.targetMapId === currentMapId) {
+                        const target = portals.find((tp) => tp.id === p.targetPortalId);
+                        if (target) syncTarget(target);
+                    } else if (campaignState?.maps?.[p.targetMapId]?.portals) {
+                        const targetList = campaignState.maps[p.targetMapId].portals;
+                        const target = targetList.find((tp) => tp.id === p.targetPortalId);
+                        if (target) {
+                            syncTarget(target);
+                            if (socket) socket.emit('portals:update', { mapId: p.targetMapId, portals: targetList });
+                        }
+                    }
+                }
+                if (socket) socket.emit('portals:update', { mapId: currentMapId, portals });
+                if (renderAll) renderAll();
+            }
+        }
+    });
+
+    // One-Way checkbox
+    document.getElementById('maptools-portal-oneway')?.addEventListener('change', (e) => {
+        const isOneWay = !!e.target.checked;
+        if (state.selectedMapToolItem && state.selectedMapToolItem.type === 'portal') {
+            const p = portals.find((item) => item.id === state.selectedMapToolItem.id);
+            if (p) {
+                p.isOneWay = isOneWay;
+                if (p.linkBack && p.targetPortalId) {
+                    const syncTarget = (target) => {
+                        if (p.viewThrough) {
+                            target.viewThrough = !isOneWay;
+                        }
+                    };
+                    if (p.targetMapId === currentMapId) {
+                        const target = portals.find((tp) => tp.id === p.targetPortalId);
+                        if (target) syncTarget(target);
+                    } else if (campaignState?.maps?.[p.targetMapId]?.portals) {
+                        const targetList = campaignState.maps[p.targetMapId].portals;
+                        const target = targetList.find((tp) => tp.id === p.targetPortalId);
+                        if (target) {
+                            syncTarget(target);
+                            if (socket) socket.emit('portals:update', { mapId: p.targetMapId, portals: targetList });
+                        }
+                    }
+                }
                 if (socket) socket.emit('portals:update', { mapId: currentMapId, portals });
                 if (renderAll) renderAll();
             }
@@ -1203,7 +1353,7 @@ export function setupMapToolsControls(state, callbacks = {}) {
         if (state.selectedMapToolItem && state.selectedMapToolItem.type === 'portal') {
             const p = portals.find((item) => item.id === state.selectedMapToolItem.id);
             if (p) {
-                p.facingAngle = ((p.facingAngle !== undefined ? p.facingAngle : 270) + 180) % 360;
+                p.facingAngle = ((p.facingAngle !== undefined ? p.facingAngle : 0) + 180) % 360;
                 p.viewSideFlipped = !p.viewSideFlipped;
                 updatePortalAngle(p.facingAngle);
                 if (socket) socket.emit('portals:update', { mapId: currentMapId, portals });
@@ -1213,7 +1363,7 @@ export function setupMapToolsControls(state, callbacks = {}) {
         }
         if (portals.length > 0) {
             const last = portals[portals.length - 1];
-            last.facingAngle = ((last.facingAngle !== undefined ? last.facingAngle : 270) + 180) % 360;
+            last.facingAngle = ((last.facingAngle !== undefined ? last.facingAngle : 0) + 180) % 360;
             last.viewSideFlipped = !last.viewSideFlipped;
             updatePortalAngle(last.facingAngle);
             if (socket) socket.emit('portals:update', { mapId: currentMapId, portals });
@@ -1464,9 +1614,10 @@ export function handleMapToolMouseUp(mouse, e, context = {}) {
     const portals = context.portals || [];
 
     if (activeResizeMapToolHandle) {
-        const item = activeResizeMapToolHandle.type === 'trap'
-            ? traps.find((t) => t.id === activeResizeMapToolHandle.id)
-            : portals.find((p) => p.id === activeResizeMapToolHandle.id);
+        const item =
+            activeResizeMapToolHandle.type === 'trap'
+                ? traps.find((t) => t.id === activeResizeMapToolHandle.id)
+                : portals.find((p) => p.id === activeResizeMapToolHandle.id);
         if (item && activeResizeMapToolHandle.origGeom && context.mapToolUndoStack) {
             context.mapToolUndoStack.push({
                 action: 'geom',
@@ -1497,9 +1648,10 @@ export function handleMapToolMouseUp(mouse, e, context = {}) {
     }
 
     if (activeDragMapToolItem) {
-        const item = activeDragMapToolItem.type === 'trap'
-            ? traps.find((t) => t.id === activeDragMapToolItem.id)
-            : portals.find((p) => p.id === activeDragMapToolItem.id);
+        const item =
+            activeDragMapToolItem.type === 'trap'
+                ? traps.find((t) => t.id === activeDragMapToolItem.id)
+                : portals.find((p) => p.id === activeDragMapToolItem.id);
         if (item && mapToolDragOriginalGeom && context.mapToolUndoStack) {
             context.mapToolUndoStack.push({
                 action: 'geom',

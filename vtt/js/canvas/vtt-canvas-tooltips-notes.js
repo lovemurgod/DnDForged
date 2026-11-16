@@ -143,7 +143,12 @@ export function getTokenAC(token, context = {}) {
     }
     const m = getResolvedCreatureMonsterData(token, context);
     if (m) {
-        if (m.primaryAc !== undefined && m.primaryAc !== null && m.primaryAc !== '' && !isNaN(parseInt(m.primaryAc, 10))) {
+        if (
+            m.primaryAc !== undefined &&
+            m.primaryAc !== null &&
+            m.primaryAc !== '' &&
+            !isNaN(parseInt(m.primaryAc, 10))
+        ) {
             return parseInt(m.primaryAc, 10);
         }
         if (typeof m.ac === 'number') return m.ac;
@@ -163,21 +168,29 @@ export function getTokenAC(token, context = {}) {
     if (charId && campaignState?.characters) {
         const char = campaignState.characters[charId];
         if (char) {
-            let base = char.baseAc !== undefined && char.baseAc !== null ? parseInt(char.baseAc, 10) : (parseInt(char.ac, 10) || 10);
+            let base =
+                char.baseAc !== undefined && char.baseAc !== null
+                    ? parseInt(char.baseAc, 10)
+                    : parseInt(char.ac, 10) || 10;
             const mod = parseInt(char.acMod, 10) || 0;
             let toggleBonus = 0;
             if (Array.isArray(char.acToggles)) {
-                char.acToggles.filter((t) => t && t.enabled).forEach((t) => {
-                    if (t.formula) {
-                        const str = String(t.formula).trim();
-                        const matches = str.match(/[+-]?\s*\d+/g);
-                        if (matches) {
-                            toggleBonus += matches.reduce((sum, term) => sum + (parseInt(term.replace(/\s+/g, ''), 10) || 0), 0);
+                char.acToggles
+                    .filter((t) => t && t.enabled)
+                    .forEach((t) => {
+                        if (t.formula) {
+                            const str = String(t.formula).trim();
+                            const matches = str.match(/[+-]?\s*\d+/g);
+                            if (matches) {
+                                toggleBonus += matches.reduce(
+                                    (sum, term) => sum + (parseInt(term.replace(/\s+/g, ''), 10) || 0),
+                                    0
+                                );
+                            }
+                        } else if (typeof t.bonus === 'number') {
+                            toggleBonus += t.bonus;
                         }
-                    } else if (typeof t.bonus === 'number') {
-                        toggleBonus += t.bonus;
-                    }
-                });
+                    });
             }
             const effective = Math.max(1, base + mod + toggleBonus);
             if (!isNaN(effective)) return effective;

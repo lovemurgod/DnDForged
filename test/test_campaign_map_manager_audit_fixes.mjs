@@ -171,7 +171,11 @@ test('Server Logic: map:delete enforces minimum 1 map and prunes offline overrid
     camp.mapOrder = camp.mapOrder.filter((id) => id !== 'm2');
 
     assert.strictEqual(camp.maps.m2, undefined, 'm2 should be deleted');
-    assert.strictEqual(camp.playerMapOverrides.offlineDave, undefined, 'Offline override for m2 must be cleanly pruned');
+    assert.strictEqual(
+        camp.playerMapOverrides.offlineDave,
+        undefined,
+        'Offline override for m2 must be cleanly pruned'
+    );
 
     // Attempt to delete last remaining map (m1)
     let errorEmitted = false;
@@ -198,8 +202,8 @@ test('Round 2: probeMediaDimensions identifies video formats and returns safe de
 test('Round 2: getPlayerMapOverride resolves case-insensitively', () => {
     const camp = {
         playerMapOverrides: {
-            'LegolasGreenleaf': 'map_woodland',
-            'gimli': 'map_caves'
+            LegolasGreenleaf: 'map_woodland',
+            gimli: 'map_caves'
         }
     };
 
@@ -248,7 +252,11 @@ test('Round 2: emitWeatherUpdate isolates draft mode without mutating stored map
 
     assert.strictEqual(weatherEngineUpdated, true, 'Weather engine preview should be updated');
     assert.strictEqual(socketEmitted, false, 'Socket emit must NOT occur in draft mode');
-    assert.strictEqual(mockVtt.campaignState.maps.m1.weather.effects.length, 0, 'Saved map weather must not mutate in draft mode');
+    assert.strictEqual(
+        mockVtt.campaignState.maps.m1.weather.effects.length,
+        0,
+        'Saved map weather must not mutate in draft mode'
+    );
 
     // Call without draft mode
     weatherState.isDraft = false;
@@ -268,7 +276,9 @@ test('Round 2: Folder datalist merges empty mapFolders with map folders', () => 
         mapFolders: ['EmptyCathedral', 'Forest', 'Underdark']
     };
 
-    const fromMaps = Object.values(camp.maps).map((m) => m.folder).filter((f) => f && f.trim());
+    const fromMaps = Object.values(camp.maps)
+        .map((m) => m.folder)
+        .filter((f) => f && f.trim());
     const fromFolders = (camp.mapFolders || []).filter((f) => f && f.trim());
     const folders = [...new Set([...fromMaps, ...fromFolders])].sort();
 
@@ -320,4 +330,3 @@ test('Round 2: Smart deletion flags active online vs offline overrides correctly
     assert.strictEqual(cryptCheck.cannotDelete, false, 'Map with only offline players can be deleted');
     assert.strictEqual(cryptCheck.hasOfflinePlayers, true, 'Triggers override confirmation warning');
 });
-

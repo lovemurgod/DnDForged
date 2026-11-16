@@ -17,7 +17,8 @@ import {
     getNearestHexFeatures,
     snapToGrid,
     snapToGridCenter,
-    snapToHalfGrid
+    snapToHalfGrid,
+    snapToSmartGrid
 } from '../vtt/js/canvas/vtt-canvas-grid-renderer.js';
 
 import {
@@ -105,6 +106,27 @@ test('Canvas Grid Math: Snapping & Hexagonal Calculations', async (t) => {
         const half = snapToHalfGrid(36, 64, grid);
         assert.equal(half.x, 25);
         assert.equal(half.y, 75);
+
+        // Smart snapping (corners, centers, edge midpoints)
+        // 1. Near corner (0, 0)
+        const nearCorner = snapToSmartGrid(3, 4, grid);
+        assert.equal(nearCorner.x, 0);
+        assert.equal(nearCorner.y, 0);
+
+        // 2. Near cell center (25, 25)
+        const nearCenter = snapToSmartGrid(24, 26, grid);
+        assert.equal(nearCenter.x, 25);
+        assert.equal(nearCenter.y, 25);
+
+        // 3. Near horizontal edge midpoint (25, 50)
+        const nearHorizEdge = snapToSmartGrid(26, 48, grid);
+        assert.equal(nearHorizEdge.x, 25);
+        assert.equal(nearHorizEdge.y, 50);
+
+        // 4. Near vertical edge midpoint (50, 25)
+        const nearVertEdge = snapToSmartGrid(49, 24, grid);
+        assert.equal(nearVertEdge.x, 50);
+        assert.equal(nearVertEdge.y, 25);
     });
 
     await t.test('getNearestHexFeatures finds hex center and vertices accurately', () => {
@@ -118,6 +140,10 @@ test('Canvas Grid Math: Snapping & Hexagonal Calculations', async (t) => {
         const snappedToken = snapToGrid(30, 40, true, grid);
         assert.ok(Number.isFinite(snappedToken.x));
         assert.ok(Number.isFinite(snappedToken.y));
+
+        const smartHex = snapToSmartGrid(30, 40, grid);
+        assert.ok(Number.isFinite(smartHex.x));
+        assert.ok(Number.isFinite(smartHex.y));
     });
 });
 
@@ -240,11 +266,11 @@ test('Canvas Interaction Tools: Token Control, Bounding Box & Selection Collisio
         assert.deepEqual(b2, { x1: 100, y1: 150, x2: 300, y2: 400 });
     });
 
-    await t.test('isTokenWithinSelection checks token center point inside bounding box', () => {
+    await t.test('isTokenWithinSelection checks token bounding box overlap inside selection rectangle', () => {
         const token = { x: 100, y: 100 };
-        const dims = () => ({ drawW: 50, drawH: 50 }); // center is 125, 125
+        const dims = () => ({ drawW: 50, drawH: 50 }); // bounds [100..150, 100..150]
         assert.equal(isTokenWithinSelection(token, { x1: 50, y1: 50, x2: 200, y2: 200 }, dims), true);
-        assert.equal(isTokenWithinSelection(token, { x1: 130, y1: 50, x2: 200, y2: 200 }, dims), false);
+        assert.equal(isTokenWithinSelection(token, { x1: 160, y1: 50, x2: 200, y2: 200 }, dims), false);
     });
 
     await t.test('getTokenAtPoint hits topmost token and respects layer matching', () => {

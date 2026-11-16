@@ -1333,6 +1333,10 @@ body.role-gm .player-only,
     display: flex !important;
     flex-direction: column !important;
     padding: 18px 22px !important;
+    background: #12151e !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.75), 0 0 0 1px var(--color-border-subtle) !important;
 }
 
 .map-manager-header-row {
@@ -1586,6 +1590,8 @@ body.role-gm .player-only,
     position: relative;
     transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s, border-color 0.2s;
     user-select: none;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
 }
 
 .map-card-compact:hover {

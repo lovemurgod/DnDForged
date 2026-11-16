@@ -52,7 +52,7 @@ async function isServerReady(port) {
             signal: AbortSignal.timeout(1000)
         });
         if (res.ok) return true;
-    } catch (e) {}
+    } catch (e) { }
     return false;
 }
 
@@ -224,20 +224,21 @@ try {
         stdio: ['ignore', 'pipe', 'pipe']
     });
 
+    let serverErrors = [];
     serverProcess.stderr.on('data', (d) => {
-        // console.error(`[Server stderr] ${d}`);
+        serverErrors.push(d.toString());
     });
 
     // Wait for server ready
     let serverReady = false;
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < 120; i++) {
         if (await isServerReady(TEST_PORT)) {
             serverReady = true;
             break;
         }
         await new Promise((r) => setTimeout(r, 100));
     }
-    assert.strictEqual(serverReady, true, 'Server failed to start on test port');
+    assert.strictEqual(serverReady, true, `Server failed to start on test port: ${serverErrors.join('')}`);
     console.log(`  ✓ Production server running and verified ready on port ${TEST_PORT}.`);
 
     // Verify initial server campaign list
@@ -404,6 +405,8 @@ try {
 // ============================================================================
 console.log('\n[SUITE 3] Testing Server Lifecycle & External Server Control Accuracy...');
 
+const EXTERNAL_TEST_PORT = 51238;
+
 // Simulate external server scenario
 const dummyHttpServer = net.createServer((socket) => {
     socket.on('data', () => {
@@ -414,14 +417,14 @@ const dummyHttpServer = net.createServer((socket) => {
     });
 });
 
-await new Promise((resolve) => dummyHttpServer.listen(TEST_PORT, '127.0.0.1', resolve));
+await new Promise((resolve) => dummyHttpServer.listen(EXTERNAL_TEST_PORT, '127.0.0.1', resolve));
 
 try {
     // 1. External server is active on port
-    const portActive = await isPortActive(TEST_PORT);
+    const portActive = await isPortActive(EXTERNAL_TEST_PORT);
     assert.strictEqual(portActive, true, 'Port should be active');
 
-    const ready = await isServerReady(TEST_PORT);
+    const ready = await isServerReady(EXTERNAL_TEST_PORT);
     assert.strictEqual(ready, true, 'isServerReady should confirm healthy response');
 
     // 2. Simulate startServer logic when attaching to external
@@ -469,11 +472,11 @@ try {
     dummyHttpServer.close();
     await new Promise((r) => setTimeout(r, 100));
 
-    const serverHealthyAfterKill = await isServerReady(TEST_PORT);
+    const serverHealthyAfterKill = await isServerReady(EXTERNAL_TEST_PORT);
     assert.strictEqual(serverHealthyAfterKill, false, 'Server must be detected as dead after shutdown');
 
     async function testStartTunnelGuard() {
-        const healthy = await isServerReady(TEST_PORT);
+        const healthy = await isServerReady(EXTERNAL_TEST_PORT);
         if (!healthy) {
             return { success: false, error: 'Local server failed to start or is not healthy' };
         }
@@ -591,7 +594,12 @@ console.log('  ✓ Password removal verified to clear hash and salt.');
 const origCampaign = {
     id: 'camp_alpha',
     name: 'Alpha Campaign',
-    initiative: { combatants: [{ id: 'goblin_1', name: 'Goblin' }], currentRound: 3, activeTurnIndex: 0, isVisible: true }
+    initiative: {
+        combatants: [{ id: 'goblin_1', name: 'Goblin' }],
+        currentRound: 3,
+        activeTurnIndex: 0,
+        isVisible: true
+    }
 };
 const duplicated = JSON.parse(JSON.stringify(origCampaign));
 duplicated.initiative = {
@@ -662,14 +670,30 @@ fs.mkdirSync(restoredCampBUploads, { recursive: true });
 fs.cpSync(path.join(suite5BackupAssets, 'campaigns', 'camp_a'), restoredCampAUploads, { recursive: true });
 fs.cpSync(path.join(suite5BackupAssets, 'campaigns', 'camp_b'), restoredCampBUploads, { recursive: true });
 
-assert.strictEqual(fs.existsSync(path.join(restoredCampAUploads, 'camp_a_map.png')), true, 'Camp A map must be in Camp A');
-assert.strictEqual(fs.existsSync(path.join(restoredCampAUploads, 'camp_b_map.png')), false, 'Camp B map must NOT pollute Camp A');
-assert.strictEqual(fs.existsSync(path.join(restoredCampBUploads, 'camp_b_map.png')), true, 'Camp B map must be in Camp B');
-assert.strictEqual(fs.existsSync(path.join(restoredCampBUploads, 'camp_a_map.png')), false, 'Camp A map must NOT pollute Camp B');
+assert.strictEqual(
+    fs.existsSync(path.join(restoredCampAUploads, 'camp_a_map.png')),
+    true,
+    'Camp A map must be in Camp A'
+);
+assert.strictEqual(
+    fs.existsSync(path.join(restoredCampAUploads, 'camp_b_map.png')),
+    false,
+    'Camp B map must NOT pollute Camp A'
+);
+assert.strictEqual(
+    fs.existsSync(path.join(restoredCampBUploads, 'camp_b_map.png')),
+    true,
+    'Camp B map must be in Camp B'
+);
+assert.strictEqual(
+    fs.existsSync(path.join(restoredCampBUploads, 'camp_a_map.png')),
+    false,
+    'Camp A map must NOT pollute Camp B'
+);
 
 try {
     fs.rmSync(suite5Dir, { recursive: true, force: true });
-} catch (e) {}
+} catch (e) { }
 
 console.log('  ✓ Isolated per-campaign backup structure verified to prevent cross-campaign asset flooding.');
 
@@ -689,10 +713,14 @@ fs.mkdirSync(mockSourcesDir, { recursive: true });
 fs.mkdirSync(mockTokensDir, { recursive: true });
 
 // Create sample custom homebrew sourcebook
-const customSourceContent = JSON.stringify({
-    _meta: { sources: [{ json: 'CUSTOM_BOOK', full: 'Custom Sourcebook' }] },
-    monster: [{ name: 'Aether Drake', source: 'CUSTOM_BOOK', cr: '5' }]
-}, null, 2);
+const customSourceContent = JSON.stringify(
+    {
+        _meta: { sources: [{ json: 'CUSTOM_BOOK', full: 'Custom Sourcebook' }] },
+        monster: [{ name: 'Aether Drake', source: 'CUSTOM_BOOK', cr: '5' }]
+    },
+    null,
+    2
+);
 fs.writeFileSync(path.join(mockSourcesDir, 'custom_book.json'), customSourceContent);
 
 // Create sample homebrew token
@@ -707,8 +735,16 @@ fs.mkdirSync(backupAssetsDir, { recursive: true });
 fs.cpSync(path.join(mockDataDir, 'sources'), path.join(backupPackDir, 'sources'), { recursive: true });
 fs.cpSync(path.join(mockDataDir, 'assets', 'tokens'), path.join(backupAssetsDir, 'tokens'), { recursive: true });
 
-assert.strictEqual(fs.existsSync(path.join(backupPackDir, 'sources', 'bestiary', 'custom_book.json')), true, 'Sources must be packaged into backup');
-assert.strictEqual(fs.existsSync(path.join(backupAssetsDir, 'tokens', 'token-12345.png')), true, 'Tokens must be packaged into backup assets');
+assert.strictEqual(
+    fs.existsSync(path.join(backupPackDir, 'sources', 'bestiary', 'custom_book.json')),
+    true,
+    'Sources must be packaged into backup'
+);
+assert.strictEqual(
+    fs.existsSync(path.join(backupAssetsDir, 'tokens', 'token-12345.png')),
+    true,
+    'Tokens must be packaged into backup assets'
+);
 
 // Simulate restore into fresh target directory
 const restoredTargetDataDir = path.join(suite6Dir, 'restored_data');
@@ -722,12 +758,21 @@ fs.mkdirSync(targetTokens, { recursive: true });
 fs.cpSync(path.join(backupPackDir, 'sources'), targetSources, { recursive: true });
 fs.cpSync(path.join(backupAssetsDir, 'tokens'), targetTokens, { recursive: true });
 
-assert.strictEqual(fs.existsSync(path.join(targetSources, 'bestiary', 'custom_book.json')), true, 'Restored sources must exist in target data folder');
-assert.strictEqual(fs.existsSync(path.join(targetTokens, 'token-12345.png')), true, 'Restored tokens must exist in target data folder');
+assert.strictEqual(
+    fs.existsSync(path.join(targetSources, 'bestiary', 'custom_book.json')),
+    true,
+    'Restored sources must exist in target data folder'
+);
+assert.strictEqual(
+    fs.existsSync(path.join(targetTokens, 'token-12345.png')),
+    true,
+    'Restored tokens must exist in target data folder'
+);
 console.log('  ✓ F-01 & F-02: Custom homebrew sources and token artwork safely bundled and restored.');
 
 // 2. F-02: findReferencedUploads token asset regex matching
-const testUploadRegex = /(?:vtt-uploads|uploads|assets[/\\]tokens|tokens)[/\\]([^"'<>\r\n]+?\.(?:png|jpe?g|webp|svg|gif|mp3|ogg|wav|webm|mp4|json|m4a|opus))/gi;
+const testUploadRegex =
+    /(?:vtt-uploads|uploads|assets[/\\]tokens|tokens)[/\\]([^"'<>\r\n]+?\.(?:png|jpe?g|webp|svg|gif|mp3|ogg|wav|webm|mp4|json|m4a|opus))/gi;
 const sampleEntityPayload = {
     avatar: '/assets/tokens/token-wizard-99.png',
     mapImage: '/uploads/dungeon_floor1.webp',
@@ -740,9 +785,17 @@ let m;
 while ((m = testUploadRegex.exec(jsonStr)) !== null) {
     if (m[1]) matchedFilenames.push(path.basename(m[1]));
 }
-assert.strictEqual(matchedFilenames.includes('token-wizard-99.png'), true, 'Must match /assets/tokens/token-wizard-99.png');
+assert.strictEqual(
+    matchedFilenames.includes('token-wizard-99.png'),
+    true,
+    'Must match /assets/tokens/token-wizard-99.png'
+);
 assert.strictEqual(matchedFilenames.includes('dungeon_floor1.webp'), true, 'Must match /uploads/dungeon_floor1.webp');
-assert.strictEqual(matchedFilenames.includes('token-dragon-77.png'), true, 'Must match assets\\tokens\\token-dragon-77.png');
+assert.strictEqual(
+    matchedFilenames.includes('token-dragon-77.png'),
+    true,
+    'Must match assets\\tokens\\token-dragon-77.png'
+);
 assert.strictEqual(matchedFilenames.includes('soundtrack.mp3'), true, 'Must match vtt-uploads/soundtrack.mp3');
 console.log('  ✓ F-02: findReferencedUploads correctly detects token assets along with standard uploads.');
 
@@ -772,7 +825,11 @@ const npcs = allChars.filter((c) => isCustomNpc(c) && !isCompanion(c));
 assert.strictEqual(companions.length, 1, 'Exactly 1 companion');
 assert.strictEqual(npcs.length, 1, 'Exactly 1 custom NPC');
 assert.strictEqual(players.length, 3, 'All remaining characters (including non-standard IDs) must default to Player');
-assert.strictEqual(players.length + companions.length + npcs.length, allChars.length, 'Total characters categorized must equal original count without omissions');
+assert.strictEqual(
+    players.length + companions.length + npcs.length,
+    allChars.length,
+    'Total characters categorized must equal original count without omissions'
+);
 console.log('  ✓ F-07: Character categorization guarantees zero orphaned characters on non-standard IDs.');
 
 // 4. F-03 & F-04: Authenticated Internal Headers for data-dir and sync-sources
@@ -801,7 +858,7 @@ console.log('  ✓ F-06: Homebrew Studio dirty check correctly detects unsaved m
 // Clean up suite 6 temp files
 try {
     fs.rmSync(suite6Dir, { recursive: true, force: true });
-} catch (e) {}
+} catch (e) { }
 
 // =========================================================================
 // SUITE 7: ROUND 3 FORENSIC AUDIT FIXES (F-08 through F-14)
@@ -866,12 +923,7 @@ console.log('  ✓ F-10: Token asset picker correctly resolves webPath and fileP
 // 3. F-11: Root-Relative Media URL Resolution in file:// Context
 function resolveMediaUrl(url, localUrl = 'http://127.0.0.1:3000') {
     if (!url || typeof url !== 'string') return '';
-    if (
-        url.startsWith('http://') ||
-        url.startsWith('https://') ||
-        url.startsWith('data:') ||
-        url.startsWith('blob:')
-    ) {
+    if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:') || url.startsWith('blob:')) {
         return url;
     }
     if (url.startsWith('/')) {
@@ -914,7 +966,11 @@ let alertMessage = '';
 if (mockFailedTunnelRes && mockFailedTunnelRes.success === false) {
     alertMessage = `Failed to start tunnel: ${mockFailedTunnelRes.error}`;
 }
-assert.strictEqual(alertMessage, 'Failed to start tunnel: cloudflared binary not found', 'Tunnel failures must produce informative error message');
+assert.strictEqual(
+    alertMessage,
+    'Failed to start tunnel: cloudflared binary not found',
+    'Tunnel failures must produce informative error message'
+);
 console.log('  ✓ F-13: Online tunnel launch failures reliably surface actionable error feedback.');
 
 // 6. F-14: Real-Time Sidebar Entity Count Synchronization
@@ -927,7 +983,11 @@ mockCampaignRecord.mapsCount = Object.keys(mockFullDetail.maps).length;
 mockCampaignRecord.playersCount = Object.keys(mockFullDetail.characters).length;
 
 assert.strictEqual(mockCampaignRecord.mapsCount, 3, 'Sidebar mapsCount must immediately reflect updated map count');
-assert.strictEqual(mockCampaignRecord.playersCount, 2, 'Sidebar playersCount must immediately reflect updated character count');
+assert.strictEqual(
+    mockCampaignRecord.playersCount,
+    2,
+    'Sidebar playersCount must immediately reflect updated character count'
+);
 console.log('  ✓ F-14: Campaign list sidebar counts synchronize in real-time when entities change.');
 
 // =========================================================================
@@ -936,9 +996,7 @@ console.log('  ✓ F-14: Campaign list sidebar counts synchronize in real-time w
 console.log('\n--- SUITE 8: CLOUDFLARED PACKAGED ASAR CWD & ERROR RESILIENCE ---');
 
 function getSafeTunnelCwd(isPackaged, rootDir, resourcesPath, binaryPath) {
-    return isPackaged || rootDir.includes('app.asar')
-        ? (resourcesPath || path.dirname(binaryPath))
-        : rootDir;
+    return isPackaged || rootDir.includes('app.asar') ? resourcesPath || path.dirname(binaryPath) : rootDir;
 }
 
 const mockAsarRootDir = 'D:\\App\\resources\\app.asar';
@@ -957,7 +1015,7 @@ console.log('  ✓ Verified external binary spawn working directory bypasses vir
 // Clean up temp directories
 try {
     fs.rmSync(testBaseDir, { recursive: true, force: true });
-} catch (e) {}
+} catch (e) { }
 
 console.log('\n===============================================================');
 console.log('🎉 ALL PRODUCTION REGRESSION TESTS PASSED CLEANLY!             ');

@@ -168,7 +168,7 @@ console.log('Testing DEFECT-05: Whisper command regex parsing...');
     assert.strictEqual(m2[1] || m2[2] || m2[3], 'Bob Dylan');
     assert.strictEqual(m2[4], 'I found the key');
 
-    const m3 = '/w \'Lady Alyssa\' Greetings'.match(whisperRegex);
+    const m3 = "/w 'Lady Alyssa' Greetings".match(whisperRegex);
     assert(m3);
     assert.strictEqual(m3[1] || m3[2] || m3[3], 'Lady Alyssa');
     assert.strictEqual(m3[4], 'Greetings');

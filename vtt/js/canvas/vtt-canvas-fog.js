@@ -6,10 +6,14 @@ import { interpolateColors, getTokenEffectiveLightFacing } from './vtt-canvas-li
 import { checkLineIntersection } from './vtt-canvas-traps.js';
 import {
     computePortalSightFrustum,
+    computeProjectedPortalData,
+    invalidatePortalCaches,
     calcPortalCenter,
     getPortalNormalVector,
     isWallCoincidentWithPortal
 } from './vtt-canvas-portals.js';
+
+let lastFogWallsVersion = -1;
 
 export function renderFogOfWarLayer(width, height, options = {}) {
     const {
@@ -43,6 +47,11 @@ export function renderFogOfWarLayer(width, height, options = {}) {
     const isGM = options.isGM !== undefined ? options.isGM : vtt.role === 'GM';
 
     if (!ctxFog || !canvasFog) return [];
+
+    if (wallsVersion !== lastFogWallsVersion) {
+        invalidatePortalCaches();
+        lastFogWallsVersion = wallsVersion;
+    }
 
     let gmVisionMode = options.gmTokenVisionMode || false;
     const useFogLod = width > 2500 || height > 2500;
@@ -206,9 +215,7 @@ export function renderFogOfWarLayer(width, height, options = {}) {
         // Carve active portal line-of-sight frustums and reflect stencils visible to this token
         if (Array.isArray(portals) && portals.length > 0) {
             portals.forEach((portal) => {
-                const isReflect =
-                    portal.reflectMode === 'one-way' ||
-                    portal.reflectMode === 'two-way';
+                const isReflect = portal.reflectMode === 'one-way' || portal.reflectMode === 'two-way';
                 const isViewThrough = !!(portal.viewThrough || portal.seeThrough);
                 if (!isReflect && !isViewThrough) return;
 
@@ -216,7 +223,7 @@ export function renderFogOfWarLayer(width, height, options = {}) {
                 const vInX = centerA.x - cx;
                 const vInY = centerA.y - cy;
                 const distToA = Math.hypot(vInX, vInY);
-                if (distToA > radius && !isDaylightMode && (!isGM || gmVisionMode)) return;
+                if (distToA > radius && !isDaylightMode) return;
 
                 let blocked = false;
                 for (let i = 0; i < walls.length; i++) {
@@ -228,11 +235,13 @@ export function renderFogOfWarLayer(width, height, options = {}) {
                         break;
                     }
                 }
-                if (blocked && (!isGM || gmVisionMode)) return;
+                if (blocked) return;
 
-                if (portal.isOneWay && !portal.isRadial) {
+                if (!portal.isRadial && portal.isOneWay) {
                     const normA = getPortalNormalVector(portal);
-                    if (vInX * normA.dx + vInY * normA.dy >= 0) return;
+                    const distNormA = (cx - centerA.x) * normA.dx + (cy - centerA.y) * normA.dy;
+                    if (distNormA < -2) return;
+                    if (distToA > 25 && vInX * normA.dx + vInY * normA.dy >= 0) return;
                 }
 
                 if (isReflect) {
@@ -256,18 +265,70 @@ export function renderFogOfWarLayer(width, height, options = {}) {
                 } else if (isViewThrough) {
                     const remainingSight = (isDaylightMode ? 99999 : radius) - distToA;
                     if (remainingSight > 10) {
-                        const frustum = computePortalSightFrustum(portal, { x: cx, y: cy }, remainingSight);
-                        if (frustum && frustum.length >= 3) {
-                            ctxFog.save();
-                            ctxFog.beginPath();
-                            ctxFog.moveTo(frustum[0].x, frustum[0].y);
-                            for (let fi = 1; fi < frustum.length; fi++) {
-                                ctxFog.lineTo(frustum[fi].x, frustum[fi].y);
+                        const targetMapId = portal.targetMapId || currentMapId;
+                        let targetPortal = null;
+                        let targetWalls = walls;
+                        if (targetMapId === currentMapId) {
+                            targetPortal = portals.find((p) => p.id === portal.targetPortalId);
+                        } else if (vtt?.campaignState?.maps?.[targetMapId]) {
+                            const tMap = vtt.campaignState.maps[targetMapId];
+                            targetPortal = tMap?.portals?.find((p) => p.id === portal.targetPortalId);
+                            targetWalls = tMap?.walls || [];
+                        }
+
+                        if (targetPortal) {
+                            const projData = computeProjectedPortalData(
+                                portal,
+                                targetPortal,
+                                { x: cx, y: cy },
+                                remainingSight,
+                                walls,
+                                targetWalls,
+                                {}
+                            );
+                            if (projData && projData.frustum && projData.frustum.length >= 3) {
+                                ctxFog.save();
+                                ctxFog.beginPath();
+                                ctxFog.moveTo(projData.frustum[0].x, projData.frustum[0].y);
+                                for (let fi = 1; fi < projData.frustum.length; fi++) {
+                                    ctxFog.lineTo(projData.frustum[fi].x, projData.frustum[fi].y);
+                                }
+                                ctxFog.closePath();
+
+                                // Strictly clip fog clearing to the target room's visible floor
+                                if (Array.isArray(projData.room2VisPoly) && projData.room2VisPoly.length >= 3) {
+                                    ctxFog.clip();
+                                    ctxFog.translate(centerA.x, centerA.y);
+                                    if (projData.thetaRot !== 0) ctxFog.rotate(projData.thetaRot);
+                                    ctxFog.translate(-projData.centerB.x, -projData.centerB.y);
+                                    ctxFog.beginPath();
+                                    ctxFog.moveTo(projData.room2VisPoly[0].x, projData.room2VisPoly[0].y);
+                                    for (let pi = 1; pi < projData.room2VisPoly.length; pi++) {
+                                        ctxFog.lineTo(projData.room2VisPoly[pi].x, projData.room2VisPoly[pi].y);
+                                    }
+                                    ctxFog.closePath();
+                                    ctxFog.fillStyle = 'rgba(255, 255, 255, 1.0)';
+                                    ctxFog.fill();
+                                } else {
+                                    ctxFog.fillStyle = 'rgba(255, 255, 255, 1.0)';
+                                    ctxFog.fill();
+                                }
+                                ctxFog.restore();
                             }
-                            ctxFog.closePath();
-                            ctxFog.fillStyle = 'rgba(255, 255, 255, 1.0)';
-                            ctxFog.fill();
-                            ctxFog.restore();
+                        } else {
+                            const frustum = computePortalSightFrustum(portal, { x: cx, y: cy }, remainingSight, walls);
+                            if (frustum && frustum.length >= 3) {
+                                ctxFog.save();
+                                ctxFog.beginPath();
+                                ctxFog.moveTo(frustum[0].x, frustum[0].y);
+                                for (let fi = 1; fi < frustum.length; fi++) {
+                                    ctxFog.lineTo(frustum[fi].x, frustum[fi].y);
+                                }
+                                ctxFog.closePath();
+                                ctxFog.fillStyle = 'rgba(255, 255, 255, 1.0)';
+                                ctxFog.fill();
+                                ctxFog.restore();
+                            }
                         }
                     }
                 }

@@ -64,8 +64,8 @@ export function parseWeatherSettings(ws = {}) {
                     typeof ws.colorStrength === 'number'
                         ? ws.colorStrength
                         : typeof ws.tintOpacity === 'number'
-                            ? ws.tintOpacity
-                            : 0.0,
+                          ? ws.tintOpacity
+                          : 0.0,
                 ambientWash: true
             }
         ];
@@ -168,12 +168,12 @@ export function renderWeatherLayersUI(weatherState, options = {}) {
                     <label style="font-size: 0.78rem;">Preset Type</label>
                     <select class="layer-preset-select" style="width: 100%; padding: 5px 8px; font-size: 0.8rem; background: var(--color-bg-card); color: var(--color-text-primary); border: 1px solid var(--color-gold-base); border-radius: 4px;">
                         ${WEATHER_CATEGORIES.map(
-            (cat) => `
+                            (cat) => `
                             <optgroup label="${cat.name}">
                                 ${cat.options.map((o) => `<option value="${o.id}" ${o.id === layer.preset ? 'selected' : ''}>${o.label}</option>`).join('')}
                             </optgroup>
                         `
-        ).join('')}
+                        ).join('')}
                     </select>
                 </div>
                 <div style="display: flex; gap: 8px; flex-wrap: wrap;">

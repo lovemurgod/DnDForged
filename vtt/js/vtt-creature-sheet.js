@@ -508,6 +508,24 @@ export function initVttCreatureSheet(vtt) {
                 return;
             }
 
+            const tableChip = e.target.closest('.cs-ability-table-chip');
+            if (tableChip) {
+                const entry = tableChip.closest('.cs-ability-entry');
+                if (!entry) return;
+                const rawJson = tableChip.dataset.tableJson;
+                let tableData = null;
+                if (rawJson) {
+                    try {
+                        tableData = JSON.parse(decodeURIComponent(rawJson));
+                    } catch (err) {}
+                }
+                const abilityName = tableChip.dataset.abilityName || 'Table';
+                const creatureName = currentMonster?.name || 'Creature';
+                rollCreatureTableAction(creatureName, abilityName, tableData, currentMonster, creatureCtx);
+                e.stopPropagation();
+                return;
+            }
+
             const infoEl = e.target.closest('.cs-ability-info-btn');
             if (infoEl) {
                 const entry = infoEl.closest('.cs-ability-entry');
@@ -517,12 +535,15 @@ export function initVttCreatureSheet(vtt) {
                 if (abilityName === 'Ping') abilityName = 'Ability';
 
                 const abilityText = entry.querySelector('.cs-ability-text')?.innerHTML.trim() || '';
+                const tableChipEl = entry.querySelector('.cs-ability-table-chip');
+                const tableJson = tableChipEl ? tableChipEl.dataset.tableJson : null;
                 const visibility = getVisibilitySetting(creatureCtx);
 
                 const abilityCard = {
                     creatureName: currentMonster?.name || 'Creature',
                     abilityName: abilityName,
-                    text: abilityText
+                    text: abilityText,
+                    tableJson: tableJson || null
                 };
 
                 if (visibility === 'private' || visibility === 'gm') {
@@ -666,6 +687,81 @@ export function initVttCreatureSheet(vtt) {
         });
     }
 
+    async function rollCreatureTableAction(creatureName, abilityName, tableData, monster, ctx) {
+        if (!tableData) return;
+        const sides = tableData.diceSides || 10;
+        const formula = tableData.formula || `1d${sides}`;
+
+        // 3D dice physics
+        if (window.Dice3D && typeof window.Dice3D.showDiceRoll === 'function') {
+            try {
+                window.Dice3D.showDiceRoll([{ faces: sides, val: 1 }]);
+            } catch (err) {}
+        }
+
+        const rollVal = Math.floor(Math.random() * sides) + 1;
+        let entryName = `Roll [${rollVal}]`;
+        let entryText = '';
+
+        if (tableData.type === 'flesh-warping') {
+            try {
+                const res = await fetch('/api/tables/catalog?q=Flesh+Warping');
+                if (res.ok) {
+                    const list = await res.json();
+                    const fw = list.find((t) => t.name.includes('Flesh Warping') || t.name.includes('Demon Ichor'));
+                    if (fw) {
+                        const fullRes = await fetch(`/api/tables/${fw.id}`);
+                        if (fullRes.ok) {
+                            const tbl = await fullRes.json();
+                            const row = (tbl.rows || []).find((r) => {
+                                const rangeStr = String(r[0]);
+                                const parts = rangeStr.split(/[–\-]/);
+                                const min = parseInt(parts[0], 10);
+                                const max = parts[1] ? (parts[1].trim() === '00' ? 100 : parseInt(parts[1], 10)) : min;
+                                return rollVal >= min && rollVal <= max;
+                            });
+                            if (row) {
+                                entryName = `${row[0]}: ${row[1] || ''}`;
+                                entryText = row.slice(2).join(' — ') || row[1] || '';
+                            }
+                        }
+                    }
+                }
+            } catch (e) {
+                console.error('Error rolling Flesh Warping table:', e);
+            }
+        } else if (tableData.items && tableData.items.length > 0) {
+            const idx = Math.min(Math.max(rollVal - 1, 0), tableData.items.length - 1);
+            const item = tableData.items[idx];
+            entryName = item.fullName || item.name || `Result #${rollVal}`;
+            entryText = item.desc || item.entry || '';
+        }
+
+        const visibility = ctx ? getVisibilitySetting(ctx) : 'public';
+        const chatPayload = {
+            rollTableCard: {
+                tableName: `${creatureName}: ${abilityName}`,
+                formula,
+                roll: rollVal,
+                entryName,
+                entryText
+            },
+            text: `${creatureName} rolled ${abilityName} [${rollVal}]: ${entryName}`
+        };
+
+        if (visibility === 'private' || visibility === 'gm') {
+            vtt.socket.emit('chat:whisper', { to: vtt.username, ...chatPayload });
+        } else {
+            vtt.socket.emit('chat:msg', chatPayload);
+        }
+        if (vtt.toast) vtt.toast(`${creatureName} rolled ${abilityName}: ${entryName}`);
+    }
+
+    if (typeof window !== 'undefined') {
+        if (!window.VTT) window.VTT = {};
+        window.VTT.rollCreatureTableAction = rollCreatureTableAction;
+    }
+
     // ─── Public API ───────────────────────────────────────────────────────────
     const api = {
         openSheet,
@@ -684,6 +780,7 @@ export function initVttCreatureSheet(vtt) {
         parseActionMacro: (a, r, t, c, p, o) => parseActionMacro(a, r, t, c, p, o, currentMonster),
         parseSpellMacro,
         rollAndPostToChat: (f, l) => rollAndPostToChat(f, l, creatureCtx),
+        rollCreatureTableAction: (c, a, t, m) => rollCreatureTableAction(c, a, t, m, creatureCtx),
         postAbilityToChat: (a, t) => postAbilityToChat(a, t, creatureCtx),
         showMassRollDialog,
         executeMassRolls: (args) => executeMassRolls({ ...args, ctx: creatureCtx }),

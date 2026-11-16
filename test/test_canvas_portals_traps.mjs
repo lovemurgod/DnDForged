@@ -183,28 +183,34 @@ describe('Canvas Portals: Non-Euclidean Geometry & Teleportation', () => {
     });
 
     it('getPortalNormalVector computes normalized direction and handles flipping', () => {
-        // Line from (0, 0) to (100, 0) -> normal points up (dy = -1, dx = 0)
+        // Line from (0, 0) to (100, 0) -> default normal points North (dy = -1, dx = 0)
         const linePortal = { shape: 'line', geom: { x1: 0, y1: 0, x2: 100, y2: 0 } };
         const norm = getPortalNormalVector(linePortal);
         assert.strictEqual(norm.dx, 0);
-        assert.strictEqual(norm.dy, 1);
+        assert.strictEqual(norm.dy, -1);
 
-        // Facing angle = 0 deg (points east along +X)
+        // Facing angle = 0 deg (points North along -Y)
         const anglePortal = { geom: {}, facingAngle: 0 };
         const normAngle = getPortalNormalVector(anglePortal);
-        assert.strictEqual(Math.round(normAngle.dx), 1);
-        assert.strictEqual(Math.abs(Math.round(normAngle.dy)), 0);
+        assert.strictEqual(Math.abs(Math.round(normAngle.dx)), 0);
+        assert.strictEqual(Math.round(normAngle.dy), -1);
 
-        // Flipped side
-        const flippedPortal = { geom: {}, facingAngle: 0, viewSideFlipped: true };
+        // Facing angle = 90 deg (points East along +X)
+        const angleEastPortal = { geom: {}, facingAngle: 90 };
+        const normEast = getPortalNormalVector(angleEastPortal);
+        assert.strictEqual(Math.round(normEast.dx), 1);
+        assert.strictEqual(Math.abs(Math.round(normEast.dy)), 0);
+
+        // Flipped side (facingAngle: 90 flipped points West along -X)
+        const flippedPortal = { geom: {}, facingAngle: 90, viewSideFlipped: true };
         const normFlipped = getPortalNormalVector(flippedPortal);
         assert.strictEqual(Math.round(normFlipped.dx), -1);
         assert.strictEqual(Math.abs(Math.round(normFlipped.dy)), 0);
     });
 
     it('checkOneWayPortalEntry allows entrance from the front and blocks from rear', () => {
-        // Portal facing East (facingAngle: 0 -> normal dx: 1, dy: 0)
-        const portal = { geom: {}, isOneWay: true, facingAngle: 0 };
+        // Portal facing East (facingAngle: 90 -> normal dx: 1, dy: 0)
+        const portal = { geom: {}, isOneWay: true, facingAngle: 90 };
 
         // Token moving Westward towards Portal (from x=100 to x=0 -> dx = -100). Dot product = -100 * 1 = -100 < 0 (facing front)
         assert.strictEqual(

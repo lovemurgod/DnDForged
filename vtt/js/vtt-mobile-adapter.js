@@ -836,6 +836,7 @@ export function initVttMobileAdapter(vtt) {
     }
 
     function closeAllDrawers() {
+        document.body.classList.remove('mobile-sheet-open');
         if (sidebar) sidebar.classList.remove('mobile-drawer-open');
         if (playerSheetPanel) {
             playerSheetPanel.classList.remove('open');
@@ -862,6 +863,13 @@ export function initVttMobileAdapter(vtt) {
         if (mobilePaintModal) mobilePaintModal.classList.add('vtt-hidden');
         const maptoolsSheet = document.getElementById('vtt-mobile-maptools-sheet');
         if (maptoolsSheet) maptoolsSheet.classList.add('vtt-hidden');
+        const desktopMapTools = document.getElementById('panel-map-tools');
+        if (desktopMapTools) desktopMapTools.classList.add('vtt-hidden');
+        const desktopLayers = document.getElementById('panel-layers-config');
+        if (desktopLayers) desktopLayers.classList.add('vtt-hidden');
+        const desktopLighting = document.getElementById('panel-lighting-config');
+        if (desktopLighting) desktopLighting.classList.add('vtt-hidden');
+        updateFloatingCombatPillFn?.();
     }
 
     function openMobileSidebarTab(targetTabId, isSubPanel = false) {
@@ -901,6 +909,8 @@ export function initVttMobileAdapter(vtt) {
             }
         }
 
+        document.body.classList.add('mobile-sheet-open');
+        if (mobileToolsMenu) mobileToolsMenu.classList.remove('active');
         sidebar.classList.add('mobile-drawer-open');
         if (mobileBackdrop) mobileBackdrop.classList.add('active');
         if (mobileSheetCarousel) mobileSheetCarousel.classList.add('vtt-hidden');
@@ -910,6 +920,8 @@ export function initVttMobileAdapter(vtt) {
         if (!playerSheetPanel) return;
 
         // Open sheet overlay
+        document.body.classList.add('mobile-sheet-open');
+        if (mobileToolsMenu) mobileToolsMenu.classList.remove('active');
         playerSheetPanel.classList.remove('minimized');
         playerSheetPanel.classList.add('open');
         if (mobileBackdrop) mobileBackdrop.classList.add('active');
@@ -922,8 +934,11 @@ export function initVttMobileAdapter(vtt) {
     function openMobileInitiativeDrawer() {
         if (!initContainer) return;
 
+        document.body.classList.add('mobile-sheet-open');
+        if (mobileToolsMenu) mobileToolsMenu.classList.remove('active');
         initContainer.classList.remove('vtt-hidden');
         initContainer.classList.add('mobile-init-open');
+        if (mobileCombatPill) mobileCombatPill.classList.add('vtt-hidden');
         if (mobileSheetCarousel) mobileSheetCarousel.classList.add('vtt-hidden');
     }
 
@@ -1879,7 +1894,8 @@ export function initVttMobileAdapter(vtt) {
             if (desktopTrapAbility && trapAbilitySelect) trapAbilitySelect.value = desktopTrapAbility.value;
             if (desktopTrapDc && trapDcVal) trapDcVal.textContent = desktopTrapDc.value || '15';
             if (desktopTrapDamage && trapDamageInput) trapDamageInput.value = desktopTrapDamage.value;
-            if (desktopTrapDamageType && trapDamageTypeSelect) trapDamageTypeSelect.value = desktopTrapDamageType.value || 'piercing';
+            if (desktopTrapDamageType && trapDamageTypeSelect)
+                trapDamageTypeSelect.value = desktopTrapDamageType.value || 'piercing';
             if (desktopTrapAuto && trapAutoCheck) trapAutoCheck.checked = desktopTrapAuto.checked;
             if (desktopTrapRepeat && trapRepeatCheck) trapRepeatCheck.checked = desktopTrapRepeat.checked;
         }
@@ -2179,6 +2195,8 @@ export function initVttMobileAdapter(vtt) {
                         window.VTT.creatureSheet.loadMonster(tok.monsterData);
                     }
                     if (creatureSheetPanel) {
+                        document.body.classList.add('mobile-sheet-open');
+                        if (mobileToolsMenu) mobileToolsMenu.classList.remove('active');
                         creatureSheetPanel.classList.remove('minimized');
                         creatureSheetPanel.classList.add('open');
                         if (mobileBackdrop) mobileBackdrop.classList.add('active');
@@ -2483,6 +2501,16 @@ export function initVttMobileAdapter(vtt) {
 
         function updateFloatingCombatPill() {
             if (!isMobileViewport()) {
+                combatPill.classList.add('vtt-hidden');
+                return;
+            }
+
+            // Hide compact pill when the full initiative drawer is open
+            if (
+                initContainer &&
+                (!initContainer.classList.contains('vtt-hidden') ||
+                    initContainer.classList.contains('mobile-init-open'))
+            ) {
                 combatPill.classList.add('vtt-hidden');
                 return;
             }

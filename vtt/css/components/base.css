@@ -249,6 +249,147 @@ body {
     box-shadow: 0 2px 8px rgba(147, 112, 219, 0.4);
 }
 
+/* Player Sheet Top Control Bar */
+.ps-top-control-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 14px;
+    background: rgba(14, 18, 27, 0.7);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--color-border-subtle);
+    flex-shrink: 0;
+    gap: 10px;
+}
+
+/* Interconnected Segmented Capsule */
+.ps-segmented-capsule {
+    display: inline-flex;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.45);
+    padding: 2px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.ps-segmented-capsule .ps-roll-mode-btn {
+    font-family: var(--font-heading);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    padding: 3px 11px;
+    border-radius: 16px;
+    border: none;
+    background: transparent;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    user-select: none;
+}
+
+.ps-segmented-capsule .ps-roll-mode-btn i {
+    font-size: 0.65rem;
+}
+
+.ps-segmented-capsule .ps-roll-mode-btn:hover:not(.active) {
+    color: var(--color-text-primary);
+    background: rgba(255, 255, 255, 0.06);
+}
+
+/* Solid Vibrant Active Badges */
+.ps-segmented-capsule .ps-roll-mode-btn.active {
+    background: linear-gradient(135deg, var(--color-gold-base, #d4af37), #b8860b);
+    color: #121212;
+    font-weight: 800;
+    box-shadow: 0 2px 6px rgba(212, 175, 55, 0.35);
+}
+
+.ps-segmented-capsule .ps-roll-mode-btn.active.adv {
+    background: linear-gradient(135deg, #16a34a, #15803d);
+    color: #ffffff;
+    box-shadow: 0 2px 6px rgba(22, 163, 74, 0.4);
+}
+
+.ps-segmented-capsule .ps-roll-mode-btn.active.dis {
+    background: linear-gradient(135deg, #dc2626, #b91c1c);
+    color: #ffffff;
+    box-shadow: 0 2px 6px rgba(220, 38, 38, 0.4);
+}
+
+/* Actions Group */
+.ps-actions-group {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+/* GM Whisper Toggle */
+.ps-whisper-btn {
+    font-family: var(--font-heading);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    padding: 3px 10px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(0, 0, 0, 0.35);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.ps-whisper-btn i {
+    font-size: 0.7rem;
+}
+
+.ps-whisper-btn:hover:not(.active) {
+    color: var(--color-text-primary);
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+.ps-whisper-btn.active {
+    background: linear-gradient(135deg, #9333ea, #7e22ce);
+    color: #ffffff;
+    border-color: transparent;
+    font-weight: 800;
+    box-shadow: 0 2px 6px rgba(147, 51, 234, 0.4);
+}
+
+/* Sleek Circular Settings Cog */
+.ps-settings-cog-btn {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 50%;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    width: 26px;
+    height: 26px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    font-size: 0.75rem;
+    padding: 0;
+}
+
+.ps-settings-cog-btn:hover {
+    background: rgba(212, 175, 55, 0.12);
+    color: var(--color-gold-base, #d4af37);
+    border-color: rgba(212, 175, 55, 0.4);
+    box-shadow: 0 0 8px rgba(212, 175, 55, 0.25);
+    transform: rotate(60deg);
+}
+
 /* Forms */
 .form-group {
     margin-bottom: 16px;
@@ -324,4 +465,69 @@ select option {
     height: 100vh;
     pointer-events: none; /* Let clicks pass through to map */
     z-index: 9999;
+}
+
+/* Roll Tables & Decks Cards */
+.rolltable-card {
+    transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.rolltable-card:hover {
+    border-color: rgba(212, 175, 55, 0.4) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+}
+.rolltable-chat-card {
+    animation: fadeInScale 0.2s ease-out;
+}
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.96);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Table Picker Modal & Tabular List */
+.picker-row {
+    display: flex;
+    align-items: center;
+    padding: 7px 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    cursor: pointer;
+    transition: background 0.15s ease;
+    font-size: 0.8rem;
+}
+.picker-row:hover {
+    background: rgba(212, 175, 55, 0.08);
+}
+.picker-row.selected {
+    background: rgba(212, 175, 55, 0.16) !important;
+    border-color: rgba(212, 175, 55, 0.3);
+}
+.picker-th.sortable:hover {
+    color: #fff !important;
+}
+.picker-th.sortable:hover .sort-icon {
+    opacity: 0.8 !important;
+}
+.picker-th.sorted {
+    color: var(--color-gold-base) !important;
+}
+.picker-th.sorted .sort-icon {
+    opacity: 1 !important;
+    color: var(--color-gold-base);
+}
+.picker-tab-btn {
+    opacity: 0.7;
+}
+.picker-tab-btn:hover {
+    opacity: 1;
+    color: #fff !important;
+}
+.picker-tab-btn.active {
+    opacity: 1;
+    color: var(--color-gold-light) !important;
+    border-bottom-color: var(--color-gold-base) !important;
 }

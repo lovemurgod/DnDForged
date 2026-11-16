@@ -73,7 +73,8 @@ export function showTokenContextMenu(tokenId, clientX, clientY, options = {}) {
         snapToGrid = (x, y) => ({ x, y }),
         renderAll = () => {},
         changeTokenZOrderFn = changeTokenZOrder,
-        applyLightingPresetFn = applyTokenLightingPreset
+        applyLightingPresetFn = applyTokenLightingPreset,
+        deleteMapBackgroundAsset = null
     } = options;
 
     const oldMenu = document.getElementById('vtt-token-context-menu');
@@ -436,9 +437,13 @@ export function showTokenContextMenu(tokenId, clientX, clientY, options = {}) {
             }
         });
 
+        const isMultiSide = token.isAssetTable || token.isCardToken;
+        const selectorLabel = isMultiSide ? 'Side Selector' : 'Token Selector';
+        const selectorIcon = isMultiSide ? 'fa-table-cells-large' : 'fa-images';
+
         html += `
             <div class="vtt-token-menu-item">
-                <span><i class="fa-solid fa-images item-icon"></i> Token Selector</span>
+                <span><i class="fa-solid ${selectorIcon} item-icon"></i> ${selectorLabel}</span>
                 <i class="fa-solid fa-chevron-right chevron-icon"></i>
                 <div class="vtt-token-submenu">
                     <div class="vtt-token-submenu-list scroll-styled" style="width: 250px; padding: 12px; cursor: default; max-height: 400px; display: flex; gap: 8px; flex-wrap: wrap;">
@@ -447,6 +452,24 @@ export function showTokenContextMenu(tokenId, clientX, clientY, options = {}) {
                 </div>
             </div>
         `;
+
+        if (availableTokens.length > 1) {
+            if (token.isCardToken) {
+                html += `
+                    <div class="vtt-token-menu-item" id="menu-flip-card">
+                        <span><i class="fa-solid fa-repeat item-icon text-gradient-gold"></i> Flip Card</span>
+                    </div>
+                `;
+            }
+            html += `
+                <div class="vtt-token-menu-item" id="menu-next-side">
+                    <span><i class="fa-solid fa-forward-step item-icon"></i> Next Side</span>
+                </div>
+                <div class="vtt-token-menu-item" id="menu-random-side">
+                    <span><i class="fa-solid fa-dice item-icon text-gradient-gold"></i> Random Side</span>
+                </div>
+            `;
+        }
     }
 
     // Equip Light Submenu
@@ -486,42 +509,50 @@ export function showTokenContextMenu(tokenId, clientX, clientY, options = {}) {
         </div>
     `;
 
-    // 4. Transform options (All Users)
+    // 4. Transform options (All Users - grouped cascading submenu)
     html += `
         <div class="vtt-token-menu-divider"></div>
-        <div class="vtt-token-menu-item" id="menu-flip-h">
-            <span><i class="fa-solid fa-arrows-left-right item-icon"></i> Flip Horizontally</span>
-        </div>
-        <div class="vtt-token-menu-item" id="menu-flip-v">
-            <span><i class="fa-solid fa-arrows-up-down item-icon"></i> Flip Vertically</span>
-        </div>
-        <div class="vtt-token-menu-item" id="menu-reset-rotation">
-            <span><i class="fa-solid fa-rotate-left item-icon"></i> Reset Rotation</span>
+        <div class="vtt-token-menu-item" id="menu-ctx-transform">
+            <span><i class="fa-solid fa-arrows-rotate item-icon"></i> Transform</span>
+            <i class="fa-solid fa-chevron-right chevron-icon"></i>
+            <div class="vtt-token-submenu" style="min-width: 190px;">
+                <div class="vtt-token-submenu-list scroll-styled">
+                    <div class="vtt-submenu-item" id="menu-flip-h">
+                        <span><i class="fa-solid fa-arrows-left-right" style="width: 16px; text-align: center; margin-right: 8px;"></i> Flip Horizontally</span>
+                    </div>
+                    <div class="vtt-submenu-item" id="menu-flip-v">
+                        <span><i class="fa-solid fa-arrows-up-down" style="width: 16px; text-align: center; margin-right: 8px;"></i> Flip Vertically</span>
+                    </div>
+                    <div class="vtt-submenu-item" id="menu-reset-rotation">
+                        <span><i class="fa-solid fa-rotate-left" style="width: 16px; text-align: center; margin-right: 8px;"></i> Reset Rotation</span>
+                    </div>
+                </div>
+            </div>
         </div>
     `;
 
-    // 5. Z-ordering (GM Only)
+    // 5. Z-ordering & Layers (GM Only - grouped cascading submenu)
     if (vtt.role === 'GM') {
         html += `
             <div class="vtt-token-menu-divider"></div>
-            <div class="vtt-token-menu-item" id="menu-move-front">
-                <span><i class="fa-solid fa-layer-group item-icon"></i> Move to Front</span>
-            </div>
-            <div class="vtt-token-menu-item" id="menu-move-back">
-                <span><i class="fa-solid fa-layer-group item-icon"></i> Move to Back</span>
-            </div>
-            <div class="vtt-token-menu-item" id="menu-move-front-one">
-                <span><i class="fa-solid fa-angle-up item-icon"></i> Move Front One</span>
-            </div>
-            <div class="vtt-token-menu-item" id="menu-move-back-one">
-                <span><i class="fa-solid fa-angle-down item-icon"></i> Move Back One</span>
-            </div>
-            <div class="vtt-token-menu-divider"></div>
-            <div class="vtt-token-menu-item">
-                <span><i class="fa-solid fa-layer-group item-icon"></i> Move to Layer</span>
+            <div class="vtt-token-menu-item" id="menu-ctx-arrange">
+                <span><i class="fa-solid fa-layer-group item-icon"></i> Arrange & Layer</span>
                 <i class="fa-solid fa-chevron-right chevron-icon"></i>
-                <div class="vtt-token-submenu" style="min-width: 180px;">
+                <div class="vtt-token-submenu" style="min-width: 200px;">
                     <div class="vtt-token-submenu-list scroll-styled">
+                        <div class="vtt-submenu-item" id="menu-move-front">
+                            <span><i class="fa-solid fa-layer-group" style="width: 16px; text-align: center; margin-right: 8px;"></i> Move to Front</span>
+                        </div>
+                        <div class="vtt-submenu-item" id="menu-move-back">
+                            <span><i class="fa-solid fa-layer-group" style="width: 16px; text-align: center; margin-right: 8px;"></i> Move to Back</span>
+                        </div>
+                        <div class="vtt-submenu-item" id="menu-move-front-one">
+                            <span><i class="fa-solid fa-angle-up" style="width: 16px; text-align: center; margin-right: 8px;"></i> Move Front One</span>
+                        </div>
+                        <div class="vtt-submenu-item" id="menu-move-back-one">
+                            <span><i class="fa-solid fa-angle-down" style="width: 16px; text-align: center; margin-right: 8px;"></i> Move Back One</span>
+                        </div>
+                        <div class="vtt-token-menu-divider"></div>
                         <div class="vtt-submenu-item menu-ctx-move-layer" data-layer="token">
                             <span><i class="fa-solid fa-users" style="width: 16px; text-align: center; margin-right: 8px;"></i> Token Layer</span>
                         </div>
@@ -595,21 +626,65 @@ export function showTokenContextMenu(tokenId, clientX, clientY, options = {}) {
         menu.style.top = '50%';
         menu.style.transform = 'translate(-50%, -50%)';
     } else {
-        const menuRect = menu.getBoundingClientRect();
+        const PADDING = 12;
         const screenW = window.innerWidth;
         const screenH = window.innerHeight;
+
+        // Measure unscaled layout dimensions to avoid CSS entrance animation scaling distortion (scale(0.96))
+        const menuWidth = menu.offsetWidth || menu.getBoundingClientRect().width || 200;
+        const menuHeight = menu.offsetHeight || menu.getBoundingClientRect().height || 350;
+
+        // Safety max-height for ultra-short viewports (< 500px)
+        const maxAllowedHeight = Math.max(160, screenH - PADDING * 2);
+        menu.style.maxHeight = `${maxAllowedHeight}px`;
+        if (menu.scrollHeight > maxAllowedHeight || menuHeight > maxAllowedHeight) {
+            menu.style.overflowY = 'auto';
+            menu.style.overflowX = 'hidden';
+        }
+
         let adjustedX = clientX;
         let adjustedY = clientY;
-        if (clientX + menuRect.width > screenW) {
-            adjustedX = screenW - menuRect.width - 10;
+
+        // Clamp horizontally
+        if (clientX + menuWidth > screenW - PADDING) {
+            adjustedX = Math.max(PADDING, screenW - menuWidth - PADDING);
         }
-        if (clientY + menuRect.height > screenH) {
-            adjustedY = screenH - menuRect.height - 10;
+
+        // Clamp vertically: flip up or shift up with safety margin if overflowing screen bottom
+        if (clientY + menuHeight > screenH - PADDING) {
+            adjustedY = Math.max(PADDING, screenH - menuHeight - PADDING);
         }
-        adjustedX = Math.max(10, adjustedX);
-        adjustedY = Math.max(10, adjustedY);
+
+        adjustedX = Math.max(PADDING, adjustedX);
+        adjustedY = Math.max(PADDING, adjustedY);
+
         menu.style.left = `${adjustedX}px`;
         menu.style.top = `${adjustedY}px`;
+
+        // Viewport-aware submenu flip (left/up) on hover
+        menu.querySelectorAll('.vtt-token-menu-item').forEach((item) => {
+            const submenu = item.querySelector('.vtt-token-submenu');
+            if (!submenu) return;
+            item.addEventListener('mouseenter', () => {
+                const itemRect = item.getBoundingClientRect();
+                const subWidth = submenu.offsetWidth || 200;
+                const subHeight = submenu.offsetHeight || 220;
+
+                // Flip left if overflowing right edge
+                if (itemRect.right + subWidth > window.innerWidth - 8) {
+                    submenu.classList.add('flip-left');
+                } else {
+                    submenu.classList.remove('flip-left');
+                }
+
+                // Flip upwards if overflowing bottom edge
+                if (itemRect.top + subHeight > window.innerHeight - 8) {
+                    submenu.classList.add('flip-up');
+                } else {
+                    submenu.classList.remove('flip-up');
+                }
+            });
+        });
     }
 
     // Splash Art
@@ -946,6 +1021,96 @@ export function showTokenContextMenu(tokenId, clientX, clientY, options = {}) {
         });
     });
 
+    const applySideByIndex = (targetSideIdx) => {
+        if (!availableTokens || availableTokens.length === 0) return;
+        const validIdx = Math.max(0, Math.min(availableTokens.length - 1, targetSideIdx));
+        const sideData = availableTokens[validIdx];
+        if (!sideData || !sideData.url) return;
+
+        const t = tokens[tokenId];
+        if (!t) return;
+
+        t.url = sideData.url;
+        t.img = sideData.url;
+        t.activeTokenIndex = sideData.idx;
+
+        const cleanUrl = sideData.url.split('?')[0].toLowerCase();
+        const isGif = cleanUrl.endsWith('.gif') || sideData.url.includes('.gif');
+        t.isGif = isGif;
+        t.isVideo =
+            !isGif &&
+            (!!cleanUrl.match(/\.(mp4|webm|ogg)$/i) ||
+                sideData.url.includes('youtube.com') ||
+                sideData.url.includes('pinimg.com/videos'));
+
+        const targetCharId = t.characterId || t.sourceCharacterId;
+        if (targetCharId && vtt.campaignState?.characters) {
+            const char = vtt.campaignState.characters[targetCharId];
+            if (
+                char &&
+                sideData.idx >= 0 &&
+                Array.isArray(char.tokenImages) &&
+                sideData.idx < char.tokenImages.length
+            ) {
+                char.activeTokenIndex = sideData.idx;
+                if (vtt.socket) {
+                    vtt.socket.emit('character:update', { id: targetCharId, character: char });
+                }
+            }
+        }
+
+        if (typeof window !== 'undefined' && window.VTT?.chatEngine?.updateCombatantTokenArt) {
+            window.VTT.chatEngine.updateCombatantTokenArt(tokenId, sideData.url, targetCharId);
+        } else if (typeof window !== 'undefined' && window.VTT?.chatEngine?.refreshInitiative) {
+            window.VTT.chatEngine.refreshInitiative();
+        }
+
+        if (vtt.socket && typeof window !== 'undefined' && typeof window.emitTokenUpdates === 'function') {
+            window.emitTokenUpdates(tokens);
+        }
+        renderAll();
+        if (typeof window !== 'undefined' && window.VTT?.toast) {
+            const sideName = sideData.label || `Side ${validIdx + 1}`;
+            window.VTT.toast(`Token art: ${sideName}`);
+        }
+    };
+
+    const btnNextSide = menu.querySelector('#menu-next-side');
+    if (btnNextSide) {
+        btnNextSide.addEventListener('click', () => {
+            const t = tokens[tokenId];
+            if (!t || availableTokens.length < 2) return;
+            let cur = availableTokens.findIndex((item) => item.url === t.img || item.idx === t.activeTokenIndex);
+            if (cur < 0) cur = 0;
+            const next = (cur + 1) % availableTokens.length;
+            applySideByIndex(next);
+            menu.remove();
+        });
+    }
+
+    const btnRandomSide = menu.querySelector('#menu-random-side');
+    if (btnRandomSide) {
+        btnRandomSide.addEventListener('click', () => {
+            const t = tokens[tokenId];
+            if (!t || availableTokens.length < 2) return;
+            const rand = Math.floor(Math.random() * availableTokens.length);
+            applySideByIndex(rand);
+            menu.remove();
+        });
+    }
+
+    const btnFlipCard = menu.querySelector('#menu-flip-card');
+    if (btnFlipCard) {
+        btnFlipCard.addEventListener('click', () => {
+            const t = tokens[tokenId];
+            if (!t || availableTokens.length < 2) return;
+            let cur = availableTokens.findIndex((item) => item.url === t.img || item.idx === t.activeTokenIndex);
+            const flip = cur === 0 ? 1 : 0;
+            applySideByIndex(flip);
+            menu.remove();
+        });
+    }
+
     menu.querySelectorAll('.menu-ctx-equip-light').forEach((item) => {
         item.addEventListener('click', () => {
             const targetToken = tokens[tokenId];
@@ -1093,6 +1258,11 @@ export function showTokenContextMenu(tokenId, clientX, clientY, options = {}) {
             menu.remove();
         });
         menu.querySelector('#menu-ctx-delete').addEventListener('click', () => {
+            if (typeof deleteMapBackgroundAsset === 'function' && deleteMapBackgroundAsset(tokenId)) {
+                renderAll();
+                menu.remove();
+                return;
+            }
             delete tokens[tokenId];
             if (typeof window !== 'undefined' && typeof window.emitTokenUpdates === 'function') {
                 window.emitTokenUpdates(tokens);

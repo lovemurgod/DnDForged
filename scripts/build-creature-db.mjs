@@ -983,6 +983,8 @@ function normalizeSpellcasting(monster, spellsLookup) {
             atkMod,
             header: cleanTags(headerText),
             footer: cleanTags(footerText),
+            headerEntries: raw.headerEntries || (headerText ? [cleanTags(headerText)] : []),
+            footerEntries: raw.footerEntries || (footerText ? [cleanTags(footerText)] : []),
             spellsByLevel,
             atWill,
             daily,

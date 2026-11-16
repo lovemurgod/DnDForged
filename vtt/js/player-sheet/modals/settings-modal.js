@@ -1165,3 +1165,187 @@ export function openAcSettingsModal(char, options = {}) {
     document.getElementById('pc-ac-settings-modal')?.classList.remove('vtt-hidden');
     document.getElementById('pc-ac-settings-overlay')?.classList.remove('vtt-hidden');
 }
+
+/**
+ * Character Sheet General Settings Modal (Elven Accuracy, Carry Weight, Halfling Lucky, Crit Threshold)
+ */
+let currentSheetSettingsChar = null;
+let currentSheetSettingsOptions = {};
+
+function closeSheetSettings() {
+    document.getElementById('pc-sheet-settings-modal')?.classList.add('vtt-hidden');
+    document.getElementById('pc-sheet-settings-overlay')?.classList.add('vtt-hidden');
+    currentSheetSettingsChar = null;
+}
+
+function setupSheetSettingsListeners(options = {}) {
+    const overlay = document.getElementById('pc-sheet-settings-overlay');
+    const closeBtn = document.getElementById('modal-sheet-settings-close');
+    const cancelBtn = document.getElementById('modal-sheet-settings-cancel');
+    const saveBtn = document.getElementById('modal-sheet-settings-save');
+
+    overlay?.addEventListener('click', closeSheetSettings);
+    closeBtn?.addEventListener('click', closeSheetSettings);
+    cancelBtn?.addEventListener('click', closeSheetSettings);
+
+    document.querySelectorAll('.pc-carry-mult-pill').forEach((pill) => {
+        pill.addEventListener('click', (e) => {
+            const val = e.currentTarget.dataset.mult;
+            const input = document.getElementById('modal-sheet-setting-carry-mult');
+            if (input && val) input.value = val;
+        });
+    });
+
+    document.querySelectorAll('.pc-crit-range-pill').forEach((pill) => {
+        pill.addEventListener('click', (e) => {
+            const val = e.currentTarget.dataset.crit;
+            const input = document.getElementById('modal-sheet-setting-crit-range');
+            if (input && val) input.value = val;
+        });
+    });
+
+    saveBtn?.addEventListener('click', () => {
+        if (!currentSheetSettingsChar) return;
+        const char = currentSheetSettingsChar;
+        char.settings = char.settings || {};
+
+        const elvenAccuracy = Boolean(document.getElementById('modal-sheet-setting-elven-accuracy')?.checked);
+        const carryMultRaw = parseFloat(document.getElementById('modal-sheet-setting-carry-mult')?.value);
+        const carryWeightMultiplier = Math.max(0.1, isNaN(carryMultRaw) ? 1 : carryMultRaw);
+        const halflingLucky = Boolean(document.getElementById('modal-sheet-setting-halfling-lucky')?.checked);
+        const critRangeRaw = parseInt(document.getElementById('modal-sheet-setting-crit-range')?.value, 10);
+        const critRange = Math.max(1, Math.min(20, isNaN(critRangeRaw) ? 20 : critRangeRaw));
+
+        char.settings.elvenAccuracy = elvenAccuracy;
+        char.settings.carryWeightMultiplier = carryWeightMultiplier;
+        char.settings.halflingLucky = halflingLucky;
+        char.settings.critRange = critRange;
+
+        // Sync with root properties for compatibility
+        char.carryWeightMultiplier = carryWeightMultiplier;
+        char.attackSettings = char.attackSettings || {};
+        char.attackSettings.critRange = critRange;
+        char.spellSettings = char.spellSettings || {};
+        char.spellSettings.critRange = critRange;
+
+        const { saveAndEmit, renderSheetData } = currentSheetSettingsOptions;
+        if (typeof saveAndEmit === 'function') saveAndEmit(char);
+        if (typeof renderSheetData === 'function') renderSheetData(char);
+
+        closeSheetSettings();
+    });
+}
+
+export function ensureSheetSettingsModalExists(options = {}) {
+    if (document.getElementById('pc-sheet-settings-modal')) return;
+
+    const container = document.createElement('div');
+    container.innerHTML = `
+        <div id="pc-sheet-settings-overlay" class="vtt-sheet-submodal-overlay vtt-hidden"></div>
+        <div id="pc-sheet-settings-modal" class="vtt-sheet-submodal vtt-hidden" style="width:520px; max-width:95vw;">
+            <div style="padding:16px; border-bottom:1px solid var(--color-border-subtle); display:flex; justify-content:space-between; align-items:center;">
+                <h3 style="margin:0; color:var(--color-gold-base); font-family:var(--font-heading); display:flex; align-items:center; gap:8px;">
+                    <i class="fa-solid fa-gear"></i> Character Sheet Settings
+                </h3>
+                <button id="modal-sheet-settings-close" style="background:transparent; border:none; color:var(--color-text-muted); cursor:pointer; font-size:1.2rem;"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div style="padding:16px; overflow-y:auto; max-height:70vh; display:flex; flex-direction:column; gap:16px;">
+                
+                <!-- Elven Accuracy -->
+                <div style="background:rgba(0,0,0,0.25); border:1px solid var(--color-border-subtle); border-radius:8px; padding:12px;">
+                    <label style="display:flex; align-items:center; gap:10px; cursor:pointer; font-weight:600; font-size:0.95rem; color:var(--color-text-primary); margin:0;">
+                        <input type="checkbox" id="modal-sheet-setting-elven-accuracy" style="width:18px; height:18px; cursor:pointer;">
+                        <span><i class="fa-solid fa-crosshairs" style="color:var(--color-gold-base); margin-right:4px;"></i> Elven Accuracy (Superadvantage)</span>
+                    </label>
+                    <div style="font-size:0.8rem; color:var(--color-text-muted); margin-top:6px; margin-left:28px; line-height:1.4;">
+                        When making an attack roll with Advantage, automatically roll 3d20 and keep the highest (<code>3d20kh1</code>).
+                    </div>
+                </div>
+
+                <!-- Carry Weight Multiplier -->
+                <div style="background:rgba(0,0,0,0.25); border:1px solid var(--color-border-subtle); border-radius:8px; padding:12px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                        <label style="font-weight:600; font-size:0.95rem; color:var(--color-text-primary); margin:0;">
+                            <i class="fa-solid fa-weight-hanging" style="color:var(--color-gold-base); margin-right:4px;"></i> Carry Weight Multiplier
+                        </label>
+                        <input type="number" id="modal-sheet-setting-carry-mult" min="0.1" max="10" step="0.25" value="1" style="width:70px; text-align:center; padding:4px 6px; font-weight:bold; background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); border-radius:4px; color:var(--color-text-primary);">
+                    </div>
+                    <div style="font-size:0.8rem; color:var(--color-text-muted); margin-bottom:8px; line-height:1.4;">
+                        Multiplies standard and variant encumbrance maximums, encumbered thresholds, and push/drag/lift capacities (e.g. for Powerful Build or size adjustments).
+                    </div>
+                    <div style="display:flex; flex-wrap:wrap; gap:6px;">
+                        <button type="button" class="btn btn-xs btn-secondary pc-carry-mult-pill" data-mult="1">1x (Normal)</button>
+                        <button type="button" class="btn btn-xs btn-secondary pc-carry-mult-pill" data-mult="2">2x (Powerful Build / Large)</button>
+                        <button type="button" class="btn btn-xs btn-secondary pc-carry-mult-pill" data-mult="4">4x (Huge / Quadruped)</button>
+                        <button type="button" class="btn btn-xs btn-secondary pc-carry-mult-pill" data-mult="8">8x (Gargantuan)</button>
+                    </div>
+                </div>
+
+                <!-- Halfling Lucky -->
+                <div style="background:rgba(0,0,0,0.25); border:1px solid var(--color-border-subtle); border-radius:8px; padding:12px;">
+                    <label style="display:flex; align-items:center; gap:10px; cursor:pointer; font-weight:600; font-size:0.95rem; color:var(--color-text-primary); margin:0;">
+                        <input type="checkbox" id="modal-sheet-setting-halfling-lucky" style="width:18px; height:18px; cursor:pointer;">
+                        <span><i class="fa-solid fa-clover" style="color:#50c878; margin-right:4px;"></i> Halfling Lucky</span>
+                    </label>
+                    <div style="font-size:0.8rem; color:var(--color-text-muted); margin-top:6px; margin-left:28px; line-height:1.4;">
+                        Automatically rerolls natural 1s on attack, check, and saving throw d20 rolls (<code>ro1</code>).
+                    </div>
+                </div>
+
+                <!-- Global Crit Threshold -->
+                <div style="background:rgba(0,0,0,0.25); border:1px solid var(--color-border-subtle); border-radius:8px; padding:12px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                        <label style="font-weight:600; font-size:0.95rem; color:var(--color-text-primary); margin:0;">
+                            <i class="fa-solid fa-bullseye" style="color:var(--color-danger, #ef5350); margin-right:4px;"></i> Global Crit Threshold
+                        </label>
+                        <input type="number" id="modal-sheet-setting-crit-range" min="1" max="20" step="1" value="20" style="width:70px; text-align:center; padding:4px 6px; font-weight:bold; background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); border-radius:4px; color:var(--color-text-primary);">
+                    </div>
+                    <div style="font-size:0.8rem; color:var(--color-text-muted); margin-bottom:8px; line-height:1.4;">
+                        Minimum d20 roll required for a Critical Hit across sheet attack and spell rolls (default 20, set to 19 for Champion Fighter, Hexblade's Curse, etc.).
+                    </div>
+                    <div style="display:flex; gap:6px;">
+                        <button type="button" class="btn btn-xs btn-secondary pc-crit-range-pill" data-crit="20">20 (Default)</button>
+                        <button type="button" class="btn btn-xs btn-secondary pc-crit-range-pill" data-crit="19">19-20 (Champion)</button>
+                        <button type="button" class="btn btn-xs btn-secondary pc-crit-range-pill" data-crit="18">18-20 (Master)</button>
+                    </div>
+                </div>
+
+            </div>
+            <div style="padding:12px 16px; border-top:1px solid var(--color-border-subtle); display:flex; justify-content:flex-end; gap:8px; background:rgba(0,0,0,0.2);">
+                <button type="button" id="modal-sheet-settings-cancel" class="btn btn-secondary">Cancel</button>
+                <button type="button" id="modal-sheet-settings-save" class="btn btn-primary">Save Settings</button>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(container);
+    setupSheetSettingsListeners(options);
+}
+
+export function openSheetSettingsModal(char, options = {}) {
+    ensureSheetSettingsModalExists(options);
+    if (!char) return;
+
+    currentSheetSettingsChar = char;
+    currentSheetSettingsOptions = options;
+
+    char.settings = char.settings || {};
+    const elvenAccuracy = Boolean(char.settings.elvenAccuracy);
+    const carryMult = char.settings.carryWeightMultiplier || char.carryWeightMultiplier || 1;
+    const halflingLucky = Boolean(char.settings.halflingLucky);
+    const critRange = char.settings.critRange || char.attackSettings?.critRange || 20;
+
+    const elvenInput = document.getElementById('modal-sheet-setting-elven-accuracy');
+    if (elvenInput) elvenInput.checked = elvenAccuracy;
+
+    const carryInput = document.getElementById('modal-sheet-setting-carry-mult');
+    if (carryInput) carryInput.value = carryMult;
+
+    const luckyInput = document.getElementById('modal-sheet-setting-halfling-lucky');
+    if (luckyInput) luckyInput.checked = halflingLucky;
+
+    const critInput = document.getElementById('modal-sheet-setting-crit-range');
+    if (critInput) critInput.value = critRange;
+
+    document.getElementById('pc-sheet-settings-modal')?.classList.remove('vtt-hidden');
+    document.getElementById('pc-sheet-settings-overlay')?.classList.remove('vtt-hidden');
+}

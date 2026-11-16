@@ -1,18 +1,41 @@
 import { escapeHtml } from './vtt-utils.js';
 
-function sanitizeHtmlContent(rawHtml) {
+export function sanitizeHtmlContent(rawHtml) {
     if (!rawHtml) return '';
-    if (
-        typeof window !== 'undefined' &&
-        typeof window.DOMPurify !== 'undefined' &&
-        typeof window.DOMPurify.sanitize === 'function'
-    ) {
-        return window.DOMPurify.sanitize(rawHtml);
-    }
-    if (typeof DOMPurify !== 'undefined' && typeof DOMPurify.sanitize === 'function') {
-        return DOMPurify.sanitize(rawHtml);
+    const purify =
+        (typeof window !== 'undefined' ? window.DOMPurify : null) ||
+        (typeof globalThis !== 'undefined' ? globalThis.DOMPurify : null) ||
+        (typeof DOMPurify !== 'undefined' ? DOMPurify : null);
+    if (purify && typeof purify.sanitize === 'function') {
+        return purify.sanitize(rawHtml);
     }
     return escapeHtml(rawHtml);
+}
+
+export function parseMediaUrl(url) {
+    if (!url) return '';
+
+    // YouTube
+    let ytMatch = url.match(
+        /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i
+    );
+    if (ytMatch) {
+        return `<iframe width="100%" height="400" src="https://www.youtube.com/embed/${ytMatch[1]}" frameborder="0" allowfullscreen style="border-radius:8px; border:1px solid var(--color-border-subtle);"></iframe>`;
+    }
+
+    // Vimeo
+    let vmMatch = url.match(/vimeo\.com\/(?:.*#|.*\/videos\/)?([0-9]+)/i);
+    if (vmMatch) {
+        return `<iframe src="https://player.vimeo.com/video/${vmMatch[1]}" width="100%" height="400" frameborder="0" allow="autoplay; fullscreen" allowfullscreen style="border-radius:8px; border:1px solid var(--color-border-subtle);"></iframe>`;
+    }
+
+    // Raw video
+    if (url.match(/\.(mp4|webm|ogg)$/i)) {
+        return `<video src="${url}" controls style="max-width:100%; max-height:400px; border-radius:8px; border:1px solid var(--color-border-subtle);"></video>`;
+    }
+
+    // Default to Image
+    return `<img src="${url}" style="max-width:100%; max-height:400px; border-radius:8px; border:1px solid var(--color-border-subtle); object-fit:contain;" alt="Handout Media">`;
 }
 
 export function initVttHandouts(vtt) {
@@ -122,10 +145,22 @@ export function initVttHandouts(vtt) {
         }
     }
 
-    // Ensure handouts array exists
-    if (vtt.campaignState && !vtt.campaignState.handouts) {
-        vtt.campaignState.handouts = [];
+    const getHandouts = () => {
+        if (!vtt.campaignState) vtt.campaignState = {};
+        if (!Array.isArray(vtt.campaignState.handouts)) {
+            vtt.campaignState.handouts = [];
+        }
+        return vtt.campaignState.handouts;
+    };
+
+    function syncHandouts(newHandouts) {
+        if (!vtt.campaignState) vtt.campaignState = {};
+        vtt.campaignState.handouts = Array.isArray(newHandouts) ? newHandouts : [];
+        renderList();
     }
+
+    // Ensure handouts array exists
+    getHandouts();
 
     function escapeHtml(str) {
         if (!str) return '';
@@ -185,9 +220,10 @@ export function initVttHandouts(vtt) {
             const url = editUrlInput.value.trim();
             const folder = editFolderInput ? editFolderInput.value.trim() : '';
 
+            const handouts = getHandouts();
             if (editingHandoutId) {
                 // Update
-                const ho = vtt.campaignState.handouts.find((h) => h.id === editingHandoutId);
+                const ho = handouts.find((h) => h.id === editingHandoutId);
                 if (ho) {
                     ho.title = title;
                     ho.desc = desc;
@@ -196,7 +232,7 @@ export function initVttHandouts(vtt) {
                 }
             } else {
                 // Create
-                vtt.campaignState.handouts.push({
+                handouts.push({
                     id: generateId(),
                     title: title,
                     desc: desc,
@@ -214,32 +250,6 @@ export function initVttHandouts(vtt) {
     }
 
     // Viewer Operations
-    function parseMediaUrl(url) {
-        if (!url) return '';
-
-        // YouTube
-        let ytMatch = url.match(
-            /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i
-        );
-        if (ytMatch) {
-            return `<iframe width="100%" height="400" src="https://www.youtube.com/embed/${ytMatch[1]}" frameborder="0" allowfullscreen style="border-radius:8px; border:1px solid var(--color-border-subtle);"></iframe>`;
-        }
-
-        // Vimeo
-        let vmMatch = url.match(/vimeo\.com\/(?:.*#|.*\/videos\/)?([0-9]+)/i);
-        if (vmMatch) {
-            return `<iframe src="https://player.vimeo.com/video/${vmMatch[1]}" width="100%" height="400" frameborder="0" allow="autoplay; fullscreen" allowfullscreen style="border-radius:8px; border:1px solid var(--color-border-subtle);"></iframe>`;
-        }
-
-        // Raw video
-        if (url.match(/\.(mp4|webm|ogg)$/i)) {
-            return `<video src="${url}" controls style="max-width:100%; max-height:400px; border-radius:8px; border:1px solid var(--color-border-subtle);"></video>`;
-        }
-
-        // Default to Image
-        return `<img src="${url}" style="max-width:100%; max-height:400px; border-radius:8px; border:1px solid var(--color-border-subtle); object-fit:contain;" alt="Handout Media">`;
-    }
-
     function openViewModal(handout) {
         if (!modalView) return;
         viewTitle.textContent = handout.title || 'Handout';
@@ -276,8 +286,7 @@ export function initVttHandouts(vtt) {
 
     // Public method for data bridge
     function handleForceShow(handoutId) {
-        if (!vtt.campaignState || !vtt.campaignState.handouts) return;
-        const ho = vtt.campaignState.handouts.find((h) => h.id === handoutId);
+        const ho = getHandouts().find((h) => h.id === handoutId);
         if (ho) {
             openViewModal(ho);
             // Switch tab to handouts if not already
@@ -296,7 +305,7 @@ export function initVttHandouts(vtt) {
     }
 
     function toggleVisibility(id) {
-        const ho = vtt.campaignState.handouts.find((h) => h.id === id);
+        const ho = getHandouts().find((h) => h.id === id);
         if (ho) {
             ho.isVisible = !ho.isVisible;
             syncAndRender();
@@ -305,7 +314,7 @@ export function initVttHandouts(vtt) {
 
     function deleteHandout(id) {
         if (!confirm('Are you sure you want to delete this handout?')) return;
-        vtt.campaignState.handouts = vtt.campaignState.handouts.filter((h) => h.id !== id);
+        vtt.campaignState.handouts = getHandouts().filter((h) => h.id !== id);
         syncAndRender();
     }
 
@@ -409,7 +418,7 @@ export function initVttHandouts(vtt) {
         if (!listEl) return;
         listEl.innerHTML = '';
 
-        const handouts = vtt.campaignState && vtt.campaignState.handouts ? vtt.campaignState.handouts : [];
+        const handouts = getHandouts();
         let visibleHandouts = handouts;
 
         if (vtt.role !== 'GM') {
@@ -1031,8 +1040,9 @@ export function initVttHandouts(vtt) {
         const itemsToImport = currentExtractedItems.filter((it) => selectedItemIds.has(it.id));
         if (itemsToImport.length === 0) return;
 
+        const handouts = getHandouts();
         itemsToImport.forEach((it) => {
-            vtt.campaignState.handouts.push({
+            handouts.push({
                 id: generateId(),
                 title: it.title,
                 desc: it.desc || '',
@@ -1068,6 +1078,7 @@ export function initVttHandouts(vtt) {
     // Public API
     return {
         renderList,
+        syncHandouts,
         handleForceShow,
         openImportWizard
     };

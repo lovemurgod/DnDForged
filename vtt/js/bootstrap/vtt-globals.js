@@ -71,7 +71,8 @@ export function vttSanitizeHtml(dirtyHtml) {
             'h5',
             'h6',
             'code',
-            'pre'
+            'pre',
+            'img'
         ],
         ALLOWED_ATTR: [
             'class',
@@ -79,6 +80,11 @@ export function vttSanitizeHtml(dirtyHtml) {
             'id',
             'title',
             'type',
+            'src',
+            'alt',
+            'srcset',
+            'width',
+            'height',
             'data-tooltip',
             'data-trap-id',
             'data-token-id',
@@ -91,9 +97,13 @@ export function vttSanitizeHtml(dirtyHtml) {
             'data-name',
             'data-key',
             'data-tab',
-            'data-category'
+            'data-category',
+            'data-creature',
+            'data-table-json'
         ],
-        ALLOWED_URI_REGEXP: /^(?:(?:(?:f|ht)tps?|mailto|tel|callto|cid|xmpp):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i,
+        ALLOWED_URI_REGEXP:
+            /^(?:(?:(?:f|ht)tps?|mailto|tel|callto|cid|xmpp|data):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i,
+        ADD_DATA_URI_TAGS: ['img'],
         ALLOW_DATA_ATTR: true
     });
 }

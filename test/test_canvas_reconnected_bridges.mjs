@@ -176,7 +176,9 @@ describe('Measurement & Shape Context Synchronization', () => {
         };
         global.document = {
             activeElement: { tagName: 'BODY', isContentEditable: false },
-            getElementById: () => null
+            getElementById: () => null,
+            querySelector: () => null,
+            querySelectorAll: () => []
         };
 
         const ctx = {

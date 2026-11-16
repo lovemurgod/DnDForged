@@ -875,12 +875,734 @@ compendiumRouter.get('/api/creature/:source/:id', (req, res) => {
     res.json(creature);
 });
 
+// --- Tables Compendium Handlers ---
+let rawTablesCatalogData = null;
+let rawTablesFullList = null;
+let tablesCatalogEtag = null;
+
+function cleanCompendiumText(str) {
+    if (str === null || str === undefined) return '';
+    if (typeof str !== 'string') {
+        if (typeof str === 'number' || typeof str === 'boolean') return String(str);
+        if (typeof str === 'object') {
+            if (str.entry) return cleanCompendiumText(str.entry);
+            if (str.exact) return String(str.exact);
+            if (str.min !== undefined && str.max !== undefined) return `${str.min}–${str.max}`;
+            if (str.roll) return cleanCompendiumText(str.roll);
+            return '';
+        }
+    }
+    return str.replace(/\{@([a-zA-Z0-9_-]+)\s+([^}]+)\}/g, (m, tag, body) => {
+        const parts = body.split('|');
+        if (tag === 'card') return parts[0] || '';
+        if (parts.length >= 3 && parts[2] && parts[2].length > 4 && !/^[A-Z0-9_-]+$/.test(parts[2])) return parts[2];
+        return parts[0] || '';
+    });
+}
+
+function loadTablesData() {
+    if (rawTablesCatalogData && rawTablesFullList) return;
+    try {
+        const tablesPath = path.join(VTT_DATA_DIR, 'generated', 'gendata-tables.json');
+        if (!fs.existsSync(tablesPath)) {
+            rawTablesCatalogData = [];
+            rawTablesFullList = [];
+            return;
+        }
+        const stat = fs.statSync(tablesPath);
+        const raw = JSON.parse(fs.readFileSync(tablesPath, 'utf8'));
+        const rawList = Array.isArray(raw?.table) ? raw.table : [];
+
+        // Ensure official Flesh Warping (Demon Ichor) table is indexed
+        const hasFleshWarping = rawList.some((t) => (t.name || '').toLowerCase().includes('flesh warping'));
+        if (!hasFleshWarping) {
+            rawList.push({
+                name: 'Flesh Warping (Demon Ichor)',
+                source: 'BGDIA',
+                dice: '1d100',
+                chapter: { name: 'Avernus - Demon Ichor Hazard' },
+                colLabels: ['{@dice d100}', 'Effect'],
+                rows: [
+                    [
+                        '01-05',
+                        "The color of the target's hair, eyes, and skin becomes blue, red, yellow, or patterned."
+                    ],
+                    ['06-10', "The target's eyes push out of its head at the end of stalks."],
+                    ['11-15', "The target's hands grow claws, which can be used as daggers."],
+                    [
+                        '16-20',
+                        "One of the target's legs grows longer than the other, reducing its walking speed by 10 feet."
+                    ],
+                    [
+                        '21-25',
+                        "The target's eyes become beacons, filling a 15-foot cone with dim light when they are open."
+                    ],
+                    [
+                        '26-30',
+                        "A pair of wings, either feathered or leathery, sprout from the target's back, granting it a flying speed of 30 feet."
+                    ],
+                    ['31-35', "The target's ears tear free from its head and scurry away; the target is deafened."],
+                    ['36-40', "Two of the target's teeth turn into tusks."],
+                    [
+                        '41-45',
+                        "The target's skin becomes scabby, granting it a +1 bonus to AC but reducing its Charisma by 2 (to a minimum of 1)."
+                    ],
+                    [
+                        '46-50',
+                        "The target's arms and legs switch places, preventing the target from moving unless it crawls."
+                    ],
+                    [
+                        '51-55',
+                        "The target's arms become tentacles with fingers on the ends, increasing its reach by 5 feet."
+                    ],
+                    [
+                        '56-60',
+                        "The target's legs grow incredibly long and springy, increasing its walking speed by 10 feet."
+                    ],
+                    ['61-65', 'The target grows a whiplike tail, which it can use as a whip.'],
+                    ['66-70', "The target's eyes turn black, and it gains darkvision out to a range of 120 feet."],
+                    ['71-75', 'The target swells, tripling its weight.'],
+                    ['76-80', 'The target becomes thin and skeletal, halving its weight.'],
+                    ['81-85', "The target's head doubles in size."],
+                    ['86-90', "The target's ears become wings, giving it a flying speed of 5 feet."],
+                    [
+                        '91-95',
+                        "The target's body becomes unusually brittle, causing the target to have vulnerability to bludgeoning, piercing, and slashing damage."
+                    ],
+                    [
+                        '96-00',
+                        'The target grows another head, causing it to have advantage on saving throws against being charmed, frightened, or stunned.'
+                    ]
+                ]
+            });
+        }
+
+        rawTablesFullList = rawList;
+
+        rawTablesCatalogData = rawList.map((tbl, idx) => {
+            let diceLabel = '1d20';
+            if (Array.isArray(tbl.colLabels) && tbl.colLabels.length > 0) {
+                const firstCol = cleanCompendiumText(tbl.colLabels[0]).trim();
+                if (/^d\d+/i.test(firstCol) || /^\d+d\d+/i.test(firstCol)) {
+                    diceLabel = firstCol;
+                } else if (Array.isArray(tbl.rows) && tbl.rows.length > 0) {
+                    diceLabel = `1d${tbl.rows.length}`;
+                }
+            } else if (Array.isArray(tbl.rows) && tbl.rows.length > 0) {
+                diceLabel = `1d${tbl.rows.length}`;
+            }
+
+            return {
+                id: `ctable_${idx}`,
+                name: tbl.name || tbl.caption || `Table #${idx + 1}`,
+                source: (tbl.source || 'PHB').toUpperCase(),
+                dice: diceLabel,
+                rowCount: Array.isArray(tbl.rows) ? tbl.rows.length : 0,
+                chapter: tbl.chapter?.name || ''
+            };
+        });
+
+        tablesCatalogEtag = `W/"${rawTablesCatalogData.length}-${stat.mtimeMs}"`;
+    } catch (err) {
+        console.error('Error loading compendium tables:', err);
+        rawTablesCatalogData = [];
+        rawTablesFullList = [];
+    }
+}
+
+compendiumRouter.get(['/api/tables/catalog', '/data/tables-catalog.json'], (req, res) => {
+    loadTablesData();
+    const campId = req.query.campaignId || extractSubdomain(req.headers.host);
+    const disabledSet = getDisabledSourcesSet(campId);
+
+    let catalog = rawTablesCatalogData.filter((t) => !disabledSet.has(t.source));
+
+    if (req.query.q) {
+        const query = req.query.q.toLowerCase().trim();
+        catalog = catalog.filter(
+            (t) =>
+                (t.name && t.name.toLowerCase().includes(query)) || (t.source && t.source.toLowerCase().includes(query))
+        );
+    }
+
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    if (!req.query.q) {
+        res.setHeader('Cache-Control', 'public, max-age=600');
+        if (tablesCatalogEtag) res.setHeader('ETag', tablesCatalogEtag);
+    } else {
+        res.setHeader('Cache-Control', 'no-cache');
+    }
+    res.json(catalog);
+});
+
+compendiumRouter.get('/api/tables/:id', (req, res) => {
+    loadTablesData();
+    const id = req.params.id;
+    const match = id.match(/^ctable_(\d+)$/);
+    if (!match) {
+        return res.status(400).json({ error: 'Invalid table ID format' });
+    }
+
+    const idx = parseInt(match[1], 10);
+    const tbl = rawTablesFullList[idx];
+    if (!tbl) {
+        return res.status(404).json({ error: 'Table not found' });
+    }
+
+    const colLabels = Array.isArray(tbl.colLabels)
+        ? tbl.colLabels.map((c) => cleanCompendiumText(c))
+        : ['Roll', 'Result'];
+
+    const rows = Array.isArray(tbl.rows)
+        ? tbl.rows.map((row) => {
+              if (Array.isArray(row)) {
+                  return row.map((cell) => cleanCompendiumText(cell));
+              }
+              return [cleanCompendiumText(row)];
+          })
+        : [];
+
+    let dice = '1d20';
+    if (colLabels.length > 0 && (/^d\d+/i.test(colLabels[0]) || /^\d+d\d+/i.test(colLabels[0]))) {
+        dice = colLabels[0];
+    } else if (rows.length > 0) {
+        dice = `1d${rows.length}`;
+    }
+
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    res.setHeader('Cache-Control', 'public, max-age=3600');
+    res.json({
+        id: `ctable_${idx}`,
+        name: tbl.name || tbl.caption || `Table #${idx + 1}`,
+        source: (tbl.source || 'PHB').toUpperCase(),
+        dice,
+        colLabels,
+        rows
+    });
+});
+
+// --- Card Decks Compendium Handlers ---
+let compendiumDecksCache = null;
+
+function loadCompendiumDecksData() {
+    if (compendiumDecksCache) return compendiumDecksCache;
+
+    const decks = [];
+
+    // 1. Curse of Strahd Tarokka Deck
+    try {
+        const cosPath = path.join(VTT_DATA_DIR, 'adventure', 'adventure-cos.json');
+        if (fs.existsSync(cosPath)) {
+            const adv = JSON.parse(fs.readFileSync(cosPath, 'utf8'));
+            const appE = adv.data?.find((d) => (d.name || '').includes('Appendix E'));
+            if (appE && Array.isArray(appE.entries)) {
+                const highDeckSec = appE.entries.find((e) => e.name === 'High Deck');
+                const commonDeckSec = appE.entries.find((e) => e.name === 'Common Deck');
+
+                const cards = [];
+
+                // Extract High Deck
+                if (highDeckSec) {
+                    const tableEntry = highDeckSec.entries?.find((e) => e.type === 'table');
+                    if (tableEntry && Array.isArray(tableEntry.rows)) {
+                        tableEntry.rows.forEach((row, idx) => {
+                            const name = cleanCompendiumText(row[0]).trim();
+                            const desc = cleanCompendiumText(row[1]).trim();
+                            cards.push({
+                                id: `card_tarokka_high_${idx + 1}`,
+                                name,
+                                suit: 'High Deck',
+                                number: idx + 1,
+                                description: desc
+                            });
+                        });
+                    }
+                }
+
+                // Extract Common Deck Suits
+                if (commonDeckSec && Array.isArray(commonDeckSec.entries)) {
+                    commonDeckSec.entries.forEach((sec) => {
+                        const suitName = sec.name; // Swords, Stars, Coins, Glyphs
+                        const suitTable = sec.entries?.find((e) => e.type === 'table');
+                        if (suitTable && Array.isArray(suitTable.rows)) {
+                            suitTable.rows.forEach((row, rIdx) => {
+                                const rank = cleanCompendiumText(row[0]).trim();
+                                const name = cleanCompendiumText(row[1]).trim();
+                                const desc = cleanCompendiumText(row[2]).trim();
+                                cards.push({
+                                    id: `card_tarokka_${(suitName || 'common').toLowerCase()}_${rIdx + 1}`,
+                                    name: `${rank} (${name})`,
+                                    cardTitle: name,
+                                    rank,
+                                    suit: suitName,
+                                    number: rIdx + 1,
+                                    description: desc
+                                });
+                            });
+                        }
+                    });
+                }
+
+                if (cards.length > 0) {
+                    decks.push({
+                        id: 'cdeck_tarokka',
+                        name: 'Curse of Strahd Tarokka Deck',
+                        source: 'COS',
+                        cardCount: cards.length,
+                        description:
+                            'The ancient 54-card fortune-telling deck used by the Vistani in Barovia to divine fates and locations.',
+                        theme: 'tarokka',
+                        cards
+                    });
+                }
+            }
+        }
+    } catch (err) {
+        console.error('Error compiling Tarokka deck:', err);
+    }
+
+    // 2. Deck of Many Things
+    decks.push({
+        id: 'cdeck_many_things',
+        name: 'Deck of Many Things',
+        source: 'DMG',
+        cardCount: 22,
+        description:
+            'A legendary wondrous artifact containing 22 cards of immense, reality-altering fortunes and cataclysms.',
+        theme: 'many_things',
+        cards: [
+            {
+                id: 'domt_sun',
+                name: 'The Sun',
+                suit: 'Fate',
+                number: 1,
+                description:
+                    'You gain 50,000 XP, and a wondrous item (which the DM determines randomly) appears in your hands.'
+            },
+            {
+                id: 'domt_moon',
+                name: 'The Moon',
+                suit: 'Fate',
+                number: 2,
+                description: 'You are granted the ability to cast the Wish spell 1d3 times.'
+            },
+            {
+                id: 'domt_star',
+                name: 'The Star',
+                suit: 'Fate',
+                number: 3,
+                description: 'Increase one of your ability scores by 2. The score can exceed 20 but cannot exceed 24.'
+            },
+            {
+                id: 'domt_comet',
+                name: 'The Comet',
+                suit: 'Fate',
+                number: 4,
+                description:
+                    'If you single-handedly defeat the next hostile monster or group of monsters you encounter, you gain experience points enough to gain one level. Otherwise, this card has no effect.'
+            },
+            {
+                id: 'domt_fates',
+                name: 'The Fates',
+                suit: 'Fate',
+                number: 5,
+                description:
+                    "Reality's fabric unravels and spins anew, allowing you to avoid or erase one event as if it never happened. You can use this effect immediately or at any time before you die."
+            },
+            {
+                id: 'domt_throne',
+                name: 'The Throne',
+                suit: 'Fate',
+                number: 6,
+                description:
+                    'You gain proficiency in the Persuasion skill, and you double your proficiency bonus on checks made with that skill. In addition, you gain rightful ownership of a small keep somewhere in the world.'
+            },
+            {
+                id: 'domt_key',
+                name: 'The Key',
+                suit: 'Fate',
+                number: 7,
+                description:
+                    'A rare or rarer magic weapon with which you are proficient appears in your hands. The DM chooses the weapon.'
+            },
+            {
+                id: 'domt_knight',
+                name: 'The Knight',
+                suit: 'Fate',
+                number: 8,
+                description:
+                    'You gain the service of a 4th-level fighter follower who appears in an unoccupied space within 30 feet of you. The follower is of the same race as you and serves you loyally.'
+            },
+            {
+                id: 'domt_gem',
+                name: 'The Gem',
+                suit: 'Fate',
+                number: 9,
+                description:
+                    'Twenty-five gems worth 2,000 gp each, or fifty gems worth 1,000 gp each, appear at your feet.'
+            },
+            {
+                id: 'domt_jester',
+                name: 'The Jester',
+                suit: 'Fate',
+                number: 10,
+                description: 'You gain 10,000 XP, or you can draw two additional cards.'
+            },
+            {
+                id: 'domt_rogue',
+                name: 'The Rogue',
+                suit: 'Fate',
+                number: 11,
+                description:
+                    "A nonplayer character of the DM's choice becomes secretly hostile toward you, plotting your ruin."
+            },
+            {
+                id: 'domt_void',
+                name: 'The Void',
+                suit: 'Fate',
+                number: 12,
+                description:
+                    "This black card spells disaster. Your soul is drawn from your body and contained in an object in a place of the DM's choice. Your body becomes incapacitated."
+            },
+            {
+                id: 'domt_skull',
+                name: 'The Skull',
+                suit: 'Fate',
+                number: 13,
+                description:
+                    'You summon an avatar of death—a ghostly humanoid skeleton clad in a tattered black robe and carrying a spectral scythe. It appears in an unoccupied space within 10 feet of you and attacks you, warning that no one may help you.'
+            },
+            {
+                id: 'domt_ruin',
+                name: 'The Ruin',
+                suit: 'Fate',
+                number: 14,
+                description:
+                    'All forms of wealth that you carry or own, other than magic items, are immediately lost. Portable property vanishes; businesses, buildings, and land you own are lost in a way that alters reality the least.'
+            },
+            {
+                id: 'domt_euryale',
+                name: 'The Euryale',
+                suit: 'Fate',
+                number: 15,
+                description:
+                    "The card's medusa-like face curses you. You take a -2 penalty on saving throws while cursed. Only a god or the magic of The Fates card can end this curse."
+            },
+            {
+                id: 'domt_flames',
+                name: 'The Flames',
+                suit: 'Fate',
+                number: 16,
+                description:
+                    'A powerful fiend becomes your sworn enemy, seeking to torment and ruin you before killing you.'
+            },
+            {
+                id: 'domt_donjon',
+                name: 'The Donjon',
+                suit: 'Fate',
+                number: 17,
+                description:
+                    'You disappear and become entombed in a state of suspended animation in an extradimensional sphere. Everything you were wearing and carrying remains behind in the space you occupied.'
+            },
+            {
+                id: 'domt_talon',
+                name: 'The Talon',
+                suit: 'Fate',
+                number: 18,
+                description:
+                    'Every magic item you are wearing or carrying is instantly disintegrated. Artifacts in your possession vanish elsewhere.'
+            },
+            {
+                id: 'domt_idiot',
+                name: 'The Idiot',
+                suit: 'Fate',
+                number: 19,
+                description:
+                    'Permanently reduce your Intelligence by 1d4 + 1 (to a minimum score of 1). You can draw one additional card beyond your declared draws.'
+            },
+            {
+                id: 'domt_vizier',
+                name: 'The Vizier',
+                suit: 'Fate',
+                number: 20,
+                description:
+                    'At any one time you choose within one year of drawing this card, you can ask a question in meditation and mentally receive a truthful answer to that question.'
+            },
+            {
+                id: 'domt_balance',
+                name: 'The Balance',
+                suit: 'Fate',
+                number: 21,
+                description:
+                    'Your mind suffers a wrenching alteration, causing your alignment to change to its diametric opposite.'
+            },
+            {
+                id: 'domt_fool',
+                name: 'The Fool',
+                suit: 'Fate',
+                number: 22,
+                description: 'You lose 10,000 XP, discard this card, and must draw one additional card from the deck.'
+            }
+        ]
+    });
+
+    // 3. Deck of Illusions
+    decks.push({
+        id: 'cdeck_illusions',
+        name: 'Deck of Illusions',
+        source: 'DMG',
+        cardCount: 34,
+        description:
+            'A magical deck of cards made from parchment. When a card is drawn and thrown to the ground, an illusion of one or more creatures materializes.',
+        theme: 'illusions',
+        cards: [
+            {
+                id: 'doi_1',
+                name: 'Red Dragon',
+                suit: 'Ace of Hearts',
+                description: 'Illusion of a terrifying Red Dragon roaring with spectral flame.'
+            },
+            {
+                id: 'doi_2',
+                name: 'Knight and Four Guards',
+                suit: 'King of Hearts',
+                description: 'Illusion of a heavily armored Knight accompanied by four armed guards.'
+            },
+            {
+                id: 'doi_3',
+                name: 'Succubus or Incubus',
+                suit: 'Queen of Hearts',
+                description: 'Illusion of an alluring Fiend with bat-like wings.'
+            },
+            {
+                id: 'doi_4',
+                name: 'Druid',
+                suit: 'Jack of Hearts',
+                description: 'Illusion of an elder Druid wielding a staff of gnarled oak.'
+            },
+            {
+                id: 'doi_5',
+                name: 'Cloud Giant',
+                suit: '10 of Hearts',
+                description: 'Illusion of a towering Cloud Giant shrouded in mist.'
+            },
+            {
+                id: 'doi_6',
+                name: 'Ettin',
+                suit: '9 of Hearts',
+                description: 'Illusion of a bickering, two-headed Ettin wielding massive clubs.'
+            },
+            {
+                id: 'doi_7',
+                name: 'Bugbear',
+                suit: '8 of Hearts',
+                description: 'Illusion of a stealthy Bugbear stalker ready to pounce.'
+            },
+            {
+                id: 'doi_8',
+                name: 'Goblin',
+                suit: '2 of Hearts',
+                description: 'Illusion of a snickering Goblin raider with a rusty shortbow.'
+            },
+            {
+                id: 'doi_9',
+                name: 'Beholder',
+                suit: 'Ace of Diamonds',
+                description: 'Illusion of a floating Beholder with ten writhing eye stalks.'
+            },
+            {
+                id: 'doi_10',
+                name: 'Archmage and Apprentice',
+                suit: 'King of Diamonds',
+                description: 'Illusion of an Archmage in starry robes followed by an eager Apprentice.'
+            },
+            {
+                id: 'doi_11',
+                name: 'Night Hag',
+                suit: 'Queen of Diamonds',
+                description: 'Illusion of a cackling Night Hag carrying a soul bag.'
+            },
+            {
+                id: 'doi_12',
+                name: 'Assassin',
+                suit: 'Jack of Diamonds',
+                description: 'Illusion of a cloaked Assassin coated in venomous daggers.'
+            },
+            {
+                id: 'doi_13',
+                name: 'Fire Giant',
+                suit: '10 of Diamonds',
+                description: 'Illusion of an imposing Fire Giant in forged plate mail.'
+            },
+            {
+                id: 'doi_14',
+                name: 'Ogre Mage (Oni)',
+                suit: '9 of Diamonds',
+                description: 'Illusion of a horned Oni floating above the ground with a massive naginata.'
+            },
+            {
+                id: 'doi_15',
+                name: 'Gnoll',
+                suit: '8 of Diamonds',
+                description: 'Illusion of a bloodthirsty hyena-headed Gnoll warrior.'
+            },
+            {
+                id: 'doi_16',
+                name: 'Kobold',
+                suit: '2 of Diamonds',
+                description: 'Illusion of a scuttling reptilian Kobold holding a sling.'
+            },
+            {
+                id: 'doi_17',
+                name: 'Lich',
+                suit: 'Ace of Spades',
+                description: 'Illusion of a withered undead Lich crowned with dark sorcery.'
+            },
+            {
+                id: 'doi_18',
+                name: 'Priest and Two Acolytes',
+                suit: 'King of Spades',
+                description: 'Illusion of a high Priest chanting prayers with two kneeling Acolytes.'
+            },
+            {
+                id: 'doi_19',
+                name: 'Medusa',
+                suit: 'Queen of Spades',
+                description: 'Illusion of a serpentine Medusa with eyes of petrifying glare.'
+            },
+            {
+                id: 'doi_20',
+                name: 'Veteran',
+                suit: 'Jack of Spades',
+                description: 'Illusion of a battle-scarred Veteran warrior.'
+            },
+            {
+                id: 'doi_21',
+                name: 'Frost Giant',
+                suit: '10 of Spades',
+                description: 'Illusion of a Frost Giant barbarian carrying a greataxe of glacial ice.'
+            },
+            {
+                id: 'doi_22',
+                name: 'Troll',
+                suit: '9 of Spades',
+                description: 'Illusion of a regenerating, mossy Troll.'
+            },
+            {
+                id: 'doi_23',
+                name: 'Hobgoblin',
+                suit: '8 of Spades',
+                description: 'Illusion of a disciplined Hobgoblin captain.'
+            },
+            { id: 'doi_24', name: 'Goblin', suit: '2 of Spades', description: 'Illusion of a nervous Goblin sentry.' },
+            {
+                id: 'doi_25',
+                name: 'Iron Golem',
+                suit: 'Ace of Clubs',
+                description: 'Illusion of an impenetrable Iron Golem emanating heated fumes.'
+            },
+            {
+                id: 'doi_26',
+                name: 'Bandit Captain and Three Bandits',
+                suit: 'King of Clubs',
+                description: 'Illusion of a swashbuckling Bandit Captain and three scoundrels.'
+            },
+            {
+                id: 'doi_27',
+                name: 'Erinyes',
+                suit: 'Queen of Clubs',
+                description: 'Illusion of a winged fiendish Erinyes with an infernal bow.'
+            },
+            {
+                id: 'doi_28',
+                name: 'Berserker',
+                suit: 'Jack of Clubs',
+                description: 'Illusion of a frenzied tribal Berserker.'
+            },
+            {
+                id: 'doi_29',
+                name: 'Hill Giant',
+                suit: '10 of Clubs',
+                description: 'Illusion of a gluttonous Hill Giant clubbing the dirt.'
+            },
+            {
+                id: 'doi_30',
+                name: 'Ogre',
+                suit: '9 of Clubs',
+                description: 'Illusion of a lumbering Ogre in animal hides.'
+            },
+            { id: 'doi_31', name: 'Orc', suit: '8 of Clubs', description: 'Illusion of a war-painted Orc warrior.' },
+            {
+                id: 'doi_32',
+                name: 'Kobold',
+                suit: '2 of Clubs',
+                description: 'Illusion of a terrified Kobold cowering behind a buckler.'
+            },
+            {
+                id: 'doi_33',
+                name: 'The Character (You)',
+                suit: 'Joker 1',
+                description: 'An illusory exact double of the character who drew this card.'
+            },
+            {
+                id: 'doi_34',
+                name: 'The Character (You)',
+                suit: 'Joker 2',
+                description: 'An illusory exact double of the character who drew this card.'
+            }
+        ]
+    });
+
+    compendiumDecksCache = decks;
+    return compendiumDecksCache;
+}
+
+compendiumRouter.get('/api/decks/catalog', (req, res) => {
+    const decks = loadCompendiumDecksData();
+    const campId = req.query.campaignId || extractSubdomain(req.headers.host);
+    const disabledSet = getDisabledSourcesSet(campId);
+
+    const catalog = decks
+        .filter((d) => {
+            if (req.query.source) return d.source.toLowerCase() === req.query.source.toLowerCase();
+            return true;
+        })
+        .map((d) => ({
+            id: d.id,
+            name: d.name,
+            source: d.source,
+            cardCount: d.cardCount,
+            description: d.description,
+            theme: d.theme
+        }));
+
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    res.setHeader('Cache-Control', 'public, max-age=600');
+    res.json(catalog);
+});
+
+compendiumRouter.get('/api/decks/:id', (req, res) => {
+    const decks = loadCompendiumDecksData();
+    const id = req.params.id;
+    const deck = decks.find((d) => d.id === id);
+    if (!deck) {
+        return res.status(404).json({ error: 'Deck not found' });
+    }
+
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    res.setHeader('Cache-Control', 'public, max-age=3600');
+    res.json(deck);
+});
+
 // Invalidate all compendium caches (called on source reload)
 export function invalidateCompendiumCaches() {
     rawSpellsCatalogData = null;
     rawItemsCatalogData = null;
     rawBestiaryCatalogData = null;
     rawHandoutsCatalogData = null;
+    rawTablesCatalogData = null;
+    rawTablesFullList = null;
+    compendiumDecksCache = null;
     gzippedSpellsCatalogBuf = null;
     gzippedItemsCatalogBuf = null;
     gzippedBestiaryCatalogBuf = null;
