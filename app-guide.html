@@ -44,8 +44,7 @@
   <div class="bg-ambient-lights" aria-hidden="true"></div>
 
   <header class="site-header">
-    <a class="site-brand" href="index.html" aria-label="ForgeDVTT home"><img src="img/TextLogo.png"
-        alt="ForgeDVTT"></a>
+    <a class="site-brand" href="index.html" aria-label="ForgeDVTT home"><img src="img/TextLogo.png" alt="ForgeDVTT"></a>
     <nav class="site-nav" aria-label="Main navigation">
       <a href="index.html">Home</a>
       <a href="getting-started.html">Getting Started</a>
@@ -151,7 +150,8 @@
                     app protects local API calls with <code>x-server-secret</code> and authenticates the Game Master
                     session using salted PBKDF2 hash tokens.</li>
                   <li><i class="fa-solid fa-circle-dot"></i> <strong>Windows Firewall:</strong> If prompted on first
-                    launch, allow ForgeDVTT on <em>Private Networks</em>. Public incoming ports are never exposed because
+                    launch, allow ForgeDVTT on <em>Private Networks</em>. Public incoming ports are never exposed
+                    because
                     the tunnel routes outbound traffic securely.</li>
                 </ul>
               </div>
@@ -173,11 +173,14 @@
                     Leave the token field blank and click <strong>Start Online Tunnel</strong>. The launcher establishes
                     an ephemeral, zero-config Cloudflare tunnel (e.g.
                     <code>https://random-name.trycloudflare.com</code>). It requires zero accounts and generates your
-                    active player link in ~5 seconds.</li>
+                    active player link in ~5 seconds.
+                  </li>
                   <li><i class="fa-solid fa-circle-dot"></i> <strong>Custom Domain (Persistent URL):</strong> If you own
                     a domain managed in Cloudflare Zero Trust, create a Cloudflare Tunnel routed to service
-                    <code>http://127.0.0.1:5050</code>. Paste the tunnel token and your custom hostname into ForgeDVTT for
-                    a permanent session URL (e.g. <code>https://dnd.yourdomain.com</code>).</li>
+                    <code>http://127.0.0.1:5050</code>. Paste the tunnel token and your custom hostname into ForgeDVTT
+                    for
+                    a permanent session URL (e.g. <code>https://dnd.yourdomain.com</code>).
+                  </li>
                 </ul>
               </div>
             </div>
@@ -256,9 +259,11 @@
                 <li><strong>1-Click Backup:</strong> In the GM Dashboard tab, click <strong>Open Data Folder</strong>.
                   Simply copy the <code>.dndforged-data</code> folder to Google Drive, OneDrive, or a USB drive.</li>
                 <li><strong>Restoring a Corrupt File:</strong> If a power loss occurs during play, rename
-                  <code>campaigns.json.bak</code> to <code>campaigns.json</code> and restart the server.</li>
+                  <code>campaigns.json.bak</code> to <code>campaigns.json</code> and restart the server.
+                </li>
                 <li><strong>Migrating to a New PC:</strong> Install ForgeDVTT on the new computer, copy your
-                  <code>.dndforged-data</code> directory over, and launch the app. All campaigns restore instantly.</li>
+                  <code>.dndforged-data</code> directory over, and launch the app. All campaigns restore instantly.
+                </li>
               </ul>
             </div>
           </div>
@@ -274,7 +279,8 @@
             <span class="manual-section-badge player">Homebrew Studio</span>
           </div>
 
-          <p class="section-lead">ForgeDVTT features a natural-language attack parser. Writing your actions in standard 5e
+          <p class="section-lead">ForgeDVTT features a natural-language attack parser. Writing your actions in standard
+            5e
             format allows the VTT to automatically extract to-hit bonuses, reach, damage formulas, and save DCs into
             single-click combat buttons.</p>
 
@@ -331,7 +337,8 @@
                 <p>ForgeDVTT parses natural language multiattack lines into automated routine buttons:</p>
                 <ul>
                   <li><strong>Example String:</strong>
-                    <code>The dragon makes three attacks: one with its Bite and two with its Claws.</code></li>
+                    <code>The dragon makes three attacks: one with its Bite and two with its Claws.</code>
+                  </li>
                   <li><strong>Execution Card:</strong> Clicking Multiattack on the creature sheet broadcasts an action
                     card with direct roll triggers for each weapon in the routine, saving significant GM combat time.
                   </li>
@@ -425,7 +432,8 @@
               <ul>
                 <li><strong>Light:</strong> Base AC + character's full DEX modifier (e.g. <code>12 + DEX</code>).</li>
                 <li><strong>Medium:</strong> Base AC + DEX modifier, automatically capped at <code>+2</code> (e.g.
-                  <code>14 + min(DEX, 2)</code>).</li>
+                  <code>14 + min(DEX, 2)</code>).
+                </li>
                 <li><strong>Heavy:</strong> Flat base AC with zero DEX bonus (e.g. <code>18</code>). Automatically flags
                   the stealth disadvantage indicator.</li>
                 <li><strong>Shield:</strong> Checking the <strong>Equip</strong> box adds a flat <code>+2 AC</code>
@@ -466,9 +474,11 @@
                     one-handed strikes (e.g. <code>1d8</code>) and one for two-handed strikes (e.g. <code>1d10</code>).
                   </li>
                   <li><strong>Enhancement Bonus:</strong> Setting an item bonus (<code>+1</code>, <code>+2</code>, or
-                    <code>+3</code>) automatically adds the bonus to both the attack roll and damage total.</li>
+                    <code>+3</code>) automatically adds the bonus to both the attack roll and damage total.
+                  </li>
                   <li><strong>Damage Riders:</strong> Append extra dice (e.g. <code>+1d6 radiant</code> or
-                    <code>+2d6 fire</code>) to display distinct damage type badges on hit cards.</li>
+                    <code>+2d6 fire</code>) to display distinct damage type badges on hit cards.
+                  </li>
                 </ul>
               </div>
             </div>
@@ -488,7 +498,8 @@
                   <li><strong>Interactive Pips:</strong> Define maximum charges (e.g. 7 charges for a <em>Staff of
                       Power</em>) to render clickable consumption bubbles on the equipment tab.</li>
                   <li><strong>Recharge Routines:</strong> Select recharge triggers (e.g. <code>1d6 + 1 at Dawn</code>,
-                    <code>Short Rest</code>, or <code>Long Rest</code>).</li>
+                    <code>Short Rest</code>, or <code>Long Rest</code>).
+                  </li>
                 </ul>
               </div>
             </div>
@@ -527,7 +538,8 @@
               <p>Format homebrew spells to support higher-level slot casting:</p>
               <ul>
                 <li><strong>Base Damage:</strong> Set the spell level (1st through 9th) and initial damage dice (e.g.
-                  <code>8d6</code> for 3rd-level <em>Fireball</em>).</li>
+                  <code>8d6</code> for 3rd-level <em>Fireball</em>).
+                </li>
                 <li><strong>Higher Level Tag:</strong> In the spell description, include standard 5e text:
                   <code>When you cast this spell using a spell slot of 4th level or higher, the damage increases by 1d6 for each slot level above 3rd.</code>
                 </li>
@@ -580,7 +592,8 @@
                 </li>
                 <li><strong>Automatic Deduplication:</strong> ForgeDVTT resolves duplicate slugs by prioritizing custom
                   campaign homebrew over core SRD entries.</li>
-                <li><strong>Token Fallbacks:</strong> If a creature lacks artwork, ForgeDVTT automatically renders a clean
+                <li><strong>Token Fallbacks:</strong> If a creature lacks artwork, ForgeDVTT automatically renders a
+                  clean
                   procedural initial-letter badge token on the canvas.</li>
               </ul>
             </div>
@@ -600,7 +613,8 @@
     <p style="margin-top: 0.5rem; font-size: 0.8rem; opacity: 0.85;">This work includes material from the System
       Reference Document 5.1 (SRD 5.1) by Wizards of the Coast LLC, available under the Creative Commons Attribution 4.0
       International License (CC-BY-4.0). 2024 Free Rules and SRD 5.2 content are used under the Wizards of the Coast Fan
-      Content Policy. • <a href="feedback.html" style="color: #d4af37; text-decoration: underline;">Feedback</a> • <a href="legal.html" style="color: #d4af37; text-decoration: underline;">Legal Notices &amp; OGC
+      Content Policy. • <a href="feedback.html" style="color: #d4af37; text-decoration: underline;">Feedback</a> • <a
+        href="legal.html" style="color: #d4af37; text-decoration: underline;">Legal Notices &amp; OGC
         Disclaimers</a></p>
   </footer>
 
