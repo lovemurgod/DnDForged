@@ -95,7 +95,7 @@ app.get(['/download/installer', '/download/latest', '/download/setup', '/downloa
     return res.download(rootSetup, 'ForgeDVTT-Setup-1.4.1.exe');
   }
 
-  return res.redirect('https://github.com/lovemurgod/DnDForged/releases/download/1.4.1/ForgeDVTT-Setup-1.4.1.exe');
+  return res.redirect('https://github.com/lovemurgod/DnDForged/releases/download/1.4.0/ForgeDVTT-Setup-1.4.1.exe');
 });
 
 // Uploads with per-campaign subdomain isolation, strict path validation & legacy fallbacks

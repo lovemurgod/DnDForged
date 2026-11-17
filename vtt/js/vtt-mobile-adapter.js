@@ -92,6 +92,8 @@ export function initVttMobileAdapter(vtt) {
     const mobilePlacementBanner = document.getElementById('vtt-mobile-placement-banner');
     const mobileCombatPill = document.getElementById('vtt-mobile-combat-pill');
     const mobileMaptoolsSheet = document.getElementById('vtt-mobile-maptools-sheet');
+    const mobileToolFullscreen = document.getElementById('mobile-tool-fullscreen');
+    const mobileInstallBanner = document.getElementById('vtt-mobile-install-banner');
     const sidebar = document.getElementById('vtt-sidebar');
     const playerSheetPanel = document.getElementById('player-sheet-panel');
     const creatureSheetPanel = document.getElementById('creature-sheet-panel');
@@ -736,6 +738,10 @@ export function initVttMobileAdapter(vtt) {
 
         // Setup Tap-to-Place Token Mode
         setupTapToPlaceMode();
+
+        // Setup Mobile Fullscreen Controller & PWA Install Banner
+        setupMobileFullscreenController();
+        setupMobileInstallBanner();
     }
 
     function renderMobileNavTabs(role) {
@@ -1012,6 +1018,11 @@ export function initVttMobileAdapter(vtt) {
                     <span style="font-weight: 600;">Center Map</span>
                     <span style="font-size: 0.75rem; color: #94a3b8;">Focus active token</span>
                 </div>
+                <div class="mobile-more-card" id="more-card-fullscreen" data-action="toggle-fullscreen">
+                    <i class="fa-solid fa-expand" id="more-card-fullscreen-icon" style="font-size: 1.8rem; color: #f5c242;"></i>
+                    <span style="font-weight: 600;" id="more-card-fullscreen-text">Fullscreen</span>
+                    <span style="font-size: 0.75rem; color: #94a3b8;" id="more-card-fullscreen-sub">Toggle immersive view</span>
+                </div>
                 <div class="mobile-more-card" id="more-card-eco" data-action="toggle-eco" style="border-color: ${isEcoModeActive ? 'rgba(34, 197, 94, 0.5)' : ''};">
                     <i class="fa-solid fa-leaf" style="font-size: 1.8rem; color: #22c55e;"></i>
                     <span style="font-weight: 600;">Battery / Eco Mode</span>
@@ -1062,6 +1073,8 @@ export function initVttMobileAdapter(vtt) {
                     if (window.VTT?.canvasEngine?.centerOnToken) {
                         window.VTT.canvasEngine.centerOnToken();
                     }
+                } else if (action === 'toggle-fullscreen') {
+                    toggleMobileFullscreen();
                 } else if (action === 'toggle-eco') {
                     toggleEcoMode();
                 } else if (action === 'toggle-desktop-ui') {
@@ -1481,7 +1494,7 @@ export function initVttMobileAdapter(vtt) {
             btn.addEventListener('click', () => {
                 const toolKey = btn.dataset.tool;
                 activateTool(toolKey);
-                if (toolKey !== 'fit' && toolKey !== 'zoom-in' && toolKey !== 'zoom-out') {
+                if (toolKey !== 'fit' && toolKey !== 'zoom-in' && toolKey !== 'zoom-out' && toolKey !== 'fullscreen') {
                     toolButtons.forEach((b) => b.classList.toggle('active', b === btn));
                 }
                 mobileToolsMenu.classList.remove('active');
@@ -1551,6 +1564,11 @@ export function initVttMobileAdapter(vtt) {
 
         if (toolKey === 'eco') {
             toggleEcoMode();
+            return;
+        }
+
+        if (toolKey === 'fullscreen') {
+            toggleMobileFullscreen();
             return;
         }
 
@@ -2437,6 +2455,215 @@ export function initVttMobileAdapter(vtt) {
     }
 
     // ========================================================================
+    // 4E. MOBILE FULLSCREEN & PWA IMMERSION CONTROLLER
+    // ========================================================================
+    let deferredInstallPrompt = null;
+
+    function isFullscreenActive() {
+        return !!(
+            document.fullscreenElement ||
+            document.webkitFullscreenElement ||
+            document.mozFullScreenElement ||
+            document.msFullscreenElement
+        );
+    }
+
+    function updateFullscreenUIState(isActive) {
+        const fabIcon = document.getElementById('mobile-tool-fullscreen-icon');
+        const fabLabel = document.getElementById('mobile-tool-fullscreen-label');
+        const moreIcon = document.getElementById('more-card-fullscreen-icon');
+        const moreText = document.getElementById('more-card-fullscreen-text');
+        const moreSub = document.getElementById('more-card-fullscreen-sub');
+
+        if (isActive) {
+            if (fabIcon) {
+                fabIcon.classList.remove('fa-expand');
+                fabIcon.classList.add('fa-compress');
+            }
+            if (fabLabel) fabLabel.textContent = 'Exit Fullscreen';
+            if (moreIcon) {
+                moreIcon.classList.remove('fa-expand');
+                moreIcon.classList.add('fa-compress');
+            }
+            if (moreText) moreText.textContent = 'Exit Fullscreen';
+            if (moreSub) moreSub.textContent = 'Return to windowed mode';
+        } else {
+            if (fabIcon) {
+                fabIcon.classList.remove('fa-compress');
+                fabIcon.classList.add('fa-expand');
+            }
+            if (fabLabel) fabLabel.textContent = 'Fullscreen';
+            if (moreIcon) {
+                moreIcon.classList.remove('fa-compress');
+                moreIcon.classList.add('fa-expand');
+            }
+            if (moreText) moreText.textContent = 'Fullscreen';
+            if (moreSub) moreSub.textContent = 'Toggle immersive view';
+        }
+    }
+
+    async function toggleMobileFullscreen() {
+        const isIOS =
+            (/iPad|iPhone|iPod/.test(navigator.userAgent) ||
+                (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) &&
+            !window.MSStream;
+
+        const docEl = document.documentElement;
+        const requestFs =
+            docEl.requestFullscreen ||
+            docEl.webkitRequestFullscreen ||
+            docEl.mozRequestFullScreen ||
+            docEl.msRequestFullscreen;
+
+        const exitFs =
+            document.exitFullscreen ||
+            document.webkitExitFullscreen ||
+            document.mozCancelFullScreen ||
+            document.msExitFullscreen;
+
+        if (isFullscreenActive()) {
+            if (exitFs) {
+                try {
+                    await exitFs.call(document);
+                } catch (err) {
+                    console.warn('[MobileAdapter] Exit fullscreen failed:', err);
+                }
+            }
+            updateFullscreenUIState(false);
+            return;
+        }
+
+        // Standard Fullscreen API for Android, Chrome, and supported tablets
+        if (requestFs && (!isIOS || ('fullscreenEnabled' in document && document.fullscreenEnabled))) {
+            try {
+                await requestFs.call(docEl, { navigationUI: 'hide' }).catch(() => requestFs.call(docEl));
+                updateFullscreenUIState(true);
+                return;
+            } catch (err) {
+                console.warn('[MobileAdapter] requestFullscreen error:', err);
+            }
+        }
+
+        // Fallback for iOS Safari (iPhone) where Fullscreen API is blocked on DOM elements
+        if (isIOS) {
+            // Attempt the Safari address bar collapse trick via a micro-scroll
+            try {
+                window.scrollTo(0, 1);
+            } catch (_) {}
+
+            const msg = 'For borderless fullscreen on iOS, tap Share <i class="fa-solid fa-arrow-up-from-bracket"></i> then "Add to Home Screen".';
+            if (window.showToast) {
+                window.showToast(msg, 'info');
+            } else if (window.VTT?.chatEngine?.appendSystemMessage) {
+                window.VTT.chatEngine.appendSystemMessage(msg);
+            } else {
+                alert('For borderless fullscreen on iOS: tap Share then "Add to Home Screen".');
+            }
+        } else {
+            if (window.showToast) {
+                window.showToast('Fullscreen mode is not supported by your browser.', 'warning');
+            }
+        }
+    }
+
+    function setupMobileFullscreenController() {
+        document.addEventListener('fullscreenchange', () => {
+            updateFullscreenUIState(isFullscreenActive());
+        });
+        document.addEventListener('webkitfullscreenchange', () => {
+            updateFullscreenUIState(isFullscreenActive());
+        });
+        document.addEventListener('mozfullscreenchange', () => {
+            updateFullscreenUIState(isFullscreenActive());
+        });
+        document.addEventListener('MSFullscreenChange', () => {
+            updateFullscreenUIState(isFullscreenActive());
+        });
+
+        // Initialize state on load
+        updateFullscreenUIState(isFullscreenActive());
+    }
+
+    function setupMobileInstallBanner() {
+        const banner = document.getElementById('vtt-mobile-install-banner');
+        const installBtn = document.getElementById('btn-mobile-install-action');
+        const dismissBtn = document.getElementById('btn-mobile-install-dismiss');
+        if (!banner) return;
+
+        // Respect saved dismissal in localStorage
+        const isDismissed = localStorage.getItem('vtt_dismiss_install_banner') === 'true';
+        if (isDismissed) return;
+
+        // Check if already running in standalone PWA mode
+        const isStandalone =
+            (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) ||
+            navigator.standalone === true;
+        if (isStandalone) return;
+
+        // Only show on touch / mobile devices
+        if (!isTouchSupported()) return;
+
+        const isIOS =
+            (/iPad|iPhone|iPod/.test(navigator.userAgent) ||
+                (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) &&
+            !window.MSStream;
+
+        // Android / Chrome: capture beforeinstallprompt
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredInstallPrompt = e;
+            const stillDismissed = localStorage.getItem('vtt_dismiss_install_banner') === 'true';
+            if (!stillDismissed) {
+                banner.classList.remove('vtt-hidden');
+            }
+        });
+
+        // iOS Safari: show subtle prompt after short delay
+        if (isIOS) {
+            setTimeout(() => {
+                const stillDismissed = localStorage.getItem('vtt_dismiss_install_banner') === 'true';
+                if (!stillDismissed && !isStandalone) {
+                    banner.classList.remove('vtt-hidden');
+                }
+            }, 2500);
+        }
+
+        if (installBtn) {
+            installBtn.addEventListener('click', async () => {
+                if (deferredInstallPrompt) {
+                    deferredInstallPrompt.prompt();
+                    const choiceResult = await deferredInstallPrompt.userChoice;
+                    if (choiceResult && choiceResult.outcome === 'accepted') {
+                        banner.classList.add('vtt-hidden');
+                        localStorage.setItem('vtt_dismiss_install_banner', 'true');
+                    }
+                    deferredInstallPrompt = null;
+                } else if (isIOS) {
+                    const msg = 'To install: Tap the Share button <i class="fa-solid fa-arrow-up-from-bracket"></i> in Safari, then choose "Add to Home Screen".';
+                    if (window.showToast) {
+                        window.showToast(msg, 'info');
+                    } else if (window.VTT?.chatEngine?.appendSystemMessage) {
+                        window.VTT.chatEngine.appendSystemMessage(msg);
+                    } else {
+                        alert('To install: Tap Share in Safari, then select "Add to Home Screen".');
+                    }
+                } else {
+                    if (window.showToast) {
+                        window.showToast('Use your browser menu (⋮) and select "Install app" or "Add to Home Screen".', 'info');
+                    }
+                }
+            });
+        }
+
+        if (dismissBtn) {
+            dismissBtn.addEventListener('click', () => {
+                banner.classList.add('vtt-hidden');
+                localStorage.setItem('vtt_dismiss_install_banner', 'true');
+            });
+        }
+    }
+
+    // ========================================================================
     // 5. LIVE INITIATIVE TURN BADGE & FLOATING COMBAT PILL OBSERVER
     // ========================================================================
     function setupTurnBadgeObserver() {
@@ -2833,7 +3060,10 @@ export function initVttMobileAdapter(vtt) {
         renderMobileSheetCarousel,
         setEcoMode,
         toggleEcoMode,
-        isEcoMode: () => isEcoMode()
+        isEcoMode: () => isEcoMode(),
+        toggleFullscreen: toggleMobileFullscreen,
+        isFullscreen: isFullscreenActive,
+        setupMobileInstallBanner
     };
     window.VTT = window.VTT || {};
     window.VTT.mobileAdapter = adapter;

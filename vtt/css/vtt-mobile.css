@@ -17,6 +17,7 @@
 #vtt-mobile-backdrop,
 #vtt-mobile-combat-pill,
 #vtt-mobile-placement-banner,
+#vtt-mobile-install-banner,
 #vtt-mobile-radial-dial,
 #vtt-mobile-sheet-carousel,
 #vtt-mobile-shape-pill,
@@ -38,7 +39,8 @@
 #vtt-mobile-radial-dial.vtt-hidden,
 #vtt-mobile-sheet-carousel.vtt-hidden,
 #vtt-mobile-combat-pill.vtt-hidden,
-#vtt-mobile-placement-banner.vtt-hidden {
+#vtt-mobile-placement-banner.vtt-hidden,
+#vtt-mobile-install-banner.vtt-hidden {
     display: none !important;
 }
 
@@ -2644,6 +2646,89 @@ screen and (pointer: coarse) and (max-width: 1366px) {
         white-space: nowrap !important;
     }
 
+    /* Mobile Install & Fullscreen Immersion Banner */
+    #vtt-mobile-install-banner {
+        display: flex !important;
+        position: fixed !important;
+        top: calc(12px + env(safe-area-inset-top, 0px)) !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        z-index: 1450 !important;
+        background: rgba(15, 23, 42, 0.94) !important;
+        backdrop-filter: blur(12px) !important;
+        -webkit-backdrop-filter: blur(12px) !important;
+        border: 1.5px solid rgba(245, 194, 66, 0.45) !important;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8), 0 0 16px rgba(245, 194, 66, 0.25) !important;
+        border-radius: 20px !important;
+        padding: 6px 12px 6px 14px !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        gap: 12px !important;
+        max-width: min(92vw, 440px) !important;
+        width: max-content !important;
+        animation: vtt-fade-in 0.3s ease-out !important;
+    }
+
+    #vtt-mobile-install-banner.vtt-hidden {
+        display: none !important;
+    }
+
+    .mobile-install-banner-content {
+        display: flex !important;
+        align-items: center !important;
+        gap: 10px !important;
+        min-width: 0 !important;
+    }
+
+    .mobile-install-banner-content i {
+        font-size: 1.25rem !important;
+        flex-shrink: 0 !important;
+    }
+
+    .mobile-install-banner-text {
+        display: flex !important;
+        flex-direction: column !important;
+        min-width: 0 !important;
+        line-height: 1.2 !important;
+    }
+
+    .mobile-install-banner-title {
+        font-size: 0.82rem !important;
+        font-weight: 700 !important;
+        color: #f1f5f9 !important;
+        white-space: nowrap !important;
+    }
+
+    .mobile-install-banner-subtitle {
+        font-size: 0.7rem !important;
+        color: #94a3b8 !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+    }
+
+    .mobile-install-banner-actions {
+        display: flex !important;
+        align-items: center !important;
+        gap: 6px !important;
+        flex-shrink: 0 !important;
+    }
+
+    #btn-mobile-install-action {
+        font-size: 0.72rem !important;
+        padding: 4px 10px !important;
+        border-radius: 12px !important;
+        font-weight: 600 !important;
+        white-space: nowrap !important;
+    }
+
+    #btn-mobile-install-dismiss {
+        padding: 4px 8px !important;
+        border-radius: 12px !important;
+        font-size: 0.75rem !important;
+        color: #94a3b8 !important;
+    }
+
     /* Map Tools Controls (Steppers & Damage Chips) */
     .mobile-stepper-btn {
         background: rgba(255, 255, 255, 0.08) !important;
@@ -2919,6 +3004,7 @@ html.force-desktop-ui #vtt-mobile-tools-menu,
 html.force-desktop-ui #vtt-mobile-backdrop,
 html.force-desktop-ui #vtt-mobile-combat-pill,
 html.force-desktop-ui #vtt-mobile-placement-banner,
+html.force-desktop-ui #vtt-mobile-install-banner,
 html.force-desktop-ui #vtt-mobile-radial-dial,
 html.force-desktop-ui #vtt-mobile-sheet-carousel,
 html.force-desktop-ui #vtt-mobile-shape-pill,

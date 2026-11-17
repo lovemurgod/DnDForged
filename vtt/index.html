@@ -33,6 +33,9 @@
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="icon" type="image/png" sizes="96x96" href="favicon-96x96.png">
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="ForgeD VTT">
     <link rel="manifest" href="site.webmanifest">
 
     <!-- Fonts & Icons -->
@@ -263,6 +266,9 @@
             <button class="mobile-tool-item" data-tool="eco" id="mobile-tool-eco" title="One-Tap Eco / Battery Mode">
                 <i class="fa-solid fa-leaf"></i> <span>Eco / Battery Mode</span>
             </button>
+            <button class="mobile-tool-item" data-tool="fullscreen" id="mobile-tool-fullscreen" title="Toggle Fullscreen">
+                <i class="fa-solid fa-expand" id="mobile-tool-fullscreen-icon"></i> <span id="mobile-tool-fullscreen-label">Fullscreen</span>
+            </button>
             <div class="mobile-tool-divider"></div>
             <button class="mobile-tool-item" data-tool="fit">
                 <i class="fa-solid fa-crosshairs"></i> <span>Focus</span>
@@ -317,6 +323,25 @@
             <button id="btn-mobile-placement-cancel" class="btn btn-secondary btn-xs">
                 <i class="fa-solid fa-xmark"></i> Cancel
             </button>
+        </div>
+
+        <!-- Mobile Install & Fullscreen Immersion Banner -->
+        <div id="vtt-mobile-install-banner" class="vtt-hidden">
+            <div class="mobile-install-banner-content">
+                <i class="fa-solid fa-mobile-screen-button text-gradient-gold"></i>
+                <div class="mobile-install-banner-text">
+                    <span class="mobile-install-banner-title">Install ForgeD VTT</span>
+                    <span class="mobile-install-banner-subtitle">Add to Home Screen for borderless fullscreen</span>
+                </div>
+            </div>
+            <div class="mobile-install-banner-actions">
+                <button type="button" id="btn-mobile-install-action" class="btn btn-primary btn-xs">
+                    <i class="fa-solid fa-download"></i> Install
+                </button>
+                <button type="button" id="btn-mobile-install-dismiss" class="btn btn-secondary btn-xs" aria-label="Dismiss">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
         </div>
 
         <!-- Mobile Shape Selector Pill (Near FAB when Measure or Shape tool is active) -->
