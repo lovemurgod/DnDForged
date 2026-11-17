@@ -4,24 +4,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Control Center &amp; Homebrew Guide — ForgeD VTT</title>
+  <title>Control Center &amp; Homebrew Guide — ForgeDVTT</title>
   <meta name="description"
-    content="Official Game Master manual for the ForgeD Control Center desktop app: server hosting, Cloudflare tunnels, backups, and deep code-backed homebrew creation for monsters, items, and spells.">
+    content="Official Game Master manual for the ForgeDVTT Control Center desktop app: server hosting, Cloudflare tunnels, backups, and deep code-backed homebrew creation for monsters, items, and spells.">
   <link rel="canonical" href="https://forgedvtt.com/app-guide.html">
   <meta name="theme-color" content="#090d16">
   <meta property="og:type" content="website">
-  <meta property="og:site_name" content="ForgeD VTT">
-  <meta property="og:title" content="Control Center &amp; Homebrew Guide — ForgeD VTT">
+  <meta property="og:site_name" content="ForgeDVTT">
+  <meta property="og:title" content="Control Center &amp; Homebrew Guide — ForgeDVTT">
   <meta property="og:description"
-    content="Official Game Master manual for the ForgeD Control Center desktop app: server hosting, Cloudflare tunnels, backups, and deep code-backed homebrew creation for monsters, items, and spells.">
+    content="Official Game Master manual for the ForgeDVTT Control Center desktop app: server hosting, Cloudflare tunnels, backups, and deep code-backed homebrew creation for monsters, items, and spells.">
   <meta property="og:url" content="https://forgedvtt.com/app-guide.html">
   <meta property="og:image" content="https://forgedvtt.com/img/social-preview.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Control Center &amp; Homebrew Guide — ForgeD VTT">
+  <meta name="twitter:title" content="Control Center &amp; Homebrew Guide — ForgeDVTT">
   <meta name="twitter:description"
-    content="Official Game Master manual for the ForgeD Control Center desktop app: server hosting, Cloudflare tunnels, backups, and deep code-backed homebrew creation for monsters, items, and spells.">
+    content="Official Game Master manual for the ForgeDVTT Control Center desktop app: server hosting, Cloudflare tunnels, backups, and deep code-backed homebrew creation for monsters, items, and spells.">
   <meta name="twitter:image" content="https://forgedvtt.com/img/social-preview.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
@@ -44,8 +44,8 @@
   <div class="bg-ambient-lights" aria-hidden="true"></div>
 
   <header class="site-header">
-    <a class="site-brand" href="index.html" aria-label="ForgeD VTT home"><img src="img/TextLogo.png"
-        alt="ForgeD VTT"></a>
+    <a class="site-brand" href="index.html" aria-label="ForgeDVTT home"><img src="img/TextLogo.png"
+        alt="ForgeDVTT"></a>
     <nav class="site-nav" aria-label="Main navigation">
       <a href="index.html">Home</a>
       <a href="getting-started.html">Getting Started</a>
@@ -128,7 +128,7 @@
             <span class="manual-section-badge gm">Control Center • Tab 1</span>
           </div>
 
-          <p class="section-lead">ForgeD runs a high-performance local Express server and uses Cloudflare to provide
+          <p class="section-lead">ForgeDVTT runs a high-performance local Express server and uses Cloudflare to provide
             players with an instant, secure web route into your session without changing router port-forwarding rules.
           </p>
 
@@ -151,7 +151,7 @@
                     app protects local API calls with <code>x-server-secret</code> and authenticates the Game Master
                     session using salted PBKDF2 hash tokens.</li>
                   <li><i class="fa-solid fa-circle-dot"></i> <strong>Windows Firewall:</strong> If prompted on first
-                    launch, allow ForgeD on <em>Private Networks</em>. Public incoming ports are never exposed because
+                    launch, allow ForgeDVTT on <em>Private Networks</em>. Public incoming ports are never exposed because
                     the tunnel routes outbound traffic securely.</li>
                 </ul>
               </div>
@@ -167,7 +167,7 @@
                   Tunnels</span>
               </div>
               <div class="doc-feature-body">
-                <p>ForgeD supports two tunnel modes to connect external players to your session:</p>
+                <p>ForgeDVTT supports two tunnel modes to connect external players to your session:</p>
                 <ul>
                   <li><i class="fa-solid fa-circle-dot"></i> <strong>Quick Tunnel (Default &amp; Recommended):</strong>
                     Leave the token field blank and click <strong>Start Online Tunnel</strong>. The launcher establishes
@@ -176,7 +176,7 @@
                     active player link in ~5 seconds.</li>
                   <li><i class="fa-solid fa-circle-dot"></i> <strong>Custom Domain (Persistent URL):</strong> If you own
                     a domain managed in Cloudflare Zero Trust, create a Cloudflare Tunnel routed to service
-                    <code>http://127.0.0.1:5050</code>. Paste the tunnel token and your custom hostname into ForgeD for
+                    <code>http://127.0.0.1:5050</code>. Paste the tunnel token and your custom hostname into ForgeDVTT for
                     a permanent session URL (e.g. <code>https://dnd.yourdomain.com</code>).</li>
                 </ul>
               </div>
@@ -234,7 +234,7 @@
           <div class="manual-subgrid">
             <div class="manual-subcard">
               <h3 class=""><i class="fa-solid fa-hard-drive"></i> The <code>.dndforged-data</code> Folder</h3>
-              <p>ForgeD stores all user content in the <code>.dndforged-data</code> directory located inside your
+              <p>ForgeDVTT stores all user content in the <code>.dndforged-data</code> directory located inside your
                 application folder or user profile:</p>
               <ul>
                 <li><code>campaigns.json</code> — Contains all scenes, tactical grids, placed tokens, fog-of-war states,
@@ -257,7 +257,7 @@
                   Simply copy the <code>.dndforged-data</code> folder to Google Drive, OneDrive, or a USB drive.</li>
                 <li><strong>Restoring a Corrupt File:</strong> If a power loss occurs during play, rename
                   <code>campaigns.json.bak</code> to <code>campaigns.json</code> and restart the server.</li>
-                <li><strong>Migrating to a New PC:</strong> Install ForgeD on the new computer, copy your
+                <li><strong>Migrating to a New PC:</strong> Install ForgeDVTT on the new computer, copy your
                   <code>.dndforged-data</code> directory over, and launch the app. All campaigns restore instantly.</li>
               </ul>
             </div>
@@ -274,7 +274,7 @@
             <span class="manual-section-badge player">Homebrew Studio</span>
           </div>
 
-          <p class="section-lead">ForgeD features a natural-language attack parser. Writing your actions in standard 5e
+          <p class="section-lead">ForgeDVTT features a natural-language attack parser. Writing your actions in standard 5e
             format allows the VTT to automatically extract to-hit bonuses, reach, damage formulas, and save DCs into
             single-click combat buttons.</p>
 
@@ -328,7 +328,7 @@
                 <span class="btn-inspector-action"><i class="fa-solid fa-bolt"></i> 1-Click Combo</span>
               </div>
               <div class="doc-feature-body">
-                <p>ForgeD parses natural language multiattack lines into automated routine buttons:</p>
+                <p>ForgeDVTT parses natural language multiattack lines into automated routine buttons:</p>
                 <ul>
                   <li><strong>Example String:</strong>
                     <code>The dragon makes three attacks: one with its Bite and two with its Claws.</code></li>
@@ -411,7 +411,7 @@
             <span class="manual-section-badge player">Equipment Studio</span>
           </div>
 
-          <p class="section-lead">ForgeD's equipment engine dynamically calculates Armor Class, weapon attack macros,
+          <p class="section-lead">ForgeDVTT's equipment engine dynamically calculates Armor Class, weapon attack macros,
             and weight encumbrance based on 5e rules and item properties.</p>
 
           <div class="doc-section-subtitle">
@@ -458,7 +458,7 @@
                 <span class="btn-inspector-action"><i class="fa-solid fa-microchip"></i> Auto-Detection</span>
               </div>
               <div class="doc-feature-body">
-                <p>ForgeD checks weapon tags to construct optimal attack macros:</p>
+                <p>ForgeDVTT checks weapon tags to construct optimal attack macros:</p>
                 <ul>
                   <li><strong>Finesse:</strong> The macro automatically compares the character's Strength and Dexterity
                     modifiers, selecting whichever is higher.</li>
@@ -505,7 +505,7 @@
             <span class="manual-section-badge player">Magic Studio</span>
           </div>
 
-          <p class="section-lead">ForgeD features automated cantrip scaling, leveled spell slot upcasting, and
+          <p class="section-lead">ForgeDVTT features automated cantrip scaling, leveled spell slot upcasting, and
             interactive spell DC cards for all homebrew arcane and divine magic.</p>
 
           <div class="manual-subgrid">
@@ -549,7 +549,7 @@
           </div>
 
           <p class="section-lead">Expand your game universe with external homebrew packages, third-party settings, and
-            community JSON compendiums using ForgeD's Source Manager.</p>
+            community JSON compendiums using ForgeDVTT's Source Manager.</p>
 
           <div class="doc-section-subtitle">
             <i class="fa-solid fa-folder-tree"></i> JSON Compendium Directory Architecture
@@ -560,7 +560,7 @@
               <h3 class=""><i class="fa-solid fa-file-code"></i> Data File Layout</h3>
               <p>Place custom homebrew JSON packages into your campaign data directory:</p>
               <pre
-                style="background: rgba(0,0,0,0.6); padding: 12px; border-radius: 6px; color: #7dd3fc; font-family: var(--font-code); font-size: 0.8rem; overflow-x: auto;">
+                style="background: rgba(0,0,0,0.6); padding: 12px; border-radius: 6px; color: #7dd3fc; font-family: var(--font-code); font-size: 0.8rem; overflow-x: auto; max-width: 100%; box-sizing: border-box;">
 .dndforged-data/
 ├── sources/
 │   ├── bestiary/     (custom monster .json files)
@@ -578,9 +578,9 @@
                   Center and click <strong>Rebuild Catalogs</strong>.</li>
                 <li><strong>Via Developer Terminal:</strong> Run <code>npm run build:dbs</code> in the project root.
                 </li>
-                <li><strong>Automatic Deduplication:</strong> ForgeD resolves duplicate slugs by prioritizing custom
+                <li><strong>Automatic Deduplication:</strong> ForgeDVTT resolves duplicate slugs by prioritizing custom
                   campaign homebrew over core SRD entries.</li>
-                <li><strong>Token Fallbacks:</strong> If a creature lacks artwork, ForgeD automatically renders a clean
+                <li><strong>Token Fallbacks:</strong> If a creature lacks artwork, ForgeDVTT automatically renders a clean
                   procedural initial-letter badge token on the canvas.</li>
               </ul>
             </div>
@@ -596,7 +596,7 @@
   </a>
 
   <footer class="footer-vtt">
-    <p>© 2026 ForgeD VTT — Self-Hosted Virtual Tabletop System. Designed for Tabletop Freedom.</p>
+    <p>© 2026 ForgeDVTT — Self-Hosted Virtual Tabletop System. Designed for Tabletop Freedom.</p>
     <p style="margin-top: 0.5rem; font-size: 0.8rem; opacity: 0.85;">This work includes material from the System
       Reference Document 5.1 (SRD 5.1) by Wizards of the Coast LLC, available under the Creative Commons Attribution 4.0
       International License (CC-BY-4.0). 2024 Free Rules and SRD 5.2 content are used under the Wizards of the Coast Fan
@@ -902,6 +902,13 @@
         }
       });
     });
+
+    if (backToTopBtn) {
+      backToTopBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
 
     window.addEventListener('scroll', () => {
       if (backToTopBtn) {

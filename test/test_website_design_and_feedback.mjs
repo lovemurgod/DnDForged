@@ -73,4 +73,64 @@ test('Website Design & Feedback Page Verification Suite', async (t) => {
     assert.ok(content.includes('https://forms.gle/CaL1PXZyPmkehx7c7'), 'feedback.html must contain direct forms.gle link');
     assert.ok(content.includes('docs.google.com/forms/d/e/1FAIpQLSdXQSQ10zosM_noJch0sBh0QcVPvY6XEelCbmPAeH12Bunz3g/viewform?embedded=true'), 'feedback.html must contain embedded form iframe');
   });
+
+  await t.test('9. Verify SmartScreen instructions removed from index.html and present only on getting-started.html', () => {
+    const indexContent = fs.readFileSync(path.join(ROOT_DIR, 'index.html'), 'utf8');
+    assert.ok(!indexContent.includes('First time on Windows'), 'index.html must not contain "First time on Windows"');
+    assert.ok(!indexContent.includes('Run anyway'), 'index.html must not contain "Run anyway"');
+    assert.ok(!indexContent.includes('More info'), 'index.html must not contain "More info"');
+
+    const gsContent = fs.readFileSync(path.join(ROOT_DIR, 'getting-started.html'), 'utf8');
+    assert.ok(gsContent.includes('download-smartscreen-card'), 'getting-started.html must format SmartScreen with card');
+    assert.ok(gsContent.includes('<kbd>More info</kbd>'), 'getting-started.html must format More info with kbd');
+    assert.ok(gsContent.includes('<kbd>Run anyway</kbd>'), 'getting-started.html must format Run anyway with kbd');
+  });
+
+  await t.test('10. Verify no visible mentions of GitHub in page copy', () => {
+    for (const page of PAGES) {
+      const content = fs.readFileSync(path.join(ROOT_DIR, page), 'utf8');
+      const lines = content.split('\n');
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+        if (line.includes('href="https://github.com/')) continue;
+        assert.ok(
+          !/\bgithub\b/i.test(line),
+          `Page ${page} line ${i + 1} has visible mention of GitHub: "${line.trim()}"`
+        );
+      }
+    }
+  });
+
+  await t.test('11. Verify strict branding as ForgeDVTT across all pages', () => {
+    for (const page of PAGES) {
+      const content = fs.readFileSync(path.join(ROOT_DIR, page), 'utf8');
+      const lines = content.split('\n');
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+        // Allow repository path in release download link, .dndforged-data directory, "Forged Gold" color, or DnDForged repository mention in legal
+        if (line.includes('https://github.com/lovemurgod/DnDForged/')) continue;
+        if (line.includes('.dndforged-data')) continue;
+        if (line.includes('Forged Gold')) continue;
+        if (line.includes('(DnDForged)')) continue;
+        assert.ok(
+          !/\bForgeD\b/.test(line),
+          `Page ${page} line ${i + 1} must use "ForgeDVTT" or "the VTT" instead of standalone "ForgeD": "${line.trim()}"`
+        );
+      }
+    }
+  });
+
+  await t.test('12. Verify back-to-top button on all pages', () => {
+    for (const page of PAGES) {
+      const content = fs.readFileSync(path.join(ROOT_DIR, page), 'utf8');
+      assert.ok(
+        content.includes('id="site-back-to-top"') || content.includes('id="guide-back-to-top"'),
+        `Page ${page} must contain a back-to-top button element`
+      );
+      assert.ok(
+        content.includes("scrollTo({ top: 0, behavior: 'smooth' })"),
+        `Page ${page} must wire smooth scroll handler for back-to-top button`
+      );
+    }
+  });
 });

@@ -4,24 +4,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Community Feedback &amp; Suggestions — ForgeD VTT</title>
+  <title>Community Feedback &amp; Suggestions — ForgeDVTT</title>
   <meta name="description"
-    content="Submit feedback, feature requests, usability suggestions, and bug reports for ForgeD VTT via our official community feedback form.">
+    content="Submit feedback, feature requests, usability suggestions, and bug reports for ForgeDVTT via our official community feedback form.">
   <link rel="canonical" href="https://forgedvtt.com/feedback.html">
   <meta name="theme-color" content="#090d16">
   <meta property="og:type" content="website">
-  <meta property="og:site_name" content="ForgeD VTT">
-  <meta property="og:title" content="Community Feedback &amp; Suggestions — ForgeD VTT">
+  <meta property="og:site_name" content="ForgeDVTT">
+  <meta property="og:title" content="Community Feedback &amp; Suggestions — ForgeDVTT">
   <meta property="og:description"
-    content="Submit feedback, feature requests, usability suggestions, and bug reports for ForgeD VTT via our official community feedback form.">
+    content="Submit feedback, feature requests, usability suggestions, and bug reports for ForgeDVTT via our official community feedback form.">
   <meta property="og:url" content="https://forgedvtt.com/feedback.html">
   <meta property="og:image" content="https://forgedvtt.com/img/social-preview.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Community Feedback &amp; Suggestions — ForgeD VTT">
+  <meta name="twitter:title" content="Community Feedback &amp; Suggestions — ForgeDVTT">
   <meta name="twitter:description"
-    content="Submit feedback, feature requests, usability suggestions, and bug reports for ForgeD VTT via our official community feedback form.">
+    content="Submit feedback, feature requests, usability suggestions, and bug reports for ForgeDVTT via our official community feedback form.">
   <meta name="twitter:image" content="https://forgedvtt.com/img/social-preview.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -44,8 +44,8 @@
   <div class="bg-ambient-lights" aria-hidden="true"></div>
 
   <header class="site-header">
-    <a class="site-brand" href="index.html" aria-label="ForgeD VTT home"><img src="img/TextLogo.png"
-        alt="ForgeD VTT"></a>
+    <a class="site-brand" href="index.html" aria-label="ForgeDVTT home"><img src="img/TextLogo.png"
+        alt="ForgeDVTT"></a>
     <nav class="site-nav" aria-label="Main navigation">
       <a href="index.html">Home</a>
       <a href="getting-started.html">Getting Started</a>
@@ -61,9 +61,9 @@
   <main class="main-wrapper site-main">
     <section class="page-intro" aria-labelledby="feedback-title">
       <p class="eyebrow"><i class="fa-solid fa-comments" aria-hidden="true"></i> Community &amp; Player Voice</p>
-      <h1 id="feedback-title">Help Shape the Future of ForgeD VTT</h1>
+      <h1 id="feedback-title">Help Shape the Future of ForgeDVTT</h1>
       <p>Whether you are a Game Master orchestrating high-stakes encounters or an adventurer rolling your first d20,
-        your experience drives ForgeD forward. Share your impressions, report issues, or propose new features.</p>
+        your experience drives ForgeDVTT forward. Share your impressions, report issues, or propose new features.</p>
     </section>
 
     <section class="feedback-section" aria-labelledby="feedback-categories-heading">
@@ -98,7 +98,7 @@
           <iframe
             src="https://docs.google.com/forms/d/e/1FAIpQLSdXQSQ10zosM_noJch0sBh0QcVPvY6XEelCbmPAeH12Bunz3g/viewform?embedded=true"
             width="100%" height="880" frameborder="0" marginheight="0" marginwidth="0"
-            title="ForgeD VTT Community Feedback Form">Loading feedback form…</iframe>
+            title="ForgeDVTT Community Feedback Form">Loading feedback form…</iframe>
         </div>
       </div>
 
@@ -114,14 +114,30 @@
     </section>
   </main>
 
+  <a href="#" id="site-back-to-top" class="site-back-to-top" aria-label="Back to top of page">
+    <i class="fa-solid fa-arrow-up" aria-hidden="true"></i>
+  </a>
+
   <footer class="footer-vtt">
-    <p>© 2026 ForgeD VTT — Self-Hosted Virtual Tabletop System. Designed for Tabletop Freedom.</p>
+    <p>© 2026 ForgeDVTT — Self-Hosted Virtual Tabletop System. Designed for Tabletop Freedom.</p>
     <p style="margin-top: 0.5rem; font-size: 0.8rem; opacity: 0.85;">This work includes material from the System
       Reference Document 5.1 (SRD 5.1) by Wizards of the Coast LLC, available under the Creative Commons Attribution 4.0
       International License (CC-BY-4.0). 2024 Free Rules and SRD 5.2 content are used under the Wizards of the Coast Fan
       Content Policy. • <a href="feedback.html" style="color: #d4af37; text-decoration: underline;">Feedback</a> • <a
         href="legal.html" style="color: #d4af37; text-decoration: underline;">Legal Notices &amp; OGC Disclaimers</a></p>
   </footer>
+  <script>
+    const backToTopBtn = document.getElementById('site-back-to-top');
+    if (backToTopBtn) {
+      window.addEventListener('scroll', () => {
+        backToTopBtn.classList.toggle('visible', window.scrollY > 400);
+      }, { passive: true });
+      backToTopBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+  </script>
 </body>
 
 </html>
