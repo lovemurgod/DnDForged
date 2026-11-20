@@ -12,7 +12,7 @@ test('Hero Crest Interactive d20 Easter Egg DOM & Logic', async (t) => {
   assert.ok(html.includes('crest-shield-die'), 'index.html contains .crest-shield-die');
   assert.ok(html.includes('fa-dice-d20'), 'index.html contains d20 icon');
   assert.ok(html.includes('Cursed to subscriptions,'), 'index.html contains Nat 1 text');
-  assert.ok(html.includes('A Forge of creation, untamed and bold,'), 'index.html contains Nat 20 text');
+  assert.ok(html.includes('A Forge to create,'), 'index.html contains Nat 20 text');
 
   const dom = new JSDOM(html, {
     runScripts: 'dangerously',
