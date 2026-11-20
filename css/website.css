@@ -2821,24 +2821,19 @@ i[class*="fa-regular"] {
     position: relative;
     display: block;
     z-index: 2;
-    width: min(100%, 360px);
+    width: min(100%, 390px);
     height: auto;
-    border-radius: 50%;
-    border: 3px solid rgba(245, 196, 83, 0.45);
-    box-shadow: 
-        0 0 35px rgba(223, 160, 30, 0.35),
-        0 0 70px rgba(56, 189, 248, 0.2),
-        0 20px 45px rgba(0, 0, 0, 0.85);
-    background: radial-gradient(circle, rgba(16, 21, 33, 0.9) 0%, rgba(9, 13, 22, 0.98) 100%);
-    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    border-radius: 0;
+    border: none;
+    background: transparent;
+    box-shadow: none;
+    filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.75)) drop-shadow(0 0 25px rgba(223, 160, 30, 0.25));
+    transition: transform 0.4s ease, filter 0.4s ease;
 }
 
 .hero-crest:hover img {
     transform: scale(1.02);
-    box-shadow: 
-        0 0 45px rgba(223, 160, 30, 0.5),
-        0 0 85px rgba(56, 189, 248, 0.3),
-        0 25px 50px rgba(0, 0, 0, 0.9);
+    filter: drop-shadow(0 20px 35px rgba(0, 0, 0, 0.85)) drop-shadow(0 0 35px rgba(223, 160, 30, 0.4));
 }
 
 .crest-orbit {
