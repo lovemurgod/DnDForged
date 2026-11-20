@@ -121,9 +121,14 @@
         </div>
         <p class="download-note"><i class="fa-solid fa-shield-halved" style="color: var(--color-gold-bright);" aria-hidden="true"></i> 100% Free &amp; Open Core • Unlimited Local Storage • No Subscriptions</p>
       </div>
-      <div class="hero-crest"><span class="crest-orbit orbit-blue" aria-hidden="true"></span><span
+      <div class="hero-crest crest-interactive" role="button" tabindex="0" aria-label="Roll d20 for fate" title="Click to roll d20 for fate"><span class="crest-orbit orbit-blue" aria-hidden="true"></span><span
           class="crest-orbit orbit-red" aria-hidden="true"></span><span class="crest-orbit orbit-purple"
           aria-hidden="true"></span><img src="img/logo.png" alt="ForgeDVTT crest with a fantasy adventuring party">
+        <div class="crest-shield-die" aria-hidden="true">
+          <span class="die-icon"><i class="fa-solid fa-dice-d20"></i></span>
+          <span class="die-number">20</span>
+          <span class="die-label"></span>
+        </div>
       </div>
     </section>
     <section class="role-section" aria-labelledby="role-heading">
@@ -466,6 +471,134 @@
         window.scrollTo({ top: 0, behavior: 'smooth' });
       });
     }
+
+    // Hero Crest Interactive d20 Easter Egg
+    (() => {
+      const crest = document.querySelector('.crest-interactive');
+      const dieEl = document.querySelector('.crest-shield-die');
+      const headline = document.getElementById('home-headline');
+      if (!crest || !dieEl || !headline) return;
+
+      const dieNum = dieEl.querySelector('.die-number');
+      const dieLabel = dieEl.querySelector('.die-label');
+      const headlineSpans = headline.querySelectorAll('span');
+
+      const stanzas = {
+        default: [
+          'One DM to Run it.',
+          'One Party to Play it.',
+          'One VTT to Forge it All—',
+          'and in your minds, display it.'
+        ],
+        nat1: [
+          'Cursed to subscriptions,',
+          'Monstrous transactions,',
+          'Locked behind paywalls—',
+          'and billed for your actions.'
+        ],
+        nat20: [
+          'A Forge of creation, untamed and bold,',
+          'the D stands for freedom in every world told—',
+          'and a VTT shaping the digital stage,',
+          'for every DM to write their own page.'
+        ]
+      };
+
+      let isRolling = false;
+      let rollCountSinceCrit = 0;
+      let currentState = 'default';
+      let hideDieTimeout = null;
+
+      function updateHeadline(newState) {
+        if (newState === currentState) return;
+        headline.classList.add('is-transitioning');
+        setTimeout(() => {
+          headline.classList.remove('state-nat1', 'state-nat20');
+          if (newState === 'nat1') headline.classList.add('state-nat1');
+          if (newState === 'nat20') headline.classList.add('state-nat20');
+
+          const lines = stanzas[newState] || stanzas.default;
+          headlineSpans.forEach((span, idx) => {
+            if (lines[idx]) span.textContent = lines[idx];
+          });
+
+          headline.classList.remove('is-transitioning');
+          currentState = newState;
+        }, 180);
+      }
+
+      function rollD20() {
+        if (isRolling) return;
+        isRolling = true;
+        clearTimeout(hideDieTimeout);
+
+        rollCountSinceCrit++;
+        let finalRoll = Math.floor(Math.random() * 20) + 1;
+
+        // Mild pity timer: guarantee a Nat 20 if no crit within 18 rolls
+        if (rollCountSinceCrit >= 18 && finalRoll !== 20 && finalRoll !== 1) {
+          finalRoll = 20;
+        }
+
+        if (finalRoll === 1 || finalRoll === 20) {
+          rollCountSinceCrit = 0;
+        }
+
+        // Setup rolling visuals
+        dieEl.classList.remove('die-nat1', 'die-nat20');
+        dieEl.classList.add('is-visible', 'is-rolling');
+        if (dieLabel) dieLabel.textContent = 'Rolling...';
+
+        let tumbleCount = 0;
+        const tumbleInterval = setInterval(() => {
+          tumbleCount++;
+          if (dieNum) dieNum.textContent = Math.floor(Math.random() * 20) + 1;
+          if (tumbleCount >= 7) {
+            clearInterval(tumbleInterval);
+            finishRoll(finalRoll);
+          }
+        }, 50);
+      }
+
+      function finishRoll(roll) {
+        dieEl.classList.remove('is-rolling');
+        if (dieNum) dieNum.textContent = roll;
+
+        if (roll === 1) {
+          dieEl.classList.add('die-nat1');
+          if (dieLabel) dieLabel.textContent = 'Critical Failure';
+          crest.classList.add('is-shaking');
+          setTimeout(() => crest.classList.remove('is-shaking'), 500);
+          updateHeadline('nat1');
+        } else if (roll === 20) {
+          dieEl.classList.add('die-nat20');
+          if (dieLabel) dieLabel.textContent = 'Critical Success';
+          crest.classList.add('is-radiant');
+          setTimeout(() => crest.classList.remove('is-radiant'), 800);
+          updateHeadline('nat20');
+        } else {
+          if (dieLabel) dieLabel.textContent = 'Fate Rolled';
+          updateHeadline('default');
+          hideDieTimeout = setTimeout(() => {
+            dieEl.classList.remove('is-visible');
+          }, 2400);
+        }
+
+        isRolling = false;
+      }
+
+      crest.addEventListener('click', (e) => {
+        e.preventDefault();
+        rollD20();
+      });
+
+      crest.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          rollD20();
+        }
+      });
+    })();
   </script>
 </body>
 

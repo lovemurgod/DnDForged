@@ -4005,3 +4005,213 @@ i.gold,
         align-items: flex-start;
     }
 }
+
+/* ==========================================================================
+   Hero Crest Interactive d20 Easter Egg & Headline States
+   ========================================================================== */
+.crest-interactive {
+    cursor: pointer;
+    user-select: none;
+    outline: none;
+}
+
+.crest-interactive:focus-visible img {
+    outline: 2px solid var(--color-gold-bright);
+    outline-offset: 4px;
+}
+
+.crest-interactive:active img {
+    transform: scale(0.97);
+}
+
+.crest-shield-die {
+    position: absolute;
+    top: 53%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 72px;
+    min-height: 72px;
+    padding: 6px 12px;
+    border-radius: 12px;
+    background: radial-gradient(circle, rgba(15, 23, 42, 0.94) 0%, rgba(9, 13, 22, 0.98) 100%);
+    border: 2px solid var(--color-gold-bright);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.8), 0 0 20px rgba(223, 160, 30, 0.4);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.crest-shield-die.is-visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.crest-shield-die .die-icon {
+    font-size: 0.95rem;
+    color: var(--color-gold-bright);
+    margin-bottom: 2px;
+    opacity: 0.85;
+}
+
+.crest-shield-die .die-number {
+    font-family: var(--font-heading);
+    font-size: 1.65rem;
+    font-weight: 900;
+    line-height: 1;
+    color: #ffffff;
+    letter-spacing: -0.02em;
+}
+
+.crest-shield-die .die-label {
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 800;
+    margin-top: 4px;
+    color: #94a3b8;
+}
+
+/* Rolling animation */
+.crest-shield-die.is-rolling {
+    transform: translate(-50%, -50%) scale(1.08);
+    box-shadow: 0 0 30px rgba(56, 189, 248, 0.5);
+    border-color: #38bdf8;
+}
+
+.crest-shield-die.is-rolling .die-icon {
+    animation: die-spin 0.4s linear infinite;
+    color: #38bdf8;
+}
+
+@keyframes die-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Nat 1 Critical Failure Style */
+.crest-shield-die.die-nat1 {
+    border-color: #ef4444;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.9), 0 0 25px rgba(239, 68, 68, 0.6);
+    background: radial-gradient(circle, rgba(30, 10, 10, 0.96) 0%, rgba(15, 5, 5, 0.98) 100%);
+    animation: die-shake 0.45s ease-in-out;
+}
+
+.crest-shield-die.die-nat1 .die-icon,
+.crest-shield-die.die-nat1 .die-number,
+.crest-shield-die.die-nat1 .die-label {
+    color: #ef4444;
+}
+
+/* Nat 20 Critical Success Style */
+.crest-shield-die.die-nat20 {
+    border-color: #facc15;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.9), 0 0 35px rgba(250, 204, 21, 0.7);
+    background: radial-gradient(circle, rgba(35, 25, 10, 0.96) 0%, rgba(15, 10, 5, 0.98) 100%);
+    animation: die-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.crest-shield-die.die-nat20 .die-icon,
+.crest-shield-die.die-nat20 .die-number,
+.crest-shield-die.die-nat20 .die-label {
+    color: #facc15;
+    text-shadow: 0 0 8px rgba(250, 204, 21, 0.6);
+}
+
+@keyframes die-pop {
+    0% { transform: translate(-50%, -50%) scale(0.7); }
+    60% { transform: translate(-50%, -50%) scale(1.18); }
+    100% { transform: translate(-50%, -50%) scale(1); }
+}
+
+@keyframes die-shake {
+    0%, 100% { transform: translate(-50%, -50%) rotate(0deg); }
+    20% { transform: translate(-54%, -50%) rotate(-4deg); }
+    40% { transform: translate(-46%, -50%) rotate(4deg); }
+    60% { transform: translate(-52%, -50%) rotate(-2deg); }
+    80% { transform: translate(-48%, -50%) rotate(2deg); }
+}
+
+/* Crest Shake for Nat 1 */
+.crest-interactive.is-shaking img {
+    animation: crest-fail-shake 0.5s ease-in-out;
+}
+
+@keyframes crest-fail-shake {
+    0%, 100% { transform: scale(1) rotate(0deg); }
+    25% { transform: scale(0.98) rotate(-2deg); filter: drop-shadow(0 0 30px rgba(239, 68, 68, 0.6)); }
+    50% { transform: scale(1.02) rotate(2deg); filter: drop-shadow(0 0 35px rgba(239, 68, 68, 0.8)); }
+    75% { transform: scale(0.99) rotate(-1deg); }
+}
+
+/* Crest Glow for Nat 20 */
+.crest-interactive.is-radiant img {
+    animation: crest-radiance 0.8s ease-out;
+    filter: drop-shadow(0 0 45px rgba(250, 204, 21, 0.75)) drop-shadow(0 20px 40px rgba(0, 0, 0, 0.9));
+}
+
+@keyframes crest-radiance {
+    0% { transform: scale(1); filter: drop-shadow(0 0 20px rgba(250, 204, 21, 0.4)); }
+    50% { transform: scale(1.05); filter: drop-shadow(0 0 60px rgba(250, 204, 21, 0.9)); }
+    100% { transform: scale(1.02); filter: drop-shadow(0 0 45px rgba(250, 204, 21, 0.75)); }
+}
+
+/* ==========================================================================
+   Headline Transitions & State Theming
+   ========================================================================== */
+.brand-headline span {
+    transition: opacity 0.28s ease, transform 0.28s ease, color 0.3s ease, text-shadow 0.3s ease;
+}
+
+.brand-headline.is-transitioning span {
+    opacity: 0;
+    transform: translateY(6px);
+}
+
+/* State: Nat 1 (Cursed Corporate Dystopia) */
+.brand-headline.state-nat1 span:nth-child(1) {
+    color: #fca5a5;
+    text-shadow: 0 0 16px rgba(239, 68, 68, 0.45);
+}
+
+.brand-headline.state-nat1 span:nth-child(2) {
+    color: #ef4444;
+    text-shadow: 0 0 20px rgba(239, 68, 68, 0.65);
+}
+
+.brand-headline.state-nat1 span:nth-child(3) {
+    color: #f87171;
+    text-shadow: 0 0 16px rgba(239, 68, 68, 0.45);
+}
+
+.brand-headline.state-nat1 .headline-finale {
+    color: #fecaca;
+    font-style: italic;
+    text-shadow: 0 0 12px rgba(239, 68, 68, 0.5);
+}
+
+/* State: Nat 20 (The Will of Freedom / Forge D VTT) */
+.brand-headline.state-nat20 span:nth-child(1) {
+    color: #fef08a;
+    text-shadow: 0 0 16px rgba(250, 204, 21, 0.45);
+}
+
+.brand-headline.state-nat20 span:nth-child(2) {
+    color: var(--color-gold-bright);
+    text-shadow: 0 0 22px rgba(250, 204, 21, 0.7);
+}
+
+.brand-headline.state-nat20 span:nth-child(3) {
+    color: #ffffff;
+    text-shadow: 0 0 16px rgba(255, 255, 255, 0.4);
+}
+
+.brand-headline.state-nat20 .headline-finale {
+    color: #fde047;
+    text-shadow: 0 0 14px rgba(250, 204, 21, 0.55);
+}
