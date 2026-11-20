@@ -43,6 +43,10 @@ test('Website Design & Feedback Page Verification Suite', async (t) => {
       assert.ok(content.includes('href="getting-started.html"'), `${page} must link to Getting Started`);
       assert.ok(content.includes('href="guide.html"'), `${page} must link to Play Guide`);
       assert.ok(content.includes('href="app-guide.html"'), `${page} must link to App Guide`);
+      assert.ok(content.includes('portal-dungeons.html'), `${page} must include Portal Dungeons in navigation`);
+      assert.ok(content.includes('self-hosted-vtt.html'), `${page} must include Self-Hosted & Tunnels in navigation`);
+      assert.ok(content.includes('tv-gaming-table.html'), `${page} must include TV Gaming Table in navigation`);
+      assert.ok(/Features\s*<i/.test(content), `${page} must have Features dropdown toggle in navigation`);
       assert.ok(/Play Guide<\/a>/.test(content), `${page} must have Play Guide navigation label`);
       assert.ok(/App Guide<\/a>/.test(content), `${page} must have App Guide navigation label`);
       assert.ok(content.includes('href="feedback.html"'), `${page} must link to Feedback in navigation`);
