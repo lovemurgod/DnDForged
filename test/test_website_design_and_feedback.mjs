@@ -41,8 +41,10 @@ test('Website Design & Feedback Page Verification Suite', async (t) => {
       const content = fs.readFileSync(path.join(ROOT_DIR, page), 'utf8');
       assert.ok(content.includes('href="index.html"'), `${page} must link to Home`);
       assert.ok(content.includes('href="getting-started.html"'), `${page} must link to Getting Started`);
-      assert.ok(content.includes('>Play Guide</a>'), `${page} must have Play Guide navigation label`);
-      assert.ok(content.includes('>App Guide</a>'), `${page} must have App Guide navigation label`);
+      assert.ok(content.includes('href="guide.html"'), `${page} must link to Play Guide`);
+      assert.ok(content.includes('href="app-guide.html"'), `${page} must link to App Guide`);
+      assert.ok(/Play Guide<\/a>/.test(content), `${page} must have Play Guide navigation label`);
+      assert.ok(/App Guide<\/a>/.test(content), `${page} must have App Guide navigation label`);
       assert.ok(content.includes('href="feedback.html"'), `${page} must link to Feedback in navigation`);
     }
   });
@@ -141,6 +143,19 @@ test('Website Design & Feedback Page Verification Suite', async (t) => {
         content.includes("scrollTo({ top: 0, behavior: 'smooth' })"),
         `Page ${page} must wire smooth scroll handler for back-to-top button`
       );
+    }
+  });
+
+  await t.test('13. Verify JSON-LD schemas are valid parseable JSON', () => {
+    for (const page of PAGES) {
+      const content = fs.readFileSync(path.join(ROOT_DIR, page), 'utf8');
+      const matches = content.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g) || [];
+      for (let i = 0; i < matches.length; i++) {
+        const jsonText = matches[i].replace(/<script type="application\/ld\+json">|<\/script>/g, '').trim();
+        assert.doesNotThrow(() => {
+          JSON.parse(jsonText);
+        }, `Page ${page} JSON-LD block ${i + 1} must be valid JSON`);
+      }
     }
   });
 });

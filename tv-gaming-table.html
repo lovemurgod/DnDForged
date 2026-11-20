@@ -31,7 +31,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
     crossorigin="anonymous" referrerpolicy="no-referrer">
-  <link rel="stylesheet" href="css/website.css">
+  <link rel="stylesheet" href="css/website.css?v=1.4.3">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="icon" type="image/png" sizes="96x96" href="favicon-96x96.png">
@@ -89,9 +89,16 @@
           <a href="tv-gaming-table.html" aria-current="page"><i class="fa-solid fa-tv" aria-hidden="true"></i> TV Gaming Table</a>
         </div>
       </div>
-      <a href="getting-started.html">Getting Started</a>
-      <a href="guide.html">Play Guide</a>
-      <a href="app-guide.html">App Guide</a>
+      <div class="nav-dropdown">
+        <button type="button" class="nav-dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          Getting Started <i class="fa-solid fa-chevron-down" style="font-size: 0.7rem;" aria-hidden="true"></i>
+        </button>
+        <div class="nav-dropdown-menu">
+          <a href="getting-started.html"><i class="fa-solid fa-play" aria-hidden="true"></i> Getting Started</a>
+          <a href="guide.html"><i class="fa-solid fa-dice-d20" aria-hidden="true"></i> Play Guide</a>
+          <a href="app-guide.html"><i class="fa-solid fa-sliders" aria-hidden="true"></i> App Guide</a>
+        </div>
+      </div>
       <a href="feedback.html">Feedback</a>
     </nav>
     <a class="btn-vtt-gold site-download"
@@ -206,15 +213,50 @@
   </a>
 
   <footer class="footer-vtt">
-    <p>© 2026 ForgeDVTT — Self-Hosted Virtual Tabletop System. Designed for Tabletop Freedom.</p>
-    <p style="margin-top: 0.5rem; font-size: 0.8rem; opacity: 0.85;">This work includes material from the System
-      Reference Document 5.1 (SRD 5.1) by Wizards of the Coast LLC, available under the Creative Commons Attribution 4.0
-      International License (CC-BY-4.0). 2024 Free Rules and SRD 5.2 content are used under the Wizards of the Coast Fan
-      Content Policy. • <a href="feedback.html" style="color: #d4af37; text-decoration: underline;">Feedback</a> • <a
-        href="legal.html" style="color: #d4af37; text-decoration: underline;">Legal Notices &amp; OGC Disclaimers</a>
-    </p>
+    <div class="footer-vtt-nav">
+      <div class="footer-col">
+        <h4>Features</h4>
+        <ul>
+          <li><a href="portal-dungeons.html"><i class="fa-solid fa-dungeon" aria-hidden="true"></i> Portal Dungeons</a></li>
+          <li><a href="self-hosted-vtt.html"><i class="fa-solid fa-network-wired" aria-hidden="true"></i> Self-Hosted &amp; Tunnels</a></li>
+          <li><a href="tv-gaming-table.html"><i class="fa-solid fa-tv" aria-hidden="true"></i> TV Gaming Table</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Documentation</h4>
+        <ul>
+          <li><a href="getting-started.html"><i class="fa-solid fa-play" aria-hidden="true"></i> Getting Started</a></li>
+          <li><a href="guide.html"><i class="fa-solid fa-dice-d20" aria-hidden="true"></i> Play Guide</a></li>
+          <li><a href="app-guide.html"><i class="fa-solid fa-sliders" aria-hidden="true"></i> App Guide</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Community &amp; Legal</h4>
+        <ul>
+          <li><a href="feedback.html"><i class="fa-solid fa-comment-dots" aria-hidden="true"></i> Feedback</a></li>
+          <li><a href="legal.html"><i class="fa-solid fa-scale-balanced" aria-hidden="true"></i> Legal Notices &amp; OGC</a></li>
+          <li><a href="https://cosmiclove92.itch.io/forgedvtt" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-itch-io" aria-hidden="true"></i> itch.io Community</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-vtt-bottom">
+      <p>&copy; 2026 ForgeDVTT &mdash; Self-Hosted Virtual Tabletop System. Designed for Tabletop Freedom.</p>
+      <p class="footer-srd">This work includes material from the System Reference Document 5.1 (SRD 5.1) by Wizards of the Coast LLC, available under the Creative Commons Attribution 4.0 International License (CC-BY-4.0). 2024 Free Rules and SRD 5.2 content are used under the Wizards of the Coast Fan Content Policy.</p>
+    </div>
   </footer>
   <script>
+    document.querySelectorAll('.nav-dropdown-toggle').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const dropdown = btn.closest('.nav-dropdown');
+        const wasOpen = dropdown.classList.contains('is-open');
+        document.querySelectorAll('.nav-dropdown').forEach(d => d.classList.remove('is-open'));
+        if (!wasOpen) dropdown.classList.add('is-open');
+      });
+    });
+    document.addEventListener('click', () => {
+      document.querySelectorAll('.nav-dropdown').forEach(d => d.classList.remove('is-open'));
+    });
     const backToTopBtn = document.getElementById('site-back-to-top');
     if (backToTopBtn) {
       window.addEventListener('scroll', () => {
