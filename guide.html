@@ -4,25 +4,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ForgeDVTT Play Guide — Learn the Tabletop</title>
+    <title>ForgeDVTT Play Guide — Tabletop Controls, Maps, Portals &amp; Dice</title>
     <meta name="description"
-        content="Search ForgeDVTT instructions for hosting with Cloudflare, using maps, rolling dice, and managing characters.">
+        content="Complete user guide for ForgeDVTT: master portal dungeons, dynamic lighting, 3D dice syntax, spell management, and mass combat resolution.">
     <link rel="canonical" href="https://forgedvtt.com/guide.html">
     <meta name="theme-color" content="#090d16">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="ForgeDVTT">
-    <meta property="og:title" content="ForgeDVTT Play Guide — Learn the Tabletop">
+    <meta property="og:title" content="ForgeDVTT Play Guide — Tabletop Controls, Maps, Portals &amp; Dice">
     <meta property="og:description"
-        content="Search ForgeDVTT instructions for hosting with Cloudflare, using maps, rolling dice, and managing characters.">
-    <link rel="canonical" href="https://forgedvtt.com/guide.html">
+        content="Complete user guide for ForgeDVTT: master portal dungeons, dynamic lighting, 3D dice syntax, spell management, and mass combat resolution.">
     <meta property="og:url" content="https://forgedvtt.com/guide.html">
     <meta property="og:image" content="https://forgedvtt.com/img/social-preview.jpg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="ForgeDVTT Play Guide — Learn the Tabletop">
+    <meta name="twitter:title" content="ForgeDVTT Play Guide — Tabletop Controls, Maps, Portals &amp; Dice">
     <meta name="twitter:description"
-        content="Search ForgeDVTT instructions for hosting with Cloudflare, using maps, rolling dice, and managing characters.">
+        content="Complete user guide for ForgeDVTT: master portal dungeons, dynamic lighting, 3D dice syntax, spell management, and mass combat resolution.">
     <meta name="twitter:image" content="https://forgedvtt.com/img/social-preview.jpg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
@@ -38,6 +37,46 @@
     <link rel="icon" type="image/png" sizes="96x96" href="favicon-96x96.png">
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
     <link rel="manifest" href="site.webmanifest">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How do portals work in ForgeDVTT?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "ForgeDVTT includes a proprietary non-Euclidean portal engine that connects different maps and dungeon levels. When tokens move or measure across portal boundaries, distances and line-of-sight seamlessly transition between maps."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do players need to install software or make an account to play?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. The Game Master runs the desktop host on Windows, while players connect instantly by opening the generated game link in any modern web browser on PC, Mac, iOS, Android, or ChromeOS."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does ForgeDVTT support animated battlemaps and dynamic lighting?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. ForgeDVTT supports 4K WebM and MP4 video battlemaps, real-time dynamic lighting presets (torches, bullseye and hooded lanterns, candles), animated flicker effects, and multi-layer particle weather simulations."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I use ForgeDVTT for an in-person digital TV gaming table?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. ForgeDVTT includes a dedicated Player-Facing Presentation Window with party-vision synchronization and camera lock controls designed specifically for secondary monitors, projectors, and digital TV tables."
+          }
+        }
+      ]
+    }
+    </script>
 </head>
 
 <body class="site-page">
@@ -49,6 +88,16 @@
                 alt="ForgeDVTT"></a>
         <nav class="site-nav" aria-label="Main navigation">
             <a href="index.html">Home</a>
+            <div class="nav-dropdown">
+                <button type="button" class="nav-dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+                    Features <i class="fa-solid fa-chevron-down" style="font-size: 0.7rem;" aria-hidden="true"></i>
+                </button>
+                <div class="nav-dropdown-menu">
+                    <a href="portal-dungeons.html"><i class="fa-solid fa-dungeon" aria-hidden="true"></i> Portal Dungeons</a>
+                    <a href="self-hosted-vtt.html"><i class="fa-solid fa-network-wired" aria-hidden="true"></i> Self-Hosted &amp; Tunnels</a>
+                    <a href="tv-gaming-table.html"><i class="fa-solid fa-tv" aria-hidden="true"></i> TV Gaming Table</a>
+                </div>
+            </div>
             <a href="getting-started.html">Getting Started</a>
             <a href="guide.html" aria-current="page">Play Guide</a>
             <a href="app-guide.html">App Guide</a>

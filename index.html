@@ -4,24 +4,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ForgeDVTT — Bring Your Party Together</title>
+  <title>ForgeDVTT — Free Self-Hosted Virtual Tabletop for D&amp;D</title>
   <meta name="description"
-    content="A virtual tabletop for D&D. The Game Master hosts from a Windows app; players open the game link in a browser.">
+    content="ForgeDVTT is a free, self-hosted virtual tabletop for D&amp;D and TTRPGs. Features portal-linked mega-dungeons, animated maps, dynamic lighting, and instant browser play for players with no installation.">
   <link rel="canonical" href="https://forgedvtt.com/">
   <meta name="theme-color" content="#090d16">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="ForgeDVTT">
-  <meta property="og:title" content="ForgeDVTT — Bring Your Party Together">
+  <meta property="og:title" content="ForgeDVTT — Free Self-Hosted Virtual Tabletop for D&amp;D">
   <meta property="og:description"
-    content="A virtual tabletop for D&D. The Game Master hosts from a Windows app; players open the game link in a browser.">
+    content="ForgeDVTT is a free, self-hosted virtual tabletop for D&amp;D and TTRPGs. Features portal-linked mega-dungeons, animated maps, dynamic lighting, and instant browser play for players with no installation.">
   <meta property="og:url" content="https://forgedvtt.com/">
   <meta property="og:image" content="https://forgedvtt.com/img/social-preview.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="ForgeDVTT — Bring Your Party Together">
+  <meta name="twitter:title" content="ForgeDVTT — Free Self-Hosted Virtual Tabletop for D&amp;D">
   <meta name="twitter:description"
-    content="A virtual tabletop for D&D. The Game Master hosts from a Windows app; players open the game link in a browser.">
+    content="ForgeDVTT is a free, self-hosted virtual tabletop for D&amp;D and TTRPGs. Features portal-linked mega-dungeons, animated maps, dynamic lighting, and instant browser play for players with no installation.">
   <meta name="twitter:image" content="https://forgedvtt.com/img/social-preview.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -37,6 +37,36 @@
   <link rel="icon" type="image/png" sizes="96x96" href="favicon-96x96.png">
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
   <link rel="manifest" href="site.webmanifest">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "ForgeDVTT",
+    "operatingSystem": "Windows 10, Windows 11",
+    "applicationCategory": "GameApplication",
+    "offers": {
+      "@type": "Offer",
+      "price": "0.00",
+      "priceCurrency": "USD"
+    },
+    "description": "A free, self-hosted virtual tabletop for Dungeons & Dragons and TTRPGs with interconnected portal dungeons, animated maps, dynamic lighting, and browser-based player connections.",
+    "softwareVersion": "1.4.1",
+    "url": "https://forgedvtt.com/",
+    "downloadUrl": "https://cosmiclove92.itch.io/forgedvtt",
+    "sameAs": [
+      "https://cosmiclove92.itch.io/forgedvtt"
+    ],
+    "featureList": [
+      "Interconnected mega-dungeon portals",
+      "Animated WebM and MP4 battlemaps",
+      "Real-time dynamic lighting and particle weather",
+      "Self-hosted server with zero-port-forwarding Cloudflare Tunnels",
+      "Dual-screen Presentation Window for TV gaming tables",
+      "D&D 5e SRD 5.1 and 2024 rule automation",
+      "Mass combat and squad resolution tools"
+    ]
+  }
+  </script>
 </head>
 
 <body class="site-page">
@@ -47,6 +77,16 @@
     <a class="site-brand" href="index.html" aria-label="ForgeDVTT home"><img src="img/TextLogo.png" alt="ForgeDVTT"></a>
     <nav class="site-nav" aria-label="Main navigation">
       <a href="index.html" aria-current="page">Home</a>
+      <div class="nav-dropdown">
+        <button type="button" class="nav-dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          Features <i class="fa-solid fa-chevron-down" style="font-size: 0.7rem;" aria-hidden="true"></i>
+        </button>
+        <div class="nav-dropdown-menu">
+          <a href="portal-dungeons.html"><i class="fa-solid fa-dungeon" aria-hidden="true"></i> Portal Dungeons</a>
+          <a href="self-hosted-vtt.html"><i class="fa-solid fa-network-wired" aria-hidden="true"></i> Self-Hosted &amp; Tunnels</a>
+          <a href="tv-gaming-table.html"><i class="fa-solid fa-tv" aria-hidden="true"></i> TV Gaming Table</a>
+        </div>
+      </div>
       <a href="getting-started.html">Getting Started</a>
       <a href="guide.html">Play Guide</a>
       <a href="app-guide.html">App Guide</a>
@@ -59,19 +99,26 @@
   <main class="main-wrapper site-main">
     <section class="home-hero" aria-labelledby="home-headline">
       <div class="hero-copy">
-        <p class="eyebrow"><span class="eyebrow-mark"></span> A tabletop for your next D&amp;D night</p>
+        <div class="hero-poem-badge" aria-label="Tabletop Creed">
+          <span class="badge-icon"><i class="fa-solid fa-scroll" aria-hidden="true"></i></span>
+          <span class="badge-line">One DM to Run it. One Party to Play it. One VTT to Forge it All.</span>
+        </div>
         <h1 id="home-headline" class="brand-headline">
-          <span>One DM to Run it.</span><span>One Party to Play it.</span><span>One VTT to Forge it All—</span><span
-            class="headline-finale">and in your minds, display it.</span>
+          The Free, Self-Hosted Virtual Tabletop for D&amp;D
         </h1>
-        <p class="hero-explainer">ForgeDVTT is a virtual tabletop: a shared online space for your D&amp;D game. The Game
-          Master (DM) hosts from the Windows app; players open your game link in any web browser.</p>
-        <div class="hero-actions"><a class="btn-vtt-gold hero-download"
+        <p class="hero-explainer">ForgeDVTT is a virtual tabletop for D&amp;D. The Game Master (DM) hosts from the Windows app with dynamic lighting, animated maps, and seamless portal dungeons; players open your game link in any web browser with <strong>zero installation and zero account signups</strong>.</p>
+        <div class="hero-actions">
+          <a class="btn-vtt-gold hero-download"
             href="https://github.com/lovemurgod/DnDForged/releases/download/1.4.0/ForgeDVTT-Setup-1.4.1.exe"><i
-              class="fa-brands fa-windows" aria-hidden="true"></i> Download for Windows</a><a class="text-link"
-            href="getting-started.html">See how to start a game <i class="fa-solid fa-arrow-right"
-              aria-hidden="true"></i></a></div>
-        <p class="download-note">For Game Masters on Windows 10 or 11. Players don’t need to install the app.</p>
+              class="fa-brands fa-windows" aria-hidden="true"></i> Download for Windows</a>
+          <a class="btn-vtt-itch hero-itch"
+            href="https://cosmiclove92.itch.io/forgedvtt" target="_blank" rel="noopener noreferrer"><i
+              class="fa-brands fa-itch-io" aria-hidden="true"></i> Get on itch.io</a>
+          <a class="text-link"
+            href="getting-started.html">Quick start guide <i class="fa-solid fa-arrow-right"
+              aria-hidden="true"></i></a>
+        </div>
+        <p class="download-note"><i class="fa-solid fa-shield-halved" style="color: var(--color-gold-bright);" aria-hidden="true"></i> 100% Free &amp; Open Core • Unlimited Local Storage • No Subscriptions</p>
       </div>
       <div class="hero-crest"><span class="crest-orbit orbit-blue" aria-hidden="true"></span><span
           class="crest-orbit orbit-red" aria-hidden="true"></span><span class="crest-orbit orbit-purple"
@@ -106,28 +153,57 @@
     </section>
     <section class="feature-section" aria-labelledby="feature-heading">
       <div class="section-intro">
-        <p class="eyebrow">Made for game night</p>
-        <h2 id="feature-heading">Keep the table moving.</h2>
-        <p>Bring the parts of your session together, so your group can focus on the adventure.</p>
+        <p class="eyebrow">Engineered for Tabletop Freedom</p>
+        <h2 id="feature-heading">Built for Dungeon Masters who demand more.</h2>
+        <p>Everything you need for epic sessions, without subscription paywalls or cloud storage caps.</p>
       </div>
       <div class="feature-list">
-        <article><span class="feature-symbol feature-blue" aria-hidden="true"><i class="fa-solid fa-map"></i></span>
+        <article><span class="feature-symbol feature-blue" aria-hidden="true"><i class="fa-solid fa-dungeon"></i></span>
           <div>
-            <h3>Set the scene</h3>
-            <p>Lay out maps, move tokens, and reveal places as the party explores.</p>
+            <h3>Portal Mega-Dungeons</h3>
+            <p>Link multiple battlemaps seamlessly into colossal multi-level dungeons. Distance rulers bend across portals for continuous tactical movement.</p>
+            <span class="feature-badge-tag">Proprietary</span>
+            <a class="feature-link" href="portal-dungeons.html">Explore Portal Engine <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
           </div>
         </article>
-        <article><span class="feature-symbol feature-green" aria-hidden="true"><i class="fa-solid fa-users"></i></span>
+        <article><span class="feature-symbol feature-gold" aria-hidden="true"><i class="fa-solid fa-fire-flame-curved"></i></span>
           <div>
-            <h3>Keep characters close</h3>
-            <p>Bring character sheets, spells, equipment, and creatures into the game.</p>
+            <h3>Animated Maps &amp; Lighting</h3>
+            <p>Full support for 4K WebM/MP4 video maps. Realistic dynamic line-of-sight with animated torches, bullseye lanterns, and candles.</p>
+            <span class="feature-badge-tag">Dynamic Lighting</span>
+            <a class="feature-link" href="guide.html#guide-toolbar">See Map Tools <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
           </div>
         </article>
-        <article><span class="feature-symbol feature-purple" aria-hidden="true"><i
-              class="fa-solid fa-dice-d20"></i></span>
+        <article><span class="feature-symbol feature-cyan" aria-hidden="true"><i class="fa-solid fa-cloud-bolt"></i></span>
           <div>
-            <h3>Play the next turn</h3>
-            <p>Roll dice, follow initiative, and keep the group in sync.</p>
+            <h3>Particle Weather Engine</h3>
+            <p>Zero-allocation multi-layer particle simulation. Bring encounters alive with realistic rain, thunderstorms, snow, blizzard, ash, fog, and sandstorms.</p>
+            <span class="feature-badge-tag">Atmosphere</span>
+            <a class="feature-link" href="guide.html#guide-toolbar">Weather Controls <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+          </div>
+        </article>
+        <article><span class="feature-symbol feature-purple" aria-hidden="true"><i class="fa-solid fa-network-wired"></i></span>
+          <div>
+            <h3>1-Click Online Tunneling</h3>
+            <p>Self-host securely from your machine without touching your router. Built-in Cloudflare quick tunnels let players join via simple HTTPS links.</p>
+            <span class="feature-badge-tag">No Port Forwarding</span>
+            <a class="feature-link" href="self-hosted-vtt.html">Explore Self-Hosting <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+          </div>
+        </article>
+        <article><span class="feature-symbol feature-red" aria-hidden="true"><i class="fa-solid fa-tv"></i></span>
+          <div>
+            <h3>TV Table Presentation Mode</h3>
+            <p>Dedicated player-facing display for digital gaming tables, projectors, and secondary monitors. Syncs party vision with independent GM camera controls.</p>
+            <span class="feature-badge-tag">In-Person &amp; Hybrid</span>
+            <a class="feature-link" href="tv-gaming-table.html">Explore TV Presentation <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+          </div>
+        </article>
+        <article><span class="feature-symbol feature-green" aria-hidden="true"><i class="fa-solid fa-book-sparkles"></i></span>
+          <div>
+            <h3>D&amp;D 5e &amp; 2024 Rules Engine</h3>
+            <p>Automated character sheets, spell slot tracking, SRD 5.1/5.2 compendiums, homebrew studio, and mass combat rolls for large-scale battles.</p>
+            <span class="feature-badge-tag">SRD 5.1 &amp; 2024</span>
+            <a class="feature-link" href="guide.html#guide-char-builder">Character &amp; Combat Tools <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
           </div>
         </article>
       </div>
@@ -310,10 +386,13 @@
         <p class="eyebrow">Your next session is waiting</p>
         <h2>Bring your party together.</h2>
       </div>
-      <div class="closing-cta-action">
+      <div class="closing-cta-action" style="display: flex; gap: 14px; flex-wrap: wrap; justify-content: flex-end;">
         <a class="btn-vtt-gold"
           href="https://github.com/lovemurgod/DnDForged/releases/download/1.4.0/ForgeDVTT-Setup-1.4.1.exe"><i
             class="fa-brands fa-windows" aria-hidden="true"></i> Download for Windows</a>
+        <a class="btn-vtt-itch"
+          href="https://cosmiclove92.itch.io/forgedvtt" target="_blank" rel="noopener noreferrer"><i
+            class="fa-brands fa-itch-io" aria-hidden="true"></i> Get on itch.io</a>
       </div>
     </section>
   </main>

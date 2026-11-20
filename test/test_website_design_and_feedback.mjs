@@ -4,7 +4,17 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 const ROOT_DIR = process.cwd();
-const PAGES = ['index.html', 'getting-started.html', 'guide.html', 'app-guide.html', 'feedback.html', 'legal.html'];
+const PAGES = [
+  'index.html',
+  'getting-started.html',
+  'guide.html',
+  'app-guide.html',
+  'feedback.html',
+  'legal.html',
+  'portal-dungeons.html',
+  'self-hosted-vtt.html',
+  'tv-gaming-table.html'
+];
 
 test('Website Design & Feedback Page Verification Suite', async (t) => {
   await t.test('1. Verify all expected website HTML files exist', () => {

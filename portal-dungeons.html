@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal-Linked Mega-Dungeons &amp; Interconnected Maps — ForgeDVTT</title>
+  <meta name="description"
+    content="Build and run sprawling multi-level dungeons without lag. ForgeDVTT links separate battlemaps through non-Euclidean portals with distance-bending measurement.">
+  <link rel="canonical" href="https://forgedvtt.com/portal-dungeons.html">
+  <meta name="theme-color" content="#090d16">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="ForgeDVTT">
+  <meta property="og:title" content="Portal-Linked Mega-Dungeons &amp; Interconnected Maps — ForgeDVTT">
+  <meta property="og:description"
+    content="Build and run sprawling multi-level dungeons without lag. ForgeDVTT links separate battlemaps through non-Euclidean portals with distance-bending measurement.">
+  <meta property="og:url" content="https://forgedvtt.com/portal-dungeons.html">
+  <meta property="og:image" content="https://forgedvtt.com/img/social-preview.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Portal-Linked Mega-Dungeons &amp; Interconnected Maps — ForgeDVTT">
+  <meta name="twitter:description"
+    content="Build and run sprawling multi-level dungeons without lag. ForgeDVTT links separate battlemaps through non-Euclidean portals with distance-bending measurement.">
+  <meta name="twitter:image" content="https://forgedvtt.com/img/social-preview.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Inter:wght@400;500;600;700;800&family=Consolas&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer">
+  <link rel="stylesheet" href="css/website.css">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="icon" type="image/png" sizes="96x96" href="favicon-96x96.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How do portals work in ForgeDVTT?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "ForgeDVTT links two distinct battlemaps through custom geometric portal boundaries. When a token enters a portal line, the engine automatically transitions the character to the destination map with continuous coordinates."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can distance rulers measure through portals?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. ForgeDVTT features a proprietary distance-bending measurement ruler that continues calculating accurate 5-foot increments across portal boundaries without resetting."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does linking multiple maps cause browser lag?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. Rather than loading one colossal 10,000-pixel battlemap that consumes gigabytes of browser RAM, ForgeDVTT streams individual tactical maps on demand, keeping memory use light and framerates high."
+        }
+      }
+    ]
+  }
+  </script>
+</head>
+
+<body class="site-page">
+  <div class="bg-tactical-grid" aria-hidden="true"></div>
+  <div class="bg-ambient-lights" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <a class="site-brand" href="index.html" aria-label="ForgeDVTT home"><img src="img/TextLogo.png" alt="ForgeDVTT"></a>
+    <nav class="site-nav" aria-label="Main navigation">
+      <a href="index.html">Home</a>
+      <div class="nav-dropdown is-active">
+        <button type="button" class="nav-dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          Features <i class="fa-solid fa-chevron-down" style="font-size: 0.7rem;" aria-hidden="true"></i>
+        </button>
+        <div class="nav-dropdown-menu">
+          <a href="portal-dungeons.html" aria-current="page"><i class="fa-solid fa-dungeon" aria-hidden="true"></i> Portal Dungeons</a>
+          <a href="self-hosted-vtt.html"><i class="fa-solid fa-network-wired" aria-hidden="true"></i> Self-Hosted &amp; Tunnels</a>
+          <a href="tv-gaming-table.html"><i class="fa-solid fa-tv" aria-hidden="true"></i> TV Gaming Table</a>
+        </div>
+      </div>
+      <a href="getting-started.html">Getting Started</a>
+      <a href="guide.html">Play Guide</a>
+      <a href="app-guide.html">App Guide</a>
+      <a href="feedback.html">Feedback</a>
+    </nav>
+    <a class="btn-vtt-gold site-download"
+      href="https://github.com/lovemurgod/DnDForged/releases/download/1.4.0/ForgeDVTT-Setup-1.4.1.exe"><i
+        class="fa-brands fa-windows" aria-hidden="true"></i> Download for Windows</a>
+  </header>
+
+  <main class="main-wrapper site-main">
+    <section class="page-intro" aria-labelledby="portal-title">
+      <p class="eyebrow"><i class="fa-solid fa-dungeon" aria-hidden="true"></i> Tactical Map Technology</p>
+      <h1 id="portal-title">Portal-Linked Mega-Dungeons &amp; Interconnected Maps</h1>
+      <p>Build sprawling multi-floor complexes, winding cavern networks, and planar rifts across modular maps—without browser crashes or performance lag.</p>
+    </section>
+
+    <section class="manual-section" style="margin-bottom: 28px;">
+      <div class="manual-section-header">
+        <div class="manual-section-title-wrap">
+          <div class="manual-section-icon"><i class="fa-solid fa-scale-unbalanced-flip"></i></div>
+          <h2 class="manual-section-title">The Challenge: Colossal Single-Image Battlemaps</h2>
+        </div>
+        <span class="manual-section-badge">Architecture</span>
+      </div>
+      <p class="section-lead">Running ambitious campaigns often forces Dungeon Masters to choose between cramped combat maps or massive 10,000-pixel graphics that choke browser memory and stutter during player movement.</p>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 18px;">
+        <div style="background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.25); border-radius: 12px; padding: 20px;">
+          <h3 style="color: #fca5a5; font-size: 1.05rem; margin-top: 0; display: flex; align-items: center; gap: 8px;">
+            <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i> Single-Map Limitations
+          </h3>
+          <p style="color: #cbd5e1; font-size: 0.9rem; line-height: 1.6; margin-bottom: 0;">Loading an entire megadungeon in one file forces every player's browser to decode hundreds of megabytes of raw textures at once. Mobile phones and older laptops frequently crash or drop to single-digit framerates.</p>
+        </div>
+        <div style="background: rgba(34, 197, 94, 0.08); border: 1px solid rgba(34, 197, 94, 0.25); border-radius: 12px; padding: 20px;">
+          <h3 style="color: #86efac; font-size: 1.05rem; margin-top: 0; display: flex; align-items: center; gap: 8px;">
+            <i class="fa-solid fa-circle-check" aria-hidden="true"></i> The ForgeDVTT Solution
+          </h3>
+          <p style="color: #cbd5e1; font-size: 0.9rem; line-height: 1.6; margin-bottom: 0;">Split your adventure into fast, modular tactical maps connected by geometric portals. Players explore seamlessly while the application loads only the active environment, guaranteeing buttery-smooth 60 FPS tactical play.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="manual-section" style="margin-bottom: 28px;">
+      <div class="manual-section-header">
+        <div class="manual-section-title-wrap">
+          <div class="manual-section-icon"><i class="fa-solid fa-compass-drafting"></i></div>
+          <h2 class="manual-section-title">Core Portal Capabilities</h2>
+        </div>
+        <span class="manual-section-badge">Engine</span>
+      </div>
+      <div class="feature-list" style="margin-top: 16px;">
+        <article><span class="feature-symbol feature-blue" aria-hidden="true"><i class="fa-solid fa-arrows-split-up-and-left"></i></span>
+          <div>
+            <h3>Non-Euclidean Space</h3>
+            <p>Portals support arbitrary facing angles (0° to 360°), directional flips, and one-way secret passages. Connect spiral stairways, vertical elevator shafts, and impossible teleportation traps.</p>
+          </div>
+        </article>
+        <article><span class="feature-symbol feature-gold" aria-hidden="true"><i class="fa-solid fa-ruler-combined"></i></span>
+          <div>
+            <h3>Distance-Bending Ruler</h3>
+            <p>Measurement lines don’t break at thresholds. Drag your tactical ruler toward a portal, and it bends across the boundary into the target map, calculating continuous character movement.</p>
+          </div>
+        </article>
+        <article><span class="feature-symbol feature-cyan" aria-hidden="true"><i class="fa-solid fa-microchip"></i></span>
+          <div>
+            <h3>Lightweight Memory Footprint</h3>
+            <p>Only the map containing active player tokens is streamed to connecting browsers. Distant floors and unvisited dungeon wings remain stored safely on disk until entered.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="manual-section" style="margin-bottom: 28px;">
+      <div class="manual-section-header">
+        <div class="manual-section-title-wrap">
+          <div class="manual-section-icon"><i class="fa-solid fa-screwdriver-wrench"></i></div>
+          <h2 class="manual-section-title">How Dungeon Masters Configure Portals</h2>
+        </div>
+        <span class="manual-section-badge">Workflow</span>
+      </div>
+      <ol class="setup-steps" style="margin-top: 16px;">
+        <li><span class="setup-number">1</span>
+          <div>
+            <h3>Select the Portal Geometry Tool</h3>
+            <p>In the Game Master map editor, click the Portal icon on the left canvas toolbar. Choose between line-segment doors or radial teleportation circles.</p>
+          </div>
+        </li>
+        <li><span class="setup-number">2</span>
+          <div>
+            <h3>Draw the Entrance &amp; Set Orientation</h3>
+            <p>Draw the threshold along a doorway or archway. Set the compass facing angle so tokens entering from the south arrive in the correct orientation.</p>
+          </div>
+        </li>
+        <li><span class="setup-number">3</span>
+          <div>
+            <h3>Link to Destination Map &amp; Target Portal</h3>
+            <p>Select the target map from your campaign library and assign the corresponding arrival portal. Two-way linkages update automatically.</p>
+          </div>
+        </li>
+      </ol>
+      <div class="guide-callout" style="margin-top: 20px;">
+        <span><strong>Need full canvas shortcuts?</strong><small>Review token interaction, rotation, and portal editing in the Play Guide.</small></span>
+        <a href="guide.html#guide-canvas-tokens" class="text-link" style="white-space: nowrap;">Read Portal Docs <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+      </div>
+    </section>
+
+    <section class="troubleshooting" aria-labelledby="faq-title">
+      <p class="eyebrow">Technical Details</p>
+      <h2 id="faq-title">Frequently Asked Questions</h2>
+      <details>
+        <summary>Can players see through portals before stepping through?</summary>
+        <p>Portals focus on token transition and movement measurement. Line-of-sight and fog of war remain contained to each map until a token crosses the threshold, keeping secret rooms completely hidden from unauthorized vision.</p>
+      </details>
+      <details>
+        <summary>Do portals work with hex grids as well as square grids?</summary>
+        <p>Yes. ForgeDVTT's coordinate mapping engine calculates distance and vector entry angles across standard square tactical grids, point-to-point measurements, and hexagonal maps.</p>
+      </details>
+      <details>
+        <summary>Can I lock a portal to prevent players from triggering it prematurely?</summary>
+        <p>Yes. The Game Master can toggle any portal between active and locked states directly from the canvas interface, preventing accidental transitions during exploration.</p>
+      </details>
+      <p class="troubleshooting-guide">Ready to get your table set up? <a href="getting-started.html">Follow the Getting Started guide</a> or <a href="guide.html">explore the Play Guide</a>.</p>
+    </section>
+  </main>
+
+  <a href="#" id="site-back-to-top" class="site-back-to-top" aria-label="Back to top of page">
+    <i class="fa-solid fa-arrow-up" aria-hidden="true"></i>
+  </a>
+
+  <footer class="footer-vtt">
+    <p>© 2026 ForgeDVTT — Self-Hosted Virtual Tabletop System. Designed for Tabletop Freedom.</p>
+    <p style="margin-top: 0.5rem; font-size: 0.8rem; opacity: 0.85;">This work includes material from the System
+      Reference Document 5.1 (SRD 5.1) by Wizards of the Coast LLC, available under the Creative Commons Attribution 4.0
+      International License (CC-BY-4.0). 2024 Free Rules and SRD 5.2 content are used under the Wizards of the Coast Fan
+      Content Policy. • <a href="feedback.html" style="color: #d4af37; text-decoration: underline;">Feedback</a> • <a
+        href="legal.html" style="color: #d4af37; text-decoration: underline;">Legal Notices &amp; OGC Disclaimers</a>
+    </p>
+  </footer>
+  <script>
+    const backToTopBtn = document.getElementById('site-back-to-top');
+    if (backToTopBtn) {
+      window.addEventListener('scroll', () => {
+        backToTopBtn.classList.toggle('visible', window.scrollY > 400);
+      }, { passive: true });
+      backToTopBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+  </script>
+</body>
+
+</html>
