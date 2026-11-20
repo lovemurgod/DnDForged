@@ -258,15 +258,79 @@ code {
     white-space: nowrap;
 }
 
+/* Universal Font Awesome Anti-Faux-Bolding Normalization */
+.fa,
+.fas,
+.far,
+.fab,
+.fa-solid,
+.fa-regular,
+.fa-brands,
+i[class*="fa-"],
+[class^="fa-"] {
+    display: inline-block;
+    font-style: normal !important;
+    font-variant: normal !important;
+    text-rendering: geometricPrecision !important;
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+    font-synthesis: none !important;
+    font-synthesis-weight: none !important;
+    font-synthesis-style: none !important;
+    font-synthesis-small-caps: none !important;
+    line-height: 1;
+}
+
+.fa-solid,
+.fas,
+i[class*="fa-solid"] {
+    font-family: "Font Awesome 6 Free" !important;
+    font-weight: 900 !important;
+}
+
+.fa-brands,
+.fab,
+i[class*="fa-brands"] {
+    font-family: "Font Awesome 6 Brands" !important;
+    font-weight: 400 !important;
+}
+
+.fa-regular,
+.far,
+i[class*="fa-regular"] {
+    font-family: "Font Awesome 6 Free" !important;
+    font-weight: 400 !important;
+}
+
+.btn-icon-svg {
+    display: inline-block;
+    vertical-align: -2px;
+    width: 1.05em;
+    height: 1.05em;
+    flex-shrink: 0;
+}
+
 .btn-vtt-gold i,
 .hero-download i,
 .site-download i,
 .btn-vtt-itch i,
-.hero-itch i {
-    font-weight: 400 !important;
+.hero-itch i,
+.closing-cta-action i {
     font-style: normal;
     -webkit-font-smoothing: antialiased;
     line-height: 1;
+}
+
+.btn-vtt-gold .fa-brands,
+.hero-download .fa-brands,
+.site-download .fa-brands,
+.btn-vtt-itch .fa-brands,
+.hero-itch .fa-brands,
+.closing-cta-action .fa-brands {
+    font-family: "Font Awesome 6 Brands" !important;
+    font-weight: 400 !important;
+    font-size: 1.08rem;
+    vertical-align: -1px;
 }
 
 .btn-vtt-gold:hover {
@@ -352,15 +416,16 @@ code {
     display: grid;
     place-items: center;
     flex: 0 0 auto;
-    width: 44px;
-    height: 44px;
-    border-radius: 12px;
-    font-size: 1.15rem;
+    width: 48px;
+    height: 48px;
+    border-radius: 13px;
+    font-size: 1.25rem;
 }
 
 .feature-symbol i {
     font-weight: 900 !important;
     line-height: 1;
+    font-synthesis: none !important;
 }
 
 .feature-blue {
@@ -2850,8 +2915,7 @@ code {
     border-bottom: 1px solid rgba(255, 255, 255, .16);
 }
 
-.role-icon,
-.feature-symbol {
+.role-icon {
     display: grid;
     place-items: center;
     flex: 0 0 auto;
@@ -2907,27 +2971,6 @@ code {
     display: flex;
     align-items: flex-start;
     gap: 14px;
-}
-
-.feature-symbol {
-    width: 40px;
-    height: 40px;
-    border-radius: 11px;
-    font-size: 1rem;
-}
-
-.feature-blue {
-    color: #fff;
-    background: var(--color-party-blue);
-}
-
-.feature-green {
-    background: var(--color-party-green);
-}
-
-.feature-purple {
-    color: #fff;
-    background: var(--color-party-purple);
 }
 
 .guide-callout {
