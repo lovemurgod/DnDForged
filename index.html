@@ -31,7 +31,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
     crossorigin="anonymous" referrerpolicy="no-referrer">
-  <link rel="stylesheet" href="css/website.css?v=1.4.4">
+  <link rel="stylesheet" href="css/website.css?v=1.4.5">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="icon" type="image/png" sizes="96x96" href="favicon-96x96.png">
@@ -123,7 +123,7 @@
       </div>
       <div class="hero-crest"><span class="crest-orbit orbit-blue" aria-hidden="true"></span><span
           class="crest-orbit orbit-red" aria-hidden="true"></span><span class="crest-orbit orbit-purple"
-          aria-hidden="true"></span><img src="img/logo.png" alt="ForgeDVTT crest with a fantasy adventuring party">
+          aria-hidden="true"></span><img src="img/logo.png" alt="ForgeDVTT crest with a fantasy adventuring party"><span class="crest-caption"><i class="fa-solid fa-dice-d20" aria-hidden="true"></i> Make room for adventure</span>
       </div>
     </section>
     <section class="role-section" aria-labelledby="role-heading">
@@ -419,6 +419,18 @@
   </footer>
   <script>
     if (window.location.hash.startsWith('#guide-')) window.location.replace('guide.html' + window.location.hash);
+    document.querySelectorAll('.nav-dropdown').forEach(dropdown => {
+      let closeTimeout;
+      dropdown.addEventListener('mouseenter', () => {
+        clearTimeout(closeTimeout);
+        dropdown.classList.add('is-hovered');
+      });
+      dropdown.addEventListener('mouseleave', () => {
+        closeTimeout = setTimeout(() => {
+          dropdown.classList.remove('is-hovered');
+        }, 150);
+      });
+    });
     document.querySelectorAll('.nav-dropdown-toggle').forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
