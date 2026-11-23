@@ -30,8 +30,8 @@ test('Website Design & Feedback Page Verification Suite', async (t) => {
     for (const page of PAGES) {
       const content = fs.readFileSync(path.join(ROOT_DIR, page), 'utf8');
       assert.ok(
-        content.includes('1.4.0/ForgeDVTT-Setup-1.4.1.exe'),
-        `Page ${page} must link to working release installer (1.4.0 tag with ForgeDVTT-Setup-1.4.1.exe asset)`
+        content.includes('1.4.0/ForgeDVTT-Setup-1.4.2.exe'),
+        `Page ${page} must link to working release installer (1.4.0 tag with ForgeDVTT-Setup-1.4.2.exe asset)`
       );
     }
   });
