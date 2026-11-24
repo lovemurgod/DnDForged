@@ -2,7 +2,13 @@ import express from 'express';
 import path from 'path';
 import fs from 'fs';
 import multer from 'multer';
-import { ASSETS_DIR, isAuthorizedGmOrSecret, isValidAssetPath, verifyGmOrSecret } from '../state.js';
+import {
+    ASSETS_DIR,
+    isAuthorizedGmOrSecret,
+    isValidAssetPath,
+    verifyGmOrSecret,
+    verifyPlayerOrGmSession
+} from '../state.js';
 import { processMediaUrl } from './media.js';
 
 export const assetsRouter = express.Router();
@@ -48,7 +54,34 @@ const assetStorage = multer.diskStorage({
         cb(null, safeName);
     }
 });
-const assetUpload = multer({ storage: assetStorage, limits: { fileSize: 250 * 1024 * 1024 } });
+const ALLOWED_ASSET_MEDIA_EXTS = new Set(['.png', '.jpg', '.jpeg', '.webp', '.gif', '.webm', '.mp4']);
+const PLAYER_UPLOAD_MAX_BYTES = 15 * 1024 * 1024; // 15 MB cap for players
+const GM_UPLOAD_MAX_BYTES = 250 * 1024 * 1024; // 250 MB cap for GMs
+
+const assetUpload = multer({
+    storage: assetStorage,
+    limits: { fileSize: GM_UPLOAD_MAX_BYTES },
+    fileFilter: (req, file, cb) => {
+        if (isAuthorizedGmOrSecret(req)) {
+            return cb(null, true);
+        }
+        const ext = path.extname(file.originalname || '').toLowerCase();
+        const mime = String(file.mimetype || '').toLowerCase();
+        const isSafeMime =
+            !mime ||
+            mime === 'application/octet-stream' ||
+            mime === 'image/png' ||
+            mime === 'image/jpeg' ||
+            mime === 'image/webp' ||
+            mime === 'image/gif' ||
+            mime === 'video/webm' ||
+            mime === 'video/mp4';
+        if (!ALLOWED_ASSET_MEDIA_EXTS.has(ext) || !isSafeMime) {
+            return cb(new Error('Invalid file type: players may only upload PNG, JPG, WebP, GIF, WebM, or MP4 media'));
+        }
+        cb(null, true);
+    }
+});
 
 // Recursively get directory structure for assets
 function getAssetTree(dirPath, relativePath = '') {
@@ -124,30 +157,47 @@ assetsRouter.post('/assets/folder', verifyGmOrSecret, (req, res) => {
     res.json({ success: true, path: folderPath });
 });
 
-// Upload batch assets (GMs upload to chosen folder; non-GMs/players are safely sandboxed into /players)
-assetsRouter.post('/assets/upload', assetUpload.any(), (req, res) => {
-    const files = req.files || (req.file ? [req.file] : []);
-    if (files.length === 0) return res.status(400).json({ error: 'No file provided' });
+// Upload batch assets (GMs upload to chosen folder; players require active session, safe media types & 15 MB cap)
+assetsRouter.post('/assets/upload', verifyPlayerOrGmSession, (req, res) => {
+    assetUpload.any()(req, res, (err) => {
+        if (err) {
+            return res.status(400).json({ error: err.message || 'Upload rejected' });
+        }
+        const files = req.files || (req.file ? [req.file] : []);
+        if (files.length === 0) return res.status(400).json({ error: 'No file provided' });
 
-    invalidateAssetTree();
+        if (!isAuthorizedGmOrSecret(req)) {
+            const oversized = files.find((f) => f.size > PLAYER_UPLOAD_MAX_BYTES);
+            if (oversized) {
+                for (const f of files) {
+                    try {
+                        fs.unlinkSync(f.path);
+                    } catch (_) {}
+                }
+                return res.status(413).json({ error: 'Player upload exceeds 15 MB limit' });
+            }
+        }
 
-    const results = files.map((file) => {
-        const relPath = path.relative(ASSETS_DIR, file.path).replace(/\\/g, '/');
-        return {
-            url: `/assets/${relPath}`,
-            name: file.filename,
-            originalName: file.originalname,
-            size: file.size,
-            path: relPath
-        };
-    });
+        invalidateAssetTree();
 
-    res.json({
-        success: true,
-        count: results.length,
-        files: results,
-        url: results[0].url,
-        name: results[0].name
+        const results = files.map((file) => {
+            const relPath = path.relative(ASSETS_DIR, file.path).replace(/\\/g, '/');
+            return {
+                url: `/assets/${relPath}`,
+                name: file.filename,
+                originalName: file.originalname,
+                size: file.size,
+                path: relPath
+            };
+        });
+
+        res.json({
+            success: true,
+            count: results.length,
+            files: results,
+            url: results[0].url,
+            name: results[0].name
+        });
     });
 });
 

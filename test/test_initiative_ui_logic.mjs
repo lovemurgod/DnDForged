@@ -37,11 +37,11 @@ test('CSS: Initiative tracker z-index, sheet layering, and circular layout', () 
         'Player sheet panel must have z-index: 60 !important'
     );
 
-    // 3. Verify pos-right uses --sidebar-width for snug docking
+    // 3. Verify pos-right defaults to 64px to dock flush against the 60px right toolbar
     assert.match(
         cssContent,
-        /#vtt-initiative-carousel-container\.pos-right\s*\{[^}]*right:\s*calc\(var\(--sidebar-width,\s*380px\)\s*\+\s*4px\);/s,
-        'pos-right must dock against --sidebar-width + 4px'
+        /#vtt-initiative-carousel-container\.pos-right\s*\{[^}]*right:\s*64px;/s,
+        'pos-right must default to right: 64px'
     );
 
     // 4. Verify slim capsule pods for controls and 64px container
@@ -149,7 +149,7 @@ test('Initiative Tracker Logic: Off-layer filtering and player privacy rules', (
     );
     assert.ok(
         tokenMenuJs.includes('window.VTT?.chatEngine?.updateCombatantLayer(id, targetLayer)') ||
-            tokenMenuJs.includes('window.VTT?.chatEngine?.updateCombatantLayer?.(id, targetLayer)'),
+        tokenMenuJs.includes('window.VTT?.chatEngine?.updateCombatantLayer?.(id, targetLayer)'),
         'Layer change must notify chatEngine.updateCombatantLayer'
     );
 
@@ -158,6 +158,13 @@ test('Initiative Tracker Logic: Off-layer filtering and player privacy rules', (
         chatJs,
         /row\.addEventListener\('contextmenu',\s*startScoreEdit\);/s,
         'Right clicking row must trigger startScoreEdit'
+    );
+
+    // 7. Verify initiative score display formatting up to 2 decimal places with trailing zero trimming
+    assert.match(
+        chatJs,
+        /parseFloat\(scoreNum\.toFixed\(2\)\)/,
+        'Initiative display score must format up to 2 decimal places with parseFloat for trailing zero trimming'
     );
 });
 
@@ -322,47 +329,73 @@ test('Fine-Tuning: Resize handle across all modes, horizontal ~720px sizing, tra
         'Active card must retain 2px solid #d4af37 gold border'
     );
 
-    // 7. Resize handle styles & JS logic
-    assert.match(
+    // 7. Resize handle removed: natural flexbox anchoring without bottom: auto clamps
+    assert.doesNotMatch(
+        indexHtml,
+        /id="init-resize-handle"/,
+        'init-resize-handle must be removed from index.html'
+    );
+    assert.doesNotMatch(
         cssContent,
-        /\.init-resize-handle\s*\{[^}]*cursor:\s*nwse-resize;/s,
-        'init-resize-handle must have cursor: nwse-resize'
+        /\.init-resize-handle\s*\{/,
+        'init-resize-handle styles must be removed from initiative.css'
     );
-    assert.match(
-        cssContent,
-        /\.init-resize-handle\s*\{[^}]*touch-action:\s*none;/s,
-        'init-resize-handle must have touch-action: none'
-    );
-    assert.match(
+    assert.doesNotMatch(
         chatJs,
-        /initContainer\.style\.maxHeight\s*=\s*`\$\{newH\}px`;/s,
-        'JS resize handler must adjust maxHeight for vertical length stretching'
+        /btnResize\.setPointerCapture/,
+        'btnResize capture handler must be removed'
     );
-    assert.match(
+    assert.doesNotMatch(
         chatJs,
-        /initContainer\.style\.bottom\s*=\s*'auto';/s,
-        'JS resize handler must release bottom constraint when resizing vertical docked tracker'
+        /vtt_initiative_docked_height\s*,\s*Math\.round/,
+        'docked height clamp persistence must be removed'
     );
 
-    // 8. Horizontal View Resize Fixes
+    // 8. Dynamic offset coordination for right drawer and left sheets in hud.css
+    const hudCssContent = fs.readFileSync(path.join(rootDir, 'vtt', 'css', 'components', 'hud.css'), 'utf8');
+    assert.match(
+        hudCssContent,
+        /#vtt-workspace:has\(#vtt-sidebar\.panel-open\)\s+#vtt-initiative-carousel-container\.pos-right\s*\{[^}]*right:\s*calc\(var\(--sidebar-width,\s*380px\)\s*\+\s*64px\);/s,
+        'pos-right must dynamically shift when sidebar panel is open'
+    );
+    assert.match(
+        hudCssContent,
+        /#vtt-workspace:has\(#creature-sheet-panel:not\(\.minimized\)\)\s+#vtt-initiative-carousel-container\.pos-left\s*\{[^}]*left:\s*calc\(var\(--cs-panel-width,\s*320px\)\s*\+\s*72px\);/s,
+        'pos-left must dynamically shift when creature sheet is open'
+    );
+    assert.match(
+        hudCssContent,
+        /#vtt-workspace:has\(#player-sheet-panel:not\(\.minimized\)\)\s+#vtt-initiative-carousel-container\.pos-left\s*\{[^}]*left:\s*calc\(var\(--sidebar-width,\s*380px\)\s*\+\s*72px\);/s,
+        'pos-left must dynamically shift when player sheet is open'
+    );
+
+    // 9. Vertical empty-state must fit within 64px without horizontal overflow
     assert.match(
         cssContent,
-        /\.init-resize-handle\s+i\s*\{[^}]*pointer-events:\s*none;/s,
-        'Resize handle icon must have pointer-events: none to prevent capture interception'
+        /\.pos-right\s+\.init-empty-state[\s\S]*?\{[^}]*width:\s*44px;/s,
+        'Vertical empty state must be compact 44px icon badge'
     );
+    assert.doesNotMatch(
+        cssContent,
+        /\.init-empty-state\s*\{[^}]*width:\s*85px;/s,
+        'init-empty-state must not enforce an 85px width'
+    );
+});
+
+test('Initiative Tracker Scope Guard: currentOrientation is defined at initVttChat level', () => {
+    const chatJs = fs.readFileSync(path.join(rootDir, 'vtt', 'js', 'vtt-chat.js'), 'utf8');
+
+    // 1. Verify currentOrientation is declared in initVttChat outer scope
     assert.match(
         chatJs,
-        /btnResize\.setPointerCapture\s*\(\s*e\.pointerId\s*\)/,
-        'btnResize must capture pointer directly on pointerdown'
+        /let\s+currentOrientation\s*=\s*['"]vertical['"];/s,
+        'currentOrientation must be declared in initVttChat outer scope'
     );
+
+    // 2. Verify renderInitiativeList safely guards currentOrientation
     assert.match(
         chatJs,
-        /initContainer\.style\.setProperty\('width',\s*`\$\{newW\}px`,\s*'important'\)/,
-        'Horizontal resize must apply width with !important to override stylesheet rules'
-    );
-    assert.match(
-        chatJs,
-        /const factor = isCentered \? 2 : 1;/,
-        'Centered horizontal resize must scale by 2 to keep handle locked to cursor'
+        /const\s+isVertical\s*=\s*\([^)]*currentOrientation[^)]*\)/s,
+        'renderInitiativeList must check currentOrientation safely'
     );
 });

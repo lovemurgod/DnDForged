@@ -787,7 +787,7 @@ export function openDrawingTextInput(x, y, existingDrawing = null, options = {})
     ta.style.outline = 'none';
     ta.style.resize = 'both';
     ta.style.overflow = 'hidden';
-    ta.style.fontFamily = 'Inter, sans-serif';
+    ta.style.fontFamily = 'var(--font-primary, "Open Sans", sans-serif)';
     ta.style.fontSize = `${(existingDrawing?.fontSize || options.paintStrokeWidth * 4 || 20) * (options.zoom || 1)}px`;
     ta.value = existingDrawing ? existingDrawing.text || '' : '';
 

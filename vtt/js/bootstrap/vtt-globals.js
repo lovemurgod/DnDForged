@@ -13,6 +13,7 @@ export function initVttGlobals() {
         username: 'Game Master',
         role: 'GM',
         gmSessionToken: null,
+        playerSessionToken: null,
         campaignState: null,
         canvasEngine: null,
         chatEngine: null,
@@ -115,6 +116,12 @@ export function vttAuthHeaders(existingHeaders = {}) {
     const headers = { ...existingHeaders };
     if (typeof window !== 'undefined' && window.VTT && window.VTT.gmSessionToken) {
         headers['x-gm-token'] = window.VTT.gmSessionToken;
+    }
+    const pToken =
+        (typeof window !== 'undefined' && window.VTT && window.VTT.playerSessionToken) ||
+        (typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('forgedvtt_player_token') : null);
+    if (pToken) {
+        headers['x-player-token'] = pToken;
     }
     return headers;
 }

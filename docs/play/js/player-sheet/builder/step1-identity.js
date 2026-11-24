@@ -1,0 +1,606 @@
+/**
+ * Character Builder Wizard - Step 1: Identity & Classes
+ * Species, Subrace, Background, Multiclassing rows, Senses, Speeds, and Bio.
+ */
+
+export function renderStep1(ctx) {
+    const {
+        bodyEl,
+        builderCache,
+        disabledSources,
+        isSourceAllowed,
+        workingChar,
+        recomputeCandidates,
+        harvestCurrentStepInputs
+    } = ctx;
+
+    const rawRaces = (builderCache?.races || []).filter((r) => isSourceAllowed(r.source, r.name, disabledSources));
+    const seenR = new Set();
+    const baseRaces = [];
+    rawRaces.forEach((r) => {
+        const raw = r.raceName || r.name || '';
+        const baseName = raw
+            .replace(/\s*\[.*?\]$/, '')
+            .replace(/\s*\([^)]*\).*$/, '')
+            .trim();
+        const rSrc = (r.source || 'PHB').toUpperCase();
+        const key = `${baseName.toLowerCase()}::${rSrc}`;
+        if (!baseName || seenR.has(key)) return;
+        seenR.add(key);
+        baseRaces.push({ name: baseName, source: r.source || 'PHB' });
+    });
+    baseRaces.sort((a, b) => {
+        const cmp = a.name.localeCompare(b.name);
+        return cmp !== 0 ? cmp : a.source.localeCompare(b.source);
+    });
+
+    // Matching subraces
+    const cleanBase = (workingChar.race || '')
+        .replace(/\s*\[.*?\]$/, '')
+        .replace(/\s*\([^)]*\).*$/, '')
+        .trim()
+        .toLowerCase();
+    const matchingSubraces = [];
+    const seenSub = new Set();
+    rawRaces.forEach((r) => {
+        const rBase = (r.raceName || r.name || '')
+            .replace(/\s*\[.*?\]$/, '')
+            .replace(/\s*\([^)]*\).*$/, '')
+            .trim()
+            .toLowerCase();
+        if (rBase === cleanBase) {
+            let sub = r.subraceName || (r.name && r.name.includes('(') ? r.name.match(/\(([^)]+)\)/)?.[1] : '');
+            if (sub) {
+                sub = sub.replace(/^variant;\s*/i, '').trim();
+                const subKey = `${sub.toLowerCase()}::${(r.source || 'PHB').toUpperCase()}`;
+                if (!seenSub.has(subKey) && isSourceAllowed(r.source, sub, disabledSources)) {
+                    seenSub.add(subKey);
+                    matchingSubraces.push({ name: sub, source: r.source || 'PHB' });
+                }
+            }
+        }
+    });
+    matchingSubraces.sort((a, b) => {
+        const cmp = a.name.localeCompare(b.name);
+        return cmp !== 0 ? cmp : a.source.localeCompare(b.source);
+    });
+
+    // Backgrounds
+    const rawBgs = (builderCache?.bgs || []).filter((b) => isSourceAllowed(b.source, b.name, disabledSources));
+    const bgList = rawBgs.map((b) => ({ name: b.name, source: b.source })).sort((a, b) => a.name.localeCompare(b.name));
+
+    // Classes list
+    const rawCls = (builderCache?.classes || []).filter((c) => isSourceAllowed(c.source, c.name, disabledSources));
+    const clsList = rawCls
+        .map((c) => ({ name: c.name, source: c.source }))
+        .sort((a, b) => a.name.localeCompare(b.name));
+
+    // Active Token Artwork
+    workingChar.tokenImages = Array.isArray(workingChar.tokenImages) ? workingChar.tokenImages : [];
+    if (typeof workingChar.activeTokenIndex !== 'number' || workingChar.activeTokenIndex < 0) {
+        workingChar.activeTokenIndex = 0;
+    }
+    const activeTokenObj = workingChar.tokenImages[workingChar.activeTokenIndex] || workingChar.tokenImages[0];
+    const activeTokenUrl = activeTokenObj
+        ? typeof activeTokenObj === 'string'
+            ? activeTokenObj
+            : activeTokenObj.url
+        : workingChar.avatar || 'favicon.svg';
+
+    bodyEl.innerHTML = `
+        <!-- Character Identity: Name & Multi-Token Art -->
+        <div class="builder-section-box" style="border-left: 3px solid var(--color-gold-base);">
+            <div class="builder-section-header">
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <i class="fa-solid fa-id-card text-gradient-gold"></i>
+                    <strong style="font-size:0.95rem; color:var(--color-gold-base);">Hero Identity & Token Artwork</strong>
+                </div>
+            </div>
+            <div style="display:flex; gap:20px; align-items:flex-start; flex-wrap:wrap;">
+                <!-- Circular Avatar Preview with active indicator -->
+                <div style="display:flex; flex-direction:column; align-items:center; gap:8px;">
+                    <div id="pc-wiz-token-preview-circle" style="width:72px; height:72px; border-radius:50%; border:2px solid var(--color-gold-base); overflow:hidden; background:rgba(0,0,0,0.5); box-shadow:0 0 12px rgba(212,175,55,0.35); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                        <img id="pc-wiz-active-token-img" src="${activeTokenUrl}" alt="Token Art" style="width:100%; height:100%; object-fit:cover; display:block;" onerror="this.src='favicon.svg'">
+                    </div>
+                    <span class="badge" style="background:rgba(212,175,55,0.15); color:var(--color-gold-base); font-size:0.65rem; padding:1px 6px; border-radius:3px;">Active Token</span>
+                </div>
+
+                <!-- Name & Upload Controls -->
+                <div style="flex:1; min-width:260px; display:flex; flex-direction:column; gap:10px;">
+                    <div class="form-group" style="margin:0;">
+                        <label style="font-size:0.8rem; font-weight:600; color:var(--color-text-secondary); margin-bottom:4px; display:flex; align-items:center; gap:6px;">
+                            <i class="fa-solid fa-signature text-gradient-gold"></i> Character Name
+                        </label>
+                        <input type="text" id="pc-wizard-char-name" placeholder="Enter hero name (e.g. Valeros of Neverwinter)" value="${workingChar.name || ''}" style="width:100%; padding:8px 12px; font-size:1rem; font-weight:bold; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); color:var(--color-gold-light); border-radius:6px;">
+                    </div>
+
+                    <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+                        <input type="file" id="pc-wiz-token-file" accept="image/*,video/mp4,video/webm" style="display:none;">
+                        <button type="button" id="pc-wiz-upload-token-btn" class="btn btn-secondary btn-xs" style="display:inline-flex; align-items:center; gap:6px;">
+                            <i class="fa-solid fa-cloud-arrow-up"></i> Upload Media
+                        </button>
+                        <button type="button" id="pc-wiz-add-url-token-btn" class="btn btn-secondary btn-xs" style="display:inline-flex; align-items:center; gap:6px;">
+                            <i class="fa-solid fa-link"></i> Add from URL
+                        </button>
+                    </div>
+
+                    <!-- Token Gallery / Thumbnails -->
+                    ${
+                        workingChar.tokenImages.length > 0
+                            ? `
+                        <div style="display:flex; flex-direction:column; gap:4px; margin-top:2px;">
+                            <span style="font-size:0.75rem; color:var(--color-text-muted);">Uploaded Token Gallery (Click to select active):</span>
+                            <div id="pc-wiz-token-thumbnails" style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+                                ${workingChar.tokenImages
+                                    .map((tok, idx) => {
+                                        const u = typeof tok === 'string' ? tok : tok?.url || '';
+                                        const isActive = idx === workingChar.activeTokenIndex;
+                                        return `
+                                    <div class="pc-wiz-token-thumb-item" data-idx="${idx}" style="position:relative; width:40px; height:40px; border-radius:50%; border:2px solid ${isActive ? 'var(--color-gold-base)' : 'var(--color-border-subtle)'}; overflow:hidden; cursor:pointer; background:rgba(0,0,0,0.5); box-shadow:${isActive ? '0 0 8px rgba(212,175,55,0.6)' : 'none'};" title="${tok.name || 'Token'}">
+                                        <img src="${u}" style="width:100%; height:100%; object-fit:cover;" onerror="this.src='favicon.svg'">
+                                        <button type="button" class="pc-wiz-del-token-btn" data-idx="${idx}" style="position:absolute; top:-2px; right:-2px; width:16px; height:16px; border-radius:50%; background:#ef4444; border:none; color:#fff; font-size:9px; display:flex; align-items:center; justify-content:center; cursor:pointer; padding:0;" title="Remove this token">&times;</button>
+                                    </div>
+                                    `;
+                                    })
+                                    .join('')}
+                            </div>
+                        </div>
+                    `
+                            : ''
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Species, Subrace & Background Selection -->
+        <div class="builder-section-box">
+            <div class="builder-section-header">
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <i class="fa-solid fa-dna text-gradient-gold"></i>
+                    <strong style="font-size:0.95rem; color:var(--color-gold-base);">Origin: Species, Lineage & Background</strong>
+                </div>
+            </div>
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:12px;">
+                <div class="form-group">
+                    <label style="font-size:0.8rem; font-weight:600; color:var(--color-text-secondary); margin-bottom:4px;">Species / Race</label>
+                    <select id="pc-wizard-race" style="width:100%; padding:8px 10px; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); border-radius:6px;">
+                        <option value="">-- Choose Species --</option>
+                        ${baseRaces
+                            .map((r) => {
+                                const isSel =
+                                    workingChar.race === r.name &&
+                                    (!workingChar.raceSource ||
+                                        (r.source || 'PHB').toUpperCase() ===
+                                            String(workingChar.raceSource || '').toUpperCase()) &&
+                                    !workingChar.isCustomRace;
+                                return `<option value="${r.name}::${r.source || 'PHB'}" ${isSel ? 'selected' : ''}>${r.name} [${r.source || 'PHB'}]</option>`;
+                            })
+                            .join('')}
+                        <option value="__custom__" ${workingChar.isCustomRace ? 'selected' : ''}>➕ Custom / Homebrew Species...</option>
+                    </select>
+                    <input type="text" id="pc-wizard-custom-race" placeholder="Enter custom species name" value="${workingChar.customRaceText}" style="width:100%; margin-top:6px; display:${workingChar.isCustomRace ? 'block' : 'none'}; padding:6px 10px; background:rgba(0,0,0,0.4); border:1px solid var(--color-gold-base); color:var(--color-gold-light); border-radius:4px;">
+                </div>
+
+                <div class="form-group">
+                    <label style="font-size:0.8rem; font-weight:600; color:var(--color-text-secondary); margin-bottom:4px;">Subrace / Lineage</label>
+                    <select id="pc-wizard-subrace" style="width:100%; padding:8px 10px; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); border-radius:6px;">
+                        <option value="">None / Standard</option>
+                        ${matchingSubraces
+                            .map((s) => {
+                                const isSel =
+                                    workingChar.subrace === s.name &&
+                                    (!workingChar.subraceSource ||
+                                        (s.source || 'PHB').toUpperCase() ===
+                                            String(workingChar.subraceSource || '').toUpperCase()) &&
+                                    !workingChar.isCustomSubrace;
+                                return `<option value="${s.name}::${s.source || 'PHB'}" ${isSel ? 'selected' : ''}>${s.name} [${s.source || 'PHB'}]</option>`;
+                            })
+                            .join('')}
+                        <option value="__custom__" ${workingChar.isCustomSubrace ? 'selected' : ''}>➕ Custom / Homebrew Subrace...</option>
+                    </select>
+                    <input type="text" id="pc-wizard-custom-subrace" placeholder="Enter custom subrace name" value="${workingChar.customSubraceText}" style="width:100%; margin-top:6px; display:${workingChar.isCustomSubrace ? 'block' : 'none'}; padding:6px 10px; background:rgba(0,0,0,0.4); border:1px solid var(--color-gold-base); color:var(--color-gold-light); border-radius:4px;">
+                </div>
+
+                <div class="form-group">
+                    <label style="font-size:0.8rem; font-weight:600; color:var(--color-text-secondary); margin-bottom:4px;">Background</label>
+                    <select id="pc-wizard-bg" style="width:100%; padding:8px 10px; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); border-radius:6px;">
+                        <option value="">-- Choose Background --</option>
+                        ${bgList.map((b) => `<option value="${b.name}::${b.source || 'PHB'}" ${workingChar.background === b.name && (!workingChar.backgroundSource || (b.source || 'PHB').toUpperCase() === String(workingChar.backgroundSource || '').toUpperCase()) && !workingChar.isCustomBackground ? 'selected' : ''}>${b.name} [${b.source || 'PHB'}]</option>`).join('')}
+                        <option value="__custom__" ${workingChar.isCustomBackground ? 'selected' : ''}>➕ Custom / Homebrew Background...</option>
+                    </select>
+                    <input type="text" id="pc-wizard-custom-bg" placeholder="Enter custom background name" value="${workingChar.customBackgroundText}" style="width:100%; margin-top:6px; display:${workingChar.isCustomBackground ? 'block' : 'none'}; padding:6px 10px; background:rgba(0,0,0,0.4); border:1px solid var(--color-gold-base); color:var(--color-gold-light); border-radius:4px;">
+                </div>
+            </div>
+        </div>
+
+        <!-- Multiclass Builder -->
+        <div class="builder-section-box">
+            <div class="builder-section-header">
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <i class="fa-solid fa-shield text-gradient-gold"></i>
+                    <strong style="font-size:0.95rem; color:var(--color-gold-base);">Classes & Multiclassing</strong>
+                    <span class="builder-pill" style="color:#4fc3f7;">Total Level: ${workingChar.classes.reduce((sum, c) => sum + (parseInt(c.level) || 1), 0)}</span>
+                </div>
+                <button type="button" id="pc-wiz-add-class-btn" class="btn btn-secondary btn-xs"><i class="fa-solid fa-plus"></i> Add Multiclass</button>
+            </div>
+            <div id="pc-wiz-classes-container" style="display:flex; flex-direction:column; gap:8px;">
+                ${workingChar.classes
+                    .map((cls, i) => {
+                        const curSrc = (cls.source || 'PHB').toUpperCase();
+                        const cObj =
+                            builderCache?.classes?.find(
+                                (c) =>
+                                    (c.name || '').toLowerCase() === (cls.name || '').toLowerCase() &&
+                                    (!cls.source || (c.source || 'PHB').toUpperCase() === curSrc)
+                            ) ||
+                            builderCache?.classes?.find(
+                                (c) => (c.name || '').toLowerCase() === (cls.name || '').toLowerCase()
+                            );
+                        const availableSubs = (cObj?.subclasses || []).filter((s) => {
+                            const subSrc = (s.source || cls.source || 'PHB').toUpperCase();
+                            if (!isSourceAllowed(subSrc, s.name, disabledSources)) return false;
+                            if (curSrc === 'PHB') {
+                                if (subSrc === 'XPHB' || subSrc.startsWith('XUA')) return false;
+                            } else if (curSrc === 'XPHB') {
+                                if (subSrc === 'PHB') return false;
+                            }
+                            if (disabledSources && disabledSources.has('UA')) {
+                                if (subSrc.startsWith('UA') || subSrc.startsWith('XUA') || s.name.includes('(UA)'))
+                                    return false;
+                            }
+                            return true;
+                        });
+                        const hasSubs = availableSubs.length > 0;
+                        return `
+                    <div class="glass-flat" style="padding:10px 12px; display:flex; gap:10px; align-items:flex-end; flex-wrap:wrap; border:1px solid var(--color-border-subtle); border-radius:6px;">
+                        <div class="form-group" style="flex:2; min-width:140px;">
+                            <label style="font-size:0.75rem; text-transform:uppercase; color:var(--color-text-muted); font-weight:600;">${i === 0 ? 'Primary Class' : 'Multiclass ' + (i + 1)}</label>
+                            <select class="pc-wiz-cls-sel" data-idx="${i}" style="width:100%; padding:6px 8px; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); border-radius:4px;">
+                                ${clsList.map((c) => `<option value="${c.name}::${c.source || 'PHB'}" ${cls.name === c.name && (!cls.source || cls.source === c.source) ? 'selected' : ''}>${c.name} [${c.source || 'PHB'}]</option>`).join('')}
+                                <option value="__custom__" ${cls.isCustomClass ? 'selected' : ''}>➕ Custom Class...</option>
+                            </select>
+                            <input type="text" class="pc-wiz-custom-cls-input" data-idx="${i}" placeholder="Enter custom class name" value="${cls.customClassText || ''}" style="width:100%; margin-top:4px; display:${cls.isCustomClass ? 'block' : 'none'}; padding:4px 8px; font-size:0.8rem; background:rgba(0,0,0,0.4); border:1px solid var(--color-gold-base); color:var(--color-gold-light); border-radius:4px;">
+                        </div>
+                        <div class="form-group" style="flex:2; min-width:140px;">
+                            <label style="font-size:0.75rem; text-transform:uppercase; color:var(--color-text-muted); font-weight:600;">Subclass</label>
+                            ${
+                                hasSubs
+                                    ? `
+                                <select class="pc-wiz-subclass-sel" data-idx="${i}" style="width:100%; padding:6px 8px; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); border-radius:4px;">
+                                    <option value="">None / Base Class</option>
+                                    ${availableSubs.map((s) => `<option value="${s.name}" ${cls.subclass === s.name && !cls.isCustomSubclass ? 'selected' : ''}>${s.name} [${s.source || 'PHB'}]</option>`).join('')}
+                                    <option value="__custom__" ${cls.isCustomSubclass ? 'selected' : ''}>➕ Custom Subclass...</option>
+                                </select>
+                                <input type="text" class="pc-wiz-custom-subclass-input" data-idx="${i}" placeholder="Enter custom subclass name" value="${cls.customSubclassText || ''}" style="width:100%; margin-top:4px; display:${cls.isCustomSubclass ? 'block' : 'none'}; padding:4px 8px; font-size:0.8rem; background:rgba(0,0,0,0.4); border:1px solid var(--color-gold-base); color:var(--color-gold-light); border-radius:4px;">
+                            `
+                                    : `
+                                <input type="text" class="pc-wiz-subclass-input" data-idx="${i}" placeholder="None / e.g. Champion" value="${cls.subclass || ''}" style="width:100%; padding:6px 8px; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); border-radius:4px;">
+                            `
+                            }
+                        </div>
+                        <div class="form-group" style="flex:1; min-width:80px;">
+                            <label style="font-size:0.75rem; text-transform:uppercase; color:var(--color-text-muted); font-weight:600;">Level</label>
+                            <input type="number" class="pc-wiz-cls-lvl" data-idx="${i}" min="1" max="20" value="${cls.level || 1}" style="width:100%; padding:6px 8px; text-align:center; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); color:var(--color-gold-light); font-weight:bold; border-radius:4px;">
+                        </div>
+                        <button type="button" class="btn btn-danger btn-sm pc-wiz-cls-del" data-idx="${i}" ${workingChar.classes.length <= 1 ? 'disabled' : ''} style="height:34px; padding:0 10px;" title="Remove Multiclass">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+                    `;
+                    })
+                    .join('')}
+            </div>
+        </div>
+
+        <!-- Speeds & Senses Overrides -->
+        <div class="builder-section-box">
+            <div class="builder-section-header">
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <i class="fa-solid fa-person-running text-gradient-gold"></i>
+                    <strong style="font-size:0.95rem; color:var(--color-gold-base);">Speeds & Senses (ft)</strong>
+                </div>
+            </div>
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(110px, 1fr)); gap:10px; margin-bottom:10px;">
+                <div class="form-group">
+                    <label style="font-size:0.75rem; color:var(--color-text-muted);">Walk</label>
+                    <input type="number" id="pc-wiz-spd-walk" value="${workingChar.speed.walk}" style="width:100%; text-align:center; padding:6px; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); border-radius:4px;">
+                </div>
+                <div class="form-group">
+                    <label style="font-size:0.75rem; color:var(--color-text-muted);">Climb</label>
+                    <input type="number" id="pc-wiz-spd-climb" value="${workingChar.speed.climb}" style="width:100%; text-align:center; padding:6px; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); border-radius:4px;">
+                </div>
+                <div class="form-group">
+                    <label style="font-size:0.75rem; color:var(--color-text-muted);">Fly</label>
+                    <input type="number" id="pc-wiz-spd-fly" value="${workingChar.speed.fly}" style="width:100%; text-align:center; padding:6px; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); border-radius:4px;">
+                </div>
+                <div class="form-group">
+                    <label style="font-size:0.75rem; color:var(--color-text-muted);">Burrow</label>
+                    <input type="number" id="pc-wiz-spd-burrow" value="${workingChar.speed.burrow}" style="width:100%; text-align:center; padding:6px; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); border-radius:4px;">
+                </div>
+                <div class="form-group">
+                    <label style="font-size:0.75rem; color:var(--color-text-muted);">Darkvision</label>
+                    <input type="number" id="pc-wiz-sns-darkvision" value="${workingChar.senses.darkvision}" style="width:100%; text-align:center; padding:6px; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); border-radius:4px;">
+                </div>
+                <div class="form-group">
+                    <label style="font-size:0.75rem; color:var(--color-text-muted);">Devil's Sight</label>
+                    <input type="number" id="pc-wiz-sns-devilsight" value="${workingChar.senses.devilSight}" style="width:100%; text-align:center; padding:6px; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); border-radius:4px;">
+                </div>
+                <div class="form-group">
+                    <label style="font-size:0.75rem; color:var(--color-text-muted);">Blindsight</label>
+                    <input type="number" id="pc-wiz-sns-blindsight" value="${workingChar.senses.blindsight}" style="width:100%; text-align:center; padding:6px; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); border-radius:4px;">
+                </div>
+                <div class="form-group">
+                    <label style="font-size:0.75rem; color:var(--color-text-muted);">Truesight</label>
+                    <input type="number" id="pc-wiz-sns-truesight" value="${workingChar.senses.truesight}" style="width:100%; text-align:center; padding:6px; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); border-radius:4px;">
+                </div>
+            </div>
+        </div>
+
+        <!-- Bio & Description -->
+        <div class="builder-section-box">
+            <div class="builder-section-header">
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <i class="fa-solid fa-book-open text-gradient-gold"></i>
+                    <strong style="font-size:0.95rem; color:var(--color-gold-base);">Character Bio & Background Details</strong>
+                </div>
+            </div>
+            <div style="display:flex; gap:12px; margin-bottom:12px; flex-wrap:wrap;">
+                <div class="form-group" style="flex:1; min-width:80px;">
+                    <label style="font-size:0.75rem; color:var(--color-text-muted);">Age</label>
+                    <input type="text" id="pc-wiz-bio-age" value="${workingChar.bio.age}" style="width:100%; padding:6px 10px; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); border-radius:4px;">
+                </div>
+                <div class="form-group" style="flex:1; min-width:80px;">
+                    <label style="font-size:0.75rem; color:var(--color-text-muted);">Height</label>
+                    <input type="text" id="pc-wiz-bio-height" value="${workingChar.bio.height}" style="width:100%; padding:6px 10px; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); border-radius:4px;">
+                </div>
+                <div class="form-group" style="flex:1; min-width:80px;">
+                    <label style="font-size:0.75rem; color:var(--color-text-muted);">Weight</label>
+                    <input type="text" id="pc-wiz-bio-weight" value="${workingChar.bio.weight}" style="width:100%; padding:6px 10px; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); border-radius:4px;">
+                </div>
+            </div>
+            <div class="form-group" style="margin-bottom:10px;">
+                <label style="font-size:0.75rem; color:var(--color-text-muted);">Backstory</label>
+                <textarea id="pc-wiz-bio-backstory" class="scroll-styled" style="width:100%; height:80px; resize:vertical; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); padding:8px 10px; border-radius:6px; font-family:var(--font-primary); font-size:0.85rem;">${workingChar.bio.backstory}</textarea>
+            </div>
+            <div class="form-group">
+                <label style="font-size:0.75rem; color:var(--color-text-muted);">Other Notes</label>
+                <textarea id="pc-wiz-bio-notes" class="scroll-styled" style="width:100%; height:70px; resize:vertical; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); padding:8px 10px; border-radius:6px; font-family:var(--font-primary); font-size:0.85rem;">${workingChar.bio.notes}</textarea>
+            </div>
+        </div>
+    `;
+
+    // Step 1 Event Listeners
+
+    // Hero Name & Top Summary update
+    const nameInput = document.getElementById('pc-wizard-char-name');
+    nameInput?.addEventListener('input', (e) => {
+        workingChar.name = e.target.value;
+        if (ctx.updateTopSummary) ctx.updateTopSummary();
+    });
+
+    // Token Art Upload
+    const fileInput = document.getElementById('pc-wiz-token-file');
+    const uploadBtn = document.getElementById('pc-wiz-upload-token-btn');
+    uploadBtn?.addEventListener('click', () => fileInput?.click());
+    fileInput?.addEventListener('change', async (e) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        const formData = new FormData();
+        formData.append('file', file);
+        try {
+            const headers = typeof window !== 'undefined' && typeof window.vttAuthHeaders === 'function' ? window.vttAuthHeaders() : {};
+            const res = await fetch('/api/assets/upload', { method: 'POST', headers, body: formData });
+            if (res.ok) {
+                const data = await res.json();
+                const url = data.url || data.path || data.filePath;
+                if (url) {
+                    workingChar.tokenImages.push({ url, name: file.name });
+                    workingChar.activeTokenIndex = workingChar.tokenImages.length - 1;
+                    workingChar.avatar = url;
+                    renderStep1(ctx);
+                }
+            } else {
+                console.error('Token upload failed:', res.statusText);
+            }
+        } catch (err) {
+            console.error('Error uploading token image:', err);
+        }
+    });
+
+    // Token Art from URL
+    const addUrlBtn = document.getElementById('pc-wiz-add-url-token-btn');
+    addUrlBtn?.addEventListener('click', () => {
+        const url = prompt('Enter token image/media URL (e.g., https://... or /assets/...):');
+        if (url && url.trim()) {
+            const cleanUrl = url.trim();
+            workingChar.tokenImages.push({ url: cleanUrl, name: `Token ${workingChar.tokenImages.length + 1}` });
+            workingChar.activeTokenIndex = workingChar.tokenImages.length - 1;
+            workingChar.avatar = cleanUrl;
+            renderStep1(ctx);
+        }
+    });
+
+    // Token Thumbnail selection
+    document.querySelectorAll('.pc-wiz-token-thumb-item').forEach((thumb) => {
+        thumb.addEventListener('click', (e) => {
+            if (e.target.closest('.pc-wiz-del-token-btn')) return;
+            const idx = parseInt(thumb.dataset.idx);
+            if (!isNaN(idx) && workingChar.tokenImages[idx]) {
+                workingChar.activeTokenIndex = idx;
+                const tok = workingChar.tokenImages[idx];
+                workingChar.avatar = typeof tok === 'string' ? tok : tok?.url;
+                renderStep1(ctx);
+            }
+        });
+    });
+
+    // Token Thumbnail deletion
+    document.querySelectorAll('.pc-wiz-del-token-btn').forEach((btn) => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const idx = parseInt(btn.dataset.idx);
+            if (!isNaN(idx) && workingChar.tokenImages[idx]) {
+                workingChar.tokenImages.splice(idx, 1);
+                if (workingChar.activeTokenIndex >= workingChar.tokenImages.length) {
+                    workingChar.activeTokenIndex = Math.max(0, workingChar.tokenImages.length - 1);
+                }
+                const cur = workingChar.tokenImages[workingChar.activeTokenIndex];
+                workingChar.avatar = cur ? (typeof cur === 'string' ? cur : cur?.url) : '';
+                renderStep1(ctx);
+            }
+        });
+    });
+
+    // Speed manual edits flag
+    ['pc-wiz-spd-walk', 'pc-wiz-spd-climb', 'pc-wiz-spd-fly', 'pc-wiz-spd-burrow'].forEach((id) => {
+        document.getElementById(id)?.addEventListener('input', () => {
+            workingChar._manualSpeedCustomized = true;
+        });
+    });
+
+    const rSel = document.getElementById('pc-wizard-race');
+    const custR = document.getElementById('pc-wizard-custom-race');
+    custR?.addEventListener('input', () => {
+        workingChar.customRaceText = custR.value.trim();
+        workingChar.race = workingChar.customRaceText || 'Custom Species';
+    });
+    rSel?.addEventListener('change', () => {
+        if (rSel.value === '__custom__') {
+            if (custR) custR.style.display = 'block';
+            workingChar.isCustomRace = true;
+        } else {
+            if (custR) custR.style.display = 'none';
+            workingChar.isCustomRace = false;
+            const [rName, rSrc] = rSel.value.split('::');
+            workingChar.race = rName || rSel.value;
+            workingChar.raceSource = rSrc || '';
+            workingChar.subrace = '';
+            workingChar.subraceSource = '';
+        }
+        recomputeCandidates().then(() => renderStep1(ctx));
+    });
+
+    const sSel = document.getElementById('pc-wizard-subrace');
+    const custS = document.getElementById('pc-wizard-custom-subrace');
+    custS?.addEventListener('input', () => {
+        workingChar.customSubraceText = custS.value.trim();
+        workingChar.subrace = workingChar.customSubraceText || '';
+    });
+    sSel?.addEventListener('change', () => {
+        if (sSel.value === '__custom__') {
+            if (custS) custS.style.display = 'block';
+            workingChar.isCustomSubrace = true;
+        } else {
+            if (custS) custS.style.display = 'none';
+            workingChar.isCustomSubrace = false;
+            const [sName, sSrc] = sSel.value.split('::');
+            workingChar.subrace = sName || sSel.value;
+            workingChar.subraceSource = sSrc || '';
+        }
+        recomputeCandidates().then(() => renderStep1(ctx));
+    });
+
+    const bgSel = document.getElementById('pc-wizard-bg');
+    const custBg = document.getElementById('pc-wizard-custom-bg');
+    custBg?.addEventListener('input', () => {
+        workingChar.customBackgroundText = custBg.value.trim();
+        workingChar.background = workingChar.customBackgroundText || 'Custom Background';
+    });
+    bgSel?.addEventListener('change', () => {
+        if (bgSel.value === '__custom__') {
+            if (custBg) custBg.style.display = 'block';
+            workingChar.isCustomBackground = true;
+        } else {
+            if (custBg) custBg.style.display = 'none';
+            workingChar.isCustomBackground = false;
+            const [bName, bSrc] = bgSel.value.split('::');
+            workingChar.background = bName || bgSel.value;
+            workingChar.backgroundSource = bSrc || '';
+        }
+        recomputeCandidates().then(() => renderStep1(ctx));
+    });
+
+    document.getElementById('pc-wiz-add-class-btn')?.addEventListener('click', () => {
+        harvestCurrentStepInputs();
+        const currentNames = workingChar.classes.map((c) => c.name);
+        const unused = clsList.find((c) => !currentNames.includes(c.name)) || clsList[0];
+        workingChar.classes.push({
+            name: unused?.name || 'Fighter',
+            source: unused?.source || 'PHB',
+            subclass: '',
+            level: 1
+        });
+        recomputeCandidates().then(() => renderStep1(ctx));
+    });
+
+    document.querySelectorAll('.pc-wiz-cls-del').forEach((btn) => {
+        btn.addEventListener('click', (e) => {
+            harvestCurrentStepInputs();
+            const idx = parseInt(e.currentTarget.dataset.idx);
+            if (workingChar.classes.length > 1) {
+                workingChar.classes.splice(idx, 1);
+                recomputeCandidates().then(() => renderStep1(ctx));
+            }
+        });
+    });
+
+    document.querySelectorAll('.pc-wiz-cls-sel').forEach((sel) => {
+        sel.addEventListener('change', async (e) => {
+            await harvestCurrentStepInputs();
+            const idx = parseInt(e.target.dataset.idx);
+            const custInput = document.querySelector(`.pc-wiz-custom-cls-input[data-idx="${idx}"]`);
+            if (e.target.value === '__custom__') {
+                if (custInput) custInput.style.display = 'block';
+                workingChar.classes[idx].isCustomClass = true;
+            } else {
+                if (custInput) custInput.style.display = 'none';
+                workingChar.classes[idx].isCustomClass = false;
+                const [cName, cSrc] = e.target.value.split('::');
+                workingChar.classes[idx].name = cName || e.target.value;
+                workingChar.classes[idx].source = cSrc || 'PHB';
+                workingChar.classes[idx].subclass = '';
+            }
+            await recomputeCandidates();
+            renderStep1(ctx);
+        });
+    });
+
+    document.querySelectorAll('.pc-wiz-subclass-sel').forEach((sel) => {
+        sel.addEventListener('change', (e) => {
+            const idx = parseInt(e.target.dataset.idx);
+            const custSub = document.querySelector(`.pc-wiz-custom-subclass-input[data-idx="${idx}"]`);
+            if (e.target.value === '__custom__') {
+                if (custSub) custSub.style.display = 'block';
+                workingChar.classes[idx].isCustomSubclass = true;
+            } else {
+                if (custSub) custSub.style.display = 'none';
+                workingChar.classes[idx].isCustomSubclass = false;
+                workingChar.classes[idx].subclass = e.target.value;
+            }
+            recomputeCandidates();
+        });
+    });
+
+    document.querySelectorAll('.pc-wiz-custom-subclass-input').forEach((input) => {
+        input.addEventListener('input', (e) => {
+            const idx = parseInt(e.target.dataset.idx);
+            workingChar.classes[idx].customSubclassText = e.target.value.trim();
+            workingChar.classes[idx].subclass = e.target.value.trim();
+        });
+    });
+
+    document.querySelectorAll('.pc-wiz-subclass-input').forEach((input) => {
+        input.addEventListener('input', (e) => {
+            const idx = parseInt(e.target.dataset.idx);
+            workingChar.classes[idx].subclass = e.target.value.trim();
+        });
+    });
+
+    document.querySelectorAll('.pc-wiz-cls-lvl').forEach((input) => {
+        input.addEventListener('change', (e) => {
+            const idx = parseInt(e.target.dataset.idx);
+            workingChar.classes[idx].level = Math.max(1, Math.min(20, parseInt(e.target.value) || 1));
+            recomputeCandidates().then(() => renderStep1(ctx));
+        });
+    });
+}

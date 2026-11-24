@@ -42,7 +42,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,700;1,400&family=Cinzel+Decorative:wght@700&family=Cinzel:wght@400;600;700&family=Exo+2:wght@400;600;700&family=MedievalSharp&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Orbitron:wght@400;600;700&family=Rajdhani:wght@500;600;700&family=Rye&family=Syne:wght@500;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@400;600;700;800&family=Exo+2:wght@400;600;700;800&family=MedievalSharp&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Orbitron:wght@400;600;700;800&family=Outfit:wght@600;700;900&family=Rajdhani:wght@500;600;700&family=Rye&family=Syne:wght@500;600;700;800&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -75,8 +75,11 @@
     <!-- YouTube IFrame API -->
     <script src="https://www.youtube.com/iframe_api"></script>
 
-    <!-- Socket.io -->
+    <!-- Socket.io & P2P WebRTC Adapter -->
     <script src="/socket.io/socket.io.js"></script>
+    <script src="js/network/vtt-static-shim.js"></script>
+    <script src="lib/peerjs.min.js"></script>
+    <script src="js/network/vtt-p2p-adapter.js"></script>
 
     <!-- Three.js, Cannon.js & 3D WebGL Dice Engine -->
     <script src="lib/three.min.js"></script>
@@ -115,6 +118,47 @@
                         <div id="login-error-banner" class="vtt-login-error vtt-hidden">
                             <i class="fa-solid fa-triangle-exclamation"></i>
                             <span id="login-error-text"></span>
+                        </div>
+
+                        <!-- Connection Mode Selector -->
+                        <div class="login-connection-tabs" style="display: flex; gap: 8px; margin-bottom: 8px;">
+                            <button type="button" class="btn btn-primary btn-sm active" id="tab-login-server"
+                                style="flex: 1;"
+                                title="Web Server: Connects through Cloudflare or local server. 100% reliable everywhere, even on mobile phones (4G/5G) and strict Wi-Fi firewalls."><i
+                                    class="fa-solid fa-server"></i> Web Server <i class="fa-solid fa-circle-info"
+                                    style="font-size: 0.75rem; opacity: 0.7; margin-left: 4px;"></i></button>
+                            <button type="button" class="btn btn-secondary btn-sm" id="tab-login-p2p" style="flex: 1;"
+                                title="Direct P2P: Connects directly computer-to-computer. Lowest possible lag, zero cloud bandwidth used, and completely free. Best for home Wi-Fi and desktop setups."><i
+                                    class="fa-solid fa-bolt"></i> Direct P2P <i class="fa-solid fa-circle-info"
+                                    style="font-size: 0.75rem; opacity: 0.7; margin-left: 4px;"></i></button>
+                        </div>
+                        <div id="login-connection-hint"
+                            style="margin-bottom: 14px; font-size: 0.78rem; color: var(--color-gold-light); line-height: 1.35; padding: 6px 10px; background: rgba(0,0,0,0.25); border-radius: 6px; border: 1px solid rgba(255,255,255,0.06);">
+                            <span id="login-connection-hint-text"><i class="fa-solid fa-shield-halved"
+                                    style="margin-right: 4px; color: #38bdf8;"></i> <strong>Web Server:</strong>
+                                Standard host connection. Highly reliable across all networks, mobile data, and strict
+                                firewalls.</span>
+                        </div>
+
+                        <!-- P2P Room Configuration Fields -->
+                        <div id="login-p2p-group" class="vtt-hidden"
+                            style="margin-bottom: 14px; background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px; border: 1px solid var(--color-border-subtle);">
+                            <div class="form-group" style="margin-bottom: 8px;">
+                                <label for="login-p2p-code"><i class="fa-solid fa-key"></i> P2P Room Code</label>
+                                <input type="text" id="login-p2p-code" placeholder="e.g. ABCD-2345"
+                                    style="text-transform: uppercase;">
+                            </div>
+                            <details style="margin-top: 6px;">
+                                <summary style="font-size: 0.78rem; color: var(--color-gold-light); cursor: pointer;"><i
+                                        class="fa-solid fa-file-lines"></i> Or Paste Serverless Invite Text</summary>
+                                <textarea id="login-p2p-manual" placeholder="Paste dndvtt://offer/... here"
+                                    style="width: 100%; height: 60px; font-size: 0.75rem; font-family: monospace; margin-top: 4px;"></textarea>
+                                <div id="login-p2p-answer-group" class="vtt-hidden" style="margin-top: 8px;">
+                                    <label for="login-p2p-answer-output" style="font-size: 0.75rem; color: #38bdf8;">Your P2P Answer (Send back to GM):</label>
+                                    <textarea id="login-p2p-answer-output" readonly onclick="this.select()"
+                                        style="width: 100%; height: 60px; font-size: 0.75rem; font-family: monospace; margin-top: 4px;"></textarea>
+                                </div>
+                            </details>
                         </div>
 
                         <div class="form-group">
@@ -266,8 +310,10 @@
             <button class="mobile-tool-item" data-tool="eco" id="mobile-tool-eco" title="One-Tap Eco / Battery Mode">
                 <i class="fa-solid fa-leaf"></i> <span>Eco / Battery Mode</span>
             </button>
-            <button class="mobile-tool-item" data-tool="fullscreen" id="mobile-tool-fullscreen" title="Toggle Fullscreen">
-                <i class="fa-solid fa-expand" id="mobile-tool-fullscreen-icon"></i> <span id="mobile-tool-fullscreen-label">Fullscreen</span>
+            <button class="mobile-tool-item" data-tool="fullscreen" id="mobile-tool-fullscreen"
+                title="Toggle Fullscreen">
+                <i class="fa-solid fa-expand" id="mobile-tool-fullscreen-icon"></i> <span
+                    id="mobile-tool-fullscreen-label">Fullscreen</span>
             </button>
             <div class="mobile-tool-divider"></div>
             <button class="mobile-tool-item" data-tool="fit">
@@ -338,7 +384,8 @@
                 <button type="button" id="btn-mobile-install-action" class="btn btn-primary btn-xs">
                     <i class="fa-solid fa-download"></i> Install
                 </button>
-                <button type="button" id="btn-mobile-install-dismiss" class="btn btn-secondary btn-xs" aria-label="Dismiss">
+                <button type="button" id="btn-mobile-install-dismiss" class="btn btn-secondary btn-xs"
+                    aria-label="Dismiss">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
@@ -778,13 +825,21 @@
                     <!-- Player Sheet Header Control Bar (Roll Mode, Whisper, Settings) -->
                     <div id="ps-top-control-bar" class="ps-top-control-bar">
                         <div class="ps-segmented-capsule" role="group" aria-label="Sheet Roll Mode">
-                            <button type="button" class="ps-roll-mode-btn" data-mode="adv" title="Advantage (rolls with advantage)"><i class="fa-solid fa-angles-up"></i> Adv</button>
-                            <button type="button" class="ps-roll-mode-btn active" data-mode="normal" title="Normal (1d20)">Norm</button>
-                            <button type="button" class="ps-roll-mode-btn" data-mode="dis" title="Disadvantage (rolls with disadvantage)"><i class="fa-solid fa-angles-down"></i> Dis</button>
+                            <button type="button" class="ps-roll-mode-btn" data-mode="adv"
+                                title="Advantage (rolls with advantage)"><i class="fa-solid fa-angles-up"></i>
+                                Adv</button>
+                            <button type="button" class="ps-roll-mode-btn active" data-mode="normal"
+                                title="Normal (1d20)">Norm</button>
+                            <button type="button" class="ps-roll-mode-btn" data-mode="dis"
+                                title="Disadvantage (rolls with disadvantage)"><i class="fa-solid fa-angles-down"></i>
+                                Dis</button>
                         </div>
                         <div class="ps-actions-group">
-                            <button type="button" class="ps-whisper-btn" id="ps-btn-gm-whisper" title="Whisper rolls from this sheet to GM only"><i class="fa-solid fa-user-secret"></i> GM</button>
-                            <button type="button" class="ps-settings-cog-btn" id="ps-btn-sheet-settings" title="Sheet Settings"><i class="fa-solid fa-gear"></i></button>
+                            <button type="button" class="ps-whisper-btn" id="ps-btn-gm-whisper"
+                                title="Whisper rolls from this sheet to GM only"><i class="fa-solid fa-user-secret"></i>
+                                GM</button>
+                            <button type="button" class="ps-settings-cog-btn" id="ps-btn-sheet-settings"
+                                title="Sheet Settings"><i class="fa-solid fa-gear"></i></button>
                         </div>
                     </div>
                     <!-- Inner Tabs Header -->
@@ -988,11 +1043,6 @@
                 </button>
             </div>
 
-            <!-- Free-drag Corner Resize Handle -->
-            <div id="init-resize-handle" class="init-resize-handle" title="Drag corner to resize tracker">
-                <i class="fa-solid fa-up-right-and-down-left-from-center"></i>
-            </div>
-
             <!-- Minimized HUD Bar (displayed when is-minimized) -->
             <div id="init-minimized-bar" class="init-minimized-bar">
                 <button id="btn-init-min-drag" class="btn btn-icon btn-secondary init-drag-handle"
@@ -1025,41 +1075,45 @@
 
 
 
-        <!-- Right Panels (Collapsible Tabs Sidebar) -->
+        <!-- Right Panels (Collapsible Vertical Toolbar & Flyout Drawer) -->
         <aside id="vtt-sidebar" class="glassmorphism">
-            <!-- Sidebar Drag-to-Resize Handle -->
-            <div id="vtt-sidebar-resizer" title="Drag to resize sidebar"></div>
-
-            <!-- Tab Headers -->
+            <!-- Vertical Tab Strip (Mirrors left toolbar) -->
             <div class="sidebar-tabs">
-                <button class="tab-header active" data-tab="tab-chat" title="Game Chat & Dice Roller">
+                <button class="tab-header control-btn" data-tab="tab-chat" title="Game Chat & Dice Roller">
                     <i class="fa-solid fa-comments"></i>
                 </button>
-                <button class="tab-header" data-tab="tab-characters" title="Player Characters">
+                <button class="tab-header control-btn" data-tab="tab-characters" title="Player Characters">
                     <i class="fa-solid fa-users"></i>
                 </button>
-                <button class="tab-header" data-tab="tab-handouts" title="Campaign Handouts">
+                <button class="tab-header control-btn" data-tab="tab-handouts" title="Campaign Handouts">
                     <i class="fa-solid fa-note-sticky"></i>
                 </button>
-                <button class="tab-header gm-only" data-tab="tab-library" title="Bestiary Drawer (Drag & Drop)">
+                <div class="control-divider gm-only"></div>
+                <button class="tab-header control-btn gm-only" data-tab="tab-library"
+                    title="Bestiary Drawer (Drag & Drop)">
                     <i class="fa-solid fa-book-skull"></i>
                 </button>
-                <button class="tab-header gm-only" data-tab="tab-assets" title="Asset Gallery (Drag & Drop)">
+                <button class="tab-header control-btn gm-only" data-tab="tab-assets"
+                    title="Asset Gallery (Drag & Drop)">
                     <i class="fa-solid fa-photo-film"></i>
                 </button>
-                <button class="tab-header gm-only" data-tab="tab-tables" title="Roll Tables & Card Decks">
+                <button class="tab-header control-btn gm-only" data-tab="tab-tables" title="Roll Tables & Card Decks">
                     <i class="fa-solid fa-dice-d20"></i>
                 </button>
-                <button class="tab-header" data-tab="tab-config" title="Settings & Preferences">
+                <div style="flex-grow: 1;"></div>
+                <div class="control-divider"></div>
+                <button class="tab-header control-btn" data-tab="tab-config" title="Settings & Preferences">
                     <i class="fa-solid fa-gears"></i>
                 </button>
             </div>
 
-            <!-- Tab Content Panel -->
+            <!-- Tab Content Panel (Flyout Drawer) -->
             <div class="sidebar-content">
+                <!-- Sidebar Drag-to-Resize Handle -->
+                <div id="vtt-sidebar-resizer" title="Drag to resize sidebar"></div>
 
                 <!-- Chat Panel -->
-                <div id="tab-chat" class="tab-panel active">
+                <div id="tab-chat" class="tab-panel">
 
                     <div id="chat-messages" class="chat-message-list scroll-styled">
                         <!-- Dynamic chat messages go here -->
@@ -1281,10 +1335,12 @@
                                         title="Move selected assets"><i class="fa-solid fa-arrow-right-to-bracket"></i>
                                         Move</button>
                                     <button id="btn-asset-batch-create-table" class="btn btn-xxs btn-primary"
-                                        title="Create Asset Table from selected assets"><i class="fa-solid fa-layer-group"></i>
+                                        title="Create Asset Table from selected assets"><i
+                                            class="fa-solid fa-layer-group"></i>
                                         Create Table</button>
                                     <button id="btn-asset-batch-add-table" class="btn btn-xxs btn-secondary"
-                                        title="Add selected assets to an existing Asset Table"><i class="fa-solid fa-plus"></i>
+                                        title="Add selected assets to an existing Asset Table"><i
+                                            class="fa-solid fa-plus"></i>
                                         Add to Table</button>
                                     <button id="btn-asset-batch-delete" class="btn btn-xxs btn-danger"
                                         title="Delete selected assets"><i class="fa-solid fa-trash"></i> Delete</button>
@@ -2421,17 +2477,28 @@
                                         address:</p>
                                     <div class="url-copy-box">
                                         <input type="text" id="config-remote-url" readonly
-                                            value="https://xyz.loca.lt/vtt.html">
+                                            value="https://forgedvtt.com/play">
                                         <button id="btn-copy-remote-url" class="btn btn-icon btn-secondary"
                                             title="Copy Link"><i class="fa-solid fa-copy"></i></button>
                                     </div>
                                     <p class="config-desc text-muted mt-2">Local network users (IP):</p>
                                     <div class="url-copy-box">
                                         <input type="text" id="config-local-url" readonly
-                                            value="http://localhost:5050/vtt.html">
+                                            value="http://localhost:5050/play">
                                         <button id="btn-copy-local-url" class="btn btn-icon btn-secondary"
                                             title="Copy Link"><i class="fa-solid fa-copy"></i></button>
                                     </div>
+                                </div>
+
+                                <!-- Manual WebRTC Host Pair Card -->
+                                <div class="config-card vtt-hidden" id="config-manual-p2p-card">
+                                    <h4><i class="fa-solid fa-handshake text-gradient-gold"></i> Manual WebRTC Peer Pair</h4>
+                                    <p class="config-desc text-muted">Copy Offer to share with player, then paste player Answer below:</p>
+                                    <textarea id="config-manual-offer-output" readonly onclick="this.select()"
+                                        style="width: 100%; height: 54px; font-size: 0.72rem; font-family: monospace; margin-bottom: 6px;"></textarea>
+                                    <textarea id="config-manual-answer-input" placeholder="Paste dndvtt://answer/... from player here"
+                                        style="width: 100%; height: 54px; font-size: 0.72rem; font-family: monospace; margin-bottom: 6px;"></textarea>
+                                    <button id="btn-config-apply-answer" type="button" class="btn btn-sm btn-primary">Connect Player Answer</button>
                                 </div>
 
                                 <!-- Allowlist Settings Card (GM Only) -->
@@ -2451,6 +2518,45 @@
                                         style="margin-top: 12px; display: flex; flex-direction: column; gap: 4px;">
                                         <!-- Allowed users will appear here -->
                                     </div>
+                                </div>
+                            </div>
+                        </details>
+
+                        <!-- ACCORDION: PRESENTATION DISPLAY (GM Only) -->
+                        <details class="config-accordion-section gm-only" name="config-accordion"
+                            id="accordion-presentation-window">
+                            <summary class="config-accordion-header">
+                                <span class="config-accordion-title"><i class="fa-solid fa-tv text-gradient-gold"></i>
+                                    Presentation Display</span>
+                                <i class="fa-solid fa-chevron-right config-accordion-caret"></i>
+                            </summary>
+                            <div class="config-accordion-body">
+                                <div class="config-card">
+                                    <h4><i class="fa-solid fa-display text-gradient-gold"></i> Player-Facing Window</h4>
+                                    <p class="config-desc text-muted">Open an uncluttered, player-facing view on a
+                                        second monitor, TV, or stream.</p>
+
+                                    <div style="display: flex; gap: 8px; margin-top: 10px;">
+                                        <button id="btn-launch-presentation" class="btn btn-sm btn-primary"
+                                            style="flex: 1;">
+                                            <i class="fa-solid fa-arrow-up-right-from-square"></i> Open Presentation
+                                            Window
+                                        </button>
+                                        <button id="btn-close-presentation" class="btn btn-sm btn-danger vtt-hidden"
+                                            title="Close Presentation Window">
+                                            <i class="fa-solid fa-xmark"></i>
+                                        </button>
+                                    </div>
+
+                                    <div class="config-setting" style="margin-top: 14px;">
+                                        <label for="config-presentation-camera-sync">Mirror GM Camera</label>
+                                        <input type="checkbox" id="config-presentation-camera-sync" checked
+                                            style="cursor: pointer; width: 16px; height: 16px;">
+                                    </div>
+                                    <p class="config-desc text-muted" style="font-size: 0.72rem; margin-top: 4px;">
+                                        Uncheck to freeze the player display while you inspect secret areas on the GM
+                                        view.
+                                    </p>
                                 </div>
                             </div>
                         </details>
@@ -2605,6 +2711,13 @@
                             <option value="hex-v-even">Hex Vertical - Even (Pointy-top)</option>
                             <option value="hex-h">Hex Horizontal - Odd (Flat-top)</option>
                             <option value="hex-h-even">Hex Horizontal - Even (Flat-top)</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="new-map-diagonal-rule-wrap" style="flex: 1;">
+                        <label for="new-map-diagonal-rule">Diagonal Rule</label>
+                        <select id="new-map-diagonal-rule">
+                            <option value="5ft" selected>5ft / Square (PHB Standard)</option>
+                            <option value="5-10-5">5-10-5 (DMG Variant)</option>
                         </select>
                     </div>
                 </div>
@@ -3195,7 +3308,8 @@
                             style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--color-text-muted); text-align: center; padding: 20px;">
                             <i class="fa-solid fa-layer-group"
                                 style="font-size: 2.5rem; opacity: 0.2; margin-bottom: 10px;"></i>
-                            <p style="font-size: 0.85rem; margin: 0;">Select a card deck to preview its cards, suits, and
+                            <p style="font-size: 0.85rem; margin: 0;">Select a card deck to preview its cards, suits,
+                                and
                                 artwork.</p>
                         </div>
 
@@ -3406,6 +3520,13 @@
                         <option value="hex-v-even">Hex Vertical - Even (Pointy-top)</option>
                         <option value="hex-h">Hex Horizontal - Odd (Flat-top)</option>
                         <option value="hex-h-even">Hex Horizontal - Even (Flat-top)</option>
+                    </select>
+                </div>
+                <div class="form-group" id="edit-map-diagonal-rule-wrap" style="flex: 1; min-width: 140px;">
+                    <label for="edit-map-diagonal-rule">Diagonal Rule</label>
+                    <select id="edit-map-diagonal-rule">
+                        <option value="5ft" selected>5ft / Square (PHB Standard)</option>
+                        <option value="5-10-5">5-10-5 (DMG Variant)</option>
                     </select>
                 </div>
                 <div class="form-group" style="flex: 1; min-width: 120px;">
@@ -4275,6 +4396,104 @@
                         style="padding: 6px 10px; display: flex; align-items: center; gap: 6px; font-size: 0.75rem; white-space: nowrap;">
                         <i class="fa-solid fa-arrows-rotate"></i> Sync Sheet
                     </button>
+                </div>
+            </div>
+
+            <!-- Token Border & Framing Section -->
+            <div class="form-group border-top-subtle pt-3 mt-3">
+                <h4
+                    style="margin: 0 0 12px 0; font-size: 0.9rem; color: var(--color-gold-base); font-family: var(--font-heading); display: flex; align-items: center; justify-content: space-between;">
+                    <span><i class="fa-solid fa-shapes"></i> Token Border & Framing</span>
+                    <button type="button" id="btn-token-edit-open-cropper" class="btn btn-secondary btn-xxs"
+                        style="padding: 4px 8px; font-size: 0.72rem; display: flex; align-items: center; gap: 4px;"
+                        title="Open interactive cropper to pan, zoom, and frame art">
+                        <i class="fa-solid fa-crop"></i> Crop / Frame Art
+                    </button>
+                </h4>
+
+                <div class="flex-row" style="gap: 12px; align-items: center; margin-bottom: 10px;">
+                    <!-- Live Token Preview in Modal -->
+                    <div id="token-edit-border-preview-box"
+                        style="position: relative; width: 68px; height: 68px; flex-shrink: 0; background: rgba(0,0,0,0.3); border-radius: 6px; display: flex; align-items: center; justify-content: center; overflow: hidden; border: 1px dashed var(--color-border-subtle);">
+                        <img id="token-edit-border-preview-img" src="favicon.svg" alt="Preview"
+                            style="width: 58px; height: 58px; object-fit: cover; border-radius: 50%; border: 3px solid #007bff; transition: all 0.2s ease;">
+                    </div>
+                    <div style="flex: 1; display: flex; flex-direction: column; gap: 6px;">
+                        <div class="form-group" style="margin: 0;">
+                            <label for="token-edit-border-shape" style="font-size: 0.75rem;">Border Shape</label>
+                            <select id="token-edit-border-shape"
+                                style="width: 100%; font-size: 0.8rem; padding: 4px 6px;">
+                                <option value="circle">Circle (Round)</option>
+                                <option value="squircle">Squircle (Rounded Square)</option>
+                                <option value="square">Square</option>
+                                <option value="hexagon">Hexagon</option>
+                                <option value="octagon">Octagon</option>
+                                <option value="shield">Shield</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="margin: 0;">
+                            <label for="token-edit-border-style" style="font-size: 0.75rem;">Border Style</label>
+                            <select id="token-edit-border-style"
+                                style="width: 100%; font-size: 0.8rem; padding: 4px 6px;">
+                                <option value="solid">Solid Line</option>
+                                <option value="double">Double Ring</option>
+                                <option value="dashed">Dashed Line</option>
+                                <option value="glow">Neon Glow</option>
+                                <option value="frame">Thematic Frame</option>
+                                <option value="none">Borderless</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="token-edit-frame-preset-group" class="form-group vtt-hidden" style="margin-bottom: 8px;">
+                    <label for="token-edit-frame-preset"
+                        style="font-size: 0.75rem; color: var(--color-gold-base);">Thematic Frame Preset</label>
+                    <select id="token-edit-frame-preset" style="width: 100%; font-size: 0.8rem; padding: 4px 6px;">
+                        <option value="ornate_gold">✨ Ornate Gold Filigree</option>
+                        <option value="silver_mithral">🛡️ Mithral Silver Ring</option>
+                        <option value="gothic_iron">⛓️ Gothic Spiked Iron</option>
+                        <option value="arcane_runic">🔮 Glowing Arcane Runes</option>
+                        <option value="legendary_crown">👑 Legendary Boss Crown</option>
+                    </select>
+                </div>
+
+                <div class="flex-row" style="gap: 8px; align-items: center;">
+                    <div class="form-group w-50" style="margin: 0;">
+                        <label for="token-edit-border-color" style="font-size: 0.75rem;">Border Color</label>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <input type="color" id="token-edit-border-color" value="#007bff"
+                                style="width: 36px; height: 28px; border: 1px solid var(--color-border-subtle); border-radius: 4px; padding: 0; cursor: pointer; background: none;">
+                            <div class="token-edit-border-swatches swatches-row"
+                                style="display: flex; gap: 4px; flex-wrap: wrap;">
+                                <button type="button" class="swatch" data-color="#007bff"
+                                    style="width: 18px; height: 18px; border-radius: 50%; background: #007bff; border: 1px solid #fff; cursor: pointer;"
+                                    title="Player Blue"></button>
+                                <button type="button" class="swatch" data-color="#dc3545"
+                                    style="width: 18px; height: 18px; border-radius: 50%; background: #dc3545; border: 1px solid #fff; cursor: pointer;"
+                                    title="Hostile Red"></button>
+                                <button type="button" class="swatch" data-color="#eab308"
+                                    style="width: 18px; height: 18px; border-radius: 50%; background: #eab308; border: 1px solid #fff; cursor: pointer;"
+                                    title="Neutral Yellow"></button>
+                                <button type="button" class="swatch" data-color="#22c55e"
+                                    style="width: 18px; height: 18px; border-radius: 50%; background: #22c55e; border: 1px solid #fff; cursor: pointer;"
+                                    title="Friendly Green"></button>
+                                <button type="button" class="swatch" data-color="#d4af37"
+                                    style="width: 18px; height: 18px; border-radius: 50%; background: #d4af37; border: 1px solid #fff; cursor: pointer;"
+                                    title="Gold"></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group w-50" style="margin: 0;">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px;">
+                            <label for="token-edit-border-width" style="font-size: 0.75rem;">Thickness</label>
+                            <span id="val-token-edit-border-width"
+                                style="font-family: monospace; font-size: 0.75rem; color: var(--color-gold-base);">3px</span>
+                        </div>
+                        <input type="range" id="token-edit-border-width" min="1" max="8" step="1" value="3"
+                            style="width: 100%; cursor: pointer;">
+                    </div>
                 </div>
             </div>
 

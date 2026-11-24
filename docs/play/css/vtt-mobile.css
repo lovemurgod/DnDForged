@@ -1,0 +1,3455 @@
+/**
+ * ============================================================================
+ * ForgeD VTT - Mobile & Touch Adaptive Stylesheet (vtt-mobile.css)
+ * ============================================================================
+ * Strictly isolated for mobile viewports (<= 900px) and touch pointer devices.
+ * Zero desktop regressions: desktop viewports (>900px fine pointer) ignore
+ * these rules completely.
+ * ============================================================================
+ */
+
+/* ============================================================================
+   1. DESKTOP BASELINE - Hide all mobile-specific elements completely
+   ============================================================================ */
+#vtt-mobile-nav,
+#vtt-mobile-tools-fab,
+#vtt-mobile-tools-menu,
+#vtt-mobile-backdrop,
+#vtt-mobile-combat-pill,
+#vtt-mobile-placement-banner,
+#vtt-mobile-install-banner,
+#vtt-mobile-radial-dial,
+#vtt-mobile-sheet-carousel,
+#vtt-mobile-shape-pill,
+#vtt-mobile-shape-sheet,
+#vtt-mobile-maptools-sheet,
+.mobile-only,
+.mobile-sheet-topbar,
+.mobile-drawer-header,
+.mobile-more-grid,
+.btn-mobile-spawn-token,
+.asset-mobile-spawn-btn,
+.btn-mobile-spawn-asset,
+.mobile-sheet-spawn-btn {
+    display: none !important;
+}
+
+/* Universal Touch Elements: Hidden by class only */
+#vtt-mobile-drag-pill.vtt-hidden,
+#vtt-mobile-radial-dial.vtt-hidden,
+#vtt-mobile-sheet-carousel.vtt-hidden,
+#vtt-mobile-combat-pill.vtt-hidden,
+#vtt-mobile-placement-banner.vtt-hidden,
+#vtt-mobile-install-banner.vtt-hidden {
+    display: none !important;
+}
+
+#vtt-mobile-drag-pill {
+    display: flex;
+    position: fixed;
+    z-index: 1500;
+    pointer-events: none;
+    background: rgba(15, 23, 42, 0.94);
+    border: 1.5px solid #d4af37;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.75), 0 0 12px rgba(212, 175, 55, 0.4);
+    padding: 6px 14px;
+    border-radius: 20px;
+    color: #fef08a;
+    font-size: 0.95rem;
+    font-weight: 700;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+    transform: translate(-50%, -140%);
+    transition: opacity 0.15s ease;
+}
+
+#vtt-mobile-token-actions {
+    display: flex;
+    position: fixed;
+    z-index: 840;
+    gap: 8px;
+    background: rgba(14, 18, 27, 0.95);
+    border: 1px solid rgba(212, 175, 55, 0.45);
+    border-radius: 24px;
+    padding: 4px 8px;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.75), 0 0 15px rgba(212, 175, 55, 0.25);
+    transform: translate(-50%, -130%);
+    animation: fadeInQuickAction 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ============================================================================
+   2. MOBILE & TOUCH MEDIA QUERY
+   ============================================================================ */
+@media screen and (max-width: 900px),
+screen and (pointer: coarse) and (max-width: 1366px) {
+
+    /* --- Root & Safe Area Helpers --- */
+    :root {
+        --mobile-bottom-nav-h: 56px;
+        --safe-bottom: env(safe-area-inset-bottom, 0px);
+        --total-bottom-space: calc(var(--mobile-bottom-nav-h) + var(--safe-bottom));
+    }
+
+    html,
+    body {
+        overflow: hidden;
+        position: fixed;
+        width: 100vw;
+        height: 100dvh;
+        -webkit-tap-highlight-color: transparent;
+        -webkit-touch-callout: none !important;
+        overscroll-behavior: none !important;
+        touch-action: manipulation;
+    }
+
+    /* --- Main Workspace Layout --- */
+    #vtt-workspace {
+        display: block !important;
+        position: relative !important;
+        width: 100vw !important;
+        height: 100dvh !important;
+        overflow: hidden !important;
+        overscroll-behavior: none !important;
+        grid-template-columns: none !important;
+    }
+
+    /* --- Hide Desktop Left Toolbar (Replaced by Mobile FAB) --- */
+    #vtt-controls {
+        display: none !important;
+    }
+
+    /* --- Fullscreen Canvas Viewport --- */
+    #vtt-canvas-viewport {
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100dvh !important;
+        z-index: 10 !important;
+        overflow: hidden !important;
+        overscroll-behavior: none !important;
+        touch-action: none !important;
+        -webkit-touch-callout: none !important;
+    }
+
+    #vtt-canvas-interaction,
+    #canvas-container {
+        touch-action: none !important;
+        -webkit-touch-callout: none !important;
+        -webkit-user-select: none !important;
+        user-select: none !important;
+    }
+
+    /* Position Bottom-Left Coordinates above Mobile Bottom Nav */
+    #vtt-coordinates-indicator {
+        bottom: calc(var(--total-bottom-space) + 10px) !important;
+        left: 12px !important;
+        z-index: 50 !important;
+        font-size: 0.72rem !important;
+        padding: 4px 10px !important;
+        border-radius: 12px !important;
+        background: rgba(14, 18, 27, 0.85) !important;
+        border: 1px solid rgba(212, 175, 55, 0.2) !important;
+    }
+
+    /* ========================================================================
+       3. MOBILE BACKDROP OVERLAY
+       ======================================================================== */
+    #vtt-mobile-backdrop {
+        display: block !important;
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100dvh !important;
+        background: rgba(0, 0, 0, 0.65) !important;
+        z-index: 850 !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+        transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }
+
+    #vtt-mobile-backdrop.active {
+        opacity: 1 !important;
+        pointer-events: auto !important;
+    }
+
+    /* ========================================================================
+       4. MOBILE FLOATING TOOL FAB & PALETTE
+       ======================================================================== */
+    #vtt-mobile-tools-fab {
+        display: flex !important;
+        position: fixed !important;
+        top: calc(14px + env(safe-area-inset-top, 0px)) !important;
+        left: calc(14px + env(safe-area-inset-left, 0px)) !important;
+        width: 46px !important;
+        height: 46px !important;
+        border-radius: 50% !important;
+        background: rgba(18, 24, 38, 0.92) !important;
+        border: 1.5px solid rgba(212, 175, 55, 0.45) !important;
+        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.55), 0 0 10px rgba(212, 175, 55, 0.15) !important;
+        color: #f5c242 !important;
+        font-size: 1.15rem !important;
+        align-items: center !important;
+        justify-content: center !important;
+        z-index: 800 !important;
+        cursor: pointer !important;
+        transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease !important;
+    }
+
+    #vtt-mobile-tools-fab:active {
+        transform: scale(0.92) !important;
+        background: rgba(26, 35, 56, 0.98) !important;
+    }
+
+    #vtt-mobile-tools-fab.active {
+        background: rgba(212, 175, 55, 0.25) !important;
+        border-color: #f5c242 !important;
+        color: #ffffff !important;
+    }
+
+    #vtt-mobile-tools-menu {
+        display: none !important;
+        flex-direction: column !important;
+        position: fixed !important;
+        top: 68px !important;
+        left: 14px !important;
+        min-width: 190px !important;
+        background: rgba(15, 20, 31, 0.96) !important;
+        border: 1px solid rgba(212, 175, 55, 0.35) !important;
+        border-radius: 14px !important;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.65), 0 0 15px rgba(212, 175, 55, 0.1) !important;
+        z-index: 810 !important;
+        padding: 6px !important;
+        gap: 4px !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+        transform: translateY(-8px) scale(0.96) !important;
+        transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1), transform 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }
+
+    #vtt-mobile-tools-menu.active {
+        display: flex !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
+        transform: translateY(0) scale(1) !important;
+    }
+
+    /* ========================================================================
+       FULL SHEET FOCUS: Auto-suppress floating tabletop overlays when sheets/drawers are open
+       ======================================================================== */
+    body.mobile-sheet-open #vtt-mobile-tools-fab,
+    body.mobile-sheet-open #vtt-mobile-tools-menu,
+    body.mobile-sheet-open #vtt-mobile-combat-pill,
+    body.mobile-sheet-open #vtt-initiative-carousel-container,
+    body.mobile-sheet-open #vtt-sidebar-zoom,
+    body.mobile-sheet-open #vtt-mobile-nav,
+    body.mobile-sheet-open #vtt-coordinates-indicator,
+    body:has(#player-sheet-panel.open) #vtt-mobile-tools-fab,
+    body:has(#player-sheet-panel.open) #vtt-mobile-tools-menu,
+    body:has(#player-sheet-panel.open) #vtt-mobile-combat-pill,
+    body:has(#player-sheet-panel.open) #vtt-initiative-carousel-container,
+    body:has(#player-sheet-panel.open) #vtt-sidebar-zoom,
+    body:has(#player-sheet-panel.open) #vtt-mobile-nav,
+    body:has(#player-sheet-panel.open) #vtt-sidebar,
+    body:has(#player-sheet-panel.open) #vtt-coordinates-indicator,
+    body:has(#player-sheet-panel:not(.minimized)) #vtt-mobile-tools-fab,
+    body:has(#player-sheet-panel:not(.minimized)) #vtt-mobile-tools-menu,
+    body:has(#player-sheet-panel:not(.minimized)) #vtt-mobile-combat-pill,
+    body:has(#player-sheet-panel:not(.minimized)) #vtt-initiative-carousel-container,
+    body:has(#player-sheet-panel:not(.minimized)) #vtt-sidebar-zoom,
+    body:has(#player-sheet-panel:not(.minimized)) #vtt-mobile-nav,
+    body:has(#player-sheet-panel:not(.minimized)) #vtt-coordinates-indicator,
+    body:has(#creature-sheet-panel.open) #vtt-mobile-tools-fab,
+    body:has(#creature-sheet-panel.open) #vtt-mobile-tools-menu,
+    body:has(#creature-sheet-panel.open) #vtt-mobile-combat-pill,
+    body:has(#creature-sheet-panel.open) #vtt-initiative-carousel-container,
+    body:has(#creature-sheet-panel.open) #vtt-sidebar-zoom,
+    body:has(#creature-sheet-panel.open) #vtt-mobile-nav,
+    body:has(#creature-sheet-panel.open) #vtt-sidebar,
+    body:has(#creature-sheet-panel.open) #vtt-coordinates-indicator,
+    body:has(#creature-sheet-panel:not(.minimized)) #vtt-mobile-tools-fab,
+    body:has(#creature-sheet-panel:not(.minimized)) #vtt-mobile-tools-menu,
+    body:has(#creature-sheet-panel:not(.minimized)) #vtt-mobile-combat-pill,
+    body:has(#creature-sheet-panel:not(.minimized)) #vtt-initiative-carousel-container,
+    body:has(#creature-sheet-panel:not(.minimized)) #vtt-sidebar-zoom,
+    body:has(#creature-sheet-panel:not(.minimized)) #vtt-mobile-nav,
+    body:has(#creature-sheet-panel:not(.minimized)) #vtt-coordinates-indicator,
+    body:has(#vtt-sidebar.mobile-drawer-open) #vtt-mobile-tools-fab,
+    body:has(#vtt-sidebar.mobile-drawer-open) #vtt-mobile-tools-menu,
+    body:has(#vtt-sidebar.mobile-drawer-open) #vtt-mobile-combat-pill,
+    body:has(#vtt-sidebar.mobile-drawer-open) #vtt-initiative-carousel-container,
+    body:has(#vtt-sidebar.mobile-drawer-open) #vtt-sidebar-zoom,
+    body:has(#vtt-sidebar.mobile-drawer-open) #vtt-coordinates-indicator,
+    body:has(.vtt-mobile-bottom-sheet:not(.vtt-hidden)) #vtt-mobile-nav,
+    body:has(.vtt-mobile-bottom-sheet:not(.vtt-hidden)) #vtt-initiative-carousel-container,
+    body:has(.vtt-mobile-bottom-sheet:not(.vtt-hidden)) #vtt-coordinates-indicator,
+    body:has(.vtt-mobile-bottom-sheet:not(.vtt-hidden)) #vtt-mobile-tools-fab,
+    body:has(.vtt-mobile-bottom-sheet:not(.vtt-hidden)) #vtt-slideout-tabs,
+    body:has(.vtt-mobile-bottom-sheet:not(.vtt-hidden)) .slideout-tabs-container,
+    body:has(.vtt-mobile-bottom-sheet:not(.vtt-hidden)) .slideout-tab-wrapper,
+    body:has(.vtt-mobile-bottom-sheet:not(.vtt-hidden)) .slideout-tab-handle,
+    body:has(.vtt-mobile-bottom-sheet:not(.vtt-hidden)) #creature-sheet-tabs-container,
+    body:has(.vtt-mobile-bottom-sheet:not(.vtt-hidden)) .tab-tooltip-popout,
+    body:has(.vtt-mobile-bottom-sheet:not(.vtt-hidden)) .tab-tooltip-close,
+    body:has(.vtt-mobile-bottom-sheet:not(.vtt-hidden)) #creature-sheet-panel,
+    body:has(.vtt-mobile-bottom-sheet:not(.vtt-hidden)) #player-sheet-panel,
+    body:has(#pc-character-builder-modal:not(.vtt-hidden)) #vtt-mobile-nav,
+    body:has(#pc-character-builder-modal:not(.vtt-hidden)) #vtt-initiative-carousel-container,
+    body:has(#pc-character-builder-modal:not(.vtt-hidden)) #vtt-coordinates-indicator,
+    body:has(#pc-character-builder-modal:not(.vtt-hidden)) #vtt-mobile-tools-fab,
+    body:has(#pc-character-builder-modal:not(.vtt-hidden)) #vtt-slideout-tabs,
+    body:has(#pc-character-builder-modal:not(.vtt-hidden)) .slideout-tabs-container,
+    body:has(#pc-character-builder-modal:not(.vtt-hidden)) .slideout-tab-wrapper,
+    body:has(#pc-character-builder-modal:not(.vtt-hidden)) .slideout-tab-handle,
+    body:has(#pc-character-builder-modal:not(.vtt-hidden)) #creature-sheet-tabs-container,
+    body:has(#pc-character-builder-modal:not(.vtt-hidden)) .tab-tooltip-popout,
+    body:has(#pc-character-builder-modal:not(.vtt-hidden)) .tab-tooltip-close,
+    body:has(#pc-character-builder-modal:not(.vtt-hidden)) #creature-sheet-panel,
+    body:has(#pc-character-builder-modal:not(.vtt-hidden)) #player-sheet-panel {
+        display: none !important;
+    }
+
+    .mobile-tool-item.vtt-hidden,
+    .mobile-tool-item.gm-only.vtt-hidden {
+        display: none !important;
+    }
+
+    .mobile-tool-item {
+        display: flex !important;
+        align-items: center !important;
+        gap: 12px !important;
+        padding: 10px 14px !important;
+        border-radius: 10px !important;
+        background: transparent !important;
+        border: none !important;
+        color: #d1d5db !important;
+        font-size: 0.9rem !important;
+        font-weight: 500 !important;
+        cursor: pointer !important;
+        text-align: left !important;
+        width: 100% !important;
+        transition: background-color 0.15s ease, color 0.15s ease !important;
+    }
+
+    .mobile-tool-item i {
+        font-size: 1rem !important;
+        width: 20px !important;
+        text-align: center !important;
+        color: #f5c242 !important;
+    }
+
+    .mobile-tool-item.active {
+        background: rgba(212, 175, 55, 0.2) !important;
+        color: #ffffff !important;
+        font-weight: 600 !important;
+    }
+
+    .mobile-tool-item.paused {
+        background: rgba(245, 194, 66, 0.2) !important;
+        color: #fcd34d !important;
+        font-weight: 600 !important;
+    }
+
+    .mobile-tool-item.mobile-tool-xcard i {
+        color: #ef4444 !important;
+    }
+
+    .mobile-tool-item.mobile-tool-xcard {
+        color: #fca5a5 !important;
+    }
+
+    .mobile-tool-item.active-paused {
+        background: rgba(239, 68, 68, 0.2) !important;
+        color: #fca5a5 !important;
+        font-weight: 600 !important;
+    }
+
+    .mobile-tool-item:active {
+        background: rgba(255, 255, 255, 0.1) !important;
+    }
+
+    .mobile-tool-divider {
+        height: 1px !important;
+        background: rgba(255, 255, 255, 0.1) !important;
+        margin: 4px 6px !important;
+    }
+
+    /* ========================================================================
+       5. MOBILE BOTTOM NAVIGATION BAR
+       ======================================================================== */
+    #vtt-mobile-nav {
+        display: flex !important;
+        position: fixed !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: var(--total-bottom-space) !important;
+        padding-bottom: var(--safe-bottom) !important;
+        background: #0a0e17 !important;
+        backdrop-filter: blur(20px) !important;
+        -webkit-backdrop-filter: blur(20px) !important;
+        border-top: 1px solid rgba(212, 175, 55, 0.3) !important;
+        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.6) !important;
+        z-index: 1000 !important;
+        align-items: center !important;
+        justify-content: space-around !important;
+        user-select: none !important;
+    }
+
+    .mobile-nav-btn {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        flex: 1 !important;
+        height: var(--mobile-bottom-nav-h) !important;
+        background: transparent !important;
+        border: none !important;
+        color: #8a99ad !important;
+        font-size: 0.68rem !important;
+        font-weight: 500 !important;
+        gap: 3px !important;
+        cursor: pointer !important;
+        position: relative !important;
+        padding: 4px 2px !important;
+        transition: color 0.2s ease, transform 0.15s ease !important;
+    }
+
+    .mobile-nav-btn i {
+        font-size: 1.15rem !important;
+        transition: transform 0.2s ease !important;
+    }
+
+    .mobile-nav-btn.active {
+        color: #f5c242 !important;
+        font-weight: 700 !important;
+    }
+
+    .mobile-nav-btn.active i {
+        transform: translateY(-2px) scale(1.1) !important;
+        filter: drop-shadow(0 0 6px rgba(245, 194, 66, 0.6)) !important;
+    }
+
+    .mobile-nav-btn:active {
+        transform: scale(0.94) !important;
+    }
+
+    .mobile-nav-badge {
+        position: absolute !important;
+        top: 4px !important;
+        right: 22% !important;
+        background: #e63946 !important;
+        color: #ffffff !important;
+        font-size: 0.62rem !important;
+        font-weight: 700 !important;
+        padding: 2px 6px !important;
+        border-radius: 10px !important;
+        box-shadow: 0 2px 6px rgba(230, 57, 70, 0.5) !important;
+        pointer-events: none !important;
+    }
+
+    /* ========================================================================
+       6. RIGHT SIDEBAR -> MOBILE FULL DRAWER
+       ======================================================================== */
+    #vtt-sidebar {
+        display: flex !important;
+        flex-direction: column !important;
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: calc(100dvh - var(--total-bottom-space)) !important;
+        max-width: 100vw !important;
+        z-index: 900 !important;
+        background: rgba(13, 17, 27, 0.98) !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        border: none !important;
+        border-bottom: 1px solid rgba(212, 175, 55, 0.25) !important;
+        transform: translateY(100dvh) !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+        transition: transform 0.3s cubic-bezier(0.33, 1, 0.68, 1), visibility 0.3s !important;
+        box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.7) !important;
+        padding: 0 !important;
+        gap: 0 !important;
+    }
+
+    #vtt-sidebar.mobile-drawer-open {
+        transform: translateY(0) !important;
+        visibility: visible !important;
+        pointer-events: auto !important;
+    }
+
+    #vtt-sidebar-resizer {
+        display: none !important;
+    }
+
+    /* Hide desktop vertical tab strip inside sidebar on mobile */
+    #vtt-sidebar .sidebar-tabs {
+        display: none !important;
+    }
+
+    #vtt-sidebar .sidebar-content {
+        height: 100% !important;
+        width: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        overflow: hidden !important;
+        position: relative !important;
+        right: 0 !important;
+        transform: none !important;
+        opacity: 1 !important;
+        visibility: inherit !important;
+        pointer-events: auto !important;
+        border: none !important;
+        box-shadow: none !important;
+    }
+
+    /* Drawer Header with Title, Back Button and Close Button */
+    .mobile-drawer-header {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        height: 50px !important;
+        min-height: 50px !important;
+        padding: 0 14px !important;
+        background: rgba(18, 25, 40, 0.98) !important;
+        border-bottom: 1.5px solid rgba(212, 175, 55, 0.25) !important;
+        flex-shrink: 0 !important;
+        z-index: 100 !important;
+    }
+
+    .mobile-drawer-left {
+        display: flex !important;
+        align-items: center !important;
+        gap: 10px !important;
+    }
+
+    .mobile-drawer-back-btn {
+        width: 32px !important;
+        height: 32px !important;
+        border-radius: 8px !important;
+        background: rgba(255, 255, 255, 0.08) !important;
+        border: 1px solid rgba(212, 175, 55, 0.3) !important;
+        color: #f5c242 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        cursor: pointer !important;
+    }
+
+    .mobile-drawer-back-btn.vtt-hidden {
+        display: none !important;
+    }
+
+    .mobile-drawer-title {
+        font-family: var(--font-heading, 'Cinzel', serif) !important;
+        font-size: 1.05rem !important;
+        font-weight: 700 !important;
+        color: #f5c242 !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+    }
+
+    .mobile-drawer-close {
+        width: 36px !important;
+        height: 36px !important;
+        border-radius: 50% !important;
+        background: rgba(255, 255, 255, 0.08) !important;
+        border: 1px solid rgba(255, 255, 255, 0.15) !important;
+        color: #d1d5db !important;
+        font-size: 1rem !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        cursor: pointer !important;
+        transition: background-color 0.15s ease, color 0.15s ease !important;
+    }
+
+    .mobile-drawer-close:active {
+        background: rgba(230, 57, 70, 0.3) !important;
+        color: #ff6b6b !important;
+    }
+
+    /* Tab panels inside mobile sidebar - MUST BE RELATIVE FLEX CHILD SO IT NEVER OVERLAYS DRAWER HEADER */
+    #vtt-sidebar .tab-panel {
+        position: relative !important;
+        top: auto !important;
+        left: auto !important;
+        width: 100% !important;
+        flex: 1 !important;
+        height: calc(100% - 50px) !important;
+        max-height: calc(100% - 50px) !important;
+        display: none !important;
+        flex-direction: column !important;
+        overflow-y: auto !important;
+    }
+
+    #vtt-sidebar .tab-panel.active {
+        display: flex !important;
+    }
+
+    /* Ensure Library internal tabs header doesn't blow out on mobile */
+    .library-tabs-header {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        width: 100% !important;
+        padding: 0 !important;
+    }
+
+    /* Spawn Token button on Bestiary rows */
+    .btn-mobile-spawn-token {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 34px !important;
+        height: 34px !important;
+        min-width: 34px !important;
+        border-radius: 8px !important;
+        background: rgba(212, 175, 55, 0.22) !important;
+        border: 1px solid rgba(212, 175, 55, 0.6) !important;
+        color: #f5c242 !important;
+        font-size: 0.95rem !important;
+        cursor: pointer !important;
+        margin-left: 6px !important;
+        flex-shrink: 0 !important;
+        transition: transform 0.15s ease, background-color 0.15s ease !important;
+    }
+
+    .btn-mobile-spawn-token:active {
+        transform: scale(0.92) !important;
+        background: rgba(212, 175, 55, 0.45) !important;
+    }
+
+    /* Spawn button in Creature Sheet Topbar */
+    .mobile-sheet-spawn-btn {
+        display: flex !important;
+        align-items: center !important;
+        gap: 6px !important;
+        padding: 6px 12px !important;
+        border-radius: 8px !important;
+        background: rgba(212, 175, 55, 0.25) !important;
+        border: 1px solid rgba(212, 175, 55, 0.6) !important;
+        color: #f5c242 !important;
+        font-size: 0.85rem !important;
+        font-weight: 700 !important;
+        cursor: pointer !important;
+    }
+
+    .mobile-sheet-spawn-btn:active {
+        background: rgba(212, 175, 55, 0.5) !important;
+        transform: scale(0.94) !important;
+    }
+
+    /* Dedicated 'More' Grid Hub */
+    .mobile-more-grid {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 14px !important;
+        padding: 16px !important;
+    }
+
+    .mobile-more-card {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        padding: 22px 14px !important;
+        border-radius: 14px !important;
+        background: rgba(20, 27, 43, 0.92) !important;
+        border: 1px solid rgba(212, 175, 55, 0.3) !important;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5) !important;
+        gap: 10px !important;
+        color: #e2e8f0 !important;
+        text-align: center !important;
+        cursor: pointer !important;
+        user-select: none !important;
+        transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease !important;
+    }
+
+    .mobile-more-card:active {
+        transform: scale(0.95) !important;
+        background: rgba(30, 42, 68, 0.98) !important;
+        border-color: #f5c242 !important;
+    }
+
+    .mobile-more-card i {
+        font-size: 1.8rem !important;
+        color: #f5c242 !important;
+    }
+
+    .mobile-more-card span {
+        font-size: 0.88rem !important;
+        font-weight: 600 !important;
+        font-family: var(--font-heading, 'Cinzel', serif) !important;
+    }
+
+    /* ========================================================================
+       7. CHAT & FAST DICE ROLLER ADAPTATIONS
+       ======================================================================== */
+    #tab-chat {
+        display: flex !important;
+        flex-direction: column !important;
+        height: 100% !important;
+    }
+
+    #chat-messages {
+        flex: 1 !important;
+        overflow-y: auto !important;
+        padding: 12px !important;
+    }
+
+    .chat-input-area {
+        flex-shrink: 0 !important;
+        background: rgba(16, 22, 35, 0.95) !important;
+        border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+        padding: 8px 10px !important;
+    }
+
+    .fast-dice-bar {
+        display: flex !important;
+        overflow-x: auto !important;
+        gap: 6px !important;
+        padding: 4px 2px 8px 2px !important;
+        scrollbar-width: none !important;
+    }
+
+    .fast-dice-bar::-webkit-scrollbar {
+        display: none !important;
+    }
+
+    .fast-dice {
+        min-width: 42px !important;
+        height: 36px !important;
+        flex-shrink: 0 !important;
+        font-size: 0.85rem !important;
+        font-weight: 700 !important;
+        border-radius: 8px !important;
+    }
+
+    #chat-input {
+        font-size: 16px !important;
+        /* Prevents auto-zoom in Safari iOS */
+        height: 42px !important;
+        border-radius: 10px !important;
+    }
+
+    #btn-chat-send {
+        width: 44px !important;
+        height: 42px !important;
+        border-radius: 10px !important;
+    }
+
+    /* ========================================================================
+       8. CHARACTER & CREATURE SHEETS (FULLSCREEN MOBILE OVERLAYS)
+       ======================================================================== */
+    #player-sheet-panel,
+    #creature-sheet-panel {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100dvh !important;
+        max-width: 100vw !important;
+        z-index: 1100 !important;
+        border: none !important;
+        background: rgba(10, 14, 23, 0.99) !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        transform: translateY(100%) !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+        transition: transform 0.32s cubic-bezier(0.33, 1, 0.68, 1), visibility 0.32s !important;
+        display: flex !important;
+        flex-direction: column !important;
+        overflow: hidden !important;
+        padding-top: calc(52px + env(safe-area-inset-top, 0px)) !important;
+    }
+
+    #player-sheet-panel.open,
+    #creature-sheet-panel.open {
+        transform: translateY(0) !important;
+        visibility: visible !important;
+        pointer-events: auto !important;
+    }
+
+    #player-sheet-panel.minimized,
+    #creature-sheet-panel.minimized {
+        transform: translateY(100%) !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+    }
+
+    /* Hide desktop minimize arrow buttons */
+    #player-sheet-minimize-btn,
+    #creature-sheet-minimize-btn {
+        display: none !important;
+    }
+
+    #player-sheet-content,
+    #creature-sheet-content,
+    .ps-tabs-body {
+        padding-bottom: calc(76px + env(safe-area-inset-bottom, 0px)) !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Mobile Sheet Top Bar */
+    .mobile-sheet-topbar {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        padding: 10px 14px !important;
+        background: rgba(18, 25, 40, 0.95) !important;
+        border-bottom: 1.5px solid rgba(212, 175, 55, 0.3) !important;
+        flex-shrink: 0 !important;
+        z-index: 10 !important;
+    }
+
+    .mobile-sheet-info {
+        display: flex !important;
+        align-items: center !important;
+        gap: 10px !important;
+        min-width: 0 !important;
+    }
+
+    .mobile-sheet-avatar {
+        width: 38px !important;
+        height: 38px !important;
+        border-radius: 50% !important;
+        border: 1.5px solid #f5c242 !important;
+        object-fit: cover !important;
+        flex-shrink: 0 !important;
+    }
+
+    .mobile-sheet-details {
+        display: flex !important;
+        flex-direction: column !important;
+        min-width: 0 !important;
+    }
+
+    .mobile-sheet-name {
+        font-family: var(--font-heading, 'Cinzel', serif) !important;
+        font-size: 0.95rem !important;
+        font-weight: 700 !important;
+        color: #f5c242 !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+    }
+
+    .mobile-sheet-hp-pill {
+        font-size: 0.72rem !important;
+        font-weight: 600 !important;
+        color: #4ade80 !important;
+    }
+
+    .mobile-sheet-close-btn {
+        width: 40px !important;
+        height: 40px !important;
+        border-radius: 50% !important;
+        background: rgba(255, 255, 255, 0.1) !important;
+        border: 1px solid rgba(255, 255, 255, 0.18) !important;
+        color: #ffffff !important;
+        font-size: 1.15rem !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        cursor: pointer !important;
+        flex-shrink: 0 !important;
+    }
+
+    .mobile-sheet-close-btn:active {
+        background: rgba(230, 57, 70, 0.4) !important;
+    }
+
+    /* Player Sheet Inner Tabs Header on Mobile */
+    .ps-tabs-header {
+        overflow-x: auto !important;
+        scrollbar-width: none !important;
+        padding: 4px 6px !important;
+        background: rgba(14, 19, 31, 0.9) !important;
+        gap: 4px !important;
+    }
+
+    .ps-tabs-header::-webkit-scrollbar {
+        display: none !important;
+    }
+
+    .ps-tab-btn {
+        padding: 10px 14px !important;
+        font-size: 0.85rem !important;
+        min-height: 44px !important;
+        border-radius: 8px !important;
+        white-space: nowrap !important;
+    }
+
+    .ps-tab-btn.active {
+        background: rgba(212, 175, 55, 0.2) !important;
+        color: #f5c242 !important;
+        border-bottom: 2px solid #f5c242 !important;
+    }
+
+    /* ========================================================================
+       PHASE 2: TOUCH-FRIENDLY TAP TARGETS & BUTTON SIZING (>= 36px)
+       ======================================================================== */
+    /* 1. Ability Score Grid & Roll Action Pills */
+    .cs-ability-grid {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 8px !important;
+        margin-bottom: 16px !important;
+    }
+
+    .cs-ability-cell {
+        overflow: visible !important;
+        padding: 8px 6px !important;
+        border: 1px solid var(--color-border-subtle, rgba(255, 255, 255, 0.1)) !important;
+        border-radius: 8px !important;
+        background: rgba(255, 255, 255, 0.02) !important;
+    }
+
+    .cs-ability-actions {
+        position: static !important;
+        height: auto !important;
+        width: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 6px !important;
+        margin-top: 6px !important;
+        background: transparent !important;
+        border: none !important;
+    }
+
+    .cs-ability-actions > div {
+        width: 100% !important;
+        background: transparent !important;
+        padding: 0 !important;
+        display: flex !important;
+    }
+
+    .cs-ability-action-btn,
+    .cs-roll-check,
+    .cs-roll-save,
+    .pc-roll-check,
+    .pc-roll-save {
+        min-height: 36px !important;
+        height: 36px !important;
+        min-width: 36px !important;
+        width: 100% !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        box-sizing: border-box !important;
+        background: rgba(212, 175, 55, 0.15) !important;
+        border: 1px solid rgba(212, 175, 55, 0.35) !important;
+        border-radius: 6px !important;
+        font-size: 0.75rem !important;
+        font-weight: 700 !important;
+        color: var(--color-gold-light, #fef08a) !important;
+        touch-action: manipulation !important;
+        cursor: pointer !important;
+    }
+
+    .cs-ability-action-btn:active,
+    .cs-roll-check:active,
+    .cs-roll-save:active,
+    .pc-roll-check:active,
+    .pc-roll-save:active {
+        background: rgba(212, 175, 55, 0.35) !important;
+        transform: scale(0.96) !important;
+    }
+
+    /* 2. HP, Temp HP & Hero Points Steppers (+ / -) */
+    .cs-hp-btn {
+        width: 38px !important;
+        height: 38px !important;
+        min-width: 38px !important;
+        min-height: 38px !important;
+        border-radius: 6px !important;
+        font-size: 1.25rem !important;
+        line-height: 1 !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        touch-action: manipulation !important;
+        cursor: pointer !important;
+        background: rgba(255, 255, 255, 0.08) !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    }
+
+    .cs-hp-btn:active {
+        background: rgba(212, 175, 55, 0.3) !important;
+        border-color: var(--color-gold-base, #d4af37) !important;
+        transform: scale(0.95) !important;
+    }
+
+    #pc-hp-current-input,
+    #pc-temp-hp-current,
+    #pc-hero-points-input {
+        min-height: 36px !important;
+        height: 36px !important;
+        min-width: 44px !important;
+        font-size: 1.05rem !important;
+        text-align: center !important;
+        box-sizing: border-box !important;
+    }
+
+    #pc-prof-armor,
+    #pc-prof-languages,
+    #pc-prof-tools,
+    #pc-prof-weapons {
+        min-height: 36px !important;
+        padding: 6px 10px !important;
+        box-sizing: border-box !important;
+    }
+
+    /* 3. Death Save Checkboxes & Bubbles */
+    div:has(> #pc-roll-death-save) {
+        flex-wrap: wrap !important;
+        gap: 10px !important;
+        justify-content: center !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    input.pc-ds-failure,
+    input.pc-ds-success {
+        width: 32px !important;
+        height: 32px !important;
+        min-width: 32px !important;
+        min-height: 32px !important;
+        cursor: pointer !important;
+        touch-action: manipulation !important;
+        margin: 2px 3px !important;
+    }
+
+    /* 4. Action Buttons, Locator Tabs & Mini Controls */
+    .locator-tab-btn {
+        width: 38px !important;
+        height: 38px !important;
+        min-width: 38px !important;
+        min-height: 38px !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        touch-action: manipulation !important;
+    }
+
+    #btn-gm-broadcast-view.btn.btn-icon {
+        width: 38px !important;
+        height: 38px !important;
+        min-width: 38px !important;
+        min-height: 38px !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    .tab-tooltip-popout,
+    .tab-tooltip-close {
+        min-width: 36px !important;
+        min-height: 36px !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        touch-action: manipulation !important;
+    }
+
+    .slideout-tab-handle {
+        width: 36px !important;
+        min-width: 36px !important;
+        min-height: 48px !important;
+        touch-action: manipulation !important;
+    }
+
+    .slideout-tab-handle:hover,
+    .slideout-tab-handle.active {
+        width: 38px !important;
+    }
+
+    .mobile-sheet-spawn-btn {
+        min-height: 38px !important;
+        padding: 6px 14px !important;
+    }
+
+    button.dice-chip {
+        min-height: 36px !important;
+        min-width: 36px !important;
+        padding: 6px 10px !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        touch-action: manipulation !important;
+    }
+
+    .btn.btn-xs {
+        min-height: 36px !important;
+        padding: 6px 12px !important;
+        font-size: 0.85rem !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        touch-action: manipulation !important;
+    }
+
+    #player-sheet-panel .btn.btn-secondary,
+    #creature-sheet-panel .btn.btn-secondary,
+    #pc-open-character-builder-btn,
+    #pc-assign-players-btn,
+    #pc-btn-popout {
+        min-height: 38px !important;
+        min-width: 38px !important;
+        padding: 8px 14px !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        touch-action: manipulation !important;
+    }
+
+    .pc-reset-hd.btn,
+    .pc-roll-hd.btn {
+        min-height: 36px !important;
+        padding: 6px 12px !important;
+    }
+
+    /* Mobile Capsule Controls & Touch Target Expansion */
+    .ps-segmented-capsule,
+    .cs-segmented-capsule {
+        height: 36px !important;
+        padding: 2px 4px !important;
+    }
+
+    .ps-roll-mode-btn,
+    .cs-roll-mode-btn {
+        min-height: 32px !important;
+        min-width: 46px !important;
+        font-size: 0.82rem !important;
+        padding: 4px 8px !important;
+    }
+
+    .ps-whisper-btn,
+    .cs-whisper-btn {
+        min-height: 32px !important;
+        min-width: 44px !important;
+        padding: 4px 8px !important;
+    }
+
+    #ps-btn-sheet-settings,
+    #cs-btn-sheet-settings {
+        min-width: 36px !important;
+        min-height: 36px !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    /* ========================================================================
+       PHASE 3: ENHANCED TYPOGRAPHY & LEGIBILITY (>= 11.5px)
+       ======================================================================== */
+    /* 1. Ability Score Labels & Prominent Modifiers */
+    .cs-ability-label {
+        font-size: 0.8rem !important;
+        font-weight: 700 !important;
+        letter-spacing: 0.5px !important;
+        color: var(--color-gold-light, #fef08a) !important;
+        text-transform: uppercase !important;
+    }
+
+    .cs-ability-mod {
+        font-size: 0.95rem !important;
+        font-weight: 700 !important;
+        color: #ffffff !important;
+        line-height: 1.2 !important;
+    }
+
+    /* 2. Skill & Tool Ability Parentheticals and Secondary Text */
+    #player-sheet-panel .pc-skill-btn span[style*="font-size"],
+    #player-sheet-panel .pc-skill-row span[style*="font-size"],
+    #player-sheet-panel span[style*="font-size:0.7rem"],
+    #player-sheet-panel span[style*="font-size: 0.7rem"],
+    #player-sheet-panel span[style*="font-size:0.65rem"],
+    #player-sheet-panel span[style*="font-size: 0.65rem"],
+    #player-sheet-panel span[style*="font-size:0.6rem"],
+    #player-sheet-panel span[style*="font-size: 0.6rem"] {
+        font-size: 0.8rem !important;
+        color: #ffffff !important;
+        font-weight: 600 !important;
+    }
+
+    /* 3. Statblock Combat Metrics, Stat Pills & Badges */
+    .cs-combat-stat-label {
+        font-size: 0.78rem !important;
+        color: var(--color-gold-light, #fef08a) !important;
+        font-weight: 700 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.5px !important;
+    }
+
+    .cs-stat-pill,
+    .cs-stat-pill span {
+        font-size: 0.78rem !important;
+        color: #ffffff !important;
+        font-weight: 600 !important;
+    }
+
+    .cs-cr-badge {
+        font-size: 0.78rem !important;
+        font-weight: 700 !important;
+    }
+
+    .mobile-sheet-hp-pill {
+        font-size: 0.8rem !important;
+        font-weight: 700 !important;
+    }
+
+    #cs-toggle-all-btn,
+    #cs-toggle-all-btn span {
+        font-size: 0.78rem !important;
+        font-weight: 600 !important;
+    }
+
+    .dice-chip,
+    button.dice-chip {
+        font-size: 0.8rem !important;
+        font-weight: 700 !important;
+    }
+
+    /* 4. Minimalist Compact Action & Status Badges */
+    .badge,
+    span.badge,
+    .pc-badge {
+        font-size: 0.75rem !important;
+        font-weight: 700 !important;
+        padding: 1px 4px !important;
+        line-height: 1.2 !important;
+    }
+
+    /* ========================================================================
+       PHASE 4: CHARACTER BUILDER & MOBILE TOOL SHEETS ADAPTATION
+       ======================================================================== */
+    /* 1. Character Builder Full Screen Modal */
+    #pc-character-builder-modal {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100dvh !important;
+        max-width: 100vw !important;
+        max-height: 100dvh !important;
+        transform: none !important;
+        border-radius: 0 !important;
+        box-sizing: border-box !important;
+        display: flex !important;
+        flex-direction: column !important;
+        z-index: 3015 !important;
+        background: rgba(10, 14, 23, 0.99) !important;
+        overflow: hidden !important;
+    }
+
+    #pc-character-builder-modal.vtt-hidden {
+        display: none !important;
+    }
+
+    /* 2. Builder Mode Toggles & Close Button */
+    #pc-builder-mode-create,
+    #pc-builder-mode-levelup {
+        min-height: 38px !important;
+        font-size: 0.82rem !important;
+        font-weight: 600 !important;
+        padding: 6px 12px !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        touch-action: manipulation !important;
+    }
+
+    #pc-builder-close-btn {
+        min-width: 40px !important;
+        min-height: 40px !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        font-size: 1.4rem !important;
+        touch-action: manipulation !important;
+    }
+
+    /* 3. Builder Step Navigation (4x2 Wrapped Grid) */
+    .pc-builder-step-nav {
+        display: grid !important;
+        grid-template-columns: repeat(4, 1fr) !important;
+        gap: 4px !important;
+        padding: 6px !important;
+        overflow-x: visible !important;
+        white-space: normal !important;
+        background: rgba(8, 11, 20, 0.98) !important;
+        flex-shrink: 0 !important;
+    }
+
+    .pc-builder-tab {
+        padding: 6px 4px !important;
+        font-size: 0.78rem !important;
+        min-height: 38px !important;
+        border-radius: 6px !important;
+        border: 1px solid rgba(255, 255, 255, 0.08) !important;
+        background: rgba(255, 255, 255, 0.02) !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 2px !important;
+        text-align: center !important;
+        box-sizing: border-box !important;
+        touch-action: manipulation !important;
+    }
+
+    .pc-builder-tab span {
+        font-size: 0.78rem !important;
+    }
+
+    .pc-builder-tab.active {
+        background: rgba(212, 175, 55, 0.15) !important;
+        border-color: var(--color-gold-base, #d4af37) !important;
+        color: var(--color-gold-light, #fef08a) !important;
+    }
+
+    .pc-builder-tab .step-idx {
+        width: 18px !important;
+        height: 18px !important;
+        min-width: 18px !important;
+        min-height: 18px !important;
+        font-size: 0.75rem !important;
+        font-weight: 700 !important;
+    }
+
+    /* 4. Builder Step Body & Point-Buy Table */
+    #pc-builder-body {
+        flex: 1 1 0 !important;
+        min-height: 0 !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        padding: 12px !important;
+        box-sizing: border-box !important;
+    }
+
+    #pc-character-builder-modal table {
+        display: block !important;
+        overflow-x: auto !important;
+        max-width: 100% !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+
+    .pc-pb-btn {
+        width: 36px !important;
+        height: 36px !important;
+        min-width: 36px !important;
+        min-height: 36px !important;
+        font-size: 1.15rem !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        touch-action: manipulation !important;
+    }
+
+    /* 5. Builder Sticky Footer Navigation */
+    #pc-character-builder-modal > div:last-child {
+        flex-direction: column !important;
+        flex-shrink: 0 !important;
+        gap: 8px !important;
+        padding: 8px 12px calc(8px + env(safe-area-inset-bottom, 0px)) !important;
+        box-sizing: border-box !important;
+        width: 100% !important;
+        background: rgba(10, 14, 24, 0.98) !important;
+        z-index: 10 !important;
+    }
+
+    #pc-builder-footer-counts {
+        font-size: 0.75rem !important;
+        justify-content: center !important;
+        text-align: center !important;
+        width: 100% !important;
+    }
+
+    #pc-character-builder-modal > div:last-child > div:last-child {
+        display: flex !important;
+        width: 100% !important;
+        justify-content: space-between !important;
+        gap: 6px !important;
+    }
+
+    #pc-builder-cancel-btn,
+    #pc-wizard-back-btn,
+    #pc-wizard-next-btn,
+    #pc-builder-apply-btn {
+        flex: 1 !important;
+        min-height: 38px !important;
+        padding: 6px 8px !important;
+        font-size: 0.8rem !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        touch-action: manipulation !important;
+        white-space: nowrap !important;
+    }
+
+    /* 6. Tool Sheets Swatches & Steppers */
+    .vtt-color-swatch {
+        width: 36px !important;
+        height: 36px !important;
+        min-width: 36px !important;
+        min-height: 36px !important;
+        touch-action: manipulation !important;
+    }
+
+    #btn-mobile-trap-dc-minus,
+    #btn-mobile-trap-dc-plus {
+        min-width: 38px !important;
+        min-height: 38px !important;
+        touch-action: manipulation !important;
+    }
+
+    /* 7. Mobile Nav Labels & Badges */
+    .mobile-nav-btn span:last-child {
+        font-size: 0.75rem !important;
+    }
+
+    #mobile-init-badge.mobile-nav-badge {
+        font-size: 0.72rem !important;
+    }
+
+    /* ========================================================================
+       9. INITIATIVE TRACKER MOBILE ADAPTATION (SLIM RIGHT EDGE DOCK)
+       ======================================================================== */
+    #vtt-initiative-carousel-container {
+        position: fixed !important;
+        top: 64px !important;
+        right: 8px !important;
+        left: auto !important;
+        bottom: auto !important;
+        width: 64px !important;
+        max-width: 64px !important;
+        height: calc(100dvh - 64px - var(--total-bottom-space, 56px) - 12px) !important;
+        max-height: calc(100dvh - 64px - var(--total-bottom-space, 56px) - 12px) !important;
+        z-index: 950 !important;
+        background: transparent !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        border: none !important;
+        box-shadow: none !important;
+        transform: none !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        pointer-events: none !important;
+    }
+
+    #vtt-initiative-carousel-container>* {
+        pointer-events: auto !important;
+    }
+
+    #vtt-initiative-carousel-container.vtt-hidden {
+        display: none !important;
+    }
+
+    /* Hide the oversized mobile drawer header inside the slim 64px right dock */
+    #vtt-initiative-carousel-container .mobile-drawer-header {
+        display: none !important;
+    }
+
+    /* Hide desktop drag handle and resize corner on mobile */
+    #btn-init-drag,
+    #init-resize-handle,
+    #hud-init-position,
+    #btn-init-orientation,
+    #btn-init-minimize {
+        display: none !important;
+    }
+
+    .init-scroll-wrapper {
+        flex: 1 !important;
+        height: auto !important;
+        overflow-y: auto !important;
+        max-height: none !important;
+        width: 64px !important;
+    }
+
+    .init-carousel-list {
+        flex-direction: column !important;
+        height: auto !important;
+        padding: 4px 0 !important;
+        gap: 6px !important;
+        width: 64px !important;
+    }
+
+    .init-controls-bottom {
+        padding: 6px 0 !important;
+        background: rgba(18, 25, 40, 0.95) !important;
+        border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+        border-radius: 8px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 4px !important;
+        width: 64px !important;
+        align-items: center !important;
+    }
+
+    .init-controls-bottom button {
+        min-height: 36px !important;
+        min-width: 36px !important;
+        font-size: 0.95rem !important;
+        border-radius: 8px !important;
+    }
+
+    /* Mobile Tap-to-Inspect Action Sheet */
+    .vtt-mobile-init-sheet {
+        position: fixed !important;
+        inset: 0 !important;
+        z-index: 1100 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: flex-end !important;
+    }
+
+    .vtt-mobile-init-sheet.vtt-hidden {
+        display: none !important;
+    }
+
+    .mobile-init-sheet-backdrop {
+        position: absolute !important;
+        inset: 0 !important;
+        background: rgba(0, 0, 0, 0.65) !important;
+        backdrop-filter: blur(4px) !important;
+        -webkit-backdrop-filter: blur(4px) !important;
+    }
+
+    .mobile-init-sheet-panel {
+        position: relative !important;
+        z-index: 10 !important;
+        background: rgba(15, 23, 42, 0.98) !important;
+        border-top: 1.5px solid rgba(212, 175, 55, 0.4) !important;
+        border-radius: 20px 20px 0 0 !important;
+        padding: 12px 18px 24px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 12px !important;
+        box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.8) !important;
+        animation: sheetSlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+
+    @keyframes sheetSlideUp {
+        from {
+            transform: translateY(100%);
+        }
+
+        to {
+            transform: translateY(0);
+        }
+    }
+
+    .mobile-init-sheet-handle {
+        width: 38px !important;
+        height: 4px !important;
+        border-radius: 2px !important;
+        background: rgba(255, 255, 255, 0.2) !important;
+        margin: 0 auto 4px !important;
+    }
+
+    .mobile-init-sheet-header {
+        display: flex !important;
+        align-items: center !important;
+        gap: 12px !important;
+    }
+
+    .mobile-init-sheet-avatar-slot {
+        width: 50px !important;
+        height: 50px !important;
+        border-radius: 50% !important;
+        overflow: hidden !important;
+        flex-shrink: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        border: 2px solid #d4af37 !important;
+        background: #0f172a !important;
+    }
+
+    .mobile-init-sheet-avatar-slot img,
+    .mobile-init-sheet-avatar-slot video {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+    }
+
+    .mobile-init-sheet-info {
+        flex: 1 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 4px !important;
+        overflow: hidden !important;
+    }
+
+    .mobile-init-sheet-name {
+        font-family: var(--font-heading, sans-serif) !important;
+        font-size: 1.05rem !important;
+        font-weight: 700 !important;
+        color: #f8fafc !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+    }
+
+    .mobile-init-sheet-meta {
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+        font-size: 0.8rem !important;
+        color: #94a3b8 !important;
+    }
+
+    .mobile-init-sheet-hp {
+        padding: 2px 7px !important;
+        border-radius: 6px !important;
+        background: rgba(34, 197, 94, 0.15) !important;
+        border: 1px solid rgba(34, 197, 94, 0.4) !important;
+        font-weight: 700 !important;
+    }
+
+    .mobile-init-sheet-score-val {
+        color: #d4af37 !important;
+        font-family: var(--font-code, monospace) !important;
+    }
+
+    .mobile-init-sheet-close {
+        width: 36px !important;
+        height: 36px !important;
+        border-radius: 50% !important;
+        background: rgba(255, 255, 255, 0.08) !important;
+        border: 1px solid rgba(255, 255, 255, 0.15) !important;
+        color: #cbd5e1 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        cursor: pointer !important;
+    }
+
+    .mobile-drawer-back-btn.vtt-hidden {
+        display: none !important;
+    }
+
+    .mobile-init-sheet-actions {
+        display: flex !important;
+        gap: 8px !important;
+    }
+
+    .mobile-init-sheet-btn {
+        flex: 1 !important;
+        min-height: 44px !important;
+        border-radius: 10px !important;
+        background: rgba(255, 255, 255, 0.08) !important;
+        border: 1px solid rgba(255, 255, 255, 0.18) !important;
+        color: #f8fafc !important;
+        font-size: 0.82rem !important;
+        font-weight: 600 !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 6px !important;
+        cursor: pointer !important;
+    }
+
+    .mobile-init-sheet-btn:active {
+        background: rgba(212, 175, 55, 0.25) !important;
+        border-color: #d4af37 !important;
+    }
+
+    .mobile-init-sheet-btn--danger {
+        color: #f87171 !important;
+        border-color: rgba(239, 68, 68, 0.35) !important;
+    }
+
+    .mobile-init-sheet-btn--danger:active {
+        background: rgba(239, 68, 68, 0.3) !important;
+    }
+
+    .mobile-init-sheet-edit-row {
+        display: flex !important;
+        gap: 8px !important;
+        margin-top: 4px !important;
+    }
+
+    .mobile-init-sheet-input {
+        flex: 1 !important;
+        min-height: 42px !important;
+        border-radius: 8px !important;
+        background: rgba(0, 0, 0, 0.5) !important;
+        border: 1.5px solid #d4af37 !important;
+        color: #ffd700 !important;
+        font-family: var(--font-code, monospace) !important;
+        font-size: 1rem !important;
+        font-weight: 700 !important;
+        padding: 0 12px !important;
+    }
+
+    .mobile-init-sheet-save-btn {
+        min-height: 42px !important;
+        padding: 0 20px !important;
+        border-radius: 8px !important;
+        background: #d4af37 !important;
+        color: #0d1117 !important;
+        font-weight: 700 !important;
+        border: none !important;
+        cursor: pointer !important;
+    }
+
+    /* ========================================================================
+       10. GENERAL MODALS & DIALOGS RESPONSIVENESS
+       ======================================================================== */
+    .vtt-overlay-panel .login-card,
+    .vtt-overlay-panel .modal-content,
+    #modal-bestiary-filter .login-card {
+        width: 94vw !important;
+        max-width: 94vw !important;
+        max-height: 88dvh !important;
+        padding: 20px 16px !important;
+        overflow-y: auto !important;
+    }
+
+    /* Floating tool panels docked as mobile bottom sheets */
+    #panel-layers-config:not(.vtt-hidden),
+    #panel-lighting-config:not(.vtt-hidden) {
+        position: fixed !important;
+        left: 0 !important;
+        right: 0 !important;
+        top: auto !important;
+        bottom: var(--total-bottom-space, 56px) !important;
+        width: 100vw !important;
+        max-width: 100vw !important;
+        max-height: 70dvh !important;
+        border-radius: 16px 16px 0 0 !important;
+        box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.8) !important;
+        padding: 16px 18px !important;
+        overflow-y: auto !important;
+        z-index: 900 !important;
+    }
+
+    /* ========================================================================
+       10B. CAMPAIGN MAP MANAGER MOBILE RESPONSIVENESS
+       ======================================================================== */
+    .map-manager-modal-content {
+        width: 100vw !important;
+        max-width: 100vw !important;
+        height: calc(100dvh - var(--total-bottom-space, 56px)) !important;
+        max-height: calc(100dvh - var(--total-bottom-space, 56px)) !important;
+        border-radius: 16px 16px 0 0 !important;
+        padding: 12px 14px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        overflow-y: hidden !important;
+    }
+
+    .map-manager-header-row {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 8px !important;
+        margin-bottom: 8px !important;
+        padding-bottom: 8px !important;
+    }
+
+    .map-manager-header-row>div:last-child {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 6px !important;
+        justify-content: flex-end !important;
+    }
+
+    .map-manager-body {
+        flex-direction: column !important;
+        gap: 8px !important;
+        overflow-y: hidden !important;
+        margin-top: 2px !important;
+    }
+
+    /* Convert desktop 220px vertical sidebar into top horizontal folder pill bar */
+    .map-manager-sidebar {
+        width: 100% !important;
+        min-width: 0 !important;
+        max-height: none !important;
+        padding: 6px 8px !important;
+        flex-shrink: 0 !important;
+        background: rgba(0, 0, 0, 0.35) !important;
+        border: 1px solid rgba(212, 175, 55, 0.25) !important;
+        border-radius: 8px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 4px !important;
+        overflow: visible !important;
+    }
+
+    .map-sidebar-header {
+        padding: 2px 2px 4px 2px !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+    }
+
+    .map-folder-nav-list {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        gap: 6px !important;
+        padding: 4px 2px !important;
+    }
+
+    .map-folder-nav-item {
+        white-space: nowrap !important;
+        flex-shrink: 0 !important;
+        padding: 4px 10px !important;
+        border-radius: 16px !important;
+        font-size: 0.76rem !important;
+        background: rgba(255, 255, 255, 0.06) !important;
+    }
+
+    .map-folder-nav-item.active {
+        background: rgba(212, 175, 55, 0.25) !important;
+        border-color: var(--color-gold-base) !important;
+        color: #f5c242 !important;
+    }
+
+    .map-manager-main {
+        flex: 1 !important;
+        min-height: 0 !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+
+    .map-manager-grid {
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)) !important;
+        gap: 10px !important;
+        padding: 4px !important;
+    }
+
+    .map-card-thumb-wrap {
+        height: 95px !important;
+    }
+
+    .map-card-name {
+        font-size: 0.8rem !important;
+    }
+
+    #map-create-panel {
+        max-height: 65vh !important;
+        overflow-y: auto !important;
+        padding: 12px !important;
+    }
+
+    #map-create-panel .flex-row {
+        flex-direction: column !important;
+        gap: 8px !important;
+    }
+
+    /* ========================================================================
+       10C. CAMPAIGN HANDOUTS IMPORTER MOBILE RESPONSIVENESS (STEP WIZARD)
+       ======================================================================== */
+    .import-handout-modal-content {
+        width: 100vw !important;
+        max-width: 100vw !important;
+        height: calc(100dvh - var(--total-bottom-space, 56px)) !important;
+        max-height: calc(100dvh - var(--total-bottom-space, 56px)) !important;
+        border-radius: 16px 16px 0 0 !important;
+        padding: 0 !important;
+        display: flex !important;
+        flex-direction: column !important;
+    }
+
+    .import-handout-header {
+        padding: 10px 14px !important;
+        flex-shrink: 0 !important;
+    }
+
+    .import-wizard-body {
+        flex: 1 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        min-height: 0 !important;
+        overflow-y: hidden !important;
+    }
+
+    .import-pane {
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+        flex: 1 !important;
+        min-height: 0 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        border-right: none !important;
+    }
+
+    .import-handout-footer {
+        padding: 10px 14px calc(12px + var(--safe-bottom, 0px)) !important;
+        flex-shrink: 0 !important;
+        flex-direction: column !important;
+        gap: 8px !important;
+        background: rgba(12, 16, 26, 0.98) !important;
+        border-top: 1px solid rgba(212, 175, 55, 0.3) !important;
+    }
+
+    .import-wizard-actions {
+        width: 100% !important;
+        display: flex !important;
+        gap: 8px !important;
+    }
+
+    .import-wizard-actions button {
+        flex: 1 !important;
+        min-height: 42px !important;
+    }
+
+    /* Mobile Login Card & Inputs (Prevent iOS Safari auto-zoom) */
+    .login-split-container {
+        padding: 10px !important;
+        width: 100vw !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+    }
+
+    .login-form-pane .login-card {
+        width: 92vw !important;
+        max-width: 420px !important;
+        padding: 24px 16px !important;
+        margin: auto !important;
+    }
+
+    .login-body .form-group input,
+    .login-body .form-group select,
+    #input-gm-password {
+        font-size: 16px !important;
+        /* Prevents auto-zoom on iOS */
+        min-height: 46px !important;
+    }
+
+    .login-body .btn-primary {
+        min-height: 48px !important;
+        font-size: 1rem !important;
+    }
+
+    /* Token Locator Button & Panel (Avoids overlapping Mobile Tool FAB) */
+    #btn-token-locator {
+        top: 14px !important;
+        left: 70px !important;
+        z-index: 40 !important;
+    }
+
+    #btn-token-locator.panel-open {
+        left: 88px !important;
+    }
+
+    #vtt-token-locator-panel {
+        z-index: 40 !important;
+    }
+
+    /* ========================================================================
+       11. TOKEN RIGHT-CLICK / LONG-PRESS CONTEXT MENU MOBILE OPTIMIZATIONS
+       ======================================================================== */
+    .vtt-token-context-menu {
+        max-width: 88vw !important;
+        max-height: 75dvh !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8), 0 0 15px rgba(212, 175, 55, 0.2) !important;
+        border-radius: 12px !important;
+        font-size: 0.9rem !important;
+    }
+
+    /* Centered Mobile Modal Popup for Token Context Menu */
+    .vtt-token-context-menu.mobile-modal-mode {
+        position: fixed !important;
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%) !important;
+        width: 88vw !important;
+        max-width: 360px !important;
+        max-height: 78dvh !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        z-index: 1300 !important;
+        border: 1.5px solid rgba(212, 175, 55, 0.55) !important;
+        box-shadow: 0 12px 48px rgba(0, 0, 0, 0.92), 0 0 24px rgba(212, 175, 55, 0.25) !important;
+        animation: mobileModalPop 0.18s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+
+    @keyframes mobileModalPop {
+        from {
+            opacity: 0;
+            transform: translate(-50%, -46%) scale(0.96);
+        }
+
+        to {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+    }
+
+    .vtt-token-menu-item {
+        padding: 10px 14px !important;
+        min-height: 42px !important;
+    }
+
+    /* Mobile Tap-to-Expand Accordion Submenus */
+    .vtt-token-menu-item .vtt-token-submenu {
+        position: static !important;
+        width: 100% !important;
+        left: auto !important;
+        top: auto !important;
+        border-left: 2px solid rgba(212, 175, 55, 0.4) !important;
+        margin-top: 6px !important;
+        padding-left: 8px !important;
+        background: rgba(0, 0, 0, 0.3) !important;
+        border-radius: 6px !important;
+        box-shadow: none !important;
+        display: none;
+    }
+
+    .vtt-token-menu-item.submenu-expanded .vtt-token-submenu {
+        display: block !important;
+    }
+
+    /* Context menu touch optimization */
+    .context-menu {
+        min-width: 210px !important;
+        padding: 6px !important;
+        border-radius: 14px !important;
+    }
+
+    .btn-ctx-item {
+        padding: 12px 14px !important;
+        font-size: 0.95rem !important;
+    }
+
+    /* ========================================================================
+       12. MOBILE MEASURE & AOE SHAPE FLOATING UI & BOTTOM SHEET
+       ======================================================================== */
+    /* Hide desktop floating measure, map tools, and paint ribbon panels on mobile */
+    #panel-measure-config,
+    #panel-map-tools {
+        display: none !important;
+    }
+
+    #panel-measure-config,
+    #panel-map-tools,
+    #panel-paint-ribbon {
+        display: none !important;
+    }
+
+    /* Floating Shape Button (Placed next to Tabletop Tools FAB on top-left) */
+    #vtt-mobile-shape-pill {
+        display: flex !important;
+        position: fixed !important;
+        top: calc(14px + env(safe-area-inset-top, 0px)) !important;
+        left: calc(68px + env(safe-area-inset-left, 0px)) !important;
+        bottom: auto !important;
+        right: auto !important;
+        height: 46px !important;
+        padding: 0 16px !important;
+        border-radius: 23px !important;
+        background: rgba(14, 18, 27, 0.92) !important;
+        border: 1.5px solid rgba(212, 175, 55, 0.45) !important;
+        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.6), 0 0 12px rgba(212, 175, 55, 0.25) !important;
+        color: #ffffff !important;
+        font-size: 0.85rem !important;
+        font-weight: 600 !important;
+        align-items: center !important;
+        gap: 8px !important;
+        z-index: 810 !important;
+        cursor: pointer !important;
+        transition: transform 0.15s ease, background 0.15s ease !important;
+        touch-action: manipulation !important;
+        user-select: none !important;
+        -webkit-user-select: none !important;
+    }
+
+    #vtt-mobile-shape-pill.vtt-hidden {
+        display: none !important;
+    }
+
+    #vtt-mobile-shape-pill:active {
+        transform: scale(0.95) !important;
+        background: rgba(212, 175, 55, 0.2) !important;
+    }
+
+    #vtt-mobile-shape-pill .color-dot {
+        width: 10px !important;
+        height: 10px !important;
+        border-radius: 50% !important;
+        display: inline-block !important;
+        background: #eab308;
+        box-shadow: 0 0 6px currentColor !important;
+    }
+
+    /* Mobile Shape & Color Bottom Sheet */
+    .vtt-mobile-bottom-sheet {
+        position: fixed !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        background: rgba(14, 18, 27, 0.98) !important;
+        border-top: 1px solid rgba(212, 175, 55, 0.4) !important;
+        border-radius: 20px 20px 0 0 !important;
+        box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.8) !important;
+        padding: 12px 18px calc(18px + var(--safe-bottom, 0px)) !important;
+        z-index: 1200 !important;
+        animation: slideUpSheet 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+
+    .vtt-mobile-bottom-sheet.vtt-hidden {
+        display: none !important;
+    }
+
+    #vtt-mobile-shape-sheet:not(.vtt-hidden),
+    #vtt-mobile-maptools-sheet:not(.vtt-hidden) {
+        display: flex !important;
+        flex-direction: column !important;
+    }
+
+    @keyframes slideUpSheet {
+        from {
+            transform: translateY(100%);
+            opacity: 0;
+        }
+
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    .vtt-sheet-handle {
+        width: 38px !important;
+        height: 4px !important;
+        background: rgba(255, 255, 255, 0.3) !important;
+        border-radius: 4px !important;
+        margin: 0 auto 12px auto !important;
+    }
+
+    .vtt-sheet-header {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        margin-bottom: 14px !important;
+    }
+
+    .vtt-sheet-header h4 {
+        margin: 0 !important;
+        font-size: 1rem !important;
+        font-weight: 700 !important;
+        color: #f1f5f9 !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+    }
+
+    .vtt-sheet-close {
+        background: rgba(255, 255, 255, 0.1) !important;
+        border: none !important;
+        color: #94a3b8 !important;
+        width: 32px !important;
+        height: 32px !important;
+        border-radius: 50% !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        cursor: pointer !important;
+    }
+
+    .mobile-drawer-back-btn.vtt-hidden {
+        display: none !important;
+    }
+
+    .vtt-sheet-close:active {
+        background: rgba(239, 68, 68, 0.25) !important;
+        color: #ef4444 !important;
+    }
+
+    .vtt-shape-grid {
+        display: grid !important;
+        grid-template-columns: repeat(5, 1fr) !important;
+        gap: 8px !important;
+        margin-bottom: 16px !important;
+    }
+
+    .vtt-shape-opt {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 6px !important;
+        padding: 12px 6px !important;
+        border-radius: 12px !important;
+        background: rgba(255, 255, 255, 0.05) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        color: #cbd5e1 !important;
+        font-size: 0.75rem !important;
+        font-weight: 600 !important;
+        cursor: pointer !important;
+        transition: all 0.15s ease !important;
+    }
+
+    .vtt-shape-opt i {
+        font-size: 1.25rem !important;
+        color: #d4af37 !important;
+    }
+
+    .vtt-shape-opt.active {
+        background: rgba(212, 175, 55, 0.25) !important;
+        border-color: #d4af37 !important;
+        color: #ffffff !important;
+        box-shadow: 0 0 12px rgba(212, 175, 55, 0.3) !important;
+    }
+
+    .vtt-color-picker-row {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        padding-top: 8px !important;
+        border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+    }
+
+    .vtt-color-label {
+        font-size: 0.85rem !important;
+        font-weight: 600 !important;
+        color: #94a3b8 !important;
+    }
+
+    .vtt-color-swatches {
+        display: flex !important;
+        gap: 12px !important;
+    }
+
+    .vtt-color-swatch {
+        width: 32px !important;
+        height: 32px !important;
+        border-radius: 50% !important;
+        border: 2px solid transparent !important;
+        cursor: pointer !important;
+        transition: transform 0.15s ease, border-color 0.15s ease !important;
+    }
+
+    .vtt-color-swatch.active {
+        border-color: #ffffff !important;
+        transform: scale(1.15) !important;
+        box-shadow: 0 0 10px currentColor !important;
+    }
+
+    /* ========================================================================
+       13. FLOATING DISTANCE READOUT PILL (ALWAYS ON TOKEN DRAG ON MOBILE)
+       ======================================================================== */
+    #vtt-mobile-drag-pill {
+        display: flex !important;
+        position: fixed !important;
+        z-index: 1500 !important;
+        pointer-events: none !important;
+        background: rgba(15, 23, 42, 0.94) !important;
+        border: 1.5px solid #d4af37 !important;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.75), 0 0 12px rgba(212, 175, 55, 0.4) !important;
+        padding: 6px 14px !important;
+        border-radius: 20px !important;
+        color: #fef08a !important;
+        font-size: 0.95rem !important;
+        font-weight: 700 !important;
+        align-items: center !important;
+        gap: 8px !important;
+        white-space: nowrap !important;
+        transform: translate(-50%, -140%) !important;
+        transition: opacity 0.15s ease !important;
+    }
+
+    #vtt-mobile-drag-pill.vtt-hidden {
+        display: none !important;
+    }
+
+    #vtt-mobile-drag-pill i {
+        color: #d4af37 !important;
+        font-size: 0.9rem !important;
+    }
+
+    /* ========================================================================
+       14. MOBILE UNIFIED RADIAL TOUCH DIAL
+       ======================================================================== */
+    #vtt-mobile-radial-dial {
+        display: block !important;
+        position: fixed !important;
+        z-index: 850 !important;
+        width: 170px !important;
+        height: 170px !important;
+        transform: translate(-50%, -50%) !important;
+        pointer-events: none !important;
+        animation: popRadialDial 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        user-select: none !important;
+        -webkit-user-select: none !important;
+    }
+
+    #vtt-mobile-radial-dial.vtt-hidden {
+        display: none !important;
+    }
+
+    @keyframes popRadialDial {
+        from {
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.82);
+        }
+
+        to {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+    }
+
+    .radial-dial-ring {
+        position: absolute !important;
+        inset: 12px !important;
+        border-radius: 50% !important;
+        border: 1.5px dashed rgba(212, 175, 55, 0.35) !important;
+        pointer-events: none !important;
+    }
+
+    .radial-center-hub {
+        pointer-events: auto !important;
+        position: absolute !important;
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%) !important;
+        width: 44px !important;
+        height: 44px !important;
+        border-radius: 50% !important;
+        background: rgba(15, 23, 42, 0.96) !important;
+        border: 1.5px solid #f5c242 !important;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.8), 0 0 12px rgba(212, 175, 55, 0.3) !important;
+        color: #f5c242 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        cursor: pointer !important;
+        font-size: 0.75rem !important;
+        font-weight: 700 !important;
+        transition: transform 0.12s ease !important;
+    }
+
+    .radial-center-hub:active {
+        transform: translate(-50%, -50%) scale(0.92) !important;
+    }
+
+    .radial-hub-size {
+        display: block !important;
+    }
+
+    .radial-hub-close {
+        display: none !important;
+    }
+
+    .radial-center-hub:hover .radial-hub-size {
+        display: none !important;
+    }
+
+    .radial-center-hub:hover .radial-hub-close {
+        display: block !important;
+        color: #ef4444 !important;
+    }
+
+    .radial-node {
+        pointer-events: auto !important;
+        position: absolute !important;
+        width: 40px !important;
+        height: 40px !important;
+        border-radius: 50% !important;
+        background: rgba(15, 23, 42, 0.95) !important;
+        border: 1.5px solid rgba(212, 175, 55, 0.5) !important;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.8), 0 0 8px rgba(212, 175, 55, 0.2) !important;
+        color: #f8fafc !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        cursor: pointer !important;
+        padding: 0 !important;
+        transition: transform 0.12s ease, background-color 0.12s ease, border-color 0.12s ease !important;
+    }
+
+    .radial-node i {
+        font-size: 0.82rem !important;
+        color: #f5c242 !important;
+        line-height: 1 !important;
+    }
+
+    .radial-node-label {
+        font-size: 0.52rem !important;
+        font-weight: 700 !important;
+        line-height: 1 !important;
+        color: #cbd5e1 !important;
+        margin-top: 2px !important;
+    }
+
+    .radial-node:active {
+        transform: translate(-50%, -50%) scale(1.15) !important;
+        background: rgba(212, 175, 55, 0.35) !important;
+        border-color: #f5c242 !important;
+    }
+
+    /* Angular Radial Node Offsets (R = 66px) */
+    .node-top {
+        top: calc(50% - 66px) !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%) !important;
+    }
+
+    .node-top-right {
+        top: calc(50% - 47px) !important;
+        left: calc(50% + 47px) !important;
+        transform: translate(-50%, -50%) !important;
+    }
+
+    .node-right {
+        top: 50% !important;
+        left: calc(50% + 66px) !important;
+        transform: translate(-50%, -50%) !important;
+    }
+
+    .node-bottom-right {
+        top: calc(50% + 47px) !important;
+        left: calc(50% + 47px) !important;
+        transform: translate(-50%, -50%) !important;
+    }
+
+    .node-bottom-left {
+        top: calc(50% + 47px) !important;
+        left: calc(50% - 47px) !important;
+        transform: translate(-50%, -50%) !important;
+    }
+
+    .node-left {
+        top: 50% !important;
+        left: calc(50% - 66px) !important;
+        transform: translate(-50%, -50%) !important;
+    }
+
+    .node-top-left {
+        top: calc(50% - 47px) !important;
+        left: calc(50% - 47px) !important;
+        transform: translate(-50%, -50%) !important;
+    }
+
+    /* ========================================================================
+       14C. MOBILE SHEET SWITCHER CAROUSEL (REMOVED - USE TOKEN LOCATOR / NAV TABS)
+       ======================================================================== */
+    #vtt-mobile-sheet-carousel {
+        display: none !important;
+    }
+
+    #vtt-mobile-sheet-carousel.vtt-hidden {
+        display: none !important;
+    }
+
+    .mobile-sheet-track {
+        display: flex !important;
+        align-items: center !important;
+        gap: 10px !important;
+        padding: 0 14px !important;
+        width: 100% !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        scrollbar-width: none !important;
+    }
+
+    .mobile-sheet-track::-webkit-scrollbar {
+        display: none !important;
+    }
+
+    .mobile-sheet-chip {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 36px !important;
+        height: 36px !important;
+        border-radius: 50% !important;
+        flex-shrink: 0 !important;
+        cursor: pointer !important;
+        position: relative !important;
+        background: #1e293b !important;
+        border: 2px solid #64748b !important;
+        transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease !important;
+        overflow: hidden !important;
+    }
+
+    .mobile-sheet-chip:active {
+        transform: scale(0.92) !important;
+    }
+
+    .mobile-sheet-chip.chip-pc {
+        border-color: #22c55e !important;
+    }
+
+    .mobile-sheet-chip.chip-npc {
+        border-color: #a855f7 !important;
+    }
+
+    .mobile-sheet-chip.chip-creature {
+        border-color: #f59e0b !important;
+    }
+
+    .mobile-sheet-chip.chip-active {
+        border-color: #f5c242 !important;
+        box-shadow: 0 0 12px rgba(245, 194, 66, 0.8) !important;
+        transform: scale(1.12) !important;
+    }
+
+    .mobile-sheet-chip img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+        border-radius: 50% !important;
+    }
+
+    .mobile-sheet-chip .chip-monogram {
+        font-size: 0.72rem !important;
+        font-weight: 700 !important;
+        color: #f8fafc !important;
+    }
+
+    /* Eco Mode Indicators */
+    #mobile-fab-eco-badge {
+        position: absolute !important;
+        top: -3px !important;
+        right: -3px !important;
+        width: 18px !important;
+        height: 18px !important;
+        border-radius: 50% !important;
+        background: #16a34a !important;
+        color: #ffffff !important;
+        border: 1.5px solid #0f172a !important;
+        font-size: 0.62rem !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        box-shadow: 0 0 8px rgba(34, 197, 94, 0.8) !important;
+    }
+
+    #mobile-fab-eco-badge.vtt-hidden {
+        display: none !important;
+    }
+
+    #mobile-tool-eco.active {
+        background: rgba(34, 197, 94, 0.25) !important;
+        border-color: rgba(34, 197, 94, 0.6) !important;
+    }
+
+    #mobile-tool-eco.active i {
+        color: #4ade80 !important;
+        text-shadow: 0 0 10px rgba(74, 222, 128, 0.8) !important;
+    }
+
+    /* ========================================================================
+       14B. MOBILE FLOATING COMBAT PILL & PLACEMENT BANNER
+       ======================================================================== */
+    #vtt-mobile-combat-pill {
+        display: flex !important;
+        position: fixed !important;
+        top: calc(14px + env(safe-area-inset-top, 0px)) !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        z-index: 820 !important;
+        background: rgba(14, 18, 27, 0.95) !important;
+        border: 1.5px solid rgba(212, 175, 55, 0.5) !important;
+        border-radius: 24px !important;
+        padding: 4px 10px 4px 6px !important;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.75), 0 0 14px rgba(212, 175, 55, 0.25) !important;
+        align-items: center !important;
+        gap: 8px !important;
+        cursor: pointer !important;
+        user-select: none !important;
+        -webkit-user-select: none !important;
+        max-width: calc(100vw - 120px) !important;
+        transition: transform 0.15s ease, background-color 0.15s ease !important;
+    }
+
+    #vtt-mobile-combat-pill:active {
+        transform: translateX(-50%) scale(0.96) !important;
+    }
+
+    .mobile-combat-pill-left {
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+        min-width: 0 !important;
+    }
+
+    .mobile-combat-pill-avatar {
+        width: 32px !important;
+        height: 32px !important;
+        border-radius: 50% !important;
+        border: 1.5px solid #f5c242 !important;
+        object-fit: cover !important;
+        flex-shrink: 0 !important;
+        background: #1e293b !important;
+    }
+
+    .mobile-combat-pill-info {
+        display: flex !important;
+        flex-direction: column !important;
+        min-width: 0 !important;
+    }
+
+    .mobile-combat-pill-name {
+        font-family: var(--font-heading, 'Cinzel', serif) !important;
+        font-size: 0.85rem !important;
+        font-weight: 700 !important;
+        color: #f5c242 !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        max-width: 130px !important;
+    }
+
+    .mobile-combat-pill-sub {
+        display: flex !important;
+        align-items: center !important;
+        gap: 6px !important;
+        font-size: 0.68rem !important;
+        color: #94a3b8 !important;
+        font-weight: 600 !important;
+    }
+
+    .mobile-combat-pill-hp {
+        color: #4ade80 !important;
+    }
+
+    .mobile-combat-pill-actions {
+        display: flex !important;
+        align-items: center !important;
+        gap: 4px !important;
+        margin-left: 4px !important;
+    }
+
+    .mobile-combat-pill-btn {
+        width: 28px !important;
+        height: 28px !important;
+        border-radius: 50% !important;
+        background: rgba(255, 255, 255, 0.1) !important;
+        border: 1px solid rgba(212, 175, 55, 0.3) !important;
+        color: #f5c242 !important;
+        font-size: 0.75rem !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        cursor: pointer !important;
+    }
+
+    .mobile-drawer-back-btn.vtt-hidden {
+        display: none !important;
+    }
+
+    .mobile-combat-pill-btn:active {
+        background: rgba(212, 175, 55, 0.35) !important;
+        color: #ffffff !important;
+    }
+
+    /* Tap-to-Place Alert Banner */
+    #vtt-mobile-placement-banner {
+        display: flex !important;
+        position: fixed !important;
+        top: calc(14px + env(safe-area-inset-top, 0px)) !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        z-index: 1400 !important;
+        background: rgba(15, 23, 42, 0.96) !important;
+        border: 1.5px solid #f59e0b !important;
+        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.8), 0 0 16px rgba(245, 158, 11, 0.35) !important;
+        border-radius: 24px !important;
+        padding: 6px 14px !important;
+        align-items: center !important;
+        gap: 12px !important;
+        white-space: nowrap !important;
+        animation: none !important;
+    }
+
+    .placement-banner-content {
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+    }
+
+    .placement-banner-content i {
+        font-size: 1.1rem !important;
+        color: #f59e0b !important;
+    }
+
+    .placement-banner-text {
+        display: flex !important;
+        align-items: center !important;
+        gap: 5px !important;
+        font-size: 0.82rem !important;
+    }
+
+    .placement-banner-title {
+        color: #94a3b8 !important;
+    }
+
+    .placement-banner-target {
+        font-weight: 700 !important;
+        color: #fef08a !important;
+        max-width: 120px !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        white-space: nowrap !important;
+    }
+
+    /* Mobile Install & Fullscreen Immersion Banner */
+    #vtt-mobile-install-banner {
+        display: flex !important;
+        position: fixed !important;
+        top: calc(12px + env(safe-area-inset-top, 0px)) !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        z-index: 1450 !important;
+        background: rgba(15, 23, 42, 0.94) !important;
+        backdrop-filter: blur(12px) !important;
+        -webkit-backdrop-filter: blur(12px) !important;
+        border: 1.5px solid rgba(245, 194, 66, 0.45) !important;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8), 0 0 16px rgba(245, 194, 66, 0.25) !important;
+        border-radius: 20px !important;
+        padding: 6px 12px 6px 14px !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        gap: 12px !important;
+        max-width: min(92vw, 440px) !important;
+        width: max-content !important;
+        animation: vtt-fade-in 0.3s ease-out !important;
+    }
+
+    #vtt-mobile-install-banner.vtt-hidden {
+        display: none !important;
+    }
+
+    .mobile-install-banner-content {
+        display: flex !important;
+        align-items: center !important;
+        gap: 10px !important;
+        min-width: 0 !important;
+    }
+
+    .mobile-install-banner-content i {
+        font-size: 1.25rem !important;
+        flex-shrink: 0 !important;
+    }
+
+    .mobile-install-banner-text {
+        display: flex !important;
+        flex-direction: column !important;
+        min-width: 0 !important;
+        line-height: 1.2 !important;
+    }
+
+    .mobile-install-banner-title {
+        font-size: 0.82rem !important;
+        font-weight: 700 !important;
+        color: #f1f5f9 !important;
+        white-space: nowrap !important;
+    }
+
+    .mobile-install-banner-subtitle {
+        font-size: 0.7rem !important;
+        color: #94a3b8 !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+    }
+
+    .mobile-install-banner-actions {
+        display: flex !important;
+        align-items: center !important;
+        gap: 6px !important;
+        flex-shrink: 0 !important;
+    }
+
+    #btn-mobile-install-action {
+        font-size: 0.72rem !important;
+        padding: 4px 10px !important;
+        border-radius: 12px !important;
+        font-weight: 600 !important;
+        white-space: nowrap !important;
+    }
+
+    #btn-mobile-install-dismiss {
+        padding: 4px 8px !important;
+        border-radius: 12px !important;
+        font-size: 0.75rem !important;
+        color: #94a3b8 !important;
+    }
+
+    /* Map Tools Controls (Steppers & Damage Chips) */
+    .mobile-stepper-btn {
+        background: rgba(255, 255, 255, 0.08) !important;
+        border: 1px solid rgba(212, 175, 55, 0.35) !important;
+        color: #f5c242 !important;
+        font-size: 1.1rem !important;
+        font-weight: 700 !important;
+        border-radius: 8px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    .mobile-stepper-btn:active {
+        background: rgba(212, 175, 55, 0.3) !important;
+    }
+
+    .mobile-chip-btn {
+        background: rgba(255, 255, 255, 0.08) !important;
+        border: 1px solid rgba(255, 255, 255, 0.16) !important;
+        color: #cbd5e1 !important;
+        font-size: 0.78rem !important;
+        font-weight: 600 !important;
+        padding: 5px 12px !important;
+        border-radius: 14px !important;
+        white-space: nowrap !important;
+        cursor: pointer !important;
+        flex-shrink: 0 !important;
+        transition: all 0.15s ease !important;
+    }
+
+    .mobile-chip-btn:active,
+    .mobile-chip-btn.active {
+        background: rgba(212, 175, 55, 0.3) !important;
+        border-color: #f5c242 !important;
+        color: #fef08a !important;
+    }
+
+    /* ========================================================================
+       15. MOBILE MODALS & BOTTOM SHEET DRAWER PRESENTATION
+       ======================================================================== */
+    .vtt-modal {
+        display: flex !important;
+        align-items: flex-end !important;
+        justify-content: center !important;
+        background: rgba(0, 0, 0, 0.75) !important;
+        padding: 0 !important;
+        z-index: 2500 !important;
+    }
+
+    .vtt-modal.vtt-hidden {
+        display: none !important;
+    }
+
+    .vtt-modal .modal-content,
+    .vtt-modal .vtt-modal-content {
+        width: 100% !important;
+        max-width: 100vw !important;
+        max-height: 86dvh !important;
+        margin: 0 !important;
+        padding: 16px 20px calc(24px + var(--safe-bottom, 0px)) !important;
+        border-radius: 20px 20px 0 0 !important;
+        border-bottom: none !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        overscroll-behavior: contain !important;
+        box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.85), 0 0 20px rgba(212, 175, 55, 0.25) !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        animation: slideUpModal 0.24s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        position: relative !important;
+    }
+
+    /* Modal Top Pull Handle */
+    .vtt-modal .modal-content::before,
+    .vtt-modal .vtt-modal-content::before {
+        content: '' !important;
+        display: block !important;
+        width: 38px !important;
+        height: 4px !important;
+        background: rgba(255, 255, 255, 0.3) !important;
+        border-radius: 4px !important;
+        margin: -4px auto 14px auto !important;
+    }
+
+    @keyframes slideUpModal {
+        from {
+            transform: translateY(100%);
+            opacity: 0;
+        }
+
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    /* Modal Action Buttons Sticky Bottom Bar on Mobile */
+    .vtt-modal .flex-row.gap-sm:last-child,
+    .vtt-modal .vtt-modal-footer,
+    .vtt-modal .modal-buttons {
+        position: sticky !important;
+        bottom: 0 !important;
+        margin: 20px -20px calc(-24px - var(--safe-bottom, 0px)) -20px !important;
+        padding: 12px 16px calc(14px + var(--safe-bottom, 0px)) 16px !important;
+        background: rgba(14, 18, 27, 0.98) !important;
+        border-top: 1px solid rgba(212, 175, 55, 0.3) !important;
+        z-index: 25 !important;
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+        box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.8) !important;
+    }
+
+    /* Token Edit Modal Buttons Specific Touch Styling */
+    #modal-token-edit .modal-buttons {
+        position: sticky !important;
+        bottom: 0 !important;
+        margin: 16px -20px 0 -20px !important;
+        padding: 10px 16px calc(14px + var(--safe-bottom, 0px)) 16px !important;
+        background: rgba(12, 16, 26, 0.98) !important;
+        border-top: 1px solid rgba(212, 175, 55, 0.3) !important;
+        z-index: 30 !important;
+    }
+
+    #modal-token-edit .modal-buttons button {
+        flex: 1 1 calc(50% - 6px) !important;
+        min-height: 42px !important;
+        font-size: 0.8rem !important;
+        padding: 6px 8px !important;
+        margin-right: 0 !important;
+    }
+
+    /* ========================================================================
+       16. GLOBAL OVERSCROLL CONTAINMENT & SMOOTH SCROLLING ON MOBILE
+       ======================================================================== */
+    .scroll-styled,
+    .tab-panel,
+    .sidebar-content,
+    #chat-messages,
+    .ps-tabs-body,
+    .init-combatants-list,
+    #vtt-creature-sheet-panel,
+    #player-sheet-content {
+        overscroll-behavior: contain !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+
+    /* ========================================================================
+       17. SHEET SUB-MODALS & BESTIARY IMPORT BOTTOM SHEET DRAWER PRESENTATION
+       ======================================================================== */
+    .vtt-sheet-submodal-overlay {
+        z-index: 3000 !important;
+        background: rgba(0, 0, 0, 0.75) !important;
+    }
+
+    .vtt-sheet-submodal {
+        position: fixed !important;
+        top: auto !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        transform: none !important;
+        width: 100vw !important;
+        max-width: 100vw !important;
+        max-height: 88dvh !important;
+        border-radius: 20px 20px 0 0 !important;
+        border-bottom: none !important;
+        border-left: none !important;
+        border-right: none !important;
+        z-index: 3010 !important;
+        box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.85), 0 0 20px rgba(212, 175, 55, 0.25) !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        animation: slideUpSubmodal 0.24s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        display: flex !important;
+        flex-direction: column !important;
+    }
+
+    .vtt-sheet-submodal-high {
+        z-index: 3025 !important;
+    }
+
+    /* Submodal Top Pull Handle */
+    .vtt-sheet-submodal::before {
+        content: '' !important;
+        display: block !important;
+        width: 40px !important;
+        height: 4px !important;
+        background: rgba(255, 255, 255, 0.3) !important;
+        border-radius: 4px !important;
+        margin: 8px auto 6px auto !important;
+        flex-shrink: 0 !important;
+    }
+
+    @keyframes slideUpSubmodal {
+        from {
+            transform: translateY(100%);
+            opacity: 0;
+        }
+
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    /* Submodal footer / action bar padding */
+    .vtt-sheet-submodal-footer,
+    .vtt-sheet-submodal>div:last-child {
+        padding-bottom: calc(14px + var(--safe-bottom, 0px)) !important;
+    }
+
+    .vtt-sheet-submodal .btn {
+        min-height: 42px !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    .vtt-sheet-submodal input[type="checkbox"] {
+        min-width: 20px !important;
+        min-height: 20px !important;
+    }
+
+    /* Bestiary Template Import Modal - Fullscreen Mobile Drawer */
+    .bestiary-import-drawer-mobile {
+        position: fixed !important;
+        top: 0 !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        width: 100vw !important;
+        height: 100dvh !important;
+        max-width: 100vw !important;
+        max-height: 100dvh !important;
+        border-radius: 0 !important;
+        border: none !important;
+        transform: none !important;
+        z-index: 3010 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        padding: 0 !important;
+        background: var(--color-bg-base, #10141d) !important;
+        animation: slideUpSubmodal 0.24s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+
+    .bestiary-import-drawer-mobile .bestiary-drawer-header {
+        padding: calc(12px + env(safe-area-inset-top, 0px)) 16px 12px 16px !important;
+        background: rgba(14, 18, 27, 0.98) !important;
+        border-bottom: 1px solid var(--color-border-subtle) !important;
+    }
+
+    .bestiary-import-drawer-mobile .bestiary-drawer-body {
+        flex: 1 !important;
+        padding: 12px 16px !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+
+    .bestiary-import-drawer-mobile .npc-template-row {
+        min-height: 48px !important;
+        padding: 10px 12px !important;
+    }
+}
+
+/* ============================================================================
+   3. MANUAL UI OVERRIDES (FORCE-DESKTOP-UI & FORCE-MOBILE-UI)
+   ============================================================================ */
+html.force-desktop-ui #vtt-mobile-nav,
+html.force-desktop-ui #vtt-mobile-tools-fab,
+html.force-desktop-ui #vtt-mobile-tools-menu,
+html.force-desktop-ui #vtt-mobile-backdrop,
+html.force-desktop-ui #vtt-mobile-combat-pill,
+html.force-desktop-ui #vtt-mobile-placement-banner,
+html.force-desktop-ui #vtt-mobile-install-banner,
+html.force-desktop-ui #vtt-mobile-radial-dial,
+html.force-desktop-ui #vtt-mobile-sheet-carousel,
+html.force-desktop-ui #vtt-mobile-shape-pill,
+html.force-desktop-ui #vtt-mobile-shape-sheet,
+html.force-desktop-ui #vtt-mobile-maptools-sheet,
+html.force-desktop-ui #vtt-mobile-drag-pill,
+html.force-desktop-ui .mobile-only,
+html.force-desktop-ui .mobile-sheet-topbar,
+html.force-desktop-ui .mobile-drawer-header,
+html.force-desktop-ui .mobile-more-grid,
+html.force-desktop-ui .btn-mobile-spawn-token,
+html.force-desktop-ui .asset-mobile-spawn-btn,
+html.force-desktop-ui .btn-mobile-spawn-asset,
+html.force-desktop-ui .mobile-sheet-spawn-btn {
+    display: none !important;
+}
+
+html.force-desktop-ui #vtt-controls {
+    display: flex !important;
+}
+
+html.force-desktop-ui #vtt-workspace {
+    display: grid !important;
+    grid-template-columns: var(--vtt-sidebar-w, 360px) 1fr !important;
+    position: relative !important;
+    width: 100vw !important;
+    height: 100vh !important;
+}
+
+html.force-desktop-ui #vtt-sidebar {
+    display: flex !important;
+    position: relative !important;
+    transform: none !important;
+    width: 100% !important;
+    max-width: none !important;
+    height: 100% !important;
+}
+
+html.force-desktop-ui #vtt-canvas-viewport {
+    position: relative !important;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+/* Force Mobile UI overrides for wide viewports / touchscreen laptops */
+html.force-mobile-ui:not(.force-desktop-ui) {
+    --mobile-bottom-nav-h: 56px;
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+    --total-bottom-space: calc(var(--mobile-bottom-nav-h) + var(--safe-bottom));
+}
+
+html.force-mobile-ui:not(.force-desktop-ui),
+html.force-mobile-ui:not(.force-desktop-ui) body {
+    overflow: hidden;
+    position: fixed;
+    width: 100vw;
+    height: 100dvh;
+    touch-action: manipulation;
+}
+
+html.force-mobile-ui:not(.force-desktop-ui) #vtt-controls {
+    display: none !important;
+}
+
+html.force-mobile-ui:not(.force-desktop-ui) #vtt-workspace {
+    display: block !important;
+    position: relative !important;
+    width: 100vw !important;
+    height: 100dvh !important;
+    overflow: hidden !important;
+    overscroll-behavior: none !important;
+    grid-template-columns: none !important;
+}
+
+html.force-mobile-ui:not(.force-desktop-ui) #vtt-canvas-viewport {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100dvh !important;
+    z-index: 10 !important;
+    overflow: hidden !important;
+    overscroll-behavior: none !important;
+    touch-action: none !important;
+}
+
+html.force-mobile-ui:not(.force-desktop-ui) #vtt-sidebar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: min(100vw, 420px) !important;
+    max-width: 88vw !important;
+    height: 100dvh !important;
+    z-index: 1000 !important;
+    transform: translateX(-100%) !important;
+    transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    box-shadow: 10px 0 30px rgba(0, 0, 0, 0.8) !important;
+    border-right: 1px solid rgba(212, 175, 55, 0.3) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    background: rgba(12, 16, 26, 0.98) !important;
+    padding: 0 !important;
+    gap: 0 !important;
+}
+
+html.force-mobile-ui:not(.force-desktop-ui) #vtt-sidebar .sidebar-content {
+    right: 0 !important;
+    transform: none !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+html.force-mobile-ui:not(.force-desktop-ui) #vtt-coordinates-indicator {
+    bottom: calc(var(--total-bottom-space, 56px) + 10px) !important;
+    left: 12px !important;
+    z-index: 50 !important;
+}
+
+html.force-mobile-ui:not(.force-desktop-ui) #vtt-sidebar.mobile-drawer-open {
+    transform: translateX(0) !important;
+}
+
+html.force-mobile-ui:not(.force-desktop-ui) .slideout-tabs-container {
+    left: 0 !important;
+    top: 130px !important;
+}
+
+html.force-mobile-ui:not(.force-desktop-ui) #vtt-initiative-carousel-container {
+    position: fixed !important;
+    top: 64px !important;
+    right: 8px !important;
+    left: auto !important;
+    bottom: auto !important;
+    width: 64px !important;
+    max-width: 64px !important;
+    height: calc(100dvh - 64px - var(--total-bottom-space, 56px) - 12px) !important;
+    max-height: calc(100dvh - 64px - var(--total-bottom-space, 56px) - 12px) !important;
+    z-index: 950 !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    transform: none !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    pointer-events: none !important;
+}
+
+html.force-mobile-ui:not(.force-desktop-ui) #vtt-initiative-carousel-container>* {
+    pointer-events: auto !important;
+}
+
+html.force-mobile-ui:not(.force-desktop-ui) #vtt-initiative-carousel-container.vtt-hidden {
+    display: none !important;
+}
+
+html.force-mobile-ui:not(.force-desktop-ui) #vtt-initiative-carousel-container .mobile-drawer-header {
+    display: none !important;
+}
+
+html.force-mobile-ui:not(.force-desktop-ui) #vtt-mobile-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: var(--total-bottom-space, 56px) !important;
+    padding-bottom: var(--safe-bottom, 0px) !important;
+    background: #0a0e17 !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border-top: 1px solid rgba(212, 175, 55, 0.3) !important;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.6) !important;
+    z-index: 1000 !important;
+    align-items: center !important;
+    justify-content: space-around !important;
+    user-select: none !important;
+}
+
+html.force-mobile-ui:not(.force-desktop-ui) .mobile-nav-btn {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex: 1 !important;
+    height: var(--mobile-bottom-nav-h, 56px) !important;
+    background: transparent !important;
+    border: none !important;
+    color: #8a99ad !important;
+    font-size: 0.68rem !important;
+    cursor: pointer !important;
+    gap: 3px !important;
+    transition: color 0.18s ease, transform 0.12s ease !important;
+}
+
+html.force-mobile-ui:not(.force-desktop-ui) .mobile-nav-btn.active {
+    color: #ffd700 !important;
+}
+
+html.force-mobile-ui:not(.force-desktop-ui) .mobile-nav-btn i {
+    font-size: 1.15rem !important;
+}
+
+html.force-mobile-ui:not(.force-desktop-ui) #vtt-mobile-backdrop {
+    display: none;
+    position: fixed !important;
+    inset: 0 !important;
+    background: rgba(0, 0, 0, 0.65) !important;
+    z-index: 999 !important;
+}
+
+html.force-mobile-ui:not(.force-desktop-ui) #vtt-mobile-backdrop.active {
+    display: block !important;
+}
+
+html.force-mobile-ui:not(.force-desktop-ui) #vtt-mobile-tools-fab {
+    display: flex !important;
+    position: fixed !important;
+    right: 16px !important;
+    bottom: calc(var(--total-bottom-space, 56px) + 16px) !important;
+    z-index: 950 !important;
+}
+
+html.force-mobile-ui:not(.force-desktop-ui) .mobile-only,
+html.force-mobile-ui:not(.force-desktop-ui) .mobile-drawer-header,
+html.force-mobile-ui:not(.force-desktop-ui) .mobile-more-grid {
+    display: flex !important;
+}
+
+html.force-mobile-ui:not(.force-desktop-ui) .mobile-bottom-sheet {
+    position: fixed !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    z-index: 1001 !important;
+    max-height: 85vh !important;
+    background: rgba(15, 23, 42, 0.98) !important;
+    border-top: 1px solid rgba(212, 175, 55, 0.35) !important;
+    border-radius: 16px 16px 0 0 !important;
+    box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.8) !important;
+    overflow-y: auto !important;
+}
+
+html.force-mobile-ui:not(.force-desktop-ui) #panel-measure-config,
+html.force-mobile-ui:not(.force-desktop-ui) #panel-map-tools,
+html.force-mobile-ui:not(.force-desktop-ui) #panel-paint-ribbon {
+    display: none !important;
+}
+
+html.force-mobile-ui:not(.force-desktop-ui) #panel-layers-config:not(.vtt-hidden),
+html.force-mobile-ui:not(.force-desktop-ui) #panel-lighting-config:not(.vtt-hidden) {
+    position: fixed !important;
+    left: 0 !important;
+    right: 0 !important;
+    top: auto !important;
+    bottom: var(--total-bottom-space, 56px) !important;
+    width: 100vw !important;
+    max-width: 100vw !important;
+    max-height: 70dvh !important;
+    border-radius: 16px 16px 0 0 !important;
+    box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.8) !important;
+    padding: 16px 18px !important;
+    overflow-y: auto !important;
+    z-index: 900 !important;
+}
+
+html.force-mobile-ui:not(.force-desktop-ui) #vtt-mobile-maptools-sheet:not(.vtt-hidden),
+html.force-mobile-ui:not(.force-desktop-ui) #vtt-mobile-shape-sheet:not(.vtt-hidden) {
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+html.force-mobile-ui:not(.force-desktop-ui) #vtt-mobile-shape-pill:not(.vtt-hidden),
+html.force-mobile-ui:not(.force-desktop-ui) #vtt-mobile-combat-pill:not(.vtt-hidden) {
+    display: flex !important;
+}
+
+html.force-mobile-ui:not(.force-desktop-ui) #player-sheet-panel,
+html.force-mobile-ui:not(.force-desktop-ui) #creature-sheet-panel {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/* Mobile Paint Studio Drawer Modal                                            */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+.mobile-paint-drawer-card {
+    width: 90%;
+    max-width: 380px;
+    max-height: 85vh;
+    padding: 18px;
+    border-radius: 12px;
+    overflow-y: auto;
+    background: rgba(15, 23, 42, 0.95);
+    border: 1px solid rgba(212, 175, 55, 0.35);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.8), 0 0 20px rgba(212, 175, 55, 0.2);
+}
+
+.mobile-paint-drawer-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+}
+
+.mobile-paint-drawer-header h3 {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.mobile-paint-subtools {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 14px;
+}
+
+.mobile-paint-tool-btn {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 8px;
+    color: #e2e8f0;
+    padding: 10px 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.78rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.mobile-paint-tool-btn i {
+    font-size: 1.15rem;
+}
+
+.mobile-paint-tool-btn.active {
+    background: rgba(212, 175, 55, 0.25);
+    border-color: var(--color-gold-base, #d4af37);
+    color: #ffd700;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+}
+
+.mobile-paint-slider-row {
+    margin-bottom: 14px;
+}
+
+.mobile-paint-slider-row label {
+    display: block;
+    font-size: 0.8rem;
+    color: #94a3b8;
+    margin-bottom: 4px;
+}
+
+.mobile-paint-slider-row input[type="range"] {
+    width: 100%;
+}
+
+.mobile-paint-colors-section label {
+    display: block;
+    font-size: 0.8rem;
+    color: #94a3b8;
+    margin-bottom: 6px;
+}
+
+.mobile-paint-swatches {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+}
+
+.mobile-paint-swatch {
+    height: 32px;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    cursor: pointer;
+}
+
+.mobile-paint-swatch.active {
+    border: 2px solid #fff;
+    box-shadow: 0 0 8px #ffd700;
+}

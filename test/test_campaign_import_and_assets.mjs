@@ -15,7 +15,7 @@ import fs from 'fs';
 import os from 'os';
 import { fileURLToPath } from 'url';
 
-import { DATA_DIR, ASSETS_DIR, campaigns, SERVER_INTERNAL_SECRET, isValidAssetPath } from '../server/state.js';
+import { DATA_DIR, ASSETS_DIR, campaigns, SERVER_INTERNAL_SECRET, isValidAssetPath, generatePlayerSessionToken } from '../server/state.js';
 import { campaignsRouter } from '../server/routes/campaigns.js';
 import { assetsRouter } from '../server/routes/assets.js';
 import {
@@ -349,10 +349,14 @@ test('Campaign Import & Asset Upload Integration Suite', async (t) => {
         const fakeBlob = new Blob(['FAKEDATA'], { type: 'image/png' });
         formData.append('file', fakeBlob, 'player-avatar.png');
 
-        // Send WITHOUT GM authorization headers and attempt to target 'admin_folder'
+        // Send WITH active player session token (no GM authorization) and attempt to target 'admin_folder'
+        const playerToken = generatePlayerSessionToken({ campaignId: 'default', username: 'Alice' });
         const res = await fetch(`${baseUrl}/api/assets/upload?folderPath=admin_folder`, {
             method: 'POST',
-            headers: { 'x-forwarded-for': '203.0.113.195' }, // simulate non-loopback player
+            headers: {
+                'x-forwarded-for': '203.0.113.195', // simulate non-loopback player
+                'x-player-token': playerToken
+            },
             body: formData
         });
 

@@ -1173,12 +1173,29 @@ export function renderStatBlock(m, panel = null, ctx = {}) {
     `
         : '';
 
-    const curVis = getVisibilitySetting(ctx);
-    const rollVisToggleHtml = `
-        <button id="cs-roll-vis-toggle" class="btn btn-xs ${curVis === 'private' ? 'btn-danger' : 'btn-secondary'}" title="Roll Visibility: ${curVis === 'private' ? 'GM Secret' : 'Public'}. Click to toggle." style="display:inline-flex; align-items:center; gap:4px; font-size:0.75rem; padding:2px 6px; border-radius:4px; cursor:pointer;">
-            <i class="${curVis === 'private' ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye'}"></i>
-            <span>${curVis === 'private' ? 'GM Secret' : 'Public'}</span>
-        </button>
+    const globalRollMode = (typeof window !== 'undefined' && window.VTT?.currentRollMode) || null;
+    const globalWhisper = (typeof window !== 'undefined' && window.VTT?.whisperGM !== undefined) ? window.VTT.whisperGM : null;
+
+    m.activeRollMode = globalRollMode || m.activeRollMode || (char && char.activeRollMode) || 'normal';
+    m.whisperToGM = globalWhisper !== null ? Boolean(globalWhisper) : (m.whisperToGM !== undefined ? Boolean(m.whisperToGM) : (char ? Boolean(char.whisperToGM) : false));
+
+    const activeRollMode = (typeof window !== 'undefined' && window.VTT?.currentRollMode) || m.activeRollMode || 'normal';
+    const isWhisper = Boolean((typeof window !== 'undefined' && window.VTT?.whisperGM) || m.whisperToGM);
+
+    const rollModeControlHtml = `
+        <div class="ps-segmented-capsule cs-segmented-capsule" role="group" aria-label="Creature Sheet Roll Mode">
+            <button type="button" class="ps-roll-mode-btn cs-roll-mode-btn ${activeRollMode === 'adv' ? 'active adv' : ''}" data-mode="adv" title="Advantage (rolls with advantage)"><i class="fa-solid fa-angles-up"></i> Adv</button>
+            <button type="button" class="ps-roll-mode-btn cs-roll-mode-btn ${activeRollMode === 'normal' ? 'active' : ''}" data-mode="normal" title="Normal (1d20)">Norm</button>
+            <button type="button" class="ps-roll-mode-btn cs-roll-mode-btn ${activeRollMode === 'dis' ? 'active dis' : ''}" data-mode="dis" title="Disadvantage (rolls with disadvantage)"><i class="fa-solid fa-angles-down"></i> Dis</button>
+        </div>
+    `;
+
+    const whisperBtnHtml = `
+        <button type="button" class="ps-whisper-btn cs-whisper-btn ${isWhisper ? 'active' : ''}" id="cs-btn-gm-whisper" title="Whisper rolls from this sheet to GM only"><i class="fa-solid fa-user-secret"></i> GM</button>
+    `;
+
+    const settingsCogBtnHtml = `
+        <button type="button" class="ps-settings-cog-btn cs-settings-cog-btn" id="cs-btn-sheet-settings" title="Edit Creature Stats & Settings"><i class="fa-solid fa-gear"></i></button>
     `;
 
     const popoutBtnHtml =
@@ -1219,14 +1236,15 @@ export function renderStatBlock(m, panel = null, ctx = {}) {
 
     contentEl.innerHTML = `
         <!-- Top Toolbar -->
-        <div class="cs-top-toolbar">
+        <div class="cs-top-toolbar ps-top-control-bar">
             <div class="cs-top-toolbar-group">
                 ${genericNamedToggleHtml}
-                ${rollVisToggleHtml}
+                ${rollModeControlHtml}
             </div>
-            <div class="cs-top-toolbar-group">
+            <div class="cs-top-toolbar-group ps-actions-group">
+                ${whisperBtnHtml}
+                ${settingsCogBtnHtml}
                 ${assignBtnHtml}
-                ${editBtnHtml}
                 ${popoutBtnHtml}
             </div>
         </div>
@@ -1433,23 +1451,70 @@ export function renderStatBlock(m, panel = null, ctx = {}) {
         });
     }
 
-    // Wire Roll Visibility Quick-Toggle Pill
-    const visToggleBtn = contentEl.querySelector('#cs-roll-vis-toggle');
-    if (visToggleBtn) {
-        visToggleBtn.addEventListener('click', (e) => {
+    // Wire Settings Cog Button
+    const settingsCogBtn = contentEl.querySelector('#cs-btn-sheet-settings');
+    if (settingsCogBtn) {
+        settingsCogBtn.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
-            const currentVis = getVisibilitySetting(ctx);
-            const nextVis = currentVis === 'private' ? 'public' : 'private';
+            if (ctx.openEditModal) {
+                ctx.openEditModal(m, activeCharId);
+            } else {
+                openEditModal(m, activeCharId, ctx);
+            }
+        });
+    }
+
+    // Wire Roll Mode Buttons (Adv / Norm / Dis)
+    contentEl.querySelectorAll('.cs-roll-mode-btn').forEach((btn) => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const mode = btn.dataset.mode || 'normal';
+            if (typeof window !== 'undefined' && window.VTT?.setGlobalRollMode) {
+                window.VTT.setGlobalRollMode(mode);
+            }
+            m.activeRollMode = mode;
+            if (char) {
+                char.activeRollMode = mode;
+            }
+            if (ctx.saveMonsterData) ctx.saveMonsterData(m);
+
+            contentEl.querySelectorAll('.cs-roll-mode-btn').forEach((b) => {
+                b.classList.remove('active', 'adv', 'dis');
+                if (b.dataset.mode === mode) {
+                    b.classList.add('active');
+                    if (mode === 'adv') b.classList.add('adv');
+                    if (mode === 'dis') b.classList.add('dis');
+                }
+            });
+        });
+    });
+
+    // Wire GM Whisper Toggle Button
+    const whisperBtn = contentEl.querySelector('#cs-btn-gm-whisper');
+    if (whisperBtn) {
+        whisperBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const currentWhisper = Boolean((typeof window !== 'undefined' && window.VTT?.whisperGM) || m.whisperToGM);
+            const nextWhisper = !currentWhisper;
+            if (typeof window !== 'undefined' && window.VTT?.setGlobalWhisperGM) {
+                window.VTT.setGlobalWhisperGM(nextWhisper);
+            }
+            m.whisperToGM = nextWhisper;
+            if (char) {
+                char.whisperToGM = nextWhisper;
+            }
+            if (ctx.saveMonsterData) ctx.saveMonsterData(m);
+
             const el = document.getElementById('config-roll-visibility');
             if (el) {
-                el.value = nextVis;
+                el.value = nextWhisper ? 'private' : 'public';
                 el.dispatchEvent(new Event('change'));
             }
-            const isPrivate = nextVis === 'private';
-            visToggleBtn.className = `btn btn-xs ${isPrivate ? 'btn-danger' : 'btn-secondary'}`;
-            visToggleBtn.innerHTML = `<i class="${isPrivate ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye'}"></i> <span>${isPrivate ? 'GM Secret' : 'Public'}</span>`;
-            visToggleBtn.title = `Roll Visibility: ${isPrivate ? 'GM Secret (only GM sees)' : 'Public (all see)'}. Click to toggle.`;
+
+            whisperBtn.classList.toggle('active', nextWhisper);
         });
     }
 

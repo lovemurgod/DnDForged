@@ -6,7 +6,7 @@
  */
 
 import { ALL_SKILLS, STANDARD_TOOLS } from '../vtt-sheet-modals.js';
-import { calculateEffectiveHp, calculateEffectiveAc } from '../calc/stats.js';
+import { calculateEffectiveHp, calculateEffectiveAc, resolveCharacterSheetSettings } from '../calc/stats.js';
 
 // ─── 1. STAT & SAVE SETTINGS ──────────────────────────────────────────────────
 
@@ -1215,11 +1215,20 @@ function setupSheetSettingsListeners(options = {}) {
         const halflingLucky = Boolean(document.getElementById('modal-sheet-setting-halfling-lucky')?.checked);
         const critRangeRaw = parseInt(document.getElementById('modal-sheet-setting-crit-range')?.value, 10);
         const critRange = Math.max(1, Math.min(20, isNaN(critRangeRaw) ? 20 : critRangeRaw));
+        const brutalCritical = Boolean(document.getElementById('modal-sheet-setting-brutal-critical')?.checked);
+        const brutalDiceRaw = parseInt(document.getElementById('modal-sheet-setting-brutal-crit-dice')?.value, 10);
+        const brutalCritDice = Math.max(1, Math.min(10, isNaN(brutalDiceRaw) ? 1 : brutalDiceRaw));
+        const reliableTalent = Boolean(document.getElementById('modal-sheet-setting-reliable-talent')?.checked);
+        const jackOfAllTrades = Boolean(document.getElementById('modal-sheet-setting-jack-of-all-trades')?.checked);
 
         char.settings.elvenAccuracy = elvenAccuracy;
         char.settings.carryWeightMultiplier = carryWeightMultiplier;
         char.settings.halflingLucky = halflingLucky;
         char.settings.critRange = critRange;
+        char.settings.brutalCritical = brutalCritical;
+        char.settings.brutalCritDice = brutalCritDice;
+        char.settings.reliableTalent = reliableTalent;
+        char.settings.jackOfAllTrades = jackOfAllTrades;
 
         // Sync with root properties for compatibility
         char.carryWeightMultiplier = carryWeightMultiplier;
@@ -1310,6 +1319,45 @@ export function ensureSheetSettingsModalExists(options = {}) {
                     </div>
                 </div>
 
+                <!-- Brutal Critical & Savage Attacks -->
+                <div style="background:rgba(0,0,0,0.25); border:1px solid var(--color-border-subtle); border-radius:8px; padding:12px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <label style="display:flex; align-items:center; gap:10px; cursor:pointer; font-weight:600; font-size:0.95rem; color:var(--color-text-primary); margin:0;">
+                            <input type="checkbox" id="modal-sheet-setting-brutal-critical" style="width:18px; height:18px; cursor:pointer;">
+                            <span><i class="fa-solid fa-burst" style="color:var(--color-danger, #ef5350); margin-right:4px;"></i> Brutal Critical / Savage Attacks</span>
+                        </label>
+                        <div style="display:flex; align-items:center; gap:6px;">
+                            <span style="font-size:0.75rem; color:var(--color-text-muted);">Extra Dice:</span>
+                            <input type="number" id="modal-sheet-setting-brutal-crit-dice" min="1" max="10" step="1" value="1" style="width:55px; text-align:center; padding:3px 4px; font-weight:bold; background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); border-radius:4px; color:var(--color-text-primary);">
+                        </div>
+                    </div>
+                    <div style="font-size:0.8rem; color:var(--color-text-muted); margin-top:6px; margin-left:28px; line-height:1.4;">
+                        Rolls extra weapon damage dice when scoring a critical hit with a melee weapon attack (Barbarian 9/13/17, Half-Orc Savage Attacks).
+                    </div>
+                </div>
+
+                <!-- Reliable Talent -->
+                <div style="background:rgba(0,0,0,0.25); border:1px solid var(--color-border-subtle); border-radius:8px; padding:12px;">
+                    <label style="display:flex; align-items:center; gap:10px; cursor:pointer; font-weight:600; font-size:0.95rem; color:var(--color-text-primary); margin:0;">
+                        <input type="checkbox" id="modal-sheet-setting-reliable-talent" style="width:18px; height:18px; cursor:pointer;">
+                        <span><i class="fa-solid fa-dice-d20" style="color:var(--color-gold-base); margin-right:4px;"></i> Reliable Talent</span>
+                    </label>
+                    <div style="font-size:0.8rem; color:var(--color-text-muted); margin-top:6px; margin-left:28px; line-height:1.4;">
+                        Treat any d20 roll of 9 or lower as a 10 on ability checks that include your proficiency bonus (Rogue 11+).
+                    </div>
+                </div>
+
+                <!-- Jack of All Trades -->
+                <div style="background:rgba(0,0,0,0.25); border:1px solid var(--color-border-subtle); border-radius:8px; padding:12px;">
+                    <label style="display:flex; align-items:center; gap:10px; cursor:pointer; font-weight:600; font-size:0.95rem; color:var(--color-text-primary); margin:0;">
+                        <input type="checkbox" id="modal-sheet-setting-jack-of-all-trades" style="width:18px; height:18px; cursor:pointer;">
+                        <span><i class="fa-solid fa-masks-theater" style="color:#38bdf8; margin-right:4px;"></i> Jack of All Trades</span>
+                    </label>
+                    <div style="font-size:0.8rem; color:var(--color-text-muted); margin-top:6px; margin-left:28px; line-height:1.4;">
+                        Adds half your proficiency bonus (rounded down) to any ability check and initiative roll that doesn't already include proficiency (Bard 2+).
+                    </div>
+                </div>
+
             </div>
             <div style="padding:12px 16px; border-top:1px solid var(--color-border-subtle); display:flex; justify-content:flex-end; gap:8px; background:rgba(0,0,0,0.2);">
                 <button type="button" id="modal-sheet-settings-cancel" class="btn btn-secondary">Cancel</button>
@@ -1328,11 +1376,19 @@ export function openSheetSettingsModal(char, options = {}) {
     currentSheetSettingsChar = char;
     currentSheetSettingsOptions = options;
 
+    if (typeof resolveCharacterSheetSettings === 'function') {
+        resolveCharacterSheetSettings(char);
+    }
+
     char.settings = char.settings || {};
     const elvenAccuracy = Boolean(char.settings.elvenAccuracy);
     const carryMult = char.settings.carryWeightMultiplier || char.carryWeightMultiplier || 1;
     const halflingLucky = Boolean(char.settings.halflingLucky);
     const critRange = char.settings.critRange || char.attackSettings?.critRange || 20;
+    const brutalCritical = Boolean(char.settings.brutalCritical);
+    const brutalCritDice = parseInt(char.settings.brutalCritDice) || 1;
+    const reliableTalent = Boolean(char.settings.reliableTalent);
+    const jackOfAllTrades = Boolean(char.settings.jackOfAllTrades);
 
     const elvenInput = document.getElementById('modal-sheet-setting-elven-accuracy');
     if (elvenInput) elvenInput.checked = elvenAccuracy;
@@ -1345,6 +1401,18 @@ export function openSheetSettingsModal(char, options = {}) {
 
     const critInput = document.getElementById('modal-sheet-setting-crit-range');
     if (critInput) critInput.value = critRange;
+
+    const brutalInput = document.getElementById('modal-sheet-setting-brutal-critical');
+    if (brutalInput) brutalInput.checked = brutalCritical;
+
+    const brutalDiceInput = document.getElementById('modal-sheet-setting-brutal-crit-dice');
+    if (brutalDiceInput) brutalDiceInput.value = brutalCritDice;
+
+    const reliableInput = document.getElementById('modal-sheet-setting-reliable-talent');
+    if (reliableInput) reliableInput.checked = reliableTalent;
+
+    const jackInput = document.getElementById('modal-sheet-setting-jack-of-all-trades');
+    if (jackInput) jackInput.checked = jackOfAllTrades;
 
     document.getElementById('pc-sheet-settings-modal')?.classList.remove('vtt-hidden');
     document.getElementById('pc-sheet-settings-overlay')?.classList.remove('vtt-hidden');

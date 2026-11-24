@@ -280,7 +280,14 @@ describe('Token Edit Modal Lifecycle & Data Model Suite', () => {
                 fxShadowBlur: 16,
                 fxShadowOffset: 6,
                 fxShadowColor: '#000000',
-                fxShadowOpacity: 0.8
+                fxShadowOpacity: 0.8,
+                border: {
+                    shape: 'hexagon',
+                    style: 'glow',
+                    framePreset: 'none',
+                    color: '#00ffcc',
+                    width: 4
+                }
             };
 
             // Emulate handleSave(true) logic from vtt-canvas-token-modal.js
@@ -296,6 +303,7 @@ describe('Token Edit Modal Lifecycle & Data Model Suite', () => {
 
             character.tokenSight = editedToken.sightRange;
             character.tokenAuras = editedToken.auras;
+            character.tokenBorder = JSON.parse(JSON.stringify(editedToken.border || {}));
             character.fxOverlayEnabled = editedToken.fxOverlayEnabled;
             character.fxOverlayOpacity = editedToken.fxOverlayOpacity;
             character.fxOverlayColor = editedToken.fxOverlayColor;
@@ -334,6 +342,9 @@ describe('Token Edit Modal Lifecycle & Data Model Suite', () => {
             assert.equal(character.fxOverlayEnabled, true);
             assert.equal(character.fxOverlayColor, '#007bff');
             assert.equal(character.fxShadowBlur, 16);
+            assert.equal(character.tokenBorder.shape, 'hexagon');
+            assert.equal(character.tokenBorder.style, 'glow');
+            assert.equal(character.tokenBorder.color, '#00ffcc');
         });
 
         it('should correctly structure Custom NPC schema when promoting unlinked Bestiary monster', () => {

@@ -434,11 +434,20 @@ export function rollFromToken(formula, label, tokenId, extraModifier = 0, option
         'public';
     const msgText = `[${label}] rolls **${displayFormula}**${modeText}`;
 
+    const isGlobalWhisper = Boolean(typeof window !== 'undefined' && window.VTT?.whisperGM);
+
     if (rollVisibility === 'private' && vtt.role === 'GM') {
         vtt.socket.emit('chat:whisper', {
             to: vtt.username,
             text: msgText,
-            roll: rollResult
+            roll: rollResult,
+            whisperToGM: true
+        });
+    } else if (isGlobalWhisper) {
+        vtt.socket.emit('chat:msg', {
+            text: msgText,
+            roll: rollResult,
+            whisperToGM: true
         });
     } else {
         vtt.socket.emit('chat:msg', {

@@ -12,7 +12,8 @@ export const BUILDER_CATEGORIES = [
     { id: 'races', name: 'Races', icon: '🧝', singular: 'Race / Lineage' },
     { id: 'feats', name: 'Feats', icon: '📜', singular: 'Feat' },
     { id: 'backgrounds', name: 'Backgrounds', icon: '🎭', singular: 'Background' },
-    { id: 'adventures', name: 'Adventures', icon: '📖', singular: 'Chapter / Note' }
+    { id: 'adventures', name: 'Adventures', icon: '📖', singular: 'Chapter / Note' },
+    { id: 'tables', name: 'Tables', icon: '🎲', singular: 'Roll Table' }
 ];
 
 export const ABILITY_KEYS = ['str', 'dex', 'con', 'int', 'wis', 'cha'];
@@ -444,6 +445,20 @@ export function createBlankEntity(category, sourceCode = 'MYBREW') {
                     'You have an innate sense for finding shelter, food, and fresh water in uncharted territories.'
             };
 
+        case 'tables':
+            return {
+                id: `table_${Date.now()}_${code.toLowerCase()}`,
+                name: 'New Roll Table',
+                source: code,
+                dice: '1d100',
+                caption: '',
+                colLabels: ['d100', 'Effect'],
+                rows: [
+                    { min: 1, max: 50, text: 'First sample outcome description.' },
+                    { min: 51, max: 100, text: 'Second sample outcome description.' }
+                ]
+            };
+
         case 'adventures':
         default:
             return {
@@ -456,7 +471,7 @@ export function createBlankEntity(category, sourceCode = 'MYBREW') {
 }
 
 /**
- * Convert visual form model into schema-compliant 5eTools JSON
+ * Convert visual form model into schema-compliant rulebook JSON
  */
 export function entityToJson(category, entity) {
     const code = (entity.source || 'MYBREW').toUpperCase();
@@ -557,13 +572,15 @@ export function entityToJson(category, entity) {
                     .filter((t) => t.name && (t.text || t.entries))
                     .map((t) => ({
                         name: t.name,
-                        entries: Array.isArray(t.text || t.entries) ? t.text || t.entries : [t.text || t.entries]
+                        entries: Array.isArray(t.text || t.entries) ? t.text || t.entries : [t.text || t.entries],
+                        ...(t.linkedTable ? { linkedTable: t.linkedTable.trim() } : {})
                     })),
                 action: (entity.actions || [])
                     .filter((a) => a.name && (a.text || a.entries))
                     .map((a) => ({
                         name: a.name,
-                        entries: Array.isArray(a.text || a.entries) ? a.text || a.entries : [a.text || a.entries]
+                        entries: Array.isArray(a.text || a.entries) ? a.text || a.entries : [a.text || a.entries],
+                        ...(a.linkedTable ? { linkedTable: a.linkedTable.trim() } : {})
                     })),
                 reaction: (entity.reactions || [])
                     .filter((r) => r.name && (r.text || r.entries))
@@ -755,7 +772,10 @@ export function entityToJson(category, entity) {
                 entriesHigherLevel: higher || rawObj.entriesHigherLevel,
                 classes: {
                     fromClassList: Array.isArray(entity.classes)
-                        ? entity.classes.map((c) => ({ name: typeof c === 'string' ? c : c.name, source: 'PHB' }))
+                        ? entity.classes.map((c) => ({
+                              name: typeof c === 'string' ? c : c.name,
+                              source: typeof c === 'object' && c && c.source ? c.source : 'PHB'
+                          }))
                         : rawObj.classes?.fromClassList || []
                 },
                 subclasses: entity.subclasses || rawObj.subclasses || undefined,
@@ -847,6 +867,7 @@ export function entityToJson(category, entity) {
                     rawObj.charges ??
                     undefined,
                 recharge: entity.rechargeText || rawObj.recharge || undefined,
+                linkedTable: entity.linkedTable ? entity.linkedTable.trim() : rawObj.linkedTable || undefined,
                 descriptionHtml: entity.descriptionHtml || rawObj.descriptionHtml || undefined,
                 descriptionMarkdown: entity.descriptionMarkdown || rawObj.descriptionMarkdown || undefined,
                 entries: [entity.description || 'Item description.']
@@ -975,7 +996,7 @@ export function entityToJson(category, entity) {
                     ...(entity.speedFly ? { fly: parseInt(entity.speedFly, 10) } : {}),
                     ...(entity.speedSwim ? { swim: parseInt(entity.speedSwim, 10) } : {})
                 },
-                ability: [abMap],
+                ability: entity.ability || (Object.keys(abMap).length > 0 ? [abMap] : rawObj.ability || []),
                 darkvision:
                     entity.darkvision !== undefined &&
                     entity.darkvision !== '' &&
@@ -1163,6 +1184,8 @@ export function entityToJson(category, entity) {
                 equipment: rawEquip || rawObj.equipment,
                 equipmentData: rawObj.equipmentData || parseEquipmentTextToData(rawEquip),
                 features: [{ name: featName, description: featDesc }],
+                ability: entity.ability || rawObj.ability || undefined,
+                feats: entity.feats || (entity.feat ? [{ feat: entity.feat }] : undefined) || rawObj.feats || undefined,
                 entries: [
                     {
                         name: featName,
@@ -1217,11 +1240,33 @@ export function entityToJson(category, entity) {
                 entries: finalEntries
             };
         }
+
+        case 'tables': {
+            const rows = (entity.rows || []).map((r) => {
+                const min = r.min !== undefined ? r.min : 1;
+                const max = r.max !== undefined ? r.max : min;
+                const rollStr = min === max ? String(min) : `${min}-${max}`;
+                return [rollStr, r.text || ''];
+            });
+            return {
+                ...rawObj,
+                id:
+                    entity.id ||
+                    rawObj.id ||
+                    `table_${(entity.name || 'table').toLowerCase().replace(/[^a-z0-9]/g, '_')}_${code.toLowerCase()}`,
+                name: entity.name || 'New Roll Table',
+                source: code,
+                dice: entity.dice || '1d100',
+                caption: entity.caption || '',
+                colLabels: Array.isArray(entity.colLabels) ? entity.colLabels : ['d100', 'Effect'],
+                rows
+            };
+        }
     }
 }
 
 /**
- * Extract visual form model from an existing 5eTools JSON object
+ * Extract visual form model from an existing rulebook JSON object
  */
 export function jsonToEntity(category, raw) {
     if (!raw) return createBlankEntity(category);
@@ -1251,7 +1296,13 @@ export function jsonToEntity(category, raw) {
                     name: item.name || '',
                     text: flatten5eEntries(item.entries || item.text || item.descriptionHtml || item),
                     entries: item.entries,
-                    descriptionHtml: item.descriptionHtml
+                    descriptionHtml: item.descriptionHtml,
+                    linkedTable:
+                        item.linkedTable ||
+                        (item.macroTemplate && item.macroTemplate.linkedTable
+                            ? item.macroTemplate.linkedTable.name || item.macroTemplate.linkedTable.id
+                            : '') ||
+                        ''
                 }));
             };
 
@@ -1458,6 +1509,12 @@ export function jsonToEntity(category, raw) {
                 acBonus: raw.bonusAc ? parseInt(raw.bonusAc.replace('+', ''), 10) : 0,
                 charges: raw.charges || 0,
                 rechargeText: raw.recharge || '',
+                linkedTable:
+                    raw.linkedTable ||
+                    (raw.macroTemplate && raw.macroTemplate.linkedTable
+                        ? raw.macroTemplate.linkedTable.name || raw.macroTemplate.linkedTable.id
+                        : '') ||
+                    '',
                 value: raw.value || '',
                 valueGp: typeof raw.value === 'string' ? parseFloat(raw.value) || 0 : raw.value ? raw.value / 100 : 0,
                 weight: raw.weight || 0,
@@ -1717,11 +1774,65 @@ export function jsonToEntity(category, raw) {
                 description: leadDesc
             };
         }
+
+        case 'tables': {
+            const rawRows = Array.isArray(raw.rows) ? raw.rows : [];
+            const rows = rawRows.map((r) => {
+                if (Array.isArray(r)) {
+                    const rollStr = String(r[0] || '1').trim();
+                    const text = r
+                        .slice(1)
+                        .map((c) =>
+                            typeof c === 'object' && c !== null
+                                ? c.entry || c.text || JSON.stringify(c)
+                                : String(c)
+                        )
+                        .join(' | ');
+                    let min = 1;
+                    let max = 1;
+                    const dashMatch = rollStr.match(/^(\d+)[–\-](\d+)$/);
+                    if (dashMatch) {
+                        min = parseInt(dashMatch[1], 10);
+                        max = parseInt(dashMatch[2], 10);
+                    } else {
+                        const parsed = parseInt(rollStr, 10);
+                        if (!isNaN(parsed)) {
+                            min = parsed;
+                            max = parsed;
+                        }
+                    }
+                    return { min, max, text };
+                } else if (typeof r === 'object' && r !== null) {
+                    return {
+                        min: r.min !== undefined ? r.min : 1,
+                        max: r.max !== undefined ? r.max : 1,
+                        text: r.text || r.name || ''
+                    };
+                }
+                return { min: 1, max: 1, text: String(r) };
+            });
+
+            return {
+                _raw: raw,
+                id: raw.id || `table_${Date.now()}`,
+                name: raw.name || '',
+                source: raw.source || 'MYBREW',
+                dice: raw.dice || '1d100',
+                caption: raw.caption || '',
+                colLabels: Array.isArray(raw.colLabels) ? raw.colLabels : ['d100', 'Effect'],
+                rows: Array.isArray(raw.rows)
+                    ? rows
+                    : [
+                          { min: 1, max: 50, text: 'First sample outcome description.' },
+                          { min: 51, max: 100, text: 'Second sample outcome description.' }
+                      ]
+            };
+        }
     }
 }
 
 // =========================================================================
-// 5E CHALLENGE RATING BENCHMARKS & AUTO-MATH UTILITIES
+// CHALLENGE RATING BENCHMARKS & AUTO-MATH UTILITIES
 // =========================================================================
 export const CR_BENCHMARKS = {
     0: { ac: 10, hp: 4, hd: '1d6', atk: 2, dmg: 1, dc: 10, pb: 2 },

@@ -1,5 +1,7 @@
 import { renderAuraList } from './vtt-canvas-token-config.js';
 import { LIGHTING_PRESETS } from '../vtt-canvas-lighting.js';
+import { TOKEN_SHAPES, TOKEN_BORDER_STYLES, THEMATIC_FRAMES } from './vtt-canvas-token-borders.js';
+import { openTokenCropper } from './vtt-token-cropper.js';
 
 export { renderAuraList };
 
@@ -81,6 +83,122 @@ export function setupTokenEditModal(tokenModalState, options = {}) {
             const val = tokenLightFxSelect.value;
             if (tokenLightFxOptionsPanel) tokenLightFxOptionsPanel.classList.toggle('vtt-hidden', val === 'none');
             if (tokenLightColor2GroupEl) tokenLightColor2GroupEl.classList.toggle('vtt-hidden', val !== 'color_shift');
+        });
+    }
+
+    // Token Border & Framing UI Bindings
+    const tokenEditBorderShape = document.getElementById('token-edit-border-shape');
+    const tokenEditBorderStyle = document.getElementById('token-edit-border-style');
+    const tokenEditFramePreset = document.getElementById('token-edit-frame-preset');
+    const tokenEditFramePresetGroup = document.getElementById('token-edit-frame-preset-group');
+    const tokenEditBorderColor = document.getElementById('token-edit-border-color');
+    const tokenEditBorderWidth = document.getElementById('token-edit-border-width');
+    const valTokenEditBorderWidth = document.getElementById('val-token-edit-border-width');
+    const tokenEditBorderPreviewImg = document.getElementById('token-edit-border-preview-img');
+    const btnTokenEditOpenCropper = document.getElementById('btn-token-edit-open-cropper');
+
+    const updateTokenBorderPreview = () => {
+        if (!tokenEditBorderPreviewImg) return;
+        const shape = tokenEditBorderShape?.value || 'circle';
+        const style = tokenEditBorderStyle?.value || 'solid';
+        const color = tokenEditBorderColor?.value || '#007bff';
+        const width = parseInt(tokenEditBorderWidth?.value) || 3;
+        const shapeDef = TOKEN_SHAPES[shape] || TOKEN_SHAPES.circle;
+
+        tokenEditBorderPreviewImg.style.borderRadius = shapeDef.borderRadius;
+        tokenEditBorderPreviewImg.style.clipPath = shapeDef.clipPath || 'none';
+
+        if (style === 'none') {
+            tokenEditBorderPreviewImg.style.border = 'none';
+            tokenEditBorderPreviewImg.style.boxShadow = 'none';
+        } else if (style === 'dashed') {
+            tokenEditBorderPreviewImg.style.border = `${width}px dashed ${color}`;
+            tokenEditBorderPreviewImg.style.boxShadow = 'none';
+        } else if (style === 'double') {
+            tokenEditBorderPreviewImg.style.border = `${width + 2}px double ${color}`;
+            tokenEditBorderPreviewImg.style.boxShadow = 'none';
+        } else if (style === 'glow') {
+            tokenEditBorderPreviewImg.style.border = `${width}px solid ${color}`;
+            tokenEditBorderPreviewImg.style.boxShadow = `0 0 8px ${color}`;
+        } else {
+            tokenEditBorderPreviewImg.style.border = `${width}px solid ${color}`;
+            tokenEditBorderPreviewImg.style.boxShadow = 'none';
+        }
+    };
+
+    if (tokenEditBorderShape) {
+        tokenEditBorderShape.addEventListener('change', () => {
+            if (tokenEditBorderShape.value !== 'circle' && tokenEditBorderStyle?.value === 'frame') {
+                tokenEditBorderStyle.value = 'solid';
+                if (tokenEditFramePresetGroup) {
+                    tokenEditFramePresetGroup.classList.add('vtt-hidden');
+                }
+            }
+            updateTokenBorderPreview();
+        });
+    }
+    if (tokenEditBorderStyle) {
+        tokenEditBorderStyle.addEventListener('change', () => {
+            if (tokenEditBorderStyle.value === 'frame') {
+                if (tokenEditBorderShape) tokenEditBorderShape.value = 'circle';
+            }
+            if (tokenEditFramePresetGroup) {
+                tokenEditFramePresetGroup.classList.toggle('vtt-hidden', tokenEditBorderStyle.value !== 'frame');
+            }
+            updateTokenBorderPreview();
+        });
+    }
+    if (tokenEditBorderColor) tokenEditBorderColor.addEventListener('input', updateTokenBorderPreview);
+    if (tokenEditBorderWidth) {
+        tokenEditBorderWidth.addEventListener('input', () => {
+            if (valTokenEditBorderWidth) valTokenEditBorderWidth.textContent = `${tokenEditBorderWidth.value}px`;
+            updateTokenBorderPreview();
+        });
+    }
+    document.querySelectorAll('.token-edit-border-swatches .swatch').forEach((sw) => {
+        sw.addEventListener('click', () => {
+            const col = sw.dataset.color;
+            if (col && tokenEditBorderColor) {
+                tokenEditBorderColor.value = col;
+                updateTokenBorderPreview();
+            }
+        });
+    });
+
+    if (btnTokenEditOpenCropper) {
+        btnTokenEditOpenCropper.addEventListener('click', () => {
+            const tokenId = tokenModalState.selectedTokenIdForEdit;
+            if (!tokenId) return;
+            const liveTokens = getTokens();
+            const tok = liveTokens[tokenId];
+            if (!tok) return;
+
+            openTokenCropper({
+                sourceUrl: tok.img || 'favicon.svg',
+                initialFraming: tok.framing || {},
+                initialBorder: tok.border || {
+                    shape: tokenEditBorderShape?.value || 'circle',
+                    style: tokenEditBorderStyle?.value || 'solid',
+                    framePreset: tokenEditFramePreset?.value || 'none',
+                    color: tokenEditBorderColor?.value || '#007bff',
+                    width: parseInt(tokenEditBorderWidth?.value) || 3
+                },
+                tokenName: tok.name || 'Token',
+                onSave: (result) => {
+                    tok.img = result.url;
+                    tok.border = result.border;
+                    tok.framing = result.framing;
+                    if (tokenEditBorderShape) tokenEditBorderShape.value = result.border.shape || 'circle';
+                    if (tokenEditBorderStyle) tokenEditBorderStyle.value = result.border.style || 'solid';
+                    if (tokenEditFramePreset) tokenEditFramePreset.value = result.border.framePreset || 'none';
+                    if (tokenEditBorderColor) tokenEditBorderColor.value = result.border.color || '#007bff';
+                    if (tokenEditBorderWidth) tokenEditBorderWidth.value = result.border.width || 3;
+                    if (valTokenEditBorderWidth) valTokenEditBorderWidth.textContent = `${result.border.width || 3}px`;
+                    if (tokenEditBorderPreviewImg) tokenEditBorderPreviewImg.src = result.url;
+                    updateTokenBorderPreview();
+                    renderAll();
+                }
+            });
         });
     }
 
@@ -295,6 +413,22 @@ export function setupTokenEditModal(tokenModalState, options = {}) {
         liveTokens[tokenId].fxShadowColor = shadowColorInput.value;
         liveTokens[tokenId].fxShadowOpacity = parseFloat(shadowOpacitySlider.value) || 0.7;
 
+        const bShape = document.getElementById('token-edit-border-shape')?.value || 'circle';
+        const bStyle = document.getElementById('token-edit-border-style')?.value || 'solid';
+        const bFrame = document.getElementById('token-edit-frame-preset')?.value || 'none';
+        const bColor = document.getElementById('token-edit-border-color')?.value || '#007bff';
+        const bWidth = parseInt(document.getElementById('token-edit-border-width')?.value) || 3;
+
+        liveTokens[tokenId].border = {
+            shape: bShape,
+            style: bStyle,
+            framePreset: bFrame,
+            color: bColor,
+            width: bWidth
+        };
+        liveTokens[tokenId].ringColor = bColor;
+        liveTokens[tokenId].isBorderless = bStyle === 'none';
+
         if (vtt.role === 'GM') {
             const layer = document.getElementById('token-edit-layer').value;
             liveTokens[tokenId].layer = layer;
@@ -339,6 +473,7 @@ export function setupTokenEditModal(tokenModalState, options = {}) {
                     char.tokenLightAnimationSpeed = editedToken.lightAnimationSpeed;
                     char.tokenLightAnimationIntensity = editedToken.lightAnimationIntensity;
                     char.tokenLightAnimationColor2 = editedToken.lightAnimationColor2;
+                    char.tokenBorder = JSON.parse(JSON.stringify(editedToken.border || {}));
                 }
 
                 if (vtt.socket) {
@@ -396,6 +531,7 @@ export function setupTokenEditModal(tokenModalState, options = {}) {
                     tokenLightAnimationSpeed: editedToken.lightAnimationSpeed,
                     tokenLightAnimationIntensity: editedToken.lightAnimationIntensity,
                     tokenLightAnimationColor2: editedToken.lightAnimationColor2,
+                    tokenBorder: JSON.parse(JSON.stringify(editedToken.border || {})),
                     monsterData: cleanMonster
                 };
 
@@ -699,6 +835,60 @@ export function openTokenEditModal(tokenId, tokenModalState, options = {}) {
     [panelOverlay, panelVignette, panelShadow].forEach((p) => p.classList.add('vtt-hidden'));
     tabBtnOverlay.classList.add('active');
     panelOverlay.classList.remove('vtt-hidden');
+
+    // Populate Border & Framing controls
+    const tokBorder = token.border || {};
+    const bShape = tokBorder.shape || token.borderShape || 'circle';
+    const bStyle = token.isBorderless ? 'none' : tokBorder.style || token.borderStyle || 'solid';
+    const bFrame = tokBorder.framePreset || token.framePreset || 'none';
+    const bColor = tokBorder.color || token.ringColor || (token.isPlayer ? '#007bff' : '#dc3545');
+    const bWidth =
+        tokBorder.width !== undefined
+            ? tokBorder.width
+            : token.borderWidth !== undefined
+              ? token.borderWidth
+              : token.ringColor
+                ? 3
+                : 2;
+
+    const shapeEl = document.getElementById('token-edit-border-shape');
+    const styleEl = document.getElementById('token-edit-border-style');
+    const frameEl = document.getElementById('token-edit-frame-preset');
+    const frameGroup = document.getElementById('token-edit-frame-preset-group');
+    const colorEl = document.getElementById('token-edit-border-color');
+    const widthEl = document.getElementById('token-edit-border-width');
+    const widthVal = document.getElementById('val-token-edit-border-width');
+    const previewImg = document.getElementById('token-edit-border-preview-img');
+
+    if (shapeEl) shapeEl.value = bShape;
+    if (styleEl) styleEl.value = bStyle;
+    if (frameEl) frameEl.value = bFrame;
+    if (frameGroup) frameGroup.classList.toggle('vtt-hidden', bStyle !== 'frame');
+    if (colorEl) colorEl.value = bColor;
+    if (widthEl) widthEl.value = bWidth;
+    if (widthVal) widthVal.textContent = `${bWidth}px`;
+    if (previewImg) {
+        previewImg.src = token.img || 'favicon.svg';
+        const shapeDef = TOKEN_SHAPES[bShape] || TOKEN_SHAPES.circle;
+        previewImg.style.borderRadius = shapeDef.borderRadius;
+        previewImg.style.clipPath = shapeDef.clipPath || 'none';
+        if (bStyle === 'none') {
+            previewImg.style.border = 'none';
+            previewImg.style.boxShadow = 'none';
+        } else if (bStyle === 'dashed') {
+            previewImg.style.border = `${bWidth}px dashed ${bColor}`;
+            previewImg.style.boxShadow = 'none';
+        } else if (bStyle === 'double') {
+            previewImg.style.border = `${bWidth + 2}px double ${bColor}`;
+            previewImg.style.boxShadow = 'none';
+        } else if (bStyle === 'glow') {
+            previewImg.style.border = `${bWidth}px solid ${bColor}`;
+            previewImg.style.boxShadow = `0 0 8px ${bColor}`;
+        } else {
+            previewImg.style.border = `${bWidth}px solid ${bColor}`;
+            previewImg.style.boxShadow = 'none';
+        }
+    }
 
     if (vtt.role === 'GM') {
         document.getElementById('token-edit-layer').value = token.layer || 'token';

@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 
-const ROOT_DIR = process.cwd();
+const ROOT_DIR = path.join(process.cwd(), 'docs');
 const PAGES = [
   'index.html',
   'getting-started.html',
@@ -30,8 +30,8 @@ test('Website Design & Feedback Page Verification Suite', async (t) => {
     for (const page of PAGES) {
       const content = fs.readFileSync(path.join(ROOT_DIR, page), 'utf8');
       assert.ok(
-        content.includes('1.4.0/ForgeDVTT-Setup-1.4.2.exe'),
-        `Page ${page} must link to working release installer (1.4.0 tag with ForgeDVTT-Setup-1.4.2.exe asset)`
+        content.includes('1.5.0/ForgeDVTT-Setup-1.5.0.exe'),
+        `Page ${page} must link to working release installer (1.5.0 tag with ForgeDVTT-Setup-1.5.0.exe asset)`
       );
     }
   });

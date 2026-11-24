@@ -11,7 +11,10 @@ export const DEFAULT_TOKEN_DROP_CONFIG = {
         autoRollInitiative: false,
         initiativeTrigger: 'combat_active', // 'combat_active' | 'always'
         dispositionRing: 'hostile', // 'hostile' | 'neutral' | 'friendly' | 'custom' | 'none'
-        customRingColor: '#ef4444'
+        customRingColor: '#ef4444',
+        borderShape: 'circle',
+        borderStyle: 'solid',
+        borderWidth: 3
     },
     customNpc: {
         hpMode: 'average',
@@ -22,7 +25,10 @@ export const DEFAULT_TOKEN_DROP_CONFIG = {
         autoRollInitiative: false,
         initiativeTrigger: 'combat_active',
         dispositionRing: 'neutral',
-        customRingColor: '#eab308'
+        customRingColor: '#eab308',
+        borderShape: 'circle',
+        borderStyle: 'solid',
+        borderWidth: 3
     },
     companion: {
         hpMode: 'average',
@@ -33,7 +39,10 @@ export const DEFAULT_TOKEN_DROP_CONFIG = {
         autoRollInitiative: false,
         initiativeTrigger: 'combat_active',
         dispositionRing: 'friendly',
-        customRingColor: '#22c55e'
+        customRingColor: '#22c55e',
+        borderShape: 'circle',
+        borderStyle: 'solid',
+        borderWidth: 3
     }
 };
 

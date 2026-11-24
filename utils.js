@@ -79,15 +79,23 @@ export function hashPassword(password, salt = null, iterations = PBKDF2_ITERATIO
  * @param {string} hash
  * @returns {boolean}
  */
+function timingSafeHexEquals(a, b) {
+  if (typeof a !== 'string' || typeof b !== 'string' || !a || !b) return false;
+  const bufA = Buffer.from(a, 'utf8');
+  const bufB = Buffer.from(b, 'utf8');
+  if (bufA.length !== bufB.length) return false;
+  return crypto.timingSafeEqual(bufA, bufB);
+}
+
 export function verifyPassword(password, salt, hash) {
   if (!password || !salt || !hash) return false;
   // 1. Try modern 600,000 iterations
   const computedModern = crypto.pbkdf2Sync(password, salt, PBKDF2_ITERATIONS, 64, 'sha256').toString('hex');
-  if (computedModern === hash) return true;
+  if (timingSafeHexEquals(computedModern, hash)) return true;
 
   // 2. Fall back to legacy 1,000 iterations for backward compatibility
   const computedLegacy = crypto.pbkdf2Sync(password, salt, PBKDF2_LEGACY_ITERATIONS, 64, 'sha256').toString('hex');
-  return computedLegacy === hash;
+  return timingSafeHexEquals(computedLegacy, hash);
 }
 
 /**

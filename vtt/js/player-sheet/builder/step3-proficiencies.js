@@ -9,8 +9,13 @@ export function renderStep3(ctx) {
         workingChar,
         candidateProficiencies,
         candidateSpeciesSkills = [],
+        speciesSkillChoiceDef = null,
+        speciesLanguageChoiceDef = null,
+        speciesToolChoiceDef = null,
         candidateLanguages = [],
         candidateTools = [],
+        bgLanguageChoiceDef = null,
+        bgToolChoiceDef = null,
         candidateBgSkills,
         availableClassSkills,
         selectedClassSkills,
@@ -22,10 +27,20 @@ export function renderStep3(ctx) {
     } = ctx;
 
     workingChar.expertise = workingChar.expertise || {};
+    workingChar.selectedSpeciesSkills = Array.isArray(workingChar.selectedSpeciesSkills)
+        ? workingChar.selectedSpeciesSkills
+        : [];
+    workingChar.selectedLanguages = Array.isArray(workingChar.selectedLanguages)
+        ? workingChar.selectedLanguages
+        : [];
+    workingChar.selectedTools = Array.isArray(workingChar.selectedTools)
+        ? workingChar.selectedTools
+        : [];
 
     // Gather all proficient skills eligible for expertise
     const allProficientSkills = new Set();
     candidateSpeciesSkills.forEach((s) => allProficientSkills.add(s));
+    workingChar.selectedSpeciesSkills.forEach((s) => allProficientSkills.add(s));
     candidateBgSkills.forEach((s) => allProficientSkills.add(s));
     selectedClassSkills.forEach((s) => allProficientSkills.add(s));
     selectedMulticlassSkills.forEach((set) => {
@@ -49,6 +64,48 @@ export function renderStep3(ctx) {
     });
 
     const selectedExpertiseCount = Object.keys(workingChar.expertise).filter((k) => !!workingChar.expertise[k]).length;
+
+    // Collect language choice slots
+    const allLangChoiceSlots = [];
+    if (speciesLanguageChoiceDef && speciesLanguageChoiceDef.count > 0) {
+        for (let i = 0; i < speciesLanguageChoiceDef.count; i++) {
+            allLangChoiceSlots.push({
+                type: 'species',
+                label: `Species Language Choice ${i + 1}`,
+                from: speciesLanguageChoiceDef.from || []
+            });
+        }
+    }
+    if (bgLanguageChoiceDef && bgLanguageChoiceDef.count > 0) {
+        for (let i = 0; i < bgLanguageChoiceDef.count; i++) {
+            allLangChoiceSlots.push({
+                type: 'background',
+                label: `Background Language Choice ${i + 1}`,
+                from: bgLanguageChoiceDef.from || []
+            });
+        }
+    }
+
+    // Collect tool choice slots
+    const allToolChoiceSlots = [];
+    if (speciesToolChoiceDef && speciesToolChoiceDef.count > 0) {
+        for (let i = 0; i < speciesToolChoiceDef.count; i++) {
+            allToolChoiceSlots.push({
+                type: 'species',
+                label: `Species Tool Choice ${i + 1}`,
+                from: speciesToolChoiceDef.from || []
+            });
+        }
+    }
+    if (bgToolChoiceDef && bgToolChoiceDef.count > 0) {
+        for (let i = 0; i < bgToolChoiceDef.count; i++) {
+            allToolChoiceSlots.push({
+                type: 'background',
+                label: `Background Tool Choice ${i + 1}`,
+                from: bgToolChoiceDef.from || []
+            });
+        }
+    }
 
     bodyEl.innerHTML = `
         <!-- Saving Throws -->
@@ -126,6 +183,34 @@ export function renderStep3(ctx) {
                                 </div>
                             `
                                 )
+                                .join('')}
+                        </div>
+                    </div>
+                `
+                        : ''
+                }
+
+                ${
+                    speciesSkillChoiceDef && speciesSkillChoiceDef.count > 0
+                        ? `
+                    <div style="border-left:3px solid #81c784; padding-left:10px;">
+                        <div style="font-size:0.75rem; text-transform:uppercase; color:var(--color-text-muted); margin-bottom:6px; font-weight:600;">
+                            Species Skill Choices (Choose ${speciesSkillChoiceDef.count} for ${speciesSkillChoiceDef.label || workingChar.race || 'Species'}): <strong style="color:#81c784;">${workingChar.selectedSpeciesSkills.length} / ${speciesSkillChoiceDef.count}</strong>
+                        </div>
+                        <div style="display:flex; flex-wrap:wrap; gap:6px;">
+                            ${speciesSkillChoiceDef.from
+                                .map((s) => {
+                                    const isGrantedElsewhere = candidateSpeciesSkills.includes(s) || candidateBgSkills.includes(s);
+                                    const isChecked = workingChar.selectedSpeciesSkills.includes(s);
+                                    const isDisabled = isGrantedElsewhere || (!isChecked && workingChar.selectedSpeciesSkills.length >= speciesSkillChoiceDef.count);
+                                    return `
+                                    <label class="builder-badge-check ${isChecked || isGrantedElsewhere ? 'is-checked' : ''} ${isDisabled ? 'is-disabled' : ''}" style="margin:0; cursor:${isGrantedElsewhere ? 'default' : 'pointer'};">
+                                        <input type="checkbox" class="pc-wiz-species-skill-chk" data-skill="${s}" ${isChecked ? 'checked' : ''} ${isDisabled ? 'disabled' : ''} style="accent-color:#81c784;">
+                                        <span>${s}</span>
+                                        ${isGrantedElsewhere ? '<span style="font-size:0.65rem; opacity:0.7;">(Granted)</span>' : ''}
+                                    </label>
+                                `;
+                                })
                                 .join('')}
                         </div>
                     </div>
@@ -222,7 +307,10 @@ export function renderStep3(ctx) {
 
         <!-- Languages & Tool Proficiencies Confirmation -->
         ${
-            candidateLanguages.length > 0 || candidateTools.length > 0
+            candidateLanguages.length > 0 ||
+            candidateTools.length > 0 ||
+            allLangChoiceSlots.length > 0 ||
+            allToolChoiceSlots.length > 0
                 ? `
         <div class="builder-section-box">
             <div class="builder-section-header">
@@ -233,7 +321,7 @@ export function renderStep3(ctx) {
             </div>
             <div style="display:flex; flex-direction:column; gap:10px;">
                 ${
-                    candidateLanguages.length > 0
+                    candidateLanguages.length > 0 || allLangChoiceSlots.length > 0
                         ? `
                     <div>
                         <div style="font-size:0.75rem; text-transform:uppercase; color:var(--color-text-muted); margin-bottom:6px; font-weight:600;">
@@ -251,12 +339,43 @@ export function renderStep3(ctx) {
                                 )
                                 .join('')}
                         </div>
+                        ${
+                            allLangChoiceSlots.length > 0
+                                ? `
+                            <div style="margin-top:8px; display:flex; flex-direction:column; gap:6px;">
+                                <div style="font-size:0.75rem; color:var(--color-gold-light); font-weight:600;">
+                                    Choose Language Proficiencies:
+                                </div>
+                                <div style="display:flex; flex-wrap:wrap; gap:10px;">
+                                    ${allLangChoiceSlots
+                                        .map(
+                                            (slot, idx) => `
+                                        <div style="display:flex; align-items:center; gap:6px;">
+                                            <span style="font-size:0.8rem; color:var(--color-text-secondary);">${slot.label}:</span>
+                                            <select class="pc-wiz-lang-choice-sel" data-idx="${idx}" style="padding:4px 8px; font-size:0.8rem; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); border-radius:4px;">
+                                                <option value="">-- Choose Language --</option>
+                                                ${slot.from
+                                                    .map(
+                                                        (l) =>
+                                                            `<option value="${l}" ${workingChar.selectedLanguages[idx] === l ? 'selected' : ''}>${l}</option>`
+                                                    )
+                                                    .join('')}
+                                            </select>
+                                        </div>
+                                    `
+                                        )
+                                        .join('')}
+                                </div>
+                            </div>
+                        `
+                                : ''
+                        }
                     </div>
                 `
                         : ''
                 }
                 ${
-                    candidateTools.length > 0
+                    candidateTools.length > 0 || allToolChoiceSlots.length > 0
                         ? `
                     <div>
                         <div style="font-size:0.75rem; text-transform:uppercase; color:var(--color-text-muted); margin-bottom:6px; font-weight:600;">
@@ -274,6 +393,37 @@ export function renderStep3(ctx) {
                                 )
                                 .join('')}
                         </div>
+                        ${
+                            allToolChoiceSlots.length > 0
+                                ? `
+                            <div style="margin-top:8px; display:flex; flex-direction:column; gap:6px;">
+                                <div style="font-size:0.75rem; color:var(--color-gold-light); font-weight:600;">
+                                    Choose Tool Proficiencies:
+                                </div>
+                                <div style="display:flex; flex-wrap:wrap; gap:10px;">
+                                    ${allToolChoiceSlots
+                                        .map(
+                                            (slot, idx) => `
+                                        <div style="display:flex; align-items:center; gap:6px;">
+                                            <span style="font-size:0.8rem; color:var(--color-text-secondary);">${slot.label}:</span>
+                                            <select class="pc-wiz-tool-choice-sel" data-idx="${idx}" style="padding:4px 8px; font-size:0.8rem; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); border-radius:4px;">
+                                                <option value="">-- Choose Tool --</option>
+                                                ${slot.from
+                                                    .map(
+                                                        (t) =>
+                                                            `<option value="${t}" ${workingChar.selectedTools[idx] === t ? 'selected' : ''}>${t}</option>`
+                                                    )
+                                                    .join('')}
+                                            </select>
+                                        </div>
+                                    `
+                                        )
+                                        .join('')}
+                                </div>
+                            </div>
+                        `
+                                : ''
+                        }
                     </div>
                 `
                         : ''
@@ -332,6 +482,21 @@ export function renderStep3(ctx) {
         });
     });
 
+    bodyEl.querySelectorAll('.pc-wiz-species-skill-chk').forEach((chk) => {
+        chk.addEventListener('change', (e) => {
+            const sk = e.target.dataset.skill;
+            if (e.target.checked) {
+                if (!workingChar.selectedSpeciesSkills.includes(sk)) {
+                    workingChar.selectedSpeciesSkills.push(sk);
+                }
+            } else {
+                workingChar.selectedSpeciesSkills = workingChar.selectedSpeciesSkills.filter((s) => s !== sk);
+            }
+            renderStep3(ctx);
+            updateCountsDisplay();
+        });
+    });
+
     bodyEl.querySelectorAll('.pc-wiz-class-skill-chk').forEach((chk) => {
         chk.addEventListener('change', (e) => {
             const sk = e.target.dataset.skill;
@@ -367,6 +532,20 @@ export function renderStep3(ctx) {
             }
             renderStep3(ctx);
             updateCountsDisplay();
+        });
+    });
+
+    bodyEl.querySelectorAll('.pc-wiz-lang-choice-sel').forEach((sel) => {
+        sel.addEventListener('change', (e) => {
+            const idx = parseInt(e.target.dataset.idx, 10);
+            workingChar.selectedLanguages[idx] = e.target.value;
+        });
+    });
+
+    bodyEl.querySelectorAll('.pc-wiz-tool-choice-sel').forEach((sel) => {
+        sel.addEventListener('change', (e) => {
+            const idx = parseInt(e.target.dataset.idx, 10);
+            workingChar.selectedTools[idx] = e.target.value;
         });
     });
 }

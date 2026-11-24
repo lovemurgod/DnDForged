@@ -12,30 +12,44 @@ export function sanitizeHtmlContent(rawHtml) {
     return escapeHtml(rawHtml);
 }
 
+function sanitizeHandoutMediaUrl(rawUrl) {
+    if (!rawUrl || typeof rawUrl !== 'string') return '';
+    const trimmed = rawUrl.trim();
+    if (/^(https?:\/\/|\/|data:(?:image|video)\/|blob:|assets\/|img\/|data\/|vtt-uploads\/)/i.test(trimmed)) {
+        return trimmed;
+    }
+    if (!/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(trimmed)) {
+        return trimmed;
+    }
+    return '';
+}
+
 export function parseMediaUrl(url) {
-    if (!url) return '';
+    const safeUrl = sanitizeHandoutMediaUrl(url);
+    if (!safeUrl) return '';
 
     // YouTube
-    let ytMatch = url.match(
+    let ytMatch = safeUrl.match(
         /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i
     );
     if (ytMatch) {
-        return `<iframe width="100%" height="400" src="https://www.youtube.com/embed/${ytMatch[1]}" frameborder="0" allowfullscreen style="border-radius:8px; border:1px solid var(--color-border-subtle);"></iframe>`;
+        return `<iframe width="100%" height="400" src="https://www.youtube.com/embed/${escapeHtml(ytMatch[1])}" frameborder="0" allowfullscreen style="border-radius:8px; border:1px solid var(--color-border-subtle);"></iframe>`;
     }
 
     // Vimeo
-    let vmMatch = url.match(/vimeo\.com\/(?:.*#|.*\/videos\/)?([0-9]+)/i);
+    let vmMatch = safeUrl.match(/vimeo\.com\/(?:.*#|.*\/videos\/)?([0-9]+)/i);
     if (vmMatch) {
-        return `<iframe src="https://player.vimeo.com/video/${vmMatch[1]}" width="100%" height="400" frameborder="0" allow="autoplay; fullscreen" allowfullscreen style="border-radius:8px; border:1px solid var(--color-border-subtle);"></iframe>`;
+        return `<iframe src="https://player.vimeo.com/video/${escapeHtml(vmMatch[1])}" width="100%" height="400" frameborder="0" allow="autoplay; fullscreen" allowfullscreen style="border-radius:8px; border:1px solid var(--color-border-subtle);"></iframe>`;
     }
 
+    const escapedUrl = escapeHtml(safeUrl);
     // Raw video
-    if (url.match(/\.(mp4|webm|ogg)$/i)) {
-        return `<video src="${url}" controls style="max-width:100%; max-height:400px; border-radius:8px; border:1px solid var(--color-border-subtle);"></video>`;
+    if (safeUrl.match(/\.(mp4|webm|ogg)(\?.*)?$/i)) {
+        return `<video src="${escapedUrl}" controls style="max-width:100%; max-height:400px; border-radius:8px; border:1px solid var(--color-border-subtle);"></video>`;
     }
 
     // Default to Image
-    return `<img src="${url}" style="max-width:100%; max-height:400px; border-radius:8px; border:1px solid var(--color-border-subtle); object-fit:contain;" alt="Handout Media">`;
+    return `<img src="${escapedUrl}" style="max-width:100%; max-height:400px; border-radius:8px; border:1px solid var(--color-border-subtle); object-fit:contain;" alt="Handout Media">`;
 }
 
 export function initVttHandouts(vtt) {

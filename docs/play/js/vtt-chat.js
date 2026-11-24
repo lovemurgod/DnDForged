@@ -1,0 +1,3301 @@
+// DnDForged Unified Chat, Roll Parser & 3D Dice Simulation
+import { VTTDiceParser } from './vtt-dice-parser.js';
+
+function stripAllHtmlFallback(html) {
+    return String(html || '').replace(/<[^>]*>/g, '');
+}
+
+export function initVttChat(vtt, chatHistory) {
+    const chatMessages = document.getElementById('chat-messages');
+    const chatInput = document.getElementById('chat-input');
+    const btnSend = document.getElementById('btn-chat-send');
+    const fastRollBtns = document.querySelectorAll('.fast-dice');
+    const chatRollModeBtns = document.querySelectorAll('.chat-roll-mode .roll-mode-btn');
+
+    // Global keyboard modifier tracking (Shift = Advantage, Ctrl = Disadvantage)
+    if (typeof window !== 'undefined' && !window._vttKeyTrackerBound) {
+        window._vttKeyTrackerBound = true;
+        let shiftDown = false;
+        let ctrlDown = false;
+        window.addEventListener(
+            'keydown',
+            (e) => {
+                if (e.shiftKey || e.key === 'Shift') shiftDown = true;
+                if (e.ctrlKey || e.key === 'Control') ctrlDown = true;
+            },
+            true
+        );
+        window.addEventListener(
+            'keyup',
+            (e) => {
+                if (!e.shiftKey && e.key === 'Shift') shiftDown = false;
+                if (!e.ctrlKey && e.key === 'Control') ctrlDown = false;
+            },
+            true
+        );
+        window.addEventListener('blur', () => {
+            shiftDown = false;
+            ctrlDown = false;
+        });
+        window.VTT_isShiftPressed = () => shiftDown;
+        window.VTT_isCtrlPressed = () => ctrlDown;
+    }
+
+    // Initialize global roll mode (sticky mode from localStorage or 'normal')
+    let savedRollMode = 'normal';
+    try {
+        savedRollMode = localStorage.getItem('vtt_current_roll_mode') || 'normal';
+    } catch (e) { }
+    let savedWhisperGM = false;
+    try {
+        savedWhisperGM = localStorage.getItem('vtt_whisper_to_gm') === 'true';
+    } catch (e) { }
+
+    vtt.currentRollMode = savedRollMode;
+    window.VTT = window.VTT || {};
+    window.VTT.currentRollMode = savedRollMode;
+    vtt.whisperGM = savedWhisperGM;
+    window.VTT.whisperGM = savedWhisperGM;
+
+    function updateAllRollModeButtonsUI(mode) {
+        document.querySelectorAll('.chat-roll-mode .roll-mode-btn, .ps-roll-mode-btn, .cs-roll-mode-btn').forEach((b) => {
+            if (b.id === 'btn-gm-whisper' || b.id === 'ps-btn-gm-whisper' || b.id === 'cs-btn-gm-whisper') return;
+            b.classList.remove('active', 'adv', 'dis');
+            if (b.dataset.mode === mode) {
+                b.classList.add('active');
+                if (mode === 'adv') b.classList.add('adv');
+                if (mode === 'dis') b.classList.add('dis');
+            }
+        });
+    }
+
+    function setGlobalRollMode(mode) {
+        const validMode = (mode === 'adv' || mode === 'dis') ? mode : 'normal';
+        vtt.currentRollMode = validMode;
+        window.VTT = window.VTT || {};
+        window.VTT.currentRollMode = validMode;
+        if (window.currentChar) {
+            window.currentChar.activeRollMode = validMode;
+        }
+        try {
+            localStorage.setItem('vtt_current_roll_mode', validMode);
+        } catch (e) { }
+        updateAllRollModeButtonsUI(validMode);
+    }
+
+    function updateAllWhisperButtonsUI(isWhisper) {
+        const active = Boolean(isWhisper);
+        const chatWhisperBtn = document.getElementById('btn-gm-whisper');
+        if (chatWhisperBtn) {
+            chatWhisperBtn.classList.toggle('active', active);
+            chatWhisperBtn.classList.toggle('gm-whisper', active);
+        }
+        const psWhisperBtn = document.getElementById('ps-btn-gm-whisper');
+        if (psWhisperBtn) {
+            psWhisperBtn.classList.toggle('active', active);
+        }
+        document.querySelectorAll('#cs-btn-gm-whisper, .cs-whisper-btn').forEach((b) => {
+            b.classList.toggle('active', active);
+        });
+    }
+
+    function setGlobalWhisperGM(isWhisper) {
+        const active = Boolean(isWhisper);
+        vtt.whisperGM = active;
+        window.VTT = window.VTT || {};
+        window.VTT.whisperGM = active;
+        if (window.currentChar) {
+            window.currentChar.whisperToGM = active;
+        }
+        try {
+            localStorage.setItem('vtt_whisper_to_gm', active ? 'true' : 'false');
+        } catch (e) { }
+        updateAllWhisperButtonsUI(active);
+    }
+
+    window.VTT.setGlobalRollMode = setGlobalRollMode;
+    window.VTT.getGlobalRollMode = () => window.VTT?.currentRollMode || 'normal';
+    window.VTT.setGlobalWhisperGM = setGlobalWhisperGM;
+    window.VTT.getGlobalWhisperGM = () => Boolean(window.VTT?.whisperGM);
+    window.VTT.updateAllRollModeButtonsUI = updateAllRollModeButtonsUI;
+    window.VTT.updateAllWhisperButtonsUI = updateAllWhisperButtonsUI;
+
+    updateAllRollModeButtonsUI(savedRollMode);
+    updateAllWhisperButtonsUI(savedWhisperGM);
+
+    // Cross-window / popout sync listener
+    window.addEventListener('storage', (e) => {
+        if (e.key === 'vtt_current_roll_mode' && e.newValue) {
+            setGlobalRollMode(e.newValue);
+        } else if (e.key === 'vtt_whisper_to_gm') {
+            setGlobalWhisperGM(e.newValue === 'true');
+        }
+    });
+
+    // Combat initiative DOM bindings
+    const initContainer = document.getElementById('vtt-initiative-carousel-container');
+    const initMinBar = document.getElementById('init-minimized-bar');
+    const initMinName = document.getElementById('init-min-name');
+    const initMinHp = document.getElementById('init-min-hp');
+    const initMinAvatar = document.getElementById('init-min-avatar');
+    const initMinRoundNum = document.getElementById('init-min-round-num');
+    const btnInitMinDrag = document.getElementById('btn-init-min-drag');
+    const btnInitMinPrev = document.getElementById('btn-init-min-prev');
+    const btnInitMinNext = document.getElementById('btn-init-min-next');
+    const btnInitMinExpand = document.getElementById('btn-init-min-expand');
+    const initMinCombatant = document.getElementById('init-min-combatant');
+    const initList = document.getElementById('init-list');
+    const roundDisplay = document.getElementById('init-round-num');
+    const btnToggleGlobalInit = document.getElementById('btn-toggle-initiative');
+
+    // Combat state
+    let combatants = [];
+    let currentRound = 1;
+    let activeTurnIndex = -1;
+    let initiativeVisible = false;
+    let active3dDice = [];
+    let currentOrientation = 'vertical';
+    try {
+        currentOrientation = localStorage.getItem('vtt_initiative_orientation') || 'vertical';
+    } catch (e) {}
+
+    // Load initial persistent state
+    if (vtt.campaignState && vtt.campaignState.initiative) {
+        if (Array.isArray(vtt.campaignState.initiative)) {
+            combatants = vtt.campaignState.initiative;
+            currentRound = 1;
+            activeTurnIndex = combatants.length > 0 ? 0 : -1;
+            initiativeVisible = true;
+        } else {
+            combatants = vtt.campaignState.initiative.combatants || [];
+            currentRound = vtt.campaignState.initiative.currentRound || 1;
+            activeTurnIndex =
+                vtt.campaignState.initiative.activeTurnIndex !== undefined
+                    ? vtt.campaignState.initiative.activeTurnIndex
+                    : -1;
+            initiativeVisible =
+                vtt.campaignState.initiative.isVisible !== undefined ? vtt.campaignState.initiative.isVisible : true;
+        }
+    }
+
+    // Load initial chat history
+    if (chatHistory && chatHistory.length > 0) {
+        chatMessages.innerHTML = '';
+        chatHistory.forEach((msg) => appendMessageToDom(msg, true));
+    }
+
+    // Connect WebSocket hooks
+    setupChatSocketSync();
+
+    // Setup input controllers
+    setupChatInputs();
+
+    // Setup Initiative controllers
+    setupInitiativeControls();
+
+    // Render initial state
+    renderInitiativeList();
+
+    // Setup Context Menu for Fast Dice
+    setupFastDiceContextMenu();
+
+    // 3D Animated Dice overlay system
+    if (window.Dice3D) {
+        window.Dice3D.init({ containerId: 'dice-box-canvas-container' });
+    }
+
+    function parseFormulaToDiceList(formula) {
+        if (!formula || typeof formula !== 'string') return [];
+        const diceList = [];
+        const matches = [...formula.matchAll(/(\d*)d(\d+)/gi)];
+        matches.forEach((m) => {
+            const count = Math.min(parseInt(m[1] || '1', 10), 20);
+            const faces = parseInt(m[2], 10);
+            if (faces > 0 && count > 0) {
+                for (let i = 0; i < count; i++) {
+                    diceList.push({ faces, val: Math.floor(Math.random() * faces) + 1 });
+                }
+            }
+        });
+        return diceList;
+    }
+
+    function extractDiceFromMessage(msg) {
+        if (!msg) return [];
+        if (msg.roll) {
+            const dice = msg.roll.diceList || (Array.isArray(msg.roll) ? msg.roll : null);
+            if (Array.isArray(dice) && dice.length > 0) return dice;
+            if (typeof msg.roll.formula === 'string') {
+                const synthesized = parseFormulaToDiceList(msg.roll.formula);
+                if (synthesized.length > 0) return synthesized;
+            }
+        }
+        if (msg.macroCard) {
+            const mc = msg.macroCard;
+            const allDice = [];
+
+            // 1. Attack roll dice
+            if (mc.atkRoll) {
+                const atk = mc.atkRoll;
+                const atkDice = atk.diceList || (atk.roll && atk.roll.diceList) || (Array.isArray(atk) ? atk : null);
+                if (Array.isArray(atkDice) && atkDice.length > 0) {
+                    atkDice.forEach((d) =>
+                        allDice.push({
+                            ...d,
+                            damageType: null,
+                            isCritSuccess: Boolean(atk.isCritSuccess),
+                            isCritFail: Boolean(atk.isCritFail)
+                        })
+                    );
+                } else {
+                    const f = atk.formula || (atk.roll && atk.roll.formula) || '1d20';
+                    const syn = parseFormulaToDiceList(f);
+                    syn.forEach((d) =>
+                        allDice.push({
+                            ...d,
+                            damageType: null,
+                            isCritSuccess: Boolean(atk.isCritSuccess),
+                            isCritFail: Boolean(atk.isCritFail)
+                        })
+                    );
+                }
+            }
+
+            // 2. Damage roll dice
+            (mc.dmgRolls || []).forEach((dr) => {
+                const dmgDice =
+                    dr.roll && Array.isArray(dr.roll.diceList)
+                        ? dr.roll.diceList
+                        : Array.isArray(dr.diceList)
+                            ? dr.diceList
+                            : null;
+                if (Array.isArray(dmgDice) && dmgDice.length > 0) {
+                    dmgDice.forEach((d) => allDice.push({ ...d, damageType: dr.type || null }));
+                } else {
+                    const f = (dr.roll && dr.roll.formula) || dr.formula || '';
+                    if (f) {
+                        const syn = parseFormulaToDiceList(f);
+                        syn.forEach((d) => allDice.push({ ...d, damageType: dr.type || null }));
+                    }
+                }
+            });
+
+            return allDice;
+        }
+        return [];
+    }
+
+    function setupChatSocketSync() {
+        vtt.socket.on('chat:msg', (msg) => {
+            // Apply visibility filtering for socket event handling
+            if (msg.hidden && vtt.role !== 'GM') return;
+            if (msg.whisperToGM && vtt.role !== 'GM' && msg.username !== vtt.username) return;
+            if (
+                msg.whisperTo &&
+                vtt.role !== 'GM' &&
+                msg.username !== vtt.username &&
+                (!vtt.username || msg.whisperTo.toLowerCase() !== vtt.username.toLowerCase())
+            )
+                return;
+
+            appendMessageToDom(msg);
+
+            // Trigger 3D physics roll animations if there's dice data
+            const dice = extractDiceFromMessage(msg);
+            if (dice.length > 0) {
+                trigger3dDiceRoll(dice);
+            }
+        });
+
+        vtt.socket.on('chat:deleted', (data) => {
+            const msgEl = chatMessages.querySelector(`[data-msg-id="${data.id}"]`);
+            if (msgEl) msgEl.remove();
+        });
+
+        vtt.socket.on('chat:hidden_toggled', (data) => {
+            const msgEl = chatMessages.querySelector(`[data-msg-id="${data.id}"]`);
+            if (msgEl) {
+                if (vtt.role !== 'GM' && data.hidden) {
+                    msgEl.remove();
+                } else {
+                    if (data.hidden) {
+                        msgEl.classList.add('msg-hidden');
+                        const btn = msgEl.querySelector('.btn-chat-toggle-hide');
+                        if (btn) btn.innerHTML = '<i class="fa-regular fa-eye"></i> Unhide';
+                    } else {
+                        msgEl.classList.remove('msg-hidden');
+                        const btn = msgEl.querySelector('.btn-chat-toggle-hide');
+                        if (btn) btn.innerHTML = '<i class="fa-regular fa-eye-slash"></i> Hide';
+                    }
+                }
+            }
+        });
+
+        vtt.socket.on('chat:save_resolved', (data) => {
+            if (!data || !data.id) return;
+            const msgEl = chatMessages.querySelector(`[data-msg-id="${data.id}"]`);
+            if (msgEl) {
+                if (!msgEl._saveResolveCardData) {
+                    const row = msgEl.querySelector('.save-resolve-actions-row');
+                    if (row && row.dataset.cardData) {
+                        try {
+                            msgEl._saveResolveCardData = JSON.parse(decodeURIComponent(row.dataset.cardData));
+                        } catch (e) { }
+                    }
+                }
+                if (msgEl._saveResolveCardData) {
+                    msgEl._saveResolveCardData.resolved = data.resolution;
+                    if (data.results) msgEl._saveResolveCardData.results = data.results;
+                    const cardContainer = msgEl.querySelector('.save-resolve-chat-card');
+                    if (cardContainer) {
+                        const newHtml = renderSaveResolveCardHtml(msgEl._saveResolveCardData, false, data.id);
+                        const tempDiv = document.createElement('div');
+                        tempDiv.innerHTML = newHtml;
+                        cardContainer.replaceWith(tempDiv.firstElementChild);
+                    }
+                }
+            }
+        });
+
+        vtt.socket.on('chat:mass_attack_resolved', (data) => {
+            if (!data || !data.id) return;
+            const msgEl = chatMessages.querySelector(`[data-msg-id="${data.id}"]`);
+            if (msgEl) {
+                if (!msgEl._massAttackCardData) {
+                    const row = msgEl.querySelector('.mass-attack-actions-row');
+                    if (row && row.dataset.cardData) {
+                        try {
+                            msgEl._massAttackCardData = JSON.parse(decodeURIComponent(row.dataset.cardData));
+                        } catch (e) { }
+                    }
+                }
+                if (data.massAttackCard) {
+                    msgEl._massAttackCardData = data.massAttackCard;
+                } else if (msgEl._massAttackCardData) {
+                    msgEl._massAttackCardData.resolved = data.resolution || true;
+                    if (data.attacks) msgEl._massAttackCardData.attacks = data.attacks;
+                    if (data.summary) msgEl._massAttackCardData.summary = data.summary;
+                }
+                if (msgEl._massAttackCardData) {
+                    const cardContainer = msgEl.querySelector('.mass-attack-chat-card');
+                    if (cardContainer) {
+                        const newHtml = renderMassAttackCardHtml(msgEl._massAttackCardData, false, data.id);
+                        const tempDiv = document.createElement('div');
+                        tempDiv.innerHTML = newHtml;
+                        cardContainer.replaceWith(tempDiv.firstElementChild);
+                    }
+                }
+            }
+        });
+
+        vtt.socket.on('chat:macro_resolved', (data) => {
+            if (!data || !data.id) return;
+            const msgEl = chatMessages.querySelector(`[data-msg-id="${data.id}"]`);
+            if (msgEl) {
+                if (!msgEl._macroCardData) {
+                    const row = msgEl.querySelector('.macro-card-actions-row');
+                    if (row && row.dataset.cardData) {
+                        try {
+                            msgEl._macroCardData = JSON.parse(decodeURIComponent(row.dataset.cardData));
+                        } catch (e) { }
+                    }
+                }
+                if (data.macroCard) {
+                    msgEl._macroCardData = data.macroCard;
+                } else if (msgEl._macroCardData) {
+                    msgEl._macroCardData.resolved = data.resolution || true;
+                    if (data.results) msgEl._macroCardData.results = data.results;
+                    if (data.summary) msgEl._macroCardData.summary = data.summary;
+                }
+                if (msgEl._macroCardData) {
+                    const cardContainer = msgEl.querySelector('.macro-chat-card');
+                    if (cardContainer) {
+                        const newHtml = renderMacroCardHtml(msgEl._macroCardData, false, data.id);
+                        const tempDiv = document.createElement('div');
+                        tempDiv.innerHTML = newHtml;
+                        cardContainer.replaceWith(tempDiv.firstElementChild);
+                    }
+                }
+            }
+        });
+
+        vtt.socket.on('initiative:updated', (data) => {
+            if (data.initiative) {
+                if (!vtt.campaignState) vtt.campaignState = {};
+                vtt.campaignState.initiative = data.initiative;
+
+                if (Array.isArray(data.initiative)) {
+                    combatants = data.initiative;
+                } else {
+                    combatants = data.initiative.combatants || [];
+                    currentRound = data.initiative.currentRound || 1;
+                    activeTurnIndex =
+                        data.initiative.activeTurnIndex !== undefined ? data.initiative.activeTurnIndex : -1;
+                    if (data.initiative.isVisible !== undefined) {
+                        initiativeVisible = data.initiative.isVisible;
+                    }
+                }
+                renderInitiativeList();
+            }
+        });
+    }
+
+    function setupChatInputs() {
+        btnSend.addEventListener('click', () => sendMessage());
+        chatInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Fast Dice rolling quickbar buttons
+        fastRollBtns.forEach((btn) => {
+            btn.addEventListener('click', (e) => {
+                const formula = btn.dataset.formula;
+                rollAndSend(formula, e);
+            });
+        });
+
+        // Chat bar roll mode toggles
+        chatRollModeBtns.forEach((btn) => {
+            btn.addEventListener('click', () => {
+                if (btn.id === 'btn-gm-whisper') {
+                    setGlobalWhisperGM(!window.VTT?.whisperGM);
+                    return;
+                }
+                const newMode = btn.dataset.mode || 'normal';
+                setGlobalRollMode(newMode);
+            });
+        });
+
+        // 3D Dice Settings Controls Bindings
+        const cfg3dEnable = document.getElementById('config-3d-dice-enable');
+        const cfg3dSkin = document.getElementById('config-3d-dice-skin');
+        const cfg3dSfx = document.getElementById('config-3d-dice-sfx');
+        const cfg3dVol = document.getElementById('config-3d-dice-volume');
+
+        if (cfg3dEnable && window.Dice3D) {
+            cfg3dEnable.checked = window.Dice3D.isEnabled();
+            cfg3dEnable.addEventListener('change', (e) => {
+                window.Dice3D.setEnabled(e.target.checked);
+            });
+        }
+
+        if (cfg3dSkin && window.Dice3D) {
+            const savedSkin = localStorage.getItem('vtt_3d_dice_skin') || 'obsidian_gold';
+            cfg3dSkin.value = savedSkin;
+            cfg3dSkin.addEventListener('change', (e) => {
+                window.Dice3D.setSkin(e.target.value);
+            });
+        }
+
+        if (cfg3dSfx && window.Dice3D) {
+            const savedSfx = localStorage.getItem('vtt_3d_dice_sfx');
+            cfg3dSfx.checked = savedSfx === null ? true : savedSfx === 'true';
+            cfg3dSfx.addEventListener('change', (e) => {
+                window.Dice3D.setSfxEnabled(e.target.checked);
+            });
+        }
+
+        if (cfg3dVol && window.Dice3D) {
+            const savedVol = localStorage.getItem('vtt_3d_dice_volume');
+            cfg3dVol.value = savedVol !== null ? Math.round(parseFloat(savedVol) * 100) : 60;
+            cfg3dVol.addEventListener('input', (e) => {
+                window.Dice3D.setVolume(parseFloat(e.target.value) / 100);
+            });
+        }
+
+        // Click delegation for dice chips, native rollers, and chat actions
+        chatMessages.addEventListener('click', (e) => {
+            // Chat menu actions
+            const menuBtn = e.target.closest('.btn-chat-menu');
+            if (menuBtn) {
+                const menu = menuBtn.nextElementSibling;
+                // Close all others
+                document.querySelectorAll('.chat-msg-menu').forEach((m) => {
+                    if (m !== menu) m.classList.add('vtt-hidden');
+                });
+                menu.classList.toggle('vtt-hidden');
+                e.stopPropagation();
+            }
+
+            // Linked Roll Table action button on macro card
+            const rollTableBtn = e.target.closest('.btn-chat-roll-table');
+            if (rollTableBtn) {
+                const tableId = rollTableBtn.dataset.tableId;
+                const charName = rollTableBtn.dataset.charName;
+                const abilityName = rollTableBtn.dataset.abilityName;
+                const isSheetWhisper = Boolean(
+                    (typeof window !== 'undefined' && window.vttPlayerSheetAPI?.isWhisperToGM?.()) ||
+                    (typeof window !== 'undefined' && window.vttCreatureSheetAPI?.isWhisperToGM?.())
+                );
+                const isCardWhisper = Boolean(rollTableBtn.closest('.chat-msg.is-whisper'));
+                const effectiveWhisper = isSheetWhisper || isCardWhisper;
+                if (window.VTT?.rollTablesEngine?.rollLinkedTable) {
+                    window.VTT.rollTablesEngine.rollLinkedTable(tableId, {
+                        charName,
+                        abilityName,
+                        isWhisper: effectiveWhisper
+                    });
+                }
+                e.stopPropagation();
+                return;
+            }
+
+            // Creature Table action button on pinged ability card
+            const rollCreatureTableBtn = e.target.closest('.btn-chat-roll-creature-table');
+            if (rollCreatureTableBtn) {
+                const rawJson = rollCreatureTableBtn.dataset.tableJson;
+                let tableData = null;
+                if (rawJson) {
+                    try {
+                        tableData = JSON.parse(decodeURIComponent(rawJson));
+                    } catch (err) { }
+                }
+                const cName = rollCreatureTableBtn.dataset.creature || 'Creature';
+                const aName = rollCreatureTableBtn.dataset.ability || 'Table';
+                if (window.VTT?.rollCreatureTableAction) {
+                    window.VTT.rollCreatureTableAction(cName, aName, tableData);
+                }
+                e.stopPropagation();
+                return;
+            }
+
+            const hideBtn = e.target.closest('.btn-chat-toggle-hide');
+            if (hideBtn) {
+                const msgEl = hideBtn.closest('.chat-message');
+                if (msgEl && msgEl.dataset.msgId) {
+                    vtt.socket.emit('chat:hide', msgEl.dataset.msgId);
+                }
+                hideBtn.closest('.chat-msg-menu').classList.add('vtt-hidden');
+                e.stopPropagation();
+            }
+
+            const delBtn = e.target.closest('.btn-chat-delete');
+            if (delBtn) {
+                const msgEl = delBtn.closest('.chat-message');
+                if (msgEl && msgEl.dataset.msgId) {
+                    vtt.socket.emit('chat:delete', msgEl.dataset.msgId);
+                }
+                delBtn.closest('.chat-msg-menu').classList.add('vtt-hidden');
+                e.stopPropagation();
+            }
+
+            const target = e.target.closest('.dice-chip, .render-roller');
+            if (target) {
+                let formula = target.dataset.formula;
+                if (!formula && target.classList.contains('render-roller')) {
+                    formula = target.textContent.trim();
+                }
+                if (formula) rollAndSend(formula);
+                e.stopPropagation();
+                return;
+            }
+
+            // Macro chatcard resolution & damage buttons (GM only)
+            const actionBtn = e.target.closest('.macro-btn-action');
+            if (actionBtn) {
+                if (vtt.role !== 'GM') return;
+                const msgEl = actionBtn.closest('.chat-message');
+                let cardData = msgEl?._macroCardData;
+                const rowEl = actionBtn.closest('.macro-card-actions-row');
+                const msgId = msgEl?.dataset?.msgId || rowEl?.dataset?.msgId;
+                if (!cardData && rowEl && rowEl.dataset.cardData) {
+                    try {
+                        cardData = JSON.parse(decodeURIComponent(rowEl.dataset.cardData));
+                    } catch (err) { }
+                }
+                const action = actionBtn.dataset.action;
+                if (cardData && action) {
+                    const rowButtons = rowEl ? Array.from(rowEl.querySelectorAll('.macro-btn-action')) : [actionBtn];
+                    rowButtons.forEach((b) => (b.disabled = true));
+
+                    if (window.VTT?.canvasEngine?.handleCardAction) {
+                        const handled = window.VTT.canvasEngine.handleCardAction(cardData, action, msgId);
+                        if (handled === false) {
+                            rowButtons.forEach((b) => (b.disabled = false));
+                        }
+                    }
+                }
+                e.stopPropagation();
+                return;
+            }
+
+            // Save resolution chatcard buttons (GM only)
+            const saveResolveBtn = e.target.closest('.btn-save-resolve-action');
+            if (saveResolveBtn) {
+                if (vtt.role !== 'GM') return;
+                const msgEl = saveResolveBtn.closest('.chat-message');
+                let cardData = msgEl?._saveResolveCardData;
+                const rowEl = saveResolveBtn.closest('.save-resolve-actions-row');
+                const msgId = msgEl?.dataset?.msgId || rowEl?.dataset?.msgId;
+                if (!cardData && rowEl && rowEl.dataset.cardData) {
+                    try {
+                        cardData = JSON.parse(decodeURIComponent(rowEl.dataset.cardData));
+                    } catch (err) { }
+                }
+                const action = saveResolveBtn.dataset.action;
+                if (cardData && action && window.VTT?.canvasEngine?.resolveSaveFromChat) {
+                    saveResolveBtn.disabled = true;
+                    const sibling = rowEl?.querySelector(`.btn-save-resolve-action:not([data-action="${action}"])`);
+                    if (sibling) sibling.disabled = true;
+                    window.VTT.canvasEngine.resolveSaveFromChat(cardData, action === 'half', msgId);
+                }
+                e.stopPropagation();
+                return;
+            }
+
+            // Mass attack resolution process button (GM only)
+            const massAttackBtn = e.target.closest('.btn-mass-attack-process');
+            if (massAttackBtn) {
+                if (vtt.role !== 'GM') return;
+                const msgEl = massAttackBtn.closest('.chat-message');
+                let cardData = msgEl?._massAttackCardData;
+                const rowEl = massAttackBtn.closest('.mass-attack-actions-row');
+                const msgId = msgEl?.dataset?.msgId || rowEl?.dataset?.msgId;
+                if (!cardData && rowEl && rowEl.dataset.cardData) {
+                    try {
+                        cardData = JSON.parse(decodeURIComponent(rowEl.dataset.cardData));
+                    } catch (err) { }
+                }
+                if (cardData && window.VTT?.canvasEngine?.processMassAttackFromChat) {
+                    massAttackBtn.disabled = true;
+                    window.VTT.canvasEngine.processMassAttackFromChat(cardData, msgId);
+                }
+                e.stopPropagation();
+                return;
+            }
+
+            // Trap save button click delegation
+            const trapBtn = e.target.closest('.trap-chat-save-btn');
+            if (trapBtn) {
+                const { trapId, tokenId, ability, dc } = trapBtn.dataset;
+                if (window.VTT?.canvasEngine?.rollTrapSave) {
+                    window.VTT.canvasEngine.rollTrapSave(trapId, tokenId, ability, parseInt(dc, 10));
+                }
+                e.stopPropagation();
+                return;
+            }
+
+            // Trap action buttons click delegation (Process, Full Damage, Half Damage)
+            const trapActionBtn = e.target.closest('.trap-btn-action');
+            if (trapActionBtn) {
+                if (vtt.role !== 'GM') return;
+                const action = trapActionBtn.dataset.action;
+                const rowEl = trapActionBtn.closest('.trap-card-actions-row');
+                const msgEl = trapActionBtn.closest('.chat-message');
+                const msgId = msgEl?.dataset?.msgId || rowEl?.dataset?.msgId;
+                let cardData = null;
+                if (rowEl && rowEl.dataset.cardData) {
+                    try {
+                        cardData = JSON.parse(decodeURIComponent(rowEl.dataset.cardData));
+                    } catch (err) { }
+                }
+                if (!cardData && msgEl?._msgData?.trapCard) {
+                    cardData = { ...msgEl._msgData.trapCard, isTrap: true };
+                }
+
+                if (cardData && action && window.VTT?.canvasEngine?.handleCardAction) {
+                    const rowButtons = rowEl ? Array.from(rowEl.querySelectorAll('.trap-btn-action')) : [trapActionBtn];
+                    rowButtons.forEach((b) => (b.disabled = true));
+                    const handled = window.VTT.canvasEngine.handleCardAction(cardData, action, msgId);
+                    if (handled === false) {
+                        rowButtons.forEach((b) => (b.disabled = false));
+                    }
+                }
+                e.stopPropagation();
+                return;
+            }
+        });
+
+        // Close menus when clicking outside
+        document.addEventListener('click', () => {
+            document.querySelectorAll('.chat-msg-menu').forEach((m) => m.classList.add('vtt-hidden'));
+        });
+
+        // Global Popover Tooltip for data-tooltip
+        let popoverEl = document.getElementById('vtt-global-tooltip');
+        if (!popoverEl) {
+            popoverEl = document.createElement('div');
+            popoverEl.id = 'vtt-global-tooltip';
+            popoverEl.popover = 'manual';
+            popoverEl.className = 'vtt-popover-tooltip';
+            document.body.appendChild(popoverEl);
+        }
+
+        let tooltipHoverTimer;
+
+        chatMessages.addEventListener('mouseover', (e) => {
+            const target = e.target.closest('[data-tooltip]');
+            if (target) {
+                clearTimeout(tooltipHoverTimer);
+                const text = target.getAttribute('data-tooltip');
+                if (!text) return;
+
+                if (typeof window !== 'undefined' && typeof window.vttSanitizeHtml === 'function') {
+                    popoverEl.innerHTML = window.vttSanitizeHtml(text);
+                } else {
+                    popoverEl.textContent = text;
+                }
+
+                // Show popover to compute its dimensions
+                popoverEl.showPopover();
+
+                const rect = target.getBoundingClientRect();
+                const popRect = popoverEl.getBoundingClientRect();
+
+                let top = rect.top - popRect.height - 8;
+                let left = rect.left + rect.width / 2 - popRect.width / 2;
+
+                // boundary checks
+                if (top < 0) top = rect.bottom + 8; // flip to bottom
+                if (left < 0) left = 8;
+                if (left + popRect.width > window.innerWidth) left = window.innerWidth - popRect.width - 8;
+
+                popoverEl.style.top = top + 'px';
+                popoverEl.style.left = left + 'px';
+            }
+        });
+
+        chatMessages.addEventListener('mouseout', (e) => {
+            const target = e.target.closest('[data-tooltip]');
+            if (target) {
+                if (!e.relatedTarget || !target.contains(e.relatedTarget)) {
+                    tooltipHoverTimer = setTimeout(() => {
+                        popoverEl.hidePopover();
+                    }, 50);
+                }
+            }
+        });
+    }
+
+    function sendMessage() {
+        const text = chatInput.value.trim();
+        if (!text) return;
+
+        chatInput.value = '';
+
+        // Check if message is a whisper command: /w or /whisper
+        const whisperMatch = text.match(/^(?:\/w|\/whisper)\s+(?:"([^"]+)"|'([^']+)'|(\S+))\s+([\s\S]+)$/i);
+        if (whisperMatch) {
+            const target = whisperMatch[1] || whisperMatch[2] || whisperMatch[3];
+            const whisperText = whisperMatch[4].trim();
+            if (target.toLowerCase() === 'gm') {
+                vtt.socket.emit('chat:msg', { text: whisperText, whisperToGM: true });
+            } else {
+                vtt.socket.emit('chat:msg', { text: whisperText, whisperTo: target });
+            }
+            return;
+        }
+
+        // Check if message is a dice roll command
+        if (text.startsWith('/roll ') || text.startsWith('/r ')) {
+            const formula = text.replace(/^\/(roll|r)\s+/i, '');
+            rollAndSend(formula);
+        } else {
+            // Standard text message
+            vtt.socket.emit('chat:msg', { text, whisperToGM: vtt.whisperGM });
+        }
+    }
+
+    function rollAndSend(formula, optEvent = null) {
+        if (!formula || typeof formula !== 'string') return;
+
+        let strippedFormula = formula.replace(/\[.*?\]/g, '').trim();
+
+        // Calculate effective roll mode: Shift/Ctrl shortcuts override sticky chat panel mode
+        let mode = 'normal';
+        try {
+            mode =
+                (window.VTT && window.VTT.currentRollMode) ||
+                vtt.currentRollMode ||
+                localStorage.getItem('vtt_current_roll_mode') ||
+                'normal';
+        } catch (e) {
+            mode = (window.VTT && window.VTT.currentRollMode) || vtt.currentRollMode || 'normal';
+        }
+
+        const evt = optEvent || window.event;
+        const isShift =
+            (evt && evt.shiftKey) || (typeof window.VTT_isShiftPressed === 'function' && window.VTT_isShiftPressed());
+        const isCtrl =
+            (evt && evt.ctrlKey) || (typeof window.VTT_isCtrlPressed === 'function' && window.VTT_isCtrlPressed());
+
+        if (isShift) mode = 'adv';
+        else if (isCtrl) mode = 'dis';
+
+        let displayFormula = formula;
+        if (strippedFormula.match(/(?:^|[^0-9])(?:1)?d20/i)) {
+            if (mode === 'adv') {
+                strippedFormula = strippedFormula.replace(/(^|[^0-9])(?:1)?d20/gi, '$12d20kh1');
+                displayFormula = displayFormula.replace(/(^|[^0-9])(?:1)?d20/gi, '$12d20kh1');
+            } else if (mode === 'dis') {
+                strippedFormula = strippedFormula.replace(/(^|[^0-9])(?:1)?d20/gi, '$12d20kl1');
+                displayFormula = displayFormula.replace(/(^|[^0-9])(?:1)?d20/gi, '$12d20kl1');
+            }
+        }
+
+        const parser = typeof VTTDiceParser !== 'undefined' ? VTTDiceParser : window.VTTDiceParser;
+        let rollResult = null;
+
+        if (parser && typeof parser.roll === 'function') {
+            try {
+                rollResult = parser.roll(strippedFormula);
+            } catch (e) {
+                console.warn('[rollAndSend] VTTDiceParser.roll failed:', e);
+            }
+        }
+
+        if (!rollResult && window.Renderer?.dice?.lang?.getTree3) {
+            try {
+                const wrpTree = window.Renderer.dice.lang.getTree3(strippedFormula.toLowerCase());
+                if (wrpTree && wrpTree.tree) {
+                    const meta = {};
+                    const total = wrpTree.tree.evl(meta);
+                    rollResult = {
+                        total,
+                        diceList: meta.diceList || [],
+                        breakdownStr: (meta.html || []).join('') || `<strong>${total}</strong>`,
+                        isCritSuccess: meta.isCritSuccess || false,
+                        isCritFail: meta.isCritFail || false
+                    };
+                }
+            } catch (e) {
+                console.warn('[rollAndSend] Renderer.dice.lang.getTree3 failed:', e);
+            }
+        }
+
+        // Inline fallback evaluator if neither parser available
+        if (!rollResult) {
+            const diceList = [];
+            const breakdownParts = [];
+            const parsedStr = strippedFormula.replace(
+                /(\d*)d(\d+)(?:(kh|kl|dl|dh)(\d*))?/gi,
+                (match, countStr, facesStr, keepDropType, keepDropNumStr) => {
+                    const count = parseInt(countStr || '1', 10);
+                    const faces = parseInt(facesStr, 10);
+                    if (faces <= 0 || count <= 0) return '0';
+                    const rolled = [];
+                    for (let i = 0; i < count; i++) {
+                        rolled.push(Math.floor(Math.random() * faces) + 1);
+                    }
+                    let droppedIndices = new Set();
+                    if (keepDropType) {
+                        const kNum = parseInt(keepDropNumStr || '1', 10);
+                        const indexed = rolled.map((val, idx) => ({ val, idx })).sort((a, b) => b.val - a.val);
+                        if (keepDropType === 'kh') indexed.slice(kNum).forEach((x) => droppedIndices.add(x.idx));
+                        else if (keepDropType === 'kl')
+                            indexed.slice(0, -kNum).forEach((x) => droppedIndices.add(x.idx));
+                    }
+                    rolled.forEach((val, idx) => {
+                        diceList.push({ faces, val, isDropped: droppedIndices.has(idx) });
+                    });
+                    const subtotal = rolled.reduce((acc, val, idx) => (droppedIndices.has(idx) ? acc : acc + val), 0);
+                    const rollStrings = rolled.map((val, idx) =>
+                        droppedIndices.has(idx) ? `<s>${val}</s>` : `${val}`
+                    );
+                    breakdownParts.push(`[${rollStrings.join(', ')}]`);
+                    return subtotal.toString();
+                }
+            );
+
+            let total = 0;
+            try {
+                const safeMath = parsedStr.replace(/[^0-9+\-*/().\s]/g, '');
+                if (safeMath) total = Math.round(new Function(`"use strict"; return (${safeMath})`)());
+            } catch (e) {
+                total = 0;
+            }
+
+            const breakdownStr =
+                breakdownParts.length > 0
+                    ? `${breakdownParts.join(' + ')}${strippedFormula.includes('+') || strippedFormula.includes('-') ? ` = <strong>${total}</strong>` : ''}`
+                    : `<strong>${total}</strong>`;
+
+            rollResult = { total, diceList, breakdownStr, isCritSuccess: false, isCritFail: false };
+        }
+
+        // Critical Hit detection on d20
+        let isCritSuccess = rollResult.isCritSuccess || false;
+        let isCritFail = rollResult.isCritFail || false;
+        const diceList = rollResult.diceList || [];
+        if (strippedFormula.match(/d20/i) && diceList.length > 0) {
+            const activeD20s = diceList.filter((d) => d.faces === 20 && !d.isDropped);
+            if (activeD20s.length > 0) {
+                if (activeD20s.some((d) => d.val === 20)) isCritSuccess = true;
+                if (activeD20s.some((d) => d.val === 1) && !isCritSuccess) isCritFail = true;
+            }
+        }
+
+        const finalRoll = {
+            formula: displayFormula,
+            diceList,
+            total: rollResult.total,
+            breakdownStr: rollResult.breakdownStr || `<strong>${rollResult.total}</strong>`,
+            isCritSuccess,
+            isCritFail
+        };
+
+        const rollLabel = mode === 'adv' ? ' (Advantage)' : mode === 'dis' ? ' (Disadvantage)' : '';
+
+        // Broadcast to chat room
+        vtt.socket.emit('chat:msg', {
+            text: `rolls **${displayFormula}**${rollLabel}`,
+            roll: finalRoll,
+            whisperToGM: vtt.whisperGM
+        });
+    }
+
+    // Inject dice expression chips into text for chat display (safe against HTML tags, attributes, and existing buttons)
+    function injectDiceChipsChat(html) {
+        if (!html) return '';
+        let clean = html;
+
+        // Strip any existing/corrupted dice-chips back to their inner content to prevent nested buttons
+        clean = clean.replace(/<button class="dice-chip[^"]*"[^>]*>([\s\S]*?)<\/button>/gi, '$1');
+        clean = clean.replace(/<button class="dice-chip[^"]*"[^>]*>([\s\S]*?)<\/button>/gi, '$1');
+
+        // Split by HTML tags to isolate plain text nodes from tag markup/attributes
+        const parts = clean.split(/(<[^>]*>)/g);
+        let inButton = false;
+        let inAnchor = false;
+
+        for (let i = 0; i < parts.length; i++) {
+            const part = parts[i];
+            if (!part) continue;
+
+            // HTML tag handling
+            if (part.startsWith('<') && part.endsWith('>')) {
+                const tagLower = part.toLowerCase();
+                if (tagLower.startsWith('<button')) inButton = true;
+                else if (tagLower.startsWith('</button')) inButton = false;
+                else if (tagLower.startsWith('<a')) inAnchor = true;
+                else if (tagLower.startsWith('</a')) inAnchor = false;
+                // Never modify tag contents or attributes
+                continue;
+            }
+
+            // Only process text that is NOT inside interactive elements or existing buttons
+            if (!inButton && !inAnchor) {
+                let text = part;
+
+                // 1. Roll chip for dice: XdY+Z or XdY-Z or XdY
+                text = text.replace(/(\d+)d(\d+)(?:\s*([+\-])\s*(\d+))?/gi, (match, count, faces, sign, mod) => {
+                    let formula = `${count}d${faces}`;
+                    if (sign && mod) formula += `${sign}${mod}`;
+                    return `<button class="dice-chip" data-formula="${formula}" title="Roll: ${formula}">${match.trim()}</button>`;
+                });
+
+                // 2. +N to hit -> roll chip
+                text = text.replace(/\+(\d+)\s+to\s+hit/gi, (match, bonus) => {
+                    const formula = `1d20+${bonus}`;
+                    return `<button class="dice-chip" data-formula="${formula}" title="Roll attack: ${formula}">+${bonus} to hit</button>`;
+                });
+
+                // 3. DC N -> dc chip
+                text = text.replace(/DC\s+(\d+)/gi, (match, dcVal) => {
+                    return `<button class="dice-chip dc-chip" data-dc="${dcVal}" style="border-color: var(--color-gold-base);" title="Ping DC ${dcVal} to Chat">DC ${dcVal}</button>`;
+                });
+
+                parts[i] = text;
+            }
+        }
+
+        return parts.join('');
+    }
+
+    function escapeHtml(str) {
+        if (str === null || str === undefined) return '';
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+    }
+
+    function parseSimpleMarkdown(text) {
+        if (!text) return '';
+        const safe = escapeHtml(text);
+        return safe.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/\*(.+?)\*/g, '<em>$1</em>');
+    }
+
+    function renderMarkdownTablesAndFormatting(text) {
+        if (!text) return '';
+        let res = text;
+
+        // Match markdown table blocks (header | divider | body rows)
+        res = res.replace(/(?:^|\n)(\|[^\n]+\|\r?\n\|[-:\s|]+\|\r?\n(?:\|[^\n]+\|\r?\n?)+)/g, (match, tableContent) => {
+            const rawRows = tableContent
+                .trim()
+                .split(/\r?\n/)
+                .filter((r) => r.trim());
+            if (rawRows.length < 2) return match;
+
+            const parseRow = (line) => {
+                const parts = line.split('|');
+                if (parts.length > 2) {
+                    return parts.slice(1, -1).map((c) => c.trim());
+                }
+                return parts.map((c) => c.trim()).filter(Boolean);
+            };
+
+            const headerCells = parseRow(rawRows[0]);
+            const bodyRows = rawRows.slice(2);
+
+            let html = '<div class="table-responsive ability-card-table-wrap"><table class="ability-card-table">';
+            html +=
+                '<thead><tr>' + headerCells.map((c) => `<th>${escapeHtml(c)}</th>`).join('') + '</tr></thead><tbody>';
+            bodyRows.forEach((row) => {
+                const cells = parseRow(row);
+                html += '<tr>' + cells.map((c) => `<td>${escapeHtml(c)}</td>`).join('') + '</tr>';
+            });
+            html += '</tbody></table></div>';
+            return '\n' + html + '\n';
+        });
+
+        // Markdown Horizontal rules: ---
+        res = res.replace(/\n\s*---\s*\n/g, '<hr class="ability-card-hr">');
+
+        // Markdown Bold / Italic
+        res = res.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+        res = res.replace(/\*(.+?)\*/g, '<em>$1</em>');
+
+        return res;
+    }
+
+    function formatAbilityCardText(rawText) {
+        if (!rawText) return '';
+        let text = String(rawText).trim();
+
+        // 1. Remove raw 5etools footer metadata, source headers, or internal header chrome if present
+        text = text.replace(/<div class="vtt-spell-source-footer"[\s\S]*?<\/div>/gi, '');
+        text = text.replace(/<div class="ve-split-v-end"[\s\S]*?<\/div>\s*<\/div>\s*<\/div>/gi, '');
+        text = text.replace(/<div class="ve-split-v-end"[\s\S]*?<\/div>\s*<\/div>/gi, '');
+        text = text.replace(/<div class="ve-split-v-end"[\s\S]*?<\/div>/gi, '');
+        text = text.replace(/<div class="ve-stats__wrp-h-source[\s\S]*?<\/div>/gi, '');
+        text = text.replace(/<h1[^>]*>[\s\S]*?<\/h1>/gi, '');
+        text = text.replace(/<a\s+href="book\.html[^"]*"[^>]*>[\s\S]*?<\/a>/gi, '');
+        text = text.replace(/<span class="ve-stats__h-source-abbreviation[^"]*"[^>]*>[\s\S]*?<\/span>/gi, '');
+        text = text.replace(/<span class="rd__h-toggle"[^>]*>[\s\S]*?<\/span>/gi, '');
+
+        // 2. Clean 5etools tag syntax (e.g. {@damage 1d6}, {@hit 5}, {@dice 1d20}, {@spell ...})
+        text = text.replace(/\{@damage\s+([^}]+)\}/gi, '$1');
+        text = text.replace(/\{@dice\s+([^}]+)\}/gi, '$1');
+        text = text.replace(/\{@hit\s+([+-]?\d+)\}/gi, '+$1');
+        text = text.replace(/\{@spell\s+([^|}]+)(?:\|[^}]+)?\}/gi, '$1');
+        text = text.replace(/\{@item\s+([^|}]+)(?:\|[^}]+)?\}/gi, '$1');
+        text = text.replace(/\{@creature\s+([^|}]+)(?:\|[^}]+)?\}/gi, '$1');
+        text = text.replace(/\{@condition\s+([^|}]+)(?:\|[^}]+)?\}/gi, '$1');
+        text = text.replace(/\{@skill\s+([^|}]+)(?:\|[^}]+)?\}/gi, '$1');
+        text = text.replace(/\{@sense\s+([^|}]+)(?:\|[^}]+)?\}/gi, '$1');
+        text = text.replace(/\{@[a-z]+\s+([^|}]+)(?:\|[^}]+)?\}/gi, '$1');
+
+        // 3. Check if text already has rich HTML markup
+        const hasHtmlTags = /<\/?(?:div|p|span|table|tr|td|th|ul|ol|li|i|b|strong|em|br|hr|button|h\d)[^>]*>/i.test(
+            text
+        );
+
+        if (hasHtmlTags) {
+            // Convert markdown tables and bold/italics inside the HTML
+            text = renderMarkdownTablesAndFormatting(text);
+
+            // Inject clickable dice chips for formulas
+            text = injectDiceChipsChat(text);
+
+            // Robust sanitization via DOMPurify to neutralize script tags, inline event handlers, and XSS vectors
+            if (typeof window !== 'undefined' && typeof window.vttSanitizeHtml === 'function') {
+                text = window.vttSanitizeHtml(text);
+            } else if (typeof DOMPurify !== 'undefined' && typeof DOMPurify.sanitize === 'function') {
+                text = DOMPurify.sanitize(text);
+            } else {
+                text = escapeHtml(text);
+            }
+
+            return text;
+        }
+
+        // 4. Pure Markdown / Plain Text path
+        text = escapeHtml(text);
+        text = renderMarkdownTablesAndFormatting(text);
+        text = text.replace(/\n\n+/g, '</p><p>');
+        text = text.replace(/\n/g, '<br>');
+        text = injectDiceChipsChat(text);
+
+        return text;
+    }
+
+    function renderMacroCardHtml(mc, isHistorical = false, msgId = null) {
+        // Damage type color map
+        const dmgColors = {
+            Fire: '#ff6b35',
+            Cold: '#64b5f6',
+            Lightning: '#ffd54f',
+            Thunder: '#b39ddb',
+            Poison: '#81c784',
+            Acid: '#aed581',
+            Necrotic: '#9e9e9e',
+            Radiant: '#fff176',
+            Force: '#ce93d8',
+            Psychic: '#f48fb1',
+            Slashing: '#ef9a9a',
+            Piercing: '#ffcc80',
+            Bludgeoning: '#bcaaa4',
+            Healing: '#a5d6a7',
+            'Temp HP': '#80cbc4',
+            'Temporary Hit Points': '#80cbc4'
+        };
+
+        const dmgIcons = {
+            Fire: 'fa-solid fa-fire',
+            Cold: 'fa-regular fa-snowflake',
+            Lightning: 'fa-solid fa-bolt',
+            Thunder: 'fa-solid fa-ear-deaf',
+            Poison: 'fa-solid fa-skull-crossbones',
+            Acid: 'fa-solid fa-flask',
+            Necrotic: 'fa-solid fa-skull',
+            Radiant: 'fa-regular fa-sun',
+            Force: 'fa-regular fa-circle-dot',
+            Psychic: 'fa-regular fa-eye',
+            Slashing: 'fa-solid fa-droplet-slash',
+            Piercing: 'fa-solid fa-trowel',
+            Bludgeoning: 'fa-solid fa-gavel',
+            Healing: 'fa-regular fa-heart',
+            'Temp HP': 'fa-solid fa-shield-heart',
+            'Temporary Hit Points': 'fa-solid fa-shield-heart'
+        };
+
+        // Description section
+        const descSection = mc.description
+            ? `<div class="macro-card-desc">${formatAbilityCardText(mc.description)}</div>`
+            : '';
+
+        // Attack roll row
+        let atkSection = '';
+        if (mc.atkRoll) {
+            const bd =
+                mc.atkRoll.breakdownStr ||
+                (mc.atkRoll.diceList ? `[${mc.atkRoll.diceList.map((d) => d.val).join(', ')}]` : '');
+            const formulaText = (mc.atkRoll.formula || '').toUpperCase();
+            const tooltipText = formulaText ? `${formulaText} → ${bd}` : bd;
+            let critClass = '';
+            let critLabel = '';
+            if (mc.atkRoll.isCritSuccess) {
+                critClass = 'roll-crit-success';
+                critLabel = `<div style="font-size:0.9rem; color:#81c784; font-weight:bold; margin-top:2px;"><i class="fa-regular fa-star"></i> CRITICAL HIT!</div>`;
+            } else if (mc.atkRoll.isCritFail) {
+                critClass = 'roll-crit-fail';
+                critLabel = `<div style="font-size:0.9rem; color:#e57373; font-weight:bold; margin-top:2px;"><i class="fa-solid fa-triangle-exclamation"></i> CRITICAL MISS!</div>`;
+            }
+
+            atkSection = `
+                <div class="macro-card-row" style="align-items: flex-start; padding: 10px 12px;">
+                    <div class="macro-row-label" style="padding-top: 2px;"><i class="fa-solid fa-crosshairs macro-row-icon" style="color:#90caf9;"></i> Attack Roll</div>
+                    <div class="macro-row-right" style="display:flex; flex-direction:column; align-items:flex-end; gap:2px; flex:1;">
+                        <span class="macro-row-total ${critClass}" style="font-size:1.35rem; line-height:1; min-width:auto; color:var(--color-gold-light); cursor:help;" data-tooltip="${escapeHtml(tooltipText)}">${escapeHtml(String(mc.atkRoll.total ?? ''))}</span>
+                        ${mc.atkRoll.compactBreakdown ? `<span style="font-size:0.75rem; color:#888; font-family:var(--font-mono, monospace); letter-spacing:0.5px; cursor:help;" data-tooltip="${escapeHtml(tooltipText)}">${escapeHtml(String(mc.atkRoll.compactBreakdown))}</span>` : ''}
+                        ${critLabel}
+                    </div>
+                </div>`;
+        }
+
+        // Save DC row
+        let saveSection = '';
+        const validAbilities = [
+            'STR',
+            'DEX',
+            'CON',
+            'INT',
+            'WIS',
+            'CHA',
+            'STRENGTH',
+            'DEXTERITY',
+            'CONSTITUTION',
+            'INTELLIGENCE',
+            'WISDOM',
+            'CHARISMA'
+        ];
+        const rawSaveObj =
+            mc.saveInfo || (mc.saveDc && mc.saveAbility ? { ability: mc.saveAbility, dc: mc.saveDc } : null);
+        const saveObj =
+            rawSaveObj &&
+                rawSaveObj.ability &&
+                validAbilities.includes(rawSaveObj.ability.trim().toUpperCase()) &&
+                !isNaN(parseInt(rawSaveObj.dc)) &&
+                parseInt(rawSaveObj.dc) > 0
+                ? {
+                    ...rawSaveObj,
+                    ability: rawSaveObj.ability.trim().substring(0, 3).toUpperCase()
+                }
+                : null;
+        if (saveObj) {
+            const abLabel = `${saveObj.ability} Save DC`;
+            saveSection = `
+                <div class="macro-card-row">
+                    <div class="macro-row-label"><i class="fa-solid fa-shield-halved macro-row-icon" style="color:#a5d6a7;"></i> ${escapeHtml(abLabel)}</div>
+                    <div class="macro-row-right">
+                        <span class="macro-row-total" style="color:#a5d6a7;">${escapeHtml(String(saveObj.dc ?? ''))}</span>
+                    </div>
+                </div>`;
+        }
+
+        // Per-type damage rows
+        const dmgSections = (mc.dmgRolls || [])
+            .map((dr) => {
+                const rawType = (dr.type || 'Damage').trim();
+                const normalizedType =
+                    rawType.length > 0 ? rawType.charAt(0).toUpperCase() + rawType.slice(1).toLowerCase() : 'Damage';
+                const color = dmgColors[normalizedType] || dmgColors[dr.type] || '#ef9a9a';
+                const icon = dmgIcons[normalizedType] || dmgIcons[dr.type] || 'fa-solid fa-droplet';
+                const bd = dr.roll
+                    ? dr.roll.breakdownStr ||
+                    (dr.roll.diceList ? `[${dr.roll.diceList.map((d) => d.val).join(', ')}]` : '')
+                    : '';
+                const total = dr.roll ? dr.roll.total : 0;
+                const formulaText = (dr.formula || '').toUpperCase();
+                const tooltipText = formulaText ? `${formulaText} → ${bd}` : bd;
+                const compactBd = dr.roll ? dr.roll.compactBreakdown || '' : '';
+                const labelText =
+                    dr.label && dr.label.trim() && dr.label.trim().toLowerCase() !== normalizedType.toLowerCase()
+                        ? ` <span style="font-size:0.75rem; opacity:0.8; font-weight:normal; margin-left:4px;">(${escapeHtml(dr.label.trim())})</span>`
+                        : '';
+                const riderBadge = dr.saveRider
+                    ? ` <span class="macro-row-rider-badge" style="font-size:0.68rem; font-weight:700; color:#ffd54f; background:rgba(255,213,79,0.15); border:1px solid rgba(255,213,79,0.3); padding:1px 5px; border-radius:3px; margin-left:4px;" title="Damage requires saving throw">Save Rider</span>`
+                    : '';
+                return `
+                <div class="macro-card-row">
+                    <div class="macro-row-label">
+                        <i class="${icon} macro-row-icon" style="color:${color};"></i>
+                        <span>${escapeHtml(normalizedType)}</span>${labelText}${riderBadge}
+                    </div>
+                    <div class="macro-row-right" style="display:flex; flex-direction:column; align-items:flex-end; gap:2px;">
+                        <span class="macro-row-total" style="color:${color}; cursor:help;" data-tooltip="${escapeHtml(tooltipText)}">${escapeHtml(String(total))}</span>
+                        ${compactBd ? `<span style="font-size:0.75rem; color:#888; font-family:var(--font-mono, monospace); letter-spacing:0.5px; cursor:help;" data-tooltip="${escapeHtml(tooltipText)}">${escapeHtml(String(compactBd))}</span>` : ''}
+                    </div>
+                </div>`;
+            })
+            .join('');
+
+        const isResolved = !!mc.resolved;
+        let actionsRow = '';
+        if (isResolved) {
+            let summaryText = typeof mc.resolved === 'object' && mc.resolved.summary ? mc.resolved.summary : 'Resolved';
+            if (summaryText.startsWith('Resolved:')) {
+                summaryText = summaryText.replace(/^Resolved:\s*/, '');
+            }
+            actionsRow = `
+                <div class="macro-card-resolved-badge">
+                    <i class="fa-solid fa-circle-check"></i> Resolved: ${escapeHtml(summaryText)}
+                </div>
+            `;
+        } else if (
+            vtt.role === 'GM' &&
+            (mc.atkRoll || mc.saveInfo || (mc.saveDc && mc.saveAbility) || (mc.dmgRolls && mc.dmgRolls.length > 0))
+        ) {
+            let encodedData = '';
+            try {
+                encodedData = encodeURIComponent(JSON.stringify(mc));
+            } catch (err) { }
+            const dataMsgAttr = msgId ? ` data-msg-id="${escapeHtml(msgId)}"` : '';
+            actionsRow = `
+                <div class="macro-card-actions-row" data-card-data="${encodedData}"${dataMsgAttr}>
+                    <button type="button" class="macro-btn-action macro-btn-process" data-action="process" title="Automatically resolve attack roll / saving throw & apply damage to selected tokens">
+                        <i class="fa-solid fa-play"></i> Process
+                    </button>
+                    <button type="button" class="macro-btn-action macro-btn-full" data-action="full" title="Apply full damage to selected tokens">
+                        <i class="fa-solid fa-burst"></i> Full
+                    </button>
+                    <button type="button" class="macro-btn-action macro-btn-half" data-action="half" title="Apply half damage to selected tokens">
+                        <i class="fa-solid fa-shield-halved"></i> Half
+                    </button>
+                </div>
+            `;
+        }
+
+        let linkedTableRow = '';
+        if (mc.linkedTable) {
+            linkedTableRow = `
+                <div class="macro-card-table-row" style="margin-top:8px; padding-top:6px; border-top:1px solid rgba(255,255,255,0.08); display:flex; justify-content:center;">
+                    <button type="button" class="btn btn-xs btn-primary btn-chat-roll-table" 
+                            data-table-id="${escapeHtml(mc.linkedTable.id || '')}" 
+                            data-char-name="${escapeHtml(mc.charName || '')}" 
+                            data-ability-name="${escapeHtml(mc.macroName || '')}"
+                            style="display:inline-flex; align-items:center; gap:6px; width:100%; justify-content:center; font-weight:600;">
+                        <i class="fa-solid fa-dice-d20"></i> Roll ${escapeHtml(mc.linkedTable.name || 'Table')}
+                    </button>
+                </div>
+            `;
+        }
+
+        return `
+            <div class="macro-chat-card ${isResolved ? 'is-resolved' : ''}">
+                <div class="macro-card-header">
+                    <div class="macro-card-header-left">
+                        <i class="fa-solid fa-dice-d20 macro-card-icon"></i>
+                        <div>
+                            <span class="macro-card-charname">${escapeHtml(mc.charName || '')}</span>
+                            <span class="macro-card-name">${escapeHtml(mc.macroName || '')}</span>
+                        </div>
+                    </div>
+                </div>
+                ${descSection}
+                <div class="macro-card-rows">
+                    ${atkSection}
+                    ${saveSection}
+                    ${dmgSections}
+                </div>
+                ${linkedTableRow}
+                ${actionsRow}
+            </div>
+        `;
+    }
+
+    function renderItemCardHtml(ic) {
+        let descHtml = ic.description
+            ? ic.description.replace(/</g, '&lt;').replace(/>/g, '&gt;')
+            : '<i>No description provided.</i>';
+        descHtml = descHtml.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
+        descHtml = descHtml.replace(/\*(.*?)\*/g, '<i>$1</i>');
+        descHtml = descHtml.replace(
+            /---/g,
+            '<hr style="border:0; border-top:1px solid rgba(255,255,255,0.1); margin:8px 0;">'
+        );
+        descHtml = descHtml.replace(/\n/g, '<br>');
+        const tableActionHtml = ic.linkedTable
+            ? `
+                <div style="margin-top: 8px; padding-top: 6px; border-top: 1px solid rgba(255,255,255,0.1); text-align: right;">
+                    <button type="button" class="btn btn-xxs btn-primary btn-chat-roll-table" data-table-id="${escapeHtml(ic.linkedTable.id)}" data-table-name="${escapeHtml(ic.linkedTable.name || ic.itemName || '')}" data-char-name="${escapeHtml(ic.charName || '')}" data-ability-name="${escapeHtml(ic.itemName || '')}" style="display:inline-flex; align-items:center; gap:5px;">
+                        <i class="fa-solid fa-dice-d20"></i> Roll Table ${ic.linkedTable.dice ? `(${escapeHtml(ic.linkedTable.dice)})` : ''}
+                    </button>
+                </div>
+            `
+            : '';
+
+        return `
+            <div class="macro-chat-card">
+                <div class="macro-card-header">
+                    <div class="macro-card-header-left">
+                        <i class="fa-solid fa-backpack macro-card-icon" style="color:var(--color-gold-base);"></i>
+                        <div>
+                            <span class="macro-card-charname">${escapeHtml(ic.charName || '')} pings an item</span>
+                            <span class="macro-card-name" style="color:var(--color-gold-light);">${escapeHtml(ic.itemName || '')}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="macro-card-desc" style="font-size:0.96rem; color:var(--color-text-muted); border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:4px; margin-bottom:6px;">
+                    <strong>Weight:</strong> ${escapeHtml(ic.weight || '0')} lb &nbsp;&nbsp;|&nbsp;&nbsp; <strong>Quantity:</strong> ${escapeHtml(ic.qty || '1')}
+                </div>
+                <div class="macro-card-desc" style="font-size:0.9rem; color:var(--color-text-secondary);">
+                    ${descHtml}
+                </div>
+                ${tableActionHtml}
+            </div>
+        `;
+    }
+
+    function renderSaveResolveCardHtml(src, isHistorical = false, msgId = '') {
+        const isResolved = !!src.resolved;
+        const ability = (src.ability || 'DEX').toUpperCase();
+        const dc = src.dc || 10;
+        const results = src.results || [];
+
+        const rowsHtml = results
+            .map((r) => {
+                const badge = r.passed
+                    ? `<span class="save-status-badge save-status-pass"><i class="fa-solid fa-check"></i> Succeeded</span>`
+                    : `<span class="save-status-badge save-status-fail"><i class="fa-solid fa-xmark"></i> Failed</span>`;
+
+                let dmgInfo = '';
+                if (isResolved && r.deductedHp !== undefined) {
+                    dmgInfo = `<span class="save-token-damage" style="font-size:0.82rem; font-weight:700; color:${r.deductedHp > 0 ? '#ef5350' : '#81c784'}; margin-left:6px;">(${r.deductedHp > 0 ? `-${r.deductedHp} HP` : '0 DMG'})</span>`;
+                }
+
+                return `
+                <div class="save-resolve-row">
+                    <span class="save-token-name">${escapeHtml(r.tokenName || 'Token')}</span>
+                    <div class="save-token-stats">
+                        <span class="save-roll-breakdown">Roll: ${escapeHtml(String(r.d20 ?? ''))}${r.mod >= 0 ? '+' : ''}${escapeHtml(String(r.mod ?? ''))} = <strong>${escapeHtml(String(r.total ?? ''))}</strong></span>
+                        ${badge}
+                        ${dmgInfo}
+                    </div>
+                </div>
+            `;
+            })
+            .join('');
+
+        let footerHtml = '';
+        if (isResolved) {
+            const halfText = src.resolved.applyHalf ? 'Half Damage Applied on Save' : '0 Damage Applied on Save';
+            footerHtml = `
+                <div class="save-resolve-resolved-badge">
+                    <i class="fa-solid fa-circle-check"></i> Resolved: ${halfText}
+                </div>
+            `;
+        } else {
+            let encodedData = '';
+            try {
+                encodedData = encodeURIComponent(JSON.stringify(src));
+            } catch (err) { }
+            footerHtml = `
+                <div class="save-resolve-prompt">Apply half damage to tokens that succeeded on the save?</div>
+                <div class="save-resolve-actions-row" data-card-data="${encodedData}" data-msg-id="${msgId}">
+                    <button type="button" class="btn-save-resolve-action btn-save-half" data-action="half" title="Apply half damage to successful saves, full damage to failures">
+                        <i class="fa-solid fa-shield-halved"></i> Yes (Half Damage)
+                    </button>
+                    <button type="button" class="btn-save-resolve-action btn-save-zero" data-action="zero" title="Apply 0 damage to successful saves, full damage to failures">
+                        <i class="fa-solid fa-ban"></i> No (0 Damage)
+                    </button>
+                </div>
+            `;
+        }
+
+        return `
+            <div class="save-resolve-chat-card ${isResolved ? 'is-resolved' : ''}">
+                <div class="save-resolve-header">
+                    <div class="save-resolve-header-left">
+                        <i class="fa-solid fa-shield-halved save-resolve-icon"></i>
+                        <div>
+                            <span class="save-resolve-title">DC ${dc} ${ability} Saving Throw Resolution</span>
+                            <span class="save-resolve-subtitle">${results.length} Target Token${results.length === 1 ? '' : 's'}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="save-resolve-body">
+                    <div class="save-resolve-token-list scroll-styled">
+                        ${rowsHtml}
+                    </div>
+                    ${footerHtml}
+                </div>
+            </div>
+        `;
+    }
+
+    function renderMassAttackCardHtml(mac, isHistorical = false, msgId = '') {
+        const isResolved = !!mac.resolved;
+        const attacks = mac.attacks || [];
+        const creatureName = mac.creatureName || 'Creature';
+        const abilityName = mac.abilityName || 'Attack';
+        const rollMode = mac.rollMode || 'normal';
+
+        let modeBadge = '';
+        if (rollMode === 'adv') {
+            modeBadge = `<span class="mass-attack-mode-badge mode-adv"><i class="fa-solid fa-angles-up"></i> Adv</span>`;
+        } else if (rollMode === 'dis') {
+            modeBadge = `<span class="mass-attack-mode-badge mode-dis"><i class="fa-solid fa-angles-down"></i> Dis</span>`;
+        }
+
+        // Damage type color map
+        const dmgColors = {
+            Fire: '#ff6b35',
+            Cold: '#64b5f6',
+            Lightning: '#ffd54f',
+            Thunder: '#b39ddb',
+            Poison: '#81c784',
+            Acid: '#aed581',
+            Necrotic: '#9e9e9e',
+            Radiant: '#fff176',
+            Force: '#ce93d8',
+            Psychic: '#f48fb1',
+            Slashing: '#ef9a9a',
+            Piercing: '#ffcc80',
+            Bludgeoning: '#bcaaa4',
+            Healing: '#a5d6a7',
+            'Temp HP': '#80cbc4'
+        };
+
+        let hasAnySaveRider = false;
+        let saveRiderText = '';
+
+        const rowsHtml = attacks
+            .map((atk, idx) => {
+                const num = atk.index || idx + 1;
+                let rollCol = '';
+
+                if (atk.atkRoll) {
+                    const total = atk.atkRoll.total;
+                    let critClass = '';
+                    let critTag = '';
+                    if (atk.atkRoll.isCritSuccess) {
+                        critClass = 'roll-crit-success';
+                        critTag = `<span style="font-size:0.75rem; color:#81c784; font-weight:bold; margin-left:4px;">(Crit!)</span>`;
+                    } else if (atk.atkRoll.isCritFail) {
+                        critClass = 'roll-crit-fail';
+                        critTag = `<span style="font-size:0.75rem; color:#e57373; font-weight:bold; margin-left:4px;">(Miss!)</span>`;
+                    }
+
+                    const tooltip = atk.atkRoll.breakdownStr
+                        ? `${atk.atkRoll.formula} → ${atk.atkRoll.breakdownStr}`
+                        : atk.atkRoll.formula;
+                    rollCol = `<span class="mass-attack-roll-total ${critClass}" style="cursor:help;" data-tooltip="${escapeHtml(tooltip || '')}">${total}</span>${critTag} <span style="font-size:0.75rem; color:#777;">to hit</span>`;
+                } else {
+                    rollCol = `<span style="font-size:0.75rem; color:#888;">Damage Roll</span>`;
+                }
+
+                // Damage tags
+                const dmgTags = (atk.dmgRolls || [])
+                    .map((d) => {
+                        const type = d.type || 'Damage';
+                        const color = dmgColors[type] || '#ef9a9a';
+                        const total = d.roll?.total ?? 0;
+                        const tooltip = d.roll?.breakdownStr ? `${d.formula} → ${d.roll.breakdownStr}` : d.formula;
+                        return `<span class="mass-attack-dmg-tag" style="cursor:help; border-left: 2px solid ${color};" data-tooltip="${escapeHtml(tooltip || '')}"><strong style="color:${color};">${total}</strong> ${type}</span>`;
+                    })
+                    .join(' ');
+
+                if (atk.saveInfo && atk.saveInfo.dc) {
+                    hasAnySaveRider = true;
+                    const ab = atk.saveInfo.ability || '';
+                    saveRiderText = `DC ${atk.saveInfo.dc} ${ab} Save required on hit`;
+                }
+
+                // Resolved status columns
+                let resCol = '';
+                if (isResolved && atk.resolution) {
+                    const hit = atk.resolution.hit;
+                    const tokenName = atk.resolution.tokenName || 'Target';
+                    const dmgDealt = atk.resolution.damageDealt ?? 0;
+
+                    const hitBadge = hit
+                        ? `<span class="mass-attack-hit-badge hit"><i class="fa-solid fa-check"></i> Hit</span>`
+                        : `<span class="mass-attack-hit-badge miss"><i class="fa-solid fa-xmark"></i> Miss</span>`;
+
+                    const dmgText = hit
+                        ? `<span class="mass-attack-token-damage" style="color:#ef5350;">-${dmgDealt} HP</span>`
+                        : `<span class="mass-attack-token-damage" style="color:#888;">0 DMG</span>`;
+
+                    resCol = `
+                    <div class="mass-attack-row-right">
+                        <span class="mass-attack-token-name" title="${escapeHtml(tokenName)}">${escapeHtml(tokenName)}</span>
+                        ${hitBadge}
+                        ${dmgText}
+                    </div>
+                `;
+                }
+
+                return `
+                <div class="mass-attack-row">
+                    <div class="mass-attack-row-left">
+                        <span class="mass-attack-idx">#${num}</span>
+                        <div>${rollCol}</div>
+                        <div style="display:flex; gap:4px; flex-wrap:wrap; margin-left:6px;">${dmgTags}</div>
+                    </div>
+                    ${resCol}
+                </div>
+            `;
+            })
+            .join('');
+
+        let footerHtml = '';
+        if (isResolved) {
+            const summary = mac.summary || {};
+            const hits = summary.hitsCount ?? attacks.filter((a) => a.resolution?.hit).length;
+            const totalDmg =
+                summary.totalDamageDealt ?? attacks.reduce((sum, a) => sum + (a.resolution?.damageDealt || 0), 0);
+
+            footerHtml = `
+                <div class="mass-attack-resolved-badge">
+                    <i class="fa-solid fa-circle-check"></i> Resolved: ${hits}/${attacks.length} Attacks Hit (${totalDmg} Total Damage)
+                </div>
+            `;
+
+            if (hasAnySaveRider && (summary.saveRidersTriggered || summary.saveRidersTriggered === undefined)) {
+                footerHtml += `
+                    <div class="mass-attack-save-rider-notice">
+                        <i class="fa-solid fa-shield-halved"></i> ${escapeHtml(saveRiderText || 'Saving throw rider triggered for hit target(s)')}
+                    </div>
+                `;
+            }
+        } else {
+            let encodedData = '';
+            try {
+                encodedData = encodeURIComponent(JSON.stringify(mac));
+            } catch (err) { }
+            footerHtml = `
+                <div class="mass-attack-prompt">Select target token(s) on canvas and click Process</div>
+                <div class="mass-attack-actions-row" data-card-data="${encodedData}" data-msg-id="${msgId}">
+                    <button type="button" class="btn-mass-attack-process" title="Evaluate target AC and apply damage on hit">
+                        <i class="fa-solid fa-play"></i> Process
+                    </button>
+                </div>
+            `;
+        }
+
+        return `
+            <div class="mass-attack-chat-card ${isResolved ? 'is-resolved' : ''}">
+                <div class="mass-attack-header">
+                    <div class="mass-attack-header-left">
+                        <i class="fa-solid fa-crosshairs mass-attack-icon"></i>
+                        <div>
+                            <span class="mass-attack-title">${escapeHtml(creatureName)}: ${escapeHtml(abilityName)}</span>
+                            <span class="mass-attack-subtitle">
+                                <span>${attacks.length} Attack Roll${attacks.length === 1 ? '' : 's'}</span>
+                                ${modeBadge}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="mass-attack-body">
+                    <div class="mass-attack-roll-list scroll-styled">
+                        ${rowsHtml}
+                    </div>
+                    ${footerHtml}
+                </div>
+            </div>
+        `;
+    }
+
+    function appendMessageToDom(msg, isHistorical = false) {
+        if (msg.hidden && vtt.role !== 'GM') return;
+        if (msg.whisperToGM && vtt.role !== 'GM' && msg.username !== vtt.username) return;
+        if (
+            msg.whisperTo &&
+            vtt.role !== 'GM' &&
+            msg.username !== vtt.username &&
+            (!vtt.username || msg.whisperTo.toLowerCase() !== vtt.username.toLowerCase())
+        )
+            return;
+
+        const isSelf = msg.username === vtt.username;
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `chat-message animated-fade-in ${msg.role === 'GM' ? 'gm-card' : 'player-card'}`;
+        if (msg.hidden) {
+            messageDiv.classList.add('msg-hidden');
+        }
+        if (msg.whisperToGM || msg.whisperTo) {
+            messageDiv.classList.add('gm-whisper-card');
+        }
+        if (msg.id) {
+            messageDiv.dataset.msgId = msg.id;
+        }
+
+        const time = new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+        let actionsHtml = '';
+        if (vtt.role === 'GM' && msg.id) {
+            actionsHtml = `
+                <div class="chat-msg-actions">
+                    <button class="btn-chat-action btn-chat-menu" title="Message Options">
+                        <i class="fa-solid fa-ellipsis-vertical"></i>
+                    </button>
+                    <div class="chat-msg-menu vtt-hidden">
+                        <button class="btn-chat-menu-item btn-chat-toggle-hide">
+                            <i class="fa-regular ${msg.hidden ? 'fa-eye' : 'fa-eye-slash'}"></i> ${msg.hidden ? 'Unhide' : 'Hide'}
+                        </button>
+                        <button class="btn-chat-menu-item btn-chat-delete text-danger">
+                            <i class="fa-regular fa-trash"></i> Delete
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        const safeUsername = escapeHtml(msg.username || 'Anonymous');
+        let whisperLabel = '';
+        if (msg.whisperToGM) {
+            whisperLabel =
+                ' <span class="whisper-label" style="font-size:0.8rem; opacity:0.8; font-style:italic;">(Whisper to GM)</span>';
+        } else if (msg.whisperTo) {
+            const isTarget = vtt.username && msg.whisperTo.toLowerCase() === vtt.username.toLowerCase();
+            whisperLabel = isTarget
+                ? ` <span class="whisper-label" style="font-size:0.8rem; opacity:0.8; font-style:italic;">(Whisper from ${safeUsername})</span>`
+                : ` <span class="whisper-label" style="font-size:0.8rem; opacity:0.8; font-style:italic;">(Whisper to ${escapeHtml(msg.whisperTo)})</span>`;
+        }
+        let headerText = `<div class="chat-message-header"><span class="username">${safeUsername}${whisperLabel}</span><span class="timestamp">${time}</span>${actionsHtml}</div>`;
+        let bodyText = msg.text ? `<span class="message-text">${parseSimpleMarkdown(msg.text)}</span>` : '';
+
+        // Structured ability card from creature sheet
+        if (msg.abilityCard) {
+            const ac = msg.abilityCard;
+            const descHtml = formatAbilityCardText(ac.text);
+            const creatureName = escapeHtml(ac.creatureName || 'Creature');
+            const abilityName = escapeHtml(ac.abilityName || 'Ability');
+
+            const tableButtonHtml = ac.tableJson
+                ? `
+                <div class="ability-chat-actions" style="margin-top: 8px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 6px;">
+                    <button type="button" class="btn btn-xxs btn-secondary btn-chat-roll-creature-table" data-creature="${creatureName}" data-ability="${abilityName}" data-table-json="${escapeHtml(ac.tableJson)}" style="display:inline-flex; align-items:center; gap:4px; font-size:0.75rem; color:var(--color-gold-light); border-color:var(--color-gold-base); cursor:pointer;">
+                        <i class="fa-solid fa-dice-d20 text-gradient-gold"></i> Roll ${abilityName} Table
+                    </button>
+                </div>
+            `
+                : '';
+
+            bodyText = `
+                <div class="ability-chat-card">
+                    <div class="ability-chat-header">
+                        <div class="ability-chat-creature">${creatureName}</div>
+                        <div class="ability-chat-name">${abilityName}</div>
+                    </div>
+                    <div class="ability-chat-desc">${descHtml}</div>
+                    ${tableButtonHtml}
+                </div>
+            `;
+        }
+        // Structured trap card
+        else if (msg.trapCard) {
+            const tc = msg.trapCard;
+            const dmgType = tc.damageType ? tc.damageType.toLowerCase() : 'piercing';
+            const dmgTypeLabel = dmgType.charAt(0).toUpperCase() + dmgType.slice(1);
+            let encodedData = '';
+            try {
+                encodedData = encodeURIComponent(JSON.stringify({ ...tc, isTrap: true, damageType: dmgType }));
+            } catch (err) { }
+
+            const actionButtonsHtml =
+                vtt.role === 'GM'
+                    ? `
+                <div class="trap-card-actions-row" data-card-data="${encodedData}" data-msg-id="${escapeHtml(msg.id || '')}">
+                    <button type="button" class="trap-btn-action trap-btn-process" data-action="process" title="Process saving throw result and apply damage to victim">
+                        <i class="fa-solid fa-play"></i> Process
+                    </button>
+                    <button type="button" class="trap-btn-action trap-btn-full" data-action="full" title="Apply full damage to victim">
+                        <i class="fa-solid fa-burst"></i> Full Damage
+                    </button>
+                    <button type="button" class="trap-btn-action trap-btn-half" data-action="half" title="Apply half damage to victim">
+                        <i class="fa-solid fa-shield-halved"></i> Half Damage
+                    </button>
+                </div>
+                `
+                    : '';
+
+            bodyText = `
+                <div class="trap-chat-card">
+                    <div class="trap-chat-header">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                        <span>TRAP TRIGGERED: ${escapeHtml(tc.trapName || 'Trap')}</span>
+                    </div>
+                    <div class="trap-chat-body">
+                        <span class="trap-chat-victim">${escapeHtml(tc.tokenName || 'Creature')}</span> stepped into a trap!
+                        <div style="margin-top: 4px; color: #cbd5e1; font-style: italic;">${escapeHtml(tc.flavor || '')}</div>
+                    </div>
+                    <div class="trap-chat-details">
+                        ${tc.saveAbility && tc.saveAbility !== 'NONE' ? `<span class="trap-chat-badge"><i class="fa-solid fa-shield"></i> DC ${escapeHtml(tc.saveDc)} ${escapeHtml(tc.saveAbility)} Save</span>` : ''}
+                        ${tc.damageRoll
+                    ? `
+                            <span class="trap-chat-badge" style="background: rgba(239, 68, 68, 0.25); border-color: rgba(239, 68, 68, 0.6); color: #fca5a5;">
+                                <i class="fa-solid fa-burst"></i> Damage: <strong>${escapeHtml(tc.damageRoll.total)}</strong> ${escapeHtml(dmgTypeLabel)} <span style="font-size: 0.85em; opacity: 0.85;">(${escapeHtml(tc.damageRoll.breakdownStr || tc.damageRoll.formula || tc.damage || '')})</span>
+                            </span>
+                        `
+                    : tc.damage
+                        ? `<span class="trap-chat-badge"><i class="fa-solid fa-burst"></i> ${escapeHtml(tc.damage)} ${escapeHtml(dmgTypeLabel)}</span>`
+                        : ''
+                }
+                    </div>
+                    ${tc.saveAbility && tc.saveAbility !== 'NONE'
+                    ? `
+                        <button type="button" class="trap-chat-save-btn" data-trap-id="${escapeHtml(tc.trapId)}" data-token-id="${escapeHtml(tc.tokenId)}" data-ability="${escapeHtml(tc.saveAbility)}" data-dc="${escapeHtml(tc.saveDc)}">
+                            <i class="fa-solid fa-dice-d20"></i> Roll ${escapeHtml(tc.saveAbility)} Save (DC ${escapeHtml(tc.saveDc)})
+                        </button>
+                    `
+                    : ''
+                }
+                    ${actionButtonsHtml}
+                </div>
+            `;
+        }
+        // If there's parsed rolls, append dice roll cards
+        else if (msg.roll) {
+            let breakdownHtml = '';
+            if (msg.roll.breakdownStr) {
+                breakdownHtml = msg.roll.breakdownStr;
+            } else {
+                // Fallback for legacy roll objects
+                const listStr = msg.roll.diceList ? msg.roll.diceList.map((d) => d.val).join(', ') : '';
+                const modStr =
+                    msg.roll.modifier !== undefined && msg.roll.modifier !== 0
+                        ? ` ${msg.roll.modifier > 0 ? '+' : '-'} ${Math.abs(msg.roll.modifier)}`
+                        : '';
+                breakdownHtml = `[${listStr}]${modStr}`;
+            }
+
+            const compactBreakdown = escapeHtml(msg.roll.compactBreakdown || breakdownHtml);
+            const detailedTooltip = escapeHtml(msg.roll.breakdownStr || breakdownHtml);
+
+            let rollTitle = '';
+            let rollSub = '';
+
+            const matchLabel = msg.text.match(/^\[([^\]:]+)(?::\s*([^\]]+))?\]\s*rolls\s*\*\*([^*]+)\*\*/i);
+            if (matchLabel) {
+                rollTitle = matchLabel[1];
+                rollSub = matchLabel[2] ? matchLabel[2] : 'Roll';
+            } else {
+                rollTitle = 'Dice Roll';
+                rollSub = '';
+            }
+
+            let critClass = '';
+            let critLabel = '';
+            if (msg.roll.isCritSuccess) {
+                critClass = 'roll-crit-success';
+                critLabel = `<div style="font-size:0.96rem; color:#81c784; font-weight:bold; text-align:center; margin-top:4px;"><i class="fa-regular fa-star"></i> CRITICAL SUCCESS!</div>`;
+            } else if (msg.roll.isCritFail) {
+                critClass = 'roll-crit-fail';
+                critLabel = `<div style="font-size:0.96rem; color:#e57373; font-weight:bold; text-align:center; margin-top:4px;"><i class="fa-solid fa-triangle-exclamation"></i> CRITICAL FAILURE!</div>`;
+            }
+
+            bodyText = `
+                <div class="dice-roll-card">
+                    <div class="roll-card-header">
+                        <div class="roll-card-header-left">
+                            <span class="roll-card-title">${escapeHtml(rollTitle)}</span>
+                            ${rollSub ? `<span class="roll-card-subtitle">${escapeHtml(rollSub)}</span>` : ''}
+                        </div>
+                        <span class="roll-card-formula">${escapeHtml((msg.roll.formula || '').toUpperCase())}</span>
+                    </div>
+                    <div class="roll-card-result ${critClass}" style="cursor:help;" data-tooltip="${detailedTooltip}">${escapeHtml(String(msg.roll.total ?? ''))}</div>
+                    <div class="roll-card-breakdown" style="cursor:help;" data-tooltip="${detailedTooltip}">${compactBreakdown}</div>
+                    ${critLabel}
+                </div>
+            `;
+        }
+        // Combined macro card: attack + save + per-type damage rows
+        else if (msg.macroCard) {
+            messageDiv._macroCardData = msg.macroCard;
+            bodyText = renderMacroCardHtml(msg.macroCard, isHistorical, msg.id);
+        }
+        // Stylized item card for pinging inventory items
+        else if (msg.itemCard) {
+            bodyText = renderItemCardHtml(msg.itemCard);
+        }
+        // Saving throw resolution card (GM only)
+        else if (msg.saveResolveCard) {
+            messageDiv._saveResolveCardData = msg.saveResolveCard;
+            bodyText = renderSaveResolveCardHtml(msg.saveResolveCard, isHistorical, msg.id);
+        }
+        // Mass attack summary card (GM only)
+        else if (msg.massAttackCard) {
+            messageDiv._massAttackCardData = msg.massAttackCard;
+            bodyText = renderMassAttackCardHtml(msg.massAttackCard, isHistorical, msg.id);
+        }
+        // Roll Table Result Card
+        else if (msg.rollTableCard) {
+            const rtc = msg.rollTableCard;
+            bodyText = `
+                <div class="rolltable-chat-card" style="border: 1px solid var(--color-gold-base); border-radius: 6px; padding: 10px; background: rgba(18, 22, 33, 0.95); box-shadow: 0 4px 12px rgba(0,0,0,0.4);">
+                    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(212,175,55,0.3); padding-bottom:4px; margin-bottom:8px;">
+                        <span style="font-weight:bold; color:var(--color-gold-light); font-size:0.95rem;"><i class="fa-solid fa-dice-d20"></i> ${escapeHtml(rtc.tableName || 'Roll Table')}</span>
+                        <span style="font-size:0.8rem; background:rgba(212,175,55,0.15); border:1px solid rgba(212,175,55,0.4); border-radius:4px; padding:1px 6px; color:var(--color-gold-light); font-weight:600;">${escapeHtml(rtc.formula || '')} &rarr; ${escapeHtml(String(rtc.roll ?? ''))}</span>
+                    </div>
+                    <div style="font-weight:600; color:#fff; font-size:1rem; margin-bottom:4px;">${escapeHtml(rtc.entryName || '')}</div>
+                    ${rtc.entryText ? `<div style="font-size:0.85rem; color:#cbd5e1; line-height:1.4;">${escapeHtml(rtc.entryText)}</div>` : ''}
+                </div>
+            `;
+        }
+        // Card Deck Drawn Card
+        else if (msg.cardDrawCard) {
+            const cdc = msg.cardDrawCard;
+            bodyText = `
+                <div class="card-draw-chat" style="border: 1px solid var(--color-gold-base); border-radius: 8px; padding: 12px; background: rgba(18, 22, 33, 0.95); max-width: 260px; margin: 0 auto; text-align: center; box-shadow: 0 4px 16px rgba(0,0,0,0.5);">
+                    <div style="font-size:0.75rem; text-transform:uppercase; letter-spacing:1px; color:var(--color-gold-light); margin-bottom:6px;">${escapeHtml(cdc.deckName || 'Card Deck')}</div>
+                    <div style="width:140px; height:200px; margin:0 auto 10px auto; border-radius:6px; overflow:hidden; border:2px solid var(--color-gold-dark); background:#05070a; display:flex; align-items:center; justify-content:center;">
+                        <img src="${escapeHtml(cdc.cardImg || 'favicon.svg')}" alt="${escapeHtml(cdc.cardName || 'Card')}" style="width:100%; height:100%; object-fit:contain;" onerror="this.src='favicon.svg'">
+                    </div>
+                    <div style="font-weight:bold; color:#fff; font-size:1.1rem; margin-bottom:4px;">${escapeHtml(cdc.cardName || '')}</div>
+                    ${cdc.description ? `<div style="font-size:0.85rem; color:#cbd5e1; line-height:1.4;">${escapeHtml(cdc.description)}</div>` : ''}
+                </div>
+            `;
+        }
+
+        const rawCardHtml = headerText + bodyText;
+        if (typeof window !== 'undefined' && typeof window.vttSanitizeHtml === 'function') {
+            messageDiv.innerHTML = window.vttSanitizeHtml(rawCardHtml);
+        } else if (typeof DOMPurify !== 'undefined' && typeof DOMPurify.sanitize === 'function') {
+            messageDiv.innerHTML = DOMPurify.sanitize(rawCardHtml);
+        } else {
+            messageDiv.textContent = stripAllHtmlFallback(rawCardHtml);
+        }
+        chatMessages.appendChild(messageDiv);
+
+        // Auto scroll to bottom
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function extractFaces(dice) {
+        if (!dice) return 6;
+        if (typeof dice === 'number') return dice;
+        const raw = dice.faces ?? dice.type ?? dice.d ?? dice.numFaces ?? dice.sides ?? 6;
+        if (typeof raw === 'number') return raw;
+        const match = String(raw).match(/\d+/);
+        return match ? parseInt(match[0], 10) : 6;
+    }
+
+    function extractVal(dice) {
+        if (!dice) return 1;
+        if (typeof dice === 'number') return dice;
+        const raw = dice.val ?? dice.value ?? dice.v ?? dice.result ?? 1;
+        if (typeof raw === 'number') return raw;
+        const match = String(raw).match(/\d+/);
+        return match ? parseInt(match[0], 10) : 1;
+    }
+
+    // 3D Physics simulated dice animation routines
+    function trigger3dDiceRoll(diceList, options = {}) {
+        if (window.Dice3D && window.Dice3D.isEnabled()) {
+            window.Dice3D.roll(diceList, options);
+        }
+    }
+
+    // Initiative tracker engine logic
+    function setupInitiativeControls() {
+        const btnClear = document.getElementById('btn-init-clear');
+        const btnNext = document.getElementById('btn-init-next');
+        const btnPrev = document.getElementById('btn-init-prev');
+        const btnAdd = document.getElementById('btn-init-add');
+        const btnMinimize = document.getElementById('btn-init-minimize');
+
+        // Position settings
+        const configPosition = document.getElementById('config-init-position');
+        const configVisibility = document.getElementById('config-init-visible-global');
+
+        if (vtt.role !== 'GM') {
+            document
+                .querySelectorAll('.init-turn-controls.gm-only, .init-carousel-header .header-actions .gm-only')
+                .forEach((el) => el.classList.add('vtt-hidden'));
+        }
+
+        if (btnAdd) {
+            btnAdd.addEventListener('click', () => {
+                // Check if any tokens are selected on canvas
+                const canvasEngine = window.VTT?.canvasEngine;
+                const selectedTokenIds = canvasEngine
+                    ? canvasEngine.getSelectedTokenIds
+                        ? canvasEngine.getSelectedTokenIds()
+                        : canvasEngine.getSelectedTokens
+                            ? canvasEngine.getSelectedTokens()
+                            : []
+                    : [];
+                if (selectedTokenIds.length > 0) {
+                    const canvasTokens = canvasEngine.getTokens ? canvasEngine.getTokens() : {};
+                    selectedTokenIds.forEach((id) => {
+                        const tok = canvasTokens[id];
+                        if (tok) {
+                            const roll = Math.floor(Math.random() * 20) + 1;
+                            const dexMod = tok.dexMod || tok.attributes?.dex?.mod || 0;
+                            addToInitiative(tok.name || 'Token', roll + dexMod, tok.id, tok.img);
+                        }
+                    });
+                    return;
+                }
+
+                // If no tokens selected, prompt GM for creature name and score
+                const name = window.prompt('Enter creature or character name:', 'Combatant');
+                if (!name || !name.trim()) return;
+                const d20 = Math.floor(Math.random() * 20) + 1;
+                const scoreStr = window.prompt(`Enter initiative score for "${name.trim()}":`, d20);
+                const score = parseFloat(scoreStr);
+                addToInitiative(name.trim(), !isNaN(score) ? score : d20);
+            });
+        }
+
+        if (btnClear) {
+            btnClear.addEventListener('click', () => {
+                combatants = [];
+                currentRound = 1;
+                activeTurnIndex = -1;
+                broadcastInitiative();
+            });
+        }
+
+        const nextTurn = () => {
+            if (combatants.length === 0) return;
+            activeTurnIndex++;
+            if (activeTurnIndex >= combatants.length) {
+                activeTurnIndex = 0;
+                currentRound++;
+            }
+            broadcastInitiative();
+        };
+
+        const prevTurn = () => {
+            if (combatants.length === 0) return;
+            activeTurnIndex--;
+            if (activeTurnIndex < 0) {
+                activeTurnIndex = combatants.length - 1;
+                currentRound = Math.max(1, currentRound - 1);
+            }
+            broadcastInitiative();
+        };
+
+        if (btnNext) btnNext.addEventListener('click', nextTurn);
+        if (btnPrev) btnPrev.addEventListener('click', prevTurn);
+        if (btnInitMinNext) btnInitMinNext.addEventListener('click', nextTurn);
+        if (btnInitMinPrev) btnInitMinPrev.addEventListener('click', prevTurn);
+
+        // Global GM Toggle
+        if (btnToggleGlobalInit && vtt.role === 'GM') {
+            btnToggleGlobalInit.title = 'Toggle Initiative Tracker';
+            btnToggleGlobalInit.addEventListener('click', () => {
+                initiativeVisible = !initiativeVisible;
+                broadcastInitiative();
+            });
+        }
+
+        // Minimize / Maximize logic
+        const updateMinimizeState = () => {
+            if (!initContainer) return;
+            const isMin = initContainer.classList.contains('is-minimized');
+            if (btnMinimize) {
+                const icon = btnMinimize.querySelector('i');
+                if (icon) icon.className = isMin ? 'fa-solid fa-expand' : 'fa-solid fa-compress';
+                btnMinimize.title = isMin ? 'Expand Tracker' : 'Minimize Tracker';
+            }
+        };
+
+        const setMinimized = (minimized) => {
+            if (!initContainer) return;
+            initContainer.classList.toggle('is-minimized', !!minimized);
+            localStorage.setItem('vtt_initiative_minimized', minimized ? 'true' : 'false');
+            updateMinimizeState();
+        };
+
+        if (btnMinimize) {
+            btnMinimize.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const isMin = !initContainer.classList.contains('is-minimized');
+                setMinimized(isMin);
+            });
+        }
+
+        if (btnInitMinExpand) {
+            btnInitMinExpand.addEventListener('click', (e) => {
+                e.stopPropagation();
+                setMinimized(false);
+            });
+        }
+
+        // Restore saved minimized state
+        if (localStorage.getItem('vtt_initiative_minimized') === 'true') {
+            initContainer.classList.add('is-minimized');
+            updateMinimizeState();
+        }
+
+        // Position, Orientation & Free-Drag settings
+        const hudPosition = document.getElementById('hud-init-position');
+        const btnDrag = document.getElementById('btn-init-drag');
+        const btnOrientation = document.getElementById('btn-init-orientation');
+
+        try {
+            currentOrientation = localStorage.getItem('vtt_initiative_orientation') || 'vertical';
+        } catch (e) {}
+
+        function updateChevronIcons(pos) {
+            const prevIcon = document.querySelector('#btn-init-prev i');
+            const nextIcon = document.querySelector('#btn-init-next i');
+            if (!prevIcon || !nextIcon) return;
+
+            const isHorizontal = currentOrientation === 'horizontal' || pos === 'top' || pos === 'bottom';
+            if (isHorizontal) {
+                prevIcon.className = 'fa-solid fa-chevron-left';
+                nextIcon.className = 'fa-solid fa-chevron-right';
+            } else {
+                prevIcon.className = 'fa-solid fa-chevron-up';
+                nextIcon.className = 'fa-solid fa-chevron-down';
+            }
+        }
+
+        function setOrientation(orientation, forceCustom = false) {
+            currentOrientation = orientation;
+            localStorage.setItem('vtt_initiative_orientation', orientation);
+
+            initContainer.classList.remove('orientation-horizontal', 'orientation-vertical');
+            initContainer.classList.add(`orientation-${orientation}`);
+
+            if (btnOrientation) {
+                btnOrientation.title =
+                    orientation === 'horizontal'
+                        ? 'Switch to Vertical Orientation'
+                        : 'Switch to Horizontal Orientation';
+                const icon = btnOrientation.querySelector('i');
+                if (icon) {
+                    icon.className =
+                        orientation === 'horizontal' ? 'fa-solid fa-arrows-up-down' : 'fa-solid fa-arrows-left-right';
+                }
+            }
+
+            const currentPos = localStorage.getItem('vtt_initiative_position_style') || 'right';
+            updateChevronIcons(forceCustom ? 'custom' : currentPos);
+        }
+
+        function setPositionStyle(pos, coords = null, size = null) {
+            initContainer.classList.remove('pos-right', 'pos-left', 'pos-top', 'pos-bottom', 'pos-custom');
+            initContainer.classList.add(`pos-${pos}`);
+
+            if (pos === 'top' || pos === 'bottom') {
+                currentOrientation = 'horizontal';
+            } else if (pos === 'right' || pos === 'left') {
+                currentOrientation = 'vertical';
+            }
+
+            setOrientation(currentOrientation);
+
+            if (pos !== 'custom') {
+                initContainer.style.top = '';
+                initContainer.style.left = '';
+                initContainer.style.right = '';
+                initContainer.style.bottom = '';
+                initContainer.style.height = '';
+                initContainer.style.maxHeight = '';
+                initContainer.style.width = '';
+                initContainer.style.maxWidth = '';
+                initContainer.style.removeProperty('width');
+                initContainer.style.removeProperty('max-width');
+            } else {
+                let finalCoords = coords;
+                if (!finalCoords) {
+                    try {
+                        finalCoords = JSON.parse(localStorage.getItem('vtt_initiative_custom_coords'));
+                    } catch (e) { }
+                }
+                if (!finalCoords) {
+                    const rect = initContainer.getBoundingClientRect();
+                    finalCoords = { left: Math.round(rect.left), top: Math.round(rect.top) };
+                }
+                if (finalCoords && Number.isFinite(finalCoords.left) && Number.isFinite(finalCoords.top)) {
+                    initContainer.style.left = `${finalCoords.left}px`;
+                    initContainer.style.top = `${finalCoords.top}px`;
+                    initContainer.style.right = 'auto';
+                    initContainer.style.bottom = 'auto';
+                }
+                if (size && Number.isFinite(size.width)) {
+                    initContainer.style.width = `${size.width}px`;
+                    initContainer.style.maxWidth = `${size.width}px`;
+                    initContainer.style.setProperty('width', `${size.width}px`, 'important');
+                    initContainer.style.setProperty('max-width', `${size.width}px`, 'important');
+                }
+                if (size && Number.isFinite(size.height)) {
+                    initContainer.style.height = `${size.height}px`;
+                    initContainer.style.maxHeight = `${size.height}px`;
+                }
+            }
+
+            updateChevronIcons(pos);
+
+            if (configPosition) configPosition.value = pos;
+            if (hudPosition) hudPosition.value = pos;
+            localStorage.setItem('vtt_initiative_position_style', pos);
+        }
+
+        if (configPosition) {
+            configPosition.addEventListener('change', (e) => setPositionStyle(e.target.value));
+        }
+        if (hudPosition) {
+            hudPosition.addEventListener('change', (e) => setPositionStyle(e.target.value));
+        }
+
+        // Orientation Toggle Button
+        if (btnOrientation) {
+            btnOrientation.addEventListener('click', () => {
+                const newOrientation = currentOrientation === 'horizontal' ? 'vertical' : 'horizontal';
+                const currentPos = localStorage.getItem('vtt_initiative_position_style') || 'right';
+
+                // If docked in a preset that contradicts the new orientation, switch to custom floating mode smoothly
+                if (currentPos !== 'custom') {
+                    const rect = initContainer.getBoundingClientRect();
+                    initContainer.classList.remove('pos-right', 'pos-left', 'pos-top', 'pos-bottom');
+                    initContainer.classList.add('pos-custom');
+                    initContainer.style.left = `${Math.round(rect.left)}px`;
+                    initContainer.style.top = `${Math.round(rect.top)}px`;
+                    initContainer.style.right = 'auto';
+                    initContainer.style.bottom = 'auto';
+                    localStorage.setItem('vtt_initiative_position_style', 'custom');
+                    localStorage.setItem(
+                        'vtt_initiative_custom_coords',
+                        JSON.stringify({ left: Math.round(rect.left), top: Math.round(rect.top) })
+                    );
+
+                    [configPosition, hudPosition].forEach((sel) => {
+                        if (sel && !sel.querySelector('option[value="custom"]')) {
+                            const opt = document.createElement('option');
+                            opt.value = 'custom';
+                            opt.textContent = '✥';
+                            sel.appendChild(opt);
+                        }
+                        if (sel) sel.value = 'custom';
+                    });
+                }
+
+                // Adjust default width/height on orientation flip if custom
+                if (newOrientation === 'horizontal') {
+                    initContainer.style.height = '';
+                } else {
+                    initContainer.style.width = '';
+                }
+
+                setOrientation(newOrientation, true);
+            });
+        }
+
+        function updateScrollButtons() {
+            // Scroll buttons permanently removed from DOM to avoid confusion with turn chevrons
+        }
+
+        // Wheel Scroll for Horizontal Mode
+        if (initList) {
+            let wheelRafId = null;
+            initList.addEventListener(
+                'wheel',
+                (e) => {
+                    if (currentOrientation === 'horizontal') {
+                        if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+                            e.preventDefault();
+                            initList.scrollLeft += e.deltaY;
+                            if (!wheelRafId) {
+                                wheelRafId = requestAnimationFrame(() => {
+                                    wheelRafId = null;
+                                    updateScrollButtons();
+                                });
+                            }
+                        }
+                    }
+                },
+                { passive: false }
+            );
+        }
+        // Free dragging implementation (preserves orientation)
+        if (btnDrag && initContainer) {
+            let isDragging = false;
+            let startX = 0,
+                startY = 0;
+            let startLeft = 0,
+                startTop = 0;
+
+            const onPointerDown = (e) => {
+                isDragging = true;
+                initContainer.classList.add('is-dragging');
+                document.body.style.userSelect = 'none';
+                const rect = initContainer.getBoundingClientRect();
+                startX = e.clientX;
+                startY = e.clientY;
+                startLeft = rect.left;
+                startTop = rect.top;
+
+                // Determine orientation based on current preset if dragging from docked
+                const currentPos = localStorage.getItem('vtt_initiative_position_style') || 'right';
+                if (currentPos === 'top' || currentPos === 'bottom') {
+                    currentOrientation = 'horizontal';
+                } else if (currentPos === 'right' || currentPos === 'left') {
+                    currentOrientation = 'vertical';
+                }
+
+                initContainer.style.left = `${startLeft}px`;
+                initContainer.style.top = `${startTop}px`;
+                initContainer.style.right = 'auto';
+                initContainer.style.bottom = 'auto';
+                initContainer.classList.remove('pos-right', 'pos-left', 'pos-top', 'pos-bottom');
+                initContainer.classList.add('pos-custom', `orientation-${currentOrientation}`);
+
+                document.addEventListener('pointermove', onPointerMove);
+                document.addEventListener('pointerup', onPointerUp);
+                e.preventDefault();
+            };
+
+            const onPointerMove = (e) => {
+                if (!isDragging) return;
+                const dx = e.clientX - startX;
+                const dy = e.clientY - startY;
+                const newLeft = Math.max(0, Math.min(window.innerWidth - 100, startLeft + dx));
+                const newTop = Math.max(0, Math.min(window.innerHeight - 60, startTop + dy));
+
+                initContainer.style.left = `${newLeft}px`;
+                initContainer.style.top = `${newTop}px`;
+            };
+
+            const onPointerUp = () => {
+                if (!isDragging) return;
+                isDragging = false;
+                initContainer.classList.remove('is-dragging');
+                document.body.style.userSelect = '';
+                document.removeEventListener('pointermove', onPointerMove);
+                document.removeEventListener('pointerup', onPointerUp);
+
+                const finalRect = initContainer.getBoundingClientRect();
+                const coords = { left: Math.round(finalRect.left), top: Math.round(finalRect.top) };
+                localStorage.setItem('vtt_initiative_custom_coords', JSON.stringify(coords));
+                localStorage.setItem('vtt_initiative_position_style', 'custom');
+                localStorage.setItem('vtt_initiative_orientation', currentOrientation);
+
+                [configPosition, hudPosition].forEach((sel) => {
+                    if (sel && !sel.querySelector('option[value="custom"]')) {
+                        const opt = document.createElement('option');
+                        opt.value = 'custom';
+                        opt.textContent = '✥';
+                        sel.appendChild(opt);
+                    }
+                    if (sel) sel.value = 'custom';
+                });
+                updateChevronIcons('custom');
+            };
+
+            [btnDrag, btnInitMinDrag].filter(Boolean).forEach((btn) => {
+                btn.addEventListener('pointerdown', onPointerDown);
+            });
+        }
+
+        // Clean up any legacy docked resize dimensions from localStorage
+        try {
+            localStorage.removeItem('vtt_initiative_docked_height');
+            localStorage.removeItem('vtt_initiative_docked_width');
+        } catch (e) { }
+
+        // Restore saved position, orientation, and size on load
+        const savedPosStyle = localStorage.getItem('vtt_initiative_position_style') || 'right';
+        const savedOrientation =
+            localStorage.getItem('vtt_initiative_orientation') ||
+            (savedPosStyle === 'top' || savedPosStyle === 'bottom' ? 'horizontal' : 'vertical');
+        currentOrientation = savedOrientation;
+
+        if (savedPosStyle === 'custom') {
+            try {
+                const savedCoords = JSON.parse(localStorage.getItem('vtt_initiative_custom_coords'));
+                let savedSize = null;
+                try {
+                    savedSize = JSON.parse(localStorage.getItem('vtt_initiative_custom_size'));
+                } catch (e) { }
+
+                if (savedCoords) {
+                    [configPosition, hudPosition].forEach((sel) => {
+                        if (sel && !sel.querySelector('option[value="custom"]')) {
+                            const opt = document.createElement('option');
+                            opt.value = 'custom';
+                            opt.textContent = '✥';
+                            sel.appendChild(opt);
+                        }
+                    });
+                    setPositionStyle('custom', savedCoords, savedSize);
+                } else {
+                    setPositionStyle('right');
+                }
+            } catch (err) {
+                setPositionStyle('right');
+            }
+        } else {
+            setPositionStyle(savedPosStyle);
+        }
+
+        if (configVisibility && vtt.role === 'GM') {
+            configVisibility.addEventListener('change', () => {
+                broadcastInitiative(); // Re-render to players without HP/etc if needed, or hide container
+                // Actually if global visibility is changed, we should emit an event.
+                vtt.socket.emit('initiative:settings', { visible: configVisibility.value === 'visible' });
+            });
+        }
+
+        vtt.socket.on('initiative:settings', (settings) => {
+            if (vtt.role !== 'GM') {
+                if (settings && settings.visible) {
+                    if (initContainer) initContainer.style.display = '';
+                } else {
+                    if (initContainer) initContainer.style.display = 'none';
+                }
+            }
+        });
+    }
+
+    function addToInitiative(name, score, tokenId, customImg, tokenIds = null) {
+        if (!name) return;
+
+        // Sanitize score to numeric value
+        let numScore = parseFloat(score);
+        if (isNaN(numScore)) {
+            if (score && typeof score === 'object') {
+                numScore = parseFloat(score.total ?? score.value ?? score.result);
+            }
+        }
+        if (isNaN(numScore)) {
+            numScore = Math.floor(Math.random() * 20) + 1;
+        }
+
+        const safeName = String(name).trim();
+        const memberIds = Array.isArray(tokenIds) && tokenIds.length > 0 ? tokenIds : tokenId ? [tokenId] : [];
+
+        // Deduplicate: check if token or creature already exists in combatants
+        const existingIdx = combatants.findIndex(
+            (c) =>
+                (tokenId && (c.tokenId === tokenId || (Array.isArray(c.tokenIds) && c.tokenIds.includes(tokenId)))) ||
+                (!tokenId && !c.tokenId && c.name === safeName) ||
+                (c.name === safeName && (c.tokenId === tokenId || !c.tokenId))
+        );
+
+        let initImg = customImg || null;
+        let tokLayer = 'token';
+        let isPlayerTok = false;
+        if (tokenId && window.VTT?.canvasEngine) {
+            const t = window.VTT.canvasEngine.getTokens()?.[tokenId];
+            if (t) {
+                if (!initImg && t.img) initImg = t.img;
+                if (t.layer) tokLayer = t.layer;
+                if (t.isPlayer) isPlayerTok = true;
+            }
+        }
+
+        if (existingIdx !== -1) {
+            // Update existing combatant
+            combatants[existingIdx].score = numScore;
+            combatants[existingIdx].name = safeName;
+            if (initImg) combatants[existingIdx].img = initImg;
+            if (tokenId) combatants[existingIdx].tokenId = tokenId;
+            combatants[existingIdx].tokenIds = memberIds;
+            combatants[existingIdx].layer = tokLayer;
+            if (isPlayerTok) combatants[existingIdx].isPlayer = true;
+        } else {
+            const id = 'init_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7);
+            combatants.push({
+                id,
+                name: safeName,
+                score: numScore,
+                tokenId: tokenId || null,
+                tokenIds: memberIds,
+                img: initImg,
+                layer: tokLayer,
+                isPlayer: isPlayerTok
+            });
+        }
+
+        // Sort descending by initiative score
+        combatants.sort((a, b) => (parseFloat(b.score) || 0) - (parseFloat(a.score) || 0));
+
+        if (activeTurnIndex === -1 || activeTurnIndex >= combatants.length) {
+            activeTurnIndex = 0;
+        }
+
+        initiativeVisible = true;
+
+        broadcastInitiative();
+        renderInitiativeList();
+    }
+
+    function updateCombatantTokenArt(tokenId, newUrl, characterId = null) {
+        if (!combatants || combatants.length === 0 || !newUrl) return;
+        let updated = false;
+
+        combatants.forEach((c) => {
+            const matchesToken = tokenId && (c.tokenId === tokenId || c.id === tokenId);
+            let matchesChar = false;
+            if (characterId && !c.tokenId && window.VTT?.campaignState?.characters?.[characterId]) {
+                const charName = window.VTT.campaignState.characters[characterId]?.name;
+                if (charName && c.name && c.name.toLowerCase() === charName.toLowerCase()) {
+                    matchesChar = true;
+                }
+            }
+            if (matchesToken || matchesChar) {
+                c.img = newUrl;
+                if (tokenId && !c.tokenId) c.tokenId = tokenId;
+                if (characterId && !c.characterId) c.characterId = characterId;
+                updated = true;
+            }
+        });
+
+        if (updated) {
+            broadcastInitiative();
+            renderInitiativeList();
+        }
+    }
+
+    function broadcastInitiative() {
+        if (!vtt.campaignState) vtt.campaignState = {};
+
+        // Sync layer & player status from canvas tokens if available
+        if (window.VTT?.canvasEngine?.getTokens) {
+            const tokens = window.VTT.canvasEngine.getTokens();
+            combatants.forEach((c) => {
+                if (c.tokenId && tokens[c.tokenId]) {
+                    c.layer = tokens[c.tokenId].layer || 'token';
+                    if (tokens[c.tokenId].isPlayer) c.isPlayer = true;
+                }
+            });
+        }
+
+        vtt.campaignState.initiative = {
+            combatants,
+            currentRound,
+            activeTurnIndex,
+            isVisible: initiativeVisible
+        };
+
+        vtt.socket.emit('initiative:update', {
+            initiative: vtt.campaignState.initiative
+        });
+        renderInitiativeList();
+    }
+
+    function updateCombatantLayer(tokenId, newLayer) {
+        if (!combatants || combatants.length === 0 || !tokenId) return;
+        let updated = false;
+        combatants.forEach((c) => {
+            if (c.tokenId === tokenId) {
+                c.layer = newLayer;
+                updated = true;
+            }
+        });
+        if (updated) {
+            broadcastInitiative();
+        }
+    }
+
+    function updateCombatantScore(targetId, newScore) {
+        if (!combatants || combatants.length === 0 || targetId === undefined) return;
+        const num = parseFloat(newScore);
+        if (isNaN(num)) return;
+        const targetIdx = combatants.findIndex(
+            (cb) => (cb.id && cb.id === targetId) || (cb.tokenId && cb.tokenId === targetId) || cb.name === targetId
+        );
+        if (targetIdx !== -1) {
+            combatants[targetIdx].score = num;
+            let activeId = combatants[activeTurnIndex]?.id || combatants[activeTurnIndex]?.tokenId;
+            combatants.sort((a, b) => (parseFloat(b.score) || 0) - (parseFloat(a.score) || 0));
+            if (activeId) {
+                const newIdx = combatants.findIndex(
+                    (cb) => cb.id === activeId || (cb.tokenId && cb.tokenId === activeId)
+                );
+                if (newIdx !== -1) activeTurnIndex = newIdx;
+            }
+            broadcastInitiative();
+        }
+    }
+
+    function removeFromInitiative(combatantId) {
+        if (!combatants || combatants.length === 0) return;
+        const index = combatants.findIndex(
+            (c) => c.id === combatantId || (c.tokenId && c.tokenId === combatantId) || c.name === combatantId
+        );
+        if (index === -1) return;
+
+        combatants.splice(index, 1);
+        if (combatants.length === 0) {
+            activeTurnIndex = -1;
+            currentRound = 1;
+        } else if (index < activeTurnIndex) {
+            activeTurnIndex--;
+        } else if (index === activeTurnIndex) {
+            if (activeTurnIndex >= combatants.length) {
+                activeTurnIndex = 0;
+                currentRound++;
+            }
+        }
+        broadcastInitiative();
+    }
+
+    function getCombatantMonogram(name) {
+        const cleanName = (name || '?').trim();
+        const words = cleanName.split(/\s+/).filter(Boolean);
+        let letters = '?';
+        if (words.length >= 2) {
+            letters = (words[0][0] + words[1][0]).toUpperCase();
+        } else if (words.length === 1) {
+            letters = words[0].substring(0, Math.min(2, words[0].length)).toUpperCase();
+        }
+        let hash = 0;
+        for (let i = 0; i < cleanName.length; i++) {
+            hash = cleanName.charCodeAt(i) + ((hash << 5) - hash);
+        }
+        const hue = Math.abs(hash) % 360;
+        return {
+            letters,
+            bg: `hsl(${hue}, 42%, 25%)`,
+            border: `hsl(${hue}, 60%, 45%)`,
+            color: `hsl(${hue}, 90%, 88%)`
+        };
+    }
+
+    function renderInitiativeList() {
+        // Clean up video decoders to prevent lag when re-rendering
+        initList.querySelectorAll('video').forEach((v) => {
+            v.pause();
+            v.removeAttribute('src');
+            v.load();
+        });
+
+        initList.innerHTML = '';
+        if (roundDisplay) roundDisplay.textContent = currentRound;
+        if (btnToggleGlobalInit) {
+            btnToggleGlobalInit.classList.toggle('active', !!initiativeVisible);
+            btnToggleGlobalInit.title = initiativeVisible ? 'Hide Initiative Tracker' : 'Show Initiative Tracker';
+        }
+
+        if (!initiativeVisible) {
+            initContainer.classList.add('vtt-hidden');
+            return;
+        }
+
+        if (combatants.length === 0) {
+            const isVertical =
+                (typeof currentOrientation !== 'undefined' ? currentOrientation : 'vertical') === 'vertical' ||
+                initContainer.classList.contains('orientation-vertical') ||
+                initContainer.classList.contains('pos-right') ||
+                initContainer.classList.contains('pos-left');
+            initList.innerHTML = isVertical
+                ? '<div class="init-empty-state" title="No creatures in combat yet. Drag creatures onto map or click \'+\' to add."><i class="fa-solid fa-shield-halved"></i></div>'
+                : '<div class="init-empty-state">No creatures in combat yet. Drag creatures onto map or click "+" to add.</div>';
+            initContainer.classList.remove('vtt-hidden');
+            if (initMinRoundNum) initMinRoundNum.textContent = currentRound;
+            if (initMinName) initMinName.textContent = 'No Combat';
+            if (initMinHp) initMinHp.style.display = 'none';
+            if (initMinAvatar) initMinAvatar.innerHTML = '<i class="fa-solid fa-shield-halved"></i>';
+            if (initMinCombatant) {
+                initMinCombatant.onclick = null;
+                initMinCombatant.ondblclick = null;
+                initMinCombatant.style.cursor = 'default';
+            }
+            if (btnInitMinPrev) btnInitMinPrev.disabled = true;
+            if (btnInitMinNext) btnInitMinNext.disabled = true;
+            const dock = window.VTT?.sheetDock || vtt?.sheetDock;
+            if (dock?.setActiveTurnToken) dock.setActiveTurnToken(null, null);
+            return;
+        }
+
+        initContainer.classList.remove('vtt-hidden');
+
+        const canvasEngine = window.VTT?.canvasEngine;
+
+        const len = combatants.length;
+        let renderList = [];
+        let visualActiveIndex = -1;
+
+        if (len > 0) {
+            let activeIdx = activeTurnIndex;
+            if (activeIdx < 0 || activeIdx >= len) activeIdx = 0;
+
+            const activeCombatantRaw = combatants[activeIdx];
+            const activeTokenRaw =
+                activeCombatantRaw?.tokenId && canvasEngine
+                    ? canvasEngine.getTokens()?.[activeCombatantRaw.tokenId]
+                    : null;
+            const isActiveOffLayer = Boolean(
+                (activeCombatantRaw?.layer && activeCombatantRaw.layer !== 'token') ||
+                (activeTokenRaw && activeTokenRaw.layer && activeTokenRaw.layer !== 'token') ||
+                (activeCombatantRaw?.tokenId && !activeTokenRaw && !activeCombatantRaw?.isPlayer)
+            );
+
+            // For players, filter out combatants on non-token layers
+            let visibleCombatants = combatants;
+            if (vtt.role !== 'GM') {
+                visibleCombatants = combatants.filter((c) => {
+                    if (c.layer && c.layer !== 'token') return false;
+                    const tok = c.tokenId && canvasEngine ? canvasEngine.getTokens()?.[c.tokenId] : null;
+                    if (c.tokenId && !tok && !c.isPlayer) return false;
+                    if (tok && tok.layer && tok.layer !== 'token') return false;
+                    return true;
+                });
+            }
+
+            if (visibleCombatants.length > 0) {
+                // If active combatant is visible, rotate list so active combatant is at index 0
+                if (vtt.role === 'GM' || !isActiveOffLayer) {
+                    const targetCombatant = combatants[activeIdx];
+                    const visIdx = visibleCombatants.findIndex(
+                        (c) =>
+                            (targetCombatant.id && c.id === targetCombatant.id) ||
+                            (targetCombatant.tokenId && c.tokenId === targetCombatant.tokenId)
+                    );
+                    if (visIdx !== -1) {
+                        renderList = [...visibleCombatants.slice(visIdx), ...visibleCombatants.slice(0, visIdx)];
+                        visualActiveIndex = 0;
+                    } else {
+                        renderList = [...visibleCombatants];
+                        visualActiveIndex = -1;
+                    }
+                } else {
+                    // Active combatant is hidden on GM layer! Players see visible combatants without active turn
+                    renderList = [...visibleCombatants];
+                    visualActiveIndex = -1;
+                }
+            }
+        }
+
+        // Populate Minimized HUD Bar
+        if (initMinRoundNum) initMinRoundNum.textContent = currentRound;
+        if (btnInitMinPrev) btnInitMinPrev.disabled = false;
+        if (btnInitMinNext) btnInitMinNext.disabled = false;
+
+        const activeCombatant = visualActiveIndex >= 0 ? renderList[visualActiveIndex] : null;
+        const dock = window.VTT?.sheetDock || vtt?.sheetDock;
+        if (dock?.setActiveTurnToken) {
+            dock.setActiveTurnToken(activeCombatant?.tokenId, activeCombatant?.name);
+        }
+
+        if (activeCombatant) {
+            const actToken = canvasEngine ? canvasEngine.getTokens()?.[activeCombatant.tokenId] : null;
+            const isActPlayer = Boolean(
+                actToken?.isPlayer ||
+                (actToken?.characterId && vtt.campaignState?.characters?.[actToken.characterId]?.isPlayer) ||
+                (activeCombatant.characterId && vtt.campaignState?.characters?.[activeCombatant.characterId]?.isPlayer)
+            );
+            const isActCreaturePlayerView = vtt.role !== 'GM' && !isActPlayer;
+            const actName = activeCombatant.name || 'Unknown';
+
+            if (initMinName) {
+                initMinName.textContent = isActCreaturePlayerView ? 'Creature Turn' : actName;
+            }
+
+            // HP
+            if (initMinHp) {
+                let actHpText = '';
+                let actHpColor = '#22c55e';
+                if (!isActCreaturePlayerView && actToken && actToken.maxHp) {
+                    actHpText = `${actToken.hp}/${actToken.maxHp}`;
+                    const ratio = actToken.hp / (actToken.maxHp || 1);
+                    if (ratio > 0.5) actHpColor = '#22c55e';
+                    else if (ratio > 0.2) actHpColor = '#eab308';
+                    else actHpColor = '#ef4444';
+                }
+                if (actHpText) {
+                    initMinHp.textContent = actHpText;
+                    initMinHp.style.color = actHpColor;
+                    initMinHp.style.borderColor = actHpColor;
+                    initMinHp.style.display = 'inline-block';
+                } else {
+                    initMinHp.style.display = 'none';
+                }
+            }
+
+            // Avatar
+            if (initMinAvatar) {
+                const actMonogram = getCombatantMonogram(actName);
+                const actTargetImg = (actToken && actToken.img) || activeCombatant.img;
+                if (actTargetImg) {
+                    const safeActTargetImg =
+                        typeof window.getSafeVttUrl === 'function'
+                            ? window.getSafeVttUrl(actTargetImg)
+                            : actTargetImg.includes('discordapp.com') || actTargetImg.includes('discordapp.net')
+                                ? '/api/proxy-discord?url=' + encodeURIComponent(actTargetImg)
+                                : actTargetImg;
+                    const cleanTarget = actTargetImg.split('?')[0].toLowerCase();
+                    const isTargetVideo = (actToken && actToken.isVideo) || !!cleanTarget.match(/\.(mp4|webm|ogg)$/i);
+                    const isTargetYt = actTargetImg.includes('youtube.com') || actTargetImg.includes('youtu.be');
+                    if (isTargetYt) {
+                        initMinAvatar.innerHTML = '📺';
+                    } else if (isTargetVideo) {
+                        initMinAvatar.innerHTML = `<video src="${safeActTargetImg}" autoplay muted loop playsinline preload="auto" onloadeddata="this.play().catch(()=>{})"></video>`;
+                    } else {
+                        const safeActName = escapeHtml(actName);
+                        initMinAvatar.innerHTML = `<img src="${safeActTargetImg}" alt="${safeActName}" onerror="this.parentElement.innerHTML='<div class=\\'init-monogram-avatar\\' style=\\'background: ${actMonogram.bg}; border-color: ${actMonogram.border}; color: ${actMonogram.color};\\'>${actMonogram.letters}</div>';">`;
+                    }
+                } else {
+                    initMinAvatar.innerHTML = `<div class="init-monogram-avatar" style="background: ${actMonogram.bg}; border-color: ${actMonogram.border}; color: ${actMonogram.color};">${actMonogram.letters}</div>`;
+                }
+            }
+
+            // Interacting with minimized combatant chip
+            if (initMinCombatant) {
+                initMinCombatant.style.cursor = 'pointer';
+                initMinCombatant.onclick = (e) => {
+                    e.stopPropagation();
+                    if (actToken && window.VTT?.canvasEngine) {
+                        window.VTT.canvasEngine.panTo(actToken.x, actToken.y);
+                        if (e.shiftKey && vtt.role === 'GM') {
+                            window.VTT.canvasEngine.selectToken(actToken.id);
+                        }
+                    }
+                };
+                initMinCombatant.ondblclick = (e) => {
+                    e.stopPropagation();
+                    if (actToken && window.VTT?.canvasEngine) {
+                        window.VTT.canvasEngine.panTo(actToken.x, actToken.y, null, 350);
+                        window.VTT.canvasEngine.selectToken(actToken.id);
+                    }
+                };
+            }
+        } else {
+            if (initMinName) initMinName.textContent = 'Combat';
+            if (initMinHp) initMinHp.style.display = 'none';
+            if (initMinAvatar) initMinAvatar.innerHTML = '<i class="fa-solid fa-shield-halved"></i>';
+            if (initMinCombatant) {
+                initMinCombatant.onclick = null;
+                initMinCombatant.ondblclick = null;
+                initMinCombatant.style.cursor = 'default';
+            }
+        }
+
+        renderList.forEach((c, idx) => {
+            const row = document.createElement('div');
+            const isActive = idx === visualActiveIndex;
+            const memberIds =
+                Array.isArray(c.tokenIds) && c.tokenIds.length > 0 ? c.tokenIds : c.tokenId ? [c.tokenId] : [];
+            const memberTokens = memberIds
+                .map((id) => (canvasEngine ? canvasEngine.getTokens()?.[id] : null))
+                .filter(Boolean);
+            const token = canvasEngine ? canvasEngine.getTokens()?.[c.tokenId] || memberTokens[0] || null : null;
+            const isGhost = Boolean(c.tokenId && (!canvasEngine || !canvasEngine.getTokens()?.[c.tokenId]));
+
+            const isOffLayer = Boolean(
+                (c.layer && c.layer !== 'token') || (token && token.layer && token.layer !== 'token')
+            );
+            const isPlayerChar = Boolean(
+                token?.isPlayer ||
+                (token?.characterId && vtt.campaignState?.characters?.[token.characterId]?.isPlayer) ||
+                (c.characterId && vtt.campaignState?.characters?.[c.characterId]?.isPlayer)
+            );
+            const isCreaturePlayerView = vtt.role !== 'GM' && !isPlayerChar;
+
+            const cardClasses = ['init-carousel-card'];
+            if (isActive) cardClasses.push('init-carousel-card--active');
+            if (isOffLayer) cardClasses.push('init-carousel-card--off-layer');
+            if (isCreaturePlayerView) cardClasses.push('init-card--creature-player-view');
+            if (isGhost) cardClasses.push('init-carousel-card--ghost');
+
+            row.className = cardClasses.join(' ');
+            row.dataset.id = c.id || c.tokenId || '';
+            if (isGhost) {
+                row.title = `${c.name || 'Combatant'} (Token Removed from Canvas)`;
+            } else if (isOffLayer && vtt.role === 'GM') {
+                row.title = `Off Token Layer (${(c.layer || token?.layer || 'GM').toUpperCase()})`;
+            }
+
+            const name = c.name || 'Unknown';
+            const safeName = escapeHtml(name);
+            let hpText = '';
+            let hpColor = '#22c55e';
+
+            const getCentroid = () => {
+                if (memberTokens.length > 0) {
+                    const sumX = memberTokens.reduce((acc, t) => acc + t.x, 0);
+                    const sumY = memberTokens.reduce((acc, t) => acc + t.y, 0);
+                    return { x: sumX / memberTokens.length, y: sumY / memberTokens.length };
+                }
+                return token ? { x: token.x, y: token.y } : null;
+            };
+
+            // Allow clicking token to pan canvas or open sheet
+            row.addEventListener('click', (e) => {
+                const center = getCentroid();
+                if (center && window.VTT?.canvasEngine) {
+                    window.VTT.canvasEngine.panTo(center.x, center.y);
+                    if (e.shiftKey && vtt.role === 'GM') {
+                        if (memberIds.length > 1) {
+                            window.VTT.canvasEngine.selectToken(memberIds);
+                        } else if (token) {
+                            window.VTT.canvasEngine.selectToken(token.id);
+                        }
+                    }
+                }
+            });
+
+            row.addEventListener('dblclick', (e) => {
+                e.stopPropagation();
+                const center = getCentroid();
+                if (token && window.VTT?.canvasEngine) {
+                    window.VTT.canvasEngine.panTo(center ? center.x : token.x, center ? center.y : token.y, null, 350);
+                    const canSelect =
+                        vtt.role === 'GM' || token.isPlayer || token.characterId === window.VTT?.activeCharacterId;
+                    if (canSelect) {
+                        if (memberIds.length > 1) {
+                            window.VTT.canvasEngine.selectToken(memberIds);
+                        } else {
+                            window.VTT.canvasEngine.selectToken(token.id);
+                        }
+                    }
+                }
+            });
+
+            // HP Calculation (strictly GM or Player Characters)
+            if (!isCreaturePlayerView) {
+                if (memberTokens.length > 1) {
+                    const totalHp = memberTokens.reduce((acc, t) => acc + (t.hp || 0), 0);
+                    const totalMaxHp = memberTokens.reduce((acc, t) => acc + (t.maxHp || 0), 0);
+                    if (totalMaxHp > 0) {
+                        hpText = `${totalHp}/${totalMaxHp}`;
+                        const ratio = totalHp / totalMaxHp;
+                        if (ratio > 0.5) hpColor = '#22c55e';
+                        else if (ratio > 0.2) hpColor = '#eab308';
+                        else hpColor = '#ef4444';
+                    }
+                } else if (token && token.maxHp) {
+                    hpText = `${token.hp}/${token.maxHp}`;
+                    const ratio = token.hp / (token.maxHp || 1);
+                    if (ratio > 0.5) hpColor = '#22c55e';
+                    else if (ratio > 0.2) hpColor = '#eab308';
+                    else hpColor = '#ef4444';
+                }
+            }
+
+            // Avatar construction
+            const monogram = getCombatantMonogram(name);
+            const monogramHtml = `<div class="init-monogram-avatar" style="background: ${monogram.bg}; border-color: ${monogram.border}; color: ${monogram.color};">${monogram.letters}</div>`;
+
+            let avatarHtml = monogramHtml;
+            const targetImg = (token && token.img) || c.img;
+
+            if (targetImg) {
+                const cleanTarget = targetImg.split('?')[0].toLowerCase();
+                const isTargetVideo = (token && token.isVideo) || !!cleanTarget.match(/\.(mp4|webm|ogg)$/i);
+                const isTargetYt = targetImg.includes('youtube.com') || targetImg.includes('youtu.be');
+
+                const safeTargetImg =
+                    typeof window.getSafeVttUrl === 'function'
+                        ? window.getSafeVttUrl(targetImg)
+                        : targetImg.includes('discordapp.com') || targetImg.includes('discordapp.net')
+                            ? '/api/proxy-discord?url=' + encodeURIComponent(targetImg)
+                            : targetImg;
+
+                if (isTargetYt) {
+                    avatarHtml = `<div class="init-token-avatar init-avatar-yt" title="YouTube Token">📺</div>`;
+                } else if (isTargetVideo) {
+                    // First-frame only: eliminate running video decoders in initiative HUD
+                    const posterSrc = token?.poster || token?.thumbnail || '';
+                    if (posterSrc) {
+                        avatarHtml = `
+                            <div class="init-token-avatar-wrap">
+                                <img class="init-token-avatar" src="${posterSrc}" alt="${safeName}">
+                            </div>`;
+                    } else {
+                        avatarHtml = `
+                            <div class="init-token-avatar-wrap">
+                                <video class="init-token-avatar" src="${safeTargetImg}#t=0.001" muted playsinline preload="metadata"></video>
+                            </div>`;
+                    }
+                } else {
+                    avatarHtml = `
+                        <div class="init-token-avatar-wrap">
+                            <img class="init-token-avatar" src="${safeTargetImg}" alt="${safeName}" onerror="this.parentElement.innerHTML = '<div class=\\'init-monogram-avatar\\' style=\\'background: ${monogram.bg}; border-color: ${monogram.border}; color: ${monogram.color};\\'>${monogram.letters}</div>';">
+                        </div>`;
+                }
+            }
+
+            // Tooltip HTML (floating on hover with Name & HP)
+            const tooltipName = isGhost ? `${safeName} (Token Removed)` : isCreaturePlayerView ? 'Creature' : safeName;
+            let tooltipHp = '';
+            if (!isCreaturePlayerView && token && token.maxHp) {
+                tooltipHp = `<span class="init-card-hover-tooltip-hp" style="color: ${hpColor}; border-color: ${hpColor};">${hpText}</span>`;
+            }
+            const tooltipHtml = `
+                <div class="init-card-hover-tooltip">
+                    <span class="init-card-hover-tooltip-name">${tooltipName}</span>
+                    ${tooltipHp}
+                </div>
+            `;
+
+            let delBtnHtml = '';
+            if (vtt.role === 'GM') {
+                delBtnHtml = `<button class="init-card-del-btn" data-id="${c.id || c.tokenId}" title="Remove from Tracker"><i class="fa-solid fa-xmark"></i></button>`;
+            }
+
+            let ghostBadgeHtml = '';
+            if (isGhost) {
+                ghostBadgeHtml = `<span class="init-ghost-badge" title="Token removed from canvas"><i class="fa-solid fa-skull"></i></span>`;
+            }
+
+            const scoreNum = parseFloat(c.score);
+            const displayScore = !isNaN(scoreNum)
+                ? (Number.isInteger(scoreNum) ? scoreNum : parseFloat(scoreNum.toFixed(2)))
+                : '—';
+
+            row.innerHTML = `
+                ${delBtnHtml}
+                ${ghostBadgeHtml}
+                <div class="init-card-content">
+                    <div class="init-card-img">${avatarHtml}</div>
+                    <div class="init-card-score" ${vtt.role === 'GM' ? 'title="Right-click to edit score"' : ''}>${displayScore}</div>
+                </div>
+                ${tooltipHtml}
+            `;
+
+            // Delete button listener
+            if (vtt.role === 'GM') {
+                const delBtn = row.querySelector('.init-card-del-btn');
+                if (delBtn) {
+                    delBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        removeFromInitiative(c.id || c.tokenId || c.name);
+                    });
+                }
+
+                // Edit initiative score listener on right-click anywhere on the card or badge
+                const startScoreEdit = (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    const scoreEl = row.querySelector('.init-card-score');
+                    if (!scoreEl || scoreEl.querySelector('input')) return; // Already editing
+
+                    scoreEl.classList.add('is-editing');
+                    const currentScore = parseFloat(c.score) || 0;
+                    scoreEl.innerHTML = `<input type="number" step="any" class="init-score-edit-input" value="${currentScore}">`;
+
+                    const inputEl = scoreEl.querySelector('input');
+                    inputEl.focus();
+                    inputEl.select();
+
+                    let isSaved = false;
+
+                    const saveEdit = () => {
+                        if (isSaved) return;
+                        isSaved = true;
+                        scoreEl.classList.remove('is-editing');
+                        const newScore = parseFloat(inputEl.value);
+                        if (!isNaN(newScore) && newScore !== currentScore) {
+                            updateCombatantScore(c.id || c.tokenId || c.name, newScore);
+                        } else {
+                            scoreEl.textContent = displayScore;
+                        }
+                    };
+
+                    inputEl.addEventListener('blur', saveEdit);
+                    inputEl.addEventListener('keydown', (ke) => {
+                        if (ke.key === 'Enter') {
+                            saveEdit();
+                        } else if (ke.key === 'Escape') {
+                            isSaved = true;
+                            scoreEl.classList.remove('is-editing');
+                            scoreEl.textContent = displayScore;
+                        }
+                    });
+
+                    inputEl.addEventListener('click', (ce) => {
+                        ce.stopPropagation();
+                    });
+                };
+
+                row.addEventListener('contextmenu', startScoreEdit);
+            }
+
+            // Video hover listeners
+            const videoEl = row.querySelector('video');
+            if (videoEl) {
+                row.addEventListener('mouseenter', () => videoEl.play().catch(() => { }));
+                row.addEventListener('mouseleave', () => videoEl.pause());
+            }
+
+            // Highlight token(s) on canvas when hovering over card (only if tokens are alive on canvas)
+            row.addEventListener('mouseenter', () => {
+                if (window.VTT?.canvasEngine?.setInitiativeHoverToken) {
+                    if (memberTokens.length > 1) {
+                        window.VTT.canvasEngine.setInitiativeHoverToken(memberTokens.map((t) => t.id));
+                    } else if (token && c.tokenId) {
+                        window.VTT.canvasEngine.setInitiativeHoverToken(c.tokenId);
+                    }
+                }
+            });
+            row.addEventListener('mouseleave', () => {
+                if (window.VTT?.canvasEngine?.setInitiativeHoverToken) {
+                    window.VTT.canvasEngine.setInitiativeHoverToken(null);
+                }
+            });
+
+            initList.appendChild(row);
+        });
+    }
+
+    function appendWhisperMessage(msg, isHistorical = false) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'chat-message whisper-card animated-fade-in';
+        if (msg.id) {
+            messageDiv.dataset.msgId = msg.id;
+        }
+
+        const time = new Date(msg.timestamp || Date.now()).toLocaleTimeString([], {
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+
+        const safeUsername = escapeHtml(msg.username || vtt.username);
+        let headerText = `<span class="username">🔒 ${safeUsername} <span class="whisper-badge">Private</span><span class="timestamp">${time}</span></span>`;
+        let bodyText = msg.text ? `<span class="message-text">${parseSimpleMarkdown(msg.text)}</span>` : '';
+
+        // Structured macro card (private)
+        if (msg.macroCard) {
+            messageDiv._macroCardData = msg.macroCard;
+            bodyText = renderMacroCardHtml(msg.macroCard, isHistorical, msg.id);
+            if (!isHistorical) {
+                const dice = extractDiceFromMessage(msg);
+                if (dice.length > 0) trigger3dDiceRoll(dice);
+            }
+        }
+        // Structured ability card (private)
+        else if (msg.abilityCard) {
+            const ac = msg.abilityCard;
+            const descHtml = formatAbilityCardText(ac.text);
+            bodyText = `
+                <div class="ability-chat-card">
+                    <div class="ability-chat-header">
+                        <div class="ability-chat-creature">${escapeHtml(ac.creatureName || 'Creature')}</div>
+                        ${ac.abilityName ? `<div class="ability-chat-name">${escapeHtml(ac.abilityName)}</div>` : ''}
+                    </div>
+                    <div class="ability-chat-desc">${descHtml}</div>
+                </div>
+            `;
+        } else if (msg.itemCard) {
+            bodyText = renderItemCardHtml(msg.itemCard);
+        } else if (msg.roll) {
+            const listStr = msg.roll.diceList.map((d) => d.val).join(', ');
+            const modStr =
+                msg.roll.modifier !== 0 ? ` ${msg.roll.modifier > 0 ? '+' : '-'} ${Math.abs(msg.roll.modifier)}` : '';
+
+            let rollTitle = '';
+            let rollSub = '';
+
+            const matchLabel = msg.text.match(/^\[([^\]:]+)(?::\s*([^\]]+))?\]\s*rolls\s*\*\*([^*]+)\*\*/i);
+            if (matchLabel) {
+                rollTitle = matchLabel[1];
+                rollSub = matchLabel[2] ? matchLabel[2] : 'Roll';
+            } else {
+                rollTitle = 'Dice Roll';
+                rollSub = '';
+            }
+
+            bodyText = `
+                <div class="dice-roll-card">
+                    <div class="roll-card-header">
+                        <div class="roll-card-header-left">
+                            <span class="roll-card-title">${escapeHtml(rollTitle)}</span>
+                            ${rollSub ? `<span class="roll-card-subtitle">${escapeHtml(rollSub)}</span>` : ''}
+                        </div>
+                        <span class="roll-card-formula">${escapeHtml((msg.roll.formula || '').toUpperCase())}</span>
+                    </div>
+                    <div class="roll-card-result">${escapeHtml(String(msg.roll.total ?? ''))}</div>
+                    <div class="roll-card-breakdown">[${listStr}]${modStr}</div>
+                </div>
+            `;
+            // Trigger 3D dice animation for whispers too
+            if (!isHistorical) trigger3dDiceRoll(msg.roll.diceList);
+        }
+
+        const rawWhisperHtml = headerText + bodyText;
+        if (typeof window !== 'undefined' && typeof window.vttSanitizeHtml === 'function') {
+            messageDiv.innerHTML = window.vttSanitizeHtml(rawWhisperHtml);
+        } else if (typeof DOMPurify !== 'undefined' && typeof DOMPurify.sanitize === 'function') {
+            messageDiv.innerHTML = DOMPurify.sanitize(rawWhisperHtml);
+        } else {
+            messageDiv.textContent = stripAllHtmlFallback(rawWhisperHtml);
+        }
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    // Setup Context Menu for Fast Dice Buttons
+    function setupFastDiceContextMenu() {
+        let menu = document.getElementById('dice-fast-roll-menu');
+        if (!menu) {
+            menu = document.createElement('div');
+            menu.id = 'dice-fast-roll-menu';
+            menu.className = 'dice-context-menu';
+            menu.style.display = 'none';
+            document.body.appendChild(menu);
+        }
+
+        let targetFormula = '';
+        let targetFaces = 6;
+
+        fastRollBtns.forEach((btn) => {
+            btn.addEventListener('contextmenu', (e) => {
+                e.preventDefault();
+
+                const formula = btn.dataset.formula;
+                const match = formula.match(/1?d(\d+)/i);
+                if (!match) return;
+
+                targetFaces = parseInt(match[1]);
+                targetFormula = formula;
+
+                menu.style.display = 'block';
+                menu.style.left = `${e.pageX}px`;
+
+                const menuHeight = 280;
+                let topPos = e.pageY;
+                if (topPos + menuHeight > window.innerHeight + window.scrollY) {
+                    topPos = window.innerHeight + window.scrollY - menuHeight - 10;
+                }
+                menu.style.top = `${topPos}px`;
+
+                renderContextMenuContent();
+            });
+        });
+
+        function renderContextMenuContent() {
+            menu.innerHTML = `
+                <div class="dice-menu-header">Roll d${targetFaces}</div>
+                <div class="dice-menu-options">
+                    ${Array.from({ length: 10 }, (_, i) => i + 1)
+                    .map(
+                        (num) => `
+                        <div class="dice-menu-option" data-count="${num}">
+                            Roll ${num}d${targetFaces}
+                        </div>
+                    `
+                    )
+                    .join('')}
+                </div>
+                <div class="dice-menu-divider"></div>
+                <div class="dice-menu-custom">
+                    <input type="number" id="dice-menu-custom-input" min="1" max="50" value="1">
+                    <button id="dice-menu-custom-btn">Roll</button>
+                </div>
+            `;
+
+            menu.querySelectorAll('.dice-menu-option').forEach((option) => {
+                option.addEventListener('click', () => {
+                    const count = option.dataset.count;
+                    const formula = `${count}d${targetFaces}`;
+                    rollAndSend(formula);
+                    hideMenu();
+                });
+            });
+
+            const customInput = menu.querySelector('#dice-menu-custom-input');
+            const customBtn = menu.querySelector('#dice-menu-custom-btn');
+
+            customBtn.addEventListener('click', () => {
+                const count = parseInt(customInput.value) || 1;
+                if (count > 0) {
+                    const formula = `${count}d${targetFaces}`;
+                    rollAndSend(formula);
+                }
+                hideMenu();
+            });
+
+            customInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    customBtn.click();
+                }
+            });
+        }
+
+        function hideMenu() {
+            menu.style.display = 'none';
+        }
+
+        document.addEventListener('click', (e) => {
+            if (!menu.contains(e.target)) {
+                hideMenu();
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                hideMenu();
+            }
+        });
+    }
+
+    function appendSystemMessage(text, timestamp) {
+        appendMessageToDom({
+            username: 'SYSTEM',
+            role: 'SYSTEM',
+            text: text,
+            timestamp: timestamp || Date.now()
+        });
+    }
+
+    return {
+        appendSystemMessage,
+        appendWhisperMessage,
+        addToInitiative,
+        removeFromInitiative,
+        updateCombatantLayer,
+        updateCombatantScore,
+        updateCombatantTokenArt,
+        isCombatActive: () => combatants.length > 0,
+        getCombatants: () => [...combatants],
+        refreshInitiative: renderInitiativeList,
+        syncChatHistory: (newHistory) => {
+            if (chatMessages && Array.isArray(newHistory)) {
+                chatMessages.innerHTML = '';
+                newHistory.forEach((msg) => appendMessageToDom(msg, true));
+            }
+            renderInitiativeList();
+        },
+        toggleInitiative: (visible) => {
+            initiativeVisible = visible !== undefined ? visible : !initiativeVisible;
+            broadcastInitiative();
+        }
+    };
+}

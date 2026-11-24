@@ -1,16 +1,16 @@
 {
   "appId": "com.forgedvtt.desktop",
   "productName": "ForgeDVTT",
+  "executableName": "ForgeDVTT",
   "asar": true,
   "asarUnpack": [
+    "package.json",
+    "node_modules/**/*",
     "server/**/*",
     "server.js",
     "launcher.js",
     "utils.js",
-    "vtt/**/*",
-    "img/**/*",
-    "css/**/*",
-    "index.html"
+    "vtt/**/*"
   ],
   "directories": {
     "app": ".release-stage",
@@ -20,13 +20,10 @@
     "server.js",
     "launcher.js",
     "utils.js",
-    "index.html",
     "LEGAL.md",
     "electron/**/*",
     "server/**/*",
     "vtt/**/*",
-    "img/**/*",
-    "css/**/*",
     "package.json"
   ],
   "extraResources": [
@@ -39,6 +36,7 @@
     }
   ],
   "win": {
+    "executableName": "ForgeDVTT",
     "target": [
       {
         "target": "nsis",

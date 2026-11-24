@@ -12,15 +12,73 @@ export function getGridDistanceSettings(g) {
         g && g.distanceUnit && typeof g.distanceUnit === 'string' && g.distanceUnit.trim()
             ? g.distanceUnit.trim()
             : 'ft';
-    return { val, unit };
+    const diagonalRule = g && g.diagonalRule === '5-10-5' ? '5-10-5' : '5ft';
+    return { val, unit, diagonalRule };
 }
 
-export function calcDistanceFormatted(pixels, g) {
-    const pxPerCell = (g?.size || 50) * (g?.scale || 1.0);
-    const { val, unit } = getGridDistanceSettings(g);
-    const cells = pixels / (pxPerCell || 50);
-    const totalDist = cells * val;
+export function calcPointsDistance(p1, p2, g, carryOverDiagonals = 0) {
+    if (!p1 || !p2) return { distance: 0, diagonals: 0 };
+    const pxPerCell = (g?.size || 50) * (g?.scale || 1.0) || 50;
+    const { val, diagonalRule } = getGridDistanceSettings(g);
+    const isHex = typeof g?.type === 'string' && g.type.startsWith('hex');
 
+    const dx = Math.abs(p2.x - p1.x);
+    const dy = Math.abs(p2.y - p1.y);
+
+    if (isHex) {
+        const distPx = Math.hypot(dx, dy);
+        const cells = distPx / pxPerCell;
+        return { distance: cells * val, diagonals: 0 };
+    }
+
+    const cellDx = dx / pxPerCell;
+    const cellDy = dy / pxPerCell;
+
+    if (diagonalRule === '5ft') {
+        const cells = Math.max(cellDx, cellDy);
+        return { distance: cells * val, diagonals: 0 };
+    }
+
+    // 5-10-5 (DMG Variant)
+    const minCells = Math.min(cellDx, cellDy);
+    const maxCells = Math.max(cellDx, cellDy);
+    const straightCells = maxCells - minCells;
+
+    const fullDiagonals = Math.floor(minCells);
+    const fracDiagonal = minCells - fullDiagonals;
+
+    let diagonalDistance = 0;
+    for (let i = 1; i <= fullDiagonals; i++) {
+        const diagIndex = carryOverDiagonals + i;
+        diagonalDistance += (diagIndex % 2 === 0 ? 2 : 1) * val;
+    }
+    if (fracDiagonal > 0) {
+        const nextDiagIndex = carryOverDiagonals + fullDiagonals + 1;
+        const nextStepCost = (nextDiagIndex % 2 === 0 ? 2 : 1) * val;
+        diagonalDistance += fracDiagonal * nextStepCost;
+    }
+
+    const totalDist = straightCells * val + diagonalDistance;
+    return {
+        distance: totalDist,
+        diagonals: fullDiagonals + fracDiagonal
+    };
+}
+
+export function calcPolylineGridDistance(points, g) {
+    if (!Array.isArray(points) || points.length < 2) return 0;
+    let totalDist = 0;
+    let carryDiagonals = 0;
+    for (let i = 1; i < points.length; i++) {
+        const seg = calcPointsDistance(points[i - 1], points[i], g, carryDiagonals);
+        totalDist += seg.distance;
+        carryDiagonals += seg.diagonals;
+    }
+    return totalDist;
+}
+
+export function formatDistanceResult(totalDist, g) {
+    const { val, unit } = getGridDistanceSettings(g);
     let roundedDist;
     if (unit.toLowerCase() === 'ft' && val === 5) {
         roundedDist = Math.round(totalDist / 5) * 5;
@@ -38,8 +96,24 @@ export function calcDistanceFormatted(pixels, g) {
     };
 }
 
-export function calcDistanceFt(pixels, g) {
-    return calcDistanceFormatted(pixels, g).distance;
+export function calcDistanceFormatted(pixelsOrDistance, g, pointsOrCoords = null) {
+    if (Array.isArray(pointsOrCoords) && pointsOrCoords.length >= 2) {
+        const totalDist = calcPolylineGridDistance(pointsOrCoords, g);
+        return formatDistanceResult(totalDist, g);
+    } else if (pointsOrCoords && pointsOrCoords.start && pointsOrCoords.end) {
+        const totalDist = calcPointsDistance(pointsOrCoords.start, pointsOrCoords.end, g).distance;
+        return formatDistanceResult(totalDist, g);
+    } else if (typeof pixelsOrDistance === 'number') {
+        const pxPerCell = (g?.size || 50) * (g?.scale || 1.0) || 50;
+        const { val } = getGridDistanceSettings(g);
+        const cells = pixelsOrDistance / pxPerCell;
+        return formatDistanceResult(cells * val, g);
+    }
+    return formatDistanceResult(0, g);
+}
+
+export function calcDistanceFt(pixelsOrDistance, g, pointsOrCoords = null) {
+    return calcDistanceFormatted(pixelsOrDistance, g, pointsOrCoords).distance;
 }
 
 export function drawMeasurementTemplate(
@@ -91,6 +165,7 @@ export function drawMeasurementTemplate(
     let distancePx = radius;
     let labelAtX = endPoint.x;
     let labelAtY = endPoint.y;
+    let shapeDistInfo = null;
 
     if (shapeType === 'circle') {
         ctx.beginPath();
@@ -108,6 +183,7 @@ export function drawMeasurementTemplate(
         ctx.setLineDash([]);
 
         distancePx = radius;
+        shapeDistInfo = calcDistanceFormatted(null, activeGrid, { start: startPoint, end: endPoint });
     } else if (shapeType === 'square') {
         const halfSide = radius;
         let rx = startPoint.x,
@@ -132,6 +208,7 @@ export function drawMeasurementTemplate(
         ctx.stroke();
 
         distancePx = side;
+        shapeDistInfo = calcDistanceFormatted(side, activeGrid);
     } else if (shapeType === 'cone') {
         const angle = Math.atan2(dy, dx);
         const halfAngle = Math.PI / 4; // 90 degree cone
@@ -145,6 +222,7 @@ export function drawMeasurementTemplate(
         ctx.stroke();
 
         distancePx = radius;
+        shapeDistInfo = calcDistanceFormatted(null, activeGrid, { start: startPoint, end: endPoint });
     } else if (shapeType === 'beam') {
         const angle = Math.atan2(dy, dx);
         const length = radius;
@@ -170,6 +248,7 @@ export function drawMeasurementTemplate(
         ctx.stroke();
 
         distancePx = length;
+        shapeDistInfo = calcDistanceFormatted(null, activeGrid, { start: startPoint, end: endPoint });
     } else {
         // Default: line (polyline if points array given, else simple line)
         const polyPoints = Array.isArray(points) && points.length >= 2 ? points : [startPoint, endPoint];
@@ -261,14 +340,27 @@ export function drawMeasurementTemplate(
             }
         }
 
+        let totalDist = 0;
+        let carryDiagonals = 0;
+        bentSegments.forEach((seg) => {
+            if (Array.isArray(seg.points) && seg.points.length >= 2) {
+                for (let i = 1; i < seg.points.length; i++) {
+                    const res = calcPointsDistance(seg.points[i - 1], seg.points[i], activeGrid, carryDiagonals);
+                    totalDist += res.distance;
+                    carryDiagonals += res.diagonals;
+                }
+            }
+        });
+        shapeDistInfo = formatDistanceResult(totalDist, activeGrid);
+
         distancePx = totalLen;
         labelAtX = lastPt.x;
         labelAtY = lastPt.y;
     }
 
     // Distance label — shown only during live drawing
-    if (showDistance && distancePx > 0) {
-        const distInfo = calcDistanceFormatted(distancePx, activeGrid);
+    if (showDistance && (distancePx > 0 || (shapeDistInfo && shapeDistInfo.distance > 0))) {
+        const distInfo = shapeDistInfo || calcDistanceFormatted(distancePx, activeGrid);
         const label = distInfo.label;
         const livePill = typeof document !== 'undefined' ? document.getElementById('vtt-live-measure-pill') : null;
         if (livePill) livePill.style.display = 'none';
@@ -280,7 +372,7 @@ export function drawMeasurementTemplate(
             ctx.save();
             ctx.globalAlpha = 1.0;
             const pillFontSize = Math.round(13 * screenResScale);
-            ctx.font = `bold ${pillFontSize}px Inter, Arial, sans-serif`;
+            ctx.font = `bold ${pillFontSize}px "Open Sans", Arial, sans-serif`;
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             const tw = ctx.measureText(label).width;
@@ -313,7 +405,7 @@ export function drawMeasurementTemplate(
             ctx.scale(1 / zoom, 1 / zoom);
 
             const pillFontSize = Math.round(13 * screenResScale);
-            ctx.font = `bold ${pillFontSize}px Inter, Arial, sans-serif`;
+            ctx.font = `bold ${pillFontSize}px "Open Sans", Arial, sans-serif`;
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             const tw = ctx.measureText(label).width;
@@ -352,7 +444,7 @@ export function drawMeasurementTemplate(
             ctx.save();
             ctx.globalAlpha = 1.0;
             const ownerFontSize = Math.round(11 * screenResScale);
-            ctx.font = `bold ${ownerFontSize}px Inter, Arial, sans-serif`;
+            ctx.font = `bold ${ownerFontSize}px "Open Sans", Arial, sans-serif`;
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             const tw = ctx.measureText(ownerUsername).width;
@@ -385,7 +477,7 @@ export function drawMeasurementTemplate(
             ctx.scale(1 / zoom, 1 / zoom);
 
             const ownerFontSize = Math.round(11 * screenResScale);
-            ctx.font = `${ownerFontSize}px Inter, Arial, sans-serif`;
+            ctx.font = `${ownerFontSize}px "Open Sans", Arial, sans-serif`;
             ctx.textAlign = 'center';
             ctx.textBaseline = 'bottom';
             ctx.fillStyle = 'rgba(0,0,0,0.6)';

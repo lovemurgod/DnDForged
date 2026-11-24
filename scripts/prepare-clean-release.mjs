@@ -62,10 +62,6 @@ execFileSync(
 
 // 5. Copy Brand & App Assets (Omit copyrighted covers and adventures)
 console.log('\n📁 Step 3: Copying brand assets and client files...');
-// Copy root images (logos only)
-copyDirFiltered(path.join(rootDir, 'img'), path.join(stageDir, 'img'));
-// Copy root css
-copyDirFiltered(path.join(rootDir, 'css'), path.join(stageDir, 'css'));
 // Copy electron
 copyDirFiltered(path.join(rootDir, 'electron'), path.join(stageDir, 'electron'));
 // Copy server
@@ -107,15 +103,7 @@ const rootFilesToCopy = [
     'server.js',
     'launcher.js',
     'utils.js',
-    'index.html',
-    'LEGAL.md',
-    'favicon.ico',
-    'favicon.svg',
-    'favicon-96x96.png',
-    'apple-touch-icon.png',
-    'web-app-manifest-192x192.png',
-    'web-app-manifest-512x512.png',
-    'site.webmanifest'
+    'LEGAL.md'
 ];
 
 for (const rf of rootFilesToCopy) {

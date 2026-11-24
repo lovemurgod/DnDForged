@@ -8,6 +8,14 @@ import { CONDITION_ICONS } from './vtt-canvas-token-rollers.js';
 import { getSafeVttUrl } from '../../vtt-utils.js';
 import { loadPlayerTokenPrefs } from './vtt-canvas-token-config.js';
 import {
+    TOKEN_SHAPES,
+    TOKEN_BORDER_STYLES,
+    THEMATIC_FRAMES,
+    traceTokenCanvasPath,
+    getThematicFrameSvg,
+    getShapeBorderSvg
+} from './vtt-canvas-token-borders.js';
+import {
     spawnProceduralCombatFX,
     MAX_CONCURRENT_PROCEDURAL_FX,
     getActiveProceduralFxCount,
@@ -85,6 +93,14 @@ function cleanupMediaElement(node) {
     const id = node.id?.startsWith('asset_node_') ? node.id.substring(11) : null;
     if (id && typeof cleanupYouTubePingPongForId === 'function') {
         cleanupYouTubePingPongForId(id);
+    }
+    if (id) {
+        const frameNode = document.getElementById('token_frame_' + id);
+        if (frameNode) {
+            try {
+                frameNode.remove();
+            } catch (e) {}
+        }
     }
     if (node.tagName === 'VIDEO') {
         try {
@@ -637,6 +653,8 @@ export function renderTokensLayer(context = {}) {
             }
             const offUiNode = document.getElementById('token_ui_' + id);
             if (offUiNode) offUiNode.style.display = 'none';
+            const offFrameNode = document.getElementById('token_frame_' + id);
+            if (offFrameNode) offFrameNode.style.display = 'none';
             continue;
         }
 
@@ -837,24 +855,71 @@ export function renderTokensLayer(context = {}) {
                 node.style.height = `${drawH}px`;
                 node.style.zIndex = sortedIndex;
 
-                // Apply circular clipping if it is a standard Token
+                // Apply shape clipping and border style if it is a standard Token
                 if (!token.isAsset) {
-                    node.style.borderRadius = '50%';
+                    const bShape = token.border?.shape || token.borderShape || 'circle';
+                    const bStyle = token.isBorderless ? 'none' : token.border?.style || token.borderStyle || 'solid';
+                    const bWidth =
+                        token.border?.width !== undefined
+                            ? token.border.width
+                            : token.borderWidth !== undefined
+                              ? token.borderWidth
+                              : token.ringColor
+                                ? 3
+                                : 2;
+                    const bColor =
+                        token.border?.color ||
+                        token.ringColor ||
+                        (token.isPlayer ? 'rgba(0, 123, 255, 0.8)' : 'rgba(220, 53, 69, 0.8)');
+                    const bFrame = token.border?.framePreset || token.framePreset || 'none';
+
+                    const shapeDef = TOKEN_SHAPES[bShape] || TOKEN_SHAPES.circle;
+                    node.style.borderRadius = shapeDef.borderRadius;
+                    node.style.clipPath = shapeDef.clipPath || 'none';
                     node.style.objectFit = 'cover';
-                    if (token.ringColor && token.ringColor !== 'none' && token.ringColor !== 'transparent') {
-                        node.style.border = `3px solid ${token.ringColor}`;
-                        node.style.boxSizing = 'border-box';
-                    } else if (!token.isBorderless) {
-                        const borderColor = token.isPlayer ? 'rgba(0, 123, 255, 0.8)' : 'rgba(220, 53, 69, 0.8)';
-                        node.style.border = `2px solid ${borderColor}`;
-                        node.style.boxSizing = 'border-box';
-                    } else {
-                        node.style.border = 'none';
+
+                    // Dedicated SVG Frame Overlay element (handles all shapes, styles, and thematic frames)
+                    const frameId = 'token_frame_' + id;
+                    let frameNode = document.getElementById(frameId);
+                    if (bStyle !== 'none') {
+                        if (!frameNode) {
+                            frameNode = document.createElement('div');
+                            frameNode.id = frameId;
+                            frameNode.style.position = 'absolute';
+                            frameNode.style.pointerEvents = 'none';
+                            targetOverlay.appendChild(frameNode);
+                        }
+                        frameNode.style.display = 'block';
+                        frameNode.style.left = `${renderPos.x}px`;
+                        frameNode.style.top = `${renderPos.y}px`;
+                        frameNode.style.width = `${drawW}px`;
+                        frameNode.style.height = `${drawH}px`;
+                        frameNode.style.zIndex = sortedIndex + 1;
+
+                        const borderCacheKey = `${bShape}_${bStyle}_${bFrame}_${bColor}_${bWidth}_${drawW}`;
+                        if (frameNode.dataset.lastKey !== borderCacheKey) {
+                            frameNode.dataset.lastKey = borderCacheKey;
+                            if (bStyle === 'frame' && bFrame && bFrame !== 'none') {
+                                frameNode.innerHTML = getThematicFrameSvg(bFrame, bColor, drawW, drawH, id);
+                            } else {
+                                frameNode.innerHTML = getShapeBorderSvg(bShape, bStyle, bColor, bWidth, drawW, drawH, id);
+                            }
+                        }
+                    } else if (frameNode) {
+                        frameNode.style.display = 'none';
                     }
+
+                    // Suppress CSS border on the media element; the synchronized SVG frame overlay renders the exact boundary
+                    node.style.border = 'none';
+                    node.style.boxShadow = 'none';
                 } else {
                     node.style.borderRadius = '0';
+                    node.style.clipPath = 'none';
                     node.style.objectFit = 'fill';
                     node.style.border = 'none';
+                    node.style.boxShadow = 'none';
+                    const frameNode = document.getElementById('token_frame_' + id);
+                    if (frameNode) frameNode.style.display = 'none';
                 }
 
                 // Apply flip and rotation transform
@@ -864,6 +929,11 @@ export function renderTokensLayer(context = {}) {
                 if (token.flipY) transformStr += 'scaleY(-1)';
                 transformStr = transformStr.trim();
                 node.style.transform = transformStr || 'none';
+
+                const frameNode = document.getElementById('token_frame_' + id);
+                if (frameNode) {
+                    frameNode.style.transform = transformStr || 'none';
+                }
 
                 // Render customizable Floor Shadow via CSS
                 if (token.fxShadowEnabled) {
@@ -956,13 +1026,13 @@ export function renderTokensLayer(context = {}) {
                     if (cachedImg && cachedImg.complete && cachedImg.naturalWidth > 0) {
                         ctxInteraction.save();
                         if (!token.isAsset) {
-                            ctxInteraction.beginPath();
-                            ctxInteraction.arc(
+                            const bShape = token.border?.shape || token.borderShape || 'circle';
+                            traceTokenCanvasPath(
+                                ctxInteraction,
                                 originalPos.x + drawW / 2,
                                 originalPos.y + drawH / 2,
                                 tokenRadius,
-                                0,
-                                Math.PI * 2
+                                bShape
                             );
                             ctxInteraction.clip();
                         }
@@ -993,17 +1063,25 @@ export function renderTokensLayer(context = {}) {
                         ctxInteraction.fill();
                     }
                     if (!token.isAsset && !token.isBorderless) {
-                        ctxInteraction.strokeStyle = token.isPlayer
-                            ? 'rgba(0, 123, 255, 0.8)'
-                            : 'rgba(220, 53, 69, 0.8)';
-                        ctxInteraction.lineWidth = 2;
-                        ctxInteraction.beginPath();
-                        ctxInteraction.arc(
+                        const bShape = token.border?.shape || token.borderShape || 'circle';
+                        const bColor =
+                            token.border?.color ||
+                            token.ringColor ||
+                            (token.isPlayer ? 'rgba(0, 123, 255, 0.8)' : 'rgba(220, 53, 69, 0.8)');
+                        const bWidth =
+                            token.border?.width !== undefined
+                                ? token.border.width
+                                : token.borderWidth !== undefined
+                                  ? token.borderWidth
+                                  : 2;
+                        ctxInteraction.strokeStyle = bColor;
+                        ctxInteraction.lineWidth = bWidth;
+                        traceTokenCanvasPath(
+                            ctxInteraction,
                             originalPos.x + drawW / 2,
                             originalPos.y + drawH / 2,
                             tokenRadius - 1,
-                            0,
-                            Math.PI * 2
+                            bShape
                         );
                         ctxInteraction.stroke();
                     }
@@ -1041,8 +1119,8 @@ export function renderTokensLayer(context = {}) {
                 if (token.isAsset) {
                     ctxInteraction.strokeRect(renderPos.x - 2, renderPos.y - 2, drawW + 4, drawH + 4);
                 } else {
-                    ctxInteraction.beginPath();
-                    ctxInteraction.arc(tx, ty, tokenRadius + (isTokenSelected ? 3.5 : 2), 0, Math.PI * 2);
+                    const bShape = token.border?.shape || token.borderShape || 'circle';
+                    traceTokenCanvasPath(ctxInteraction, tx, ty, tokenRadius + (isTokenSelected ? 3.5 : 2), bShape);
                     ctxInteraction.stroke();
                 }
 
@@ -1056,8 +1134,8 @@ export function renderTokensLayer(context = {}) {
                     if (token.isAsset) {
                         ctxInteraction.strokeRect(renderPos.x, renderPos.y, drawW, drawH);
                     } else {
-                        ctxInteraction.beginPath();
-                        ctxInteraction.arc(tx, ty, tokenRadius + 1, 0, Math.PI * 2);
+                        const bShape = token.border?.shape || token.borderShape || 'circle';
+                        traceTokenCanvasPath(ctxInteraction, tx, ty, tokenRadius + 1, bShape);
                         ctxInteraction.stroke();
                     }
                     ctxInteraction.restore();
@@ -1157,23 +1235,6 @@ export function renderTokensLayer(context = {}) {
             }
 
             ctxInteraction.restore(); // Restores context globalAlpha and clipping path
-
-            // Render token border frame
-            if (!isActuallyVideo) {
-                if (token.ringColor && token.ringColor !== 'none' && token.ringColor !== 'transparent') {
-                    ctxInteraction.strokeStyle = token.ringColor;
-                    ctxInteraction.lineWidth = 3;
-                    ctxInteraction.beginPath();
-                    ctxInteraction.arc(tx, ty, tokenRadius - 1.5, 0, Math.PI * 2);
-                    ctxInteraction.stroke();
-                } else if (!token.isAsset && !token.isBorderless) {
-                    ctxInteraction.strokeStyle = token.isPlayer ? 'rgba(0, 123, 255, 0.8)' : 'rgba(220, 53, 69, 0.8)';
-                    ctxInteraction.lineWidth = 2;
-                    ctxInteraction.beginPath();
-                    ctxInteraction.arc(tx, ty, tokenRadius - 1, 0, Math.PI * 2);
-                    ctxInteraction.stroke();
-                }
-            }
 
             // ── Dying glow: red pulsing ring when linked player HP = 0 ──
             if (token.isPlayer && token.maxHp > 0 && token.hp <= 0) {
@@ -1904,7 +1965,7 @@ export function renderActivePingsPass(ctxInteraction, pings = null, options = {}
         // Username badge
         if (p.username) {
             const fontSize = isScreenSpace ? Math.round(13 * screenResScale) : 13;
-            ctxInteraction.font = `bold ${fontSize}px Inter, Arial, sans-serif`;
+            ctxInteraction.font = `bold ${fontSize}px "Open Sans", Arial, sans-serif`;
             ctxInteraction.textAlign = 'center';
             ctxInteraction.textBaseline = 'middle';
 
@@ -1980,10 +2041,11 @@ export function cleanupOrphanedTokenOverlays(tokens = {}, force = false) {
     ].filter(Boolean);
 
     overlayContainers.forEach((container) => {
-        container.querySelectorAll('[id^="asset_node_"], [id^="token_ui_"]').forEach((node) => {
+        container.querySelectorAll('[id^="asset_node_"], [id^="token_ui_"], [id^="token_frame_"]').forEach((node) => {
             let tokenId = '';
             if (node.id.startsWith('asset_node_')) tokenId = node.id.substring(11);
             else if (node.id.startsWith('token_ui_')) tokenId = node.id.substring(9);
+            else if (node.id.startsWith('token_frame_')) tokenId = node.id.substring(12);
             if (tokenId && !validTokenIds.has(tokenId)) {
                 cleanupMediaElement(node);
                 try {

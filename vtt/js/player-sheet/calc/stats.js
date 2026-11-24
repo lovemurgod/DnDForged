@@ -50,7 +50,8 @@ export const STANDARD_HIT_DICE = {
     mystic: 'd8'
 };
 
-export function getClassHitDie(className, classCatalog = null) {
+export function getClassHitDie(className, classCatalog = null, classObj = null) {
+    if (classObj && classObj.hitDie) return classObj.hitDie;
     if (!className) return 'd8';
     const name = className
         .replace(/\s*\[.*?\]$/, '')
@@ -238,6 +239,21 @@ export function evaluateDamageRolls(char, m, isSpell = false, isCrit = false, op
         }
         rollFormula += dmgFormula;
 
+        if (isCrit) {
+            rollFormula = rollFormula.replace(
+                /(\d+)\s*[dD]\s*(\d+)/g,
+                (match, count, faces) => `${parseInt(count) * 2}d${faces}`
+            );
+            if (!isSpell && char?.settings?.brutalCritical) {
+                const extraDice = parseInt(char.settings?.brutalCritDice) || 1;
+                const primaryDieMatch = (d.formula || d.dice || formula).match(/(\d+)?\s*[dD]\s*(\d+)/);
+                if (primaryDieMatch) {
+                    const faces = primaryDieMatch[2];
+                    rollFormula += `+${extraDice}d${faces}[Brutal Critical]`;
+                }
+            }
+        }
+
         return {
             type: d.type || 'Bludgeoning',
             result: simulateRoll(rollFormula, 20, optEvent, isCrit)
@@ -247,6 +263,12 @@ export function evaluateDamageRolls(char, m, isSpell = false, isCrit = false, op
     // Append typed toggles (e.g. +1d6 Fire)
     typedToggles.forEach((t) => {
         let f = (t.formula || '').trim();
+        if (isCrit) {
+            f = f.replace(
+                /(\d+)\s*[dD]\s*(\d+)/g,
+                (match, count, faces) => `${parseInt(count) * 2}d${faces}`
+            );
+        }
         results.push({
             type: t.dmgType,
             result: simulateRoll(f, 20, optEvent, isCrit)
@@ -333,4 +355,122 @@ export function calculateEffectiveAc(char) {
 
     char.ac = Math.max(1, baseAc + acMod + toggleBonus);
     return char.ac;
+}
+
+/**
+ * Automatically inspects character traits, classes, race, and ability cards
+ * to seed or synchronize Sheet Settings toggles if they have not been manually set.
+ */
+export function resolveCharacterSheetSettings(char) {
+    if (!char) return {};
+    char.settings = char.settings || {};
+
+    const raceName = (char.race || '').toLowerCase();
+    const subraceName = (char.subrace || '').toLowerCase();
+    const cards = char.abilityCards || [];
+    const feats = char.feats || [];
+    const classes = char.classes || [];
+
+    const hasCardNamed = (str) =>
+        cards.some((c) => (c.name || '').toLowerCase().includes(str.toLowerCase())) ||
+        feats.some((f) => (f.name || typeof f === 'string' ? (f.name || f).toLowerCase() : '').includes(str.toLowerCase()));
+
+    // 1. Elven Accuracy
+    if (char.settings.elvenAccuracy === undefined) {
+        char.settings.elvenAccuracy = Boolean(hasCardNamed('elven accuracy'));
+    }
+
+    // 2. Halfling Lucky
+    if (char.settings.halflingLucky === undefined) {
+        char.settings.halflingLucky = Boolean(
+            raceName.includes('halfling') ||
+            subraceName.includes('halfling') ||
+            hasCardNamed('halfling lucky') ||
+            hasCardNamed('lucky')
+        );
+    }
+
+    // 3. Carry Weight Multiplier (Powerful Build / Little Giant)
+    if (char.settings.carryWeightMultiplier === undefined) {
+        const isPowerfulBuild =
+            raceName.includes('goliath') ||
+            raceName.includes('orc') ||
+            raceName.includes('bugbear') ||
+            raceName.includes('firbolg') ||
+            raceName.includes('loxodon') ||
+            raceName.includes('centaur') ||
+            subraceName.includes('goliath') ||
+            subraceName.includes('orc') ||
+            hasCardNamed('powerful build') ||
+            hasCardNamed('little giant') ||
+            hasCardNamed('hippo build');
+        if (isPowerfulBuild) {
+            char.settings.carryWeightMultiplier = 2;
+            char.carryWeightMultiplier = 2;
+        } else {
+            char.settings.carryWeightMultiplier = char.carryWeightMultiplier || 1;
+        }
+    } else {
+        char.carryWeightMultiplier = char.settings.carryWeightMultiplier;
+    }
+
+    // 4. Brutal Critical & Savage Attacks
+    if (char.settings.brutalCritical === undefined) {
+        let barbLevel = 0;
+        const barbClass = classes.find((c) => (c.name || '').toLowerCase().includes('barbarian'));
+        if (barbClass) barbLevel = parseInt(barbClass.level) || 0;
+
+        let extraDice = 0;
+        if (barbLevel >= 17) extraDice += 3;
+        else if (barbLevel >= 13) extraDice += 2;
+        else if (barbLevel >= 9) extraDice += 1;
+
+        const isHalfOrc =
+            raceName.includes('half-orc') ||
+            raceName.includes('half orc') ||
+            subraceName.includes('half-orc') ||
+            hasCardNamed('savage attacks');
+        if (isHalfOrc) extraDice += 1;
+
+        if (extraDice > 0 || hasCardNamed('brutal critical')) {
+            char.settings.brutalCritical = true;
+            char.settings.brutalCritDice = extraDice || 1;
+        } else {
+            char.settings.brutalCritical = false;
+            char.settings.brutalCritDice = 1;
+        }
+    }
+
+    // 5. Reliable Talent
+    if (char.settings.reliableTalent === undefined) {
+        let rogueLevel = 0;
+        const rogueClass = classes.find((c) => (c.name || '').toLowerCase().includes('rogue'));
+        if (rogueClass) rogueLevel = parseInt(rogueClass.level) || 0;
+
+        if (rogueLevel >= 11 || hasCardNamed('reliable talent')) {
+            char.settings.reliableTalent = true;
+        } else {
+            char.settings.reliableTalent = false;
+        }
+    }
+
+    // 6. Jack of All Trades
+    if (char.settings.jackOfAllTrades === undefined) {
+        let bardLevel = 0;
+        const bardClass = classes.find((c) => (c.name || '').toLowerCase().includes('bard'));
+        if (bardClass) bardLevel = parseInt(bardClass.level) || 0;
+
+        if (bardLevel >= 2 || hasCardNamed('jack of all trades')) {
+            char.settings.jackOfAllTrades = true;
+        } else {
+            char.settings.jackOfAllTrades = false;
+        }
+    }
+
+    // 7. Global Crit Range
+    if (char.settings.critRange === undefined) {
+        char.settings.critRange = char.attackSettings?.critRange || 20;
+    }
+
+    return char.settings;
 }

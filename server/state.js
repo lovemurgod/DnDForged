@@ -82,14 +82,96 @@ export function getActiveIo() {
     return activeIoInstance;
 }
 
-// --- Security: Internal Secret & GM Session Authentication ---
+// --- Security: Internal Secret, Timing-Safe Auth & Session Tokens ---
 export const SERVER_INTERNAL_SECRET = process.env.FORGEDVTT_SERVER_SECRET || crypto.randomBytes(32).toString('hex');
 export const activeGmTokens = new Set();
+export const activePlayerTokens = new Map();
+const gmTokenExpiries = new Map();
+const SESSION_TOKEN_TTL_MS = 24 * 60 * 60 * 1000;
+
+export function safeTokenEquals(a, b) {
+    if (typeof a !== 'string' || typeof b !== 'string' || !a || !b) return false;
+    const ha = crypto.createHash('sha256').update(a).digest();
+    const hb = crypto.createHash('sha256').update(b).digest();
+    return crypto.timingSafeEqual(ha, hb);
+}
 
 export function generateGmSessionToken() {
     const token = crypto.randomBytes(24).toString('hex');
     activeGmTokens.add(token);
+    gmTokenExpiries.set(token, Date.now() + SESSION_TOKEN_TTL_MS);
     return token;
+}
+
+export function revokeGmSessionToken(token) {
+    if (!token) return;
+    activeGmTokens.delete(token);
+    gmTokenExpiries.delete(token);
+}
+
+export function isValidGmToken(token) {
+    if (!token || !activeGmTokens.has(token)) return false;
+    const exp = gmTokenExpiries.get(token);
+    if (exp && Date.now() > exp) {
+        activeGmTokens.delete(token);
+        gmTokenExpiries.delete(token);
+        return false;
+    }
+    return true;
+}
+
+export function generatePlayerSessionToken({ campaignId, username }) {
+    const token = crypto.randomBytes(24).toString('hex');
+    const now = Date.now();
+    // Periodically prune expired player tokens
+    if (activePlayerTokens.size > 500) {
+        for (const [k, v] of activePlayerTokens.entries()) {
+            if (!v || now > v.expiresAt) activePlayerTokens.delete(k);
+        }
+    }
+    activePlayerTokens.set(token, {
+        campaignId: String(campaignId || 'default'),
+        username: String(username || ''),
+        expiresAt: now + SESSION_TOKEN_TTL_MS
+    });
+    return token;
+}
+
+export function isValidPlayerToken(token) {
+    if (!token) return false;
+    const rec = activePlayerTokens.get(token);
+    if (!rec) return false;
+    if (Date.now() > rec.expiresAt) {
+        activePlayerTokens.delete(token);
+        return false;
+    }
+    return rec;
+}
+
+export function isLocalOriginUrl(rawOrigin) {
+    if (!rawOrigin || typeof rawOrigin !== 'string') return false;
+    if (rawOrigin.startsWith('file://')) return true;
+    try {
+        const u = new URL(rawOrigin);
+        const h = u.hostname.toLowerCase();
+        return h === 'localhost' || h === '127.0.0.1' || h === '::1' || h === '[::1]';
+    } catch {
+        return false;
+    }
+}
+
+export function isSameSiteOrLocalBrowserRequest(req) {
+    if (!req || !req.headers) return true;
+    const secFetch = String(req.headers['sec-fetch-site'] || '').toLowerCase();
+    if (secFetch === 'cross-site') return false;
+    const origin = req.headers.origin;
+    if (origin && origin !== 'null' && !isLocalOriginUrl(origin)) {
+        return false;
+    }
+    if (!origin && req.headers.referer && !isLocalOriginUrl(req.headers.referer)) {
+        return false;
+    }
+    return true;
 }
 
 export function isLoopbackRequest(req) {
@@ -106,25 +188,58 @@ export function isAuthorizedGmOrSecret(req) {
     if (!req) return false;
     // 1. Electron IPC / Internal CLI secret check
     const serverSecret = req.headers?.['x-server-secret'];
-    if (serverSecret && serverSecret === SERVER_INTERNAL_SECRET) {
+    if (serverSecret && safeTokenEquals(serverSecret, SERVER_INTERNAL_SECRET)) {
         return true;
     }
 
-    // 2. Ephemeral GM session token check
+    // 2. Ephemeral GM session token check (with TTL)
     const token =
         req.headers?.['x-gm-token'] ||
         (req.headers?.authorization && req.headers.authorization.replace(/^Bearer\s+/i, ''));
-    if (token && activeGmTokens.has(token)) {
+    if (token && isValidGmToken(token)) {
         return true;
     }
 
-    // 3. Passwordless fallback check: strictly permit only for local loopback
+    // 3. Passwordless fallback check: strictly permit only local same-origin/localhost loopback
     const hasGmPassword = !!serverConfig.gmCredentials?.hash;
     if (!hasGmPassword) {
-        return isLoopbackRequest(req);
+        return isLoopbackRequest(req) && isSameSiteOrLocalBrowserRequest(req);
     }
 
     return false;
+}
+
+export function extractCookieValue(cookieHeader, name) {
+    if (!cookieHeader || typeof cookieHeader !== 'string') return '';
+    const parts = cookieHeader.split(';');
+    for (const part of parts) {
+        const idx = part.indexOf('=');
+        if (idx === -1) continue;
+        if (part.slice(0, idx).trim() === name) {
+            try {
+                return decodeURIComponent(part.slice(idx + 1).trim());
+            } catch {
+                return part.slice(idx + 1).trim();
+            }
+        }
+    }
+    return '';
+}
+
+export function isAuthorizedPlayerOrGm(req) {
+    if (isAuthorizedGmOrSecret(req)) return true;
+    const playerToken =
+        req?.headers?.['x-player-token'] || extractCookieValue(req?.headers?.cookie, 'forgedvtt_player_token');
+    if (playerToken && isValidPlayerToken(playerToken)) return true;
+    // Permit direct loopback requests (Electron/TV Display/localhost sessionless sheets) when not cross-site
+    return isLoopbackRequest(req) && isSameSiteOrLocalBrowserRequest(req);
+}
+
+export function verifyPlayerOrGmSession(req, res, next) {
+    if (isAuthorizedPlayerOrGm(req)) {
+        return next();
+    }
+    return res.status(403).json({ error: 'Unauthorized: active campaign session required' });
 }
 
 export function verifyGmOrSecret(req, res, next) {
@@ -504,13 +619,33 @@ export function loadDatabase() {
 }
 loadDatabase();
 
+export const RESERVED_OBJECT_KEYS = new Set(['__proto__', 'constructor', 'prototype']);
+
+export function sanitizeImportedObject(value) {
+    if (Array.isArray(value)) {
+        return value.map((item) => sanitizeImportedObject(item));
+    }
+    if (!value || typeof value !== 'object') {
+        return value;
+    }
+    const clean = {};
+    for (const [k, v] of Object.entries(value)) {
+        if (RESERVED_OBJECT_KEYS.has(k)) continue;
+        clean[k] = sanitizeImportedObject(v);
+    }
+    return clean;
+}
+
 export function setDatabaseDirectory(newDir) {
-    if (!newDir) return;
-    const isSwitching = path.resolve(newDir) !== path.resolve(DATA_DIR);
+    if (!newDir || typeof newDir !== 'string' || newDir.includes('\0')) {
+        throw new Error('Invalid database directory path');
+    }
+    const resolvedDir = path.resolve(newDir);
+    const isSwitching = resolvedDir !== path.resolve(DATA_DIR);
     if (isSwitching) {
         saveCampaigns(true);
         saveChat(true);
-        DATA_DIR = newDir;
+        DATA_DIR = resolvedDir;
         UPLOADS_DIR = path.join(DATA_DIR, 'uploads');
         CAMPAIGNS_FILE = path.join(DATA_DIR, 'campaigns.json');
         CHAT_FILE = path.join(DATA_DIR, 'chat-log.json');
@@ -523,11 +658,27 @@ export function setDatabaseDirectory(newDir) {
     console.log(`[Database] Dynamically switched active DATA_DIR to: ${DATA_DIR}`);
 }
 
+// Known reverse proxy / tunnel provider root domains whose subdomains
+// represent ephemeral routing identifiers rather than isolated campaigns
+export const TUNNEL_ROOT_DOMAINS = [
+    'trycloudflare.com',
+    'localtunnel.me',
+    'ngrok.io',
+    'ngrok.app',
+    'ngrok-free.app'
+];
+
 export function extractSubdomain(hostHeader) {
     if (!hostHeader) return null;
     const host = hostHeader.split(':')[0].toLowerCase().trim();
     if (host === 'localhost' || host === '127.0.0.1' || /^(\d{1,3}\.){3}\d{1,3}$/.test(host)) {
         return null;
+    }
+    // Differentiate tunnel routing identifiers from campaign subdomains
+    for (const tunnelDomain of TUNNEL_ROOT_DOMAINS) {
+        if (host === tunnelDomain || host.endsWith('.' + tunnelDomain)) {
+            return null;
+        }
     }
     const parts = host.split('.');
     if (parts.length >= 3) {

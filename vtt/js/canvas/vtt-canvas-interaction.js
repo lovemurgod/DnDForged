@@ -2618,10 +2618,9 @@ export function setupPointerInteraction(ctx = {}) {
 
                         if (isMobileViewport()) {
                             const distInfo = calcDistanceFormatted(
-                                Math.hypot(
-                                    ctx.localMeasureEnd.x - ctx.localMeasureStart.x,
-                                    ctx.localMeasureEnd.y - ctx.localMeasureStart.y
-                                )
+                                null,
+                                ctx.grid,
+                                points || [ctx.localMeasureStart, ctx.localMeasureEnd]
                             );
                             const dragPill =
                                 typeof document !== 'undefined'

@@ -218,6 +218,17 @@ body {
   grid-column: span 2;
 }
 
+.online-security-notice {
+  margin-top: 10px;
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  color: #fbbf24;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
 /* Cards */
 .card {
   background: var(--bg-card);
@@ -820,6 +831,18 @@ body {
   border-color: rgba(239, 68, 68, 0.6);
   background: rgba(239, 68, 68, 0.2);
   color: #f87171;
+}
+
+.btn-warning {
+  background: rgba(245, 158, 11, 0.18);
+  border: 1px solid rgba(245, 158, 11, 0.45);
+  color: #fde68a;
+}
+
+.btn-warning:hover:not(:disabled) {
+  background: rgba(245, 158, 11, 0.32);
+  border-color: rgba(245, 158, 11, 0.7);
+  color: #ffffff;
 }
 
 .btn-large {
@@ -1675,6 +1698,17 @@ body {
   grid-column: span 2;
 }
 
+.online-security-notice {
+  margin-top: 10px;
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  color: #fbbf24;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
 .file-location-group .path-with-action {
   display: flex;
   align-items: center;
@@ -2150,6 +2184,17 @@ body {
 
 .span-2 {
   grid-column: span 2;
+}
+
+.online-security-notice {
+  margin-top: 10px;
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  color: #fbbf24;
+  font-size: 12px;
+  line-height: 1.4;
 }
 
 .span-3 {
@@ -4531,4 +4576,108 @@ body {
     opacity: 1;
     transform: translateY(0) scale(1);
   }
+}
+
+
+/* --- Web /prep Mode & Login Gate --- */
+body.web-prep-mode #tab-btn-hosting,
+body.web-prep-mode #view-hosting,
+body.web-prep-mode #btn-reveal-source-file,
+body.web-prep-mode #btn-select-import-folder {
+  display: none !important;
+}
+
+.prep-login-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(9, 13, 22, 0.92);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.prep-login-card {
+  width: 100%;
+  max-width: 420px;
+  background: var(--bg-card, #111827);
+  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.12));
+  border-radius: 12px;
+  padding: 28px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+}
+
+.prep-login-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.prep-login-logo {
+  max-height: 36px;
+  margin-bottom: 10px;
+}
+
+.prep-login-header h2 {
+  margin: 0 0 6px;
+  font-size: 1.25rem;
+}
+
+.prep-login-header p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text-muted, #94a3b8);
+}
+
+.prep-login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.prep-login-error {
+  padding: 8px 10px;
+  border-radius: 6px;
+  background: rgba(239, 68, 68, 0.14);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #fca5a5;
+  font-size: 12.5px;
+}
+
+@media (max-width: 960px) {
+  .header-bar {
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 10px 14px;
+  }
+
+  .nav-tabs {
+    order: 3;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .dashboard-grid,
+  .gm-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .span-2 {
+    grid-column: span 1;
+  }
+}
+
+
+/* --- Static Web Mode (forgedvtt.com/prep) --- */
+body.static-web-mode .status-card,
+body.static-web-mode .tunnel-card,
+body.static-web-mode .share-card,
+body.static-web-mode .console-card,
+body.static-web-mode #btn-open-data-dir,
+body.static-web-mode #btn-change-backups-dir,
+body.static-web-mode #btn-open-backups-dir,
+body.static-web-mode #btn-reveal-source-file,
+body.static-web-mode #btn-select-import-folder {
+  display: none !important;
 }

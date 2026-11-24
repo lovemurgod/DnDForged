@@ -2180,6 +2180,84 @@ export function initVttRollTables(vtt) {
         return compendiumCatalog || [];
     }
 
+    function findTableByItemNameSync(itemName) {
+        if (!itemName || typeof itemName !== 'string') return null;
+        const cleanName = itemName.toLowerCase().trim();
+        const baseClean = cleanName.replace(/\s*\([^)]*\)/g, '').trim();
+
+        // 1. Check custom campaign tables
+        const campaignTables = getState().tables || [];
+        const campMatch = campaignTables.find((t) => {
+            const tn = (t.name || '').toLowerCase().trim();
+            return (
+                tn === cleanName ||
+                tn === `${cleanName} effects` ||
+                tn === `${cleanName} table` ||
+                tn.startsWith(`${cleanName} —`) ||
+                tn.startsWith(`${cleanName} -`)
+            );
+        });
+        if (campMatch) {
+            const diceFormula =
+                campMatch.dice ||
+                campMatch.diceFormula ||
+                (Array.isArray(campMatch.rows) && campMatch.rows.length > 0 ? `1d${campMatch.rows.length}` : null) ||
+                (Array.isArray(campMatch.entries) && campMatch.entries.length > 0 ? `1d${campMatch.entries.length}` : '1d20');
+
+            return {
+                id: campMatch.id,
+                name: campMatch.name,
+                dice: diceFormula
+            };
+        }
+
+        // 2. Check cached compendium catalog
+        if (!compendiumCatalog || compendiumCatalog.length === 0) return null;
+
+        // Best-Match Heuristic
+        let match = compendiumCatalog.find((t) => {
+            const tn = (t.name || '').toLowerCase().trim();
+            return tn === cleanName || tn === `${cleanName} effects` || tn === `${cleanName} table`;
+        });
+        if (match) return match;
+
+        match = compendiumCatalog.find((t) => {
+            const tn = (t.name || '').toLowerCase().trim();
+            return (
+                tn.startsWith(`${cleanName} —`) ||
+                tn.startsWith(`${cleanName} -`) ||
+                tn.startsWith(`${cleanName};`) ||
+                tn.startsWith(`${cleanName},`)
+            );
+        });
+        if (match) return match;
+
+        if (baseClean && baseClean !== cleanName) {
+            match = compendiumCatalog.find((t) => {
+                const tn = (t.name || '').toLowerCase().trim();
+                return (
+                    tn === baseClean ||
+                    tn === `${baseClean} effects` ||
+                    tn === `${baseClean} table` ||
+                    tn.startsWith(`${baseClean} —`) ||
+                    tn.startsWith(`${baseClean} -`)
+                );
+            });
+            if (match) return match;
+        }
+
+        return null;
+    }
+
+    async function findTableByItemName(itemName) {
+        if (!itemName || typeof itemName !== 'string') return null;
+        const syncMatch = findTableByItemNameSync(itemName);
+        if (syncMatch) return syncMatch;
+
+        await ensureCompendiumCatalog();
+        return findTableByItemNameSync(itemName);
+    }
+
     async function rollLinkedTable(tableId, options = {}) {
         if (!tableId) return;
 
@@ -2270,6 +2348,12 @@ export function initVttRollTables(vtt) {
                 }
                 if (vtt.toast) vtt.toast(`Rolled on ${tableName}: ${entry.name || rollVal}`);
                 return;
+            } else {
+                // Check if tableId is an item name or table name
+                const itemTbl = await findTableByItemName(tableId);
+                if (itemTbl && itemTbl.id !== tableId) {
+                    return rollLinkedTable(itemTbl.id, options);
+                }
             }
         }
 
@@ -2564,13 +2648,16 @@ export function initVttRollTables(vtt) {
     const btnSaveDeck = document.getElementById('btn-save-card-deck');
     if (btnSaveDeck) btnSaveDeck.addEventListener('click', saveDeckFromModal);
 
-    // Initial render
+    // Initial render and background pre-warming of compendium tables catalog
     renderAllViews();
+    ensureCompendiumCatalog().catch(() => {});
 
     return {
         renderAllViews,
         rollFromTable,
         rollLinkedTable,
+        findTableByItemName,
+        findTableByItemNameSync,
         placeAssetTableOnCanvas,
         playCardToCanvas,
         drawFromDeckPrompt,

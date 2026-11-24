@@ -9,6 +9,8 @@ import {
     getProfBonus
 } from './creature-parser.js';
 import { resolveSpellcastingType, get5eSlotsForCaster } from './creature-spells.js';
+import { openTokenCropper } from '../canvas/tokens/vtt-token-cropper.js';
+import { isAnimatedMedia, promptAnimatedMediaChoice } from '../canvas/tokens/vtt-canvas-token-borders.js';
 
 export const DND_5E_SKILLS = [
     { key: 'acrobatics', name: 'Acrobatics', ability: 'dex' },
@@ -1650,6 +1652,41 @@ export function openEditModal(m, charId, ctx = {}) {
                 wrapper.appendChild(badge);
             }
 
+            const cropBtn = document.createElement('button');
+            cropBtn.className = 'btn btn-secondary btn-xxs';
+            cropBtn.style.cssText = 'position:absolute; bottom:2px; left:2px; padding:2px 4px;';
+            cropBtn.title = 'Crop / Frame Token Art';
+            cropBtn.innerHTML = '<i class="fa-solid fa-crop"></i>';
+            wrapper.appendChild(cropBtn);
+
+            cropBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (isAnimatedMedia(imgObj.url, imgObj.name)) {
+                    if (!confirm('Cropping an animated token will freeze its animation into a static frame. Do you want to continue?')) {
+                        return;
+                    }
+                }
+                openTokenCropper({
+                    sourceUrl: imgObj.originalUrl || imgObj.url,
+                    initialFraming: imgObj.framing || {},
+                    initialBorder: char.tokenBorder || {
+                        shape: 'circle',
+                        style: 'solid',
+                        color: '#eab308',
+                        width: 3
+                    },
+                    tokenName: char.name || 'Creature',
+                    onSave: (result) => {
+                        imgObj.url = result.url;
+                        imgObj.originalUrl = result.originalUrl;
+                        imgObj.framing = result.framing;
+                        if (result.border) char.tokenBorder = result.border;
+                        char.activeTokenIndex = idx;
+                        renderCompanionTokenGallery();
+                    }
+                });
+            });
+
             const delBtn = document.createElement('button');
             delBtn.className = 'btn btn-danger btn-xxs';
             delBtn.style.cssText = 'position:absolute; bottom:2px; right:2px; padding:2px 4px;';
@@ -1695,10 +1732,52 @@ export function openEditModal(m, charId, ctx = {}) {
         const urlInput = content.querySelector('#cs-edit-token-add-url');
         const rawUrl = urlInput.value.trim();
         if (rawUrl) {
-            char.tokenImages.push({ url: rawUrl, name: 'URL Media' });
-            char.activeTokenIndex = char.tokenImages.length - 1;
             urlInput.value = '';
-            renderCompanionTokenGallery();
+
+            const addDirect = () => {
+                char.tokenImages.push({
+                    url: rawUrl,
+                    originalUrl: rawUrl,
+                    name: 'URL Media'
+                });
+                char.activeTokenIndex = char.tokenImages.length - 1;
+                renderCompanionTokenGallery();
+            };
+
+            const openCropper = () => {
+                openTokenCropper({
+                    sourceUrl: rawUrl,
+                    tokenName: char.name || 'Creature',
+                    initialBorder: char.tokenBorder || {
+                        shape: 'circle',
+                        style: 'solid',
+                        color: '#eab308',
+                        width: 3
+                    },
+                    onSave: (result) => {
+                        char.tokenImages.push({
+                            url: result.url,
+                            originalUrl: result.originalUrl,
+                            framing: result.framing,
+                            name: 'URL Media'
+                        });
+                        if (result.border) char.tokenBorder = result.border;
+                        char.activeTokenIndex = char.tokenImages.length - 1;
+                        renderCompanionTokenGallery();
+                    }
+                });
+            };
+
+            if (isAnimatedMedia(rawUrl)) {
+                promptAnimatedMediaChoice({
+                    url: rawUrl,
+                    fileName: rawUrl,
+                    onDirect: addDirect,
+                    onCrop: openCropper
+                });
+            } else {
+                openCropper();
+            }
         }
     });
 
@@ -1732,9 +1811,51 @@ export function openEditModal(m, charId, ctx = {}) {
             });
             if (res.ok) {
                 const data = await res.json();
-                char.tokenImages.push({ url: data.url, name: file.name });
-                char.activeTokenIndex = char.tokenImages.length - 1;
-                renderCompanionTokenGallery();
+
+                const addDirect = () => {
+                    char.tokenImages.push({
+                        url: data.url,
+                        originalUrl: data.url,
+                        name: file.name
+                    });
+                    char.activeTokenIndex = char.tokenImages.length - 1;
+                    renderCompanionTokenGallery();
+                };
+
+                const openCropper = () => {
+                    openTokenCropper({
+                        sourceUrl: data.url,
+                        tokenName: char.name || 'Creature',
+                        initialBorder: char.tokenBorder || {
+                            shape: 'circle',
+                            style: 'solid',
+                            color: '#eab308',
+                            width: 3
+                        },
+                        onSave: (result) => {
+                            char.tokenImages.push({
+                                url: result.url,
+                                originalUrl: result.originalUrl,
+                                framing: result.framing,
+                                name: file.name
+                            });
+                            if (result.border) char.tokenBorder = result.border;
+                            char.activeTokenIndex = char.tokenImages.length - 1;
+                            renderCompanionTokenGallery();
+                        }
+                    });
+                };
+
+                if (isAnimatedMedia(data.url, file.name)) {
+                    promptAnimatedMediaChoice({
+                        url: data.url,
+                        fileName: file.name,
+                        onDirect: addDirect,
+                        onCrop: openCropper
+                    });
+                } else {
+                    openCropper();
+                }
             } else {
                 const errData = await res.json().catch(() => null);
                 alert('Upload failed: ' + (errData?.error || res.statusText || 'Server error'));

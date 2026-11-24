@@ -1,0 +1,2931 @@
+[
+  {
+    "id": "race_dragonborn_phb",
+    "name": "Dragonborn",
+    "raceName": "Dragonborn",
+    "subraceName": null,
+    "source": "PHB",
+    "page": 32,
+    "size": "M",
+    "speed": "30 ft",
+    "speeds": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0
+    },
+    "senses": {
+      "darkvision": 0,
+      "blindsight": 0,
+      "truesight": 0,
+      "devilSight": 0
+    },
+    "ability": [
+      {
+        "str": 2,
+        "cha": 1
+      }
+    ],
+    "traits": [
+      {
+        "id": "trait_dragonborn_age_phb",
+        "name": "Age",
+        "source": "PHB",
+        "raceName": "Dragonborn",
+        "actionType": "passive",
+        "description": "Young dragonborn grow quickly. They walk hours after hatching, attain the size and development of a 10-year-old human child by the age of 3, and reach adulthood by 15. They live to be around 80.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Young dragonborn grow quickly. They walk hours after hatching, attain the size and development of a 10-year-old human child by the age of 3, and reach adulthood by 15. They live to be around 80."
+        ]
+      },
+      {
+        "id": "trait_dragonborn_size_phb",
+        "name": "Size",
+        "source": "PHB",
+        "raceName": "Dragonborn",
+        "actionType": "passive",
+        "description": "Dragonborn are taller and heavier than humans, standing well over 6 feet tall and averaging almost 250 pounds. Your size is Medium.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Dragonborn are taller and heavier than humans, standing well over 6 feet tall and averaging almost 250 pounds. Your size is Medium."
+        ]
+      },
+      {
+        "id": "trait_dragonborn_draconic_ancestry_phb",
+        "name": "Draconic Ancestry",
+        "source": "PHB",
+        "raceName": "Dragonborn",
+        "actionType": "passive",
+        "description": "You have draconic ancestry. Choose one type of dragon from the Draconic Ancestry table. Your breath weapon and damage resistance are determined by the dragon type, as shown in the table.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have draconic ancestry. Choose one type of dragon from the Draconic Ancestry table. Your breath weapon and damage resistance are determined by the dragon type, as shown in the table.",
+          {
+            "type": "table",
+            "caption": "Draconic Ancestry",
+            "colLabels": [
+              "Dragon",
+              "Damage Type",
+              "Breath Weapon"
+            ],
+            "colStyles": [
+              "col-3 text-center",
+              "col-3 text-center",
+              "col-6"
+            ],
+            "rows": [
+              [
+                "Black",
+                "Acid",
+                "5 by 30 ft. line (Dex. save)"
+              ],
+              [
+                "Blue",
+                "Lightning",
+                "5 by 30 ft. line (Dex. save)"
+              ],
+              [
+                "Brass",
+                "Fire",
+                "5 by 30 ft. line (Dex. save)"
+              ],
+              [
+                "Bronze",
+                "Lightning",
+                "5 by 30 ft. line (Dex. save)"
+              ],
+              [
+                "Copper",
+                "Acid",
+                "5 by 30 ft. line (Dex. save)"
+              ],
+              [
+                "Gold",
+                "Fire",
+                "15 ft. cone (Dex. save)"
+              ],
+              [
+                "Green",
+                "Poison",
+                "15 ft. cone (Con. save)"
+              ],
+              [
+                "Red",
+                "Fire",
+                "15 ft. cone (Dex. save)"
+              ],
+              [
+                "Silver",
+                "Cold",
+                "15 ft. cone (Con. save)"
+              ],
+              [
+                "White",
+                "Cold",
+                "15 ft. cone (Con. save)"
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "id": "trait_dragonborn_breath_weapon_phb",
+        "name": "Breath Weapon",
+        "source": "PHB",
+        "raceName": "Dragonborn",
+        "actionType": "passive",
+        "description": "You can use your action to exhale destructive energy. Your draconic ancestry determines the size, shape, and damage type of the exhalation.\n\nWhen you use your breath weapon, each creature in the area of the exhalation must make a saving throw, the type of which is determined by your draconic ancestry. The DC for this saving throw equals 8 + your Constitution modifier + your proficiency bonus. A creature takes 2d6 damage on a failed save, and half as much damage on a successful one. The damage increases to 3d6 at 6th level, 4d6 at 11th level, and 5d6 at 16th level.\n\nAfter you use your breath weapon, you can't use it again until you complete a short or long rest.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "2d6",
+        "formulaConfig": {
+          "baseDice": "2d6",
+          "scalingMod": "none",
+          "modClass": "",
+          "extraBonus": 0
+        },
+        "rawEntries": [
+          "You can use your action to exhale destructive energy. Your draconic ancestry determines the size, shape, and damage type of the exhalation.",
+          "When you use your breath weapon, each creature in the area of the exhalation must make a saving throw, the type of which is determined by your draconic ancestry. The DC for this saving throw equals 8 + your Constitution modifier + your proficiency bonus. A creature takes {@damage 2d6} damage on a failed save, and half as much damage on a successful one. The damage increases to {@damage 3d6} at 6th level, {@damage 4d6} at 11th level, and {@damage 5d6} at 16th level.",
+          "After you use your breath weapon, you can't use it again until you complete a short or long rest."
+        ]
+      },
+      {
+        "id": "trait_dragonborn_damage_resistance_phb",
+        "name": "Damage Resistance",
+        "source": "PHB",
+        "raceName": "Dragonborn",
+        "actionType": "passive",
+        "description": "You have resistance to the damage type associated with your draconic ancestry.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have resistance to the damage type associated with your draconic ancestry."
+        ]
+      },
+      {
+        "id": "trait_dragonborn_languages_phb",
+        "name": "Languages",
+        "source": "PHB",
+        "raceName": "Dragonborn",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common and Draconic. Draconic is thought to be one of the oldest languages and is often used in the study of magic. The language sounds harsh to most other creatures and includes numerous hard consonants and sibilants.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Common and Draconic. Draconic is thought to be one of the oldest languages and is often used in the study of magic. The language sounds harsh to most other creatures and includes numerous hard consonants and sibilants."
+        ]
+      }
+    ],
+    "description": "**Age**: Young dragonborn grow quickly. They walk hours after hatching, attain the size and development of a 10-year-old human child by the age of 3, and reach adulthood by 15. They live to be around 80.\n\n**Size**: Dragonborn are taller and heavier than humans, standing well over 6 feet tall and averaging almost 250 pounds. Your size is Medium.\n\n**Draconic Ancestry**: You have draconic ancestry. Choose one type of dragon from the Draconic Ancestry table. Your breath weapon and damage resistance are determined by the dragon type, as shown in the table.\n\n**Breath Weapon**: You can use your action to exhale destructive energy. Your draconic ancestry determines the size, shape, and damage type of the exhalation.\n\nWhen you use your breath weapon, each creature in the area of the exhalation must make a saving throw, the type of which is determined by your draconic ancestry. The DC for this saving throw equals 8 + your Constitution modifier + your proficiency bonus. A creature takes 2d6 damage on a failed save, and half as much damage on a successful one. The damage increases to 3d6 at 6th level, 4d6 at 11th level, and 5d6 at 16th level.\n\nAfter you use your breath weapon, you can't use it again until you complete a short or long rest.\n\n**Damage Resistance**: You have resistance to the damage type associated with your draconic ancestry.\n\n**Languages**: You can speak, read, and write Common and Draconic. Draconic is thought to be one of the oldest languages and is often used in the study of magic. The language sounds harsh to most other creatures and includes numerous hard consonants and sibilants."
+  },
+  {
+    "id": "race_dragonborn_xphb",
+    "name": "Dragonborn",
+    "raceName": "Dragonborn",
+    "subraceName": null,
+    "source": "XPHB",
+    "page": 187,
+    "size": "M",
+    "speed": "30 ft",
+    "speeds": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0
+    },
+    "senses": {
+      "darkvision": 60,
+      "blindsight": 0,
+      "truesight": 0,
+      "devilSight": 0
+    },
+    "ability": null,
+    "traits": [
+      {
+        "id": "trait_dragonborn_draconic_ancestry_xphb",
+        "name": "Draconic Ancestry",
+        "source": "XPHB",
+        "raceName": "Dragonborn",
+        "actionType": "passive",
+        "description": "Your lineage stems from a dragon progenitor. Choose the kind of dragon from the Draconic Ancestors table. Your choice affects your Breath Weapon and Damage|XPHB Resistance|XPHB traits as well as your appearance.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Your lineage stems from a dragon progenitor. Choose the kind of dragon from the Draconic Ancestors table. Your choice affects your Breath Weapon and {@variantrule Damage|XPHB} {@variantrule Resistance|XPHB} traits as well as your appearance.",
+          {
+            "type": "table",
+            "caption": "Draconic Ancestors",
+            "colLabels": [
+              "Dragon",
+              "Damage Type"
+            ],
+            "colStyles": [
+              "col-6",
+              "col-6"
+            ],
+            "rows": [
+              [
+                "Black",
+                "Acid"
+              ],
+              [
+                "Blue",
+                "Lightning"
+              ],
+              [
+                "Brass",
+                "Fire"
+              ],
+              [
+                "Bronze",
+                "Lightning"
+              ],
+              [
+                "Copper",
+                "Acid"
+              ],
+              [
+                "Gold",
+                "Fire"
+              ],
+              [
+                "Green",
+                "Poison"
+              ],
+              [
+                "Red",
+                "Fire"
+              ],
+              [
+                "Silver",
+                "Cold"
+              ],
+              [
+                "White",
+                "Cold"
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "id": "trait_dragonborn_breath_weapon_xphb",
+        "name": "Breath Weapon",
+        "source": "XPHB",
+        "raceName": "Dragonborn",
+        "actionType": "passive",
+        "description": "When you take the Attack action on your turn, you can replace one of your attacks with an exhalation of magical energy in either a 15-foot Cone [Area of Effect]|XPHB|Cone or a 30-foot Line [Area of Effect]|XPHB|Line that is 5 feet wide (choose the shape each time). Each creature in that area must make a Dexterity saving throw (8 plus your Constitution modifier and Proficiency|XPHB|Proficiency Bonus). On a failed save, a creature takes 1d10 damage of the type determined by your Draconic Ancestry trait. On a successful save, a creature takes half as much damage. This damage increases by 1d10 when you reach character levels 5 (2d10), 11 (3d10), and 17 (4d10).\n\nYou can use this Breath Weapon a number of times equal to your Proficiency|XPHB|Proficiency Bonus, and you regain all expended uses when you finish a Long Rest|XPHB.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "1d10",
+        "formulaConfig": {
+          "baseDice": "1d10",
+          "scalingMod": "none",
+          "modClass": "",
+          "extraBonus": 0
+        },
+        "rawEntries": [
+          "When you take the {@action Attack|XPHB} action on your turn, you can replace one of your attacks with an exhalation of magical energy in either a 15-foot {@variantrule Cone [Area of Effect]|XPHB|Cone} or a 30-foot {@variantrule Line [Area of Effect]|XPHB|Line} that is 5 feet wide (choose the shape each time). Each creature in that area must make a Dexterity saving throw ({@dc 8} plus your Constitution modifier and {@variantrule Proficiency|XPHB|Proficiency Bonus}). On a failed save, a creature takes {@damage 1d10} damage of the type determined by your Draconic Ancestry trait. On a successful save, a creature takes half as much damage. This damage increases by {@damage 1d10} when you reach character levels 5 ({@damage 2d10}), 11 ({@damage 3d10}), and 17 ({@damage 4d10}).",
+          "You can use this Breath Weapon a number of times equal to your {@variantrule Proficiency|XPHB|Proficiency Bonus}, and you regain all expended uses when you finish a {@variantrule Long Rest|XPHB}."
+        ]
+      },
+      {
+        "id": "trait_dragonborn_damage_resistance_xphb",
+        "name": "Damage Resistance",
+        "source": "XPHB",
+        "raceName": "Dragonborn",
+        "actionType": "passive",
+        "description": "You have Resistance|XPHB to the damage type determined by your Draconic Ancestry trait.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@variantrule Resistance|XPHB} to the damage type determined by your Draconic Ancestry trait."
+        ]
+      },
+      {
+        "id": "trait_dragonborn_darkvision_xphb",
+        "name": "Darkvision",
+        "source": "XPHB",
+        "raceName": "Dragonborn",
+        "actionType": "passive",
+        "description": "You have Darkvision with a range of 60 feet.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@sense Darkvision|XPHB} with a range of 60 feet."
+        ]
+      },
+      {
+        "id": "trait_dragonborn_draconic_flight_xphb",
+        "name": "Draconic Flight",
+        "source": "XPHB",
+        "raceName": "Dragonborn",
+        "actionType": "bonus",
+        "description": "When you reach character level 5, you can channel draconic magic to give yourself temporary flight. As a Bonus Action|XPHB, you sprout spectral wings on your back that last for 10 minutes or until you retract the wings (no action required) or have the Incapacitated condition. During that time, you have a Fly Speed|XPHB equal to your Speed|XPHB. Your wings appear to be made of the same energy as your Breath Weapon. Once you use this trait, you can't use it again until you finish a Long Rest|XPHB.",
+        "hasCounter": true,
+        "usesMax": 1,
+        "resetType": "long",
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "When you reach character level 5, you can channel draconic magic to give yourself temporary flight. As a {@variantrule Bonus Action|XPHB}, you sprout spectral wings on your back that last for 10 minutes or until you retract the wings (no action required) or have the {@condition Incapacitated|XPHB} condition. During that time, you have a {@variantrule Fly Speed|XPHB} equal to your {@variantrule Speed|XPHB}. Your wings appear to be made of the same energy as your Breath Weapon. Once you use this trait, you can't use it again until you finish a {@variantrule Long Rest|XPHB}."
+        ]
+      }
+    ],
+    "description": "**Draconic Ancestry**: Your lineage stems from a dragon progenitor. Choose the kind of dragon from the Draconic Ancestors table. Your choice affects your Breath Weapon and Damage|XPHB Resistance|XPHB traits as well as your appearance.\n\n**Breath Weapon**: When you take the Attack action on your turn, you can replace one of your attacks with an exhalation of magical energy in either a 15-foot Cone [Area of Effect]|XPHB|Cone or a 30-foot Line [Area of Effect]|XPHB|Line that is 5 feet wide (choose the shape each time). Each creature in that area must make a Dexterity saving throw (8 plus your Constitution modifier and Proficiency|XPHB|Proficiency Bonus). On a failed save, a creature takes 1d10 damage of the type determined by your Draconic Ancestry trait. On a successful save, a creature takes half as much damage. This damage increases by 1d10 when you reach character levels 5 (2d10), 11 (3d10), and 17 (4d10).\n\nYou can use this Breath Weapon a number of times equal to your Proficiency|XPHB|Proficiency Bonus, and you regain all expended uses when you finish a Long Rest|XPHB.\n\n**Damage Resistance**: You have Resistance|XPHB to the damage type determined by your Draconic Ancestry trait.\n\n**Darkvision**: You have Darkvision with a range of 60 feet.\n\n**Draconic Flight**: When you reach character level 5, you can channel draconic magic to give yourself temporary flight. As a Bonus Action|XPHB, you sprout spectral wings on your back that last for 10 minutes or until you retract the wings (no action required) or have the Incapacitated condition. During that time, you have a Fly Speed|XPHB equal to your Speed|XPHB. Your wings appear to be made of the same energy as your Breath Weapon. Once you use this trait, you can't use it again until you finish a Long Rest|XPHB."
+  },
+  {
+    "id": "race_dwarf_phb",
+    "name": "Dwarf",
+    "raceName": "Dwarf",
+    "subraceName": null,
+    "source": "PHB",
+    "page": 18,
+    "size": "M",
+    "speed": "25 ft",
+    "speeds": {
+      "walk": 25,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0
+    },
+    "senses": {
+      "darkvision": 60,
+      "blindsight": 0,
+      "truesight": 0,
+      "devilSight": 0
+    },
+    "ability": [
+      {
+        "con": 2
+      }
+    ],
+    "traits": [
+      {
+        "id": "trait_dwarf_age_phb",
+        "name": "Age",
+        "source": "PHB",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "Dwarves mature at the same rate as humans, but they're considered young until they reach the age of 50. On average, they live about 350 years.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Dwarves mature at the same rate as humans, but they're considered young until they reach the age of 50. On average, they live about 350 years."
+        ]
+      },
+      {
+        "id": "trait_dwarf_size_phb",
+        "name": "Size",
+        "source": "PHB",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "Dwarves stand between 4 and 5 feet tall and average about 150 pounds. Your size is Medium.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Dwarves stand between 4 and 5 feet tall and average about 150 pounds. Your size is Medium."
+        ]
+      },
+      {
+        "id": "trait_dwarf_speed_phb",
+        "name": "Speed",
+        "source": "PHB",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "Your speed is not reduced by wearing heavy armor.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Your speed is not reduced by wearing heavy armor."
+        ]
+      },
+      {
+        "id": "trait_dwarf_darkvision_phb",
+        "name": "Darkvision",
+        "source": "PHB",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "Accustomed to life underground, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Accustomed to life underground, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray."
+        ]
+      },
+      {
+        "id": "trait_dwarf_dwarven_resilience_phb",
+        "name": "Dwarven Resilience",
+        "source": "PHB",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "You have advantage on saving throws against poison, and you have resistance against poison damage.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have advantage on saving throws against poison, and you have resistance against poison damage."
+        ]
+      },
+      {
+        "id": "trait_dwarf_dwarven_combat_training_phb",
+        "name": "Dwarven Combat Training",
+        "source": "PHB",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "You have proficiency with the battleaxe, handaxe, light hammer, and warhammer.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency with the {@item battleaxe|phb}, {@item handaxe|phb}, {@item light hammer|phb}, and {@item warhammer|phb}."
+        ]
+      },
+      {
+        "id": "trait_dwarf_tool_proficiency_phb",
+        "name": "Tool Proficiency",
+        "source": "PHB",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "You gain proficiency with the artisan's tools of your choice: Smith's tools, brewer's supplies, or mason's tools.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You gain proficiency with the {@item artisan's tools|PHB} of your choice: {@item Smith's tools|phb}, {@item brewer's supplies|phb}, or {@item mason's tools|phb}."
+        ]
+      },
+      {
+        "id": "trait_dwarf_stonecunning_phb",
+        "name": "Stonecunning",
+        "source": "PHB",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "Whenever you make an Intelligence (History) check related to the origin of stonework, you are considered proficient in the History skill and add double your proficiency bonus to the check, instead of your normal proficiency bonus.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Whenever you make an Intelligence ({@skill History}) check related to the origin of stonework, you are considered proficient in the {@skill History} skill and add double your proficiency bonus to the check, instead of your normal proficiency bonus."
+        ]
+      },
+      {
+        "id": "trait_dwarf_languages_phb",
+        "name": "Languages",
+        "source": "PHB",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common and Dwarvish. Dwarvish is full of hard consonants and guttural sounds, and those characteristics spill over into whatever other language a dwarf might speak.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Common and Dwarvish. Dwarvish is full of hard consonants and guttural sounds, and those characteristics spill over into whatever other language a dwarf might speak."
+        ]
+      }
+    ],
+    "description": "**Age**: Dwarves mature at the same rate as humans, but they're considered young until they reach the age of 50. On average, they live about 350 years.\n\n**Size**: Dwarves stand between 4 and 5 feet tall and average about 150 pounds. Your size is Medium.\n\n**Speed**: Your speed is not reduced by wearing heavy armor.\n\n**Darkvision**: Accustomed to life underground, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.\n\n**Dwarven Resilience**: You have advantage on saving throws against poison, and you have resistance against poison damage.\n\n**Dwarven Combat Training**: You have proficiency with the battleaxe, handaxe, light hammer, and warhammer.\n\n**Tool Proficiency**: You gain proficiency with the artisan's tools of your choice: Smith's tools, brewer's supplies, or mason's tools.\n\n**Stonecunning**: Whenever you make an Intelligence (History) check related to the origin of stonework, you are considered proficient in the History skill and add double your proficiency bonus to the check, instead of your normal proficiency bonus.\n\n**Languages**: You can speak, read, and write Common and Dwarvish. Dwarvish is full of hard consonants and guttural sounds, and those characteristics spill over into whatever other language a dwarf might speak."
+  },
+  {
+    "id": "race_dwarf_xphb",
+    "name": "Dwarf",
+    "raceName": "Dwarf",
+    "subraceName": null,
+    "source": "XPHB",
+    "page": 188,
+    "size": "M",
+    "speed": "30 ft",
+    "speeds": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0
+    },
+    "senses": {
+      "darkvision": 60,
+      "blindsight": 0,
+      "truesight": 0,
+      "devilSight": 0
+    },
+    "ability": null,
+    "traits": [
+      {
+        "id": "trait_dwarf_darkvision_xphb",
+        "name": "Darkvision",
+        "source": "XPHB",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "You have Darkvision with a range of 120 feet.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@sense Darkvision|XPHB} with a range of 120 feet."
+        ]
+      },
+      {
+        "id": "trait_dwarf_dwarven_resilience_xphb",
+        "name": "Dwarven Resilience",
+        "source": "XPHB",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "You have Resistance|XPHB to Poison damage. You also have Advantage|XPHB on saving throws you make to avoid or end the Poisoned condition.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@variantrule Resistance|XPHB} to Poison damage. You also have {@variantrule Advantage|XPHB} on saving throws you make to avoid or end the {@condition Poisoned|XPHB} condition."
+        ]
+      },
+      {
+        "id": "trait_dwarf_dwarven_toughness_xphb",
+        "name": "Dwarven Toughness",
+        "source": "XPHB",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "Your Hit Points|XPHB|Hit Point maximum increases by 1, and it increases by 1 again whenever you gain a level.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Your {@variantrule Hit Points|XPHB|Hit Point} maximum increases by 1, and it increases by 1 again whenever you gain a level."
+        ]
+      },
+      {
+        "id": "trait_dwarf_stonecunning_xphb",
+        "name": "Stonecunning",
+        "source": "XPHB",
+        "raceName": "Dwarf",
+        "actionType": "bonus",
+        "description": "As a Bonus Action|XPHB, you gain Tremorsense with a range of 60 feet for 10 minutes. You must be on a stone surface or touching a stone surface to use this Tremorsense. The stone can be natural or worked.\n\nYou can use this Bonus Action|XPHB a number of times equal to your Proficiency|XPHB|Proficiency Bonus, and you regain all expended uses when you finish a Long Rest|XPHB.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "As a {@variantrule Bonus Action|XPHB}, you gain {@sense Tremorsense|XPHB} with a range of 60 feet for 10 minutes. You must be on a stone surface or touching a stone surface to use this {@sense Tremorsense|XPHB}. The stone can be natural or worked.",
+          "You can use this {@variantrule Bonus Action|XPHB} a number of times equal to your {@variantrule Proficiency|XPHB|Proficiency Bonus}, and you regain all expended uses when you finish a {@variantrule Long Rest|XPHB}."
+        ]
+      }
+    ],
+    "description": "**Darkvision**: You have Darkvision with a range of 120 feet.\n\n**Dwarven Resilience**: You have Resistance|XPHB to Poison damage. You also have Advantage|XPHB on saving throws you make to avoid or end the Poisoned condition.\n\n**Dwarven Toughness**: Your Hit Points|XPHB|Hit Point maximum increases by 1, and it increases by 1 again whenever you gain a level.\n\n**Stonecunning**: As a Bonus Action|XPHB, you gain Tremorsense with a range of 60 feet for 10 minutes. You must be on a stone surface or touching a stone surface to use this Tremorsense. The stone can be natural or worked.\n\nYou can use this Bonus Action|XPHB a number of times equal to your Proficiency|XPHB|Proficiency Bonus, and you regain all expended uses when you finish a Long Rest|XPHB."
+  },
+  {
+    "id": "race_dwarf_hill_phb",
+    "name": "Dwarf (Hill)",
+    "raceName": "Dwarf",
+    "subraceName": "Hill",
+    "source": "PHB",
+    "page": 20,
+    "size": [
+      "M"
+    ],
+    "speed": "25 ft",
+    "speeds": {
+      "walk": 25,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0
+    },
+    "senses": {
+      "darkvision": 60,
+      "blindsight": 0,
+      "truesight": 0,
+      "devilSight": 0
+    },
+    "ability": [
+      {
+        "wis": 1
+      }
+    ],
+    "traits": [
+      {
+        "id": "trait_dwarf_age_phb",
+        "name": "Age",
+        "source": "PHB",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "Dwarves mature at the same rate as humans, but they're considered young until they reach the age of 50. On average, they live about 350 years.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Dwarves mature at the same rate as humans, but they're considered young until they reach the age of 50. On average, they live about 350 years."
+        ]
+      },
+      {
+        "id": "trait_dwarf_size_phb",
+        "name": "Size",
+        "source": "PHB",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "Dwarves stand between 4 and 5 feet tall and average about 150 pounds. Your size is Medium.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Dwarves stand between 4 and 5 feet tall and average about 150 pounds. Your size is Medium."
+        ]
+      },
+      {
+        "id": "trait_dwarf_speed_phb",
+        "name": "Speed",
+        "source": "PHB",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "Your speed is not reduced by wearing heavy armor.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Your speed is not reduced by wearing heavy armor."
+        ]
+      },
+      {
+        "id": "trait_dwarf_darkvision_phb",
+        "name": "Darkvision",
+        "source": "PHB",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "Accustomed to life underground, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Accustomed to life underground, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray."
+        ]
+      },
+      {
+        "id": "trait_dwarf_dwarven_resilience_phb",
+        "name": "Dwarven Resilience",
+        "source": "PHB",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "You have advantage on saving throws against poison, and you have resistance against poison damage.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have advantage on saving throws against poison, and you have resistance against poison damage."
+        ]
+      },
+      {
+        "id": "trait_dwarf_dwarven_combat_training_phb",
+        "name": "Dwarven Combat Training",
+        "source": "PHB",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "You have proficiency with the battleaxe, handaxe, light hammer, and warhammer.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency with the {@item battleaxe|phb}, {@item handaxe|phb}, {@item light hammer|phb}, and {@item warhammer|phb}."
+        ]
+      },
+      {
+        "id": "trait_dwarf_tool_proficiency_phb",
+        "name": "Tool Proficiency",
+        "source": "PHB",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "You gain proficiency with the artisan's tools of your choice: Smith's tools, brewer's supplies, or mason's tools.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You gain proficiency with the {@item artisan's tools|PHB} of your choice: {@item Smith's tools|phb}, {@item brewer's supplies|phb}, or {@item mason's tools|phb}."
+        ]
+      },
+      {
+        "id": "trait_dwarf_stonecunning_phb",
+        "name": "Stonecunning",
+        "source": "PHB",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "Whenever you make an Intelligence (History) check related to the origin of stonework, you are considered proficient in the History skill and add double your proficiency bonus to the check, instead of your normal proficiency bonus.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Whenever you make an Intelligence ({@skill History}) check related to the origin of stonework, you are considered proficient in the {@skill History} skill and add double your proficiency bonus to the check, instead of your normal proficiency bonus."
+        ]
+      },
+      {
+        "id": "trait_dwarf_languages_phb",
+        "name": "Languages",
+        "source": "PHB",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common and Dwarvish. Dwarvish is full of hard consonants and guttural sounds, and those characteristics spill over into whatever other language a dwarf might speak.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Common and Dwarvish. Dwarvish is full of hard consonants and guttural sounds, and those characteristics spill over into whatever other language a dwarf might speak."
+        ]
+      },
+      {
+        "id": "trait_dwarf_hill_dwarven_toughness_phb",
+        "name": "Dwarven Toughness",
+        "source": "PHB",
+        "raceName": "Dwarf",
+        "subraceName": "Hill",
+        "actionType": "passive",
+        "description": "Your hit point maximum increases by 1, and it increases by 1 every time you gain a level.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Your hit point maximum increases by 1, and it increases by 1 every time you gain a level."
+        ]
+      }
+    ],
+    "description": "**Age**: Dwarves mature at the same rate as humans, but they're considered young until they reach the age of 50. On average, they live about 350 years.\n\n**Size**: Dwarves stand between 4 and 5 feet tall and average about 150 pounds. Your size is Medium.\n\n**Speed**: Your speed is not reduced by wearing heavy armor.\n\n**Darkvision**: Accustomed to life underground, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.\n\n**Dwarven Resilience**: You have advantage on saving throws against poison, and you have resistance against poison damage.\n\n**Dwarven Combat Training**: You have proficiency with the battleaxe, handaxe, light hammer, and warhammer.\n\n**Tool Proficiency**: You gain proficiency with the artisan's tools of your choice: Smith's tools, brewer's supplies, or mason's tools.\n\n**Stonecunning**: Whenever you make an Intelligence (History) check related to the origin of stonework, you are considered proficient in the History skill and add double your proficiency bonus to the check, instead of your normal proficiency bonus.\n\n**Languages**: You can speak, read, and write Common and Dwarvish. Dwarvish is full of hard consonants and guttural sounds, and those characteristics spill over into whatever other language a dwarf might speak.\n\n**Dwarven Toughness**: Your hit point maximum increases by 1, and it increases by 1 every time you gain a level."
+  },
+  {
+    "id": "race_elf_phb",
+    "name": "Elf",
+    "raceName": "Elf",
+    "subraceName": null,
+    "source": "PHB",
+    "page": 21,
+    "size": "M",
+    "speed": "30 ft",
+    "speeds": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0
+    },
+    "senses": {
+      "darkvision": 60,
+      "blindsight": 0,
+      "truesight": 0,
+      "devilSight": 0
+    },
+    "ability": [
+      {
+        "dex": 2
+      }
+    ],
+    "traits": [
+      {
+        "id": "trait_elf_age_phb",
+        "name": "Age",
+        "source": "PHB",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "Although elves reach physical maturity at about the same age as humans, the elven understanding of adulthood goes beyond physical growth to encompass worldly experience. An elf typically claims adulthood and an adult name around the age of 100 and can live to be 750 years old.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Although elves reach physical maturity at about the same age as humans, the elven understanding of adulthood goes beyond physical growth to encompass worldly experience. An elf typically claims adulthood and an adult name around the age of 100 and can live to be 750 years old."
+        ]
+      },
+      {
+        "id": "trait_elf_size_phb",
+        "name": "Size",
+        "source": "PHB",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "Elves range from under 5 to over 6 feet tall and have slender builds. Your size is Medium.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Elves range from under 5 to over 6 feet tall and have slender builds. Your size is Medium."
+        ]
+      },
+      {
+        "id": "trait_elf_darkvision_phb",
+        "name": "Darkvision",
+        "source": "PHB",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "Accustomed to twilit forests and the night sky, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Accustomed to twilit forests and the night sky, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray."
+        ]
+      },
+      {
+        "id": "trait_elf_keen_senses_phb",
+        "name": "Keen Senses",
+        "source": "PHB",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "You have proficiency in the Perception skill.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency in the {@skill Perception} skill."
+        ]
+      },
+      {
+        "id": "trait_elf_fey_ancestry_phb",
+        "name": "Fey Ancestry",
+        "source": "PHB",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "You have advantage on saving throws against being charmed, and magic can't put you to sleep.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have advantage on saving throws against being {@condition charmed}, and magic can't put you to sleep."
+        ]
+      },
+      {
+        "id": "trait_elf_trance_phb",
+        "name": "Trance",
+        "source": "PHB",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "Elves don't need to sleep. Instead, they meditate deeply, remaining semiconscious, for 4 hours a day. (The Common word for such meditation is \"trance.\") While meditating, you can dream after a fashion; such dreams are actually mental exercises that have become reflexive through years of practice. After resting in this way, you gain the same benefit that a human does from 8 hours of sleep.\n\nNote: If you meditate during a long rest, you finish the rest after only 4 hours. You otherwise obey all the rules for a long rest; only the duration is changed.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Elves don't need to sleep. Instead, they meditate deeply, remaining semiconscious, for 4 hours a day. (The Common word for such meditation is \"trance.\") While meditating, you can dream after a fashion; such dreams are actually mental exercises that have become reflexive through years of practice. After resting in this way, you gain the same benefit that a human does from 8 hours of sleep.",
+          "{@note If you meditate during a long rest, you finish the rest after only 4 hours. You otherwise obey all the rules for a long rest; only the duration is changed.}"
+        ]
+      },
+      {
+        "id": "trait_elf_languages_phb",
+        "name": "Languages",
+        "source": "PHB",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common and Elvish. Elvish is fluid, with subtle intonations and intricate grammar. Elven literature is rich and varied, and their songs and poems are famous among other races. Many bards learn their language so they can add Elvish ballads to their repertoires.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Common and Elvish. Elvish is fluid, with subtle intonations and intricate grammar. Elven literature is rich and varied, and their songs and poems are famous among other races. Many bards learn their language so they can add Elvish ballads to their repertoires."
+        ]
+      }
+    ],
+    "description": "**Age**: Although elves reach physical maturity at about the same age as humans, the elven understanding of adulthood goes beyond physical growth to encompass worldly experience. An elf typically claims adulthood and an adult name around the age of 100 and can live to be 750 years old.\n\n**Size**: Elves range from under 5 to over 6 feet tall and have slender builds. Your size is Medium.\n\n**Darkvision**: Accustomed to twilit forests and the night sky, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.\n\n**Keen Senses**: You have proficiency in the Perception skill.\n\n**Fey Ancestry**: You have advantage on saving throws against being charmed, and magic can't put you to sleep.\n\n**Trance**: Elves don't need to sleep. Instead, they meditate deeply, remaining semiconscious, for 4 hours a day. (The Common word for such meditation is \"trance.\") While meditating, you can dream after a fashion; such dreams are actually mental exercises that have become reflexive through years of practice. After resting in this way, you gain the same benefit that a human does from 8 hours of sleep.\n\nNote: If you meditate during a long rest, you finish the rest after only 4 hours. You otherwise obey all the rules for a long rest; only the duration is changed.\n\n**Languages**: You can speak, read, and write Common and Elvish. Elvish is fluid, with subtle intonations and intricate grammar. Elven literature is rich and varied, and their songs and poems are famous among other races. Many bards learn their language so they can add Elvish ballads to their repertoires."
+  },
+  {
+    "id": "race_elf_xphb",
+    "name": "Elf",
+    "raceName": "Elf",
+    "subraceName": null,
+    "source": "XPHB",
+    "page": 189,
+    "size": "M",
+    "speed": "30 ft",
+    "speeds": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0
+    },
+    "senses": {
+      "darkvision": 60,
+      "blindsight": 0,
+      "truesight": 0,
+      "devilSight": 0
+    },
+    "ability": null,
+    "traits": [
+      {
+        "id": "trait_elf_darkvision_xphb",
+        "name": "Darkvision",
+        "source": "XPHB",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "You have Darkvision with a range of 60 feet.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@sense Darkvision|XPHB} with a range of 60 feet."
+        ]
+      },
+      {
+        "id": "trait_elf_elven_lineage_xphb",
+        "name": "Elven Lineage",
+        "source": "XPHB",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "You are part of a lineage that grants you supernatural abilities. Choose a lineage from the Elven Lineages table. You gain the level 1 benefit of that lineage.\n\nWhen you reach character levels 3 and 5, you learn a higher-level spell, as shown on the table. You always have that spell prepared. You can cast it once without a spell slot, and you regain the ability to cast it in that way when you finish a Long Rest|XPHB. You can also cast the spell using any spell slots you have of the appropriate level.\n\nIntelligence, Wisdom, or Charisma is your spellcasting ability for the spells you cast with this trait (choose the ability when you select the lineage).",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You are part of a lineage that grants you supernatural abilities. Choose a lineage from the Elven Lineages table. You gain the level 1 benefit of that lineage.",
+          "When you reach character levels 3 and 5, you learn a higher-level spell, as shown on the table. You always have that spell prepared. You can cast it once without a spell slot, and you regain the ability to cast it in that way when you finish a {@variantrule Long Rest|XPHB}. You can also cast the spell using any spell slots you have of the appropriate level.",
+          "Intelligence, Wisdom, or Charisma is your spellcasting ability for the spells you cast with this trait (choose the ability when you select the lineage).",
+          {
+            "type": "table",
+            "caption": "Elven Lineages",
+            "colLabels": [
+              "Lineage",
+              "Level 1",
+              "Level 3",
+              "Level 5"
+            ],
+            "colStyles": [
+              "col-2",
+              "col-6",
+              "col-2",
+              "col-2"
+            ],
+            "rows": [
+              [
+                "Drow",
+                "The range of your {@sense Darkvision|XPHB} increases to 120 feet. You also know the {@spell Dancing Lights|XPHB} cantrip.",
+                "{@spell Faerie Fire|XPHB}",
+                "{@spell Darkness|XPHB}"
+              ],
+              [
+                "High Elf",
+                "You know the {@spell Prestidigitation|XPHB} cantrip. Whenever you finish a {@variantrule Long Rest|XPHB}, you can replace that cantrip with a different {@filter cantrip from the Wizard spell list|spells|level=0|class=Wizard}.",
+                "{@spell Detect Magic|XPHB}",
+                "{@spell Misty Step|XPHB}"
+              ],
+              [
+                "Wood Elf",
+                "Your {@variantrule Speed|XPHB} increases to 35 feet. You also know the {@spell Druidcraft|XPHB} cantrip.",
+                "{@spell Longstrider|XPHB}",
+                "{@spell Pass without Trace|XPHB}"
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "id": "trait_elf_fey_ancestry_xphb",
+        "name": "Fey Ancestry",
+        "source": "XPHB",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "You have Advantage|XPHB on saving throws you make to avoid or end the Charmed condition.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@variantrule Advantage|XPHB} on saving throws you make to avoid or end the {@condition Charmed|XPHB} condition."
+        ]
+      },
+      {
+        "id": "trait_elf_keen_senses_xphb",
+        "name": "Keen Senses",
+        "source": "XPHB",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "You have proficiency in the Insight, Perception, or Survival skill.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency in the {@skill Insight|XPHB}, {@skill Perception|XPHB}, or {@skill Survival|XPHB} skill."
+        ]
+      },
+      {
+        "id": "trait_elf_trance_xphb",
+        "name": "Trance",
+        "source": "XPHB",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "You don't need to sleep, and magic can't put you to sleep. You can finish a Long Rest|XPHB in 4 hours if you spend those hours in a trancelike meditation, during which you retain consciousness.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You don't need to sleep, and magic can't put you to sleep. You can finish a {@variantrule Long Rest|XPHB} in 4 hours if you spend those hours in a trancelike meditation, during which you retain consciousness."
+        ]
+      }
+    ],
+    "description": "**Darkvision**: You have Darkvision with a range of 60 feet.\n\n**Elven Lineage**: You are part of a lineage that grants you supernatural abilities. Choose a lineage from the Elven Lineages table. You gain the level 1 benefit of that lineage.\n\nWhen you reach character levels 3 and 5, you learn a higher-level spell, as shown on the table. You always have that spell prepared. You can cast it once without a spell slot, and you regain the ability to cast it in that way when you finish a Long Rest|XPHB. You can also cast the spell using any spell slots you have of the appropriate level.\n\nIntelligence, Wisdom, or Charisma is your spellcasting ability for the spells you cast with this trait (choose the ability when you select the lineage).\n\n**Fey Ancestry**: You have Advantage|XPHB on saving throws you make to avoid or end the Charmed condition.\n\n**Keen Senses**: You have proficiency in the Insight, Perception, or Survival skill.\n\n**Trance**: You don't need to sleep, and magic can't put you to sleep. You can finish a Long Rest|XPHB in 4 hours if you spend those hours in a trancelike meditation, during which you retain consciousness."
+  },
+  {
+    "id": "race_elf_high_phb",
+    "name": "Elf (High)",
+    "raceName": "Elf",
+    "subraceName": "High",
+    "source": "PHB",
+    "page": 23,
+    "size": [
+      "M"
+    ],
+    "speed": "30 ft",
+    "speeds": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0
+    },
+    "senses": {
+      "darkvision": 60,
+      "blindsight": 0,
+      "truesight": 0,
+      "devilSight": 0
+    },
+    "ability": [
+      {
+        "int": 1
+      }
+    ],
+    "traits": [
+      {
+        "id": "trait_elf_age_phb",
+        "name": "Age",
+        "source": "PHB",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "Although elves reach physical maturity at about the same age as humans, the elven understanding of adulthood goes beyond physical growth to encompass worldly experience. An elf typically claims adulthood and an adult name around the age of 100 and can live to be 750 years old.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Although elves reach physical maturity at about the same age as humans, the elven understanding of adulthood goes beyond physical growth to encompass worldly experience. An elf typically claims adulthood and an adult name around the age of 100 and can live to be 750 years old."
+        ]
+      },
+      {
+        "id": "trait_elf_size_phb",
+        "name": "Size",
+        "source": "PHB",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "Elves range from under 5 to over 6 feet tall and have slender builds. Your size is Medium.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Elves range from under 5 to over 6 feet tall and have slender builds. Your size is Medium."
+        ]
+      },
+      {
+        "id": "trait_elf_darkvision_phb",
+        "name": "Darkvision",
+        "source": "PHB",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "Accustomed to twilit forests and the night sky, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Accustomed to twilit forests and the night sky, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray."
+        ]
+      },
+      {
+        "id": "trait_elf_keen_senses_phb",
+        "name": "Keen Senses",
+        "source": "PHB",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "You have proficiency in the Perception skill.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency in the {@skill Perception} skill."
+        ]
+      },
+      {
+        "id": "trait_elf_fey_ancestry_phb",
+        "name": "Fey Ancestry",
+        "source": "PHB",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "You have advantage on saving throws against being charmed, and magic can't put you to sleep.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have advantage on saving throws against being {@condition charmed}, and magic can't put you to sleep."
+        ]
+      },
+      {
+        "id": "trait_elf_trance_phb",
+        "name": "Trance",
+        "source": "PHB",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "Elves don't need to sleep. Instead, they meditate deeply, remaining semiconscious, for 4 hours a day. (The Common word for such meditation is \"trance.\") While meditating, you can dream after a fashion; such dreams are actually mental exercises that have become reflexive through years of practice. After resting in this way, you gain the same benefit that a human does from 8 hours of sleep.\n\nNote: If you meditate during a long rest, you finish the rest after only 4 hours. You otherwise obey all the rules for a long rest; only the duration is changed.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Elves don't need to sleep. Instead, they meditate deeply, remaining semiconscious, for 4 hours a day. (The Common word for such meditation is \"trance.\") While meditating, you can dream after a fashion; such dreams are actually mental exercises that have become reflexive through years of practice. After resting in this way, you gain the same benefit that a human does from 8 hours of sleep.",
+          "{@note If you meditate during a long rest, you finish the rest after only 4 hours. You otherwise obey all the rules for a long rest; only the duration is changed.}"
+        ]
+      },
+      {
+        "id": "trait_elf_languages_phb",
+        "name": "Languages",
+        "source": "PHB",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common and Elvish. Elvish is fluid, with subtle intonations and intricate grammar. Elven literature is rich and varied, and their songs and poems are famous among other races. Many bards learn their language so they can add Elvish ballads to their repertoires.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Common and Elvish. Elvish is fluid, with subtle intonations and intricate grammar. Elven literature is rich and varied, and their songs and poems are famous among other races. Many bards learn their language so they can add Elvish ballads to their repertoires."
+        ]
+      },
+      {
+        "id": "trait_elf_high_elf_weapon_training_phb",
+        "name": "Elf Weapon Training",
+        "source": "PHB",
+        "raceName": "Elf",
+        "subraceName": "High",
+        "actionType": "passive",
+        "description": "You have proficiency with the longsword, shortsword, shortbow, and longbow.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency with the {@item longsword|phb}, {@item shortsword|phb}, {@item shortbow|phb}, and {@item longbow|phb}."
+        ]
+      },
+      {
+        "id": "trait_elf_high_cantrip_phb",
+        "name": "Cantrip",
+        "source": "PHB",
+        "raceName": "Elf",
+        "subraceName": "High",
+        "actionType": "passive",
+        "description": "You know one cantrip of your choice from the wizard spell list|spells|level=0|class=Wizard. Intelligence is your spellcasting ability for it.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You know one {@filter cantrip of your choice from the wizard spell list|spells|level=0|class=Wizard}. Intelligence is your spellcasting ability for it."
+        ]
+      },
+      {
+        "id": "trait_elf_high_extra_language_phb",
+        "name": "Extra Language",
+        "source": "PHB",
+        "raceName": "Elf",
+        "subraceName": "High",
+        "actionType": "passive",
+        "description": "You can speak, read, and write one extra language of your choosing.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write one extra language of your choosing."
+        ]
+      }
+    ],
+    "description": "**Age**: Although elves reach physical maturity at about the same age as humans, the elven understanding of adulthood goes beyond physical growth to encompass worldly experience. An elf typically claims adulthood and an adult name around the age of 100 and can live to be 750 years old.\n\n**Size**: Elves range from under 5 to over 6 feet tall and have slender builds. Your size is Medium.\n\n**Darkvision**: Accustomed to twilit forests and the night sky, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.\n\n**Keen Senses**: You have proficiency in the Perception skill.\n\n**Fey Ancestry**: You have advantage on saving throws against being charmed, and magic can't put you to sleep.\n\n**Trance**: Elves don't need to sleep. Instead, they meditate deeply, remaining semiconscious, for 4 hours a day. (The Common word for such meditation is \"trance.\") While meditating, you can dream after a fashion; such dreams are actually mental exercises that have become reflexive through years of practice. After resting in this way, you gain the same benefit that a human does from 8 hours of sleep.\n\nNote: If you meditate during a long rest, you finish the rest after only 4 hours. You otherwise obey all the rules for a long rest; only the duration is changed.\n\n**Languages**: You can speak, read, and write Common and Elvish. Elvish is fluid, with subtle intonations and intricate grammar. Elven literature is rich and varied, and their songs and poems are famous among other races. Many bards learn their language so they can add Elvish ballads to their repertoires.\n\n**Elf Weapon Training**: You have proficiency with the longsword, shortsword, shortbow, and longbow.\n\n**Cantrip**: You know one cantrip of your choice from the wizard spell list|spells|level=0|class=Wizard. Intelligence is your spellcasting ability for it.\n\n**Extra Language**: You can speak, read, and write one extra language of your choosing."
+  },
+  {
+    "id": "race_gnome_phb",
+    "name": "Gnome",
+    "raceName": "Gnome",
+    "subraceName": null,
+    "source": "PHB",
+    "page": 35,
+    "size": "S",
+    "speed": "25 ft",
+    "speeds": {
+      "walk": 25,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0
+    },
+    "senses": {
+      "darkvision": 60,
+      "blindsight": 0,
+      "truesight": 0,
+      "devilSight": 0
+    },
+    "ability": [
+      {
+        "int": 2
+      }
+    ],
+    "traits": [
+      {
+        "id": "trait_gnome_age_phb",
+        "name": "Age",
+        "source": "PHB",
+        "raceName": "Gnome",
+        "actionType": "passive",
+        "description": "Gnomes mature at the same rate humans do, and most are expected to settle down into an adult life by around age 40. They can live 350 to almost 500 years.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Gnomes mature at the same rate humans do, and most are expected to settle down into an adult life by around age 40. They can live 350 to almost 500 years."
+        ]
+      },
+      {
+        "id": "trait_gnome_size_phb",
+        "name": "Size",
+        "source": "PHB",
+        "raceName": "Gnome",
+        "actionType": "passive",
+        "description": "Gnomes are between 3 and 4 feet tall and average about 40 pounds. Your size is Small.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Gnomes are between 3 and 4 feet tall and average about 40 pounds. Your size is Small."
+        ]
+      },
+      {
+        "id": "trait_gnome_darkvision_phb",
+        "name": "Darkvision",
+        "source": "PHB",
+        "raceName": "Gnome",
+        "actionType": "passive",
+        "description": "Accustomed to life underground, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Accustomed to life underground, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray."
+        ]
+      },
+      {
+        "id": "trait_gnome_gnome_cunning_phb",
+        "name": "Gnome Cunning",
+        "source": "PHB",
+        "raceName": "Gnome",
+        "actionType": "passive",
+        "description": "You have advantage on all Intelligence, Wisdom, and Charisma saving throws against magic.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have advantage on all Intelligence, Wisdom, and Charisma saving throws against magic."
+        ]
+      },
+      {
+        "id": "trait_gnome_languages_phb",
+        "name": "Languages",
+        "source": "PHB",
+        "raceName": "Gnome",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common and Gnomish. The Gnomish language, which uses the Dwarvish script, is renowned for its technical treatises and its catalogs of knowledge about the natural world.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Common and Gnomish. The Gnomish language, which uses the Dwarvish script, is renowned for its technical treatises and its catalogs of knowledge about the natural world."
+        ]
+      }
+    ],
+    "description": "**Age**: Gnomes mature at the same rate humans do, and most are expected to settle down into an adult life by around age 40. They can live 350 to almost 500 years.\n\n**Size**: Gnomes are between 3 and 4 feet tall and average about 40 pounds. Your size is Small.\n\n**Darkvision**: Accustomed to life underground, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.\n\n**Gnome Cunning**: You have advantage on all Intelligence, Wisdom, and Charisma saving throws against magic.\n\n**Languages**: You can speak, read, and write Common and Gnomish. The Gnomish language, which uses the Dwarvish script, is renowned for its technical treatises and its catalogs of knowledge about the natural world."
+  },
+  {
+    "id": "race_gnome_xphb",
+    "name": "Gnome",
+    "raceName": "Gnome",
+    "subraceName": null,
+    "source": "XPHB",
+    "page": 191,
+    "size": "S",
+    "speed": "30 ft",
+    "speeds": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0
+    },
+    "senses": {
+      "darkvision": 60,
+      "blindsight": 0,
+      "truesight": 0,
+      "devilSight": 0
+    },
+    "ability": null,
+    "traits": [
+      {
+        "id": "trait_gnome_darkvision_xphb",
+        "name": "Darkvision",
+        "source": "XPHB",
+        "raceName": "Gnome",
+        "actionType": "passive",
+        "description": "You have Darkvision with a range of 60 feet.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@sense Darkvision|XPHB} with a range of 60 feet."
+        ]
+      },
+      {
+        "id": "trait_gnome_gnomish_cunning_xphb",
+        "name": "Gnomish Cunning",
+        "source": "XPHB",
+        "raceName": "Gnome",
+        "actionType": "passive",
+        "description": "You have Advantage|XPHB on Intelligence, Wisdom, and Charisma saving throws.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@variantrule Advantage|XPHB} on Intelligence, Wisdom, and Charisma saving throws."
+        ]
+      },
+      {
+        "id": "trait_gnome_gnomish_lineage_xphb",
+        "name": "Gnomish Lineage",
+        "source": "XPHB",
+        "raceName": "Gnome",
+        "actionType": "passive",
+        "description": "You are part of a lineage that grants you supernatural abilities. Choose one of the following options; whichever one you choose, Intelligence, Wisdom, or Charisma is your spellcasting ability for the spells you cast with this trait (choose the ability when you select the lineage):\n\n- **Forest Gnome**\n\nYou know the Minor Illusion cantrip. You also always have the Speak with Animals spell prepared. You can cast it without a spell slot a number of times equal to your Proficiency|XPHB|Proficiency Bonus, and you regain all expended uses when you finish a Long Rest|XPHB. You can also use any spell slots you have to cast the spell.\n- **Rock Gnome**\n\nYou know the Mending and Prestidigitation cantrips. In addition, you can spend 10 minutes casting Prestidigitation to create a Tiny clockwork device (AC 5, 1 HP), such as a toy, fire starter, or music box. When you create the device, you determine its function by choosing one effect from Prestidigitation; the device produces that effect whenever you or another creature takes a Bonus Action|XPHB to activate it with a touch. If the chosen effect has options within it, you choose one of those options for the device when you create it. For example, if you choose the spell's ignite-extinguish effect, you determine whether the device ignites or extinguishes fire; the device doesn't do both. You can have three such devices in existence at a time, and each falls apart 8 hours after its creation or when you dismantle it with a touch as a Utilize action.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You are part of a lineage that grants you supernatural abilities. Choose one of the following options; whichever one you choose, Intelligence, Wisdom, or Charisma is your spellcasting ability for the spells you cast with this trait (choose the ability when you select the lineage):",
+          {
+            "type": "list",
+            "style": "list-hang-notitle",
+            "items": [
+              {
+                "type": "item",
+                "name": "Forest Gnome",
+                "entries": [
+                  "You know the {@spell Minor Illusion|XPHB} cantrip. You also always have the {@spell Speak with Animals|XPHB} spell prepared. You can cast it without a spell slot a number of times equal to your {@variantrule Proficiency|XPHB|Proficiency Bonus}, and you regain all expended uses when you finish a {@variantrule Long Rest|XPHB}. You can also use any spell slots you have to cast the spell."
+                ]
+              },
+              {
+                "type": "item",
+                "name": "Rock Gnome",
+                "entries": [
+                  "You know the {@spell Mending|XPHB} and {@spell Prestidigitation|XPHB} cantrips. In addition, you can spend 10 minutes casting {@spell Prestidigitation|XPHB} to create a Tiny clockwork device (AC 5, 1 HP), such as a toy, fire starter, or music box. When you create the device, you determine its function by choosing one effect from {@spell Prestidigitation|XPHB}; the device produces that effect whenever you or another creature takes a {@variantrule Bonus Action|XPHB} to activate it with a touch. If the chosen effect has options within it, you choose one of those options for the device when you create it. For example, if you choose the spell's ignite-extinguish effect, you determine whether the device ignites or extinguishes fire; the device doesn't do both. You can have three such devices in existence at a time, and each falls apart 8 hours after its creation or when you dismantle it with a touch as a {@action Utilize|XPHB} action."
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "description": "**Darkvision**: You have Darkvision with a range of 60 feet.\n\n**Gnomish Cunning**: You have Advantage|XPHB on Intelligence, Wisdom, and Charisma saving throws.\n\n**Gnomish Lineage**: You are part of a lineage that grants you supernatural abilities. Choose one of the following options; whichever one you choose, Intelligence, Wisdom, or Charisma is your spellcasting ability for the spells you cast with this trait (choose the ability when you select the lineage):\n\n- **Forest Gnome**\n\nYou know the Minor Illusion cantrip. You also always have the Speak with Animals spell prepared. You can cast it without a spell slot a number of times equal to your Proficiency|XPHB|Proficiency Bonus, and you regain all expended uses when you finish a Long Rest|XPHB. You can also use any spell slots you have to cast the spell.\n- **Rock Gnome**\n\nYou know the Mending and Prestidigitation cantrips. In addition, you can spend 10 minutes casting Prestidigitation to create a Tiny clockwork device (AC 5, 1 HP), such as a toy, fire starter, or music box. When you create the device, you determine its function by choosing one effect from Prestidigitation; the device produces that effect whenever you or another creature takes a Bonus Action|XPHB to activate it with a touch. If the chosen effect has options within it, you choose one of those options for the device when you create it. For example, if you choose the spell's ignite-extinguish effect, you determine whether the device ignites or extinguishes fire; the device doesn't do both. You can have three such devices in existence at a time, and each falls apart 8 hours after its creation or when you dismantle it with a touch as a Utilize action."
+  },
+  {
+    "id": "race_gnome_rock_phb",
+    "name": "Gnome (Rock)",
+    "raceName": "Gnome",
+    "subraceName": "Rock",
+    "source": "PHB",
+    "page": 37,
+    "size": [
+      "S"
+    ],
+    "speed": "25 ft",
+    "speeds": {
+      "walk": 25,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0
+    },
+    "senses": {
+      "darkvision": 60,
+      "blindsight": 0,
+      "truesight": 0,
+      "devilSight": 0
+    },
+    "ability": [
+      {
+        "con": 1
+      }
+    ],
+    "traits": [
+      {
+        "id": "trait_gnome_age_phb",
+        "name": "Age",
+        "source": "PHB",
+        "raceName": "Gnome",
+        "actionType": "passive",
+        "description": "Gnomes mature at the same rate humans do, and most are expected to settle down into an adult life by around age 40. They can live 350 to almost 500 years.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Gnomes mature at the same rate humans do, and most are expected to settle down into an adult life by around age 40. They can live 350 to almost 500 years."
+        ]
+      },
+      {
+        "id": "trait_gnome_size_phb",
+        "name": "Size",
+        "source": "PHB",
+        "raceName": "Gnome",
+        "actionType": "passive",
+        "description": "Gnomes are between 3 and 4 feet tall and average about 40 pounds. Your size is Small.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Gnomes are between 3 and 4 feet tall and average about 40 pounds. Your size is Small."
+        ]
+      },
+      {
+        "id": "trait_gnome_darkvision_phb",
+        "name": "Darkvision",
+        "source": "PHB",
+        "raceName": "Gnome",
+        "actionType": "passive",
+        "description": "Accustomed to life underground, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Accustomed to life underground, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray."
+        ]
+      },
+      {
+        "id": "trait_gnome_gnome_cunning_phb",
+        "name": "Gnome Cunning",
+        "source": "PHB",
+        "raceName": "Gnome",
+        "actionType": "passive",
+        "description": "You have advantage on all Intelligence, Wisdom, and Charisma saving throws against magic.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have advantage on all Intelligence, Wisdom, and Charisma saving throws against magic."
+        ]
+      },
+      {
+        "id": "trait_gnome_languages_phb",
+        "name": "Languages",
+        "source": "PHB",
+        "raceName": "Gnome",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common and Gnomish. The Gnomish language, which uses the Dwarvish script, is renowned for its technical treatises and its catalogs of knowledge about the natural world.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Common and Gnomish. The Gnomish language, which uses the Dwarvish script, is renowned for its technical treatises and its catalogs of knowledge about the natural world."
+        ]
+      },
+      {
+        "id": "trait_gnome_rock_artificer_s_lore_phb",
+        "name": "Artificer's Lore",
+        "source": "PHB",
+        "raceName": "Gnome",
+        "subraceName": "Rock",
+        "actionType": "passive",
+        "description": "Whenever you make an Intelligence (History) check related to magic items, alchemical objects, or technological devices, you can add twice your proficiency bonus, instead of any proficiency bonus you normally apply.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Whenever you make an Intelligence ({@skill History}) check related to magic items, alchemical objects, or technological devices, you can add twice your proficiency bonus, instead of any proficiency bonus you normally apply."
+        ]
+      },
+      {
+        "id": "trait_gnome_rock_tinker_phb",
+        "name": "Tinker",
+        "source": "PHB",
+        "raceName": "Gnome",
+        "subraceName": "Rock",
+        "actionType": "passive",
+        "description": "You have proficiency with artisan's tools (tinker's tools). Using those tools, you can spend 1 hour and 10 gp worth of materials to construct a Tiny clockwork device (AC 5, 1 hp). The device ceases to function after 24 hours (unless you spend 1 hour repairing it to keep the device functioning), or when you use your action to dismantle it; at that time, you can reclaim the materials used to create it. You can have up to three such devices active at a time.\n\nWhen you create a device, choose one of the following options:\n\n**Clockwork Toy**\n\nThis toy is a clockwork animal, monster, or person, such as a frog, mouse, bird, dragon, or soldier. When placed on the ground, the toy moves 5 feet across the ground on each of your turns in a random direction. It makes noises as appropriate to the creature it represents.\n\n**Fire Starter**\n\nThe device produces a miniature flame, which you can use to light a candle, torch, or campfire. Using the device requires your action.\n\n**Music Box**\n\nWhen opened, this music box plays a single song at a moderate volume. The box stops playing when it reaches the song's end or when it is closed.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency with {@item artisan's tools|PHB} ({@item tinker's tools|phb}). Using those tools, you can spend 1 hour and 10 gp worth of materials to construct a Tiny clockwork device (AC 5, 1 hp). The device ceases to function after 24 hours (unless you spend 1 hour repairing it to keep the device functioning), or when you use your action to dismantle it; at that time, you can reclaim the materials used to create it. You can have up to three such devices active at a time.",
+          "When you create a device, choose one of the following options:",
+          {
+            "type": "entries",
+            "name": "Clockwork Toy",
+            "entries": [
+              "This toy is a clockwork animal, monster, or person, such as a frog, mouse, bird, dragon, or soldier. When placed on the ground, the toy moves 5 feet across the ground on each of your turns in a random direction. It makes noises as appropriate to the creature it represents."
+            ]
+          },
+          {
+            "type": "entries",
+            "name": "Fire Starter",
+            "entries": [
+              "The device produces a miniature flame, which you can use to light a candle, torch, or campfire. Using the device requires your action."
+            ]
+          },
+          {
+            "type": "entries",
+            "name": "Music Box",
+            "entries": [
+              "When opened, this music box plays a single song at a moderate volume. The box stops playing when it reaches the song's end or when it is closed."
+            ]
+          }
+        ]
+      }
+    ],
+    "description": "**Age**: Gnomes mature at the same rate humans do, and most are expected to settle down into an adult life by around age 40. They can live 350 to almost 500 years.\n\n**Size**: Gnomes are between 3 and 4 feet tall and average about 40 pounds. Your size is Small.\n\n**Darkvision**: Accustomed to life underground, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.\n\n**Gnome Cunning**: You have advantage on all Intelligence, Wisdom, and Charisma saving throws against magic.\n\n**Languages**: You can speak, read, and write Common and Gnomish. The Gnomish language, which uses the Dwarvish script, is renowned for its technical treatises and its catalogs of knowledge about the natural world.\n\n**Artificer's Lore**: Whenever you make an Intelligence (History) check related to magic items, alchemical objects, or technological devices, you can add twice your proficiency bonus, instead of any proficiency bonus you normally apply.\n\n**Tinker**: You have proficiency with artisan's tools (tinker's tools). Using those tools, you can spend 1 hour and 10 gp worth of materials to construct a Tiny clockwork device (AC 5, 1 hp). The device ceases to function after 24 hours (unless you spend 1 hour repairing it to keep the device functioning), or when you use your action to dismantle it; at that time, you can reclaim the materials used to create it. You can have up to three such devices active at a time.\n\nWhen you create a device, choose one of the following options:\n\n**Clockwork Toy**\n\nThis toy is a clockwork animal, monster, or person, such as a frog, mouse, bird, dragon, or soldier. When placed on the ground, the toy moves 5 feet across the ground on each of your turns in a random direction. It makes noises as appropriate to the creature it represents.\n\n**Fire Starter**\n\nThe device produces a miniature flame, which you can use to light a candle, torch, or campfire. Using the device requires your action.\n\n**Music Box**\n\nWhen opened, this music box plays a single song at a moderate volume. The box stops playing when it reaches the song's end or when it is closed."
+  },
+  {
+    "id": "race_goliath_xphb",
+    "name": "Goliath",
+    "raceName": "Goliath",
+    "subraceName": null,
+    "source": "XPHB",
+    "page": 192,
+    "size": "M",
+    "speed": "35 ft",
+    "speeds": {
+      "walk": 35,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0
+    },
+    "senses": {
+      "darkvision": 0,
+      "blindsight": 0,
+      "truesight": 0,
+      "devilSight": 0
+    },
+    "ability": null,
+    "traits": [
+      {
+        "id": "trait_goliath_giant_ancestry_xphb",
+        "name": "Giant Ancestry",
+        "source": "XPHB",
+        "raceName": "Goliath",
+        "actionType": "bonus",
+        "description": "You are descended from Giants. Choose one of the following benefits—a supernatural boon from your ancestry; you can use the chosen benefit a number of times equal to your Proficiency|XPHB|Proficiency Bonus, and you regain all expended uses when you finish a Long Rest|XPHB:\n\n- **Cloud's Jaunt (Cloud Giant)**\n\nAs a Bonus Action|XPHB, you magically teleport up to 30 feet to an unoccupied space you can see.\n- **Fire's Burn (Fire Giant)**\n\nWhen you hit a target with an attack roll and deal damage to it, you can also deal 1d10 Fire damage to that target.\n- **Frost's Chill (Frost Giant)**\n\nWhen you hit a target with an attack roll and deal damage to it, you can also deal 1d6 Cold damage to that target and reduce its Speed|XPHB by 10 feet until the start of your next turn.\n- **Hill's Tumble (Hill Giant)**\n\nWhen you hit a Large or smaller creature with an attack roll and deal damage to it, you can give that target the Prone condition.\n- **Stone's Endurance (Stone Giant)**\n\nWhen you take damage, you can take a Reaction|XPHB to roll 1d12. Add your Constitution modifier to the number rolled and reduce the damage by that total.\n- **Storm's Thunder (Storm Giant)**\n\nWhen you take damage from a creature within 60 feet of you, you can take a Reaction|XPHB to deal 1d8 Thunder damage to that creature.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "1d10",
+        "formulaConfig": {
+          "baseDice": "1d10",
+          "scalingMod": "none",
+          "modClass": "",
+          "extraBonus": 0
+        },
+        "rawEntries": [
+          "You are descended from Giants. Choose one of the following benefits—a supernatural boon from your ancestry; you can use the chosen benefit a number of times equal to your {@variantrule Proficiency|XPHB|Proficiency Bonus}, and you regain all expended uses when you finish a {@variantrule Long Rest|XPHB}:",
+          {
+            "type": "list",
+            "style": "list-hang-notitle",
+            "items": [
+              {
+                "type": "item",
+                "name": "Cloud's Jaunt (Cloud Giant)",
+                "entries": [
+                  "As a {@variantrule Bonus Action|XPHB}, you magically teleport up to 30 feet to an unoccupied space you can see."
+                ]
+              },
+              {
+                "type": "item",
+                "name": "Fire's Burn (Fire Giant)",
+                "entries": [
+                  "When you hit a target with an attack roll and deal damage to it, you can also deal {@damage 1d10} Fire damage to that target."
+                ]
+              },
+              {
+                "type": "item",
+                "name": "Frost's Chill (Frost Giant)",
+                "entries": [
+                  "When you hit a target with an attack roll and deal damage to it, you can also deal {@damage 1d6} Cold damage to that target and reduce its {@variantrule Speed|XPHB} by 10 feet until the start of your next turn."
+                ]
+              },
+              {
+                "type": "item",
+                "name": "Hill's Tumble (Hill Giant)",
+                "entries": [
+                  "When you hit a Large or smaller creature with an attack roll and deal damage to it, you can give that target the {@condition Prone|XPHB} condition."
+                ]
+              },
+              {
+                "type": "item",
+                "name": "Stone's Endurance (Stone Giant)",
+                "entries": [
+                  "When you take damage, you can take a {@variantrule Reaction|XPHB} to roll {@dice 1d12}. Add your Constitution modifier to the number rolled and reduce the damage by that total."
+                ]
+              },
+              {
+                "type": "item",
+                "name": "Storm's Thunder (Storm Giant)",
+                "entries": [
+                  "When you take damage from a creature within 60 feet of you, you can take a {@variantrule Reaction|XPHB} to deal {@damage 1d8} Thunder damage to that creature."
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "trait_goliath_large_form_xphb",
+        "name": "Large Form",
+        "source": "XPHB",
+        "raceName": "Goliath",
+        "actionType": "bonus",
+        "description": "Starting at character level 5, you can change your size to Large as a Bonus Action|XPHB if you're in a big enough space. This transformation lasts for 10 minutes or until you end it (no action required). For that duration, you have Advantage|XPHB on Strength checks, and your Speed|XPHB increases by 10 feet. Once you use this trait, you can't use it again until you finish a Long Rest|XPHB.",
+        "hasCounter": true,
+        "usesMax": 1,
+        "resetType": "long",
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Starting at character level 5, you can change your size to Large as a {@variantrule Bonus Action|XPHB} if you're in a big enough space. This transformation lasts for 10 minutes or until you end it (no action required). For that duration, you have {@variantrule Advantage|XPHB} on Strength checks, and your {@variantrule Speed|XPHB} increases by 10 feet. Once you use this trait, you can't use it again until you finish a {@variantrule Long Rest|XPHB}."
+        ]
+      },
+      {
+        "id": "trait_goliath_powerful_build_xphb",
+        "name": "Powerful Build",
+        "source": "XPHB",
+        "raceName": "Goliath",
+        "actionType": "passive",
+        "description": "You have Advantage|XPHB on any ability check you make to end the Grappled condition. You also count as one size larger when determining your carrying capacity.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@variantrule Advantage|XPHB} on any ability check you make to end the {@condition Grappled|XPHB} condition. You also count as one size larger when determining your carrying capacity."
+        ]
+      }
+    ],
+    "description": "**Giant Ancestry**: You are descended from Giants. Choose one of the following benefits—a supernatural boon from your ancestry; you can use the chosen benefit a number of times equal to your Proficiency|XPHB|Proficiency Bonus, and you regain all expended uses when you finish a Long Rest|XPHB:\n\n- **Cloud's Jaunt (Cloud Giant)**\n\nAs a Bonus Action|XPHB, you magically teleport up to 30 feet to an unoccupied space you can see.\n- **Fire's Burn (Fire Giant)**\n\nWhen you hit a target with an attack roll and deal damage to it, you can also deal 1d10 Fire damage to that target.\n- **Frost's Chill (Frost Giant)**\n\nWhen you hit a target with an attack roll and deal damage to it, you can also deal 1d6 Cold damage to that target and reduce its Speed|XPHB by 10 feet until the start of your next turn.\n- **Hill's Tumble (Hill Giant)**\n\nWhen you hit a Large or smaller creature with an attack roll and deal damage to it, you can give that target the Prone condition.\n- **Stone's Endurance (Stone Giant)**\n\nWhen you take damage, you can take a Reaction|XPHB to roll 1d12. Add your Constitution modifier to the number rolled and reduce the damage by that total.\n- **Storm's Thunder (Storm Giant)**\n\nWhen you take damage from a creature within 60 feet of you, you can take a Reaction|XPHB to deal 1d8 Thunder damage to that creature.\n\n**Large Form**: Starting at character level 5, you can change your size to Large as a Bonus Action|XPHB if you're in a big enough space. This transformation lasts for 10 minutes or until you end it (no action required). For that duration, you have Advantage|XPHB on Strength checks, and your Speed|XPHB increases by 10 feet. Once you use this trait, you can't use it again until you finish a Long Rest|XPHB.\n\n**Powerful Build**: You have Advantage|XPHB on any ability check you make to end the Grappled condition. You also count as one size larger when determining your carrying capacity."
+  },
+  {
+    "id": "race_half_elf_phb",
+    "name": "Half-Elf",
+    "raceName": "Half-Elf",
+    "subraceName": null,
+    "source": "PHB",
+    "page": 38,
+    "size": "M",
+    "speed": "30 ft",
+    "speeds": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0
+    },
+    "senses": {
+      "darkvision": 60,
+      "blindsight": 0,
+      "truesight": 0,
+      "devilSight": 0
+    },
+    "ability": [
+      {
+        "cha": 2,
+        "choose": {
+          "from": [
+            "str",
+            "dex",
+            "con",
+            "int",
+            "wis"
+          ],
+          "count": 2
+        }
+      }
+    ],
+    "traits": [
+      {
+        "id": "trait_half_elf_age_phb",
+        "name": "Age",
+        "source": "PHB",
+        "raceName": "Half-Elf",
+        "actionType": "passive",
+        "description": "Half-elves mature at the same rate humans do and reach adulthood around the age of 20. They live much longer than humans, however, often exceeding 180 years.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Half-elves mature at the same rate humans do and reach adulthood around the age of 20. They live much longer than humans, however, often exceeding 180 years."
+        ]
+      },
+      {
+        "id": "trait_half_elf_size_phb",
+        "name": "Size",
+        "source": "PHB",
+        "raceName": "Half-Elf",
+        "actionType": "passive",
+        "description": "Half-elves are about the same size as humans, ranging from 5 to 6 feet tall. Your size is Medium.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Half-elves are about the same size as humans, ranging from 5 to 6 feet tall. Your size is Medium."
+        ]
+      },
+      {
+        "id": "trait_half_elf_darkvision_phb",
+        "name": "Darkvision",
+        "source": "PHB",
+        "raceName": "Half-Elf",
+        "actionType": "passive",
+        "description": "Thanks to your elf blood, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Thanks to your elf blood, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray."
+        ]
+      },
+      {
+        "id": "trait_half_elf_fey_ancestry_phb",
+        "name": "Fey Ancestry",
+        "source": "PHB",
+        "raceName": "Half-Elf",
+        "actionType": "passive",
+        "description": "You have advantage on saving throws against being charmed, and magic can't put you to sleep.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have advantage on saving throws against being {@condition charmed}, and magic can't put you to sleep."
+        ]
+      },
+      {
+        "id": "trait_half_elf_skill_versatility_phb",
+        "name": "Skill Versatility",
+        "source": "PHB",
+        "raceName": "Half-Elf",
+        "actionType": "passive",
+        "description": "You gain proficiency in two skills of your choice.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You gain proficiency in two skills of your choice."
+        ]
+      },
+      {
+        "id": "trait_half_elf_languages_phb",
+        "name": "Languages",
+        "source": "PHB",
+        "raceName": "Half-Elf",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common, Elvish, and one extra language of your choice.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Common, Elvish, and one extra language of your choice."
+        ]
+      }
+    ],
+    "description": "**Age**: Half-elves mature at the same rate humans do and reach adulthood around the age of 20. They live much longer than humans, however, often exceeding 180 years.\n\n**Size**: Half-elves are about the same size as humans, ranging from 5 to 6 feet tall. Your size is Medium.\n\n**Darkvision**: Thanks to your elf blood, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.\n\n**Fey Ancestry**: You have advantage on saving throws against being charmed, and magic can't put you to sleep.\n\n**Skill Versatility**: You gain proficiency in two skills of your choice.\n\n**Languages**: You can speak, read, and write Common, Elvish, and one extra language of your choice."
+  },
+  {
+    "id": "race_half_orc_phb",
+    "name": "Half-Orc",
+    "raceName": "Half-Orc",
+    "subraceName": null,
+    "source": "PHB",
+    "page": 40,
+    "size": "M",
+    "speed": "30 ft",
+    "speeds": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0
+    },
+    "senses": {
+      "darkvision": 60,
+      "blindsight": 0,
+      "truesight": 0,
+      "devilSight": 0
+    },
+    "ability": [
+      {
+        "str": 2,
+        "con": 1
+      }
+    ],
+    "traits": [
+      {
+        "id": "trait_half_orc_age_phb",
+        "name": "Age",
+        "source": "PHB",
+        "raceName": "Half-Orc",
+        "actionType": "passive",
+        "description": "Half-orcs mature a little faster than humans, reaching adulthood around age 14. They age noticeably faster and rarely live longer than 75 years.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Half-orcs mature a little faster than humans, reaching adulthood around age 14. They age noticeably faster and rarely live longer than 75 years."
+        ]
+      },
+      {
+        "id": "trait_half_orc_size_phb",
+        "name": "Size",
+        "source": "PHB",
+        "raceName": "Half-Orc",
+        "actionType": "passive",
+        "description": "Half-orcs are somewhat larger and bulkier than humans, and they range from 5 to well over 6 feet tall. Your size is Medium.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Half-orcs are somewhat larger and bulkier than humans, and they range from 5 to well over 6 feet tall. Your size is Medium."
+        ]
+      },
+      {
+        "id": "trait_half_orc_darkvision_phb",
+        "name": "Darkvision",
+        "source": "PHB",
+        "raceName": "Half-Orc",
+        "actionType": "passive",
+        "description": "Thanks to your orc blood, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Thanks to your orc blood, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray."
+        ]
+      },
+      {
+        "id": "trait_half_orc_menacing_phb",
+        "name": "Menacing",
+        "source": "PHB",
+        "raceName": "Half-Orc",
+        "actionType": "passive",
+        "description": "You gain proficiency in the Intimidation skill.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You gain proficiency in the {@skill Intimidation} skill."
+        ]
+      },
+      {
+        "id": "trait_half_orc_relentless_endurance_phb",
+        "name": "Relentless Endurance",
+        "source": "PHB",
+        "raceName": "Half-Orc",
+        "actionType": "passive",
+        "description": "When you are reduced to 0 hit points but not killed outright, you can drop to 1 hit point instead. You can't use this feature again until you finish a long rest.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "When you are reduced to 0 hit points but not killed outright, you can drop to 1 hit point instead. You can't use this feature again until you finish a long rest."
+        ]
+      },
+      {
+        "id": "trait_half_orc_savage_attacks_phb",
+        "name": "Savage Attacks",
+        "source": "PHB",
+        "raceName": "Half-Orc",
+        "actionType": "passive",
+        "description": "When you score a critical hit with a melee weapon attack, you can roll one of the weapon's damage dice one additional time and add it to the extra damage of the critical hit.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "When you score a critical hit with a melee weapon attack, you can roll one of the weapon's damage dice one additional time and add it to the extra damage of the critical hit."
+        ]
+      },
+      {
+        "id": "trait_half_orc_languages_phb",
+        "name": "Languages",
+        "source": "PHB",
+        "raceName": "Half-Orc",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common and Orc. Orc is a harsh, grating language with hard consonants. It has no script of its own but is written in the Dwarvish script.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Common and Orc. Orc is a harsh, grating language with hard consonants. It has no script of its own but is written in the Dwarvish script."
+        ]
+      }
+    ],
+    "description": "**Age**: Half-orcs mature a little faster than humans, reaching adulthood around age 14. They age noticeably faster and rarely live longer than 75 years.\n\n**Size**: Half-orcs are somewhat larger and bulkier than humans, and they range from 5 to well over 6 feet tall. Your size is Medium.\n\n**Darkvision**: Thanks to your orc blood, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.\n\n**Menacing**: You gain proficiency in the Intimidation skill.\n\n**Relentless Endurance**: When you are reduced to 0 hit points but not killed outright, you can drop to 1 hit point instead. You can't use this feature again until you finish a long rest.\n\n**Savage Attacks**: When you score a critical hit with a melee weapon attack, you can roll one of the weapon's damage dice one additional time and add it to the extra damage of the critical hit.\n\n**Languages**: You can speak, read, and write Common and Orc. Orc is a harsh, grating language with hard consonants. It has no script of its own but is written in the Dwarvish script."
+  },
+  {
+    "id": "race_halfling_phb",
+    "name": "Halfling",
+    "raceName": "Halfling",
+    "subraceName": null,
+    "source": "PHB",
+    "page": 26,
+    "size": "S",
+    "speed": "25 ft",
+    "speeds": {
+      "walk": 25,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0
+    },
+    "senses": {
+      "darkvision": 0,
+      "blindsight": 0,
+      "truesight": 0,
+      "devilSight": 0
+    },
+    "ability": [
+      {
+        "dex": 2
+      }
+    ],
+    "traits": [
+      {
+        "id": "trait_halfling_age_phb",
+        "name": "Age",
+        "source": "PHB",
+        "raceName": "Halfling",
+        "actionType": "passive",
+        "description": "A halfling reaches adulthood at the age of 20 and generally lives into the middle of his or her second century.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "A halfling reaches adulthood at the age of 20 and generally lives into the middle of his or her second century."
+        ]
+      },
+      {
+        "id": "trait_halfling_size_phb",
+        "name": "Size",
+        "source": "PHB",
+        "raceName": "Halfling",
+        "actionType": "passive",
+        "description": "Halflings average about 3 feet tall and weigh about 40 pounds. Your size is Small.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Halflings average about 3 feet tall and weigh about 40 pounds. Your size is Small."
+        ]
+      },
+      {
+        "id": "trait_halfling_lucky_phb",
+        "name": "Lucky",
+        "source": "PHB",
+        "raceName": "Halfling",
+        "actionType": "passive",
+        "description": "When you roll a 1 on an attack roll, ability check, or saving throw, you can reroll the die and must use the new roll.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "When you roll a 1 on an attack roll, ability check, or saving throw, you can reroll the die and must use the new roll."
+        ]
+      },
+      {
+        "id": "trait_halfling_brave_phb",
+        "name": "Brave",
+        "source": "PHB",
+        "raceName": "Halfling",
+        "actionType": "passive",
+        "description": "You have advantage on saving throws against being frightened.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have advantage on saving throws against being {@condition frightened}."
+        ]
+      },
+      {
+        "id": "trait_halfling_halfling_nimbleness_phb",
+        "name": "Halfling Nimbleness",
+        "source": "PHB",
+        "raceName": "Halfling",
+        "actionType": "passive",
+        "description": "You can move through the space of any creature that is of a size larger than yours.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can move through the space of any creature that is of a size larger than yours."
+        ]
+      },
+      {
+        "id": "trait_halfling_languages_phb",
+        "name": "Languages",
+        "source": "PHB",
+        "raceName": "Halfling",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common and Halfling. The Halfling language isn't secret, but halflings are loath to share it with others. They write very little, so they don't have a rich body of literature. Their oral tradition, however, is very strong. Almost all halflings speak Common to converse with the people in whose lands they dwell or through which they are traveling.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Common and Halfling. The Halfling language isn't secret, but halflings are loath to share it with others. They write very little, so they don't have a rich body of literature. Their oral tradition, however, is very strong. Almost all halflings speak Common to converse with the people in whose lands they dwell or through which they are traveling."
+        ]
+      }
+    ],
+    "description": "**Age**: A halfling reaches adulthood at the age of 20 and generally lives into the middle of his or her second century.\n\n**Size**: Halflings average about 3 feet tall and weigh about 40 pounds. Your size is Small.\n\n**Lucky**: When you roll a 1 on an attack roll, ability check, or saving throw, you can reroll the die and must use the new roll.\n\n**Brave**: You have advantage on saving throws against being frightened.\n\n**Halfling Nimbleness**: You can move through the space of any creature that is of a size larger than yours.\n\n**Languages**: You can speak, read, and write Common and Halfling. The Halfling language isn't secret, but halflings are loath to share it with others. They write very little, so they don't have a rich body of literature. Their oral tradition, however, is very strong. Almost all halflings speak Common to converse with the people in whose lands they dwell or through which they are traveling."
+  },
+  {
+    "id": "race_halfling_xphb",
+    "name": "Halfling",
+    "raceName": "Halfling",
+    "subraceName": null,
+    "source": "XPHB",
+    "page": 193,
+    "size": "S",
+    "speed": "30 ft",
+    "speeds": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0
+    },
+    "senses": {
+      "darkvision": 0,
+      "blindsight": 0,
+      "truesight": 0,
+      "devilSight": 0
+    },
+    "ability": null,
+    "traits": [
+      {
+        "id": "trait_halfling_brave_xphb",
+        "name": "Brave",
+        "source": "XPHB",
+        "raceName": "Halfling",
+        "actionType": "passive",
+        "description": "You have Advantage|XPHB on saving throws you make to avoid or end the Frightened condition.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@variantrule Advantage|XPHB} on saving throws you make to avoid or end the {@condition Frightened|XPHB} condition."
+        ]
+      },
+      {
+        "id": "trait_halfling_halfling_nimbleness_xphb",
+        "name": "Halfling Nimbleness",
+        "source": "XPHB",
+        "raceName": "Halfling",
+        "actionType": "passive",
+        "description": "You can move through the space of any creature that is a size larger than you, but you can't stop in the same space.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can move through the space of any creature that is a size larger than you, but you can't stop in the same space."
+        ]
+      },
+      {
+        "id": "trait_halfling_luck_xphb",
+        "name": "Luck",
+        "source": "XPHB",
+        "raceName": "Halfling",
+        "actionType": "passive",
+        "description": "When you roll a 1 on the d20 of a D20 Test|XPHB, you can reroll the die, and you must use the new roll.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "When you roll a 1 on the {@dice d20} of a {@variantrule D20 Test|XPHB}, you can reroll the die, and you must use the new roll."
+        ]
+      },
+      {
+        "id": "trait_halfling_naturally_stealthy_xphb",
+        "name": "Naturally Stealthy",
+        "source": "XPHB",
+        "raceName": "Halfling",
+        "actionType": "passive",
+        "description": "You can take the Hide action even when you are obscured only by a creature that is at least one size larger than you.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can take the {@action Hide|XPHB} action even when you are obscured only by a creature that is at least one size larger than you."
+        ]
+      }
+    ],
+    "description": "**Brave**: You have Advantage|XPHB on saving throws you make to avoid or end the Frightened condition.\n\n**Halfling Nimbleness**: You can move through the space of any creature that is a size larger than you, but you can't stop in the same space.\n\n**Luck**: When you roll a 1 on the d20 of a D20 Test|XPHB, you can reroll the die, and you must use the new roll.\n\n**Naturally Stealthy**: You can take the Hide action even when you are obscured only by a creature that is at least one size larger than you."
+  },
+  {
+    "id": "race_halfling_lightfoot_phb",
+    "name": "Halfling (Lightfoot)",
+    "raceName": "Halfling",
+    "subraceName": "Lightfoot",
+    "source": "PHB",
+    "page": 28,
+    "size": [
+      "S"
+    ],
+    "speed": "25 ft",
+    "speeds": {
+      "walk": 25,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0
+    },
+    "senses": {
+      "darkvision": 0,
+      "blindsight": 0,
+      "truesight": 0,
+      "devilSight": 0
+    },
+    "ability": [
+      {
+        "cha": 1
+      }
+    ],
+    "traits": [
+      {
+        "id": "trait_halfling_age_phb",
+        "name": "Age",
+        "source": "PHB",
+        "raceName": "Halfling",
+        "actionType": "passive",
+        "description": "A halfling reaches adulthood at the age of 20 and generally lives into the middle of his or her second century.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "A halfling reaches adulthood at the age of 20 and generally lives into the middle of his or her second century."
+        ]
+      },
+      {
+        "id": "trait_halfling_size_phb",
+        "name": "Size",
+        "source": "PHB",
+        "raceName": "Halfling",
+        "actionType": "passive",
+        "description": "Halflings average about 3 feet tall and weigh about 40 pounds. Your size is Small.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Halflings average about 3 feet tall and weigh about 40 pounds. Your size is Small."
+        ]
+      },
+      {
+        "id": "trait_halfling_lucky_phb",
+        "name": "Lucky",
+        "source": "PHB",
+        "raceName": "Halfling",
+        "actionType": "passive",
+        "description": "When you roll a 1 on an attack roll, ability check, or saving throw, you can reroll the die and must use the new roll.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "When you roll a 1 on an attack roll, ability check, or saving throw, you can reroll the die and must use the new roll."
+        ]
+      },
+      {
+        "id": "trait_halfling_brave_phb",
+        "name": "Brave",
+        "source": "PHB",
+        "raceName": "Halfling",
+        "actionType": "passive",
+        "description": "You have advantage on saving throws against being frightened.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have advantage on saving throws against being {@condition frightened}."
+        ]
+      },
+      {
+        "id": "trait_halfling_halfling_nimbleness_phb",
+        "name": "Halfling Nimbleness",
+        "source": "PHB",
+        "raceName": "Halfling",
+        "actionType": "passive",
+        "description": "You can move through the space of any creature that is of a size larger than yours.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can move through the space of any creature that is of a size larger than yours."
+        ]
+      },
+      {
+        "id": "trait_halfling_languages_phb",
+        "name": "Languages",
+        "source": "PHB",
+        "raceName": "Halfling",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common and Halfling. The Halfling language isn't secret, but halflings are loath to share it with others. They write very little, so they don't have a rich body of literature. Their oral tradition, however, is very strong. Almost all halflings speak Common to converse with the people in whose lands they dwell or through which they are traveling.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Common and Halfling. The Halfling language isn't secret, but halflings are loath to share it with others. They write very little, so they don't have a rich body of literature. Their oral tradition, however, is very strong. Almost all halflings speak Common to converse with the people in whose lands they dwell or through which they are traveling."
+        ]
+      },
+      {
+        "id": "trait_halfling_lightfoot_naturally_stealthy_phb",
+        "name": "Naturally Stealthy",
+        "source": "PHB",
+        "raceName": "Halfling",
+        "subraceName": "Lightfoot",
+        "actionType": "passive",
+        "description": "You can attempt to hide even when you are obscured only by a creature that is at least one size larger than you.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can attempt to hide even when you are obscured only by a creature that is at least one size larger than you."
+        ]
+      }
+    ],
+    "description": "**Age**: A halfling reaches adulthood at the age of 20 and generally lives into the middle of his or her second century.\n\n**Size**: Halflings average about 3 feet tall and weigh about 40 pounds. Your size is Small.\n\n**Lucky**: When you roll a 1 on an attack roll, ability check, or saving throw, you can reroll the die and must use the new roll.\n\n**Brave**: You have advantage on saving throws against being frightened.\n\n**Halfling Nimbleness**: You can move through the space of any creature that is of a size larger than yours.\n\n**Languages**: You can speak, read, and write Common and Halfling. The Halfling language isn't secret, but halflings are loath to share it with others. They write very little, so they don't have a rich body of literature. Their oral tradition, however, is very strong. Almost all halflings speak Common to converse with the people in whose lands they dwell or through which they are traveling.\n\n**Naturally Stealthy**: You can attempt to hide even when you are obscured only by a creature that is at least one size larger than you."
+  },
+  {
+    "id": "race_human_phb",
+    "name": "Human",
+    "raceName": "Human",
+    "subraceName": null,
+    "source": "PHB",
+    "page": 29,
+    "size": "M",
+    "speed": "30 ft",
+    "speeds": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0
+    },
+    "senses": {
+      "darkvision": 0,
+      "blindsight": 0,
+      "truesight": 0,
+      "devilSight": 0
+    },
+    "ability": null,
+    "traits": [
+      {
+        "id": "trait_human_age_phb",
+        "name": "Age",
+        "source": "PHB",
+        "raceName": "Human",
+        "actionType": "passive",
+        "description": "Humans reach adulthood in their late teens and live less than a century.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Humans reach adulthood in their late teens and live less than a century."
+        ]
+      },
+      {
+        "id": "trait_human_size_phb",
+        "name": "Size",
+        "source": "PHB",
+        "raceName": "Human",
+        "actionType": "passive",
+        "description": "Humans vary widely in height and build, from barely 5 feet to well over 6 feet tall. Regardless of your position in that range, your size is Medium.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Humans vary widely in height and build, from barely 5 feet to well over 6 feet tall. Regardless of your position in that range, your size is Medium."
+        ]
+      },
+      {
+        "id": "trait_human_languages_phb",
+        "name": "Languages",
+        "source": "PHB",
+        "raceName": "Human",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common and one extra language of your choice. Humans typically learn the languages of other peoples they deal with, including obscure dialects. They are fond of sprinkling their speech with words borrowed from other tongues: Orc curses, Elvish musical expressions, Dwarvish military phrases, and so on.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Common and one extra language of your choice. Humans typically learn the languages of other peoples they deal with, including obscure dialects. They are fond of sprinkling their speech with words borrowed from other tongues: Orc curses, Elvish musical expressions, Dwarvish military phrases, and so on."
+        ]
+      }
+    ],
+    "description": "**Age**: Humans reach adulthood in their late teens and live less than a century.\n\n**Size**: Humans vary widely in height and build, from barely 5 feet to well over 6 feet tall. Regardless of your position in that range, your size is Medium.\n\n**Languages**: You can speak, read, and write Common and one extra language of your choice. Humans typically learn the languages of other peoples they deal with, including obscure dialects. They are fond of sprinkling their speech with words borrowed from other tongues: Orc curses, Elvish musical expressions, Dwarvish military phrases, and so on."
+  },
+  {
+    "id": "race_human_xphb",
+    "name": "Human",
+    "raceName": "Human",
+    "subraceName": null,
+    "source": "XPHB",
+    "page": 194,
+    "size": "S/M",
+    "speed": "30 ft",
+    "speeds": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0
+    },
+    "senses": {
+      "darkvision": 0,
+      "blindsight": 0,
+      "truesight": 0,
+      "devilSight": 0
+    },
+    "ability": null,
+    "traits": [
+      {
+        "id": "trait_human_resourceful_xphb",
+        "name": "Resourceful",
+        "source": "XPHB",
+        "raceName": "Human",
+        "actionType": "passive",
+        "description": "You gain Heroic Inspiration|XPHB whenever you finish a Long Rest|XPHB.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You gain {@variantrule Heroic Inspiration|XPHB} whenever you finish a {@variantrule Long Rest|XPHB}."
+        ]
+      },
+      {
+        "id": "trait_human_skillful_xphb",
+        "name": "Skillful",
+        "source": "XPHB",
+        "raceName": "Human",
+        "actionType": "passive",
+        "description": "You gain proficiency in one skill of your choice.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You gain proficiency in one skill of your choice."
+        ]
+      },
+      {
+        "id": "trait_human_versatile_xphb",
+        "name": "Versatile",
+        "source": "XPHB",
+        "raceName": "Human",
+        "actionType": "passive",
+        "description": "You gain an Origin feat|feats|category=o of your choice.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You gain an {@filter Origin feat|feats|category=o} of your choice."
+        ]
+      }
+    ],
+    "description": "**Resourceful**: You gain Heroic Inspiration|XPHB whenever you finish a Long Rest|XPHB.\n\n**Skillful**: You gain proficiency in one skill of your choice.\n\n**Versatile**: You gain an Origin feat|feats|category=o of your choice."
+  },
+  {
+    "id": "race_orc_xphb",
+    "name": "Orc",
+    "raceName": "Orc",
+    "subraceName": null,
+    "source": "XPHB",
+    "page": 195,
+    "size": "M",
+    "speed": "30 ft",
+    "speeds": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0
+    },
+    "senses": {
+      "darkvision": 60,
+      "blindsight": 0,
+      "truesight": 0,
+      "devilSight": 0
+    },
+    "ability": null,
+    "traits": [
+      {
+        "id": "trait_orc_adrenaline_rush_xphb",
+        "name": "Adrenaline Rush",
+        "source": "XPHB",
+        "raceName": "Orc",
+        "actionType": "bonus",
+        "description": "You can take the Dash action as a Bonus Action|XPHB. When you do so, you gain a number of Temporary Hit Points|XPHB equal to your Proficiency|XPHB|Proficiency Bonus.\n\nYou can use this trait a number of times equal to your Proficiency|XPHB|Proficiency Bonus, and you regain all expended uses when you finish a Short Rest|XPHB|Short or Long Rest|XPHB.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can take the {@action Dash|XPHB} action as a {@variantrule Bonus Action|XPHB}. When you do so, you gain a number of {@variantrule Temporary Hit Points|XPHB} equal to your {@variantrule Proficiency|XPHB|Proficiency Bonus}.",
+          "You can use this trait a number of times equal to your {@variantrule Proficiency|XPHB|Proficiency Bonus}, and you regain all expended uses when you finish a {@variantrule Short Rest|XPHB|Short} or {@variantrule Long Rest|XPHB}."
+        ]
+      },
+      {
+        "id": "trait_orc_darkvision_xphb",
+        "name": "Darkvision",
+        "source": "XPHB",
+        "raceName": "Orc",
+        "actionType": "passive",
+        "description": "You have Darkvision with a range of 120 feet.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@sense Darkvision|XPHB} with a range of 120 feet."
+        ]
+      },
+      {
+        "id": "trait_orc_relentless_endurance_xphb",
+        "name": "Relentless Endurance",
+        "source": "XPHB",
+        "raceName": "Orc",
+        "actionType": "passive",
+        "description": "When you are reduced to 0 Hit Points|XPHB but not killed outright, you can drop to 1 Hit Points|XPHB|Hit Point instead. Once you use this trait, you can't do so again until you finish a Long Rest|XPHB.",
+        "hasCounter": true,
+        "usesMax": 1,
+        "resetType": "long",
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "When you are reduced to 0 {@variantrule Hit Points|XPHB} but not killed outright, you can drop to 1 {@variantrule Hit Points|XPHB|Hit Point} instead. Once you use this trait, you can't do so again until you finish a {@variantrule Long Rest|XPHB}."
+        ]
+      }
+    ],
+    "description": "**Adrenaline Rush**: You can take the Dash action as a Bonus Action|XPHB. When you do so, you gain a number of Temporary Hit Points|XPHB equal to your Proficiency|XPHB|Proficiency Bonus.\n\nYou can use this trait a number of times equal to your Proficiency|XPHB|Proficiency Bonus, and you regain all expended uses when you finish a Short Rest|XPHB|Short or Long Rest|XPHB.\n\n**Darkvision**: You have Darkvision with a range of 120 feet.\n\n**Relentless Endurance**: When you are reduced to 0 Hit Points|XPHB but not killed outright, you can drop to 1 Hit Points|XPHB|Hit Point instead. Once you use this trait, you can't do so again until you finish a Long Rest|XPHB."
+  },
+  {
+    "id": "race_tiefling_phb",
+    "name": "Tiefling",
+    "raceName": "Tiefling",
+    "subraceName": null,
+    "source": "PHB",
+    "page": 42,
+    "size": "M",
+    "speed": "30 ft",
+    "speeds": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0
+    },
+    "senses": {
+      "darkvision": 60,
+      "blindsight": 0,
+      "truesight": 0,
+      "devilSight": 0
+    },
+    "ability": [
+      {
+        "cha": 2,
+        "int": 1
+      }
+    ],
+    "traits": [
+      {
+        "id": "trait_tiefling_age_phb",
+        "name": "Age",
+        "source": "PHB",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "Tieflings mature at the same rate as humans but live a few years longer.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Tieflings mature at the same rate as humans but live a few years longer."
+        ]
+      },
+      {
+        "id": "trait_tiefling_size_phb",
+        "name": "Size",
+        "source": "PHB",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "Tieflings are about the same size and build as humans. Your size is Medium.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Tieflings are about the same size and build as humans. Your size is Medium."
+        ]
+      },
+      {
+        "id": "trait_tiefling_darkvision_phb",
+        "name": "Darkvision",
+        "source": "PHB",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "Thanks to your infernal heritage, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Thanks to your infernal heritage, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray."
+        ]
+      },
+      {
+        "id": "trait_tiefling_hellish_resistance_phb",
+        "name": "Hellish Resistance",
+        "source": "PHB",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "You have resistance to fire damage.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have resistance to fire damage."
+        ]
+      },
+      {
+        "id": "trait_tiefling_infernal_legacy_phb",
+        "name": "Infernal Legacy",
+        "source": "PHB",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "You know the thaumaturgy cantrip. Once you reach 3rd level, you can cast the hellish rebuke spell as a 2nd-level spell with this trait; you regain the ability to cast it when you finish a long rest. Once you reach 5th level, you can also cast the darkness spell once per day with this trait; you regain the ability to cast it when you finish a long rest. Charisma is your spellcasting ability for these spells.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You know the {@spell thaumaturgy} cantrip. Once you reach 3rd level, you can cast the {@spell hellish rebuke} spell as a 2nd-level spell with this trait; you regain the ability to cast it when you finish a long rest. Once you reach 5th level, you can also cast the {@spell darkness} spell once per day with this trait; you regain the ability to cast it when you finish a long rest. Charisma is your spellcasting ability for these spells."
+        ]
+      },
+      {
+        "id": "trait_tiefling_languages_phb",
+        "name": "Languages",
+        "source": "PHB",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common and Infernal.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Common and Infernal."
+        ]
+      }
+    ],
+    "description": "**Age**: Tieflings mature at the same rate as humans but live a few years longer.\n\n**Size**: Tieflings are about the same size and build as humans. Your size is Medium.\n\n**Darkvision**: Thanks to your infernal heritage, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.\n\n**Hellish Resistance**: You have resistance to fire damage.\n\n**Infernal Legacy**: You know the thaumaturgy cantrip. Once you reach 3rd level, you can cast the hellish rebuke spell as a 2nd-level spell with this trait; you regain the ability to cast it when you finish a long rest. Once you reach 5th level, you can also cast the darkness spell once per day with this trait; you regain the ability to cast it when you finish a long rest. Charisma is your spellcasting ability for these spells.\n\n**Languages**: You can speak, read, and write Common and Infernal."
+  },
+  {
+    "id": "race_tiefling_xphb",
+    "name": "Tiefling",
+    "raceName": "Tiefling",
+    "subraceName": null,
+    "source": "XPHB",
+    "page": 197,
+    "size": "S/M",
+    "speed": "30 ft",
+    "speeds": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0
+    },
+    "senses": {
+      "darkvision": 60,
+      "blindsight": 0,
+      "truesight": 0,
+      "devilSight": 0
+    },
+    "ability": null,
+    "traits": [
+      {
+        "id": "trait_tiefling_darkvision_xphb",
+        "name": "Darkvision",
+        "source": "XPHB",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "You have Darkvision with a range of 60 feet.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@sense Darkvision|XPHB} with a range of 60 feet."
+        ]
+      },
+      {
+        "id": "trait_tiefling_fiendish_legacy_xphb",
+        "name": "Fiendish Legacy",
+        "source": "XPHB",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "You are the recipient of a legacy that grants you supernatural abilities. Choose a legacy from the Fiendish Legacies table. You gain the level 1 benefit of the chosen legacy.\n\nWhen you reach character levels 3 and 5, you learn a higher-level spell, as shown on the table. You always have that spell prepared. You can cast it once without a spell slot, and you regain the ability to cast it in that way when you finish a Long Rest|XPHB. You can also cast the spell using any spell slots you have of the appropriate level. Intelligence, Wisdom, or Charisma is your spellcasting ability for the spells you cast with this trait (choose the ability when you select the legacy).",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You are the recipient of a legacy that grants you supernatural abilities. Choose a legacy from the Fiendish Legacies table. You gain the level 1 benefit of the chosen legacy.",
+          "When you reach character levels 3 and 5, you learn a higher-level spell, as shown on the table. You always have that spell prepared. You can cast it once without a spell slot, and you regain the ability to cast it in that way when you finish a {@variantrule Long Rest|XPHB}. You can also cast the spell using any spell slots you have of the appropriate level. Intelligence, Wisdom, or Charisma is your spellcasting ability for the spells you cast with this trait (choose the ability when you select the legacy).",
+          {
+            "type": "table",
+            "caption": "Fiendish Legacies",
+            "colLabels": [
+              "Legacy",
+              "Level 1",
+              "Level 3",
+              "Level 5"
+            ],
+            "colStyles": [
+              "col-2",
+              "col-6",
+              "col-2",
+              "col-2"
+            ],
+            "rows": [
+              [
+                "Abyssal",
+                "You have {@variantrule Resistance|XPHB} to Poison damage. You also know the {@spell Poison Spray|XPHB} cantrip.",
+                "{@spell Ray of Sickness|XPHB}",
+                "{@spell Hold Person|XPHB}"
+              ],
+              [
+                "Chthonic",
+                "You have {@variantrule Resistance|XPHB} to Necrotic damage. You also know the {@spell Chill Touch|XPHB} cantrip.",
+                "{@spell False Life|XPHB}",
+                "{@spell Ray of Enfeeblement|XPHB}"
+              ],
+              [
+                "Infernal",
+                "You have {@variantrule Resistance|XPHB} to Fire damage. You also know the {@spell Fire Bolt|XPHB} cantrip.",
+                "{@spell Hellish Rebuke|XPHB}",
+                "{@spell Darkness|XPHB}"
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "id": "trait_tiefling_otherworldly_presence_xphb",
+        "name": "Otherworldly Presence",
+        "source": "XPHB",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "You know the Thaumaturgy cantrip. When you cast it with this trait, the spell uses the same spellcasting ability you use for your Fiendish Legacy Trait.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You know the {@spell Thaumaturgy|XPHB} cantrip. When you cast it with this trait, the spell uses the same spellcasting ability you use for your Fiendish Legacy Trait."
+        ]
+      }
+    ],
+    "description": "**Darkvision**: You have Darkvision with a range of 60 feet.\n\n**Fiendish Legacy**: You are the recipient of a legacy that grants you supernatural abilities. Choose a legacy from the Fiendish Legacies table. You gain the level 1 benefit of the chosen legacy.\n\nWhen you reach character levels 3 and 5, you learn a higher-level spell, as shown on the table. You always have that spell prepared. You can cast it once without a spell slot, and you regain the ability to cast it in that way when you finish a Long Rest|XPHB. You can also cast the spell using any spell slots you have of the appropriate level. Intelligence, Wisdom, or Charisma is your spellcasting ability for the spells you cast with this trait (choose the ability when you select the legacy).\n\n**Otherworldly Presence**: You know the Thaumaturgy cantrip. When you cast it with this trait, the spell uses the same spellcasting ability you use for your Fiendish Legacy Trait."
+  }
+]

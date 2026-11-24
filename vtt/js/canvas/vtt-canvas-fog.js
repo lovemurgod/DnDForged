@@ -97,6 +97,9 @@ export function renderFogOfWarLayer(width, height, options = {}) {
             token.characterId ||
             (token.characterId && vtt.campaignState?.characters?.[token.characterId]?.isPlayer)
         );
+        if (vtt.isPresentationMode || options.isPresentationMode) {
+            return grantsVision;
+        }
         if (vtt.role === 'GM') {
             if (gmVisionMode && selectedTokenIds.size > 0) return selectedTokenIds.has(token.id);
             return grantsVision;

@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Self-Hosted Virtual Tabletop Without Port Forwarding — ForgeDVTT</title>
+  <meta name="description"
+    content="Host your D&amp;D game locally on Windows with zero subscription fees and no router port forwarding. Built-in Cloudflare quick tunnels let players join via browser.">
+  <link rel="canonical" href="https://forgedvtt.com/self-hosted-vtt.html">
+  <meta name="theme-color" content="#090d16">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="ForgeDVTT">
+  <meta property="og:title" content="Self-Hosted Virtual Tabletop Without Port Forwarding — ForgeDVTT">
+  <meta property="og:description"
+    content="Host your D&amp;D game locally on Windows with zero subscription fees and no router port forwarding. Built-in Cloudflare quick tunnels let players join via browser.">
+  <meta property="og:url" content="https://forgedvtt.com/self-hosted-vtt.html">
+  <meta property="og:image" content="https://forgedvtt.com/img/social-preview.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Self-Hosted Virtual Tabletop Without Port Forwarding — ForgeDVTT">
+  <meta name="twitter:description"
+    content="Host your D&amp;D game locally on Windows with zero subscription fees and no router port forwarding. Built-in Cloudflare quick tunnels let players join via browser.">
+  <meta name="twitter:image" content="https://forgedvtt.com/img/social-preview.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Inter:wght@400;500;600;700;800&family=Consolas&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer">
+  <link rel="stylesheet" href="css/website.css?v=1.5.0">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="icon" type="image/png" sizes="96x96" href="favicon-96x96.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Do I need to configure router port forwarding to host ForgeDVTT?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. ForgeDVTT features built-in Cloudflare quick tunneling that automatically establishes a secure, outbound HTTPS tunnel without modifying your router settings, firewall NAT rules, or requiring a static IP."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Where is my campaign and character data stored?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "All campaign maps, character sheets, tokens, and homebrew files are saved locally on your Windows computer in your local application directory. You retain complete ownership and privacy over your data."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Do players need to install any software to join?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. The Game Master runs the desktop host on Windows, while players join instantly by opening the shared game link in Chrome, Edge, Safari, or Firefox on PC, Mac, iPad, iPhone, Android, or Chromebook with zero installation."
+        }
+      }
+    ]
+  }
+  </script>
+</head>
+
+<body class="site-page">
+  <div class="bg-tactical-grid" aria-hidden="true"></div>
+  <div class="bg-ambient-lights" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <a class="site-brand" href="index.html" aria-label="ForgeDVTT home"><img src="img/TextLogo.png" alt="ForgeDVTT"></a>
+    <nav class="site-nav" aria-label="Main navigation">
+      <a href="index.html">Home</a>
+      <div class="nav-dropdown is-active">
+        <button type="button" class="nav-dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          Features <i class="fa-solid fa-chevron-down" style="font-size: 0.7rem;" aria-hidden="true"></i>
+        </button>
+        <div class="nav-dropdown-menu">
+          <a href="portal-dungeons.html"><i class="fa-solid fa-dungeon" aria-hidden="true"></i> Portal Dungeons</a>
+          <a href="self-hosted-vtt.html" aria-current="page"><i class="fa-solid fa-network-wired"
+              aria-hidden="true"></i> Self-Hosted &amp; Tunnels</a>
+          <a href="tv-gaming-table.html"><i class="fa-solid fa-tv" aria-hidden="true"></i> TV Gaming Table</a>
+        </div>
+      </div>
+      <div class="nav-dropdown">
+        <button type="button" class="nav-dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          Getting Started <i class="fa-solid fa-chevron-down" style="font-size: 0.7rem;" aria-hidden="true"></i>
+        </button>
+        <div class="nav-dropdown-menu">
+          <a href="getting-started.html"><i class="fa-solid fa-play" aria-hidden="true"></i> Getting Started</a>
+          <a href="guide.html"><i class="fa-solid fa-dice-d20" aria-hidden="true"></i> Play Guide</a>
+          <a href="app-guide.html"><i class="fa-solid fa-sliders" aria-hidden="true"></i> App Guide</a>
+        </div>
+      </div>
+      <a href="feedback.html">Feedback</a>
+    </nav>
+    <a class="btn-vtt-gold site-download"
+      href="https://github.com/lovemurgod/DnDForged/releases/download/1.5.0/ForgeDVTT-Setup-1.5.0.exe"><svg
+        class="btn-icon-svg" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" aria-hidden="true"
+        focusable="false">
+        <path
+          d="M0 2.3L6.5 1.4v6.2H0V2.3zm0 6.9h6.5v6.2L0 14.5V9.2zm7.3-7.9L16 0v7.6H7.3V1.3zm8.7 7.9V16L7.3 14.7V9.2H16z" />
+      </svg> Download for Windows</a>
+  </header>
+
+  <main class="main-wrapper site-main">
+    <section class="page-intro" aria-labelledby="hosting-title">
+      <p class="eyebrow"><i class="fa-solid fa-server" aria-hidden="true"></i> Local Server Freedom</p>
+      <h1 id="hosting-title">Self-Hosted Virtual Tabletop Without Port Forwarding</h1>
+      <p>Retain complete ownership of your campaign files, enjoy unlimited local asset storage, and let players join
+        through secure web links—with zero router configuration.</p>
+    </section>
+
+    <section class="manual-section" style="margin-bottom: 28px;">
+      <div class="manual-section-header">
+        <div class="manual-section-title-wrap">
+          <div class="manual-section-icon"><i class="fa-solid fa-hard-drive"></i></div>
+          <h2 class="manual-section-title">The Self-Hosted Advantage</h2>
+        </div>
+        <span class="manual-section-badge">Ownership</span>
+      </div>
+      <p class="section-lead">Cloud-hosted tabletop platforms lock dynamic lighting, asset uploads, and large campaigns
+        behind monthly subscriptions or restrictive 100 MB storage quotas. Self-hosting restores total creative freedom.
+      </p>
+      <div
+        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 18px;">
+        <div
+          style="background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 20px;">
+          <h3
+            style="color: var(--color-gold-bright); font-size: 1.05rem; margin-top: 0; display: flex; align-items: center; gap: 8px;">
+            <i class="fa-solid fa-database" aria-hidden="true"></i> Local Campaign Storage
+          </h3>
+          <p style="color: #cbd5e1; font-size: 0.9rem; line-height: 1.6; margin-bottom: 0;">Your maps, monster tokens,
+            audio, and player character sheets live directly on your SSD. Backups are as simple as copying your local
+            campaign folder—no subscription paywalls or platform lock-in.</p>
+        </div>
+        <div
+          style="background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 20px;">
+          <h3
+            style="color: var(--color-gold-bright); font-size: 1.05rem; margin-top: 0; display: flex; align-items: center; gap: 8px;">
+            <i class="fa-solid fa-infinity" aria-hidden="true"></i> Unlimited Asset Library
+          </h3>
+          <p style="color: #cbd5e1; font-size: 0.9rem; line-height: 1.6; margin-bottom: 0;">Store gigabytes of
+            high-definition battlemaps, 4K WebM animations, and massive homebrew compendiums without watching a cloud
+            storage meter or paying monthly server hosting fees.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="manual-section" style="margin-bottom: 28px;">
+      <div class="manual-section-header">
+        <div class="manual-section-title-wrap">
+          <div class="manual-section-icon"><i class="fa-solid fa-network-wired"></i></div>
+          <h2 class="manual-section-title">How 1-Click Online Tunneling Works</h2>
+        </div>
+        <span class="manual-section-badge">Networking</span>
+      </div>
+      <p class="section-lead">Traditionally, self-hosting required logging into your home router, setting up static IP
+        addresses, and forwarding TCP ports. ForgeDVTT eliminates this complexity through built-in Cloudflare quick
+        tunnels.</p>
+      <div class="feature-list" style="margin-top: 16px;">
+        <article><span class="feature-symbol feature-blue" aria-hidden="true"><i class="fa-solid fa-play"></i></span>
+          <div>
+            <h3>1. Start Local Host</h3>
+            <p>Click "Start Server" inside the ForgeDVTT Control Center. The local Node.js WebSocket engine spins up
+              instantly on your machine.</p>
+          </div>
+        </article>
+        <article><span class="feature-symbol feature-gold" aria-hidden="true"><i
+              class="fa-solid fa-shield-halved"></i></span>
+          <div>
+            <h3>2. Open Secure Tunnel</h3>
+            <p>Click "Start Online Tunnel". The app establishes an outbound encrypted TLS tunnel to Cloudflare’s global
+              edge network without opening router ports.</p>
+          </div>
+        </article>
+        <article><span class="feature-symbol feature-green" aria-hidden="true"><i
+              class="fa-solid fa-share-nodes"></i></span>
+          <div>
+            <h3>3. Share Player Link</h3>
+            <p>Copy your unique, secure HTTPS link and send it to your group. Players open the link in any modern web
+              browser and enter your campaign immediately.</p>
+          </div>
+        </article>
+      </div>
+      <div class="guide-callout" style="margin-top: 20px;">
+        <span><strong>Advanced Game Master?</strong><small>ForgeDVTT also supports custom Cloudflare tunnel tokens and
+            local LAN connections for completely offline sessions.</small></span>
+        <a href="app-guide.html#app-hosting-server" class="text-link" style="white-space: nowrap;">Read Server Docs <i
+            class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+      </div>
+    </section>
+
+    <section class="troubleshooting" aria-labelledby="faq-title">
+      <p class="eyebrow">Technical Details</p>
+      <h2 id="faq-title">Frequently Asked Questions</h2>
+      <details>
+        <summary>What internet upload speed does the Game Master need?</summary>
+        <p>For standard games with static battlemaps, 3–5 Mbps of stable upload speed is sufficient for 4–6 players. If
+          you stream multiple 4K WebM animated video maps simultaneously, a 10+ Mbps upload broadband connection is
+          recommended.</p>
+      </details>
+      <details>
+        <summary>Does my public IP address get exposed to players?</summary>
+        <p>No. When using the built-in online tunnel, players connect to Cloudflare's secure edge network, which proxies
+          the WebSocket traffic back to your local server. Your personal home IP address is never revealed to connecting
+          browsers.</p>
+      </details>
+      <details>
+        <summary>Can I run games entirely offline on a local area network (LAN)?</summary>
+        <p>Yes. If you play in person with laptops or tablets connected to the same Wi-Fi router, players can connect
+          directly using your computer’s local IP address (e.g. <code>http://192.168.1.15:3000</code>) without requiring
+          an active internet connection.</p>
+      </details>
+      <p class="troubleshooting-guide">Ready to get your table set up? <a href="getting-started.html">Follow the Getting
+          Started guide</a> or <a href="guide.html">explore the Play Guide</a>.</p>
+    </section>
+  </main>
+
+  <a href="#" id="site-back-to-top" class="site-back-to-top" aria-label="Back to top of page">
+    <i class="fa-solid fa-arrow-up" aria-hidden="true"></i>
+  </a>
+
+  <footer class="footer-vtt">
+    <div class="footer-vtt-nav">
+      <div class="footer-col">
+        <h4>Features</h4>
+        <ul>
+          <li><a href="portal-dungeons.html"><i class="fa-solid fa-dungeon" aria-hidden="true"></i> Portal Dungeons</a>
+          </li>
+          <li><a href="self-hosted-vtt.html"><i class="fa-solid fa-network-wired" aria-hidden="true"></i> Self-Hosted
+              &amp; Tunnels</a></li>
+          <li><a href="tv-gaming-table.html"><i class="fa-solid fa-tv" aria-hidden="true"></i> TV Gaming Table</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Documentation</h4>
+        <ul>
+          <li><a href="getting-started.html"><i class="fa-solid fa-play" aria-hidden="true"></i> Getting Started</a>
+          </li>
+          <li><a href="guide.html"><i class="fa-solid fa-dice-d20" aria-hidden="true"></i> Play Guide</a></li>
+          <li><a href="app-guide.html"><i class="fa-solid fa-sliders" aria-hidden="true"></i> App Guide</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Community &amp; Legal</h4>
+        <ul>
+          <li><a href="feedback.html"><i class="fa-solid fa-comment-dots" aria-hidden="true"></i> Feedback</a></li>
+          <li><a href="legal.html"><i class="fa-solid fa-scale-balanced" aria-hidden="true"></i> Legal Notices &amp;
+              OGC</a></li>
+          <li><a href="https://cosmiclove92.itch.io/forgedvtt" target="_blank" rel="noopener noreferrer"><i
+                class="fa-brands fa-itch-io" aria-hidden="true"></i> itch.io Community</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-vtt-bottom">
+      <p>&copy; 2026 ForgeDVTT &mdash; Self-Hosted Virtual Tabletop System. Designed for Tabletop Freedom.</p>
+      <p class="footer-srd">This work includes material from the System Reference Document 5.1 (SRD 5.1) by Wizards of
+        the Coast LLC, available under the Creative Commons Attribution 4.0 International License (CC-BY-4.0). 2024 Free
+        Rules and SRD 5.2 content are used under the Wizards of the Coast Fan Content Policy.</p>
+    </div>
+  </footer>
+  <script>
+    document.querySelectorAll('.nav-dropdown').forEach(dropdown => {
+      let closeTimeout;
+      dropdown.addEventListener('mouseenter', () => {
+        clearTimeout(closeTimeout);
+        dropdown.classList.add('is-hovered');
+      });
+      dropdown.addEventListener('mouseleave', () => {
+        closeTimeout = setTimeout(() => {
+          dropdown.classList.remove('is-hovered');
+        }, 150);
+      });
+    });
+    document.querySelectorAll('.nav-dropdown-toggle').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const dropdown = btn.closest('.nav-dropdown');
+        const wasOpen = dropdown.classList.contains('is-open');
+        document.querySelectorAll('.nav-dropdown').forEach(d => d.classList.remove('is-open'));
+        if (!wasOpen) dropdown.classList.add('is-open');
+      });
+    });
+    document.addEventListener('click', () => {
+      document.querySelectorAll('.nav-dropdown').forEach(d => d.classList.remove('is-open'));
+    });
+    const backToTopBtn = document.getElementById('site-back-to-top');
+    if (backToTopBtn) {
+      window.addEventListener('scroll', () => {
+        backToTopBtn.classList.toggle('visible', window.scrollY > 400);
+      }, { passive: true });
+      backToTopBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+  </script>
+</body>
+
+</html>

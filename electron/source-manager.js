@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { execFileSync } from 'child_process';
+import { safeFetchPublicUrl } from '../server/routes/media.js';
 
 /**
  * Category Definitions for DnDForged Databases
@@ -13,7 +14,8 @@ export const SOURCE_CATEGORIES = [
     { id: 'races', name: 'Races & Lineages', icon: '🧝', description: 'Player Species, Lineages & Heritages' },
     { id: 'feats', name: 'Feats & Traits', icon: '📜', description: 'Feats, Boons & Supernatural Gifts' },
     { id: 'backgrounds', name: 'Backgrounds', icon: '🎭', description: 'Origins, Backgrounds & Characteristics' },
-    { id: 'adventures', name: 'Adventures & Lore', icon: '📖', description: 'Published Modules, Guides & Rulesets' }
+    { id: 'adventures', name: 'Adventures & Lore', icon: '📖', description: 'Published Modules, Guides & Rulesets' },
+    { id: 'tables', name: 'Rollable Tables', icon: '🎲', description: 'Random Tables, Hazards & Effects' }
 ];
 
 export function flatten5eEntries(entries) {
@@ -52,6 +54,10 @@ export class SourceManager {
         const legacyData = path.join(this.rootDir, '5etools-src', 'data');
         this.dataDir = options.dataDir || (fs.existsSync(vttData) ? vttData : legacyData);
         this.campaignDataDir = options.campaignDataDir || path.join(this.rootDir, '.dndforged-data');
+        this.fetchPublicUrl =
+            typeof options.fetchPublicUrl === 'function'
+                ? options.fetchPublicUrl
+                : (u) => safeFetchPublicUrl(u, { requireAllowedMediaDomain: false, maxRedirects: 3 });
         this.configFilePath = path.join(this.campaignDataDir, 'sources-config.json');
         this.bookTitlesCache = null;
         this.cachedBuiltinCategories = null;
@@ -523,6 +529,10 @@ export class SourceManager {
                 this.scanAdventuresAndBooks(sourcesMap, titlesMap);
                 return;
             }
+            if (categoryId === 'tables') {
+                this.scanBuiltinTables(sourcesMap, titlesMap);
+                return;
+            }
 
             const scanConfigs = [];
             if (categoryId === 'feats') {
@@ -679,6 +689,71 @@ export class SourceManager {
         } catch (e) {}
     }
 
+    scanBuiltinTables(sourcesMap, titlesMap) {
+        try {
+            const candidatePaths = [
+                path.join(this.dataDir, 'generated', 'gendata-tables.json'),
+                path.join(this.rootDir, 'vtt', 'data', 'generated', 'gendata-tables.json'),
+                path.join(this.rootDir, '5etools-src', 'data', 'tables.json')
+            ];
+            let tablesPath = candidatePaths.find((p) => fs.existsSync(p));
+            if (!tablesPath) return;
+
+            const stats = fs.statSync(tablesPath);
+            const totalSize = stats.size;
+            const content = fs.readFileSync(tablesPath, 'utf8');
+            const json = JSON.parse(content);
+            const rawList = Array.isArray(json?.table) ? json.table : (Array.isArray(json) ? json : []);
+
+            if (rawList.length === 0) return;
+
+            // Group tables by source code
+            const bySource = new Map();
+            for (const t of rawList) {
+                const srcCode = (t.source || 'DMG').trim().toUpperCase();
+                if (!bySource.has(srcCode)) {
+                    bySource.set(srcCode, []);
+                }
+                bySource.get(srcCode).push(t);
+            }
+
+            for (const [srcCode, tables] of bySource.entries()) {
+                const name = titlesMap.get(srcCode) || this.formatTitle(srcCode);
+                const isUA = this.isUASource(srcCode);
+                const isPartnered = this.isPartneredSource(srcCode);
+                const is2024 = this.is2024Source(srcCode, { category: 'tables' });
+                const edition = is2024 ? '2024' : '2014';
+                const count = tables.length;
+                const estimatedSize = Math.round((totalSize / rawList.length) * count);
+
+                sourcesMap.set(srcCode, {
+                    id: `tables-${srcCode.toLowerCase()}`,
+                    code: srcCode,
+                    name,
+                    category: 'tables',
+                    entryCount: count,
+                    fileSize: estimatedSize,
+                    isCustom: false,
+                    isPartnered,
+                    isUA,
+                    is2024,
+                    edition,
+                    filePath: tablesPath,
+                    fileName: path.basename(tablesPath),
+                    author: isPartnered
+                        ? 'Partnered Publisher'
+                        : isUA
+                          ? 'WotC Unearthed Arcana'
+                          : 'Official / Published',
+                    version: is2024 ? '2024' : '2014',
+                    description: `Core database partition containing ${count} rollable tables (${edition} Ruleset).`
+                });
+            }
+        } catch (err) {
+            console.error('[SourceManager] Error scanning built-in tables:', err);
+        }
+    }
+
     scanCustomCategory(categoryId, sourcesMap) {
         try {
             const customDir = path.join(this.campaignDataDir, 'sources', categoryId);
@@ -734,9 +809,16 @@ export class SourceManager {
                     if (Array.isArray(json)) {
                         entryCount = json.length;
                     } else if (typeof json === 'object') {
-                        const primaryKey = categoryId === 'bestiary' ? 'monsters' : categoryId;
+                        const primaryKey =
+                            categoryId === 'bestiary'
+                                ? 'monsters'
+                                : categoryId === 'tables'
+                                  ? 'table'
+                                  : categoryId;
                         if (Array.isArray(json[primaryKey])) {
                             entryCount = json[primaryKey].length;
+                        } else if (categoryId === 'tables' && Array.isArray(json.tables)) {
+                            entryCount = json.tables.length;
                         } else {
                             const arrayProp = Object.values(json).find((v) => Array.isArray(v));
                             if (arrayProp) entryCount = arrayProp.length;
@@ -1347,6 +1429,23 @@ export class SourceManager {
                 ];
                 break;
 
+            case 'tables':
+                scaffold.table = [
+                    {
+                        id: `table_${cleanCode.toLowerCase()}_sample_table`,
+                        name: 'Sample Roll Table',
+                        source: cleanCode,
+                        dice: '1d100',
+                        caption: 'Sample Table Outcomes',
+                        colLabels: ['d100', 'Effect'],
+                        rows: [
+                            ['01-50', 'First sample outcome occurs with subtle planar resonance.'],
+                            ['51-100', 'Second sample outcome manifests with surging arcane power.']
+                        ]
+                    }
+                ];
+                break;
+
             default:
                 scaffold[category] = [];
                 break;
@@ -1461,7 +1560,8 @@ export class SourceManager {
             races: 'races-catalog.json',
             feats: 'feats-catalog.json',
             backgrounds: 'backgrounds-catalog.json',
-            adventures: 'adventures.json'
+            adventures: 'adventures.json',
+            tables: path.join('generated', 'gendata-tables.json')
         };
 
         const targetCategories = !category || category === 'all' ? Object.keys(catalogFileMap) : [category];
@@ -1576,6 +1676,7 @@ export class SourceManager {
                             ? `${item.featureTypeName || 'Optional Feature'} • ${item.prerequisite || 'General'}`
                             : `Feat • ${item.prerequisite || 'General'}`;
                     else if (cat === 'backgrounds') summary = 'Background';
+                    else if (cat === 'tables') summary = `${item.dice || 'd100'} • Table`;
                     else summary = source;
 
                     matches.push({
@@ -1803,6 +1904,33 @@ export class SourceManager {
                 }
             }
 
+            // 3b. Check tables
+            if (category === 'tables') {
+                const tableFiles = [
+                    path.join(vttDataDir, 'generated', 'gendata-tables.json'),
+                    path.join(this.rootDir, 'vtt', 'data', 'generated', 'gendata-tables.json'),
+                    path.join(this.rootDir, '5etools-src', 'data', 'tables.json')
+                ];
+                for (const tf of tableFiles) {
+                    if (fs.existsSync(tf)) {
+                        try {
+                            const parsed = JSON.parse(fs.readFileSync(tf, 'utf8'));
+                            const arr = Array.isArray(parsed?.table)
+                                ? parsed.table
+                                : Array.isArray(parsed)
+                                  ? parsed
+                                  : [];
+                            const match = arr.find(
+                                (e) =>
+                                    (e.name || '').toLowerCase().trim() === cleanName &&
+                                    (!cleanSource || (e.source || '').toLowerCase().trim() === cleanSource)
+                            );
+                            if (match) return { success: true, data: match, entity: match };
+                        } catch (_) {}
+                    }
+                }
+            }
+
             // 4. Check custom sources
             const customCatDir = path.join(this.campaignDataDir, 'sources', category);
             if (fs.existsSync(customCatDir)) {
@@ -1900,7 +2028,7 @@ export class SourceManager {
         const requestedCategory = options.category || null;
         const categoriesToSearch = requestedCategory
             ? [requestedCategory]
-            : ['bestiary', 'spells', 'items', 'classes', 'races', 'feats', 'backgrounds', 'adventures'];
+            : ['bestiary', 'spells', 'items', 'classes', 'races', 'feats', 'backgrounds', 'adventures', 'tables'];
 
         const matches = [];
 
@@ -2087,7 +2215,7 @@ export class SourceManager {
                 let detectedSource = 'HOMEBREW';
                 let entryCount = 0;
 
-                // Detect 5eTools category
+                // Detect content category
                 if (parsed.monster || (Array.isArray(parsed) && parsed[0]?.cr !== undefined)) {
                     category = 'bestiary';
                     entryCount = parsed.monster ? parsed.monster.length : parsed.length;
@@ -2101,6 +2229,20 @@ export class SourceManager {
                 ) {
                     category = 'items';
                     entryCount = parsed.item ? parsed.item.length : parsed.length;
+                } else if (
+                    parsed.table ||
+                    parsed.tables ||
+                    (Array.isArray(parsed) &&
+                        (parsed[0]?.rows !== undefined ||
+                            parsed[0]?.colLabels !== undefined ||
+                            parsed[0]?.dice !== undefined))
+                ) {
+                    category = 'tables';
+                    entryCount = parsed.table
+                        ? parsed.table.length
+                        : parsed.tables
+                          ? parsed.tables.length
+                          : parsed.length;
                 } else if (parsed.class || parsed.subclass || (Array.isArray(parsed) && parsed[0]?.hd !== undefined)) {
                     category = 'classes';
                     entryCount = parsed.class
@@ -2141,6 +2283,7 @@ export class SourceManager {
                     else if (lower.includes('feat')) category = 'feats';
                     else if (lower.includes('background')) category = 'backgrounds';
                     else if (lower.includes('adventure') || lower.includes('book')) category = 'adventures';
+                    else if (lower.includes('table') || lower.includes('hazard') || lower.includes('deck')) category = 'tables';
 
                     if (Array.isArray(parsed)) entryCount = parsed.length;
                     else if (typeof parsed === 'object' && parsed !== null) {
@@ -2349,7 +2492,7 @@ export class SourceManager {
         }
 
         try {
-            const res = await fetch(cleanUrl);
+            const { response: res } = await this.fetchPublicUrl(cleanUrl);
             if (!res.ok) {
                 return {
                     success: false,

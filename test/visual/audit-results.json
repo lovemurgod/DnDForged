@@ -10,22 +10,62 @@
     "screenName": "Player Character Sheet",
     "deviceName": "iPhone 14 / Mobile (Portrait)",
     "viewport": "390x844",
-    "defectsCount": 0,
-    "defects": []
+    "defectsCount": 1,
+    "defects": [
+      {
+        "type": "OBSCURED_BY_OVERLAY",
+        "severity": "HIGH",
+        "element": "button#btn-token-locator",
+        "coveredBy": "div#player-sheet-panel",
+        "details": "Center of button is blocked by fixed overlay (player-sheet-panel). Finger tap will hit the overlay instead."
+      }
+    ]
   },
   {
     "screenName": "Creature Statblock Sheet",
     "deviceName": "iPhone 14 / Mobile (Portrait)",
     "viewport": "390x844",
-    "defectsCount": 0,
-    "defects": []
+    "defectsCount": 2,
+    "defects": [
+      {
+        "type": "MICROSCOPIC_TEXT",
+        "severity": "MEDIUM",
+        "element": "div.tab-handle-monogram.role-generic",
+        "parent": "button.slideout-tab-handle.role-generic",
+        "sampleText": "GR",
+        "details": "Font size is only 8px. Too small to read on phone/tablet without zooming."
+      },
+      {
+        "type": "OBSCURED_BY_OVERLAY",
+        "severity": "HIGH",
+        "element": "button#btn-token-locator",
+        "coveredBy": "div#creature-sheet-panel",
+        "details": "Center of button is blocked by fixed overlay (creature-sheet-panel). Finger tap will hit the overlay instead."
+      }
+    ]
   },
   {
     "screenName": "Chat Dock & Right Sidebar",
     "deviceName": "iPhone 14 / Mobile (Portrait)",
     "viewport": "390x844",
-    "defectsCount": 0,
-    "defects": []
+    "defectsCount": 2,
+    "defects": [
+      {
+        "type": "MICROSCOPIC_TEXT",
+        "severity": "MEDIUM",
+        "element": "div.tab-handle-monogram.role-generic",
+        "parent": "button.slideout-tab-handle.role-generic",
+        "sampleText": "GR",
+        "details": "Font size is only 8px. Too small to read on phone/tablet without zooming."
+      },
+      {
+        "type": "OBSCURED_BY_OVERLAY",
+        "severity": "HIGH",
+        "element": "button#btn-token-locator",
+        "coveredBy": "div#creature-sheet-panel",
+        "details": "Center of button is blocked by fixed overlay (creature-sheet-panel). Finger tap will hit the overlay instead."
+      }
+    ]
   },
   {
     "screenName": "Character Builder - Step 1 (Identity)",
@@ -66,22 +106,62 @@
     "screenName": "Player Character Sheet",
     "deviceName": "Compact Android (Portrait)",
     "viewport": "360x800",
-    "defectsCount": 0,
-    "defects": []
+    "defectsCount": 1,
+    "defects": [
+      {
+        "type": "OBSCURED_BY_OVERLAY",
+        "severity": "HIGH",
+        "element": "button#btn-token-locator",
+        "coveredBy": "div#player-sheet-panel",
+        "details": "Center of button is blocked by fixed overlay (player-sheet-panel). Finger tap will hit the overlay instead."
+      }
+    ]
   },
   {
     "screenName": "Creature Statblock Sheet",
     "deviceName": "Compact Android (Portrait)",
     "viewport": "360x800",
-    "defectsCount": 0,
-    "defects": []
+    "defectsCount": 2,
+    "defects": [
+      {
+        "type": "MICROSCOPIC_TEXT",
+        "severity": "MEDIUM",
+        "element": "div.tab-handle-monogram.role-generic",
+        "parent": "button.slideout-tab-handle.role-generic",
+        "sampleText": "GR",
+        "details": "Font size is only 8px. Too small to read on phone/tablet without zooming."
+      },
+      {
+        "type": "OBSCURED_BY_OVERLAY",
+        "severity": "HIGH",
+        "element": "button#btn-token-locator",
+        "coveredBy": "div#creature-sheet-panel",
+        "details": "Center of button is blocked by fixed overlay (creature-sheet-panel). Finger tap will hit the overlay instead."
+      }
+    ]
   },
   {
     "screenName": "Chat Dock & Right Sidebar",
     "deviceName": "Compact Android (Portrait)",
     "viewport": "360x800",
-    "defectsCount": 0,
-    "defects": []
+    "defectsCount": 2,
+    "defects": [
+      {
+        "type": "MICROSCOPIC_TEXT",
+        "severity": "MEDIUM",
+        "element": "div.tab-handle-monogram.role-generic",
+        "parent": "button.slideout-tab-handle.role-generic",
+        "sampleText": "GR",
+        "details": "Font size is only 8px. Too small to read on phone/tablet without zooming."
+      },
+      {
+        "type": "OBSCURED_BY_OVERLAY",
+        "severity": "HIGH",
+        "element": "button#btn-token-locator",
+        "coveredBy": "div#creature-sheet-panel",
+        "details": "Center of button is blocked by fixed overlay (creature-sheet-panel). Finger tap will hit the overlay instead."
+      }
+    ]
   },
   {
     "screenName": "Character Builder - Step 1 (Identity)",
@@ -122,22 +202,62 @@
     "screenName": "Player Character Sheet",
     "deviceName": "Phone Landscape",
     "viewport": "800x360",
-    "defectsCount": 0,
-    "defects": []
+    "defectsCount": 1,
+    "defects": [
+      {
+        "type": "OBSCURED_BY_OVERLAY",
+        "severity": "HIGH",
+        "element": "button#btn-token-locator",
+        "coveredBy": "div#player-sheet-panel",
+        "details": "Center of button is blocked by fixed overlay (player-sheet-panel). Finger tap will hit the overlay instead."
+      }
+    ]
   },
   {
     "screenName": "Creature Statblock Sheet",
     "deviceName": "Phone Landscape",
     "viewport": "800x360",
-    "defectsCount": 0,
-    "defects": []
+    "defectsCount": 2,
+    "defects": [
+      {
+        "type": "MICROSCOPIC_TEXT",
+        "severity": "MEDIUM",
+        "element": "div.tab-handle-monogram.role-generic",
+        "parent": "button.slideout-tab-handle.role-generic",
+        "sampleText": "GR",
+        "details": "Font size is only 8px. Too small to read on phone/tablet without zooming."
+      },
+      {
+        "type": "OBSCURED_BY_OVERLAY",
+        "severity": "HIGH",
+        "element": "button#btn-token-locator",
+        "coveredBy": "div#creature-sheet-panel",
+        "details": "Center of button is blocked by fixed overlay (creature-sheet-panel). Finger tap will hit the overlay instead."
+      }
+    ]
   },
   {
     "screenName": "Chat Dock & Right Sidebar",
     "deviceName": "Phone Landscape",
     "viewport": "800x360",
-    "defectsCount": 0,
-    "defects": []
+    "defectsCount": 2,
+    "defects": [
+      {
+        "type": "MICROSCOPIC_TEXT",
+        "severity": "MEDIUM",
+        "element": "div.tab-handle-monogram.role-generic",
+        "parent": "button.slideout-tab-handle.role-generic",
+        "sampleText": "GR",
+        "details": "Font size is only 8px. Too small to read on phone/tablet without zooming."
+      },
+      {
+        "type": "OBSCURED_BY_OVERLAY",
+        "severity": "HIGH",
+        "element": "button#btn-token-locator",
+        "coveredBy": "div#creature-sheet-panel",
+        "details": "Center of button is blocked by fixed overlay (creature-sheet-panel). Finger tap will hit the overlay instead."
+      }
+    ]
   },
   {
     "screenName": "Character Builder - Step 1 (Identity)",
@@ -178,22 +298,62 @@
     "screenName": "Player Character Sheet",
     "deviceName": "iPad / Tablet (Portrait)",
     "viewport": "820x1180",
-    "defectsCount": 0,
-    "defects": []
+    "defectsCount": 1,
+    "defects": [
+      {
+        "type": "OBSCURED_BY_OVERLAY",
+        "severity": "HIGH",
+        "element": "button#btn-token-locator",
+        "coveredBy": "div#player-sheet-panel",
+        "details": "Center of button is blocked by fixed overlay (player-sheet-panel). Finger tap will hit the overlay instead."
+      }
+    ]
   },
   {
     "screenName": "Creature Statblock Sheet",
     "deviceName": "iPad / Tablet (Portrait)",
     "viewport": "820x1180",
-    "defectsCount": 0,
-    "defects": []
+    "defectsCount": 2,
+    "defects": [
+      {
+        "type": "MICROSCOPIC_TEXT",
+        "severity": "MEDIUM",
+        "element": "div.tab-handle-monogram.role-generic",
+        "parent": "button.slideout-tab-handle.role-generic",
+        "sampleText": "GR",
+        "details": "Font size is only 8px. Too small to read on phone/tablet without zooming."
+      },
+      {
+        "type": "OBSCURED_BY_OVERLAY",
+        "severity": "HIGH",
+        "element": "button#btn-token-locator",
+        "coveredBy": "div#creature-sheet-panel",
+        "details": "Center of button is blocked by fixed overlay (creature-sheet-panel). Finger tap will hit the overlay instead."
+      }
+    ]
   },
   {
     "screenName": "Chat Dock & Right Sidebar",
     "deviceName": "iPad / Tablet (Portrait)",
     "viewport": "820x1180",
-    "defectsCount": 0,
-    "defects": []
+    "defectsCount": 2,
+    "defects": [
+      {
+        "type": "MICROSCOPIC_TEXT",
+        "severity": "MEDIUM",
+        "element": "div.tab-handle-monogram.role-generic",
+        "parent": "button.slideout-tab-handle.role-generic",
+        "sampleText": "GR",
+        "details": "Font size is only 8px. Too small to read on phone/tablet without zooming."
+      },
+      {
+        "type": "OBSCURED_BY_OVERLAY",
+        "severity": "HIGH",
+        "element": "button#btn-token-locator",
+        "coveredBy": "div#creature-sheet-panel",
+        "details": "Center of button is blocked by fixed overlay (creature-sheet-panel). Finger tap will hit the overlay instead."
+      }
+    ]
   },
   {
     "screenName": "Character Builder - Step 1 (Identity)",
@@ -234,22 +394,62 @@
     "screenName": "Player Character Sheet",
     "deviceName": "Tablet Landscape",
     "viewport": "1180x820",
-    "defectsCount": 0,
-    "defects": []
+    "defectsCount": 1,
+    "defects": [
+      {
+        "type": "OBSCURED_BY_OVERLAY",
+        "severity": "HIGH",
+        "element": "button#btn-token-locator",
+        "coveredBy": "div#player-sheet-panel",
+        "details": "Center of button is blocked by fixed overlay (player-sheet-panel). Finger tap will hit the overlay instead."
+      }
+    ]
   },
   {
     "screenName": "Creature Statblock Sheet",
     "deviceName": "Tablet Landscape",
     "viewport": "1180x820",
-    "defectsCount": 0,
-    "defects": []
+    "defectsCount": 2,
+    "defects": [
+      {
+        "type": "MICROSCOPIC_TEXT",
+        "severity": "MEDIUM",
+        "element": "div.tab-handle-monogram.role-generic",
+        "parent": "button.slideout-tab-handle.role-generic",
+        "sampleText": "GR",
+        "details": "Font size is only 8px. Too small to read on phone/tablet without zooming."
+      },
+      {
+        "type": "OBSCURED_BY_OVERLAY",
+        "severity": "HIGH",
+        "element": "button#btn-token-locator",
+        "coveredBy": "div#creature-sheet-panel",
+        "details": "Center of button is blocked by fixed overlay (creature-sheet-panel). Finger tap will hit the overlay instead."
+      }
+    ]
   },
   {
     "screenName": "Chat Dock & Right Sidebar",
     "deviceName": "Tablet Landscape",
     "viewport": "1180x820",
-    "defectsCount": 0,
-    "defects": []
+    "defectsCount": 2,
+    "defects": [
+      {
+        "type": "MICROSCOPIC_TEXT",
+        "severity": "MEDIUM",
+        "element": "div.tab-handle-monogram.role-generic",
+        "parent": "button.slideout-tab-handle.role-generic",
+        "sampleText": "GR",
+        "details": "Font size is only 8px. Too small to read on phone/tablet without zooming."
+      },
+      {
+        "type": "OBSCURED_BY_OVERLAY",
+        "severity": "HIGH",
+        "element": "button#btn-token-locator",
+        "coveredBy": "div#creature-sheet-panel",
+        "details": "Center of button is blocked by fixed overlay (creature-sheet-panel). Finger tap will hit the overlay instead."
+      }
+    ]
   },
   {
     "screenName": "Character Builder - Step 1 (Identity)",

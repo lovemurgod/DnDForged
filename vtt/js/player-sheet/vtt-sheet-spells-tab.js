@@ -673,7 +673,9 @@ export function wireSpellsEvents(char, ctx) {
                 }
                 let bodyText = sp.description || '';
                 bodyText = cleanSpellHtml(bodyText);
+                const isWhisper = Boolean(char?.whisperToGM || (typeof window !== 'undefined' && window.vttPlayerSheetAPI?.isWhisperToGM?.()));
                 vtt.socket.emit('chat:msg', {
+                    whisperToGM: isWhisper,
                     abilityCard: {
                         creatureName: char.name,
                         abilityName: sp.name,

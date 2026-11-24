@@ -170,6 +170,113 @@ export const STANDARD_5E_LANGUAGES = [
     'Undercommon'
 ];
 
+export const FIGHTING_STYLES = [
+    'Archery',
+    'Blind Fighting',
+    'Defense',
+    'Dueling',
+    'Great Weapon Fighting',
+    'Interception',
+    'Protection',
+    'Superior Technique',
+    'Thrown Weapon Fighting',
+    'Two-Weapon Fighting',
+    'Unarmed Fighting'
+];
+
+export const ELDRITCH_INVOCATIONS_BASIC = [
+    'Armor of Shadows',
+    'Beast Speech',
+    'Beguiling Influence',
+    "Devil's Sight",
+    'Eldritch Sight',
+    'Eyes of the Rune Keeper',
+    'Fiendish Vigor',
+    'Gaze of Two Minds',
+    'Mask of Many Faces',
+    'Misty Visions',
+    'Thief of Five Fates'
+];
+
+export const METAMAGIC_OPTIONS = [
+    'Careful Spell',
+    'Distant Spell',
+    'Empowered Spell',
+    'Extended Spell',
+    'Heightened Spell',
+    'Quickened Spell',
+    'Subtle Spell',
+    'Twinned Spell'
+];
+
+export const ELEMENTAL_TYPES = ['Acid', 'Cold', 'Fire', 'Lightning', 'Thunder'];
+
+export const BATTLEMASTER_MANEUVERS = [
+    "Commander's Strike",
+    'Disarming Attack',
+    'Distracting Strike',
+    'Evasive Footwork',
+    'Feinting Attack',
+    'Goading Attack',
+    'Lunging Attack',
+    'Maneuvering Attack',
+    'Menacing Attack',
+    'Parry',
+    'Precision Attack',
+    'Pushing Attack',
+    'Rally',
+    'Riposte',
+    'Sweeping Attack',
+    'Trip Attack'
+];
+
+export const WEAPON_OPTIONS = [
+    'Battleaxe', 'Blowgun', 'Club', 'Dagger', 'Dart', 'Flail', 'Glaive', 'Greataxe',
+    'Greatclub', 'Greatsword', 'Halberd', 'Hand Crossbow', 'Handaxe', 'Heavy Crossbow',
+    'Javelin', 'Lance', 'Light Crossbow', 'Light Hammer', 'Longbow', 'Longsword',
+    'Mace', 'Maul', 'Morningstar', 'Net', 'Pike', 'Quarterstaff', 'Rapier', 'Scimitar',
+    'Shortbow', 'Shortsword', 'Sickle', 'Sling', 'Spear', 'Trident', 'War Pick',
+    'Warhammer', 'Whip'
+];
+
+export function evaluateFeatPrerequisites(feat, workingChar, effectiveStats) {
+    if (!feat) return { met: true };
+    const totalLevel = (workingChar?.classes || []).reduce((sum, c) => sum + (parseInt(c.level) || 1), 0);
+    const stats = effectiveStats || {};
+    const prereqList = Array.isArray(feat.prerequisite)
+        ? feat.prerequisite
+        : feat.prerequisite
+          ? [feat.prerequisite]
+          : [];
+
+    for (const p of prereqList) {
+        if (!p || typeof p !== 'object') continue;
+        if (p.level && totalLevel < p.level) {
+            return { met: false, text: `Level ${p.level}+ required (currently Level ${totalLevel})` };
+        }
+        if (Array.isArray(p.ability)) {
+            for (const abObj of p.ability) {
+                for (const [st, minVal] of Object.entries(abObj)) {
+                    const curVal = stats[st.toLowerCase()] || 10;
+                    if (curVal < minVal) {
+                        return { met: false, text: `${st.toUpperCase()} ${minVal}+ required (currently ${curVal})` };
+                    }
+                }
+            }
+        }
+        if (p.spellcasting) {
+            const hasSpellcaster = (workingChar?.classes || []).some((c) => {
+                const name = (c.name || '').toLowerCase();
+                return ['wizard', 'sorcerer', 'cleric', 'druid', 'bard', 'warlock', 'paladin', 'ranger', 'artificer'].includes(name);
+            });
+            if (!hasSpellcaster && !workingChar?.isSpellcaster) {
+                return { met: false, text: 'Spellcasting ability required' };
+            }
+        }
+    }
+    return { met: true };
+}
+
 export function renderStep7(ctx) {
     const {
         bodyEl,
@@ -180,6 +287,8 @@ export function renderStep7(ctx) {
         recomputeCandidates,
         updateCountsDisplay
     } = ctx;
+    const workingChar = ctx.workingChar;
+    const effectiveStats = typeof ctx.getEffectiveStats === 'function' ? ctx.getEffectiveStats() : {};
     const rawFeats = (builderCache?.feats || [])
         .filter((f) => isSourceAllowed(f.source, f.name, disabledSources))
         .sort((a, b) => a.name.localeCompare(b.name));
@@ -299,8 +408,11 @@ export function renderStep7(ctx) {
                                     <option value="">-- Choose Feat --</option>
                                     ${eligibleFeats
                                         .map((f) => {
-                                            const fId = f.id || f.name.replace(/\W+/g, '_').toLowerCase();
-                                            return `<option value="${fId}" ${tier.selectedFeatId === fId ? 'selected' : ''}>${f.name} [${f.source || 'PHB'}]</option>`;
+                                            const fId = `${f.id || f.name.replace(/\W+/g, '_').toLowerCase()}::${f.source || 'PHB'}`;
+                                            const legacyId = f.id || f.name.replace(/\W+/g, '_').toLowerCase();
+                                            const isSelected = tier.selectedFeatId === fId || tier.selectedFeatId === legacyId;
+                                            const prereqCheck = evaluateFeatPrerequisites(f, workingChar, effectiveStats);
+                                            return `<option value="${fId}" ${isSelected ? 'selected' : ''}>${f.name} [${f.source || 'PHB'}]${!prereqCheck.met ? ' ⚠️' : ''}</option>`;
                                         })
                                         .join('')}
                                 </select>
@@ -308,15 +420,24 @@ export function renderStep7(ctx) {
                                 ${
                                     tier.selectedFeatId
                                         ? (function () {
-                                              const matchedFeat = rawFeats.find(
-                                                  (f) =>
-                                                      (f.id || f.name.replace(/\W+/g, '_').toLowerCase()) ===
-                                                      tier.selectedFeatId
-                                              );
+                                              const matchedFeat = rawFeats.find((f) => {
+                                                  const compoundId = `${f.id || f.name.replace(/\W+/g, '_').toLowerCase()}::${f.source || 'PHB'}`;
+                                                  const legacyId = f.id || f.name.replace(/\W+/g, '_').toLowerCase();
+                                                  return compoundId === tier.selectedFeatId || legacyId === tier.selectedFeatId;
+                                              });
                                               if (!matchedFeat) return '';
                                               const featNameLow = matchedFeat.name.toLowerCase();
+                                              const prereqCheck = evaluateFeatPrerequisites(matchedFeat, workingChar, effectiveStats);
+                                              const prereqWarningHtml = !prereqCheck.met
+                                                  ? `
+                                                  <div style="background:rgba(255,152,0,0.12); border:1px solid #ff9800; color:#ffb74d; padding:4px 8px; border-radius:4px; font-size:0.75rem; display:inline-flex; align-items:center; gap:6px; margin-top:2px;">
+                                                      <i class="fa-solid fa-triangle-exclamation"></i>
+                                                      <span>Prerequisite Warning: ${prereqCheck.text}</span>
+                                                  </div>
+                                              `
+                                                  : '';
 
-                                              let subChoiceHtml = '';
+                                              let subChoiceHtml = prereqWarningHtml;
 
                                               // Half-Feat Stat Selection
                                               const isHalfFeat =
@@ -894,6 +1015,169 @@ export function renderStep7(ctx) {
                                                         <label style="font-size:0.75rem; color:var(--color-text-muted);">Skill Expertise:</label>
                                                         <select class="pc-tier-feat-subchoice-sel" data-tidx="${tIdx}" data-field="skillExp" style="width:100%; padding:4px; font-size:0.8rem; background:#1e1e1e; color:#fff; border:1px solid var(--color-border-subtle); border-radius:4px;">
                                                             ${STANDARD_5E_SKILLS.map((s) => `<option value="${s}" ${curExp === s ? 'selected' : ''}>${s} (Expertise)</option>`).join('')}
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        `;
+                                              }
+                                              // 14. Fighting Initiate
+                                              else if (/fighting initiate/i.test(featNameLow)) {
+                                                  const curStyle = tier.featSubChoices?.fightingStyle || FIGHTING_STYLES[0];
+                                                  tier.featSubChoices = tier.featSubChoices || {};
+                                                  if (!tier.featSubChoices.fightingStyle) tier.featSubChoices.fightingStyle = curStyle;
+                                                  subChoiceHtml += `
+                                            <div style="background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); padding:10px; border-radius:6px; margin-top:6px; display:flex; flex-direction:column; gap:8px;">
+                                                <div style="display:flex; justify-content:space-between; align-items:center;">
+                                                    <strong style="color:var(--color-gold-light); font-size:0.8rem;"><i class="fa-solid fa-shield-halved"></i> Fighting Style:</strong>
+                                                    <span class="badge" style="background:#b45309; color:#fff; font-size:0.7rem; padding:2px 6px;">Choose 1 Fighting Style</span>
+                                                </div>
+                                                <div>
+                                                    <select class="pc-tier-feat-subchoice-sel" data-tidx="${tIdx}" data-field="fightingStyle" style="width:100%; padding:4px; font-size:0.8rem; background:#1e1e1e; color:#fff; border:1px solid var(--color-border-subtle); border-radius:4px;">
+                                                        ${FIGHTING_STYLES.map((s) => `<option value="${s}" ${curStyle === s ? 'selected' : ''}>${s}</option>`).join('')}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        `;
+                                              }
+                                              // 15. Eldritch Adept
+                                              else if (/eldritch adept/i.test(featNameLow)) {
+                                                  const curInvoc = tier.featSubChoices?.invocation || ELDRITCH_INVOCATIONS_BASIC[0];
+                                                  tier.featSubChoices = tier.featSubChoices || {};
+                                                  if (!tier.featSubChoices.invocation) tier.featSubChoices.invocation = curInvoc;
+                                                  subChoiceHtml += `
+                                            <div style="background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); padding:10px; border-radius:6px; margin-top:6px; display:flex; flex-direction:column; gap:8px;">
+                                                <div style="display:flex; justify-content:space-between; align-items:center;">
+                                                    <strong style="color:var(--color-gold-light); font-size:0.8rem;"><i class="fa-solid fa-eye"></i> Eldritch Invocation:</strong>
+                                                    <span class="badge" style="background:#7c3aed; color:#fff; font-size:0.7rem; padding:2px 6px;">Choose 1 Invocation</span>
+                                                </div>
+                                                <div>
+                                                    <select class="pc-tier-feat-subchoice-sel" data-tidx="${tIdx}" data-field="invocation" style="width:100%; padding:4px; font-size:0.8rem; background:#1e1e1e; color:#fff; border:1px solid var(--color-border-subtle); border-radius:4px;">
+                                                        ${ELDRITCH_INVOCATIONS_BASIC.map((inv) => `<option value="${inv}" ${curInvoc === inv ? 'selected' : ''}>${inv}</option>`).join('')}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        `;
+                                              }
+                                              // 16. Metamagic Adept
+                                              else if (/metamagic adept/i.test(featNameLow)) {
+                                                  const curM1 = tier.featSubChoices?.metamagic1 || METAMAGIC_OPTIONS[0];
+                                                  const curM2 = tier.featSubChoices?.metamagic2 || METAMAGIC_OPTIONS[1];
+                                                  tier.featSubChoices = tier.featSubChoices || {};
+                                                  if (!tier.featSubChoices.metamagic1) tier.featSubChoices.metamagic1 = curM1;
+                                                  if (!tier.featSubChoices.metamagic2) tier.featSubChoices.metamagic2 = curM2;
+                                                  subChoiceHtml += `
+                                            <div style="background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); padding:10px; border-radius:6px; margin-top:6px; display:flex; flex-direction:column; gap:8px;">
+                                                <div style="display:flex; justify-content:space-between; align-items:center;">
+                                                    <strong style="color:var(--color-gold-light); font-size:0.8rem;"><i class="fa-solid fa-sparkles"></i> Metamagic Adept Options:</strong>
+                                                    <span class="badge" style="background:#0284c7; color:#fff; font-size:0.7rem; padding:2px 6px;">Choose 2 Metamagics</span>
+                                                </div>
+                                                <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+                                                    <div>
+                                                        <label style="font-size:0.75rem; color:var(--color-text-muted);">Metamagic 1:</label>
+                                                        <select class="pc-tier-feat-subchoice-sel" data-tidx="${tIdx}" data-field="metamagic1" style="width:100%; padding:4px; font-size:0.8rem; background:#1e1e1e; color:#fff; border:1px solid var(--color-border-subtle); border-radius:4px;">
+                                                            ${METAMAGIC_OPTIONS.map((m) => `<option value="${m}" ${curM1 === m ? 'selected' : ''}>${m}</option>`).join('')}
+                                                        </select>
+                                                    </div>
+                                                    <div>
+                                                        <label style="font-size:0.75rem; color:var(--color-text-muted);">Metamagic 2:</label>
+                                                        <select class="pc-tier-feat-subchoice-sel" data-tidx="${tIdx}" data-field="metamagic2" style="width:100%; padding:4px; font-size:0.8rem; background:#1e1e1e; color:#fff; border:1px solid var(--color-border-subtle); border-radius:4px;">
+                                                            ${METAMAGIC_OPTIONS.map((m) => `<option value="${m}" ${curM2 === m ? 'selected' : ''}>${m}</option>`).join('')}
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        `;
+                                              }
+                                              // 17. Elemental Adept
+                                              else if (/elemental adept/i.test(featNameLow)) {
+                                                  const curElem = tier.featSubChoices?.elementalType || ELEMENTAL_TYPES[0];
+                                                  tier.featSubChoices = tier.featSubChoices || {};
+                                                  if (!tier.featSubChoices.elementalType) tier.featSubChoices.elementalType = curElem;
+                                                  subChoiceHtml += `
+                                            <div style="background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); padding:10px; border-radius:6px; margin-top:6px; display:flex; flex-direction:column; gap:8px;">
+                                                <div style="display:flex; justify-content:space-between; align-items:center;">
+                                                    <strong style="color:var(--color-gold-light); font-size:0.8rem;"><i class="fa-solid fa-fire"></i> Elemental Adept Damage Type:</strong>
+                                                    <span class="badge" style="background:#ea580c; color:#fff; font-size:0.7rem; padding:2px 6px;">Choose 1 Element</span>
+                                                </div>
+                                                <div>
+                                                    <select class="pc-tier-feat-subchoice-sel" data-tidx="${tIdx}" data-field="elementalType" style="width:100%; padding:4px; font-size:0.8rem; background:#1e1e1e; color:#fff; border:1px solid var(--color-border-subtle); border-radius:4px;">
+                                                        ${ELEMENTAL_TYPES.map((e) => `<option value="${e}" ${curElem === e ? 'selected' : ''}>${e}</option>`).join('')}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        `;
+                                              }
+                                              // 18. Martial Adept
+                                              else if (/martial adept/i.test(featNameLow)) {
+                                                  const curMan1 = tier.featSubChoices?.maneuver1 || BATTLEMASTER_MANEUVERS[0];
+                                                  const curMan2 = tier.featSubChoices?.maneuver2 || BATTLEMASTER_MANEUVERS[1];
+                                                  tier.featSubChoices = tier.featSubChoices || {};
+                                                  if (!tier.featSubChoices.maneuver1) tier.featSubChoices.maneuver1 = curMan1;
+                                                  if (!tier.featSubChoices.maneuver2) tier.featSubChoices.maneuver2 = curMan2;
+                                                  subChoiceHtml += `
+                                            <div style="background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); padding:10px; border-radius:6px; margin-top:6px; display:flex; flex-direction:column; gap:8px;">
+                                                <div style="display:flex; justify-content:space-between; align-items:center;">
+                                                    <strong style="color:var(--color-gold-light); font-size:0.8rem;"><i class="fa-solid fa-hand-fist"></i> Martial Adept Maneuvers:</strong>
+                                                    <span class="badge" style="background:#b45309; color:#fff; font-size:0.7rem; padding:2px 6px;">Choose 2 Maneuvers (+1d6 die)</span>
+                                                </div>
+                                                <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+                                                    <div>
+                                                        <label style="font-size:0.75rem; color:var(--color-text-muted);">Maneuver 1:</label>
+                                                        <select class="pc-tier-feat-subchoice-sel" data-tidx="${tIdx}" data-field="maneuver1" style="width:100%; padding:4px; font-size:0.8rem; background:#1e1e1e; color:#fff; border:1px solid var(--color-border-subtle); border-radius:4px;">
+                                                            ${BATTLEMASTER_MANEUVERS.map((m) => `<option value="${m}" ${curMan1 === m ? 'selected' : ''}>${m}</option>`).join('')}
+                                                        </select>
+                                                    </div>
+                                                    <div>
+                                                        <label style="font-size:0.75rem; color:var(--color-text-muted);">Maneuver 2:</label>
+                                                        <select class="pc-tier-feat-subchoice-sel" data-tidx="${tIdx}" data-field="maneuver2" style="width:100%; padding:4px; font-size:0.8rem; background:#1e1e1e; color:#fff; border:1px solid var(--color-border-subtle); border-radius:4px;">
+                                                            ${BATTLEMASTER_MANEUVERS.map((m) => `<option value="${m}" ${curMan2 === m ? 'selected' : ''}>${m}</option>`).join('')}
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        `;
+                                              }
+                                              // 19. Weapon Master
+                                              else if (/weapon master/i.test(featNameLow)) {
+                                                  const curW1 = tier.featSubChoices?.weapon1 || WEAPON_OPTIONS[0];
+                                                  const curW2 = tier.featSubChoices?.weapon2 || WEAPON_OPTIONS[1];
+                                                  const curW3 = tier.featSubChoices?.weapon3 || WEAPON_OPTIONS[2];
+                                                  const curW4 = tier.featSubChoices?.weapon4 || WEAPON_OPTIONS[3];
+                                                  tier.featSubChoices = tier.featSubChoices || {};
+                                                  if (!tier.featSubChoices.weapon1) tier.featSubChoices.weapon1 = curW1;
+                                                  if (!tier.featSubChoices.weapon2) tier.featSubChoices.weapon2 = curW2;
+                                                  if (!tier.featSubChoices.weapon3) tier.featSubChoices.weapon3 = curW3;
+                                                  if (!tier.featSubChoices.weapon4) tier.featSubChoices.weapon4 = curW4;
+                                                  subChoiceHtml += `
+                                            <div style="background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); padding:10px; border-radius:6px; margin-top:6px; display:flex; flex-direction:column; gap:8px;">
+                                                <div style="display:flex; justify-content:space-between; align-items:center;">
+                                                    <strong style="color:var(--color-gold-light); font-size:0.8rem;"><i class="fa-solid fa-shield"></i> Weapon Master Proficiencies:</strong>
+                                                    <span class="badge" style="background:#059669; color:#fff; font-size:0.7rem; padding:2px 6px;">Choose 4 Weapons</span>
+                                                </div>
+                                                <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+                                                    <div>
+                                                        <label style="font-size:0.75rem; color:var(--color-text-muted);">Weapon 1:</label>
+                                                        <select class="pc-tier-feat-subchoice-sel" data-tidx="${tIdx}" data-field="weapon1" style="width:100%; padding:4px; font-size:0.8rem; background:#1e1e1e; color:#fff; border:1px solid var(--color-border-subtle); border-radius:4px;">
+                                                            ${WEAPON_OPTIONS.map((w) => `<option value="${w}" ${curW1 === w ? 'selected' : ''}>${w}</option>`).join('')}
+                                                        </select>
+                                                    </div>
+                                                    <div>
+                                                        <label style="font-size:0.75rem; color:var(--color-text-muted);">Weapon 2:</label>
+                                                        <select class="pc-tier-feat-subchoice-sel" data-tidx="${tIdx}" data-field="weapon2" style="width:100%; padding:4px; font-size:0.8rem; background:#1e1e1e; color:#fff; border:1px solid var(--color-border-subtle); border-radius:4px;">
+                                                            ${WEAPON_OPTIONS.map((w) => `<option value="${w}" ${curW2 === w ? 'selected' : ''}>${w}</option>`).join('')}
+                                                        </select>
+                                                    </div>
+                                                    <div>
+                                                        <label style="font-size:0.75rem; color:var(--color-text-muted);">Weapon 3:</label>
+                                                        <select class="pc-tier-feat-subchoice-sel" data-tidx="${tIdx}" data-field="weapon3" style="width:100%; padding:4px; font-size:0.8rem; background:#1e1e1e; color:#fff; border:1px solid var(--color-border-subtle); border-radius:4px;">
+                                                            ${WEAPON_OPTIONS.map((w) => `<option value="${w}" ${curW3 === w ? 'selected' : ''}>${w}</option>`).join('')}
+                                                        </select>
+                                                    </div>
+                                                    <div>
+                                                        <label style="font-size:0.75rem; color:var(--color-text-muted);">Weapon 4:</label>
+                                                        <select class="pc-tier-feat-subchoice-sel" data-tidx="${tIdx}" data-field="weapon4" style="width:100%; padding:4px; font-size:0.8rem; background:#1e1e1e; color:#fff; border:1px solid var(--color-border-subtle); border-radius:4px;">
+                                                            ${WEAPON_OPTIONS.map((w) => `<option value="${w}" ${curW4 === w ? 'selected' : ''}>${w}</option>`).join('')}
                                                         </select>
                                                     </div>
                                                 </div>

@@ -977,6 +977,53 @@ function loadTablesData() {
             });
         }
 
+        // Auto-index rollable tables from items.json (e.g. Robe of Useful Items, Bag of Tricks, Wand of Wonder)
+        const itemsPath = path.join(VTT_DATA_DIR, 'items.json');
+        if (fs.existsSync(itemsPath)) {
+            try {
+                const itemsData = JSON.parse(fs.readFileSync(itemsPath, 'utf8'));
+                const itemList = Array.isArray(itemsData?.item) ? itemsData.item : [];
+                for (const it of itemList) {
+                    if (!it.entries || !Array.isArray(it.entries)) continue;
+                    for (const entry of it.entries) {
+                        if (entry && typeof entry === 'object' && entry.type === 'table' && Array.isArray(entry.rows) && entry.rows.length > 0) {
+                            const baseName = cleanCompendiumText(entry.caption || entry.name || entry.data?.genTables?.tableName || `${it.name} Effects`).trim();
+                            const finalTableName = baseName.toLowerCase().includes((it.name || '').toLowerCase()) ? baseName : `${it.name} — ${baseName}`;
+                            
+                            // Prevent duplicate entries if already in rawList
+                            const alreadyExists = rawList.some((t) => (t.name || '').toLowerCase() === finalTableName.toLowerCase());
+                            if (!alreadyExists) {
+                                let diceFormula = '1d20';
+                                if (Array.isArray(entry.colLabels) && entry.colLabels.length > 0) {
+                                    const firstCol = cleanCompendiumText(entry.colLabels[0]).trim();
+                                    if (/^d\d+/i.test(firstCol)) {
+                                        diceFormula = `1${firstCol.toLowerCase()}`;
+                                    } else if (/^\d+d\d+/i.test(firstCol)) {
+                                        diceFormula = firstCol.toLowerCase();
+                                    } else {
+                                        diceFormula = `1d${entry.rows.length}`;
+                                    }
+                                } else {
+                                    diceFormula = `1d${entry.rows.length}`;
+                                }
+
+                                rawList.push({
+                                    name: finalTableName,
+                                    source: (it.source || 'DMG').toUpperCase(),
+                                    dice: diceFormula,
+                                    chapter: { name: `Magic Items - ${it.name}` },
+                                    colLabels: entry.colLabels || ['Roll', 'Effect'],
+                                    rows: entry.rows
+                                });
+                            }
+                        }
+                    }
+                }
+            } catch (itemErr) {
+                console.error('Error auto-indexing item tables:', itemErr);
+            }
+        }
+
         rawTablesFullList = rawList;
 
         rawTablesCatalogData = rawList.map((tbl, idx) => {

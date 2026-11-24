@@ -1,0 +1,821 @@
+[
+  {
+    "id": "creature_animated_object_xphb",
+    "name": "Animated Object",
+    "source": "XPHB",
+    "edition": "2024",
+    "page": 240,
+    "isSrd": true,
+    "size": "Tiny",
+    "sizeCategory": "T",
+    "type": "Construct",
+    "subtype": "",
+    "alignment": "U",
+    "ac": [
+      {
+        "value": 15,
+        "condition": null
+      }
+    ],
+    "primaryAc": 15,
+    "acCondition": "",
+    "hp": {
+      "average": 10,
+      "formula": "10"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 16,
+        "mod": 3
+      },
+      "dex": {
+        "score": 10,
+        "mod": 0
+      },
+      "con": {
+        "score": 10,
+        "mod": 0
+      },
+      "int": {
+        "score": 3,
+        "mod": -4
+      },
+      "wis": {
+        "score": 3,
+        "mod": -4
+      },
+      "cha": {
+        "score": 1,
+        "mod": -5
+      }
+    },
+    "str": 16,
+    "dex": 10,
+    "con": 10,
+    "int": 3,
+    "wis": 3,
+    "cha": 1,
+    "proficiencyBonus": 2,
+    "save": {},
+    "saves": {},
+    "skill": {},
+    "skills": {},
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 6,
+    "senses": {
+      "passivePerception": 6,
+      "sensesString": "Blindsight 30 ft."
+    },
+    "languages": [
+      "understands the languages you know"
+    ],
+    "cr": "0",
+    "crNumeric": 0,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [],
+    "actions": [
+      {
+        "id": "act_slam_2fpi",
+        "name": "Slam",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Attack: Bonus equals your spell attack modifier, reach 5 ft. Hit: Force damage equal to (summonSpellLevel - 4)d4 + 3, (summonSpellLevel - 3)d6 + 3 + your spellcasting ability modifier (Large), or (summonSpellLevel - 3)d12 + 3 + your spellcasting ability modifier (Huge).</p>",
+        "entries": [
+          "{@atkr m} {@hitYourSpellAttack Bonus equals your spell attack modifier}, reach 5 ft. {@h}Force damage equal to {@damage (summonSpellLevel - 4)d4 + 3|1d4 + 3}, {@damage (summonSpellLevel - 3)d6 + 3|2d6 + 3} + your spellcasting ability modifier (Large), or {@damage (summonSpellLevel - 3)d12 + 3|2d12 + 3} + your spellcasting ability modifier (Huge)."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "(summonSpellLevel - 4)d4 + 3|1d4 + 3",
+              "type": "Slashing",
+              "saveRider": false
+            },
+            {
+              "formula": "(summonSpellLevel - 3)d6 + 3|2d6 + 3",
+              "type": "Slashing",
+              "saveRider": false
+            },
+            {
+              "formula": "(summonSpellLevel - 3)d12 + 3|2d12 + 3",
+              "type": "Slashing",
+              "saveRider": false
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/XPHB/Animated Object.webp",
+    "tokenImg": "img/bestiary/tokens/XPHB/Animated Object.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  },
+  {
+    "id": "creature_draconic_spirit_xphb",
+    "name": "Draconic Spirit",
+    "source": "XPHB",
+    "edition": "2024",
+    "page": 325,
+    "isSrd": true,
+    "size": "Large",
+    "sizeCategory": "L",
+    "type": "Dragon",
+    "subtype": "",
+    "alignment": "N",
+    "ac": [
+      {
+        "value": 10,
+        "condition": null
+      }
+    ],
+    "primaryAc": 10,
+    "acCondition": "",
+    "hp": {
+      "average": 10,
+      "formula": "10"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 60,
+      "swim": 30,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 19,
+        "mod": 4
+      },
+      "dex": {
+        "score": 14,
+        "mod": 2
+      },
+      "con": {
+        "score": 17,
+        "mod": 3
+      },
+      "int": {
+        "score": 10,
+        "mod": 0
+      },
+      "wis": {
+        "score": 14,
+        "mod": 2
+      },
+      "cha": {
+        "score": 14,
+        "mod": 2
+      }
+    },
+    "str": 19,
+    "dex": 14,
+    "con": 17,
+    "int": 10,
+    "wis": 14,
+    "cha": 14,
+    "proficiencyBonus": 2,
+    "save": {},
+    "saves": {},
+    "skill": {},
+    "skills": {},
+    "immune": [],
+    "resist": [
+      "acid",
+      "cold",
+      "fire",
+      "lightning",
+      "poison"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "frightened",
+      "poisoned"
+    ],
+    "passive": 12,
+    "senses": {
+      "passivePerception": 12,
+      "sensesString": "Blindsight 30 ft., Darkvision 60 ft."
+    },
+    "languages": [
+      "Draconic",
+      "understands the languages you know"
+    ],
+    "cr": "0",
+    "crNumeric": 0,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_shared_resistances_u1ur",
+        "name": "Shared Resistances",
+        "actionType": "trait",
+        "descriptionHtml": "<p>When you summon the spirit, choose one of its Resistances. You have Resistance to the chosen damage type until the spell ends.</p>",
+        "entries": [
+          "When you summon the spirit, choose one of its Resistances. You have {@variantrule Resistance|XPHB} to the chosen damage type until the spell ends."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_gv02",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The spirit makes a number of Rend attacks equal to half the spell's level (round down), and it uses Breath Weapon.</p>",
+        "entries": [
+          "The spirit makes a number of Rend attacks equal to half the spell's level (round down), and it uses Breath Weapon."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_rend_gdmk",
+        "name": "Rend",
+        "actionType": "action",
+        "descriptionHtml": "<p>Attack: Bonus equals your spell attack modifier, reach 10 feet. Hit: 1d6 + 4 + summonSpellLevel Piercing damage.</p>",
+        "entries": [
+          "{@atk m} {@hitYourSpellAttack Bonus equals your spell attack modifier}, reach 10 feet. {@h}{@damage 1d6 + 4 + summonSpellLevel} Piercing damage."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d6 + 4 + summonSpellLevel",
+              "type": "Piercing",
+              "saveRider": false
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_breath_weapon_hx7c",
+        "name": "Breath Weapon",
+        "actionType": "action",
+        "descriptionHtml": "<p>dex DC equals your spell save DC, each creature in a 30-foot Cone [Area of Effect]. {@actSaveFail} 2d6 damage of a type this spirit has Resistance to (your choice when you cast the spell). {@actSaveSuccess} Half damage.</p>",
+        "entries": [
+          "{@actSave dex} DC equals your spell save DC, each creature in a 30-foot {@variantrule Cone [Area of Effect]|XPHB|Cone}. {@actSaveFail} {@damage 2d6} damage of a type this spirit has {@variantrule Resistance|XPHB} to (your choice when you cast the spell). {@actSaveSuccess} Half damage."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d6",
+              "type": "Slashing",
+              "saveRider": false
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/XPHB/Draconic Spirit.webp",
+    "tokenImg": "img/bestiary/tokens/XPHB/Draconic Spirit.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  },
+  {
+    "id": "creature_giant_insect_xphb",
+    "name": "Giant Insect",
+    "source": "XPHB",
+    "edition": "2024",
+    "page": 279,
+    "isSrd": true,
+    "size": "Large",
+    "sizeCategory": "L",
+    "type": "Beast",
+    "subtype": "",
+    "alignment": "U",
+    "ac": [
+      {
+        "value": 10,
+        "condition": null
+      }
+    ],
+    "primaryAc": 10,
+    "acCondition": "",
+    "hp": {
+      "average": 10,
+      "formula": "10"
+    },
+    "speed": {
+      "walk": 40,
+      "fly": 40,
+      "swim": 0,
+      "climb": 40,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 17,
+        "mod": 3
+      },
+      "dex": {
+        "score": 13,
+        "mod": 1
+      },
+      "con": {
+        "score": 15,
+        "mod": 2
+      },
+      "int": {
+        "score": 4,
+        "mod": -3
+      },
+      "wis": {
+        "score": 14,
+        "mod": 2
+      },
+      "cha": {
+        "score": 3,
+        "mod": -4
+      }
+    },
+    "str": 17,
+    "dex": 13,
+    "con": 15,
+    "int": 4,
+    "wis": 14,
+    "cha": 3,
+    "proficiencyBonus": 2,
+    "save": {},
+    "saves": {},
+    "skill": {},
+    "skills": {},
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 12,
+    "senses": {
+      "passivePerception": 12,
+      "sensesString": "Darkvision 60 ft."
+    },
+    "languages": [
+      "understands the languages you know"
+    ],
+    "cr": "0",
+    "crNumeric": 0,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_spider_climb_bh18",
+        "name": "Spider Climb",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The insect can climb difficult surfaces, including along ceilings, without needing to make an ability check.</p>",
+        "entries": [
+          "The insect can climb difficult surfaces, including along ceilings, without needing to make an ability check."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_96jw",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The insect makes a number of attacks equal to half this spell's level (round down).</p>",
+        "entries": [
+          "The insect makes a number of attacks equal to half this spell's level (round down)."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_poison_jab_nii3",
+        "name": "Poison Jab",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Attack: Bonus equals your spell attack modifier, reach 10 ft. Hit: 1d6 + 3 + summonSpellLevel Piercing damage plus 1d4 Poison damage.</p>",
+        "entries": [
+          "{@atkr m} {@hitYourSpellAttack Bonus equals your spell attack modifier}, reach 10 ft. {@h}{@damage 1d6 + 3 + summonSpellLevel} Piercing damage plus {@damage 1d4} Poison damage."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d6 + 3 + summonSpellLevel",
+              "type": "Piercing",
+              "saveRider": false
+            },
+            {
+              "formula": "1d4",
+              "type": "Poison",
+              "saveRider": false
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_web_bolt__spider_only__rigk",
+        "name": "Web Bolt (Spider Only)",
+        "actionType": "action",
+        "descriptionHtml": "<p>Ranged Attack: Bonus equals your spell attack modifier, range 60 ft. Hit: 1d10 + 3 + summonSpellLevel Bludgeoning damage, and the target's Speed is reduced to 0 until the start of the insect's next turn.</p>",
+        "entries": [
+          "{@atkr r} {@hitYourSpellAttack Bonus equals your spell attack modifier}, range 60 ft. {@h}{@damage 1d10 + 3 + summonSpellLevel} Bludgeoning damage, and the target's {@variantrule Speed|XPHB} is reduced to 0 until the start of the insect's next turn."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d10 + 3 + summonSpellLevel",
+              "type": "Bludgeoning",
+              "saveRider": false
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [
+      {
+        "id": "act_venomous_spew__centipede_only__hpoh",
+        "name": "Venomous Spew (Centipede Only)",
+        "actionType": "bonus",
+        "descriptionHtml": "<p>con Your spell save DC, one creature the insect can see within 10 feet. {@actSaveFail} The target has the Poisoned condition until the start of the insect's next turn.</p>",
+        "entries": [
+          "{@actSave con} Your spell save DC, one creature the insect can see within 10 feet. {@actSaveFail} The target has the {@condition Poisoned|XPHB} condition until the start of the insect's next turn."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/XPHB/Giant Insect.webp",
+    "tokenImg": "img/bestiary/tokens/XPHB/Giant Insect.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  },
+  {
+    "id": "creature_otherworldly_steed_xphb",
+    "name": "Otherworldly Steed",
+    "source": "XPHB",
+    "edition": "2024",
+    "page": 273,
+    "isSrd": true,
+    "size": "Large",
+    "sizeCategory": "L",
+    "type": "Humanoid",
+    "subtype": "",
+    "alignment": "N",
+    "ac": [
+      {
+        "value": 10,
+        "condition": null
+      }
+    ],
+    "primaryAc": 10,
+    "acCondition": "",
+    "hp": {
+      "average": 10,
+      "formula": "10"
+    },
+    "speed": {
+      "walk": 60,
+      "fly": 60,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 18,
+        "mod": 4
+      },
+      "dex": {
+        "score": 12,
+        "mod": 1
+      },
+      "con": {
+        "score": 14,
+        "mod": 2
+      },
+      "int": {
+        "score": 6,
+        "mod": -2
+      },
+      "wis": {
+        "score": 12,
+        "mod": 1
+      },
+      "cha": {
+        "score": 8,
+        "mod": -1
+      }
+    },
+    "str": 18,
+    "dex": 12,
+    "con": 14,
+    "int": 6,
+    "wis": 12,
+    "cha": 8,
+    "proficiencyBonus": 2,
+    "save": {},
+    "saves": {},
+    "skill": {},
+    "skills": {},
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 11,
+    "senses": {
+      "passivePerception": 11,
+      "sensesString": ""
+    },
+    "languages": [
+      "telepathy 1 mile (works only with you)"
+    ],
+    "cr": "0",
+    "crNumeric": 0,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_life_bond_o23z",
+        "name": "Life Bond",
+        "actionType": "trait",
+        "descriptionHtml": "<p>When you regain Hit Points from a level 1+ spell, the steed regains the same number of Hit Points if you're within 5 feet of it.</p>",
+        "entries": [
+          "When you regain {@variantrule Hit Points|XPHB} from a level 1+ spell, the steed regains the same number of {@variantrule Hit Points|XPHB} if you're within 5 feet of it."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_otherworldly_slam_kl73",
+        "name": "Otherworldly Slam",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Attack: Bonus equals your spell attack modifier, reach 5 ft. Hit: 1d8 + summonSpellLevel of Radiant (Celestial), Psychic (Fey), or Necrotic (Fiend) damage.</p>",
+        "entries": [
+          "{@atkr m} {@hitYourSpellAttack Bonus equals your spell attack modifier}, reach 5 ft. {@h}{@damage 1d8 + summonSpellLevel} of Radiant (Celestial), Psychic (Fey), or Necrotic (Fiend) damage."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d8 + summonSpellLevel",
+              "type": "Slashing",
+              "saveRider": false
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [
+      {
+        "id": "act_fell_glare__fiend_only__recharges_after_a_long_rest__i5qx",
+        "name": "Fell Glare (Fiend Only; Recharges after a Long Rest)",
+        "actionType": "bonus",
+        "descriptionHtml": "<p>wis DC equals your spell save DC, one creature within 60 feet the steed can see. {@actSaveFail} The target has the Frightened condition until the end of your next turn.</p>",
+        "entries": [
+          "{@actSave wis} DC equals your spell save DC, one creature within 60 feet the steed can see. {@actSaveFail} The target has the {@condition Frightened|XPHB} condition until the end of your next turn."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_fey_step__fey_only__recharges_after_a_long_rest__dpfj",
+        "name": "Fey Step (Fey Only; Recharges after a Long Rest)",
+        "actionType": "bonus",
+        "descriptionHtml": "<p>The steed teleports, along with its rider, to an unoccupied space of your choice up to 60 feet away from itself.</p>",
+        "entries": [
+          "The steed teleports, along with its rider, to an unoccupied space of your choice up to 60 feet away from itself."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_healing_touch__celestial_only__recharges_after_a_long_rest__35ol",
+        "name": "Healing Touch (Celestial Only; Recharges after a Long Rest)",
+        "actionType": "bonus",
+        "descriptionHtml": "<p>One creature within 5 feet of the steed regains a number of Hit Points equal to 2d8 + summonSpellLevel.</p>",
+        "entries": [
+          "One creature within 5 feet of the steed regains a number of {@variantrule Hit Points|XPHB} equal to {@dice 2d8 + summonSpellLevel}."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/XPHB/Otherworldly Steed.webp",
+    "tokenImg": "img/bestiary/tokens/XPHB/Otherworldly Steed.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  }
+]

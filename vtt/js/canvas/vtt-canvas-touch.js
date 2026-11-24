@@ -249,10 +249,9 @@ export function moveTouchTokenDrag(clientX, clientY, context = {}) {
         }
 
         const distInfo = context.calcDistanceFormatted?.(
-            Math.hypot(
-                context.localMeasureEnd.x - context.localMeasureStart.x,
-                context.localMeasureEnd.y - context.localMeasureStart.y
-            )
+            null,
+            context.grid,
+            points || [context.localMeasureStart, context.localMeasureEnd]
         ) || { label: '0 ft' };
         const dragPill = typeof document !== 'undefined' ? document.getElementById('vtt-mobile-drag-pill') : null;
         if (dragPill) {

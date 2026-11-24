@@ -179,7 +179,7 @@
     border-radius: 8px;
     padding: 8px 12px;
     margin-top: 4px;
-    box-shadow: 0 0 10px rgba(212, 175, 55, 0.1);
+    box-shadow: 0 0 0 1px var(--color-border-active);
 }
 .roll-card-header {
     display: flex;
@@ -240,7 +240,7 @@
     border: 1px solid var(--color-border-active);
     border-radius: 10px;
     margin-top: 4px;
-    box-shadow: 0 0 14px rgba(212, 175, 55, 0.12), 0 2px 8px rgba(0,0,0,0.4);
+    box-shadow: 0 0 0 1.5px var(--color-border-active), 0 2px 8px rgba(0,0,0,0.4);
 }
 .macro-card-header {
     display: flex;
@@ -353,7 +353,7 @@
     font-size: 0.75rem;
     font-family: var(--font-code);
     white-space: nowrap;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5), 0 0 8px rgba(212, 175, 55, 0.15);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5), 0 0 0 1px var(--color-border-active);
     margin: 0;
     z-index: 99999;
 }
@@ -407,7 +407,7 @@
     background: linear-gradient(135deg, rgba(212, 175, 55, 0.38), rgba(180, 140, 30, 0.24));
     border-color: var(--color-gold-base);
     color: #ffffff;
-    box-shadow: 0 0 12px rgba(212, 175, 55, 0.35);
+    box-shadow: 0 0 0 1.5px var(--color-gold-base);
 }
 .macro-btn-full {
     background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(185, 28, 28, 0.1));
@@ -418,7 +418,7 @@
     background: linear-gradient(135deg, rgba(239, 68, 68, 0.35), rgba(185, 28, 28, 0.22));
     border-color: #ef4444;
     color: #ffffff;
-    box-shadow: 0 0 12px rgba(239, 68, 68, 0.35);
+    box-shadow: 0 0 0 1.5px #ef4444;
 }
 .macro-btn-half {
     background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(29, 78, 216, 0.1));
@@ -429,7 +429,7 @@
     background: linear-gradient(135deg, rgba(59, 130, 246, 0.35), rgba(29, 78, 216, 0.22));
     border-color: #3b82f6;
     color: #ffffff;
-    box-shadow: 0 0 12px rgba(59, 130, 246, 0.35);
+    box-shadow: 0 0 0 1.5px #3b82f6;
 }
 
 .macro-card-resolved-badge {
@@ -451,7 +451,7 @@
 
 .macro-chat-card.is-resolved {
     border-color: rgba(129, 199, 132, 0.4);
-    box-shadow: 0 0 14px rgba(129, 199, 132, 0.12), 0 2px 8px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 0 0 1.5px rgba(129, 199, 132, 0.4), 0 2px 8px rgba(0, 0, 0, 0.4);
 }
 
 /* ── Save Resolution Chat Card (GM-Only Save Half/Zero Resolution) ── */
@@ -460,13 +460,13 @@
     border: 1px solid rgba(212, 175, 55, 0.35);
     border-radius: 10px;
     margin-top: 4px;
-    box-shadow: 0 0 16px rgba(212, 175, 55, 0.15), 0 4px 16px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 0 1.5px rgba(212, 175, 55, 0.35), 0 4px 16px rgba(0, 0, 0, 0.5);
     overflow: hidden;
     transition: all 0.2s ease;
 }
 .save-resolve-chat-card.is-resolved {
     border-color: rgba(129, 199, 132, 0.4);
-    box-shadow: 0 0 14px rgba(129, 199, 132, 0.12), 0 2px 8px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 0 0 1.5px rgba(129, 199, 132, 0.4), 0 2px 8px rgba(0, 0, 0, 0.4);
 }
 .save-resolve-header {
     display: flex;
@@ -620,7 +620,7 @@
     background: linear-gradient(135deg, rgba(59, 130, 246, 0.42), rgba(29, 78, 216, 0.3));
     border-color: #60a5fa;
     color: #ffffff;
-    box-shadow: 0 0 12px rgba(59, 130, 246, 0.4);
+    box-shadow: 0 0 0 1.5px #60a5fa;
 }
 .btn-save-zero {
     background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(185, 28, 28, 0.12));
@@ -631,7 +631,7 @@
     background: linear-gradient(135deg, rgba(239, 68, 68, 0.36), rgba(185, 28, 28, 0.22));
     border-color: #ef4444;
     color: #ffffff;
-    box-shadow: 0 0 12px rgba(239, 68, 68, 0.38);
+    box-shadow: 0 0 0 1.5px #ef4444;
 }
 .save-resolve-resolved-badge {
     display: flex;
@@ -653,8 +653,9 @@
 .vtt-modal-backdrop {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.65);
-    backdrop-filter: blur(3px);
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
     z-index: 10000;
     display: flex;
     align-items: center;
@@ -671,7 +672,7 @@
     background: linear-gradient(145deg, #181b24, #101218);
     border: 1px solid rgba(255, 215, 0, 0.35);
     border-radius: 10px;
-    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.7), 0 0 20px rgba(255, 215, 0, 0.12);
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.7), 0 0 0 1.5px rgba(255, 215, 0, 0.4);
     width: 360px;
     max-width: 92vw;
     color: #e0e0e0;
@@ -786,7 +787,7 @@
 }
 .mass-roll-input:focus {
     border-color: var(--color-gold-base, #e6c200);
-    box-shadow: 0 0 8px rgba(255, 215, 0, 0.3);
+    box-shadow: 0 0 0 1.5px var(--color-gold-base, #e6c200);
 }
 
 .mass-roll-presets {
@@ -1019,7 +1020,7 @@
     background: linear-gradient(145deg, rgba(255, 215, 0, 0.12), rgba(255, 215, 0, 0.04));
     border-color: rgba(255, 215, 0, 0.5);
     transform: translateY(-2px);
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45), 0 0 12px rgba(255, 215, 0, 0.15);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45), 0 0 0 1.5px rgba(255, 215, 0, 0.6);
 }
 
 .distribute-mode-card:hover::before {
@@ -1079,7 +1080,7 @@
     background: linear-gradient(135deg, rgba(28, 32, 44, 0.95), rgba(18, 20, 28, 0.98));
     border: 1px solid rgba(255, 179, 0, 0.45);
     border-radius: 8px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45), 0 0 10px rgba(255, 179, 0, 0.1);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45), 0 0 0 1.5px rgba(255, 179, 0, 0.45);
     margin: 8px 0;
     overflow: hidden;
     font-family: var(--font-body, sans-serif);
@@ -1087,7 +1088,7 @@
 
 .mass-attack-chat-card.is-resolved {
     border-color: rgba(129, 199, 132, 0.4);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45), 0 0 8px rgba(129, 199, 132, 0.1);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45), 0 0 0 1.5px rgba(129, 199, 132, 0.4);
 }
 
 .mass-attack-header {
@@ -1281,7 +1282,7 @@
     background: linear-gradient(135deg, rgba(245, 158, 11, 0.45), rgba(217, 119, 6, 0.35));
     border-color: #f59e0b;
     color: #fff;
-    box-shadow: 0 0 12px rgba(245, 158, 11, 0.4);
+    box-shadow: 0 0 0 1.5px #f59e0b;
     transform: translateY(-1px);
 }
 .btn-mass-attack-process:disabled {
@@ -1439,8 +1440,7 @@
 
 /* ═══════════════════════════════════════════════════════════════════════════ */
 
-/* Fix for Chat Icons */
+/* Chat Icon Drop Shadow */
 .chat-message i {
     text-shadow: 0 1px 2px rgba(0,0,0,0.5) !important;
-    -webkit-text-stroke: 0 !important;
 }

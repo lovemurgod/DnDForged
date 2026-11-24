@@ -13,11 +13,14 @@ contextBridge.exposeInMainWorld('electronAPI', {
   getStatus: () => ipcRenderer.invoke('get-status'),
   getLogs: () => ipcRenderer.invoke('get-logs'),
   startServer: () => ipcRenderer.invoke('start-server'),
+  cancelStartServer: () => ipcRenderer.invoke('cancel-start-server'),
   stopServer: () => ipcRenderer.invoke('stop-server'),
   startTunnel: (params) => ipcRenderer.invoke('start-tunnel', params),
   stopTunnel: () => ipcRenderer.invoke('stop-tunnel'),
-  openVttApp: () => ipcRenderer.invoke('open-vtt-app'),
+  openVttApp: (url) => ipcRenderer.invoke('open-vtt-app', url),
   openVttBrowser: (url) => ipcRenderer.invoke('open-vtt-browser', url),
+  openPresentationWindow: (params) => ipcRenderer.invoke('open-presentation-window', params),
+  closePresentationWindow: () => ipcRenderer.invoke('close-presentation-window'),
   updateServerPort: (params) => ipcRenderer.invoke('config-update-port', params),
   openDataFolder: () => ipcRenderer.invoke('open-data-folder'),
   openBackupsFolder: () => ipcRenderer.invoke('open-backups-folder'),
@@ -70,6 +73,17 @@ contextBridge.exposeInMainWorld('electronAPI', {
   sourcesImportFromUrl: (params) => ipcRenderer.invoke('sources-import-from-url', params),
   sourcesSyncToServer: () => ipcRenderer.invoke('sources-sync-to-server'),
 
+  // Direct STUN P2P Room Management
+  p2pGetStatus: () => ipcRenderer.invoke('p2p-get-status'),
+  p2pStartRoom: (params) => ipcRenderer.invoke('p2p-start-room', params),
+  p2pStopRoom: () => ipcRenderer.invoke('p2p-stop-room'),
+  p2pRegenCode: () => ipcRenderer.invoke('p2p-regen-code'),
+  onP2pStatusUpdate: (callback) => {
+    const subscription = (_, data) => callback(data);
+    ipcRenderer.on('p2p-status-update', subscription);
+    return () => ipcRenderer.removeListener('p2p-status-update', subscription);
+  },
+
   onStatusUpdate: (callback) => {
     const subscription = (_, data) => callback(data);
     ipcRenderer.on('status-update', subscription);
@@ -80,5 +94,11 @@ contextBridge.exposeInMainWorld('electronAPI', {
     const subscription = (_, log) => callback(log);
     ipcRenderer.on('log-update', subscription);
     return () => ipcRenderer.removeListener('log-update', subscription);
+  },
+
+  onPresentationStatusUpdate: (callback) => {
+    const subscription = (_, data) => callback(data);
+    ipcRenderer.on('presentation-status-update', subscription);
+    return () => ipcRenderer.removeListener('presentation-status-update', subscription);
   }
 });

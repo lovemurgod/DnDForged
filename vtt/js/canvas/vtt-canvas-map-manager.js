@@ -1489,6 +1489,7 @@ export function setupEditMapModal(managerState, options = {}) {
         map.grid.feetPerSquare = distVal;
         map.grid.distancePerSquare = distVal;
         map.grid.distanceUnit = finalUnit;
+        map.grid.diagonalRule = document.getElementById('edit-map-diagonal-rule')?.value || '5ft';
 
         // 5. Lighting settings
         if (!map.lightingSettings) {
@@ -1604,6 +1605,20 @@ export function openEditMapModal(map, managerState, options = {}) {
     document.getElementById('edit-map-grid-color').value = g.color || '#888888';
     document.getElementById('edit-map-grid-opacity').value = g.opacity || 0.3;
 
+    const editDiagRuleEl = document.getElementById('edit-map-diagonal-rule');
+    if (editDiagRuleEl) editDiagRuleEl.value = g.diagonalRule || '5ft';
+    const editDiagWrap = document.getElementById('edit-map-diagonal-rule-wrap');
+    if (editDiagWrap) editDiagWrap.classList.toggle('vtt-hidden', (g.type || 'square') !== 'square');
+
+    const editGridTypeEl = document.getElementById('edit-map-grid-type');
+    if (editGridTypeEl && !editGridTypeEl.dataset.diagListenerAttached) {
+        editGridTypeEl.dataset.diagListenerAttached = 'true';
+        editGridTypeEl.addEventListener('change', () => {
+            const wrap = document.getElementById('edit-map-diagonal-rule-wrap');
+            if (wrap) wrap.classList.toggle('vtt-hidden', editGridTypeEl.value !== 'square');
+        });
+    }
+
     const getGridDistanceSettings =
         options.getGridDistanceSettings ||
         ((grid) => ({ val: grid?.feetPerSquare || 5, unit: grid?.distanceUnit || 'ft' }));
@@ -1709,6 +1724,10 @@ export function setupMapUploadControls(managerState, options = {}) {
             newMapFolderInput.dataset.autoFilled = 'false';
         }
         if (newMapGridTypeSelect) newMapGridTypeSelect.value = 'square';
+        const newMapDiagEl = document.getElementById('new-map-diagonal-rule');
+        if (newMapDiagEl) newMapDiagEl.value = '5ft';
+        const newMapDiagWrap = document.getElementById('new-map-diagonal-rule-wrap');
+        if (newMapDiagWrap) newMapDiagWrap.classList.remove('vtt-hidden');
         if (newMapDistValInput) newMapDistValInput.value = 5;
         if (newMapDistUnitSelect) newMapDistUnitSelect.value = 'ft';
         if (newMapDistCustomWrap) newMapDistCustomWrap.classList.add('vtt-hidden');
@@ -1736,6 +1755,14 @@ export function setupMapUploadControls(managerState, options = {}) {
             } else {
                 if (newMapDistCustomWrap) newMapDistCustomWrap.classList.add('vtt-hidden');
             }
+        });
+    }
+
+    if (newMapGridTypeSelect && !newMapGridTypeSelect.dataset.diagListenerAttached) {
+        newMapGridTypeSelect.dataset.diagListenerAttached = 'true';
+        newMapGridTypeSelect.addEventListener('change', () => {
+            const wrap = document.getElementById('new-map-diagonal-rule-wrap');
+            if (wrap) wrap.classList.toggle('vtt-hidden', newMapGridTypeSelect.value !== 'square');
         });
     }
 
@@ -2019,6 +2046,7 @@ export function setupMapUploadControls(managerState, options = {}) {
             const chosenGridOpacity = !isNaN(rawGridOpacity) ? Math.min(1, Math.max(0, rawGridOpacity)) : 0.3;
             const chosenFogOfWar = newMapFogOfWarInput ? newMapFogOfWarInput.checked : true;
             const chosenDaylightMode = newMapDaylightModeInput ? newMapDaylightModeInput.checked : false;
+            const chosenDiagonalRule = document.getElementById('new-map-diagonal-rule')?.value || '5ft';
 
             if (!name) return alert('Please enter a map name');
 
@@ -2041,6 +2069,7 @@ export function setupMapUploadControls(managerState, options = {}) {
                             feetPerSquare: chosenDistVal,
                             distancePerSquare: chosenDistVal,
                             distanceUnit: chosenDistanceUnit,
+                            diagonalRule: chosenDiagonalRule,
                             type: chosenGridType,
                             color: chosenGridColor,
                             opacity: chosenGridOpacity
@@ -2145,6 +2174,7 @@ export function setupMapUploadControls(managerState, options = {}) {
                                 feetPerSquare: chosenDistVal,
                                 distancePerSquare: chosenDistVal,
                                 distanceUnit: chosenDistanceUnit,
+                                diagonalRule: chosenDiagonalRule,
                                 type: chosenGridType,
                                 color: chosenGridColor,
                                 opacity: chosenGridOpacity
@@ -2200,6 +2230,7 @@ export function setupMapUploadControls(managerState, options = {}) {
                                     feetPerSquare: chosenDistVal,
                                     distancePerSquare: chosenDistVal,
                                     distanceUnit: chosenDistanceUnit,
+                                    diagonalRule: chosenDiagonalRule,
                                     type: chosenGridType,
                                     color: '#888888',
                                     opacity: 0.3
@@ -2208,6 +2239,7 @@ export function setupMapUploadControls(managerState, options = {}) {
                                 importedMap.grid.feetPerSquare = chosenDistVal;
                                 importedMap.grid.distancePerSquare = chosenDistVal;
                                 importedMap.grid.distanceUnit = chosenDistanceUnit;
+                                importedMap.grid.diagonalRule = chosenDiagonalRule;
                                 if (
                                     chosenGridType !== 'square' &&
                                     (!importedMap.grid.type || importedMap.grid.type === 'square')
@@ -2298,6 +2330,7 @@ export function setupMapUploadControls(managerState, options = {}) {
                                     feetPerSquare: chosenDistVal,
                                     distancePerSquare: chosenDistVal,
                                     distanceUnit: chosenDistanceUnit,
+                                    diagonalRule: chosenDiagonalRule,
                                     type: chosenGridType,
                                     color: chosenGridColor,
                                     opacity: chosenGridOpacity

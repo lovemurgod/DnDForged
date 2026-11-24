@@ -23,11 +23,16 @@ export function renderStep1(ctx) {
             .replace(/\s*\[.*?\]$/, '')
             .replace(/\s*\([^)]*\).*$/, '')
             .trim();
-        if (!baseName || seenR.has(baseName.toLowerCase())) return;
-        seenR.add(baseName.toLowerCase());
-        baseRaces.push({ name: baseName, source: r.source });
+        const rSrc = (r.source || 'PHB').toUpperCase();
+        const key = `${baseName.toLowerCase()}::${rSrc}`;
+        if (!baseName || seenR.has(key)) return;
+        seenR.add(key);
+        baseRaces.push({ name: baseName, source: r.source || 'PHB' });
     });
-    baseRaces.sort((a, b) => a.name.localeCompare(b.name));
+    baseRaces.sort((a, b) => {
+        const cmp = a.name.localeCompare(b.name);
+        return cmp !== 0 ? cmp : a.source.localeCompare(b.source);
+    });
 
     // Matching subraces
     const cleanBase = (workingChar.race || '')
@@ -47,14 +52,18 @@ export function renderStep1(ctx) {
             let sub = r.subraceName || (r.name && r.name.includes('(') ? r.name.match(/\(([^)]+)\)/)?.[1] : '');
             if (sub) {
                 sub = sub.replace(/^variant;\s*/i, '').trim();
-                if (!seenSub.has(sub.toLowerCase()) && isSourceAllowed(r.source, sub, disabledSources)) {
-                    seenSub.add(sub.toLowerCase());
-                    matchingSubraces.push({ name: sub, source: r.source });
+                const subKey = `${sub.toLowerCase()}::${(r.source || 'PHB').toUpperCase()}`;
+                if (!seenSub.has(subKey) && isSourceAllowed(r.source, sub, disabledSources)) {
+                    seenSub.add(subKey);
+                    matchingSubraces.push({ name: sub, source: r.source || 'PHB' });
                 }
             }
         }
     });
-    matchingSubraces.sort((a, b) => a.name.localeCompare(b.name));
+    matchingSubraces.sort((a, b) => {
+        const cmp = a.name.localeCompare(b.name);
+        return cmp !== 0 ? cmp : a.source.localeCompare(b.source);
+    });
 
     // Backgrounds
     const rawBgs = (builderCache?.bgs || []).filter((b) => isSourceAllowed(b.source, b.name, disabledSources));
@@ -156,7 +165,17 @@ export function renderStep1(ctx) {
                     <label style="font-size:0.8rem; font-weight:600; color:var(--color-text-secondary); margin-bottom:4px;">Species / Race</label>
                     <select id="pc-wizard-race" style="width:100%; padding:8px 10px; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); border-radius:6px;">
                         <option value="">-- Choose Species --</option>
-                        ${baseRaces.map((r) => `<option value="${r.name}" ${workingChar.race === r.name && !workingChar.isCustomRace ? 'selected' : ''}>${r.name} [${r.source || 'PHB'}]</option>`).join('')}
+                        ${baseRaces
+                            .map((r) => {
+                                const isSel =
+                                    workingChar.race === r.name &&
+                                    (!workingChar.raceSource ||
+                                        (r.source || 'PHB').toUpperCase() ===
+                                            String(workingChar.raceSource || '').toUpperCase()) &&
+                                    !workingChar.isCustomRace;
+                                return `<option value="${r.name}::${r.source || 'PHB'}" ${isSel ? 'selected' : ''}>${r.name} [${r.source || 'PHB'}]</option>`;
+                            })
+                            .join('')}
                         <option value="__custom__" ${workingChar.isCustomRace ? 'selected' : ''}>➕ Custom / Homebrew Species...</option>
                     </select>
                     <input type="text" id="pc-wizard-custom-race" placeholder="Enter custom species name" value="${workingChar.customRaceText}" style="width:100%; margin-top:6px; display:${workingChar.isCustomRace ? 'block' : 'none'}; padding:6px 10px; background:rgba(0,0,0,0.4); border:1px solid var(--color-gold-base); color:var(--color-gold-light); border-radius:4px;">
@@ -166,7 +185,17 @@ export function renderStep1(ctx) {
                     <label style="font-size:0.8rem; font-weight:600; color:var(--color-text-secondary); margin-bottom:4px;">Subrace / Lineage</label>
                     <select id="pc-wizard-subrace" style="width:100%; padding:8px 10px; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); border-radius:6px;">
                         <option value="">None / Standard</option>
-                        ${matchingSubraces.map((s) => `<option value="${s.name}" ${workingChar.subrace === s.name && !workingChar.isCustomSubrace ? 'selected' : ''}>${s.name} [${s.source || 'PHB'}]</option>`).join('')}
+                        ${matchingSubraces
+                            .map((s) => {
+                                const isSel =
+                                    workingChar.subrace === s.name &&
+                                    (!workingChar.subraceSource ||
+                                        (s.source || 'PHB').toUpperCase() ===
+                                            String(workingChar.subraceSource || '').toUpperCase()) &&
+                                    !workingChar.isCustomSubrace;
+                                return `<option value="${s.name}::${s.source || 'PHB'}" ${isSel ? 'selected' : ''}>${s.name} [${s.source || 'PHB'}]</option>`;
+                            })
+                            .join('')}
                         <option value="__custom__" ${workingChar.isCustomSubrace ? 'selected' : ''}>➕ Custom / Homebrew Subrace...</option>
                     </select>
                     <input type="text" id="pc-wizard-custom-subrace" placeholder="Enter custom subrace name" value="${workingChar.customSubraceText}" style="width:100%; margin-top:6px; display:${workingChar.isCustomSubrace ? 'block' : 'none'}; padding:6px 10px; background:rgba(0,0,0,0.4); border:1px solid var(--color-gold-base); color:var(--color-gold-light); border-radius:4px;">
@@ -359,7 +388,8 @@ export function renderStep1(ctx) {
         const formData = new FormData();
         formData.append('file', file);
         try {
-            const res = await fetch('/api/assets/upload', { method: 'POST', body: formData });
+            const headers = typeof window !== 'undefined' && typeof window.vttAuthHeaders === 'function' ? window.vttAuthHeaders() : {};
+            const res = await fetch('/api/assets/upload', { method: 'POST', headers, body: formData });
             if (res.ok) {
                 const data = await res.json();
                 const url = data.url || data.path || data.filePath;
@@ -430,6 +460,10 @@ export function renderStep1(ctx) {
 
     const rSel = document.getElementById('pc-wizard-race');
     const custR = document.getElementById('pc-wizard-custom-race');
+    custR?.addEventListener('input', () => {
+        workingChar.customRaceText = custR.value.trim();
+        workingChar.race = workingChar.customRaceText || 'Custom Species';
+    });
     rSel?.addEventListener('change', () => {
         if (rSel.value === '__custom__') {
             if (custR) custR.style.display = 'block';
@@ -437,14 +471,21 @@ export function renderStep1(ctx) {
         } else {
             if (custR) custR.style.display = 'none';
             workingChar.isCustomRace = false;
-            workingChar.race = rSel.value;
+            const [rName, rSrc] = rSel.value.split('::');
+            workingChar.race = rName || rSel.value;
+            workingChar.raceSource = rSrc || '';
             workingChar.subrace = '';
+            workingChar.subraceSource = '';
         }
         recomputeCandidates().then(() => renderStep1(ctx));
     });
 
     const sSel = document.getElementById('pc-wizard-subrace');
     const custS = document.getElementById('pc-wizard-custom-subrace');
+    custS?.addEventListener('input', () => {
+        workingChar.customSubraceText = custS.value.trim();
+        workingChar.subrace = workingChar.customSubraceText || '';
+    });
     sSel?.addEventListener('change', () => {
         if (sSel.value === '__custom__') {
             if (custS) custS.style.display = 'block';
@@ -452,13 +493,19 @@ export function renderStep1(ctx) {
         } else {
             if (custS) custS.style.display = 'none';
             workingChar.isCustomSubrace = false;
-            workingChar.subrace = sSel.value;
+            const [sName, sSrc] = sSel.value.split('::');
+            workingChar.subrace = sName || sSel.value;
+            workingChar.subraceSource = sSrc || '';
         }
-        recomputeCandidates();
+        recomputeCandidates().then(() => renderStep1(ctx));
     });
 
     const bgSel = document.getElementById('pc-wizard-bg');
     const custBg = document.getElementById('pc-wizard-custom-bg');
+    custBg?.addEventListener('input', () => {
+        workingChar.customBackgroundText = custBg.value.trim();
+        workingChar.background = workingChar.customBackgroundText || 'Custom Background';
+    });
     bgSel?.addEventListener('change', () => {
         if (bgSel.value === '__custom__') {
             if (custBg) custBg.style.display = 'block';
@@ -470,7 +517,7 @@ export function renderStep1(ctx) {
             workingChar.background = bName || bgSel.value;
             workingChar.backgroundSource = bSrc || '';
         }
-        recomputeCandidates();
+        recomputeCandidates().then(() => renderStep1(ctx));
     });
 
     document.getElementById('pc-wiz-add-class-btn')?.addEventListener('click', () => {

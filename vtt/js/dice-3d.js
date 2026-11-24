@@ -656,10 +656,32 @@
             return mats;
         }
 
+        function clearCache() {
+            materialCache.forEach((mats) => {
+                if (Array.isArray(mats)) {
+                    mats.forEach((m) => {
+                        if (m.map) m.map.dispose();
+                        m.dispose();
+                    });
+                }
+            });
+            materialCache.clear();
+        }
+
         return {
-            getMaterialsForType
+            getMaterialsForType,
+            clearCache
         };
     })();
+
+    // Font readiness observer for WebGL face textures
+    if (typeof document !== 'undefined' && document.fonts && document.fonts.ready) {
+        document.fonts.ready
+            .then(() => {
+                MaterialManager.clearCache();
+            })
+            .catch(() => {});
+    }
 
     // Chamfered Polyhedral Geometry Factory (Sarah Rosanna Busch / Teal Algorithm)
     const GeometryFactory = (function () {

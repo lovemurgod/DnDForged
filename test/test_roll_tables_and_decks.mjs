@@ -314,8 +314,111 @@ const plainCard = { name: 'Action Surge', desc: 'Take an additional action on yo
 assert.equal(getEffectiveLinkedTable(plainCard), null, 'Unlinked feature without keyword should return null');
 console.log('   ✓ getEffectiveLinkedTable resolves auto-detected and custom linked tables');
 
-console.log('\nALL ROLL TABLES, ASSET TABLES & CARD DECKS TESTS PASSED!');
-assert.equal(getEffectiveLinkedTable(plainCard), null, 'Unlinked feature without keyword should return null');
-console.log('   ✓ getEffectiveLinkedTable resolves auto-detected and custom linked tables');
+// 10. Test Item Table Resolution & Best-Match Heuristics
+console.log('10. Testing Item Table Resolution & Best-Match Heuristics...');
+const mockCatalog = [
+    { id: 'ctable_101', name: 'Wand of Wonder Effects', dice: '1d100', source: 'DMG' },
+    { id: 'ctable_102', name: 'Robe of Useful Items Effects', dice: '1d100', source: 'DMG' },
+    { id: 'ctable_103', name: 'Bag of Tricks, Gray Effects', dice: '1d8', source: 'DMG' },
+    { id: 'ctable_104', name: 'Alchemy Jug Effects', dice: '1d10', source: 'DMG' },
+    { id: 'ctable_105', name: 'Deck of Illusions Effects', dice: '1d34', source: 'DMG' }
+];
+
+function testItemTableMatcher(itemName, catalog) {
+    if (!itemName) return null;
+    const cleanName = itemName.toLowerCase().trim();
+    const baseClean = cleanName.replace(/\s*\([^)]*\)/g, '').trim();
+
+    let match = catalog.find((t) => {
+        const tn = (t.name || '').toLowerCase().trim();
+        return tn === cleanName || tn === `${cleanName} effects` || tn === `${cleanName} table`;
+    });
+    if (match) return match;
+
+    match = catalog.find((t) => {
+        const tn = (t.name || '').toLowerCase().trim();
+        return (
+            tn.startsWith(`${cleanName} —`) ||
+            tn.startsWith(`${cleanName} -`) ||
+            tn.startsWith(`${cleanName};`) ||
+            tn.startsWith(`${cleanName},`)
+        );
+    });
+    if (match) return match;
+
+    if (baseClean && baseClean !== cleanName) {
+        match = catalog.find((t) => {
+            const tn = (t.name || '').toLowerCase().trim();
+            return (
+                tn === baseClean ||
+                tn === `${baseClean} effects` ||
+                tn === `${baseClean} table` ||
+                tn.startsWith(`${baseClean} —`) ||
+                tn.startsWith(`${baseClean} -`)
+            );
+        });
+        if (match) return match;
+    }
+    return null;
+}
+
+const matchWoW = testItemTableMatcher('Wand of Wonder', mockCatalog);
+assert.ok(matchWoW, 'Wand of Wonder must resolve to Wand of Wonder Effects');
+assert.equal(matchWoW.id, 'ctable_101');
+assert.equal(matchWoW.dice, '1d100');
+
+const matchRobe = testItemTableMatcher('Robe of Useful Items', mockCatalog);
+assert.ok(matchRobe, 'Robe of Useful Items must resolve to Robe of Useful Items Effects');
+assert.equal(matchRobe.id, 'ctable_102');
+
+const matchBag = testItemTableMatcher('Bag of Tricks, Gray', mockCatalog);
+assert.ok(matchBag, 'Bag of Tricks, Gray must resolve to its specific sub-table');
+assert.equal(matchBag.id, 'ctable_103');
+
+const matchPlain = testItemTableMatcher('Dagger', mockCatalog);
+assert.equal(matchPlain, null, 'Plain items without rollable tables must resolve to null');
+
+console.log('   ✓ Item table Best-Match heuristics correctly resolve magic item tables');
+
+// 11. Testing Custom Table Dice Resolution & Explicit Linked Table Precedence
+console.log('11. Testing Custom Table Dice Resolution & Explicit Linked Table Precedence...');
+{
+    // Custom campaign table with dice and rows (no entries property)
+    const mockCustomTables = [
+        {
+            id: 'table_custom_surge',
+            name: 'Chaos Wand Effects',
+            dice: '1d100',
+            rows: [
+                { min: 1, max: 50, text: 'Planar anomaly' },
+                { min: 51, max: 100, text: 'Astral flash' }
+            ]
+        }
+    ];
+
+    function resolveCustomTableDice(t) {
+        return (
+            t.dice ||
+            t.diceFormula ||
+            (Array.isArray(t.rows) && t.rows.length > 0 ? `1d${t.rows.length}` : null) ||
+            (Array.isArray(t.entries) && t.entries.length > 0 ? `1d${t.entries.length}` : '1d20')
+        );
+    }
+
+    assert.equal(resolveCustomTableDice(mockCustomTables[0]), '1d100', 'Custom table must resolve dice property 1d100');
+
+    // Custom item with explicit linkedTable
+    const customItem = {
+        name: 'Staff of the Planar Overlord',
+        linkedTable: 'Chaos Wand Effects'
+    };
+
+    const lookupKey = customItem.linkedTable
+        ? (typeof customItem.linkedTable === 'string' ? customItem.linkedTable : customItem.linkedTable.name || customItem.linkedTable.id)
+        : customItem.name;
+
+    assert.equal(lookupKey, 'Chaos Wand Effects', 'Explicit linkedTable must take precedence over item name');
+    console.log('   ✓ Custom Table Dice Resolution and Explicit Linked Table Precedence verified');
+}
 
 console.log('\nALL ROLL TABLES, ASSET TABLES & CARD DECKS TESTS PASSED!');

@@ -1497,7 +1497,7 @@ export function getUpcastBonus(spData) {
     return null;
 }
 
-export function parseSpellMacro(spell, stats, charName, descHtml, castLvl) {
+export function parseSpellMacro(spell, stats, charName, descHtml, castLvl, rollModeOverride = null) {
     const mc = {
         charName: charName || 'Creature',
         macroName: spell.name,
@@ -1511,7 +1511,7 @@ export function parseSpellMacro(spell, stats, charName, descHtml, castLvl) {
     if (spell.spellAttack) {
         const mod = stats.atk;
         const formula = `1d20${mod >= 0 ? '+' : ''}${mod}`;
-        const evalRoll = evaluateDiceHelper(formula);
+        const evalRoll = evaluateDiceHelper(formula, false, rollModeOverride);
         mc.atkRoll = {
             formula: formula,
             total: evalRoll.total,
@@ -1684,7 +1684,8 @@ export function rollNpcSpell(level, idx, type, customCastLvl = null, targetSpell
         window.VTTSpellManager.rollSpell(sp, level, m, {
             type: type,
             castLvl: customCastLvl,
-            visibility: visibility
+            visibility: visibility,
+            rollMode: rollOpts.rollMode || m?.activeRollMode || 'normal'
         });
         return;
     }
@@ -1917,8 +1918,8 @@ export function setupCsSpellListeners(panel, m, ctx) {
                     }
                 };
                 if (visibility === 'private' || visibility === 'gm') {
-                    msgObj.to = vtt.username;
-                    vtt.socket.emit('chat:whisper', msgObj);
+                    msgObj.whisperToGM = true;
+                    vtt.socket.emit('chat:msg', msgObj);
                 } else {
                     vtt.socket.emit('chat:msg', msgObj);
                 }

@@ -8,8 +8,14 @@ import { spawn, execFileSync, execSync } from 'child_process';
 import net from 'net';
 import crypto from 'crypto';
 import { SourceManager } from './source-manager.js';
-import { isRoll20CharacterJson, convertRoll20Character } from './importers/roll20-importer.js';
+import {
+    isRoll20CharacterJson,
+    convertRoll20Character,
+    isRoll20TableJson,
+    convertRoll20TableToVTT
+} from './importers/roll20-importer.js';
 import { createCampaignTemplate, hashPassword } from '../utils.js';
+import { p2pBridge } from '../server/p2p-bridge.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -203,6 +209,9 @@ let serverProcess = null;
 let tunnelProcess = null;
 
 let isServerRunning = false;
+let isServerStarting = false;
+let isServerStopping = false;
+let cancelStartupRequested = false;
 let isServerManaged = false;
 let isTunnelRunning = false;
 let currentSubdomain = appConfig.subdomain || 'mygame';
@@ -294,6 +303,9 @@ async function startServer() {
         await syncConfigToServer();
         return true;
     }
+    if (isServerStarting) {
+        return false;
+    }
 
     const requestedPort = parseInt(appConfig.serverPort, 10) || DEFAULT_PORT;
     let targetPort = requestedPort;
@@ -313,6 +325,16 @@ async function startServer() {
         }
 
         // Port is occupied but not responding as ForgeDVTT
+        const hasToken = appConfig.tunnelToken && isValidTunnelToken(appConfig.tunnelToken);
+        if (hasToken) {
+            appendLog(
+                `[Server Error] Port ${targetPort} is in use. When a Named Cloudflare Tunnel Token is configured, strict port binding is enforced to match Cloudflare Zero Trust ingress rules. Please free port ${targetPort} or update your server port.`
+            );
+            isServerRunning = false;
+            notifyStatusChange();
+            return false;
+        }
+
         if (appConfig.autoAssignPort !== false) {
             const nextFree = await findAvailablePort(targetPort + 1);
             appendLog(`[Server Notice] Port ${targetPort} is occupied. Auto-assigning next free port: ${nextFree}.`);
@@ -345,6 +367,9 @@ async function startServer() {
     let processExitedEarly = false;
     let earlyExitCode = null;
     let spawnError = null;
+    isServerStarting = true;
+    cancelStartupRequested = false;
+    notifyStatusChange();
 
     try {
         serverProcess = spawn(process.execPath, [serverScript], {
@@ -362,6 +387,7 @@ async function startServer() {
     } catch (err) {
         appendLog(`[Server Err] Failed to spawn process: ${err.message}`);
         isServerRunning = false;
+        isServerStarting = false;
         notifyStatusChange();
         return false;
     }
@@ -389,11 +415,11 @@ async function startServer() {
     serverProcess.once('error', onEarlyError);
 
     const startTime = Date.now();
-    const timeoutMs = 10000;
+    let lastHeartbeatTime = Date.now();
     let serverConfirmed = false;
 
-    while (Date.now() - startTime < timeoutMs) {
-        if (processExitedEarly) break;
+    // Poll until ready, early exit, or user-initiated cancellation (no rigid 10s cutoff)
+    while (!processExitedEarly && !cancelStartupRequested) {
         const portActive = await isPortActive(targetPort);
         if (portActive) {
             const ready = await isServerReady(targetPort);
@@ -402,11 +428,34 @@ async function startServer() {
                 break;
             }
         }
-        await new Promise((r) => setTimeout(r, 150));
+
+        // Periodic diagnostic heartbeat every 12 seconds
+        if (Date.now() - lastHeartbeatTime >= 12000) {
+            lastHeartbeatTime = Date.now();
+            const elapsed = Math.round((Date.now() - startTime) / 1000);
+            appendLog(`[Server Notice] Local server is initializing campaigns, compendiums & assets... (${elapsed}s elapsed)`);
+        }
+
+        await new Promise((r) => setTimeout(r, 200));
     }
 
     serverProcess.removeListener('exit', onEarlyExit);
     serverProcess.removeListener('error', onEarlyError);
+
+    if (cancelStartupRequested) {
+        appendLog(`[Server Notice] Startup cancelled by user. Terminating process...`);
+        if (serverProcess) {
+            try {
+                serverProcess.kill();
+            } catch (e) {}
+            serverProcess = null;
+        }
+        isServerRunning = false;
+        isServerStarting = false;
+        cancelStartupRequested = false;
+        notifyStatusChange();
+        return false;
+    }
 
     if (!serverConfirmed || processExitedEarly) {
         let reason = spawnError ? spawnError.message : '';
@@ -417,7 +466,7 @@ async function startServer() {
                 reason = `Server process exited prematurely with code ${earlyExitCode}`;
             }
         } else if (!serverConfirmed) {
-            reason = `Server did not become ready on port ${targetPort} within ${timeoutMs / 1000} seconds`;
+            reason = `Server did not become ready on port ${targetPort}`;
         }
         appendLog(`[Server Error] Startup failed: ${reason}`);
         if (serverProcess) {
@@ -427,6 +476,7 @@ async function startServer() {
             serverProcess = null;
         }
         isServerRunning = false;
+        isServerStarting = false;
         notifyStatusChange();
         return false;
     }
@@ -440,6 +490,7 @@ async function startServer() {
         notifyStatusChange();
     });
 
+    isServerStarting = false;
     isServerRunning = true;
     isServerManaged = true;
     await syncConfigToServer();
@@ -451,42 +502,59 @@ async function stopServer() {
     if (serverProcess) {
         appendLog('Stopping local server process gracefully...');
         const proc = serverProcess;
-        // 1. Attempt graceful shutdown via local HTTP endpoint
+        isServerStopping = true;
+        notifyStatusChange();
+
+        // 1. Send graceful shutdown request to flush state (clean await up to 30s for large campaigns)
         try {
-            const shutdownPromise = fetch(`http://127.0.0.1:${getServerPort()}/api/server/shutdown`, {
+            await fetch(`http://127.0.0.1:${getServerPort()}/api/server/shutdown`, {
                 method: 'POST',
-                headers: internalHeaders({ 'Content-Type': 'application/json' })
+                headers: internalHeaders({ 'Content-Type': 'application/json' }),
+                signal: AbortSignal.timeout(30000)
             });
-            await Promise.race([shutdownPromise, new Promise((r) => setTimeout(r, 600))]);
         } catch {
-            // Ignore network errors if server is already down or unresponsive
+            // Server may already be closing or offline
         }
 
-        // 2. Await clean exit before forceful fallback
+        // 2. Await clean exit before forceful fallback, logging progress periodically
         if (proc && !proc.killed) {
             await new Promise((resolve) => {
                 let isDone = false;
+                const startTime = Date.now();
                 const cleanup = () => {
                     if (!isDone) {
                         isDone = true;
+                        clearInterval(heartbeatInterval);
+                        clearTimeout(safetyTimeout);
                         resolve();
                     }
                 };
                 proc.once('exit', cleanup);
                 proc.once('close', cleanup);
-                setTimeout(() => {
+
+                // Periodic status heartbeat every 10s
+                const heartbeatInterval = setInterval(() => {
+                    const elapsed = Math.round((Date.now() - startTime) / 1000);
+                    appendLog(`[Server Notice] Awaiting safe campaign state flush to disk... (${elapsed}s elapsed)`);
+                }, 10000);
+
+                // Safe fallback timer (45 seconds) to prevent infinite hangs
+                const safetyTimeout = setTimeout(() => {
                     if (!isDone) {
                         isDone = true;
+                        clearInterval(heartbeatInterval);
+                        appendLog('[Server Notice] Shutdown wait threshold reached (45s). Terminating process.');
                         try {
                             proc.kill();
                         } catch {}
                         resolve();
                     }
-                }, 1500);
+                }, 45000);
             });
         }
         serverProcess = null;
         isServerRunning = false;
+        isServerStopping = false;
         isServerManaged = false;
         notifyStatusChange();
         return { success: true };
@@ -496,6 +564,7 @@ async function stopServer() {
         return { success: false, external: true, error: 'External server process cannot be stopped from Electron.' };
     }
     isServerRunning = false;
+    isServerStopping = false;
     isServerManaged = false;
     notifyStatusChange();
     return { success: true };
@@ -512,6 +581,12 @@ async function startTunnel(params = {}) {
         .replace(/^https?:\/\//i, '')
         .replace(/\/+$/, '');
     const token = (params.token !== undefined ? params.token : appConfig.tunnelToken || '').trim();
+
+    if (!appConfig.gmCredentials?.username || !appConfig.gmCredentials?.hash) {
+        const msg = 'Set a GM Username and Password in Hosting & Server before starting an online tunnel.';
+        appendLog(`[GM Security] Blocked tunnel start: ${msg}`);
+        return { success: false, error: msg };
+    }
 
     appConfig.hostingMode = mode;
     appConfig.subdomain = subdomain;
@@ -541,41 +616,42 @@ async function startTunnel(params = {}) {
         isServerRunning = true;
     }
 
+    const isQuickTunnel = mode !== 'custom' && (!currentTunnelToken || !isValidTunnelToken(currentTunnelToken));
+
     if (mode === 'custom' && customDomain) {
         registeredUrl = `https://${customDomain}`;
         appendLog(`Launching Cloudflare Tunnel for Custom Domain: ${customDomain}`);
-    } else {
+    } else if (currentTunnelToken && isValidTunnelToken(currentTunnelToken)) {
         registeredUrl = `https://${currentSubdomain}.forgedvtt.com`;
         appendLog(`Launching Cloudflare Tunnel for subdomain: ${currentSubdomain}.forgedvtt.com`);
+    } else {
+        registeredUrl = ''; // Pending quick tunnel allocation from Cloudflare Edge
+        appendLog('Launching zero-config Cloudflare Quick Tunnel...');
     }
 
     const tunnelArgs = ['--protocol', 'http2', '--no-prechecks'];
+    const tunnelEnv = { ...process.env };
     if (currentTunnelToken && isValidTunnelToken(currentTunnelToken)) {
-        tunnelArgs.push('tunnel', 'run', '--token', currentTunnelToken);
+        tunnelArgs.push('tunnel', 'run');
+        tunnelEnv.TUNNEL_TOKEN = currentTunnelToken;
     } else {
-        const localConfig = path.join(process.env.USERPROFILE || process.env.HOME || '', '.cloudflared', 'config.yml');
-        if (fs.existsSync(localConfig)) {
-            tunnelArgs.push('--config', localConfig, 'tunnel', 'run');
-        } else {
-            tunnelArgs.push('tunnel', '--url', `http://127.0.0.1:${getServerPort()}`);
-        }
+        tunnelArgs.push('tunnel', '--config', '', '--url', `http://127.0.0.1:${getServerPort()}`);
     }
 
-    // In packaged ASAR builds, rootDir points into app.asar which is a virtual archive,
-    // not a physical filesystem directory. Spawning an external OS binary with cwd inside
-    // an .asar archive fails with ENOENT in libuv CreateProcess.
-    const tunnelCwd =
-        app.isPackaged || rootDir.includes('app.asar') ? process.resourcesPath || path.dirname(cloudflared) : rootDir;
+    // Always use a guaranteed user-writable directory for child process execution
+    const tunnelCwd = app.getPath('userData') || rootDir;
 
     try {
         tunnelProcess = spawn(cloudflared, tunnelArgs, {
             cwd: tunnelCwd,
+            env: tunnelEnv,
             stdio: ['ignore', 'pipe', 'pipe'],
             windowsHide: true
         });
     } catch (err) {
         appendLog(`[Tunnel Err] Failed to spawn cloudflared: ${err.message}`);
         isTunnelRunning = false;
+        registeredUrl = `http://localhost:${getServerPort()}`;
         notifyStatusChange();
         return { success: false, error: err.message };
     }
@@ -584,39 +660,51 @@ async function startTunnel(params = {}) {
         appendLog(`[Tunnel Err] Cloudflare process error: ${err.message}`);
         isTunnelRunning = false;
         tunnelProcess = null;
+        registeredUrl = `http://localhost:${getServerPort()}`;
         notifyStatusChange();
     });
 
-    tunnelProcess.stdout.on('data', (data) => {
-        const str = data.toString().trim();
-        if (str) appendLog(`[Tunnel] ${str}`);
-    });
+    let quickTunnelBuffer = '';
+    const handleTunnelStream = (data) => {
+        const str = data.toString();
+        const trimmed = str.trim();
+        if (trimmed) appendLog(`[Tunnel] ${trimmed}`);
 
-    tunnelProcess.stderr.on('data', (data) => {
-        const str = data.toString().trim();
-        if (str) {
-            appendLog(`[Tunnel] ${str}`);
-            // Parse quick tunnel URL if in trycloudflare mode and no custom domain set
-            if (mode !== 'custom' && !currentTunnelToken) {
-                const match = str.match(/https:\/\/[a-zA-Z0-9-]+\.trycloudflare\.com/);
-                if (match) {
-                    registeredUrl = match[0];
-                    notifyStatusChange();
-                }
+        if (isQuickTunnel && !registeredUrl) {
+            quickTunnelBuffer += str;
+            const match = quickTunnelBuffer.match(/https:\/\/[a-zA-Z0-9-]+\.trycloudflare\.com/);
+            if (match) {
+                registeredUrl = match[0];
+                appendLog(`[Tunnel] Cloudflare Quick Tunnel URL active: ${registeredUrl}`);
+                notifyStatusChange();
             }
         }
-    });
+    };
+
+    tunnelProcess.stdout.on('data', handleTunnelStream);
+    tunnelProcess.stderr.on('data', handleTunnelStream);
 
     tunnelProcess.on('exit', (code) => {
         appendLog(`Cloudflare Tunnel stopped (exit code: ${code})`);
         isTunnelRunning = false;
         tunnelProcess = null;
+        registeredUrl = `http://localhost:${getServerPort()}`;
         notifyStatusChange();
     });
 
     isTunnelRunning = true;
     notifyStatusChange();
-    return { success: true, url: registeredUrl };
+
+    // In quick tunnel mode, await assigned URL for up to 15 seconds so UI and caller receive resolved link
+    if (isQuickTunnel) {
+        const timeoutMs = 15000;
+        const startWait = Date.now();
+        while (!registeredUrl && isTunnelRunning && Date.now() - startWait < timeoutMs) {
+            await new Promise((r) => setTimeout(r, 200));
+        }
+    }
+
+    return { success: true, url: registeredUrl || `http://localhost:${getServerPort()}` };
 }
 
 function stopTunnel() {
@@ -641,6 +729,8 @@ function getStatusPayload() {
     const port = getServerPort();
     return {
         isServerRunning,
+        isServerStarting,
+        isServerStopping,
         isServerManaged,
         isTunnelRunning,
         port,
@@ -656,8 +746,56 @@ function getStatusPayload() {
         backupsDir: appConfig.backupsDir,
         cloudflaredAvailable: !!getCloudflaredPath(),
         gmUsername: appConfig.gmCredentials?.username || '',
-        hasGmPassword: !!appConfig.gmCredentials?.hash
+        hasGmPassword: !!appConfig.gmCredentials?.hash,
+        p2p: p2pBridge.getStatus()
     };
+}
+
+function attachWindowSecurityGuards(win, { allowLocalPopouts = false } = {}) {
+    if (!win || !win.webContents) return;
+    const isPermittedAppUrl = (rawUrl) => {
+        if (!rawUrl || rawUrl === 'about:blank') return true;
+        if (rawUrl.startsWith('file://')) return true;
+        try {
+            const parsed = new URL(rawUrl);
+            const h = parsed.hostname.toLowerCase();
+            return (
+                (parsed.protocol === 'http:' || parsed.protocol === 'https:') &&
+                (h === 'localhost' || h === '127.0.0.1') &&
+                Number(parsed.port || 80) === getServerPort()
+            );
+        } catch {
+            return false;
+        }
+    };
+
+    win.webContents.on('will-navigate', (event, navigationUrl) => {
+        if (!isPermittedAppUrl(navigationUrl)) {
+            event.preventDefault();
+            if (/^https?:\/\//i.test(navigationUrl)) {
+                shell.openExternal(navigationUrl).catch(() => {});
+            }
+        }
+    });
+
+    win.webContents.setWindowOpenHandler(({ url }) => {
+        if (allowLocalPopouts && isPermittedAppUrl(url)) {
+            return {
+                action: 'allow',
+                overrideBrowserWindowOptions: {
+                    webPreferences: {
+                        preload: path.join(__dirname, 'vtt-preload.cjs'),
+                        nodeIntegration: false,
+                        contextIsolation: true
+                    }
+                }
+            };
+        }
+        if (/^https?:\/\//i.test(url)) {
+            shell.openExternal(url).catch(() => {});
+        }
+        return { action: 'deny' };
+    });
 }
 
 function createWindow() {
@@ -677,6 +815,7 @@ function createWindow() {
         }
     });
 
+    attachWindowSecurityGuards(mainWindow);
     mainWindow.loadFile(path.join(__dirname, 'ui', 'index.html'));
 
     mainWindow.on('close', (event) => {
@@ -786,7 +925,56 @@ function updateTrayMenu() {
     tray.setContextMenu(contextMenu);
 }
 
-function openVTTWindow() {
+let presentationWindow = null;
+
+function openPresentationWindow(campaignId = 'default') {
+    if (presentationWindow && !presentationWindow.isDestroyed()) {
+        presentationWindow.show();
+        presentationWindow.focus();
+        return;
+    }
+
+    presentationWindow = new BrowserWindow({
+        width: 1280,
+        height: 720,
+        minWidth: 800,
+        minHeight: 600,
+        title: 'ForgeDVTT — Presentation Display',
+        icon: path.join(__dirname, 'icon.png'),
+        backgroundColor: '#0a0e17',
+        autoHideMenuBar: true,
+        webPreferences: {
+            preload: path.join(__dirname, 'vtt-preload.cjs'),
+            nodeIntegration: false,
+            contextIsolation: true,
+            backgroundThrottling: false
+        }
+    });
+
+    attachWindowSecurityGuards(presentationWindow);
+    presentationWindow.setMenuBarVisibility(false);
+    presentationWindow.loadURL(`http://localhost:${getServerPort()}/vtt/index.html?mode=presentation&campaign=${encodeURIComponent(campaignId)}`);
+
+    presentationWindow.on('closed', () => {
+        presentationWindow = null;
+        try {
+            BrowserWindow.getAllWindows().forEach((win) => {
+                if (!win.isDestroyed()) {
+                    win.webContents.send('presentation-status-update', { isOpen: false });
+                }
+            });
+        } catch (_) {}
+    });
+}
+
+function closePresentationWindow() {
+    if (presentationWindow && !presentationWindow.isDestroyed()) {
+        presentationWindow.close();
+        presentationWindow = null;
+    }
+}
+
+function openVTTWindow(targetUrl) {
     if (session.defaultSession) {
         session.defaultSession.clearCache().catch(() => {});
     }
@@ -796,14 +984,16 @@ function openVTTWindow() {
         title: 'ForgeDVTT Virtual Tabletop',
         backgroundColor: '#121212',
         webPreferences: {
+            preload: path.join(__dirname, 'vtt-preload.cjs'),
             nodeIntegration: false,
             contextIsolation: true,
             backgroundThrottling: false
         }
     });
 
+    attachWindowSecurityGuards(vttWin, { allowLocalPopouts: true });
     vttWin.setMenuBarVisibility(false);
-    vttWin.loadURL(`http://localhost:${getServerPort()}/vtt/index.html`);
+    vttWin.loadURL(targetUrl || `http://localhost:${getServerPort()}/vtt/index.html`);
 }
 
 // Register IPC Handlers
@@ -840,16 +1030,68 @@ ipcMain.handle('config-update-port', async (_, { port, autoAssign }) => {
     };
 });
 ipcMain.handle('start-server', async () => await startServer());
+ipcMain.handle('cancel-start-server', async () => {
+    if (isServerStarting) {
+        cancelStartupRequested = true;
+        if (serverProcess) {
+            try {
+                serverProcess.kill();
+            } catch (e) {}
+        }
+        return { success: true };
+    }
+    return { success: false };
+});
 ipcMain.handle('stop-server', async () => await stopServer());
 ipcMain.handle('start-tunnel', async (_, params = {}) => {
     return await startTunnel(params);
 });
 ipcMain.handle('stop-tunnel', () => stopTunnel());
-ipcMain.handle('open-vtt-app', async () => {
+
+// Direct STUN P2P Room Handlers
+function hasConfiguredGmCredentials() {
+    return Boolean(appConfig.gmCredentials?.username && appConfig.gmCredentials?.hash);
+}
+
+ipcMain.handle('p2p-get-status', () => p2pBridge.getStatus());
+ipcMain.handle('p2p-start-room', (_, options = {}) => {
+    if (!hasConfiguredGmCredentials()) {
+        return { success: false, error: 'Set a GM Username and Password before starting an online P2P room.' };
+    }
+    const status = p2pBridge.startRoom(options);
+    notifyStatusChange();
+    return status;
+});
+ipcMain.handle('p2p-stop-room', () => {
+    const result = p2pBridge.stopRoom();
+    notifyStatusChange();
+    return result;
+});
+ipcMain.handle('p2p-regen-code', () => {
+    if (!hasConfiguredGmCredentials()) {
+        return { success: false, error: 'Set a GM Username and Password before regenerating a P2P room code.' };
+    }
+    const newCode = p2pBridge.generateRoomCode();
+    const status = p2pBridge.startRoom({ roomCode: newCode });
+    notifyStatusChange();
+    return status;
+});
+ipcMain.handle('open-vtt-app', async (_, targetUrl) => {
     if (!isServerRunning) {
         await startServer();
     }
-    return openVTTWindow();
+    return openVTTWindow(targetUrl);
+});
+ipcMain.handle('open-presentation-window', async (_, params = {}) => {
+    if (!isServerRunning) {
+        await startServer();
+    }
+    openPresentationWindow(params?.campaignId || 'default');
+    return { success: true };
+});
+ipcMain.handle('close-presentation-window', async () => {
+    closePresentationWindow();
+    return { success: true };
 });
 ipcMain.handle('open-vtt-browser', async (_, url) => {
     if (!isServerRunning) {
@@ -1326,6 +1568,9 @@ ipcMain.handle('set-gm-credentials', async (_, { username, password, clearPasswo
     let salt = appConfig.gmCredentials?.salt || '';
 
     if (clearPassword) {
+        if (isTunnelRunning) {
+            return { success: false, error: 'Stop the active online tunnel before removing the GM password.' };
+        }
         hash = '';
         salt = '';
     } else if (password && password.trim() !== '') {
@@ -1572,6 +1817,45 @@ ipcMain.handle('gm-delete-entity', async (_, { campaignId, entityType, entityId 
             } else if (camp.characters && camp.characters[entityId]) {
                 delete camp.characters[entityId];
                 deleted = true;
+            } else if (entityType === 'table' || entityType === 'deck' || camp.rollTables || camp.assetTables) {
+                const rt = camp.rollTables || {};
+                let found = false;
+                if (Array.isArray(rt.customTables)) {
+                    const initLen = rt.customTables.length;
+                    rt.customTables = rt.customTables.filter((t) => t.id !== entityId);
+                    if (rt.customTables.length < initLen) {
+                        found = true;
+                        entityType = 'table';
+                    }
+                }
+                if (!found && Array.isArray(rt.assetTables)) {
+                    const initLen = rt.assetTables.length;
+                    rt.assetTables = rt.assetTables.filter((t) => t.id !== entityId);
+                    if (rt.assetTables.length < initLen) {
+                        found = true;
+                        entityType = 'table';
+                    }
+                }
+                if (!found && Array.isArray(camp.assetTables)) {
+                    const initLen = camp.assetTables.length;
+                    camp.assetTables = camp.assetTables.filter((t) => t.id !== entityId);
+                    if (camp.assetTables.length < initLen) {
+                        found = true;
+                        entityType = 'table';
+                    }
+                }
+                if (!found && Array.isArray(rt.cardDecks)) {
+                    const initLen = rt.cardDecks.length;
+                    rt.cardDecks = rt.cardDecks.filter((d) => d.id !== entityId);
+                    if (rt.cardDecks.length < initLen) {
+                        found = true;
+                        entityType = 'deck';
+                    }
+                }
+                if (found) {
+                    camp.rollTables = rt;
+                    deleted = true;
+                }
             }
 
             if (!deleted) return { success: false, error: 'Entity not found in campaign' };
@@ -2033,6 +2317,34 @@ ipcMain.handle('gm-export-granular', async (_, { campaignId, entityType, entityI
             if (ch) items = [ch];
             exportLabel = ch?.name ? `${ch.name}-NPC` : 'CustomNPC';
         }
+    } else if (entityType === 'table' || entityType === 'deck' || entityType === 'tablesAndDecks') {
+        const rollTablesObj = campaign.rollTables || {};
+        const customTables = rollTablesObj.customTables || [];
+        const assetTables = rollTablesObj.assetTables || campaign.assetTables || [];
+        const cardDecks = rollTablesObj.cardDecks || [];
+
+        if (batch || entityType === 'tablesAndDecks') {
+            items = [
+                ...customTables.map((t) => ({ ...t, _entityCategory: 'customTable' })),
+                ...assetTables.map((t) => ({ ...t, _entityCategory: 'assetTable' })),
+                ...cardDecks.map((t) => ({ ...t, _entityCategory: 'cardDeck' }))
+            ];
+            exportLabel = `${campaign.name || 'Campaign'}-All-Tables-and-Decks`;
+        } else {
+            let match = null;
+            if (entityType === 'deck') {
+                match = cardDecks.find((d) => d.id === entityId);
+            } else {
+                match =
+                    customTables.find((t) => t.id === entityId) ||
+                    assetTables.find((t) => t.id === entityId) ||
+                    cardDecks.find((d) => d.id === entityId);
+            }
+            if (match) items = [match];
+            exportLabel = match?.name
+                ? `${match.name}-${match.isAssetTable ? 'AssetTable' : match.cards ? 'Deck' : 'Table'}`
+                : 'Table';
+        }
     }
 
     if (items.length === 0) {
@@ -2120,8 +2432,9 @@ ipcMain.handle('gm-import-granular', async (_, { campaignId, explicitFilePath })
 
     if (targetFiles.length === 0) return { canceled: true };
 
-    // Check if any selected files are Roll20 character JSONs
+    // Check if any selected files are Roll20 character or table JSONs
     const roll20Candidates = [];
+    const roll20TableCandidates = [];
     const standardFiles = [];
 
     for (const fPath of targetFiles) {
@@ -2134,9 +2447,55 @@ ipcMain.handle('gm-import-granular', async (_, { campaignId, explicitFilePath })
                     roll20Candidates.push({ filePath: fPath, data: parsed });
                     continue;
                 }
+                if (isRoll20TableJson(parsed)) {
+                    roll20TableCandidates.push({ filePath: fPath, data: parsed });
+                    continue;
+                }
             } catch {}
         }
         standardFiles.push(fPath);
+    }
+
+    if (roll20TableCandidates.length > 0) {
+        const campFile = path.join(appConfig.campaignDataDir, 'campaigns.json');
+        let currentCamp = null;
+        let allCamps = null;
+        if (fs.existsSync(campFile)) {
+            try {
+                allCamps = JSON.parse(fs.readFileSync(campFile, 'utf8'));
+                currentCamp = allCamps[campaignId];
+            } catch {}
+        }
+        if (currentCamp) {
+            if (!currentCamp.rollTables) currentCamp.rollTables = {};
+            if (!currentCamp.rollTables.customTables) currentCamp.rollTables.customTables = [];
+            if (!currentCamp.rollTables.assetTables) currentCamp.rollTables.assetTables = [];
+
+            const uploadsDir = path.join(appConfig.campaignDataDir, 'campaigns', campaignId, 'uploads');
+            let tableCount = 0;
+
+            for (const item of roll20TableCandidates) {
+                try {
+                    const conv = await convertRoll20TableToVTT(item.data, uploadsDir, campaignId);
+                    if (conv.customTables?.length > 0) {
+                        currentCamp.rollTables.customTables.push(...conv.customTables);
+                        tableCount += conv.customTables.length;
+                    }
+                    if (conv.assetTables?.length > 0) {
+                        currentCamp.rollTables.assetTables.push(...conv.assetTables);
+                        tableCount += conv.assetTables.length;
+                    }
+                } catch (e) {
+                    appendLog(`[Roll20 Table Import Error] ${e.message}`);
+                }
+            }
+
+            fs.writeFileSync(campFile, JSON.stringify(allCamps, null, 2), 'utf8');
+            appendLog(`[Roll20 Import] Converted and imported ${tableCount} Roll20 table(s) into campaign ${campaignId}`);
+            if (standardFiles.length === 0) {
+                return { success: true, count: tableCount, campaign: currentCamp };
+            }
+        }
     }
 
     if (roll20Candidates.length > 0) {
@@ -2349,6 +2708,55 @@ ipcMain.handle('gm-import-granular', async (_, { campaignId, explicitFilePath })
                         if (!camp.mapOrder) camp.mapOrder = Object.keys(camp.maps).filter((id) => id !== mId);
                         if (!camp.mapOrder.includes(mId)) camp.mapOrder.push(mId);
                         importedIds.push(mId);
+                    } else if (
+                        entityType === 'table' ||
+                        entityType === 'deck' ||
+                        item._entityCategory === 'customTable' ||
+                        item._entityCategory === 'assetTable' ||
+                        item._entityCategory === 'cardDeck' ||
+                        item.isAssetTable ||
+                        item.sides ||
+                        item.cards ||
+                        (item.dice && item.rows)
+                    ) {
+                        if (!camp.rollTables) camp.rollTables = {};
+                        if (item.isAssetTable || item.sides || item._entityCategory === 'assetTable') {
+                            if (!camp.rollTables.assetTables) camp.rollTables.assetTables = [];
+                            let tId = item.id;
+                            let tName = item.name || 'Imported Asset Table';
+                            if (!tId || camp.rollTables.assetTables.some((t) => t.id === tId)) {
+                                tId = `asset_table_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+                                tName = `${tName} (Copy)`;
+                            }
+                            const cloned = { ...item, id: tId, name: tName, isAssetTable: true };
+                            delete cloned._entityCategory;
+                            camp.rollTables.assetTables.push(cloned);
+                            importedIds.push(tId);
+                        } else if (item.cards || item._entityCategory === 'cardDeck') {
+                            if (!camp.rollTables.cardDecks) camp.rollTables.cardDecks = [];
+                            let dId = item.id;
+                            let dName = item.name || 'Imported Card Deck';
+                            if (!dId || camp.rollTables.cardDecks.some((d) => d.id === dId)) {
+                                dId = `deck_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+                                dName = `${dName} (Copy)`;
+                            }
+                            const cloned = { ...item, id: dId, name: dName };
+                            delete cloned._entityCategory;
+                            camp.rollTables.cardDecks.push(cloned);
+                            importedIds.push(dId);
+                        } else {
+                            if (!camp.rollTables.customTables) camp.rollTables.customTables = [];
+                            let tId = item.id;
+                            let tName = item.name || 'Imported Roll Table';
+                            if (!tId || camp.rollTables.customTables.some((t) => t.id === tId)) {
+                                tId = `table_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+                                tName = `${tName} (Copy)`;
+                            }
+                            const cloned = { ...item, id: tId, name: tName };
+                            delete cloned._entityCategory;
+                            camp.rollTables.customTables.push(cloned);
+                            importedIds.push(tId);
+                        }
                     } else {
                         let cId = item.id;
                         let cName = item.name || 'Imported Character';
@@ -2635,6 +3043,11 @@ app.whenReady().then(async () => {
     }
     createWindow();
     createTray();
+
+    // Start default STUN P2P room session and wire status updates
+    p2pBridge.startRoom();
+    p2pBridge.on('peer:connected', () => notifyStatusChange());
+    p2pBridge.on('peer:disconnected', () => notifyStatusChange());
 
     // Auto-start server on app boot
     await startServer();

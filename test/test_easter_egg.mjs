@@ -5,8 +5,8 @@ import path from 'node:path';
 import { JSDOM } from 'jsdom';
 
 test('Hero Crest Interactive d20 Easter Egg DOM & Logic', async (t) => {
-  const html = fs.readFileSync(path.resolve('index.html'), 'utf8');
-  
+  const html = fs.readFileSync(path.resolve('docs', 'index.html'), 'utf8');
+
   // Ensure DOM has required elements
   assert.ok(html.includes('crest-interactive'), 'index.html contains .crest-interactive');
   assert.ok(html.includes('crest-shield-die'), 'index.html contains .crest-shield-die');
@@ -38,7 +38,7 @@ test('Hero Crest Interactive d20 Easter Egg DOM & Logic', async (t) => {
 
   // Test simulation of roll outcomes directly through the DOM elements
   // Verify Nat 1 styling classes exist in CSS
-  const css = fs.readFileSync(path.resolve('css/website.css'), 'utf8');
+  const css = fs.readFileSync(path.resolve('docs', 'css', 'website.css'), 'utf8');
   assert.ok(css.includes('.state-nat1'), 'CSS has .state-nat1');
   assert.ok(css.includes('.state-nat20'), 'CSS has .state-nat20');
   assert.ok(css.includes('.crest-shield-die'), 'CSS has .crest-shield-die');

@@ -302,8 +302,8 @@ export function ensureItemModalsExist(options = {}) {
         </div>
 
         <!-- Item Automation Wizard Modal -->
-        <div id="pc-item-automation-overlay" class="vtt-sheet-submodal-overlay vtt-sheet-submodal-high vtt-hidden" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.65); backdrop-filter:blur(3px); z-index:3020;"></div>
-        <div id="pc-item-automation-modal" class="vtt-sheet-submodal vtt-sheet-submodal-high vtt-hidden glassmorphism" style="position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:#18181b; border:1px solid var(--color-gold-base); border-radius:10px; z-index:3025; width:480px; max-width:92vw; display:flex; flex-direction:column; box-shadow:0 8px 32px rgba(0,0,0,0.7); overflow:hidden; font-family:var(--font-primary, sans-serif);">
+        <div id="pc-item-automation-overlay" class="vtt-sheet-submodal-overlay vtt-sheet-submodal-high vtt-hidden" style="position:fixed; top:0; left:0; width:100%; height:100%; background:transparent; backdrop-filter:none; z-index:3020;"></div>
+        <div id="pc-item-automation-modal" class="vtt-sheet-submodal vtt-sheet-submodal-high vtt-hidden" style="position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:#18181b; border:1.5px solid var(--color-gold-base); border-radius:10px; z-index:3025; width:480px; max-width:92vw; display:flex; flex-direction:column; box-shadow:0 8px 32px rgba(0,0,0,0.7), 0 0 0 1px var(--color-gold-base); overflow:hidden; font-family:var(--font-primary, sans-serif);">
             <div style="padding:14px 18px; border-bottom:1px solid rgba(255,255,255,0.08); background:rgba(0,0,0,0.35); display:flex; justify-content:space-between; align-items:center;">
                 <div style="display:flex; align-items:center; gap:10px;">
                     <i id="pc-automation-icon" class="fa-solid fa-wand-magic-sparkles text-gradient-gold" style="font-size:1.15rem;"></i>

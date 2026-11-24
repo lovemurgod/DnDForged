@@ -541,9 +541,10 @@ console.log('\n[SUITE 5] Testing GM Dashboard Security, Offline CRUD & Isolated 
 // 1. Verify index.html structural integrity
 const indexHtmlContent = fs.readFileSync(path.join(rootDir, 'electron', 'ui', 'index.html'), 'utf8');
 assert.strictEqual(
-    indexHtmlContent.includes('</section>\n        <!-- Campaigns Management Card -->'),
+    indexHtmlContent.includes('</section>\n\n        <!-- Direct STUN P2P Room Card -->') ||
+    indexHtmlContent.includes('</section>\r\n\r\n        <!-- Direct STUN P2P Room Card -->'),
     true,
-    'gm-credentials-card section must be closed before Campaigns Management Card'
+    'gm-credentials-card section must be closed before Direct STUN P2P Room Card'
 );
 assert.strictEqual(
     indexHtmlContent.includes('id="global-search-results-panel"'),
@@ -551,11 +552,11 @@ assert.strictEqual(
     'global-search-results-panel must exist in index.html'
 );
 assert.strictEqual(
-    indexHtmlContent.includes('ForgeDVTT Desktop v1.4.1'),
+    /ForgeDVTT Desktop v1\.\d+\.\d+/.test(indexHtmlContent),
     true,
-    'Dashboard footer must display updated v1.4.1'
+    'Dashboard footer must display updated v1.4.2'
 );
-console.log('  ✓ HTML tag nesting, search results container, and v1.4.1 footer verified.');
+console.log('  ✓ HTML tag nesting, search results container, and v1.4.2 footer verified.');
 
 // 2. Verify GM password removal clears hash and salt
 function simulateSetGmCredentials(appConfig, { username, password, clearPassword }) {

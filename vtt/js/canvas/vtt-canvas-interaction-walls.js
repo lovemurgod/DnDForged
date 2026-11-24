@@ -168,7 +168,7 @@ export function renderGmWallSegmentsPass(ctxInteraction, options = {}) {
                 ctxInteraction.stroke();
 
                 ctxInteraction.fillStyle = '#ffffff';
-                ctxInteraction.font = isSelected ? 'bold 11px Inter' : '9px Inter';
+                ctxInteraction.font = isSelected ? 'bold 11px "Open Sans", sans-serif' : '9px "Open Sans", sans-serif';
                 ctxInteraction.textAlign = 'center';
                 ctxInteraction.textBaseline = 'middle';
                 ctxInteraction.fillText(doorSymbol, midX, midY);
@@ -184,7 +184,7 @@ export function renderGmWallSegmentsPass(ctxInteraction, options = {}) {
                 ctxInteraction.fill();
                 ctxInteraction.stroke();
                 ctxInteraction.fillStyle = '#ffc107';
-                ctxInteraction.font = isSelected ? '10px Inter' : '8.5px Inter';
+                ctxInteraction.font = isSelected ? '10px "Open Sans", sans-serif' : '8.5px "Open Sans", sans-serif';
                 ctxInteraction.textAlign = 'center';
                 ctxInteraction.textBaseline = 'middle';
                 ctxInteraction.fillText('⚙️', cogX, cogY);
@@ -280,7 +280,7 @@ export function renderGmWallSegmentsPass(ctxInteraction, options = {}) {
                     ctxInteraction.fill();
                     ctxInteraction.stroke();
                     ctxInteraction.fillStyle = '#ffc107';
-                    ctxInteraction.font = isSelected ? '10px Inter' : '8.5px Inter';
+                    ctxInteraction.font = isSelected ? '10px "Open Sans", sans-serif' : '8.5px "Open Sans", sans-serif';
                     ctxInteraction.textAlign = 'center';
                     ctxInteraction.textBaseline = 'middle';
                     ctxInteraction.fillText('⚙️', midX, midY);
@@ -463,7 +463,7 @@ export function renderGmWallSegmentsPass(ctxInteraction, options = {}) {
             ctxInteraction.stroke();
 
             ctxInteraction.fillStyle = '#ffffff';
-            ctxInteraction.font = '8.5px Inter';
+            ctxInteraction.font = '8.5px "Open Sans", sans-serif';
             ctxInteraction.textAlign = 'center';
             ctxInteraction.textBaseline = 'middle';
             ctxInteraction.fillText(doorSymbol, midX, midY);
@@ -576,7 +576,7 @@ export function renderStandaloneLightsInteractionPass(ctxInteraction, options = 
             ctxInteraction.stroke();
             // Draw lightbulb emoji
             ctxInteraction.fillStyle = '#ffffff';
-            ctxInteraction.font = '12px Inter';
+            ctxInteraction.font = '12px "Open Sans", sans-serif';
             ctxInteraction.textAlign = 'center';
             ctxInteraction.textBaseline = 'middle';
             ctxInteraction.fillText('💡', light.x, light.y);

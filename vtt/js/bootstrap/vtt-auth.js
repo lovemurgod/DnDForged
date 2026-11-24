@@ -26,6 +26,21 @@ export function clearLoginError() {
 
 export function restoreRememberedCredentials() {
     if (typeof localStorage === 'undefined' || typeof document === 'undefined') return;
+
+    const urlParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
+    const isPresentationMode = urlParams?.get('mode') === 'presentation' || urlParams?.get('presentation') === 'true';
+    if (isPresentationMode) {
+        if (typeof window !== 'undefined' && window.VTT) {
+            window.VTT.isPresentationMode = true;
+            window.VTT.role = 'Player';
+            window.VTT.username = 'Presentation Display';
+        }
+        document.body.classList.add('vtt-presentation-mode');
+        const loginOverlay = document.getElementById('login-overlay');
+        if (loginOverlay) loginOverlay.classList.add('vtt-hidden');
+        return;
+    }
+
     const rememberCb = document.getElementById('login-remember');
     const usernameInput = document.getElementById('login-username');
     const roleSelect = document.getElementById('login-role');
@@ -144,6 +159,9 @@ export function setupLoginHandlers(callbacks = {}) {
     // Restore saved credentials
     restoreRememberedCredentials();
 
+    const urlParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
+    let isP2PMode = false;
+
     const loadCampaigns = () => {
         if (!campaignSelect) return Promise.resolve(false);
         if (campaignLoadPromise) return campaignLoadPromise;
@@ -161,18 +179,37 @@ export function setupLoginHandlers(callbacks = {}) {
         campaignLoadPromise = (async () => {
             try {
                 await fetchActiveCampaigns(campaignSelect);
+                const reqCamp = urlParams?.get('campaign');
+                if (reqCamp && Array.from(campaignSelect.options).some((o) => o.value === reqCamp)) {
+                    campaignSelect.value = reqCamp;
+                }
                 campaignsLoaded = true;
                 campaignLoadError?.classList.add('vtt-hidden');
                 clearLoginError();
             } catch (err) {
                 console.warn('Could not query campaigns list:', err);
-                campaignSelect.innerHTML = '';
-                campaignSelect.title = '';
-                campaignLoadError?.classList.remove('vtt-hidden');
+                const isStaticOrP2p = Boolean(
+                    (typeof window !== 'undefined' && window.__FORGEDVTT_STATIC_WEB__) ||
+                    urlParams?.get('p2p')
+                );
+                if (isStaticOrP2p) {
+                    campaignSelect.innerHTML = '';
+                    const opt = document.createElement('option');
+                    opt.value = urlParams?.get('campaign') || 'default';
+                    opt.textContent = 'P2P Session Campaign';
+                    campaignSelect.appendChild(opt);
+                    campaignsLoaded = true;
+                    campaignLoadError?.classList.add('vtt-hidden');
+                    clearLoginError();
+                } else {
+                    campaignSelect.innerHTML = '';
+                    campaignSelect.title = '';
+                    campaignLoadError?.classList.remove('vtt-hidden');
+                }
             } finally {
-                campaignSelect.disabled = !campaignsLoaded;
+                campaignSelect.disabled = !campaignsLoaded && !isP2PMode;
                 if (btnJoin) {
-                    btnJoin.disabled = !campaignsLoaded;
+                    btnJoin.disabled = !campaignsLoaded && !isP2PMode;
                     btnJoin.innerHTML = '<i class="fa-solid fa-door-open"></i> Enter Tabletop';
                 }
                 if (btnRetryCampaigns) btnRetryCampaigns.disabled = false;
@@ -187,6 +224,86 @@ export function setupLoginHandlers(callbacks = {}) {
         loadCampaigns();
     });
     loadCampaigns();
+
+    // P2P Connection Mode Setup
+    const tabServer = document.getElementById('tab-login-server');
+    const tabP2P = document.getElementById('tab-login-p2p');
+    const p2pGroup = document.getElementById('login-p2p-group');
+    const p2pCodeInput = document.getElementById('login-p2p-code');
+    const p2pManualInput = document.getElementById('login-p2p-manual');
+
+    const setConnectionMode = (p2p) => {
+        isP2PMode = p2p;
+        const hintText = document.getElementById('login-connection-hint-text');
+        if (p2p) {
+            tabP2P?.classList.add('active');
+            tabP2P?.classList.remove('btn-secondary');
+            tabP2P?.classList.add('btn-primary');
+            tabServer?.classList.remove('active');
+            tabServer?.classList.add('btn-secondary');
+            tabServer?.classList.remove('btn-primary');
+            p2pGroup?.classList.remove('vtt-hidden');
+            if (btnJoin && !btnJoin.innerHTML.includes('fa-spinner')) {
+                btnJoin.disabled = false;
+            }
+            if (hintText) {
+                hintText.innerHTML = '<i class="fa-solid fa-bolt" style="margin-right: 4px; color: #f59e0b;"></i> <strong>Direct P2P:</strong> Low-latency direct connection between machines. Free & unlimited bandwidth. Best on home Wi-Fi/desktop.';
+            }
+            if (p2pCodeInput) p2pCodeInput.focus();
+        } else {
+            tabServer?.classList.add('active');
+            tabServer?.classList.remove('btn-secondary');
+            tabServer?.classList.add('btn-primary');
+            tabP2P?.classList.remove('active');
+            tabP2P?.classList.add('btn-secondary');
+            tabP2P?.classList.remove('btn-primary');
+            p2pGroup?.classList.add('vtt-hidden');
+            if (btnJoin && !campaignsLoaded) {
+                btnJoin.disabled = true;
+            }
+            if (hintText) {
+                hintText.innerHTML = '<i class="fa-solid fa-shield-halved" style="margin-right: 4px; color: #38bdf8;"></i> <strong>Web Server:</strong> Standard host connection. Highly reliable across all networks, mobile data, and strict firewalls.';
+            }
+        }
+    };
+
+    tabServer?.addEventListener('click', () => setConnectionMode(false));
+    tabP2P?.addEventListener('click', () => setConnectionMode(true));
+
+    if (urlParams?.get('p2p')) {
+        setConnectionMode(true);
+        if (p2pCodeInput) p2pCodeInput.value = urlParams.get('p2p').toUpperCase();
+    } else if (typeof window !== 'undefined' && window.__FORGEDVTT_STATIC_WEB__) {
+        // Static web hosting has no Socket.IO server: default cleanly to Direct P2P mode
+        setConnectionMode(true);
+        if (tabServer) tabServer.classList.add('vtt-hidden');
+    }
+    const isPresentationMode = urlParams?.get('mode') === 'presentation' || urlParams?.get('presentation') === 'true';
+    if (isPresentationMode) {
+        if (typeof window !== 'undefined' && window.VTT) {
+            window.VTT.isPresentationMode = true;
+            window.VTT.role = 'Player';
+            window.VTT.username = 'Presentation Display';
+        }
+        document.body.classList.add('vtt-presentation-mode');
+        const loginOverlay = document.getElementById('login-overlay');
+        if (loginOverlay) loginOverlay.classList.add('vtt-hidden');
+
+        const executePresentationJoin = () => {
+            const targetCampaign = urlParams.get('campaign') || urlParams.get('campaignId') || campaignSelect?.value || 'default';
+            if (typeof window !== 'undefined' && window.VTT) {
+                window.VTT.campaignId = targetCampaign;
+            }
+            callbacks.onStartSocketConnection?.(targetCampaign, 'Presentation Display', 'Player');
+        };
+
+        if (campaignLoadPromise) {
+            campaignLoadPromise.then(executePresentationJoin).catch(executePresentationJoin);
+        } else {
+            executePresentationJoin();
+        }
+        return;
+    }
 
     const modalGmPassword = document.getElementById('modal-gm-password');
     const inputGmPassword = document.getElementById('input-gm-password');
@@ -218,19 +335,29 @@ export function setupLoginHandlers(callbacks = {}) {
 
     const executeJoinGame = async () => {
         clearLoginError();
-        if (!campaignsLoaded) {
+        if (!isP2PMode && !campaignsLoaded) {
             showLoginError('Campaigns must load successfully before you can join.');
             return;
         }
         let username = usernameInput ? usernameInput.value.trim() : '';
         const role = roleSelect ? roleSelect.value : 'GM';
-        const campaignId = campaignSelect && campaignSelect.value ? campaignSelect.value : 'default';
+        const campaignId =
+            (!isP2PMode || role === 'GM') && campaignSelect && campaignSelect.value
+                ? campaignSelect.value
+                : (role === 'GM' && urlParams?.get('campaign')) || 'default';
 
         if (!username) {
             username = role === 'GM' ? 'Game Master' : 'Player 1';
             if (usernameInput) usernameInput.value = username;
         }
         usernameInput?.classList.remove('form-control--error');
+
+        const p2pOptions = isP2PMode ? {
+            isP2P: true,
+            p2pCode: (p2pCodeInput?.value || '').trim().toUpperCase(),
+            p2pMode: (p2pManualInput?.value || '').trim() ? 'manual' : 'broker',
+            p2pData: (p2pManualInput?.value || '').trim() || null
+        } : { isP2P: false };
 
         if (rememberCb && rememberCb.checked) {
             localStorage.setItem('vtt_remember', 'true');
@@ -273,7 +400,7 @@ export function setupLoginHandlers(callbacks = {}) {
             if (dmScreenLink1) dmScreenLink1.classList.remove('vtt-hidden');
         }
 
-        // If joining as GM, verify if server requires password verification
+        // If joining as GM, verify if server or static web store requires password verification
         if (role === 'GM') {
             try {
                 if (typeof fetch === 'undefined') {
@@ -305,7 +432,7 @@ export function setupLoginHandlers(callbacks = {}) {
                             btnSubmitGmPassword.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Validating...';
                         }
                         cancelGmPasswordConnection =
-                            callbacks.onStartSocketConnection?.(campaignId, username, role, pw) || null;
+                            callbacks.onStartSocketConnection?.(campaignId, username, role, pw, p2pOptions) || null;
                     };
 
                     btnSubmitGmPassword.onclick = submitHandler;
@@ -323,7 +450,7 @@ export function setupLoginHandlers(callbacks = {}) {
             }
         }
 
-        callbacks.onStartSocketConnection?.(campaignId, username, role);
+        callbacks.onStartSocketConnection?.(campaignId, username, role, null, p2pOptions);
     };
 
     btnJoin?.addEventListener('click', executeJoinGame);

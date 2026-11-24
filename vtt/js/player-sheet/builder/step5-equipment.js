@@ -6,9 +6,6 @@
 export const MARTIAL_WEAPONS = [
     'Battleaxe',
     'Blowgun',
-    'Club',
-    'Dagger',
-    'Dart',
     'Flail',
     'Glaive',
     'Greataxe',

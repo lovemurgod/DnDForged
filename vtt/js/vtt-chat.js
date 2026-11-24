@@ -1,6 +1,10 @@
 // DnDForged Unified Chat, Roll Parser & 3D Dice Simulation
 import { VTTDiceParser } from './vtt-dice-parser.js';
 
+function stripAllHtmlFallback(html) {
+    return String(html || '').replace(/<[^>]*>/g, '');
+}
+
 export function initVttChat(vtt, chatHistory) {
     const chatMessages = document.getElementById('chat-messages');
     const chatInput = document.getElementById('chat-input');
@@ -41,15 +45,21 @@ export function initVttChat(vtt, chatHistory) {
     let savedRollMode = 'normal';
     try {
         savedRollMode = localStorage.getItem('vtt_current_roll_mode') || 'normal';
-    } catch (e) {}
+    } catch (e) { }
+    let savedWhisperGM = false;
+    try {
+        savedWhisperGM = localStorage.getItem('vtt_whisper_to_gm') === 'true';
+    } catch (e) { }
+
     vtt.currentRollMode = savedRollMode;
     window.VTT = window.VTT || {};
     window.VTT.currentRollMode = savedRollMode;
-    vtt.whisperGM = vtt.whisperGM || false;
+    vtt.whisperGM = savedWhisperGM;
+    window.VTT.whisperGM = savedWhisperGM;
 
-    function updateRollModeButtonsUI(mode) {
-        chatRollModeBtns.forEach((b) => {
-            if (b.id === 'btn-gm-whisper') return;
+    function updateAllRollModeButtonsUI(mode) {
+        document.querySelectorAll('.chat-roll-mode .roll-mode-btn, .ps-roll-mode-btn, .cs-roll-mode-btn').forEach((b) => {
+            if (b.id === 'btn-gm-whisper' || b.id === 'ps-btn-gm-whisper' || b.id === 'cs-btn-gm-whisper') return;
             b.classList.remove('active', 'adv', 'dis');
             if (b.dataset.mode === mode) {
                 b.classList.add('active');
@@ -58,14 +68,67 @@ export function initVttChat(vtt, chatHistory) {
             }
         });
     }
-    updateRollModeButtonsUI(savedRollMode);
+
+    function setGlobalRollMode(mode) {
+        const validMode = (mode === 'adv' || mode === 'dis') ? mode : 'normal';
+        vtt.currentRollMode = validMode;
+        window.VTT = window.VTT || {};
+        window.VTT.currentRollMode = validMode;
+        if (window.currentChar) {
+            window.currentChar.activeRollMode = validMode;
+        }
+        try {
+            localStorage.setItem('vtt_current_roll_mode', validMode);
+        } catch (e) { }
+        updateAllRollModeButtonsUI(validMode);
+    }
+
+    function updateAllWhisperButtonsUI(isWhisper) {
+        const active = Boolean(isWhisper);
+        const chatWhisperBtn = document.getElementById('btn-gm-whisper');
+        if (chatWhisperBtn) {
+            chatWhisperBtn.classList.toggle('active', active);
+            chatWhisperBtn.classList.toggle('gm-whisper', active);
+        }
+        const psWhisperBtn = document.getElementById('ps-btn-gm-whisper');
+        if (psWhisperBtn) {
+            psWhisperBtn.classList.toggle('active', active);
+        }
+        document.querySelectorAll('#cs-btn-gm-whisper, .cs-whisper-btn').forEach((b) => {
+            b.classList.toggle('active', active);
+        });
+    }
+
+    function setGlobalWhisperGM(isWhisper) {
+        const active = Boolean(isWhisper);
+        vtt.whisperGM = active;
+        window.VTT = window.VTT || {};
+        window.VTT.whisperGM = active;
+        if (window.currentChar) {
+            window.currentChar.whisperToGM = active;
+        }
+        try {
+            localStorage.setItem('vtt_whisper_to_gm', active ? 'true' : 'false');
+        } catch (e) { }
+        updateAllWhisperButtonsUI(active);
+    }
+
+    window.VTT.setGlobalRollMode = setGlobalRollMode;
+    window.VTT.getGlobalRollMode = () => window.VTT?.currentRollMode || 'normal';
+    window.VTT.setGlobalWhisperGM = setGlobalWhisperGM;
+    window.VTT.getGlobalWhisperGM = () => Boolean(window.VTT?.whisperGM);
+    window.VTT.updateAllRollModeButtonsUI = updateAllRollModeButtonsUI;
+    window.VTT.updateAllWhisperButtonsUI = updateAllWhisperButtonsUI;
+
+    updateAllRollModeButtonsUI(savedRollMode);
+    updateAllWhisperButtonsUI(savedWhisperGM);
 
     // Cross-window / popout sync listener
     window.addEventListener('storage', (e) => {
         if (e.key === 'vtt_current_roll_mode' && e.newValue) {
-            vtt.currentRollMode = e.newValue;
-            if (window.VTT) window.VTT.currentRollMode = e.newValue;
-            updateRollModeButtonsUI(e.newValue);
+            setGlobalRollMode(e.newValue);
+        } else if (e.key === 'vtt_whisper_to_gm') {
+            setGlobalWhisperGM(e.newValue === 'true');
         }
     });
 
@@ -91,6 +154,10 @@ export function initVttChat(vtt, chatHistory) {
     let activeTurnIndex = -1;
     let initiativeVisible = false;
     let active3dDice = [];
+    let currentOrientation = 'vertical';
+    try {
+        currentOrientation = localStorage.getItem('vtt_initiative_orientation') || 'vertical';
+    } catch (e) {}
 
     // Load initial persistent state
     if (vtt.campaignState && vtt.campaignState.initiative) {
@@ -200,8 +267,8 @@ export function initVttChat(vtt, chatHistory) {
                     dr.roll && Array.isArray(dr.roll.diceList)
                         ? dr.roll.diceList
                         : Array.isArray(dr.diceList)
-                          ? dr.diceList
-                          : null;
+                            ? dr.diceList
+                            : null;
                 if (Array.isArray(dmgDice) && dmgDice.length > 0) {
                     dmgDice.forEach((d) => allDice.push({ ...d, damageType: dr.type || null }));
                 } else {
@@ -273,7 +340,7 @@ export function initVttChat(vtt, chatHistory) {
                     if (row && row.dataset.cardData) {
                         try {
                             msgEl._saveResolveCardData = JSON.parse(decodeURIComponent(row.dataset.cardData));
-                        } catch (e) {}
+                        } catch (e) { }
                     }
                 }
                 if (msgEl._saveResolveCardData) {
@@ -299,7 +366,7 @@ export function initVttChat(vtt, chatHistory) {
                     if (row && row.dataset.cardData) {
                         try {
                             msgEl._massAttackCardData = JSON.parse(decodeURIComponent(row.dataset.cardData));
-                        } catch (e) {}
+                        } catch (e) { }
                     }
                 }
                 if (data.massAttackCard) {
@@ -330,7 +397,7 @@ export function initVttChat(vtt, chatHistory) {
                     if (row && row.dataset.cardData) {
                         try {
                             msgEl._macroCardData = JSON.parse(decodeURIComponent(row.dataset.cardData));
-                        } catch (e) {}
+                        } catch (e) { }
                     }
                 }
                 if (data.macroCard) {
@@ -393,19 +460,11 @@ export function initVttChat(vtt, chatHistory) {
         chatRollModeBtns.forEach((btn) => {
             btn.addEventListener('click', () => {
                 if (btn.id === 'btn-gm-whisper') {
-                    vtt.whisperGM = !vtt.whisperGM;
-                    btn.classList.toggle('active', vtt.whisperGM);
-                    btn.classList.toggle('gm-whisper', vtt.whisperGM);
+                    setGlobalWhisperGM(!window.VTT?.whisperGM);
                     return;
                 }
                 const newMode = btn.dataset.mode || 'normal';
-                vtt.currentRollMode = newMode;
-                window.VTT = window.VTT || {};
-                window.VTT.currentRollMode = newMode;
-                try {
-                    localStorage.setItem('vtt_current_roll_mode', newMode);
-                } catch (e) {}
-                updateRollModeButtonsUI(newMode);
+                setGlobalRollMode(newMode);
             });
         });
 
@@ -466,8 +525,18 @@ export function initVttChat(vtt, chatHistory) {
                 const tableId = rollTableBtn.dataset.tableId;
                 const charName = rollTableBtn.dataset.charName;
                 const abilityName = rollTableBtn.dataset.abilityName;
+                const isSheetWhisper = Boolean(
+                    (typeof window !== 'undefined' && window.vttPlayerSheetAPI?.isWhisperToGM?.()) ||
+                    (typeof window !== 'undefined' && window.vttCreatureSheetAPI?.isWhisperToGM?.())
+                );
+                const isCardWhisper = Boolean(rollTableBtn.closest('.chat-msg.is-whisper'));
+                const effectiveWhisper = isSheetWhisper || isCardWhisper;
                 if (window.VTT?.rollTablesEngine?.rollLinkedTable) {
-                    window.VTT.rollTablesEngine.rollLinkedTable(tableId, { charName, abilityName });
+                    window.VTT.rollTablesEngine.rollLinkedTable(tableId, {
+                        charName,
+                        abilityName,
+                        isWhisper: effectiveWhisper
+                    });
                 }
                 e.stopPropagation();
                 return;
@@ -481,7 +550,7 @@ export function initVttChat(vtt, chatHistory) {
                 if (rawJson) {
                     try {
                         tableData = JSON.parse(decodeURIComponent(rawJson));
-                    } catch (err) {}
+                    } catch (err) { }
                 }
                 const cName = rollCreatureTableBtn.dataset.creature || 'Creature';
                 const aName = rollCreatureTableBtn.dataset.ability || 'Table';
@@ -534,7 +603,7 @@ export function initVttChat(vtt, chatHistory) {
                 if (!cardData && rowEl && rowEl.dataset.cardData) {
                     try {
                         cardData = JSON.parse(decodeURIComponent(rowEl.dataset.cardData));
-                    } catch (err) {}
+                    } catch (err) { }
                 }
                 const action = actionBtn.dataset.action;
                 if (cardData && action) {
@@ -563,7 +632,7 @@ export function initVttChat(vtt, chatHistory) {
                 if (!cardData && rowEl && rowEl.dataset.cardData) {
                     try {
                         cardData = JSON.parse(decodeURIComponent(rowEl.dataset.cardData));
-                    } catch (err) {}
+                    } catch (err) { }
                 }
                 const action = saveResolveBtn.dataset.action;
                 if (cardData && action && window.VTT?.canvasEngine?.resolveSaveFromChat) {
@@ -587,7 +656,7 @@ export function initVttChat(vtt, chatHistory) {
                 if (!cardData && rowEl && rowEl.dataset.cardData) {
                     try {
                         cardData = JSON.parse(decodeURIComponent(rowEl.dataset.cardData));
-                    } catch (err) {}
+                    } catch (err) { }
                 }
                 if (cardData && window.VTT?.canvasEngine?.processMassAttackFromChat) {
                     massAttackBtn.disabled = true;
@@ -620,7 +689,7 @@ export function initVttChat(vtt, chatHistory) {
                 if (rowEl && rowEl.dataset.cardData) {
                     try {
                         cardData = JSON.parse(decodeURIComponent(rowEl.dataset.cardData));
-                    } catch (err) {}
+                    } catch (err) { }
                 }
                 if (!cardData && msgEl?._msgData?.trapCard) {
                     cardData = { ...msgEl._msgData.trapCard, isTrap: true };
@@ -663,7 +732,11 @@ export function initVttChat(vtt, chatHistory) {
                 const text = target.getAttribute('data-tooltip');
                 if (!text) return;
 
-                popoverEl.innerHTML = text;
+                if (typeof window !== 'undefined' && typeof window.vttSanitizeHtml === 'function') {
+                    popoverEl.innerHTML = window.vttSanitizeHtml(text);
+                } else {
+                    popoverEl.textContent = text;
+                }
 
                 // Show popover to compute its dimensions
                 popoverEl.showPopover();
@@ -1146,14 +1219,14 @@ export function initVttChat(vtt, chatHistory) {
             mc.saveInfo || (mc.saveDc && mc.saveAbility ? { ability: mc.saveAbility, dc: mc.saveDc } : null);
         const saveObj =
             rawSaveObj &&
-            rawSaveObj.ability &&
-            validAbilities.includes(rawSaveObj.ability.trim().toUpperCase()) &&
-            !isNaN(parseInt(rawSaveObj.dc)) &&
-            parseInt(rawSaveObj.dc) > 0
+                rawSaveObj.ability &&
+                validAbilities.includes(rawSaveObj.ability.trim().toUpperCase()) &&
+                !isNaN(parseInt(rawSaveObj.dc)) &&
+                parseInt(rawSaveObj.dc) > 0
                 ? {
-                      ...rawSaveObj,
-                      ability: rawSaveObj.ability.trim().substring(0, 3).toUpperCase()
-                  }
+                    ...rawSaveObj,
+                    ability: rawSaveObj.ability.trim().substring(0, 3).toUpperCase()
+                }
                 : null;
         if (saveObj) {
             const abLabel = `${saveObj.ability} Save DC`;
@@ -1176,7 +1249,7 @@ export function initVttChat(vtt, chatHistory) {
                 const icon = dmgIcons[normalizedType] || dmgIcons[dr.type] || 'fa-solid fa-droplet';
                 const bd = dr.roll
                     ? dr.roll.breakdownStr ||
-                      (dr.roll.diceList ? `[${dr.roll.diceList.map((d) => d.val).join(', ')}]` : '')
+                    (dr.roll.diceList ? `[${dr.roll.diceList.map((d) => d.val).join(', ')}]` : '')
                     : '';
                 const total = dr.roll ? dr.roll.total : 0;
                 const formulaText = (dr.formula || '').toUpperCase();
@@ -1222,7 +1295,7 @@ export function initVttChat(vtt, chatHistory) {
             let encodedData = '';
             try {
                 encodedData = encodeURIComponent(JSON.stringify(mc));
-            } catch (err) {}
+            } catch (err) { }
             const dataMsgAttr = msgId ? ` data-msg-id="${escapeHtml(msgId)}"` : '';
             actionsRow = `
                 <div class="macro-card-actions-row" data-card-data="${encodedData}"${dataMsgAttr}>
@@ -1288,6 +1361,16 @@ export function initVttChat(vtt, chatHistory) {
             '<hr style="border:0; border-top:1px solid rgba(255,255,255,0.1); margin:8px 0;">'
         );
         descHtml = descHtml.replace(/\n/g, '<br>');
+        const tableActionHtml = ic.linkedTable
+            ? `
+                <div style="margin-top: 8px; padding-top: 6px; border-top: 1px solid rgba(255,255,255,0.1); text-align: right;">
+                    <button type="button" class="btn btn-xxs btn-primary btn-chat-roll-table" data-table-id="${escapeHtml(ic.linkedTable.id)}" data-table-name="${escapeHtml(ic.linkedTable.name || ic.itemName || '')}" data-char-name="${escapeHtml(ic.charName || '')}" data-ability-name="${escapeHtml(ic.itemName || '')}" style="display:inline-flex; align-items:center; gap:5px;">
+                        <i class="fa-solid fa-dice-d20"></i> Roll Table ${ic.linkedTable.dice ? `(${escapeHtml(ic.linkedTable.dice)})` : ''}
+                    </button>
+                </div>
+            `
+            : '';
+
         return `
             <div class="macro-chat-card">
                 <div class="macro-card-header">
@@ -1305,6 +1388,7 @@ export function initVttChat(vtt, chatHistory) {
                 <div class="macro-card-desc" style="font-size:0.9rem; color:var(--color-text-secondary);">
                     ${descHtml}
                 </div>
+                ${tableActionHtml}
             </div>
         `;
     }
@@ -1351,7 +1435,7 @@ export function initVttChat(vtt, chatHistory) {
             let encodedData = '';
             try {
                 encodedData = encodeURIComponent(JSON.stringify(src));
-            } catch (err) {}
+            } catch (err) { }
             footerHtml = `
                 <div class="save-resolve-prompt">Apply half damage to tokens that succeeded on the save?</div>
                 <div class="save-resolve-actions-row" data-card-data="${encodedData}" data-msg-id="${msgId}">
@@ -1525,7 +1609,7 @@ export function initVttChat(vtt, chatHistory) {
             let encodedData = '';
             try {
                 encodedData = encodeURIComponent(JSON.stringify(mac));
-            } catch (err) {}
+            } catch (err) { }
             footerHtml = `
                 <div class="mass-attack-prompt">Select target token(s) on canvas and click Process</div>
                 <div class="mass-attack-actions-row" data-card-data="${encodedData}" data-msg-id="${msgId}">
@@ -1655,7 +1739,7 @@ export function initVttChat(vtt, chatHistory) {
             let encodedData = '';
             try {
                 encodedData = encodeURIComponent(JSON.stringify({ ...tc, isTrap: true, damageType: dmgType }));
-            } catch (err) {}
+            } catch (err) { }
 
             const actionButtonsHtml =
                 vtt.role === 'GM'
@@ -1686,27 +1770,25 @@ export function initVttChat(vtt, chatHistory) {
                     </div>
                     <div class="trap-chat-details">
                         ${tc.saveAbility && tc.saveAbility !== 'NONE' ? `<span class="trap-chat-badge"><i class="fa-solid fa-shield"></i> DC ${escapeHtml(tc.saveDc)} ${escapeHtml(tc.saveAbility)} Save</span>` : ''}
-                        ${
-                            tc.damageRoll
-                                ? `
+                        ${tc.damageRoll
+                    ? `
                             <span class="trap-chat-badge" style="background: rgba(239, 68, 68, 0.25); border-color: rgba(239, 68, 68, 0.6); color: #fca5a5;">
                                 <i class="fa-solid fa-burst"></i> Damage: <strong>${escapeHtml(tc.damageRoll.total)}</strong> ${escapeHtml(dmgTypeLabel)} <span style="font-size: 0.85em; opacity: 0.85;">(${escapeHtml(tc.damageRoll.breakdownStr || tc.damageRoll.formula || tc.damage || '')})</span>
                             </span>
                         `
-                                : tc.damage
-                                  ? `<span class="trap-chat-badge"><i class="fa-solid fa-burst"></i> ${escapeHtml(tc.damage)} ${escapeHtml(dmgTypeLabel)}</span>`
-                                  : ''
-                        }
+                    : tc.damage
+                        ? `<span class="trap-chat-badge"><i class="fa-solid fa-burst"></i> ${escapeHtml(tc.damage)} ${escapeHtml(dmgTypeLabel)}</span>`
+                        : ''
+                }
                     </div>
-                    ${
-                        tc.saveAbility && tc.saveAbility !== 'NONE'
-                            ? `
+                    ${tc.saveAbility && tc.saveAbility !== 'NONE'
+                    ? `
                         <button type="button" class="trap-chat-save-btn" data-trap-id="${escapeHtml(tc.trapId)}" data-token-id="${escapeHtml(tc.tokenId)}" data-ability="${escapeHtml(tc.saveAbility)}" data-dc="${escapeHtml(tc.saveDc)}">
                             <i class="fa-solid fa-dice-d20"></i> Roll ${escapeHtml(tc.saveAbility)} Save (DC ${escapeHtml(tc.saveDc)})
                         </button>
                     `
-                            : ''
-                    }
+                    : ''
+                }
                     ${actionButtonsHtml}
                 </div>
             `;
@@ -1820,7 +1902,7 @@ export function initVttChat(vtt, chatHistory) {
         } else if (typeof DOMPurify !== 'undefined' && typeof DOMPurify.sanitize === 'function') {
             messageDiv.innerHTML = DOMPurify.sanitize(rawCardHtml);
         } else {
-            messageDiv.innerHTML = rawCardHtml;
+            messageDiv.textContent = stripAllHtmlFallback(rawCardHtml);
         }
         chatMessages.appendChild(messageDiv);
 
@@ -1879,8 +1961,8 @@ export function initVttChat(vtt, chatHistory) {
                     ? canvasEngine.getSelectedTokenIds
                         ? canvasEngine.getSelectedTokenIds()
                         : canvasEngine.getSelectedTokens
-                          ? canvasEngine.getSelectedTokens()
-                          : []
+                            ? canvasEngine.getSelectedTokens()
+                            : []
                     : [];
                 if (selectedTokenIds.length > 0) {
                     const canvasTokens = canvasEngine.getTokens ? canvasEngine.getTokens() : {};
@@ -1991,9 +2073,10 @@ export function initVttChat(vtt, chatHistory) {
         const hudPosition = document.getElementById('hud-init-position');
         const btnDrag = document.getElementById('btn-init-drag');
         const btnOrientation = document.getElementById('btn-init-orientation');
-        const btnResize = document.getElementById('init-resize-handle');
 
-        let currentOrientation = localStorage.getItem('vtt_initiative_orientation') || 'vertical';
+        try {
+            currentOrientation = localStorage.getItem('vtt_initiative_orientation') || 'vertical';
+        } catch (e) {}
 
         function updateChevronIcons(pos) {
             const prevIcon = document.querySelector('#btn-init-prev i');
@@ -2050,44 +2133,18 @@ export function initVttChat(vtt, chatHistory) {
                 initContainer.style.left = '';
                 initContainer.style.right = '';
                 initContainer.style.bottom = '';
-
-                if (pos === 'top' || pos === 'bottom') {
-                    const savedW = localStorage.getItem('vtt_initiative_docked_width');
-                    if (savedW) {
-                        initContainer.style.width = `${savedW}px`;
-                        initContainer.style.maxWidth = `${savedW}px`;
-                        initContainer.style.setProperty('width', `${savedW}px`, 'important');
-                        initContainer.style.setProperty('max-width', `${savedW}px`, 'important');
-                    } else {
-                        initContainer.style.width = '';
-                        initContainer.style.maxWidth = '';
-                        initContainer.style.removeProperty('width');
-                        initContainer.style.removeProperty('max-width');
-                    }
-                    initContainer.style.height = '';
-                    initContainer.style.maxHeight = '';
-                } else {
-                    const savedH = localStorage.getItem('vtt_initiative_docked_height');
-                    if (savedH) {
-                        initContainer.style.height = `${savedH}px`;
-                        initContainer.style.maxHeight = `${savedH}px`;
-                        initContainer.style.bottom = 'auto';
-                    } else {
-                        initContainer.style.height = '';
-                        initContainer.style.maxHeight = '';
-                        initContainer.style.bottom = '';
-                    }
-                    initContainer.style.width = '';
-                    initContainer.style.maxWidth = '';
-                    initContainer.style.removeProperty('width');
-                    initContainer.style.removeProperty('max-width');
-                }
+                initContainer.style.height = '';
+                initContainer.style.maxHeight = '';
+                initContainer.style.width = '';
+                initContainer.style.maxWidth = '';
+                initContainer.style.removeProperty('width');
+                initContainer.style.removeProperty('max-width');
             } else {
                 let finalCoords = coords;
                 if (!finalCoords) {
                     try {
                         finalCoords = JSON.parse(localStorage.getItem('vtt_initiative_custom_coords'));
-                    } catch (e) {}
+                    } catch (e) { }
                 }
                 if (!finalCoords) {
                     const rect = initContainer.getBoundingClientRect();
@@ -2274,97 +2331,11 @@ export function initVttChat(vtt, chatHistory) {
             });
         }
 
-        // Corner & length resizing implementation across all modes
-        if (btnResize && initContainer) {
-            let isResizing = false;
-            let startW = 0,
-                startH = 0;
-            let startX = 0,
-                startY = 0;
-
-            const onResizeDown = (e) => {
-                isResizing = true;
-                initContainer.classList.add('is-dragging');
-                document.body.style.userSelect = 'none';
-                const rect = initContainer.getBoundingClientRect();
-                startW = rect.width;
-                startH = rect.height;
-                startX = e.clientX;
-                startY = e.clientY;
-
-                if (btnResize.setPointerCapture && e.pointerId !== undefined) {
-                    try {
-                        btnResize.setPointerCapture(e.pointerId);
-                    } catch (err) {}
-                }
-
-                window.addEventListener('pointermove', onResizeMove);
-                window.addEventListener('pointerup', onResizeUp);
-                e.preventDefault();
-                e.stopPropagation();
-            };
-
-            const onResizeMove = (e) => {
-                if (!isResizing) return;
-                const dw = e.clientX - startX;
-                const dh = e.clientY - startY;
-
-                const isHorizontal =
-                    currentOrientation === 'horizontal' ||
-                    initContainer.classList.contains('orientation-horizontal') ||
-                    initContainer.classList.contains('pos-top') ||
-                    initContainer.classList.contains('pos-bottom');
-
-                if (isHorizontal) {
-                    const isCentered =
-                        initContainer.classList.contains('pos-top') || initContainer.classList.contains('pos-bottom');
-                    const factor = isCentered ? 2 : 1;
-                    const newW = Math.max(380, Math.min(window.innerWidth * 0.95, startW + dw * factor));
-                    initContainer.style.width = `${newW}px`;
-                    initContainer.style.maxWidth = `${newW}px`;
-                    initContainer.style.setProperty('width', `${newW}px`, 'important');
-                    initContainer.style.setProperty('max-width', `${newW}px`, 'important');
-                } else {
-                    const newH = Math.max(160, Math.min(window.innerHeight - 80, startH + dh));
-                    initContainer.style.height = `${newH}px`;
-                    initContainer.style.maxHeight = `${newH}px`;
-                    initContainer.style.bottom = 'auto';
-                }
-            };
-
-            const onResizeUp = (e) => {
-                if (!isResizing) return;
-                isResizing = false;
-                initContainer.classList.remove('is-dragging');
-                document.body.style.userSelect = '';
-                if (btnResize.releasePointerCapture && e && e.pointerId !== undefined) {
-                    try {
-                        btnResize.releasePointerCapture(e.pointerId);
-                    } catch (err) {}
-                }
-                window.removeEventListener('pointermove', onResizeMove);
-                window.removeEventListener('pointerup', onResizeUp);
-
-                const rect = initContainer.getBoundingClientRect();
-                const currentPos = localStorage.getItem('vtt_initiative_position_style') || 'right';
-                const isHorizontal =
-                    currentOrientation === 'horizontal' ||
-                    initContainer.classList.contains('orientation-horizontal') ||
-                    initContainer.classList.contains('pos-top') ||
-                    initContainer.classList.contains('pos-bottom');
-
-                if (currentPos === 'custom') {
-                    const size = { width: Math.round(rect.width), height: Math.round(rect.height) };
-                    localStorage.setItem('vtt_initiative_custom_size', JSON.stringify(size));
-                } else if (isHorizontal) {
-                    localStorage.setItem('vtt_initiative_docked_width', Math.round(rect.width));
-                } else {
-                    localStorage.setItem('vtt_initiative_docked_height', Math.round(rect.height));
-                }
-            };
-
-            btnResize.addEventListener('pointerdown', onResizeDown);
-        }
+        // Clean up any legacy docked resize dimensions from localStorage
+        try {
+            localStorage.removeItem('vtt_initiative_docked_height');
+            localStorage.removeItem('vtt_initiative_docked_width');
+        } catch (e) { }
 
         // Restore saved position, orientation, and size on load
         const savedPosStyle = localStorage.getItem('vtt_initiative_position_style') || 'right';
@@ -2379,7 +2350,7 @@ export function initVttChat(vtt, chatHistory) {
                 let savedSize = null;
                 try {
                     savedSize = JSON.parse(localStorage.getItem('vtt_initiative_custom_size'));
-                } catch (e) {}
+                } catch (e) { }
 
                 if (savedCoords) {
                     [configPosition, hudPosition].forEach((sel) => {
@@ -2647,8 +2618,14 @@ export function initVttChat(vtt, chatHistory) {
         }
 
         if (combatants.length === 0) {
-            initList.innerHTML =
-                '<div class="init-empty-state">No creatures in combat yet. Drag creatures onto map or click "+" to add.</div>';
+            const isVertical =
+                (typeof currentOrientation !== 'undefined' ? currentOrientation : 'vertical') === 'vertical' ||
+                initContainer.classList.contains('orientation-vertical') ||
+                initContainer.classList.contains('pos-right') ||
+                initContainer.classList.contains('pos-left');
+            initList.innerHTML = isVertical
+                ? '<div class="init-empty-state" title="No creatures in combat yet. Drag creatures onto map or click \'+\' to add."><i class="fa-solid fa-shield-halved"></i></div>'
+                : '<div class="init-empty-state">No creatures in combat yet. Drag creatures onto map or click "+" to add.</div>';
             initContainer.classList.remove('vtt-hidden');
             if (initMinRoundNum) initMinRoundNum.textContent = currentRound;
             if (initMinName) initMinName.textContent = 'No Combat';
@@ -2780,8 +2757,8 @@ export function initVttChat(vtt, chatHistory) {
                         typeof window.getSafeVttUrl === 'function'
                             ? window.getSafeVttUrl(actTargetImg)
                             : actTargetImg.includes('discordapp.com') || actTargetImg.includes('discordapp.net')
-                              ? '/api/proxy-discord?url=' + encodeURIComponent(actTargetImg)
-                              : actTargetImg;
+                                ? '/api/proxy-discord?url=' + encodeURIComponent(actTargetImg)
+                                : actTargetImg;
                     const cleanTarget = actTargetImg.split('?')[0].toLowerCase();
                     const isTargetVideo = (actToken && actToken.isVideo) || !!cleanTarget.match(/\.(mp4|webm|ogg)$/i);
                     const isTargetYt = actTargetImg.includes('youtube.com') || actTargetImg.includes('youtu.be');
@@ -2947,8 +2924,8 @@ export function initVttChat(vtt, chatHistory) {
                     typeof window.getSafeVttUrl === 'function'
                         ? window.getSafeVttUrl(targetImg)
                         : targetImg.includes('discordapp.com') || targetImg.includes('discordapp.net')
-                          ? '/api/proxy-discord?url=' + encodeURIComponent(targetImg)
-                          : targetImg;
+                            ? '/api/proxy-discord?url=' + encodeURIComponent(targetImg)
+                            : targetImg;
 
                 if (isTargetYt) {
                     avatarHtml = `<div class="init-token-avatar init-avatar-yt" title="YouTube Token">📺</div>`;
@@ -2998,7 +2975,9 @@ export function initVttChat(vtt, chatHistory) {
             }
 
             const scoreNum = parseFloat(c.score);
-            const displayScore = !isNaN(scoreNum) ? (Number.isInteger(scoreNum) ? scoreNum : scoreNum.toFixed(1)) : '—';
+            const displayScore = !isNaN(scoreNum)
+                ? (Number.isInteger(scoreNum) ? scoreNum : parseFloat(scoreNum.toFixed(2)))
+                : '—';
 
             row.innerHTML = `
                 ${delBtnHtml}
@@ -3072,7 +3051,7 @@ export function initVttChat(vtt, chatHistory) {
             // Video hover listeners
             const videoEl = row.querySelector('video');
             if (videoEl) {
-                row.addEventListener('mouseenter', () => videoEl.play().catch(() => {}));
+                row.addEventListener('mouseenter', () => videoEl.play().catch(() => { }));
                 row.addEventListener('mouseleave', () => videoEl.pause());
             }
 
@@ -3162,7 +3141,7 @@ export function initVttChat(vtt, chatHistory) {
                         </div>
                         <span class="roll-card-formula">${escapeHtml((msg.roll.formula || '').toUpperCase())}</span>
                     </div>
-                    <div class="roll-card-result">${msg.roll.total}</div>
+                    <div class="roll-card-result">${escapeHtml(String(msg.roll.total ?? ''))}</div>
                     <div class="roll-card-breakdown">[${listStr}]${modStr}</div>
                 </div>
             `;
@@ -3170,7 +3149,14 @@ export function initVttChat(vtt, chatHistory) {
             if (!isHistorical) trigger3dDiceRoll(msg.roll.diceList);
         }
 
-        messageDiv.innerHTML = headerText + bodyText;
+        const rawWhisperHtml = headerText + bodyText;
+        if (typeof window !== 'undefined' && typeof window.vttSanitizeHtml === 'function') {
+            messageDiv.innerHTML = window.vttSanitizeHtml(rawWhisperHtml);
+        } else if (typeof DOMPurify !== 'undefined' && typeof DOMPurify.sanitize === 'function') {
+            messageDiv.innerHTML = DOMPurify.sanitize(rawWhisperHtml);
+        } else {
+            messageDiv.textContent = stripAllHtmlFallback(rawWhisperHtml);
+        }
         chatMessages.appendChild(messageDiv);
         chatMessages.scrollTop = chatMessages.scrollHeight;
     }
@@ -3219,14 +3205,14 @@ export function initVttChat(vtt, chatHistory) {
                 <div class="dice-menu-header">Roll d${targetFaces}</div>
                 <div class="dice-menu-options">
                     ${Array.from({ length: 10 }, (_, i) => i + 1)
-                        .map(
-                            (num) => `
+                    .map(
+                        (num) => `
                         <div class="dice-menu-option" data-count="${num}">
                             Roll ${num}d${targetFaces}
                         </div>
                     `
-                        )
-                        .join('')}
+                    )
+                    .join('')}
                 </div>
                 <div class="dice-menu-divider"></div>
                 <div class="dice-menu-custom">

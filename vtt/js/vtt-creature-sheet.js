@@ -487,7 +487,7 @@ export function initVttCreatureSheet(vtt) {
                     };
 
                     if (visibility === 'private' || visibility === 'gm') {
-                        vtt.socket.emit('chat:whisper', { to: vtt.username, text: `pings ${label}`, abilityCard });
+                        vtt.socket.emit('chat:msg', { text: `pings ${label}`, abilityCard, whisperToGM: true });
                     } else {
                         vtt.socket.emit('chat:msg', { text: `pings ${label}`, abilityCard });
                     }
@@ -547,7 +547,7 @@ export function initVttCreatureSheet(vtt) {
                 };
 
                 if (visibility === 'private' || visibility === 'gm') {
-                    vtt.socket.emit('chat:whisper', { to: vtt.username, text: `pings ${abilityName}`, abilityCard });
+                    vtt.socket.emit('chat:msg', { text: `pings ${abilityName}`, abilityCard, whisperToGM: true });
                 } else {
                     vtt.socket.emit('chat:msg', { text: `pings ${abilityName}`, abilityCard });
                 }
@@ -584,7 +584,7 @@ export function initVttCreatureSheet(vtt) {
                     abilityText,
                     charName,
                     preParsedMacro,
-                    null,
+                    currentMonster?.activeRollMode || null,
                     currentMonster
                 );
 
@@ -596,7 +596,7 @@ export function initVttCreatureSheet(vtt) {
                     };
                     const visibility = getVisibilitySetting(creatureCtx);
                     if (visibility === 'private' || visibility === 'gm') {
-                        vtt.socket.emit('chat:whisper', { to: vtt.username, text: `uses ${abilityName}`, abilityCard });
+                        vtt.socket.emit('chat:msg', { text: `uses ${abilityName}`, abilityCard, whisperToGM: true });
                     } else {
                         vtt.socket.emit('chat:msg', { text: `uses ${abilityName}`, abilityCard });
                     }
@@ -608,8 +608,8 @@ export function initVttCreatureSheet(vtt) {
                         creatureName: currentMonster?.name || 'Creature'
                     };
                     if (visibility === 'private' || visibility === 'gm') {
-                        msgOut.to = vtt.username;
-                        vtt.socket.emit('chat:whisper', msgOut);
+                        msgOut.whisperToGM = true;
+                        vtt.socket.emit('chat:msg', msgOut);
                     } else {
                         vtt.socket.emit('chat:msg', msgOut);
                     }
@@ -737,7 +737,13 @@ export function initVttCreatureSheet(vtt) {
             entryText = item.desc || item.entry || '';
         }
 
-        const visibility = ctx ? getVisibilitySetting(ctx) : 'public';
+        const isWhisper =
+            (ctx && (getVisibilitySetting(ctx) === 'private' || getVisibilitySetting(ctx) === 'gm')) ||
+            (monster && Boolean(monster.whisperToGM)) ||
+            (currentMonster && Boolean(currentMonster.whisperToGM)) ||
+            (typeof window !== 'undefined' && window.vttCreatureSheetAPI?.isWhisperToGM?.()) ||
+            (typeof window !== 'undefined' && window.vttPlayerSheetAPI?.isWhisperToGM?.());
+
         const chatPayload = {
             rollTableCard: {
                 tableName: `${creatureName}: ${abilityName}`,
@@ -749,8 +755,8 @@ export function initVttCreatureSheet(vtt) {
             text: `${creatureName} rolled ${abilityName} [${rollVal}]: ${entryName}`
         };
 
-        if (visibility === 'private' || visibility === 'gm') {
-            vtt.socket.emit('chat:whisper', { to: vtt.username, ...chatPayload });
+        if (isWhisper) {
+            vtt.socket.emit('chat:msg', { whisperToGM: true, ...chatPayload });
         } else {
             vtt.socket.emit('chat:msg', chatPayload);
         }

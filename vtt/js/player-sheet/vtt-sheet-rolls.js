@@ -90,7 +90,7 @@ export function simulateRoll(formula, critRange = 20, optEvent = null, rollConte
 
     const char =
         rollContext.char ||
-        (typeof window !== 'undefined' && window.vttPlayerSheetAPI?.getCurrentCharacter?.()) ||
+        (typeof window !== 'undefined' && (window.vttPlayerSheetAPI?.getCurrentCharacter?.() || window.currentChar)) ||
         null;
 
     // Advantage / Disadvantage handling
@@ -99,15 +99,16 @@ export function simulateRoll(formula, critRange = 20, optEvent = null, rollConte
     let rollMode = 'normal';
 
     if (activeFormula.match(/(?:^|[^0-9])(?:1)?d20/i)) {
-        if (char && char.activeRollMode) {
-            rollMode = char.activeRollMode;
-        } else if (rollContext.rollMode) {
+        if (rollContext.rollMode) {
             rollMode = rollContext.rollMode;
+        } else if (typeof window !== 'undefined' && window.VTT?.currentRollMode) {
+            rollMode = window.VTT.currentRollMode;
+        } else if (char && char.activeRollMode) {
+            rollMode = char.activeRollMode;
         } else {
             try {
                 if (typeof window !== 'undefined') {
                     rollMode =
-                        (window.VTT && window.VTT.currentRollMode) ||
                         (typeof localStorage !== 'undefined' && localStorage.getItem('vtt_current_roll_mode')) ||
                         'normal';
                 }
@@ -123,7 +124,7 @@ export function simulateRoll(formula, critRange = 20, optEvent = null, rollConte
                 typeof window.VTT_isShiftPressed === 'function' &&
                 window.VTT_isShiftPressed());
         const isCtrl =
-            (evt && evt.ctrlKey) ||
+            (evt && (evt.ctrlKey || evt.altKey || evt.metaKey)) ||
             (typeof window !== 'undefined' &&
                 typeof window.VTT_isCtrlPressed === 'function' &&
                 window.VTT_isCtrlPressed());
@@ -141,10 +142,21 @@ export function simulateRoll(formula, critRange = 20, optEvent = null, rollConte
         rollContext.isAttack ||
         rollContext.type === 'attack' ||
         activeFormula.match(/\[atk\]|\[attack\]/i) ||
-        (optEvent && (optEvent.target?.closest?.('.pc-macro-attack') || optEvent.target?.closest?.('.pc-weapon-roll')))
+        (optEvent && (optEvent.target?.closest?.('.pc-macro-attack') || optEvent.target?.closest?.('.pc-weapon-roll') || optEvent.target?.closest?.('.pc-macro-roll-all')))
     );
 
-    const useSuperAdvantage = isAdvantage && isElvenAccuracy && isAttackRoll;
+    let attackStat = (rollContext.stat || rollContext.attackStat || '').toLowerCase();
+    if (!attackStat) {
+        if (/\[str\]/i.test(activeFormula)) attackStat = 'str';
+        else if (/\[dex\]/i.test(activeFormula)) attackStat = 'dex';
+        else if (/\[con\]/i.test(activeFormula)) attackStat = 'con';
+        else if (/\[int\]/i.test(activeFormula)) attackStat = 'int';
+        else if (/\[wis\]/i.test(activeFormula)) attackStat = 'wis';
+        else if (/\[cha\]/i.test(activeFormula)) attackStat = 'cha';
+    }
+    const isElvenEligible = !attackStat || ['dex', 'int', 'wis', 'cha'].includes(attackStat);
+
+    const useSuperAdvantage = isAdvantage && isElvenAccuracy && isAttackRoll && isElvenEligible;
 
     if (useSuperAdvantage) {
         if (isHalflingLucky) {
@@ -285,8 +297,25 @@ export function simulateRoll(formula, critRange = 20, optEvent = null, rollConte
         parseInt(char?.attackSettings?.critRange) || 20
     );
     const diceList = rollResult.diceList || [];
+    const isReliableEligible = Boolean(
+        char?.settings?.reliableTalent &&
+        (rollContext.isSkill || rollContext.isTool || rollContext.type === 'skill' || rollContext.type === 'tool' || rollContext.isAbilityCheck) &&
+        (rollContext.isProf || rollContext.proficient || rollContext.isProficient || (rollContext.profMod && rollContext.profMod > 0))
+    );
+
     if (strippedFormula.match(/d20/i) && diceList.length > 0) {
         const activeD20s = diceList.filter((d) => d.faces === 20 && !d.isDropped);
+        if (isReliableEligible && activeD20s.length > 0) {
+            activeD20s.forEach((d) => {
+                if (d.val < 10) {
+                    const diff = 10 - d.val;
+                    d.val = 10;
+                    rollResult.total += diff;
+                    rollResult.breakdownStr = (rollResult.breakdownStr || '') + ' (Reliable Talent: 10)';
+                    rollResult.compactBreakdown = `${rollResult.total}`;
+                }
+            });
+        }
         if (activeD20s.length > 0) {
             if (activeD20s.some((d) => d.val >= effectiveCrit)) isCritSuccess = true;
             if (activeD20s.some((d) => d.val === 1) && !isCritSuccess) isCritFail = true;

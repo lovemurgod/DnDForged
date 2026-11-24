@@ -548,6 +548,32 @@ export const MULTICLASS_PROFICIENCIES = {
     }
 };
 
+export const STANDARD_SKILLS_LIST = [
+    'Acrobatics', 'Animal Handling', 'Arcana', 'Athletics', 'Deception', 'History',
+    'Insight', 'Intimidation', 'Investigation', 'Medicine', 'Nature', 'Perception',
+    'Performance', 'Persuasion', 'Religion', 'Sleight of Hand', 'Stealth', 'Survival'
+];
+
+export const STANDARD_LANGUAGES_LIST = [
+    'Common', 'Dwarvish', 'Elvish', 'Giant', 'Gnomish', 'Goblin', 'Halfling', 'Orc',
+    'Abyssal', 'Celestial', 'Draconic', 'Deep Speech', 'Infernal', 'Primordial', 'Sylvan', 'Undercommon'
+];
+
+export const STANDARD_ARTISAN_TOOLS = [
+    "Alchemist's supplies", "Brewer's supplies", "Calligrapher's supplies", "Carpenter's tools",
+    "Cartographer's tools", "Cobbler's tools", "Cook's utensils", "Glassblower's tools",
+    "Jeweler's tools", "Leatherworker's tools", "Mason's tools", "Painter's supplies",
+    "Potter's tools", "Smith's tools", "Tinker's tools", "Weaver's tools", "Woodcarver's tools"
+];
+
+export const STANDARD_GAMING_SETS = [
+    'Dice Set', 'Dragonchess Set', 'Playing Card Set', 'Three-Dragon Ante Set'
+];
+
+export const STANDARD_MUSICAL_INSTRUMENTS = [
+    'Bagpipes', 'Drum', 'Dulcimer', 'Flute', 'Lute', 'Lyre', 'Horn', 'Pan Flute', 'Shawm', 'Viol'
+];
+
 /**
  * Extracts innate species skills, languages, and tools from race/subrace objects.
  */
@@ -555,6 +581,9 @@ export function extractSpeciesProficiencies(baseRace, subrace) {
     const skills = new Set();
     const languages = new Set();
     const tools = new Set();
+    let speciesSkillChoice = null;
+    let speciesLanguageChoice = null;
+    let speciesToolChoice = null;
 
     const rObjs = [baseRace, subrace].filter(Boolean);
     rObjs.forEach((r) => {
@@ -573,11 +602,20 @@ export function extractSpeciesProficiencies(baseRace, subrace) {
             });
         }
 
-        // Common racial trait scan for skill grants (e.g. Keen Senses, Menacing, Cat's Talent)
-        const allTraits = Array.isArray(r.traits) ? r.traits : [];
+        // Trait scan for skill grants and choices
+        const allTraits = [
+            ...(Array.isArray(r.traits) ? r.traits : []),
+            ...(Array.isArray(r.entries) ? r.entries : [])
+        ];
         allTraits.forEach((t) => {
-            const tName = (t.name || '').toLowerCase();
-            const tDesc = (t.description || (Array.isArray(t.rawEntries) ? t.rawEntries.join(' ') : '')).toLowerCase();
+            const tName = typeof t === 'object' && t ? (t.name || '').toLowerCase() : '';
+            const tDesc = (
+                typeof t === 'string'
+                    ? t
+                    : t?.description ||
+                      (Array.isArray(t?.rawEntries) ? t.rawEntries.join(' ') : '') ||
+                      (Array.isArray(t?.entries) ? t.entries.map((e) => (typeof e === 'string' ? e : e?.name || '')).join(' ') : '')
+            ).toLowerCase();
 
             if (tName.includes('keen senses')) skills.add('Perception');
             if (tName.includes('menacing')) skills.add('Intimidation');
@@ -588,11 +626,33 @@ export function extractSpeciesProficiencies(baseRace, subrace) {
             if (tName.includes('natural tracker')) skills.add('Survival');
             if (tName.includes('reveler')) skills.add('Performance');
 
-            // Regex match "proficiency in the [Skill] skill" or "proficient in [Skill]"
+            // Skill choices
+            if (tName.includes('skill versatility') || tDesc.includes('two skills of your choice')) {
+                speciesSkillChoice = { count: 2, from: [...STANDARD_SKILLS_LIST], label: 'Skill Versatility' };
+            } else if ((r.name || '').toLowerCase().includes('human') && (tName.includes('skills') || tDesc.includes('one skill of your choice'))) {
+                speciesSkillChoice = { count: 1, from: [...STANDARD_SKILLS_LIST], label: 'Variant Human' };
+            } else if (tName.includes('changeling instincts')) {
+                speciesSkillChoice = { count: 2, from: ['Deception', 'Insight', 'Intimidation', 'Persuasion'], label: 'Changeling Instincts' };
+            } else if (tName.includes('kenku recall')) {
+                speciesSkillChoice = { count: 2, from: ['Acrobatics', 'Deception', 'Stealth', 'Sleight of Hand'], label: 'Kenku Recall' };
+            } else if (tName.includes("hunter's lore")) {
+                speciesSkillChoice = { count: 2, from: ['Animal Handling', 'Nature', 'Perception', 'Stealth', 'Survival'], label: "Hunter's Lore" };
+            }
+
+            // Language choices in trait description
+            if (!speciesLanguageChoice && (tDesc.includes('extra language of your choice') || tDesc.includes('one language of your choice') || tDesc.includes('one other language of your choice'))) {
+                speciesLanguageChoice = { count: 1, from: [...STANDARD_LANGUAGES_LIST], label: 'Species Language Choice' };
+            }
+
+            // Regex match specific skills while ignoring numbers/count words
             const profMatches = tDesc.matchAll(/proficien(?:cy|t)\s+(?:in|with)\s+(?:the\s+)?([A-Za-z\s]+?)\s+skill/gi);
             for (const pm of profMatches) {
+                const rawWord = pm[1].trim().toLowerCase();
+                if (['one', 'two', 'three', 'four', 'any', 'a', 'the', 'chosen'].includes(rawWord)) continue;
                 const skNorm = normalizeSkill(pm[1].trim());
-                if (skNorm) skills.add(skNorm);
+                if (skNorm && STANDARD_SKILLS_LIST.map((s) => s.toLowerCase()).includes(skNorm.toLowerCase())) {
+                    skills.add(skNorm);
+                }
             }
         });
 
@@ -605,10 +665,17 @@ export function extractSpeciesProficiencies(baseRace, subrace) {
         if (r.languageProficiencies) {
             const lp = Array.isArray(r.languageProficiencies) ? r.languageProficiencies : [r.languageProficiencies];
             lp.forEach((entry) => {
-                if (typeof entry === 'object') {
+                if (typeof entry === 'object' && entry) {
                     Object.keys(entry).forEach((k) => {
                         if (entry[k] === true) languages.add(k.charAt(0).toUpperCase() + k.slice(1));
                     });
+                    const count = entry.anyStandard || entry.any || entry.choose?.count;
+                    if (count && !speciesLanguageChoice) {
+                        const fromList = Array.isArray(entry.choose?.from) && entry.choose.from.length > 0
+                            ? entry.choose.from.map((s) => s.charAt(0).toUpperCase() + s.slice(1))
+                            : [...STANDARD_LANGUAGES_LIST];
+                        speciesLanguageChoice = { count: parseInt(count) || 1, from: fromList, label: 'Species Language Choice' };
+                    }
                 }
             });
         }
@@ -616,9 +683,35 @@ export function extractSpeciesProficiencies(baseRace, subrace) {
         // Tools
         if (Array.isArray(r.toolProficiencies)) {
             r.toolProficiencies.forEach((tp) => {
-                if (typeof tp === 'string') tools.add(tp);
-                else if (typeof tp === 'object') {
-                    Object.keys(tp).forEach((k) => tools.add(k));
+                if (typeof tp === 'string') {
+                    tools.add(tp);
+                } else if (typeof tp === 'object' && tp) {
+                    Object.keys(tp).forEach((k) => {
+                        if (tp[k] === true) tools.add(k);
+                    });
+                    if (tp.choose && !speciesToolChoice) {
+                        speciesToolChoice = {
+                            count: parseInt(tp.choose.count) || 1,
+                            from: Array.isArray(tp.choose.from) && tp.choose.from.length > 0 ? tp.choose.from : [...STANDARD_ARTISAN_TOOLS],
+                            label: 'Tool Proficiency Choice'
+                        };
+                    } else if (tp.artisan && !speciesToolChoice) {
+                        speciesToolChoice = { count: parseInt(tp.artisan) || 1, from: [...STANDARD_ARTISAN_TOOLS], label: "Artisan's Tools" };
+                    }
+                }
+            });
+        }
+        if (r.skillProficiencies && Array.isArray(r.skillProficiencies)) {
+            r.skillProficiencies.forEach((sp) => {
+                if (sp.choose && sp.choose.count) {
+                    speciesSkillChoice = {
+                        count: sp.choose.count,
+                        from:
+                            Array.isArray(sp.choose.from) && sp.choose.from.length > 0
+                                ? sp.choose.from.map(normalizeSkill).filter(Boolean)
+                                : [...STANDARD_SKILLS_LIST],
+                        label: 'Species Skill Choice'
+                    };
                 }
             });
         }
@@ -626,8 +719,11 @@ export function extractSpeciesProficiencies(baseRace, subrace) {
 
     return {
         skills: Array.from(skills).filter(Boolean),
+        skillChoice: speciesSkillChoice,
         languages: Array.from(languages).filter(Boolean),
-        tools: Array.from(tools).filter(Boolean)
+        languageChoice: speciesLanguageChoice,
+        tools: Array.from(tools).filter(Boolean),
+        toolChoice: speciesToolChoice
     };
 }
 

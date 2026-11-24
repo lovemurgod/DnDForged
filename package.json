@@ -1,7 +1,7 @@
 {
     "name": "forgedvtt",
     "productName": "ForgeDVTT",
-    "version": "1.4.1",
+    "version": "1.5.0",
     "description": "ForgeDVTT Virtual Tabletop (VTT) Desktop App & Server",
     "author": "ForgeDVTT Team <lovemurgod92@gmail.com>",
     "main": "electron/main.js",
@@ -51,6 +51,7 @@
         "build:handouts": "node scripts/build-handout-db.mjs",
         "build:dbs": "node scripts/build-spell-db.mjs && node scripts/build-creature-db.mjs && node scripts/build-item-db.mjs && node scripts/build-compendium-db.mjs && node scripts/build-handout-db.mjs",
         "build:srd": "node scripts/build-srd-db.mjs",
+        "build:web": "node scripts/build-static-web.mjs",
         "release:stage": "node scripts/prepare-clean-release.mjs",
         "sync:content": "node scripts/sync-partnered-brew.mjs",
         "sync:partnered": "node scripts/sync-partnered-brew.mjs --partnered-only",
@@ -87,14 +88,13 @@
         "executableName": "ForgeDVTT",
         "asar": true,
         "asarUnpack": [
+            "package.json",
+            "node_modules/**/*",
             "server/**/*",
             "server.js",
             "launcher.js",
             "utils.js",
-            "vtt/**/*",
-            "img/**/*",
-            "css/**/*",
-            "index.html"
+            "vtt/**/*"
         ],
         "directories": {
             "output": "dist"
@@ -103,14 +103,11 @@
             "server.js",
             "launcher.js",
             "utils.js",
-            "index.html",
             "matto.json",
             "LEGAL.md",
             "electron/**/*",
             "server/**/*",
             "vtt/**/*",
-            "img/**/*",
-            "css/**/*",
             "package.json"
         ],
         "extraResources": [

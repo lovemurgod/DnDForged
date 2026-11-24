@@ -7,6 +7,9 @@ import { parseSpellMacro } from './creature-spells.js';
 export { parseSpellMacro };
 
 export function getVisibilitySetting(ctx = {}) {
+    const curM = ctx.getMonster ? ctx.getMonster() : null;
+    if (curM && curM.whisperToGM) return 'gm';
+    if (typeof window !== 'undefined' && window.VTT?.whisperGM) return 'gm';
     if (typeof document === 'undefined') return 'public';
     const el = document.getElementById('config-roll-visibility');
     return el ? el.value : 'public';
@@ -30,12 +33,15 @@ export function rollAndPostToChat(formula, label, ctx = {}) {
 
     let isAdvantage = false;
     let isDisadvantage = false;
-    let rollMode = typeof window !== 'undefined' && window.VTT ? window.VTT.currentRollMode : 'normal';
+    const curM = ctx.getMonster ? ctx.getMonster() : null;
+    let rollMode = (curM && curM.activeRollMode) || (typeof window !== 'undefined' && window.VTT ? window.VTT.currentRollMode : 'normal');
     const evt = typeof window !== 'undefined' ? window.event : null;
+    const isShift = (evt && evt.shiftKey) || (typeof window !== 'undefined' && typeof window.VTT_isShiftPressed === 'function' && window.VTT_isShiftPressed());
+    const isCtrl = (evt && (evt.ctrlKey || evt.altKey || evt.metaKey)) || (typeof window !== 'undefined' && typeof window.VTT_isCtrlPressed === 'function' && window.VTT_isCtrlPressed());
 
     if (count === 1 && faces === 20) {
-        if (evt && evt.shiftKey) rollMode = 'adv';
-        else if (evt && evt.ctrlKey) rollMode = 'dis';
+        if (isShift) rollMode = 'adv';
+        else if (isCtrl) rollMode = 'dis';
         if (rollMode === 'adv') isAdvantage = true;
         if (rollMode === 'dis') isDisadvantage = true;
     }
@@ -94,11 +100,11 @@ export function rollAndPostToChat(formula, label, ctx = {}) {
     const visibility = ctx.getVisibilitySetting ? ctx.getVisibilitySetting() : getVisibilitySetting();
     const modeText = isAdvantage ? ' (Advantage)' : isDisadvantage ? ' (Disadvantage)' : '';
 
-    if (visibility === 'private') {
-        vtt.socket.emit('chat:whisper', {
-            to: vtt.username,
+    if (visibility === 'private' || visibility === 'gm') {
+        vtt.socket.emit('chat:msg', {
             text: `[${label}] rolls **${formula}**${modeText}`,
-            roll: rollResult
+            roll: rollResult,
+            whisperToGM: true
         });
     } else {
         vtt.socket.emit('chat:msg', {
@@ -112,11 +118,13 @@ export function postAbilityToChat(abilityName, text, ctx = {}) {
     const vtt = ctx.getVtt ? ctx.getVtt() : typeof window !== 'undefined' ? window.VTT : null;
     if (!vtt || !vtt.socket) return;
     const currentMonster = ctx.getMonster ? ctx.getMonster() : null;
-    const visibility = ctx.getVisibilitySetting ? ctx.getVisibilitySetting() : getVisibilitySetting();
+    const visibility = ctx.getVisibilitySetting ? ctx.getVisibilitySetting(ctx) : getVisibilitySetting(ctx);
     const msgText = `**[${currentMonster?.name || 'Creature'}] ${abilityName}**`;
 
     if (visibility === 'private') {
-        vtt.socket.emit('chat:whisper', { to: vtt.username, text: msgText });
+        vtt.socket.emit('chat:whisper', { to: vtt.username, text: msgText, whisperToGM: true });
+    } else if (visibility === 'gm') {
+        vtt.socket.emit('chat:msg', { text: msgText, whisperToGM: true });
     } else {
         vtt.socket.emit('chat:msg', { text: msgText });
     }
@@ -131,6 +139,11 @@ export function parseActionMacro(
     rollModeOverride = null,
     m = null
 ) {
+    const isShift = typeof window !== 'undefined' && typeof window.VTT_isShiftPressed === 'function' && window.VTT_isShiftPressed();
+    const isCtrl = typeof window !== 'undefined' && typeof window.VTT_isCtrlPressed === 'function' && window.VTT_isCtrlPressed();
+    let effectiveRollMode = rollModeOverride || (typeof window !== 'undefined' && window.VTT ? window.VTT.currentRollMode : null) || m?.activeRollMode || null;
+    if (isShift) effectiveRollMode = 'adv';
+    else if (isCtrl) effectiveRollMode = 'dis';
     const mc = {
         charName: charName || 'Creature',
         macroName: abilityName,
@@ -161,7 +174,7 @@ export function parseActionMacro(
         ) {
             const mod = preParsedMacro.attackBonus;
             const formula = `1d20${mod >= 0 ? '+' : ''}${mod}`;
-            const evalRoll = evaluateDiceHelper(formula, false, rollModeOverride);
+            const evalRoll = evaluateDiceHelper(formula, false, effectiveRollMode);
             mc.atkRoll = {
                 formula: formula,
                 total: evalRoll.total,
@@ -221,7 +234,7 @@ export function parseActionMacro(
     if (atkMatch) {
         const mod = parseInt(atkMatch[1]) || 0;
         const formula = `1d20${mod >= 0 ? '+' : ''}${mod}`;
-        const evalRoll = evaluateDiceHelper(formula, false, rollModeOverride);
+        const evalRoll = evaluateDiceHelper(formula, false, effectiveRollMode);
         mc.atkRoll = {
             formula: formula,
             total: evalRoll.total,
@@ -568,13 +581,14 @@ export function executeMassRolls({
         if (index < count) {
             const i = index + 1;
             const curM = ctx.getMonster ? ctx.getMonster() : null;
+            const effectiveMode = rollMode || curM?.activeRollMode || null;
             const macroCard = parseActionMacro(
                 abilityName,
                 rawEntries,
                 abilityText,
                 charName,
                 preParsedMacro,
-                rollMode,
+                effectiveMode,
                 curM
             );
             const msgOut = {
@@ -587,9 +601,13 @@ export function executeMassRolls({
             // Individual attack macro cards are intentionally emitted sequentially to chat to provide
             // granular rolling breakdown, discrete 3D dice physics trigger points, and standalone action history
             // before the consolidated summary Mass Attack Card is generated below.
-            if (visibility === 'private' || visibility === 'gm') {
+            if (visibility === 'private') {
                 msgOut.to = vtt.username;
+                msgOut.whisperToGM = true;
                 vtt.socket.emit('chat:whisper', msgOut);
+            } else if (visibility === 'gm') {
+                msgOut.whisperToGM = true;
+                vtt.socket.emit('chat:msg', msgOut);
             } else {
                 vtt.socket.emit('chat:msg', msgOut);
             }
@@ -656,7 +674,7 @@ export function wireInitiativeRoll(panel, m, ctx = {}) {
     const linkedCharacterId = ctx.getLinkedCharacterId ? ctx.getLinkedCharacterId() : null;
 
     initBtns.forEach((btn) => {
-        btn.addEventListener('click', () => {
+        btn.addEventListener('click', (e) => {
             const dexScore = m.dex || 10;
             let initMod = Math.floor((dexScore - 10) / 2);
             if (m.initiative !== undefined) {
@@ -667,11 +685,30 @@ export function wireInitiativeRoll(panel, m, ctx = {}) {
             const formula = `1d20${modStr}`;
 
             let rollData = null;
+            const curRollMode = (typeof window !== 'undefined' && window.VTT?.currentRollMode) || m?.activeRollMode || 'normal';
             if (typeof window !== 'undefined' && window.vttPlayerSheetAPI && window.vttPlayerSheetAPI.simulateRoll) {
-                rollData = window.vttPlayerSheetAPI.simulateRoll(formula);
+                rollData = window.vttPlayerSheetAPI.simulateRoll(formula, 20, e, { rollMode: curRollMode });
             } else {
-                const r = Math.floor(Math.random() * 20) + 1;
-                rollData = { total: r + initMod, rolls: [r], modifier: initMod, formula };
+                const isShift = (e && e.shiftKey) || (typeof window !== 'undefined' && typeof window.VTT_isShiftPressed === 'function' && window.VTT_isShiftPressed());
+                const isCtrl = (e && (e.ctrlKey || e.altKey || e.metaKey)) || (typeof window !== 'undefined' && typeof window.VTT_isCtrlPressed === 'function' && window.VTT_isCtrlPressed());
+                let effMode = curRollMode;
+                if (isShift) effMode = 'adv';
+                else if (isCtrl) effMode = 'dis';
+
+                if (effMode === 'adv') {
+                    const r1 = Math.floor(Math.random() * 20) + 1;
+                    const r2 = Math.floor(Math.random() * 20) + 1;
+                    const kept = Math.max(r1, r2);
+                    rollData = { total: kept + initMod, rolls: [r1, r2], modifier: initMod, formula: `2d20kh1${modStr}` };
+                } else if (effMode === 'dis') {
+                    const r1 = Math.floor(Math.random() * 20) + 1;
+                    const r2 = Math.floor(Math.random() * 20) + 1;
+                    const kept = Math.min(r1, r2);
+                    rollData = { total: kept + initMod, rolls: [r1, r2], modifier: initMod, formula: `2d20kl1${modStr}` };
+                } else {
+                    const r = Math.floor(Math.random() * 20) + 1;
+                    rollData = { total: r + initMod, rolls: [r], modifier: initMod, formula };
+                }
             }
 
             let isTiebreaker = true;
@@ -687,12 +724,20 @@ export function wireInitiativeRoll(panel, m, ctx = {}) {
             }
 
             if (typeof window !== 'undefined' && window.VTT && window.VTT.socket) {
-                const visibility = ctx.getVisibilitySetting ? ctx.getVisibilitySetting() : getVisibilitySetting();
-                if (visibility === 'private' || visibility === 'gm') {
+                const isWhisper = Boolean((typeof window !== 'undefined' && window.VTT?.whisperGM) || m?.whisperToGM);
+                const visibility = ctx.getVisibilitySetting ? ctx.getVisibilitySetting(ctx) : getVisibilitySetting(ctx);
+                if (visibility === 'private') {
                     window.VTT.socket.emit('chat:whisper', {
                         to: window.VTT.username,
                         text: `[${m.name}] rolls **Initiative**`,
-                        roll: rollData
+                        roll: rollData,
+                        whisperToGM: true
+                    });
+                } else if (visibility === 'gm' || isWhisper) {
+                    window.VTT.socket.emit('chat:msg', {
+                        text: `[${m.name}] rolls **Initiative**`,
+                        roll: rollData,
+                        whisperToGM: true
                     });
                 } else {
                     window.VTT.socket.emit('chat:msg', {

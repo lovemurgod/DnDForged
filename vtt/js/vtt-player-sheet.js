@@ -41,7 +41,8 @@ import {
     evaluateSaveDc as evaluateSaveDcCalc,
     evaluateDamageRolls as evaluateDamageRollsCalc,
     calculateEffectiveHp,
-    calculateEffectiveAc
+    calculateEffectiveAc,
+    resolveCharacterSheetSettings
 } from './player-sheet/calc/stats.js';
 import {
     calculateCharacterSpellSlots,
@@ -63,6 +64,7 @@ import {
     ensureCharacterBuilderModalExists as ensureCharacterBuilderModalExistsExt,
     openCharacterBuilderModal as openCharacterBuilderModalExt
 } from './player-sheet/builder/builder-modal.js';
+import { openCreatureSelectorModal } from './modals/creature-selector-modal.js';
 import {
     ensureItemModalsExist as ensureItemModalsExistExt,
     openItemModal as openItemModalExt,
@@ -92,7 +94,8 @@ import {
     renderHpTogglesList as renderHpTogglesListExt,
     ensureAcSettingsModalExists as ensureAcSettingsModalExistsExt,
     openAcSettingsModal as openAcSettingsModalExt,
-    renderAcTogglesList as renderAcTogglesListExt
+    renderAcTogglesList as renderAcTogglesListExt,
+    openSheetSettingsModal as openSheetSettingsModalExt
 } from './player-sheet/modals/index.js';
 import { renderEquipRowHtml, renderEquipmentHtml, wireInventoryEvents } from './player-sheet/vtt-sheet-inventory.js';
 import {
@@ -397,6 +400,12 @@ export function initVttPlayerSheet(vtt) {
     };
 
     async function fetchCatalogJson(primaryUrl, fallbackUrl, compendiumEndpoint, defaultVal = []) {
+        if (compendiumEndpoint) {
+            try {
+                const res = await fetch(compendiumEndpoint);
+                if (res.ok) return await res.json();
+            } catch (e) {}
+        }
         try {
             const res = await fetch(primaryUrl);
             if (res.ok) return await res.json();
@@ -404,12 +413,6 @@ export function initVttPlayerSheet(vtt) {
         if (fallbackUrl) {
             try {
                 const res = await fetch(fallbackUrl);
-                if (res.ok) return await res.json();
-            } catch (e) {}
-        }
-        if (compendiumEndpoint) {
-            try {
-                const res = await fetch(compendiumEndpoint);
                 if (res.ok) return await res.json();
             } catch (e) {}
         }
@@ -528,7 +531,8 @@ export function initVttPlayerSheet(vtt) {
         return builderPromise;
     }
 
-    function getClassHitDie(className) {
+    function getClassHitDie(className, classObj = null) {
+        if (classObj && classObj.hitDie) return classObj.hitDie;
         if (!className) return 'd8';
         const name = className
             .replace(/\s*\[.*?\]$/, '')
@@ -757,6 +761,8 @@ export function initVttPlayerSheet(vtt) {
     window.vttPlayerSheetAPI = {
         getCurrentCharacter: () => currentChar,
         getCurrentChar: () => currentChar,
+        isWhisperToGM: () => Boolean((typeof window !== 'undefined' && window.VTT?.whisperGM) || currentChar?.whisperToGM),
+        getActiveRollMode: () => (typeof window !== 'undefined' && window.VTT?.currentRollMode) || currentChar?.activeRollMode || 'normal',
         saveAndEmit: (c) => saveAndEmit(c || currentChar),
         renderSheetData: (c) => renderSheetData(c || currentChar),
         applyShortRest: (c) => applyShortRestCalc(c || currentChar),
@@ -3538,6 +3544,64 @@ export function initVttPlayerSheet(vtt) {
         }
     });
 
+    // ─── Player Sheet Header Control Bar (Roll Mode, GM Whisper, Settings) ─────
+    function updatePlayerSheetControlBar(char) {
+        const rollMode = (typeof window !== 'undefined' && window.VTT?.currentRollMode) || char?.activeRollMode || 'normal';
+        const isWhisper = Boolean((typeof window !== 'undefined' && window.VTT?.whisperGM) || char?.whisperToGM);
+        const controlBar = document.getElementById('ps-top-control-bar') || panel;
+
+        controlBar?.querySelectorAll('.ps-roll-mode-btn').forEach((btn) => {
+            const mode = btn.dataset.mode;
+            btn.classList.remove('active', 'adv', 'dis');
+            if (mode === rollMode) {
+                btn.classList.add('active');
+                if (mode === 'adv') btn.classList.add('adv');
+                if (mode === 'dis') btn.classList.add('dis');
+            }
+        });
+
+        const whisperBtn = document.getElementById('ps-btn-gm-whisper');
+        if (whisperBtn) {
+            whisperBtn.classList.toggle('active', isWhisper);
+        }
+    }
+
+    const psControlBar = document.getElementById('ps-top-control-bar') || panel;
+    psControlBar?.querySelectorAll('.ps-roll-mode-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            const mode = btn.dataset.mode || 'normal';
+            if (typeof window !== 'undefined' && window.VTT?.setGlobalRollMode) {
+                window.VTT.setGlobalRollMode(mode);
+            }
+            if (currentChar) {
+                currentChar.activeRollMode = mode;
+                saveAndEmit(currentChar);
+            }
+            updatePlayerSheetControlBar(currentChar);
+        });
+    });
+
+    const psWhisperBtn = document.getElementById('ps-btn-gm-whisper');
+    psWhisperBtn?.addEventListener('click', () => {
+        const currentWhisper = Boolean((typeof window !== 'undefined' && window.VTT?.whisperGM) || currentChar?.whisperToGM);
+        const nextWhisper = !currentWhisper;
+        if (typeof window !== 'undefined' && window.VTT?.setGlobalWhisperGM) {
+            window.VTT.setGlobalWhisperGM(nextWhisper);
+        }
+        if (currentChar) {
+            currentChar.whisperToGM = nextWhisper;
+            saveAndEmit(currentChar);
+        }
+        updatePlayerSheetControlBar(currentChar);
+    });
+
+    const psSettingsCogBtn = document.getElementById('ps-btn-sheet-settings');
+    psSettingsCogBtn?.addEventListener('click', () => {
+        if (currentChar) {
+            openSheetSettingsModalExt(currentChar, getModalOptions());
+        }
+    });
+
     // ─── Inner Tabs ────────────────────────────────────────────────────────
     const psTabBtns = document.querySelectorAll('.ps-tab-btn');
     const psTabContents = document.querySelectorAll('.ps-tab-content');
@@ -3822,88 +3886,7 @@ export function initVttPlayerSheet(vtt) {
 
     if (btnCharAddCompanion) {
         btnCharAddCompanion.addEventListener('click', async () => {
-            // We need a modal to select a monster, then an owner.
-            try {
-                let catRes = await fetch('/api/bestiary/catalog');
-                if (!catRes.ok) catRes = await fetch('/data/bestiary-catalog.json');
-                if (!catRes.ok) throw new Error('Could not load bestiary catalog');
-                const monsters = await catRes.json();
-
-                // create a temporary modal
-                const modalOverlay = document.createElement('div');
-                modalOverlay.className = 'vtt-sheet-submodal-overlay';
-                modalOverlay.style.cssText =
-                    'position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:3000;';
-
-                const modal = document.createElement('div');
-                modal.className = 'vtt-sheet-submodal glassmorphism';
-                modal.style.cssText =
-                    'position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:3010; width:min(500px, 92vw); max-height:80vh; display:flex; flex-direction:column; padding:16px; border-radius:8px; border:1px solid var(--color-border-subtle);';
-
-                modal.innerHTML = `
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-                        <h3 style="margin:0; color:var(--color-gold-base);"><i class="fa-solid fa-paw"></i> Add Player Companion</h3>
-                        <button id="comp-modal-close" class="btn btn-icon btn-secondary"><i class="fa-solid fa-xmark"></i></button>
-                    </div>
-                    <div class="form-group">
-                        <label>Search Bestiary</label>
-                        <input type="text" id="comp-search" placeholder="Search monsters (e.g., Wolf)...">
-                    </div>
-                    <div id="comp-list" class="scroll-styled" style="flex:1; border:1px solid var(--color-border-subtle); background:rgba(0,0,0,0.2); overflow-y:auto; padding:4px; min-height:200px;"></div>
-                `;
-
-                document.body.appendChild(modalOverlay);
-                document.body.appendChild(modal);
-
-                const listEl = modal.querySelector('#comp-list');
-                const searchInput = modal.querySelector('#comp-search');
-
-                const renderList = (query) => {
-                    listEl.innerHTML = '';
-                    const q = query.toLowerCase().trim();
-                    const filtered = monsters
-                        .filter((m) => {
-                            const nameMatch = m.name.toLowerCase().includes(q);
-                            const crStr = m.cr
-                                ? (typeof m.cr === 'object' ? String(m.cr.cr) : String(m.cr)).toLowerCase()
-                                : '0';
-                            const crMatch =
-                                crStr === q ||
-                                crStr.includes(q) ||
-                                `cr ${crStr}`.includes(query) ||
-                                `cr${crStr}`.includes(q);
-                            return nameMatch || crMatch;
-                        })
-                        .slice(0, 50);
-                    filtered.forEach((m) => {
-                        const row = document.createElement('div');
-                        row.style.cssText =
-                            'padding:8px; border-bottom:1px solid var(--color-border-subtle); cursor:pointer; display:flex; justify-content:space-between; align-items:center;';
-                        const spellBadge = m.hasSpellcasting
-                            ? `<span style="color:var(--color-gold-base); margin-left:4px;" title="Spellcaster"><i class="fa-solid fa-wand-magic-sparkles"></i></span>`
-                            : '';
-                        row.innerHTML = `<span><strong>${m.name}</strong>${spellBadge} <span style="font-size:0.75em; color:var(--color-text-muted);">[${m.source || 'Unknown'} ${m.edition || ''}]</span></span> <span style="color:var(--color-text-muted);">CR ${m.cr ? m.cr.cr || m.cr : '0'}</span>`;
-                        row.addEventListener('click', () => {
-                            selectOwnerForCompanion(m);
-                            closeModal();
-                        });
-                        row.onmouseover = () => (row.style.background = 'rgba(255,255,255,0.1)');
-                        row.onmouseout = () => (row.style.background = 'transparent');
-                        listEl.appendChild(row);
-                    });
-                };
-
-                const closeModal = () => {
-                    modalOverlay.remove();
-                    modal.remove();
-                };
-
-                modal.querySelector('#comp-modal-close').addEventListener('click', closeModal);
-                modalOverlay.addEventListener('click', closeModal);
-                searchInput.addEventListener('input', (e) => renderList(e.target.value));
-                renderList('');
-
-                const selectOwnerForCompanion = (monster) => {
+            const selectOwnerForCompanion = (monster, fullMonsterPreloaded = null) => {
                     const knownPlayers =
                         vtt.campaignState && vtt.campaignState.knownPlayers ? vtt.campaignState.knownPlayers : [];
                     const allowedUsers =
@@ -3957,33 +3940,35 @@ export function initVttPlayerSheet(vtt) {
                         else if (monster.hp && monster.hp.average) hp = monster.hp.average;
 
                         // Hydrate full normalized creature data
-                        let fullMonster = null;
-                        if (window.fetchFullCreature) {
-                            fullMonster = await window.fetchFullCreature(monster.source, monster.id || monster.name);
-                        } else {
-                            try {
-                                const r = await fetch(
-                                    `/api/creature/${encodeURIComponent(monster.source)}/${encodeURIComponent(monster.id || monster.name)}`
-                                );
-                                if (r.ok) fullMonster = await r.json();
-                            } catch (err) {}
-                            if (!fullMonster) {
+                        let fullMonster = fullMonsterPreloaded || null;
+                        if (!fullMonster) {
+                            if (window.fetchFullCreature) {
+                                fullMonster = await window.fetchFullCreature(monster.source, monster.id || monster.name);
+                            } else {
                                 try {
-                                    let partRes = await fetch(
-                                        `/data/bestiary-normalized/bestiary-${monster.source.toLowerCase()}.json`
+                                    const r = await fetch(
+                                        `/api/creature/${encodeURIComponent(monster.source)}/${encodeURIComponent(monster.id || monster.name)}`
                                     );
-                                    if (!partRes.ok)
-                                        partRes = await fetch(
-                                            `/vtt/data/bestiary-normalized/bestiary-${monster.source.toLowerCase()}.json`
-                                        );
-                                    if (partRes.ok) {
-                                        const partition = await partRes.json();
-                                        const clean = (monster.id || monster.name).toLowerCase();
-                                        fullMonster = partition.find(
-                                            (m) => m.id?.toLowerCase() === clean || m.name?.toLowerCase() === clean
-                                        );
-                                    }
+                                    if (r.ok) fullMonster = await r.json();
                                 } catch (err) {}
+                                if (!fullMonster) {
+                                    try {
+                                        let partRes = await fetch(
+                                            `/data/bestiary-normalized/bestiary-${monster.source.toLowerCase()}.json`
+                                        );
+                                        if (!partRes.ok)
+                                            partRes = await fetch(
+                                                `/vtt/data/bestiary-normalized/bestiary-${monster.source.toLowerCase()}.json`
+                                            );
+                                        if (partRes.ok) {
+                                            const partition = await partRes.json();
+                                            const clean = (monster.id || monster.name).toLowerCase();
+                                            fullMonster = partition.find(
+                                                (m) => m.id?.toLowerCase() === clean || m.name?.toLowerCase() === clean
+                                            );
+                                        }
+                                    } catch (err) {}
+                                }
                             }
                         }
                         const finalMonsterData = fullMonster
@@ -4041,12 +4026,22 @@ export function initVttPlayerSheet(vtt) {
                         closeOwnerModal();
                     });
                 };
-            } catch (e) {
-                console.error('Error loading bestiary for companion:', e);
-                alert('Could not load bestiary data.');
-            }
-        });
-    }
+
+                try {
+                    const selectorFn = window.VTT?.openCreatureSelectorModal || openCreatureSelectorModal;
+                    await selectorFn({
+                        title: 'Add Player Companion',
+                        confirmLabel: 'Choose Companion',
+                        confirmIcon: 'fa-paw',
+                        onSelect: (monster, fullMonster) => {
+                            selectOwnerForCompanion(monster, fullMonster);
+                        }
+                    });
+                } catch (e) {
+                    console.error('Error opening creature selector for companion:', e);
+                }
+            });
+        }
 
     if (btnCharAdd) {
         btnCharAdd.addEventListener('click', () => {
@@ -4410,8 +4405,44 @@ export function initVttPlayerSheet(vtt) {
         overlay.classList.remove('vtt-hidden');
     }
 
+    function emitPlayerChatMessage(payload) {
+        if (!payload) return;
+        const isWhisper = Boolean((typeof window !== 'undefined' && window.VTT?.whisperGM) || currentChar?.whisperToGM);
+        if (isWhisper) {
+            payload.whisperToGM = true;
+        }
+        if (vtt && vtt.socket) {
+            vtt.socket.emit('chat:msg', payload);
+        } else if (typeof window !== 'undefined' && window.VTT?.socket) {
+            window.VTT.socket.emit('chat:msg', payload);
+        }
+    }
+
+    const sheetSocket = {
+        emit: (evt, data) => {
+            if (evt === 'chat:msg' && data && typeof data === 'object') {
+                const isWhisper = Boolean((typeof window !== 'undefined' && window.VTT?.whisperGM) || currentChar?.whisperToGM);
+                if (isWhisper) {
+                    data.whisperToGM = true;
+                }
+            }
+            if (vtt && vtt.socket) {
+                return vtt.socket.emit(evt, data);
+            } else if (typeof window !== 'undefined' && window.VTT?.socket) {
+                return window.VTT.socket.emit(evt, data);
+            }
+        }
+    };
+    if (vtt && vtt.socket) {
+        Object.setPrototypeOf(sheetSocket, vtt.socket);
+    }
+    const sheetVtt = {
+        ...vtt,
+        socket: sheetSocket
+    };
+
     const sheetCtx = {
-        vtt,
+        vtt: sheetVtt,
         getCurrentChar: () => currentChar,
         saveAndEmit,
         renderSheetData,
@@ -4442,7 +4473,11 @@ export function initVttPlayerSheet(vtt) {
 
     function renderSheetData(char) {
         if (!char) return;
+        resolveCharacterSheetSettings(char);
         currentChar = char;
+        char.activeRollMode = (typeof window !== 'undefined' && window.VTT?.currentRollMode) || char.activeRollMode || 'normal';
+        char.whisperToGM = (typeof window !== 'undefined' && window.VTT?.whisperGM !== undefined) ? Boolean(window.VTT.whisperGM) : Boolean(char.whisperToGM);
+        updatePlayerSheetControlBar(char);
 
         if (window.VTTSpellManager) {
             if (typeof window.VTTSpellManager.init === 'function') {
@@ -4677,11 +4712,12 @@ export function initVttPlayerSheet(vtt) {
         const hdMax = {};
         if (char.classes && char.classes.length > 0) {
             char.classes.forEach((c) => {
-                const hd = getClassHitDie(c.name);
+                const hd = c.hitDie || getClassHitDie(c.name, c);
                 hdMax[hd] = (hdMax[hd] || 0) + (parseInt(c.level) || 1);
             });
         } else {
-            hdMax['d8'] = char.level || 1;
+            const fallbackHd = char.hitDie || getClassHitDie(char.class);
+            hdMax[fallbackHd] = char.level || 1;
         }
 
         char.hitDiceSpent = char.hitDiceSpent || {};
@@ -5187,9 +5223,14 @@ export function initVttPlayerSheet(vtt) {
                     const conMod = getMod(getTotalStat(char, 'con'));
                     const conStr = conMod >= 0 ? '+' + conMod : '' + conMod;
                     const formula = '1' + hd + conStr;
-                    vtt.socket.emit('chat:msg', {
-                        text: `[${char.name || 'Player'}: Hit Dice] rolls **${formula}**`,
-                        roll: simulateRoll(formula)
+                    const roll = simulateRoll(formula);
+                    const healAmount = Math.max(1, (roll && typeof roll.total === 'number') ? roll.total : 1);
+                    const oldHp = parseInt(char.hpCurrent) || 0;
+                    const hpMax = parseInt(char.hpMax) || 1;
+                    char.hpCurrent = Math.min(hpMax, oldHp + healAmount);
+                    emitPlayerChatMessage({
+                        text: `[${char.name || 'Player'}: Hit Dice] rolls **${formula}** for **${healAmount} HP** (${oldHp} -> ${char.hpCurrent}/${hpMax})`,
+                        roll
                     });
                     saveAndEmit(char);
                     renderSheetData(char);
@@ -5231,59 +5272,44 @@ export function initVttPlayerSheet(vtt) {
             const warlockClass = validClasses.find((c) => (c.name || '').trim().toLowerCase() === 'warlock');
 
             if (warlockClass && char.spellSlots) {
-                const isPureWarlock = validClasses.length === 1;
                 let slotsRestored = false;
-
-                if (isPureWarlock) {
-                    // Pure Warlock: Restore all active spell slot levels
-                    Object.keys(char.spellSlots).forEach((lvl) => {
-                        if (char.spellSlots[lvl] && char.spellSlots[lvl].max > 0) {
-                            if (char.spellSlots[lvl].current < char.spellSlots[lvl].max) {
-                                slotsRestored = true;
-                                char.spellSlots[lvl].current = char.spellSlots[lvl].max;
-                            }
-                        }
-                    });
+                const wLvl = parseInt(warlockClass.level) || 1;
+                let slotLevelNum = 1;
+                let slotCount = 1;
+                if (wLvl >= 17) {
+                    slotLevelNum = 5;
+                    slotCount = 4;
+                } else if (wLvl >= 11) {
+                    slotLevelNum = 5;
+                    slotCount = 3;
+                } else if (wLvl >= 9) {
+                    slotLevelNum = 5;
+                    slotCount = 2;
+                } else if (wLvl >= 7) {
+                    slotLevelNum = 4;
+                    slotCount = 2;
+                } else if (wLvl >= 5) {
+                    slotLevelNum = 3;
+                    slotCount = 2;
+                } else if (wLvl >= 3) {
+                    slotLevelNum = 2;
+                    slotCount = 2;
+                } else if (wLvl >= 2) {
+                    slotLevelNum = 1;
+                    slotCount = 2;
                 } else {
-                    // Multiclassed Warlock: Restore up to Pact Magic slots for the Warlock level
-                    const wLvl = parseInt(warlockClass.level) || 1;
-                    let slotLevelNum = 1;
-                    let slotCount = 1;
-                    if (wLvl >= 17) {
-                        slotLevelNum = 5;
-                        slotCount = 4;
-                    } else if (wLvl >= 11) {
-                        slotLevelNum = 5;
-                        slotCount = 3;
-                    } else if (wLvl >= 9) {
-                        slotLevelNum = 5;
-                        slotCount = 2;
-                    } else if (wLvl >= 7) {
-                        slotLevelNum = 4;
-                        slotCount = 2;
-                    } else if (wLvl >= 5) {
-                        slotLevelNum = 3;
-                        slotCount = 2;
-                    } else if (wLvl >= 3) {
-                        slotLevelNum = 2;
-                        slotCount = 2;
-                    } else if (wLvl >= 2) {
-                        slotLevelNum = 1;
-                        slotCount = 2;
-                    } else {
-                        slotLevelNum = 1;
-                        slotCount = 1;
-                    }
+                    slotLevelNum = 1;
+                    slotCount = 1;
+                }
 
-                    const targetLevelKey = `level${slotLevelNum}`;
-                    if (char.spellSlots[targetLevelKey]) {
-                        const cur = char.spellSlots[targetLevelKey].current || 0;
-                        const max = char.spellSlots[targetLevelKey].max || 0;
-                        const newCur = Math.min(max, cur + slotCount);
-                        if (newCur > cur) {
-                            char.spellSlots[targetLevelKey].current = newCur;
-                            slotsRestored = true;
-                        }
+                const targetLevelKey = `level${slotLevelNum}`;
+                if (char.spellSlots[targetLevelKey]) {
+                    const cur = char.spellSlots[targetLevelKey].current || 0;
+                    const max = char.spellSlots[targetLevelKey].max || 0;
+                    const newCur = Math.min(max, cur + slotCount);
+                    if (newCur > cur) {
+                        char.spellSlots[targetLevelKey].current = newCur;
+                        slotsRestored = true;
                     }
                 }
 
@@ -5299,7 +5325,7 @@ export function initVttPlayerSheet(vtt) {
                 msgText += ` No Short Rest resources required resetting.`;
             }
 
-            vtt.socket.emit('chat:msg', { text: msgText });
+            emitPlayerChatMessage({ text: msgText });
             saveAndEmit(char);
             renderSheetData(char);
         });
@@ -5392,7 +5418,7 @@ export function initVttPlayerSheet(vtt) {
             }
             msgText += `.`;
 
-            vtt.socket.emit('chat:msg', { text: msgText });
+            emitPlayerChatMessage({ text: msgText });
             saveAndEmit(char);
             renderSheetData(char);
         });
@@ -6211,6 +6237,11 @@ export function initVttPlayerSheet(vtt) {
                 const cleanG = globalMod.startsWith('+') || globalMod.startsWith('-') ? globalMod : '+' + globalMod;
                 formula += `${cleanG}[Global]`;
             }
+            if (char.settings?.jackOfAllTrades && !char.skillToggles?.some((t) => t.enabled && (t.target === 'initiative' || t.name?.includes('Jack of All Trades')))) {
+                const pb = getProfBonus(char.level);
+                const halfPb = Math.floor(pb / 2);
+                if (halfPb > 0) formula += `+${halfPb}[Jack of All Trades]`;
+            }
             formula += toggleFormulaStr;
 
             const rollData = simulateRoll(formula, 20, e);
@@ -6227,7 +6258,7 @@ export function initVttPlayerSheet(vtt) {
                 rollData.total = Math.round((rollData.total + dexTiebreaker) * 100) / 100;
             }
 
-            vtt.socket.emit('chat:msg', {
+            emitPlayerChatMessage({
                 text: `[${char.name}] rolls **Initiative**`,
                 roll: rollData
             });
@@ -6306,7 +6337,7 @@ export function initVttPlayerSheet(vtt) {
         });
 
         document.getElementById('pc-roll-death-save')?.addEventListener('click', (e) => {
-            vtt.socket.emit('chat:msg', {
+            emitPlayerChatMessage({
                 text: `[${char.name}] rolls **Death Save**`,
                 roll: simulateRoll('1d20', 20, e)
             });
@@ -6356,9 +6387,14 @@ export function initVttPlayerSheet(vtt) {
                     const cleanG = globalMod.startsWith('+') || globalMod.startsWith('-') ? globalMod : '+' + globalMod;
                     formula += `${cleanG}[Global]`;
                 }
-                vtt.socket.emit('chat:msg', {
+                if (char.settings?.jackOfAllTrades) {
+                    const pb = getProfBonus(char.level);
+                    const halfPb = Math.floor(pb / 2);
+                    if (halfPb > 0) formula += `+${halfPb}[Jack of All Trades]`;
+                }
+                emitPlayerChatMessage({
                     text: `[${char.name}: ${ab.toUpperCase()} Check] rolls **Ability Check**`,
-                    roll: simulateRoll(formula, 20, e)
+                    roll: simulateRoll(formula, 20, e, { isAbilityCheck: true, ability: ab })
                 });
             });
         });
@@ -6400,7 +6436,7 @@ export function initVttPlayerSheet(vtt) {
                         });
                 }
 
-                vtt.socket.emit('chat:msg', {
+                emitPlayerChatMessage({
                     text: `[${char.name}: ${ab.toUpperCase()} Save] rolls **Saving Throw**`,
                     roll: simulateRoll(formula, 20, e)
                 });
@@ -6490,6 +6526,10 @@ export function initVttPlayerSheet(vtt) {
                 if (isExp && profBonus) {
                     formula += `+${profBonus}[EXP]`;
                 }
+                if (!isProf && !isExp && char.settings?.jackOfAllTrades) {
+                    const halfPb = Math.floor(profBonus / 2);
+                    if (halfPb > 0) formula += `+${halfPb}[Jack of All Trades]`;
+                }
 
                 const customMod = char.skillMods[skill] || '0';
                 if (customMod !== '0') {
@@ -6517,9 +6557,9 @@ export function initVttPlayerSheet(vtt) {
                         });
                 }
 
-                vtt.socket.emit('chat:msg', {
+                emitPlayerChatMessage({
                     text: `[${char.name}: ${skill}] rolls **Skill Check**`,
-                    roll: simulateRoll(formula, 20, e)
+                    roll: simulateRoll(formula, 20, e, { isSkill: true, isProf: Boolean(isProf || isExp), skill })
                 });
             });
         });
@@ -6544,6 +6584,10 @@ export function initVttPlayerSheet(vtt) {
                 if (baseMod !== 0) formula += `${baseMod >= 0 ? '+' : ''}${baseMod}[${ab.toUpperCase()}]`;
                 if (isProf && profBonus) formula += `+${profBonus}[PB]`;
                 if (isExp && profBonus) formula += `+${profBonus}[EXP]`;
+                if (!isProf && !isExp && char.settings?.jackOfAllTrades) {
+                    const halfPb = Math.floor(profBonus / 2);
+                    if (halfPb > 0) formula += `+${halfPb}[Jack of All Trades]`;
+                }
 
                 const customMod = toolData.mod || '0';
                 if (customMod !== '0') {
@@ -6571,9 +6615,9 @@ export function initVttPlayerSheet(vtt) {
                         });
                 }
 
-                vtt.socket.emit('chat:msg', {
+                emitPlayerChatMessage({
                     text: `[${char.name || 'Player'}: ${toolName} Check] rolls **Tool Check**`,
-                    roll: simulateRoll(formula)
+                    roll: simulateRoll(formula, 20, e, { isTool: true, isProf: Boolean(isProf || isExp), tool: toolName })
                 });
             });
         });
@@ -6652,7 +6696,7 @@ export function initVttPlayerSheet(vtt) {
                 e.stopPropagation();
                 const m = char.macros[e.currentTarget.dataset.idx];
                 if (!m || !m.description) return;
-                vtt.socket.emit('chat:msg', {
+                emitPlayerChatMessage({
                     abilityCard: {
                         creatureName: char.name,
                         abilityName: m.name,
@@ -6847,6 +6891,14 @@ export function initVttPlayerSheet(vtt) {
                         /(\d+)\s*[dD]\s*(\d+)/g,
                         (match, count, faces) => `${parseInt(count) * 2}d${faces}`
                     );
+                    if (!isSpell && char.settings?.brutalCritical) {
+                        const extraDice = parseInt(char.settings?.brutalCritDice) || 1;
+                        const primaryDieMatch = (d.formula || d.dice || formula).match(/(\d+)?\s*[dD]\s*(\d+)/);
+                        if (primaryDieMatch) {
+                            const faces = primaryDieMatch[2];
+                            rollFormula += `+${extraDice}d${faces}[Brutal Critical]`;
+                        }
+                    }
                 }
                 const r = simulateRoll(rollFormula, 20, optEvent);
                 return {
@@ -6896,7 +6948,7 @@ export function initVttPlayerSheet(vtt) {
                     r = simulateRoll('1d20', m.critRange || 20, e);
                 }
                 if (r) {
-                    vtt.socket.emit('chat:msg', {
+                    emitPlayerChatMessage({
                         macroCard: {
                             charName: char.name,
                             macroName: m.name,
@@ -6916,7 +6968,7 @@ export function initVttPlayerSheet(vtt) {
                 if (!m) return;
                 const saveInfo = evaluateSaveDc(m);
                 if (saveInfo) {
-                    vtt.socket.emit('chat:msg', {
+                    emitPlayerChatMessage({
                         macroCard: {
                             charName: char.name,
                             macroName: m.name,
@@ -6950,7 +7002,7 @@ export function initVttPlayerSheet(vtt) {
                 }
                 if (!dmgRolls.length) return;
 
-                vtt.socket.emit('chat:msg', {
+                emitPlayerChatMessage({
                     macroCard: {
                         charName: char.name,
                         macroName: m.name,
@@ -6987,7 +7039,7 @@ export function initVttPlayerSheet(vtt) {
                     ];
                 }
 
-                vtt.socket.emit('chat:msg', {
+                emitPlayerChatMessage({
                     macroCard: {
                         charName: char.name,
                         macroName: m.name,
@@ -7643,7 +7695,7 @@ export function initVttPlayerSheet(vtt) {
             e.preventDefault();
             const dcVal = dcBtn.dataset.dc;
             const ability = dcBtn.dataset.ability;
-            vtt.socket.emit('chat:msg', {
+            emitPlayerChatMessage({
                 text: `[${currentChar?.name || 'Player'}] pings Spell DC`,
                 abilityCard: {
                     creatureName: currentChar?.name || 'Player',
@@ -7660,7 +7712,7 @@ export function initVttPlayerSheet(vtt) {
             e.preventDefault();
             const atkVal = atkBtn.dataset.atk;
             const bonusFormula = `1d20${atkVal.startsWith('+') || atkVal.startsWith('-') ? atkVal : '+' + atkVal}`;
-            vtt.socket.emit('chat:msg', {
+            emitPlayerChatMessage({
                 text: `[${currentChar?.name || 'Player'}] rolls **Spell Attack**`,
                 roll: simulateRoll(bonusFormula)
             });
@@ -7673,7 +7725,7 @@ export function initVttPlayerSheet(vtt) {
             const formula = chip.dataset.formula;
             if (chip.classList.contains('dc-chip')) {
                 const dcVal = chip.dataset.dc;
-                vtt.socket.emit('chat:msg', {
+                emitPlayerChatMessage({
                     text: `[${currentChar?.name || 'Player'}] pings DC ${dcVal}`,
                     abilityCard: {
                         creatureName: currentChar?.name || 'Player',
@@ -7681,7 +7733,7 @@ export function initVttPlayerSheet(vtt) {
                     }
                 });
             } else if (formula) {
-                vtt.socket.emit('chat:msg', {
+                emitPlayerChatMessage({
                     text: `[${currentChar?.name || 'Player'}] rolls **${formula}**`,
                     roll: simulateRoll(formula)
                 });

@@ -10,7 +10,7 @@ import { getPlayerMapOverride } from '../vtt-utils.js';
 export function preloadVttModules() {
     return (async () => {
         try {
-            const _v = '1.0.6'; // Versioned cache key
+            const _v = '1.0.8'; // Versioned cache key
             const [
                 canvasMod,
                 creatureMod,
@@ -24,7 +24,9 @@ export function preloadVttModules() {
                 themesMod,
                 dockMod,
                 weatherMod,
-                rollTablesMod
+                rollTablesMod,
+                presentationMod,
+                creatureSelectorMod
             ] = await Promise.all([
                 import(`../vtt-canvas.js?v=${_v}`),
                 import(`../vtt-creature-sheet.js?v=${_v}`),
@@ -38,7 +40,9 @@ export function preloadVttModules() {
                 import(`../vtt-themes.js?v=${_v}`),
                 import(`../vtt-sheet-dock.js?v=${_v}`),
                 import(`../vtt-weather.js?v=${_v}`),
-                import(`../vtt-roll-tables.js?v=${_v}`)
+                import(`../vtt-roll-tables.js?v=${_v}`),
+                import(`../vtt-presentation.js?v=${_v}`),
+                import(`../modals/creature-selector-modal.js?v=${_v}`)
             ]);
 
             return {
@@ -54,7 +58,9 @@ export function preloadVttModules() {
                 initVttThemes: themesMod.initVttThemes,
                 initVttSheetDock: dockMod.initVttSheetDock,
                 initVttWeather: weatherMod.initVttWeather,
-                initVttRollTables: rollTablesMod.initVttRollTables
+                initVttRollTables: rollTablesMod.initVttRollTables,
+                initVttPresentation: presentationMod.initVttPresentation,
+                openCreatureSelectorModal: creatureSelectorMod.openCreatureSelectorModal
             };
         } catch (err) {
             console.error('VTT Module Import Error:', err);
@@ -151,25 +157,105 @@ export function startSocketConnection(campaignId, username, role, gmPassword = n
     if (window.VTT?.socket) {
         try {
             window.VTT.socket.disconnect();
-        } catch (e) {}
+        } catch (e) { }
     }
 
-    // Initialise Resilient Socket connection with infinite auto-reconnect
-    const ioFn = typeof io !== 'undefined' ? io : window.io || null;
-    if (!ioFn) {
-        console.error('Socket.io client library not loaded!');
-        return;
-    }
+    let socket;
+    if (ctx.isP2P) {
+        if (typeof window.VttP2PAdapter === 'undefined') {
+            console.error('VttP2PAdapter client library not loaded!');
+            resetBtnJoin();
+            showLoginError('P2P Adapter library missing. Please reload.');
+            return;
+        }
 
-    const socket = ioFn({
-        transports: ['websocket', 'polling'],
-        timeout: 10000,
-        reconnection: true,
-        reconnectionAttempts: Infinity,
-        reconnectionDelay: 1000,
-        reconnectionDelayMax: 5000,
-        randomizationFactor: 0.3
-    });
+        const isHost = role === 'GM';
+        socket = new window.VttP2PAdapter({
+            isHost,
+            role,
+            username,
+            campaignId
+        });
+
+        if (ctx.p2pMode === 'manual') {
+            if (isHost) {
+                socket.createHostManualOffer().then((offerStr) => {
+                    const offerOut = document.getElementById('config-manual-offer-output');
+                    const manualCard = document.getElementById('config-manual-p2p-card');
+                    if (offerOut) offerOut.value = offerStr;
+                    if (manualCard) manualCard.classList.remove('vtt-hidden');
+                    const btnApplyAns = document.getElementById('btn-config-apply-answer');
+                    const ansInput = document.getElementById('config-manual-answer-input');
+                    if (btnApplyAns && ansInput) {
+                        btnApplyAns.onclick = async () => {
+                            const rawAns = ansInput.value.trim();
+                            if (!rawAns) return;
+                            try {
+                                await socket.applyHostManualAnswer(rawAns);
+                                ansInput.value = '';
+                                JqueryUtil?.doToast?.({ type: 'success', content: 'Peer Answer applied! Connecting player...' });
+                            } catch (err) {
+                                alert(`Invalid Player Answer: ${err.message}`);
+                            }
+                        };
+                    }
+                    navigator.clipboard?.writeText(offerStr).catch(() => { });
+                    if (typeof JqueryUtil !== 'undefined' && JqueryUtil.doToast) {
+                        JqueryUtil.doToast({
+                            type: 'info',
+                            content: 'P2P Host Invite ready! Share it from Settings -> Manual WebRTC Pair.'
+                        });
+                    }
+                }).catch((err) => {
+                    console.error('[P2P] Host offer generation failed:', err);
+                    showLoginError(`Failed to generate P2P Offer: ${err.message}`);
+                });
+            } else if (ctx.p2pData) {
+                socket.createPlayerManualAnswer(ctx.p2pData).then((answerStr) => {
+                    const ansGroup = document.getElementById('login-p2p-answer-group');
+                    const ansOut = document.getElementById('login-p2p-answer-output');
+                    if (ansOut) ansOut.value = answerStr;
+                    if (ansGroup) ansGroup.classList.remove('vtt-hidden');
+                    navigator.clipboard?.writeText(answerStr).catch(() => { });
+                    if (typeof JqueryUtil !== 'undefined' && JqueryUtil.doToast) {
+                        JqueryUtil.doToast({
+                            type: 'info',
+                            content: 'P2P Answer generated below! Copy and send it back to the GM.'
+                        });
+                    }
+                }).catch((err) => {
+                    console.error('[P2P] Manual answer failed:', err);
+                    showLoginError(`Invalid P2P Offer text: ${err.message}`);
+                });
+            }
+        } else if (ctx.p2pCode) {
+            socket.connectWithRoomCode(ctx.p2pCode).catch((err) => {
+                console.warn('[P2P] Room code connection failed:', err);
+                resetBtnJoin();
+                const staticFallbackMsg = window.__FORGEDVTT_STATIC_WEB__
+                    ? `P2P Connection failed (${err.message}). Try Serverless Invite Text or configure a TURN relay in /prep.`
+                    : `P2P Connection failed (${err.message}). Switch to Web Server tab to connect via Cloudflare.`;
+                showLoginError(staticFallbackMsg);
+            });
+        }
+    } else {
+        // Initialise Resilient Socket connection with infinite auto-reconnect
+        const ioFn = typeof io !== 'undefined' ? io : window.io || null;
+        if (!ioFn) {
+            console.error('Socket.io client library not loaded!');
+            return;
+        }
+
+        socket = ioFn({
+            transports: ['websocket', 'polling'],
+            timeout: 10000,
+            reconnection: true,
+            reconnectionAttempts: Infinity,
+            reconnectionDelay: 1000,
+            reconnectionDelayMax: 5000,
+            randomizationFactor: 0.3
+        });
+    }
 
     let hasJoinedSession = false;
     let isCancelled = false;
@@ -178,8 +264,10 @@ export function startSocketConnection(campaignId, username, role, gmPassword = n
     const originalEmit = socket.emit;
     socket.emit = function (eventName, ...args) {
         if (eventName === 'chat:msg' && args.length > 0 && typeof args[0] === 'object') {
-            if (window.VTT && window.VTT.whisperGM !== undefined && args[0].whisperToGM === undefined) {
-                args[0].whisperToGM = window.VTT.whisperGM;
+            if (window.VTT && window.VTT.whisperGM) {
+                args[0].whisperToGM = true;
+            } else if (window.VTT && window.VTT.whisperGM !== undefined && args[0].whisperToGM === undefined) {
+                args[0].whisperToGM = Boolean(window.VTT.whisperGM);
             }
         }
         return originalEmit.apply(this, [eventName, ...args]);
@@ -191,17 +279,30 @@ export function startSocketConnection(campaignId, username, role, gmPassword = n
     const absoluteHost = window.location.origin;
     const elLocalUrl = document.getElementById('config-local-url');
     const elRemoteUrl = document.getElementById('config-remote-url');
-    if (elLocalUrl) elLocalUrl.value = `${absoluteHost}/vtt.html`;
-    if (elRemoteUrl) elRemoteUrl.value = `${absoluteHost}/vtt.html`;
+    if (elLocalUrl) elLocalUrl.value = `${absoluteHost}/play`;
+    if (elRemoteUrl) elRemoteUrl.value = `${absoluteHost}/play`;
 
     let connTimeout = setTimeout(() => {
         if (!socket.connected && !hasJoinedSession) {
             resetBtnJoin();
-            if (typeof JqueryUtil !== 'undefined' && JqueryUtil.doToast) {
-                JqueryUtil.doToast({
-                    type: 'warning',
-                    content: `Connecting is taking longer than usual. Still attempting to reach server at ${absoluteHost}...`
-                });
+            if (ctx.isP2P) {
+                const msg = window.__FORGEDVTT_STATIC_WEB__
+                    ? 'Direct P2P connection timed out (Symmetric NAT / firewall). Use Serverless Invite Text or a custom TURN relay.'
+                    : 'Direct P2P connection timed out (Symmetric NAT restriction). Switch to the Web Server tab to connect via Cloudflare/LAN.';
+                if (typeof JqueryUtil !== 'undefined' && JqueryUtil.doToast) {
+                    JqueryUtil.doToast({
+                        type: 'warning',
+                        content: msg
+                    });
+                }
+                showLoginError(msg);
+            } else {
+                if (typeof JqueryUtil !== 'undefined' && JqueryUtil.doToast) {
+                    JqueryUtil.doToast({
+                        type: 'warning',
+                        content: `Connecting is taking longer than usual. Still attempting to reach server at ${absoluteHost}...`
+                    });
+                }
             }
         }
     }, 8000);
@@ -240,19 +341,11 @@ export function startSocketConnection(campaignId, username, role, gmPassword = n
         }
     });
 
-    socket.on('connect', () => {
-        if (isCancelled) return;
-        clearTimeout(connTimeout);
-        clearLoginError();
-        console.log('Connected to VTT backend!');
-        socket.emit('join', { campaignId, username, role, gmPassword });
-    });
-
     const modalGmPassword = document.getElementById('modal-gm-password');
     const inputGmPassword = document.getElementById('input-gm-password');
     const gmPasswordError = document.getElementById('gm-password-error');
 
-    socket.on('join_rejected', ({ reason, code }) => {
+    const handleJoinRejected = ({ reason }) => {
         if (isCancelled) return;
         clearTimeout(connTimeout);
         resetBtnJoin();
@@ -268,7 +361,36 @@ export function startSocketConnection(campaignId, username, role, gmPassword = n
         } else {
             showLoginError(`Connection Rejected: ${reason || 'Unauthorized'}`);
         }
+    };
+
+    socket.on('connect', async () => {
+        if (isCancelled) return;
+        clearTimeout(connTimeout);
+        clearLoginError();
+        if (
+            role === 'GM' &&
+            typeof window !== 'undefined' &&
+            window.__FORGEDVTT_STATIC_WEB__ &&
+            typeof window.__verifyStaticGmPassword === 'function'
+        ) {
+            try {
+                const authCheck = await window.__verifyStaticGmPassword(username, gmPassword);
+                if (!authCheck.ok) {
+                    if (typeof socket.disconnect === 'function') socket.disconnect();
+                    handleJoinRejected({ reason: authCheck.error || 'Invalid GM Password' });
+                    return;
+                }
+            } catch (err) {
+                if (typeof socket.disconnect === 'function') socket.disconnect();
+                handleJoinRejected({ reason: err?.message || 'GM password verification failed.' });
+                return;
+            }
+        }
+        console.log('Connected to VTT backend!');
+        socket.emit('join', { campaignId, username, role, gmPassword });
     });
+
+    socket.on('join_rejected', handleJoinRejected);
 
     socket.on('allowlist:updated', ({ allowedUsers }) => {
         if (isCancelled) return;
@@ -283,7 +405,7 @@ export function startSocketConnection(campaignId, username, role, gmPassword = n
         updateTabletopPauseUI?.(pauseState, true);
     });
 
-    socket.on('joined', async ({ role: serverRole, userRole, campaignState, chatHistory, gmSessionToken }) => {
+    socket.on('joined', async ({ role: serverRole, userRole, campaignState, chatHistory, gmSessionToken, playerSessionToken }) => {
         if (isCancelled) return;
         hasJoinedSession = true;
         updateConnectionStatus('connected', 'Connected!');
@@ -293,6 +415,15 @@ export function startSocketConnection(campaignId, username, role, gmPassword = n
         window.VTT.campaignState = campaignState;
         if (gmSessionToken) {
             window.VTT.gmSessionToken = gmSessionToken;
+        }
+        if (playerSessionToken) {
+            window.VTT.playerSessionToken = playerSessionToken;
+            try {
+                sessionStorage.setItem('forgedvtt_player_token', playerSessionToken);
+                if (typeof document !== 'undefined') {
+                    document.cookie = `forgedvtt_player_token=${encodeURIComponent(playerSessionToken)}; path=/; SameSite=Lax`;
+                }
+            } catch (_) {}
         }
 
         // Authoritative server-validated role
@@ -382,6 +513,7 @@ export function startSocketConnection(campaignId, username, role, gmPassword = n
             if (mods.initVttThemes) window.VTT.themesEngine = mods.initVttThemes(window.VTT);
             if (mods.initVttSheetDock) window.VTT.sheetDock = mods.initVttSheetDock(window.VTT);
             if (mods.initVttRollTables) window.VTT.rollTablesEngine = mods.initVttRollTables(window.VTT);
+            if (mods.initVttPresentation) window.VTT.presentationEngine = mods.initVttPresentation(window.VTT);
 
             // Fail-safe initial sync of weather in case map was already loaded
             if (window.VTT.weatherEngine && window.VTT.campaignState?.maps) {
@@ -390,7 +522,7 @@ export function startSocketConnection(campaignId, username, role, gmPassword = n
                     (window.VTT.role === 'GM'
                         ? window.VTT.campaignState.activeGMMapId || window.VTT.campaignState.activeMapId
                         : getPlayerMapOverride(window.VTT.campaignState, window.VTT.username) ||
-                          window.VTT.campaignState.activeMapId);
+                        window.VTT.campaignState.activeMapId);
                 const curMap = window.VTT.campaignState.maps[curMapId];
                 if (curMap?.weather) {
                     window.VTT.weatherEngine.setWeather(curMap.weather);

@@ -1,18 +1,27 @@
 import express from 'express';
 import path from 'path';
 import fs from 'fs';
+import multer from 'multer';
 import {
     DATA_DIR,
+    UPLOADS_DIR,
     campaigns,
     chatLogs,
     extractSubdomain,
     getOrCreateCampaign,
     isAuthorizedGmOrSecret,
+    sanitizeImportedObject,
     saveCampaigns,
     saveChat,
     verifyGmOrSecret
 } from '../state.js';
 import { createCampaignTemplate } from '../../utils.js';
+import {
+    isRoll20CharacterJson,
+    convertRoll20Character,
+    isRoll20TableJson,
+    convertRoll20TableToVTT
+} from '../../electron/importers/roll20-importer.js';
 
 export const campaignsRouter = express.Router();
 
@@ -30,10 +39,10 @@ function notifyCampaignSync(campId) {
 // Get campaign list (sanitized public descriptor for players, full metadata for authorized GM)
 campaignsRouter.get('/campaigns', (req, res) => {
     const sub = extractSubdomain(req.headers.host);
-    if (sub) {
+    const isAuthed = isAuthorizedGmOrSecret(req);
+    if (sub && (campaigns[sub] || isAuthed)) {
         getOrCreateCampaign(sub);
     }
-    const isAuthed = isAuthorizedGmOrSecret(req);
     const campaignsList = Object.values(campaigns).map((c) => {
         if (!isAuthed) {
             // Intentionally public metadata to populate login campaign selector
@@ -230,6 +239,8 @@ campaignsRouter.post('/campaigns/:id/import-entity', verifyGmOrSecret, (req, res
             `/assets/campaigns/${campId}`
         );
         item = JSON.parse(itemStr);
+        item = sanitizeImportedObject(item);
+        item = maybeConvertRoll20Item(item);
 
         if (entityType === 'map' || item.grid || item.tokens !== undefined) {
             // It's a map
@@ -244,6 +255,56 @@ campaignsRouter.post('/campaigns/:id/import-entity', verifyGmOrSecret, (req, res
             if (!campaign.mapOrder) campaign.mapOrder = Object.keys(campaign.maps).filter((id) => id !== mapId);
             if (!campaign.mapOrder.includes(mapId)) campaign.mapOrder.push(mapId);
             importedIds.push(mapId);
+        } else if (
+            entityType === 'table' ||
+            entityType === 'deck' ||
+            item._entityCategory === 'customTable' ||
+            item._entityCategory === 'assetTable' ||
+            item._entityCategory === 'cardDeck' ||
+            item.isAssetTable ||
+            item.sides ||
+            item.cards ||
+            (item.dice && item.rows)
+        ) {
+            // It's a rollable table, asset table, or card deck
+            if (!campaign.rollTables) campaign.rollTables = {};
+            if (item.isAssetTable || item.sides || item._entityCategory === 'assetTable') {
+                if (!campaign.rollTables.assetTables) campaign.rollTables.assetTables = [];
+                let tId = item.id;
+                let tName = item.name || 'Imported Asset Table';
+                if (!tId || campaign.rollTables.assetTables.some((t) => t.id === tId)) {
+                    tId = `asset_table_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+                    tName = `${tName} (Copy)`;
+                }
+                const cloned = { ...item, id: tId, name: tName, isAssetTable: true };
+                delete cloned._entityCategory;
+                campaign.rollTables.assetTables.push(cloned);
+                importedIds.push(tId);
+            } else if (item.cards || item._entityCategory === 'cardDeck') {
+                if (!campaign.rollTables.cardDecks) campaign.rollTables.cardDecks = [];
+                let dId = item.id;
+                let dName = item.name || 'Imported Card Deck';
+                if (!dId || campaign.rollTables.cardDecks.some((d) => d.id === dId)) {
+                    dId = `deck_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+                    dName = `${dName} (Copy)`;
+                }
+                const cloned = { ...item, id: dId, name: dName };
+                delete cloned._entityCategory;
+                campaign.rollTables.cardDecks.push(cloned);
+                importedIds.push(dId);
+            } else {
+                if (!campaign.rollTables.customTables) campaign.rollTables.customTables = [];
+                let tId = item.id;
+                let tName = item.name || 'Imported Roll Table';
+                if (!tId || campaign.rollTables.customTables.some((t) => t.id === tId)) {
+                    tId = `table_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+                    tName = `${tName} (Copy)`;
+                }
+                const cloned = { ...item, id: tId, name: tName };
+                delete cloned._entityCategory;
+                campaign.rollTables.customTables.push(cloned);
+                importedIds.push(tId);
+            }
         } else {
             // It's a character (player sheet, companion, custom NPC)
             let charId = item.id;
@@ -307,6 +368,45 @@ campaignsRouter.delete('/campaigns/:id/entities/:entityId', verifyGmOrSecret, (r
         delete campaign.characters[entityId];
         deleted = true;
         entityType = 'character';
+    } else if (campaign.rollTables || campaign.assetTables) {
+        const rt = campaign.rollTables || {};
+        let found = false;
+        if (Array.isArray(rt.customTables)) {
+            const initLen = rt.customTables.length;
+            rt.customTables = rt.customTables.filter((t) => t.id !== entityId);
+            if (rt.customTables.length < initLen) {
+                found = true;
+                entityType = 'table';
+            }
+        }
+        if (!found && Array.isArray(rt.assetTables)) {
+            const initLen = rt.assetTables.length;
+            rt.assetTables = rt.assetTables.filter((t) => t.id !== entityId);
+            if (rt.assetTables.length < initLen) {
+                found = true;
+                entityType = 'table';
+            }
+        }
+        if (!found && Array.isArray(campaign.assetTables)) {
+            const initLen = campaign.assetTables.length;
+            campaign.assetTables = campaign.assetTables.filter((t) => t.id !== entityId);
+            if (campaign.assetTables.length < initLen) {
+                found = true;
+                entityType = 'table';
+            }
+        }
+        if (!found && Array.isArray(rt.cardDecks)) {
+            const initLen = rt.cardDecks.length;
+            rt.cardDecks = rt.cardDecks.filter((d) => d.id !== entityId);
+            if (rt.cardDecks.length < initLen) {
+                found = true;
+                entityType = 'deck';
+            }
+        }
+        if (found) {
+            campaign.rollTables = rt;
+            deleted = true;
+        }
     }
 
     if (!deleted) {
@@ -324,3 +424,163 @@ campaignsRouter.get('/chat', verifyGmOrSecret, (req, res) => {
     const log = chatLogs[campaignId] || [];
     res.json(log.slice(-100)); // Send last 100 entries
 });
+
+// Export full campaign JSON for browser download
+campaignsRouter.get('/campaigns/:id/export', verifyGmOrSecret, (req, res) => {
+    const campaign = campaigns[req.params.id];
+    if (!campaign) return res.status(404).json({ success: false, error: 'Campaign not found' });
+    const safeName = (campaign.name || campaign.id || 'campaign').replace(/[^a-zA-Z0-9_-]/g, '_');
+    const payload = {
+        format: 'forgedvtt-campaign-v1',
+        exportedAt: new Date().toISOString(),
+        campaign,
+        chatLog: chatLogs[campaign.id] || []
+    };
+    res.json({
+        success: true,
+        fileName: `${safeName}.json`,
+        content: JSON.stringify(payload, null, 2)
+    });
+});
+
+// Export single entity (map, character, table, deck) for browser download
+campaignsRouter.get('/campaigns/:id/export-granular', verifyGmOrSecret, (req, res) => {
+    const campaign = campaigns[req.params.id];
+    if (!campaign) return res.status(404).json({ success: false, error: 'Campaign not found' });
+
+    const entityType = String(req.query.entityType || '');
+    const entityId = String(req.query.entityId || '');
+    let entity = null;
+
+    if (entityType === 'map') {
+        entity = campaign.maps?.[entityId];
+    } else if (['player', 'companion', 'customNpc', 'npc', 'character'].includes(entityType)) {
+        entity = campaign.characters?.[entityId];
+    } else if (entityType === 'table') {
+        entity =
+            (campaign.rollTables?.customTables || []).find((t) => t.id === entityId) ||
+            (campaign.rollTables?.assetTables || []).find((t) => t.id === entityId) ||
+            (campaign.assetTables || []).find((t) => t.id === entityId);
+    } else if (entityType === 'deck') {
+        entity = (campaign.rollTables?.cardDecks || []).find((d) => d.id === entityId);
+    }
+
+    if (!entity) {
+        return res.status(404).json({ success: false, error: 'Entity not found' });
+    }
+
+    const safeName = (entity.name || entityId || 'entity').replace(/[^a-zA-Z0-9_-]/g, '_');
+    const payload = {
+        format: 'forgedvtt-entity-v1',
+        entityType,
+        exportedAt: new Date().toISOString(),
+        entity
+    };
+    res.json({
+        success: true,
+        fileName: `${safeName}.json`,
+        content: JSON.stringify(payload, null, 2)
+    });
+});
+
+// Full Server Backup Export (JSON snapshot for browser download)
+campaignsRouter.get('/server/backup', verifyGmOrSecret, (req, res) => {
+    let sourcesConfig = null;
+    try {
+        const srcCfgPath = path.join(DATA_DIR, 'sources-config.json');
+        if (fs.existsSync(srcCfgPath)) {
+            sourcesConfig = JSON.parse(fs.readFileSync(srcCfgPath, 'utf8'));
+        }
+    } catch (_) {}
+
+    const backupPayload = {
+        format: 'forgedvtt-backup-v1',
+        exportedAt: new Date().toISOString(),
+        campaigns,
+        chatLogs,
+        sourcesConfig
+    };
+    const stamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
+    res.json({
+        success: true,
+        fileName: `ForgeDVTT-Backup-${stamp}.json`,
+        content: JSON.stringify(backupPayload, null, 2)
+    });
+});
+
+const RESERVED_OBJECT_KEYS = new Set(['__proto__', 'constructor', 'prototype']);
+
+// Full Server Backup Restore (from uploaded JSON)
+campaignsRouter.post('/server/restore', verifyGmOrSecret, (req, res) => {
+    const raw = req.body?.backupData || req.body;
+    if (!raw || typeof raw !== 'object' || !raw.campaigns || typeof raw.campaigns !== 'object') {
+        return res.status(400).json({ success: false, error: 'Invalid backup JSON: missing campaigns object.' });
+    }
+
+    let restoredCount = 0;
+    for (const [id, camp] of Object.entries(raw.campaigns)) {
+        if (RESERVED_OBJECT_KEYS.has(id) || !camp || typeof camp !== 'object') continue;
+        campaigns[id] = camp;
+        restoredCount++;
+    }
+    if (raw.chatLogs && typeof raw.chatLogs === 'object') {
+        for (const [id, log] of Object.entries(raw.chatLogs)) {
+            if (RESERVED_OBJECT_KEYS.has(id) || !Array.isArray(log)) continue;
+            chatLogs[id] = log;
+        }
+    }
+    if (raw.sourcesConfig && typeof raw.sourcesConfig === 'object') {
+        try {
+            fs.writeFileSync(
+                path.join(DATA_DIR, 'sources-config.json'),
+                JSON.stringify(raw.sourcesConfig, null, 2),
+                'utf8'
+            );
+        } catch (_) {}
+    }
+
+    saveCampaigns(true);
+    saveChat(true);
+    for (const id of Object.keys(raw.campaigns)) {
+        notifyCampaignSync(id);
+    }
+
+    res.json({ success: true, restoredCount });
+});
+
+// Generic asset upload for web /prep (tokens, portraits, icons)
+const prepAssetUpload = multer({
+    storage: multer.diskStorage({
+        destination: (_req, _file, cb) => {
+            if (!fs.existsSync(UPLOADS_DIR)) fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+            cb(null, UPLOADS_DIR);
+        },
+        filename: (_req, file, cb) => {
+            const ext = path.extname(file.originalname) || '.png';
+            const base = path
+                .basename(file.originalname, ext)
+                .replace(/[^a-z0-9]/gi, '_')
+                .toLowerCase();
+            cb(null, `${base}-${Date.now()}${ext}`);
+        }
+    }),
+    limits: { fileSize: 15 * 1024 * 1024 }
+});
+
+campaignsRouter.post('/server/upload-asset', verifyGmOrSecret, prepAssetUpload.single('file'), (req, res) => {
+    if (!req.file) {
+        return res.status(400).json({ success: false, error: 'No file uploaded' });
+    }
+    res.json({
+        success: true,
+        url: `/vtt-uploads/${req.file.filename}`,
+        filename: req.file.filename
+    });
+});
+
+// Roll20 auto-conversion helper export check (kept ready for /campaigns/:id/import-entity)
+export function maybeConvertRoll20Item(item) {
+    if (isRoll20CharacterJson(item)) return convertRoll20Character(item);
+    if (isRoll20TableJson(item)) return convertRoll20TableToVTT(item);
+    return item;
+}

@@ -91,7 +91,11 @@ async function runTests() {
     });
 
     try {
-        const sm = new SourceManager({ campaignDataDir: tmpDir, rootDir: tmpDir });
+        const sm = new SourceManager({
+            campaignDataDir: tmpDir,
+            rootDir: tmpDir,
+            fetchPublicUrl: async (url) => ({ response: await fetch(url), finalUrl: url })
+        });
 
         // =========================================================================
         // TEST 1: URL Import with Unspecified License (No inference from GitHub/5eTools)

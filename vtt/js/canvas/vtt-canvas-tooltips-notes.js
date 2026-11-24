@@ -1124,7 +1124,7 @@ export function renderNotePins(ctx, context = {}) {
         }
 
         // Name label below pin
-        ctx.font = 'bold 11px var(--font-primary, Inter)';
+        ctx.font = 'bold 11px "Open Sans", Arial, sans-serif';
         ctx.fillStyle = '#ffffff';
         ctx.shadowColor = 'rgba(0,0,0,0.9)';
         ctx.shadowBlur = 4;

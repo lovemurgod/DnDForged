@@ -43,7 +43,7 @@ function findCloudflared() {
     const whichCmd = process.platform === 'win32' ? 'where cloudflared' : 'which cloudflared';
     const output = execSync(whichCmd, { stdio: ['pipe', 'pipe', 'ignore'] }).toString().trim();
     if (output) return output.split('\r\n')[0].split('\n')[0];
-  } catch (e) {}
+  } catch (e) { }
 
   return null;
 }
@@ -133,7 +133,7 @@ function getSavedAppConfig() {
     if (fs.existsSync(cfgPath)) {
       return JSON.parse(fs.readFileSync(cfgPath, 'utf8'));
     }
-  } catch (e) {}
+  } catch (e) { }
   return null;
 }
 
@@ -166,7 +166,7 @@ async function main() {
       const dataDir = path.dirname(tokenFile);
       if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
       fs.writeFileSync(tokenFile, savedToken, 'utf8');
-    } catch (e) {}
+    } catch (e) { }
   }
 
   let token = savedToken;
@@ -218,11 +218,17 @@ async function main() {
         signal: AbortSignal.timeout(1000)
       });
       if (res.ok) isForgeD = true;
-    } catch (e) {}
+    } catch (e) { }
 
     if (isForgeD) {
       console.log(`\nℹ️  ForgeDVTT server is already active on port ${requestedPort}. Reusing existing instance.`);
     } else {
+      if (token && isValidTunnelToken(token)) {
+        console.error(`\n❌ [Server Error] Port ${requestedPort} is already in use by another application.`);
+        console.error(`   When using a Named Cloudflare Tunnel Token, strict port binding is enforced to match your Cloudflare Zero Trust ingress rules.`);
+        console.error(`   Please free port ${requestedPort} or specify your configured port via '--port <n>'.\n`);
+        process.exit(1);
+      }
       const autoAssign = appConfig?.autoAssignPort !== false || process.argv.includes('--auto-port');
       if (autoAssign) {
         activePort = await findAvailablePort(requestedPort + 1);
@@ -255,13 +261,11 @@ async function main() {
   console.log('🌐 Launching Cloudflare Tunnel...');
   const tunnelArgs = ['--protocol', 'http2', '--no-prechecks'];
 
-  const localConfig = path.join(process.env.USERPROFILE || process.env.HOME || '', '.cloudflared', 'config.yml');
-  if (token && isValidTunnelToken(token)) {
+  const hasNamedToken = Boolean(token && isValidTunnelToken(token));
+  if (hasNamedToken) {
     tunnelArgs.push('tunnel', 'run', '--token', token);
-  } else if (fs.existsSync(localConfig)) {
-    tunnelArgs.push('--config', localConfig, 'tunnel', 'run');
   } else {
-    tunnelArgs.push('tunnel', '--url', `http://127.0.0.1:${activePort}`);
+    tunnelArgs.push('tunnel', '--config', '', '--url', `http://127.0.0.1:${activePort}`);
   }
 
   const tunnelCwd = path.dirname(cloudflaredBin);
@@ -276,13 +280,20 @@ async function main() {
 
   console.log('\n======================================================');
   console.log('   🎉  YOUR FORGEDVTT GAME IS ONLINE!');
-  console.log(`   🌐  Selected Game URL: ${registeredUrl}/vtt.html`);
-  console.log(`   🌐  Portal / Launcher: https://forgedvtt.com/`);
+  if (hasNamedToken) {
+    console.log(`   🌐  Selected Game URL: ${registeredUrl}/vtt.html`);
+    console.log(`   🌐  Portal / Launcher: https://forgedvtt.com/`);
+    console.log('   🔒  Subdomain Isolation: ACTIVE');
+  } else {
+    console.log('   🌐  Quick Tunnel Mode: EPHEMERAL');
+    console.log('   👉  Look below for your generated https://*.trycloudflare.com link');
+  }
   console.log(`   💻  Local Access:      http://localhost:${activePort}/`);
-  console.log('   🔒  Subdomain Isolation: ACTIVE');
   console.log('======================================================');
-  console.log('\n💡 Tip: Any subdomain (e.g. mygame.forgedvtt.com) automatically loads');
-  console.log('   its own isolated campaign data from your local server.');
+  if (hasNamedToken) {
+    console.log('\n💡 Tip: Any subdomain (e.g. mygame.forgedvtt.com) automatically loads');
+    console.log('   its own isolated campaign data from your local server.');
+  }
   console.log('\n(Press Ctrl+C at any time to shut down the server and tunnel)\n');
 
   function shutdown() {
@@ -290,7 +301,7 @@ async function main() {
     try {
       if (serverProcess && !serverProcess.killed) serverProcess.kill();
       if (tunnelProcess && !tunnelProcess.killed) tunnelProcess.kill();
-    } catch (e) {}
+    } catch (e) { }
     process.exit(0);
   }
 

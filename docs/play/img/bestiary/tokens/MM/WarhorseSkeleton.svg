@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+  <defs>
+    <radialGradient id="bgGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="70%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#020617"/>
+    </radialGradient>
+    <radialGradient id="ringGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#9ca3af" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#374151" stop-opacity="0.1"/>
+    </radialGradient>
+  </defs>
+  
+  <!-- Token Base Circle -->
+  <circle cx="64" cy="64" r="60" fill="url(#bgGrad)"/>
+  <circle cx="64" cy="64" r="54" fill="url(#ringGrad)"/>
+  
+  <!-- Outer Gold & Type Border Rings -->
+  <circle cx="64" cy="64" r="60" fill="none" stroke="#6b7280" stroke-width="4"/>
+  <circle cx="64" cy="64" r="56" fill="none" stroke="#d4af37" stroke-width="1.5" stroke-opacity="0.7"/>
+  <circle cx="64" cy="64" r="48" fill="none" stroke="#d4af37" stroke-width="1" stroke-dasharray="3,3" stroke-opacity="0.4"/>
+  
+  <!-- Creature Initials -->
+  <text x="65" y="70" font-family="'Cinzel', 'Georgia', serif" font-size="34" font-weight="bold" fill="#000000" text-anchor="middle" opacity="0.8">WS</text>
+  <text x="64" y="69" font-family="'Cinzel', 'Georgia', serif" font-size="34" font-weight="bold" fill="#9ca3af" text-anchor="middle">WS</text>
+  
+  <!-- Creature Subtype Badge at bottom -->
+  <text x="64" y="104" font-family="'Inter', sans-serif" font-size="9" font-weight="600" letter-spacing="1" fill="#94a3b8" text-anchor="middle">UNDEAD</text>
+</svg>

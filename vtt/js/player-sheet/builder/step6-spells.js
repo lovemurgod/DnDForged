@@ -20,11 +20,16 @@ export function renderStep6(ctx) {
     const featSpells = [];
     (asiTiers || []).forEach((t) => {
         if (t.choice === 'feat' && t.selectedFeatId) {
-            const featObj = (builderCache?.feats || []).find(
-                (f) =>
+            const featObj = (builderCache?.feats || []).find((f) => {
+                const compoundId = `${f.id || f.name.replace(/\W+/g, '_').toLowerCase()}::${f.source || 'PHB'}`;
+                const legacyId = f.id || f.name.replace(/\W+/g, '_').toLowerCase();
+                return (
+                    compoundId === t.selectedFeatId ||
+                    legacyId === t.selectedFeatId ||
                     (f.id || f.name) === t.selectedFeatId ||
                     (f.name || '').toLowerCase() === t.selectedFeatId.toLowerCase()
-            );
+                );
+            });
             const fName = featObj ? featObj.name : 'Feat';
             const sub = t.featSubChoices || {};
 

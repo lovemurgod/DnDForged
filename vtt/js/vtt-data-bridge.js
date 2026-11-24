@@ -7,6 +7,7 @@ import {
     resolveDispositionColor,
     DEFAULT_TOKEN_DROP_CONFIG
 } from './canvas/tokens/vtt-canvas-token-drop-config.js';
+import { openCreatureSelectorModal } from './modals/creature-selector-modal.js';
 
 export function initVttDataBridge(vtt) {
     const listContainer = document.getElementById('library-monster-list');
@@ -1070,6 +1071,7 @@ export function initVttDataBridge(vtt) {
 
                 // Resolve disposition ring color
                 const ringColor = resolveDispositionColor(dropConfig.dispositionRing, dropConfig.customRingColor);
+                const monsterBorder = data.tokenBorder || data.monsterData?.tokenBorder || null;
 
                 const token = {
                     id: `token_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
@@ -1084,8 +1086,18 @@ export function initVttDataBridge(vtt) {
                     isPlayer: false,
                     layer: canvasEngine.getActiveLayer(),
                     hidden: !!dropConfig.defaultHidden,
-                    ringColor: ringColor || null,
-                    isBorderless: true,
+                    ringColor: monsterBorder?.color || ringColor || null,
+                    isBorderless: !(monsterBorder || ringColor),
+                    border:
+                        monsterBorder ||
+                        (ringColor
+                            ? {
+                                  shape: dropConfig.borderShape || 'circle',
+                                  style: dropConfig.borderStyle || 'solid',
+                                  color: ringColor,
+                                  width: dropConfig.borderWidth || 3
+                              }
+                            : null),
                     monsterData: data.monsterData || null // Full stat block
                 };
 
@@ -1305,8 +1317,18 @@ export function initVttDataBridge(vtt) {
                         : charRef?.monsterData || data.monsterData || null,
                     layer: canvasEngine.getActiveLayer(),
                     hidden: isHidden,
-                    ringColor: ringColor || null,
-                    isBorderless: true,
+                    ringColor: charRef?.tokenBorder?.color || ringColor || null,
+                    isBorderless: !(charRef?.tokenBorder || ringColor),
+                    border:
+                        charRef?.tokenBorder ||
+                        (ringColor
+                            ? {
+                                  shape: dropConfig.borderShape || 'circle',
+                                  style: dropConfig.borderStyle || 'solid',
+                                  color: ringColor,
+                                  width: dropConfig.borderWidth || 3
+                              }
+                            : null),
 
                     // Auras, Light and FX - fallback to charRef properties
                     auras: data.auras || (charRef && charRef.tokenAuras) || [],
@@ -1729,6 +1751,7 @@ export function initVttDataBridge(vtt) {
             : monster.name;
         const ringColor = resolveDispositionColor(dropConfig.dispositionRing, dropConfig.customRingColor);
         const sightRange = dropConfig.importSenses !== false ? parseMonsterVision(monster.monsterData || monster) : 5;
+        const monsterBorder = monster.tokenBorder || monster.monsterData?.tokenBorder || null;
 
         const token = {
             id: `token_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
@@ -1743,8 +1766,18 @@ export function initVttDataBridge(vtt) {
             isPlayer: false,
             layer: targetLayer,
             hidden: !!dropConfig.defaultHidden,
-            ringColor: ringColor || null,
-            isBorderless: true,
+            ringColor: monsterBorder?.color || ringColor || null,
+            isBorderless: !(monsterBorder || ringColor),
+            border:
+                monsterBorder ||
+                (ringColor
+                    ? {
+                          shape: dropConfig.borderShape || 'circle',
+                          style: dropConfig.borderStyle || 'solid',
+                          color: ringColor,
+                          width: dropConfig.borderWidth || 3
+                      }
+                    : null),
             monsterData: monster.monsterData || monster
         };
 
@@ -1815,12 +1848,12 @@ export function initVttDataBridge(vtt) {
             maxHp = hpEval.maxHp;
         }
 
-        const sightRange =
-            dropConfig.importSenses === false
-                ? 5
-                : npc.tokenSight !== undefined && npc.tokenSight > 0
-                  ? npc.tokenSight
-                  : parseMonsterVision(npc.monsterData);
+        /* prettier-ignore */
+        const sightRange = dropConfig.importSenses === false
+            ? 5
+            : npc.tokenSight !== undefined && npc.tokenSight > 0
+              ? npc.tokenSight
+              : parseMonsterVision(npc.monsterData);
 
         const tokenName = dropConfig.autoNumberDuplicates
             ? resolveDuplicateTokenName(npc.name, canvasEngine.getTokens ? canvasEngine.getTokens() : {})
@@ -1872,8 +1905,18 @@ export function initVttDataBridge(vtt) {
             img: tokenImg,
             layer: targetLayer,
             hidden: !!dropConfig.defaultHidden,
-            ringColor: ringColor || null,
-            isBorderless: true,
+            ringColor: npc.tokenBorder?.color || ringColor || null,
+            isBorderless: !(npc.tokenBorder || ringColor),
+            border:
+                npc.tokenBorder ||
+                (ringColor
+                    ? {
+                          shape: dropConfig.borderShape || 'circle',
+                          style: dropConfig.borderStyle || 'solid',
+                          color: ringColor,
+                          width: dropConfig.borderWidth || 3
+                      }
+                    : null),
             monsterData: npc.monsterData ? JSON.parse(JSON.stringify(npc.monsterData)) : null
         };
 
@@ -2013,8 +2056,18 @@ export function initVttDataBridge(vtt) {
             img: tokenImg,
             layer: targetLayer,
             hidden: hidden,
-            ringColor: ringColor || null,
-            isBorderless: true,
+            ringColor: char.tokenBorder?.color || ringColor || null,
+            isBorderless: !(char.tokenBorder || ringColor),
+            border:
+                char.tokenBorder ||
+                (ringColor
+                    ? {
+                          shape: dropConfig?.borderShape || 'circle',
+                          style: dropConfig?.borderStyle || 'solid',
+                          color: ringColor,
+                          width: dropConfig?.borderWidth || 3
+                      }
+                    : null),
             monsterData: char.monsterData ? JSON.parse(JSON.stringify(char.monsterData)) : null
         };
 
@@ -2189,89 +2242,19 @@ export function initVttDataBridge(vtt) {
     }
 
     function openNpcImportModal() {
-        const modalOverlay = document.createElement('div');
-        modalOverlay.className = 'vtt-sheet-submodal-overlay';
-
-        const modal = document.createElement('div');
-        modal.className = 'vtt-sheet-submodal bestiary-import-drawer-mobile';
-        modal.style.cssText =
-            'width: min(540px, 94vw); max-height: 86vh; display:flex; flex-direction:column; background: var(--color-bg-base); padding: 0;';
-
-        modal.innerHTML = `
-            <div class="bestiary-drawer-header" style="padding:14px 18px; border-bottom:1px solid var(--color-border-subtle); display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.25);">
-                <h3 style="margin:0; color:var(--color-gold-base); font-size:1.05rem; display:flex; align-items:center; gap:8px;"><i class="fa-solid fa-file-import"></i> Import Bestiary Template</h3>
-                <button id="npc-modal-close" class="btn btn-icon btn-secondary" style="min-height:36px; width:36px;"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <div style="padding:12px 16px 8px 16px; background:rgba(0,0,0,0.15);">
-                <input type="text" id="npc-search" class="vtt-input" style="width: 100%; border-radius: 20px; padding: 8px 14px;" placeholder="Search monsters by name or CR (e.g. Goblin, CR 1/4)..." autofocus>
-            </div>
-            <div class="bestiary-drawer-body scroll-styled" style="flex:1; overflow-y:auto; padding:8px 16px; min-height:160px; max-height:52vh;">
-                <div id="npc-list" style="display:flex; flex-direction:column; gap:4px;"></div>
-            </div>
-        `;
-
-        document.body.appendChild(modalOverlay);
-        document.body.appendChild(modal);
-
-        const listEl = modal.querySelector('#npc-list');
-        const searchInput = modal.querySelector('#npc-search');
-
-        const renderList = (query) => {
-            listEl.innerHTML = '';
-            const q = query.toLowerCase().trim();
-            const filtered = monsters
-                .filter((m) => {
-                    if (!q) return true;
-                    const nameMatch = m.name.toLowerCase().includes(q);
-                    const crStr = m.cr
-                        ? (typeof m.cr === 'object' ? String(m.cr.cr) : String(m.cr)).toLowerCase()
-                        : '0';
-                    const crMatch =
-                        crStr === q || crStr.includes(q) || `cr ${crStr}`.includes(q) || `cr${crStr}`.includes(q);
-                    return nameMatch || crMatch;
-                })
-                .slice(0, 50);
-
-            filtered.forEach((m) => {
-                const row = document.createElement('div');
-                row.className = 'npc-template-row glass-flat';
-                row.style.cssText =
-                    'padding:10px 14px; border:1px solid var(--color-border-subtle); cursor:pointer; display:flex; justify-content:space-between; align-items: center; border-radius: 6px; margin-bottom: 4px; transition: background 0.2s; min-height: 44px;';
-                row.innerHTML = `<span><strong style="color:var(--color-text-primary); font-size:0.95rem;">${m.name}</strong> <span style="font-size:0.75em; color:var(--color-text-muted);">[${m.source || 'Unknown'}]</span></span> <span style="color:var(--color-gold-light); font-size: 0.85em; font-weight:600; background:rgba(212,175,55,0.12); border:1px solid rgba(212,175,55,0.25); border-radius:12px; padding:2px 8px;">CR ${m.cr ? m.cr.cr || m.cr : '0'}</span>`;
-                row.addEventListener('click', () => {
-                    promptCustomNpcName(m);
-                    closeModal();
-                });
-                row.onmouseover = () => (row.style.background = 'rgba(255,255,255,0.05)');
-                row.onmouseout = () => (row.style.background = 'transparent');
-                listEl.appendChild(row);
-            });
-            if (filtered.length === 0) {
-                listEl.innerHTML =
-                    '<div style="padding: 16px; color: var(--color-text-muted); text-align: center;">No monsters found.</div>';
+        const selectorFn = window.VTT?.openCreatureSelectorModal || openCreatureSelectorModal;
+        selectorFn({
+            title: 'Import Bestiary Template',
+            confirmLabel: 'Import NPC Template',
+            confirmIcon: 'fa-file-import',
+            catalog: monsters && monsters.length > 0 ? monsters : null,
+            onSelect: (monster, fullMonster) => {
+                promptCustomNpcName(monster, fullMonster);
             }
-        };
-
-        let escListener = null;
-        const closeModal = () => {
-            if (escListener) window.removeEventListener('keydown', escListener);
-            modalOverlay.remove();
-            modal.remove();
-        };
-
-        escListener = (e) => {
-            if (e.key === 'Escape') closeModal();
-        };
-        window.addEventListener('keydown', escListener);
-
-        modal.querySelector('#npc-modal-close').addEventListener('click', closeModal);
-        modalOverlay.addEventListener('click', closeModal);
-        searchInput.addEventListener('input', (e) => renderList(e.target.value));
-        renderList('');
-        searchInput.focus();
+        });
     }
 
-    function promptCustomNpcName(monster) {
+    function promptCustomNpcName(monster, fullMonsterPreloaded = null) {
         const overlay = document.createElement('div');
         overlay.className = 'vtt-sheet-submodal-overlay vtt-sheet-submodal-high';
         const modal = document.createElement('div');
@@ -2320,8 +2303,8 @@ export function initVttDataBridge(vtt) {
             }
 
             // Hydrate full normalized creature before saving custom NPC
-            let fullMonster = null;
-            if (typeof fetchFullCreature === 'function') {
+            let fullMonster = fullMonsterPreloaded || null;
+            if (!fullMonster && typeof fetchFullCreature === 'function') {
                 fullMonster = await fetchFullCreature(monster.source, monster.id || monster.name);
             }
             const customMonsterData = fullMonster
@@ -2559,7 +2542,11 @@ export function initVttDataBridge(vtt) {
                 cleanUrl.startsWith('http'))
         ) {
             try {
-                const res = await fetch(`/api/resolve-media-url?url=${encodeURIComponent(cleanUrl)}`);
+                const headers =
+                    typeof window !== 'undefined' && typeof window.vttAuthHeaders === 'function'
+                        ? window.vttAuthHeaders()
+                        : {};
+                const res = await fetch(`/api/resolve-media-url?url=${encodeURIComponent(cleanUrl)}`, { headers });
                 if (res.ok) {
                     const data = await res.json();
                     if (data && data.resolvedUrl) {

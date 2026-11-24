@@ -283,8 +283,8 @@ test('Creature Roller Subsystem', async (t) => {
             getVisibilitySetting: () => 'private'
         };
         rollAndPostToChat('1d20+4', 'Secret Roll', privateCtx);
-        assert.strictEqual(lastEvent, 'chat:whisper');
-        assert.strictEqual(lastEmitted.to, 'TestGM');
+        assert.strictEqual(lastEvent, 'chat:msg');
+        assert.strictEqual(lastEmitted.whisperToGM, true);
     });
 });
 

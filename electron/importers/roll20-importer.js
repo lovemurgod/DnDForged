@@ -151,6 +151,30 @@ export function findCatalogItem(rawName) {
     return null;
 }
 
+export function sanitizeRoll20Html(raw) {
+    if (!raw || typeof raw !== 'string') return '';
+    let str = raw;
+    try {
+        if (str.includes('%3C') || str.includes('%3c') || str.includes('%20')) {
+            str = decodeURIComponent(str);
+        }
+    } catch {}
+    return str
+        .replace(/&nbsp;/gi, ' ')
+        .replace(/&amp;/gi, '&')
+        .replace(/&lt;/gi, '<')
+        .replace(/&gt;/gi, '>')
+        .replace(/&quot;/gi, '"')
+        .replace(/&#39;/gi, "'")
+        .replace(/<li[^>]*>/gi, '\n- ')
+        .replace(/<\/li>/gi, '')
+        .replace(/<br\s*\/?>/gi, '\n')
+        .replace(/<\/p>/gi, '\n\n')
+        .replace(/<[^>]+>/g, '')
+        .replace(/\n{3,}/g, '\n\n')
+        .trim();
+}
+
 export function inferSpellAbilityFromClasses(clsList) {
     for (const c of clsList) {
         const n = (c.name || '').toLowerCase();
@@ -169,29 +193,48 @@ export function resolveRoll20Expression(raw, ctx) {
     const varMap = {
         pb: ctx.pb,
         level: ctx.level,
-        strength_mod: ctx.mods.str,
-        dexterity_mod: ctx.mods.dex,
-        constitution_mod: ctx.mods.con,
-        intelligence_mod: ctx.mods.int,
-        wisdom_mod: ctx.mods.wis,
-        charisma_mod: ctx.mods.cha,
+        strength_mod: ctx.mods?.str ?? 0,
+        dexterity_mod: ctx.mods?.dex ?? 0,
+        constitution_mod: ctx.mods?.con ?? 0,
+        intelligence_mod: ctx.mods?.int ?? 0,
+        wisdom_mod: ctx.mods?.wis ?? 0,
+        charisma_mod: ctx.mods?.cha ?? 0,
         spell_save_dc: ctx.spellSaveDc,
-        spell_attack_mod: ctx.spellAtkMod
+        spell_attack_mod: ctx.spellAtkMod,
+        spell_dc_mod: ctx.spellDcMod !== undefined ? ctx.spellDcMod : 0,
+        saveflat: 0
     };
 
     (ctx.classes || []).forEach((c, idx) => {
         if (idx > 0) varMap[`multiclass${idx}_lvl`] = c.level;
     });
 
-    // Replace @{var}
-    str = str.replace(/@\{([a-zA-Z0-9_-]+)\}/g, (match, vName) => {
+    // Strip outer balanced braces if wrapping the entire expression: e.g. {?{Bonus|0} + 1d6}
+    if (str.startsWith('{') && str.endsWith('}')) {
+        const inner = str.slice(1, -1);
+        let depth = 0;
+        let balanced = true;
+        for (const ch of inner) {
+            if (ch === '{') depth++;
+            else if (ch === '}') {
+                depth--;
+                if (depth < 0) { balanced = false; break; }
+            }
+        }
+        if (balanced && depth === 0) {
+            str = inner.trim();
+        }
+    }
+
+    // Replace @{CharacterName|var} or @{var}
+    str = str.replace(/@\{(?:[a-zA-Z0-9_ -]+\|)?([a-zA-Z0-9_-]+)\}/g, (match, vName) => {
         const low = vName.toLowerCase();
         return varMap[low] !== undefined ? varMap[low] : match;
     });
 
-    // Replace ?{prompt|default}
-    str = str.replace(/\?\{[^|}]+\|([^,}|]+)[^}]*\}/g, '$1');
-    str = str.replace(/\?\{[^}]+\}/g, '1');
+    // Replace ?{prompt|default} and clean optional outer braces {?{...}}
+    str = str.replace(/\{?\?\{[^|}]+\|([^,}|]+)[^}]*\}?/g, '$1');
+    str = str.replace(/\{?\?\{[^}]+\}?/g, '1');
 
     // Replace [[ math ]]
     str = str.replace(/\[\[\s*([^\]]+)\s*\]\]/g, (match, inner) => {
@@ -222,11 +265,20 @@ export function resolveRoll20Expression(raw, ctx) {
     str = str.replace(/\[\[\s*(\d+)\s*\]\]/g, '$1');
     str = str.replace(/^\s*\(\s*(\d+)\s*\)\s*$/, '$1');
 
+    // Clean any remaining malformed braces like {1d6 -> 1d6
+    str = str.replace(/\{(\d+d\d+)/g, '$1');
+
+    // Clean dangling unbalanced outer braces
+    if (str.endsWith('}') && !str.includes('{')) str = str.slice(0, -1).trim();
+    if (str.startsWith('{') && !str.includes('}')) str = str.slice(1).trim();
+
     // Normalize + and spaces
     str = str
         .replace(/\s*\+\s*/g, ' + ')
         .replace(/\s*-\s*/g, ' - ')
-        .trim();
+        .trim()
+        .replace(/^\+\s+/, '+')
+        .replace(/^-\s+/, '-');
     return str;
 }
 
@@ -267,16 +319,17 @@ export async function convertRoll20Character(rawJson, campaignId, options = {}) 
         const repMatch = a.name.match(/^repeating_([a-zA-Z0-9-]+)_([a-zA-Z0-9-]+)_(.+)$/);
         if (repMatch) {
             const [, cat, rowId, field] = repMatch;
-            if (cat.startsWith('spell-')) {
-                const lvl = cat.replace('spell-', '');
+            const normCat = (cat === 'resources' || cat === 'customresource') ? 'resource' : cat;
+            if (normCat.startsWith('spell-')) {
+                const lvl = normCat.replace('spell-', '');
                 if (!repeating.spells[lvl]) repeating.spells[lvl] = {};
                 if (!repeating.spells[lvl][rowId]) repeating.spells[lvl][rowId] = { id: rowId };
                 repeating.spells[lvl][rowId][field] = a.current;
                 if (a.max) repeating.spells[lvl][rowId][`${field}_max`] = a.max;
-            } else if (repeating[cat] !== undefined) {
-                if (!repeating[cat][rowId]) repeating[cat][rowId] = { id: rowId };
-                repeating[cat][rowId][field] = a.current;
-                if (a.max) repeating[cat][rowId][`${field}_max`] = a.max;
+            } else if (repeating[normCat] !== undefined) {
+                if (!repeating[normCat][rowId]) repeating[normCat][rowId] = { id: rowId };
+                repeating[normCat][rowId][field] = a.current;
+                if (a.max) repeating[normCat][rowId][`${field}_max`] = a.max;
             }
         }
     }
@@ -352,6 +405,7 @@ export async function convertRoll20Character(rawJson, campaignId, options = {}) 
         mods: statMods,
         spellSaveDc: spellSaveDc,
         spellAtkMod: spellAtkMod,
+        spellDcMod: parseInt(attrMap['spell_dc_mod']) || 0,
         classes: classes
     };
 
@@ -503,36 +557,32 @@ export async function convertRoll20Character(rawJson, campaignId, options = {}) 
 
     // 10. Roleplaying Notes & Bio
     const rpParts = [];
-    if (attrMap['personality_traits']) rpParts.push(`### Personality Traits\n${attrMap['personality_traits']}`);
-    if (attrMap['ideals']) rpParts.push(`### Ideals\n${attrMap['ideals']}`);
-    if (attrMap['bonds']) rpParts.push(`### Bonds\n${attrMap['bonds']}`);
-    if (attrMap['flaws']) rpParts.push(`### Flaws\n${attrMap['flaws']}`);
-    if (attrMap['backstory']) rpParts.push(`### Backstory\n${attrMap['backstory']}`);
+    if (attrMap['personality_traits']) rpParts.push(`### Personality Traits\n${sanitizeRoll20Html(attrMap['personality_traits'])}`);
+    if (attrMap['ideals']) rpParts.push(`### Ideals\n${sanitizeRoll20Html(attrMap['ideals'])}`);
+    if (attrMap['bonds']) rpParts.push(`### Bonds\n${sanitizeRoll20Html(attrMap['bonds'])}`);
+    if (attrMap['flaws']) rpParts.push(`### Flaws\n${sanitizeRoll20Html(attrMap['flaws'])}`);
+    if (attrMap['backstory']) rpParts.push(`### Backstory\n${sanitizeRoll20Html(attrMap['backstory'])}`);
     if (attrMap['allies_and_organizations'])
-        rpParts.push(`### Allies & Organizations\n${attrMap['allies_and_organizations']}`);
-    if (attrMap['character_appearance']) rpParts.push(`### Appearance\n${attrMap['character_appearance']}`);
+        rpParts.push(`### Allies & Organizations\n${sanitizeRoll20Html(attrMap['allies_and_organizations'])}`);
+    if (attrMap['character_appearance']) rpParts.push(`### Appearance\n${sanitizeRoll20Html(attrMap['character_appearance'])}`);
 
     let extraBio = '';
     if (typeof rawAttrs.bio === 'string' && rawAttrs.bio.trim()) {
-        extraBio = rawAttrs.bio.trim();
+        extraBio = sanitizeRoll20Html(rawAttrs.bio);
     } else if (typeof charRoot.blobBio === 'string' && charRoot.blobBio.trim()) {
-        try {
-            extraBio = decodeURIComponent(charRoot.blobBio).trim();
-        } catch {
-            extraBio = charRoot.blobBio.trim();
-        }
+        extraBio = sanitizeRoll20Html(charRoot.blobBio);
+    } else if (typeof charRoot.bio === 'string' && charRoot.bio.trim()) {
+        extraBio = sanitizeRoll20Html(charRoot.bio);
     }
     if (extraBio) rpParts.push(`### Additional Notes\n${extraBio}`);
 
     let notes = '';
     if (typeof rawAttrs.gmnotes === 'string') {
-        notes = rawAttrs.gmnotes;
+        notes = sanitizeRoll20Html(rawAttrs.gmnotes);
     } else if (typeof charRoot.blobGmNotes === 'string') {
-        try {
-            notes = decodeURIComponent(charRoot.blobGmNotes);
-        } catch {
-            notes = charRoot.blobGmNotes;
-        }
+        notes = sanitizeRoll20Html(charRoot.blobGmNotes);
+    } else if (typeof charRoot.gmnotes === 'string') {
+        notes = sanitizeRoll20Html(charRoot.gmnotes);
     }
 
     const bio = {
@@ -581,8 +631,9 @@ export async function convertRoll20Character(rawJson, campaignId, options = {}) 
         const magicBonus = parseInt(atk.atkmagic) || 0;
 
         const dmgList = [];
-        if (atk.dmgbase) {
-            let formula = resolveRoll20Expression(atk.dmgbase, evalCtx);
+        const baseDmgSource = atk.dmgbase || atk.damage_dice || '';
+        if (baseDmgSource) {
+            let formula = resolveRoll20Expression(baseDmgSource, evalCtx);
             if (magicBonus > 0 && !formula.includes(`+ ${magicBonus}`) && !formula.includes(`+${magicBonus}`)) {
                 formula += ` + ${magicBonus}`;
             }
@@ -599,6 +650,19 @@ export async function convertRoll20Character(rawJson, campaignId, options = {}) 
                 formula: formula2,
                 type: (atk.dmg2type || '').trim()
             });
+        }
+
+        let versatile = null;
+        const rawVersatile = atk.versatile_alt || atk.versatile;
+        if (rawVersatile && String(rawVersatile).trim()) {
+            let vFormula = resolveRoll20Expression(String(rawVersatile).trim(), evalCtx);
+            if (magicBonus > 0 && !vFormula.includes(`+ ${magicBonus}`) && !vFormula.includes(`+${magicBonus}`)) {
+                vFormula += ` + ${magicBonus}`;
+            }
+            versatile = {
+                formula: vFormula,
+                type: (atk.dmgtype || '').trim()
+            };
         }
 
         let saveAbility = '';
@@ -619,6 +683,12 @@ export async function convertRoll20Character(rawJson, campaignId, options = {}) 
             saveDc = rawBonus.replace('DC', '').trim();
         }
 
+        let saveEffect = (atk.saveeffect || '').trim();
+        let atkDesc = (atk.atk_desc || '').trim();
+        if (saveEffect && !atkDesc.includes(saveEffect)) {
+            atkDesc = atkDesc ? `${atkDesc}\n\nSave Effect: ${saveEffect}` : `Save Effect: ${saveEffect}`;
+        }
+
         macros.push({
             id: `mac_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
             name: atkName,
@@ -627,15 +697,26 @@ export async function convertRoll20Character(rawJson, campaignId, options = {}) 
             attackStat: parseStat(atk.atkattr_base),
             attackProf: hasNumericAtk || parseStat(atk.atkattr_base) !== 'none',
             damage: dmgList,
+            versatile: versatile,
             range: resolveRoll20Expression(atk.atkrange || '', evalCtx),
             critRange: parseInt(atk.atkcritrange) || 20,
             saveAbility: saveAbility,
             saveDcBase: saveDc,
-            description: (atk.atk_desc || '').trim()
+            saveEffect: saveEffect || undefined,
+            description: atkDesc
         });
     });
 
     // 12. Ability Cards & Class Resources (Strict 1:1 Direct Import)
+    const abilityCategories = [
+        { id: 'cat_class', name: 'Class Features', order: 0 },
+        { id: 'cat_species', name: 'Species Traits', order: 1 },
+        { id: 'cat_feats', name: 'Feats', order: 2 },
+        { id: 'cat_background', name: 'Background Features', order: 3 },
+        { id: 'cat_resources', name: 'Resources & Counters', order: 4 },
+        { id: 'cat_other', name: 'Other Abilities', order: 5 }
+    ];
+
     const abilityCards = [];
     const resourceMap = {};
 
@@ -672,7 +753,7 @@ export async function convertRoll20Character(rawJson, campaignId, options = {}) 
     }
 
     // Direct 1:1 extraction from dual-column repeating_resource
-    Object.values(repeating.resource).forEach((res) => {
+    Object.values(repeating.resource || {}).forEach((res) => {
         if (res.resource_left_name) {
             addResource(res.resource_left_name, res.resource_left, res.resource_left_max);
         }
@@ -681,6 +762,9 @@ export async function convertRoll20Character(rawJson, campaignId, options = {}) 
         }
         if (res.resource_name) {
             addResource(res.resource_name, res.resource_count, res.resource_count_max);
+        }
+        if (res.name && !res.resource_left_name && !res.resource_right_name && !res.resource_name) {
+            addResource(res.name, res.current || res.count || res.uses, res.max || res.uses_max);
         }
     });
 
@@ -710,6 +794,17 @@ export async function convertRoll20Character(rawJson, campaignId, options = {}) 
         return d[m][n];
     }
 
+    function resolveCardCategory(trait) {
+        const src = ((trait.source || '') + ' ' + (trait.source_type || '')).toLowerCase();
+        if (src.includes('race') || src.includes('racial') || src.includes('species')) return 'cat_species';
+        if (src.includes('class') || src.includes('subclass')) return 'cat_class';
+        if (src.includes('feat')) return 'cat_feats';
+        if (src.includes('background')) return 'cat_background';
+        if (src.includes('resource')) return 'cat_resources';
+        if (src.includes('item') || src.includes('other')) return 'cat_other';
+        return 'cat_class';
+    }
+
     Object.values(repeating.traits).forEach((trait) => {
         const tName = trait.name || 'Feature';
         const key = tName.trim().toLowerCase();
@@ -737,6 +832,7 @@ export async function convertRoll20Character(rawJson, campaignId, options = {}) 
             desc: trait.description || '',
             description: trait.description || '',
             source: [trait.source, trait.source_type].filter(Boolean).join(' - ') || 'Feature',
+            categoryId: resolveCardCategory(trait),
             hasCounter: hasCounter,
             usesCurrent: hasCounter ? matchedRes.current : 0,
             usesMax: hasCounter ? matchedRes.max : 0,
@@ -748,16 +844,17 @@ export async function convertRoll20Character(rawJson, campaignId, options = {}) 
 
     // Any leftover resources without a matching trait card get dedicated counter cards
     Object.entries(resourceMap).forEach(([name, res]) => {
-        if (res.max > 0) {
+        if (res.max > 0 || res.current > 0) {
             abilityCards.push({
                 id: `ab_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
                 name: res.displayName,
                 desc: `Resource tracker: ${res.displayName}`,
                 description: `Resource tracker: ${res.displayName}`,
                 source: 'Resource',
+                categoryId: 'cat_resources',
                 hasCounter: true,
                 usesCurrent: res.current,
-                usesMax: res.max,
+                usesMax: Math.max(res.max, res.current, 1),
                 resetType: res.reset
             });
         }
@@ -769,7 +866,7 @@ export async function convertRoll20Character(rawJson, campaignId, options = {}) 
         if (mod.global_save_roll || mod.global_save_name) {
             saveToggles.push({
                 name: mod.global_save_name || 'Save Bonus',
-                formula: mod.global_save_roll || '0',
+                formula: resolveRoll20Expression(mod.global_save_roll || '0', evalCtx),
                 target: 'all',
                 enabled: String(mod.global_save_active_flag) === '1'
             });
@@ -781,7 +878,7 @@ export async function convertRoll20Character(rawJson, campaignId, options = {}) 
         if (mod.global_skill_roll || mod.global_skill_name) {
             skillToggles.push({
                 name: mod.global_skill_name || 'Skill Bonus',
-                formula: mod.global_skill_roll || '0',
+                formula: resolveRoll20Expression(mod.global_skill_roll || '0', evalCtx),
                 target: 'all',
                 enabled: String(mod.global_skill_active_flag) === '1'
             });
@@ -793,7 +890,7 @@ export async function convertRoll20Character(rawJson, campaignId, options = {}) 
         if (mod.global_ac_val || mod.global_ac_name) {
             acToggles.push({
                 name: mod.global_ac_name || 'AC Bonus',
-                formula: String(mod.global_ac_val || '0'),
+                formula: resolveRoll20Expression(String(mod.global_ac_val || '0'), evalCtx),
                 enabled: String(mod.global_ac_active_flag) === '1'
             });
         }
@@ -804,7 +901,7 @@ export async function convertRoll20Character(rawJson, campaignId, options = {}) 
         if (mod.global_attack_roll || mod.global_attack_name) {
             attackToggles.push({
                 name: mod.global_attack_name || 'Attack Bonus',
-                formula: mod.global_attack_roll || '0',
+                formula: resolveRoll20Expression(mod.global_attack_roll || '0', evalCtx),
                 target: 'atk',
                 enabled: String(mod.global_attack_active_flag) === '1'
             });
@@ -814,12 +911,51 @@ export async function convertRoll20Character(rawJson, campaignId, options = {}) 
         if (mod.global_damage_damage || mod.global_damage_name) {
             attackToggles.push({
                 name: mod.global_damage_name || 'Damage Bonus',
-                formula: mod.global_damage_damage || '0',
+                formula: resolveRoll20Expression(mod.global_damage_damage || '0', evalCtx),
                 target: 'dmg',
                 enabled: String(mod.global_damage_active_flag) === '1'
             });
         }
     });
+
+    // Initiative Bonus & Advantage
+    let initiativeAdvantage = false;
+    const initStyle = (attrMap['initiative_style'] || '').toLowerCase();
+    if (initStyle.includes('kh1') || initStyle.includes('adv')) {
+        initiativeAdvantage = true;
+    }
+    const rawInitMod = attrMap['initmod'];
+    if (rawInitMod !== undefined && rawInitMod !== null && String(rawInitMod).trim() !== '') {
+        const parsedInitMod = parseInt(resolveRoll20Expression(String(rawInitMod), evalCtx));
+        if (!isNaN(parsedInitMod) && parsedInitMod !== 0) {
+            skillToggles.push({
+                name: 'Initiative Bonus',
+                formula: parsedInitMod >= 0 ? `+${parsedInitMod}` : `${parsedInitMod}`,
+                target: 'initiative',
+                enabled: true
+            });
+        }
+    }
+
+    // Passive Perception Modifier Toggle
+    const rawPassiveWis = attrMap['passive_wisdom'];
+    if (rawPassiveWis !== undefined && rawPassiveWis !== null && String(rawPassiveWis).trim() !== '') {
+        const r20Passive = parseInt(rawPassiveWis);
+        if (!isNaN(r20Passive)) {
+            const wisMod = statMods.wis;
+            const percLvl = skills['perception'] || skills['Perception'] || 0;
+            const basePassive = 10 + wisMod + (percLvl * pb);
+            const diff = r20Passive - basePassive;
+            if (diff !== 0) {
+                skillToggles.push({
+                    name: 'Passive Perception Modifier',
+                    formula: diff >= 0 ? `+${diff}` : `${diff}`,
+                    target: 'passive_perception',
+                    enabled: true
+                });
+            }
+        }
+    }
 
     // 14. Categorized Inventory Containers
     const containers = [
@@ -1010,6 +1146,18 @@ export async function convertRoll20Character(rawJson, campaignId, options = {}) 
                 upcastBonus = `${sp.spellhldie}${upDie}`;
             }
 
+            // Multiclass individual spell combat ability
+            let spAtkStat = isAttack ? 'spell' : 'none';
+            let spDcStat = saveAbility ? 'spell' : 'none';
+            const individualAbilityRaw = sp.spell_ability || sp.atkattr_base;
+            if (individualAbilityRaw) {
+                const parsedStat = parseStat(individualAbilityRaw);
+                if (parsedStat !== 'none' && parsedStat !== spellAbility.toLowerCase()) {
+                    if (isAttack) spAtkStat = parsedStat;
+                    if (saveAbility) spDcStat = parsedStat;
+                }
+            }
+
             spells[targetKey].push({
                 id: `sp_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
                 name: spName,
@@ -1020,10 +1168,11 @@ export async function convertRoll20Character(rawJson, campaignId, options = {}) 
                 target: (sp.spelltarget || '').trim(),
                 prepared: isPrepared,
                 isAttack: isAttack,
-                attackStat: isAttack ? 'spell' : 'none',
+                attackStat: spAtkStat,
                 attackProf: isAttack,
                 saveAbility: saveAbility,
-                saveDcStat: saveAbility ? 'spell' : 'none',
+                saveDcStat: spDcStat,
+                saveSuccess: (sp.spellsavesuccess || '').trim(),
                 damage: dmg1,
                 damageType: type1,
                 damageList: damageList,
@@ -1105,31 +1254,90 @@ export async function convertRoll20Character(rawJson, campaignId, options = {}) 
         }
     }
 
-    // 16. Token Dimensions, Sight, & Assets
+    // 16. Token Dimensions, Sight, Lighting, Auras & Assets
     let tokenSize = 1;
-    let tokenSight = 60;
     let defaultToken = null;
-    if (charRoot.blobDefaultToken) {
+    const rawDefaultToken = charRoot.blobDefaultToken || charRoot.defaulttoken || rawJson.defaulttoken;
+    if (rawDefaultToken) {
         try {
             defaultToken =
-                typeof charRoot.blobDefaultToken === 'string'
-                    ? JSON.parse(charRoot.blobDefaultToken)
-                    : charRoot.blobDefaultToken;
+                typeof rawDefaultToken === 'string'
+                    ? JSON.parse(rawDefaultToken)
+                    : rawDefaultToken;
             if (defaultToken && defaultToken.width) {
                 tokenSize = Math.max(1, Math.round(defaultToken.width / 70));
             }
         } catch {}
     }
 
-    // Darkvision parsing
+    // Traits text for senses inspection
     const allTraitsText = Object.values(repeating.traits)
         .map((t) => `${t.name} ${t.description}`)
         .join(' ')
         .toLowerCase();
     const dvMatch =
         allTraitsText.match(/darkvision\s*(?:of\s*)?(\d+)/i) || allTraitsText.match(/(\d+)\s*ft\.?\s*darkvision/i);
-    if (dvMatch) {
-        tokenSight = parseInt(dvMatch[1]) || 60;
+    const traitDarkvision = dvMatch ? parseInt(dvMatch[1]) || 60 : 0;
+
+    // Token night vision distance priority
+    let tokenNightVision = 0;
+    if (defaultToken && defaultToken.night_vision_distance !== undefined && !isNaN(parseFloat(defaultToken.night_vision_distance))) {
+        tokenNightVision = parseFloat(defaultToken.night_vision_distance);
+    }
+
+    const finalDarkvision = tokenNightVision > 0 ? tokenNightVision : traitDarkvision;
+    const tokenSight = finalDarkvision > 0 ? finalDarkvision : 60;
+
+    const blindMatch = allTraitsText.match(/blindsight\s*(?:of\s*)?(\d+)/i) || allTraitsText.match(/(\d+)\s*ft\.?\s*blindsight/i);
+    const trueMatch = allTraitsText.match(/truesight\s*(?:of\s*)?(\d+)/i) || allTraitsText.match(/(\d+)\s*ft\.?\s*truesight/i);
+    const tremorMatch = allTraitsText.match(/tremorsense\s*(?:of\s*)?(\d+)/i) || allTraitsText.match(/(\d+)\s*ft\.?\s*tremorsense/i);
+    const hasDevilSight = allTraitsText.includes("devil's sight") || allTraitsText.includes('devils sight');
+
+    const senses = {
+        darkvision: finalDarkvision,
+        blindsight: blindMatch ? parseInt(blindMatch[1]) || 0 : 0,
+        truesight: trueMatch ? parseInt(trueMatch[1]) || 0 : 0,
+        tremorsense: tremorMatch ? parseInt(tremorMatch[1]) || 0 : 0,
+        devilSight: hasDevilSight
+    };
+
+    // Token Lighting
+    const rawLightRadius = parseFloat(defaultToken?.light_radius) || 0;
+    const rawBrightDist = parseFloat(defaultToken?.bright_light_distance) || 0;
+    const rawDimDist = parseFloat(defaultToken?.low_light_distance || defaultToken?.light_dimradius) || 0;
+    const emitsLight = Boolean(
+        rawLightRadius > 0 ||
+        rawBrightDist > 0 ||
+        rawDimDist > 0 ||
+        defaultToken?.emits_bright_light ||
+        defaultToken?.emits_low_light
+    );
+
+    const tokenLightEnabled = emitsLight;
+    const tokenLightBright = rawBrightDist > 0 ? rawBrightDist : rawLightRadius;
+    const tokenLightDim = rawDimDist > 0 ? rawDimDist : 0;
+    const tokenLightAngle = parseInt(defaultToken?.light_angle) || 360;
+    const tokenLightColor = defaultToken?.light_color || '#ffffff';
+
+    // Token Auras
+    const tokenAuras = [];
+    if (defaultToken) {
+        if (defaultToken.aura1_radius !== undefined && parseFloat(defaultToken.aura1_radius) > 0) {
+            tokenAuras.push({
+                id: 'aura_1',
+                range: parseFloat(defaultToken.aura1_radius),
+                color: defaultToken.aura1_color || '#00ff00',
+                square: !!defaultToken.aura1_square
+            });
+        }
+        if (defaultToken.aura2_radius !== undefined && parseFloat(defaultToken.aura2_radius) > 0) {
+            tokenAuras.push({
+                id: 'aura_2',
+                range: parseFloat(defaultToken.aura2_radius),
+                color: defaultToken.aura2_color || '#0000ff',
+                square: !!defaultToken.aura2_square
+            });
+        }
     }
 
     // Asset image caching (strictly local - no remote URL fallback)
@@ -1218,6 +1426,8 @@ export async function convertRoll20Character(rawJson, campaignId, options = {}) 
         race: (attrMap['race'] || '').trim(),
         subrace: (attrMap['subrace'] || '').trim(),
         background: (attrMap['background'] || '').trim(),
+        alignment: (attrMap['alignment'] || '').trim(),
+        experience: parseInt(attrMap['experience']) || 0,
         stats: stats,
         hpMax: hpMax,
         hpCurrent: hpCurrent,
@@ -1229,6 +1439,7 @@ export async function convertRoll20Character(rawJson, campaignId, options = {}) 
         saves: saves,
         skills: skills,
         expertise: expertise,
+        senses: senses,
         proficiencies: proficiencies,
         tools: tools,
         hitDiceSpent: hitDiceSpent,
@@ -1249,21 +1460,173 @@ export async function convertRoll20Character(rawJson, campaignId, options = {}) 
         },
         inspiration:
             attrMap['inspiration'] === 'on' || attrMap['inspiration'] === '1' || attrMap['inspiration'] === true,
+        initiativeAdvantage: initiativeAdvantage,
         toHit: '',
         macros: macros,
         abilityCards: abilityCards,
+        abilityCategories: abilityCategories,
         saveToggles: saveToggles,
         skillToggles: skillToggles,
         acToggles: acToggles,
         attackSettings: { atkMod: 0, critRange: 20, toggles: attackToggles },
+        settings: {
+            carryWeightMultiplier: (function () {
+                const raceStr = ((attrMap['race'] || '') + ' ' + (attrMap['subrace'] || '')).toLowerCase();
+                const traitsStr = abilityCards.map((a) => (a.name || '') + ' ' + (a.description || '')).join(' ').toLowerCase();
+                if (
+                    raceStr.includes('goliath') ||
+                    raceStr.includes('orc') ||
+                    traitsStr.includes('powerful build') ||
+                    traitsStr.includes('little giant') ||
+                    traitsStr.includes('hippo build')
+                ) {
+                    return 2;
+                }
+                return 1;
+            })(),
+            halflingLucky: ((attrMap['race'] || '') + ' ' + (attrMap['subrace'] || '')).toLowerCase().includes('halfling'),
+            elvenAccuracy: abilityCards.some((a) => (a.name || '').toLowerCase().includes('elven accuracy')),
+            brutalCritical: (function () {
+                const barb = (classes || []).find((c) => (c.name || '').toLowerCase().includes('barbarian'));
+                const barbLvl = barb ? parseInt(barb.level) || 0 : 0;
+                const isHalfOrc = ((attrMap['race'] || '') + ' ' + (attrMap['subrace'] || '')).toLowerCase().includes('half-orc') ||
+                    abilityCards.some((a) => (a.name || '').toLowerCase().includes('savage attacks'));
+                return barbLvl >= 9 || isHalfOrc || abilityCards.some((a) => (a.name || '').toLowerCase().includes('brutal critical'));
+            })(),
+            reliableTalent: (function () {
+                const rog = (classes || []).find((c) => (c.name || '').toLowerCase().includes('rogue'));
+                return rog ? (parseInt(rog.level) || 0) >= 11 : false;
+            })(),
+            jackOfAllTrades: (function () {
+                const brd = (classes || []).find((c) => (c.name || '').toLowerCase().includes('bard'));
+                return brd ? (parseInt(brd.level) || 0) >= 2 : false;
+            })(),
+            autoRollDamage: false,
+            critDiceDouble: true
+        },
         tokenImages: tokenImages,
         activeTokenIndex: activeSideIndex,
         tokenSize: tokenSize,
         tokenSight: tokenSight,
+        tokenLightEnabled: tokenLightEnabled,
+        tokenLightBright: tokenLightBright,
+        tokenLightDim: tokenLightDim,
+        tokenLightAngle: tokenLightAngle,
+        tokenLightColor: tokenLightColor,
+        tokenAuras: tokenAuras,
         deathSaves: {
             successes: parseInt(attrMap['deathsave_successes']) || 0,
             failures: parseInt(attrMap['deathsave_failures']) || 0
         },
         bio: bio
     };
+}
+
+/**
+ * Checks whether a parsed JSON manifest represents a Roll20 rollable table export.
+ */
+export function isRoll20TableJson(data) {
+    if (!data || typeof data !== 'object') return false;
+    if (
+        data.rollabletable &&
+        Array.isArray(data.rollabletable.tableitems || data.rollabletable.items || data.tableitems || data.items)
+    )
+        return true;
+    if (Array.isArray(data.rollabletables)) return true;
+    if (data.name && Array.isArray(data.tableitems || data.items)) return true;
+    if (Array.isArray(data) && data[0] && Array.isArray(data[0].tableitems || data[0].items)) return true;
+    return false;
+}
+
+/**
+ * Converts Roll20 rollable tables to ForgeDVTT custom roll tables and asset tables.
+ * Auto-detects image avatars on items to produce multi-sided asset tables, or converts
+ * item weights into cumulative min-max ranges for custom dice roll tables.
+ */
+export async function convertRoll20TableToVTT(data, uploadsDir, campaignId) {
+    const rawTables = Array.isArray(data)
+        ? data
+        : Array.isArray(data.rollabletables)
+          ? data.rollabletables
+          : data.rollabletable
+            ? [data.rollabletable]
+            : [data];
+
+    const results = {
+        customTables: [],
+        assetTables: []
+    };
+
+    for (const t of rawTables) {
+        const tableName = (t.name || 'Imported Roll Table').trim();
+        const items = Array.isArray(t.tableitems) ? t.tableitems : Array.isArray(t.items) ? t.items : [];
+        if (items.length === 0) continue;
+
+        // Check if items have image avatars
+        const hasAvatars = items.some(
+            (it) => it.avatar && typeof it.avatar === 'string' && it.avatar.trim().length > 0
+        );
+
+        if (hasAvatars) {
+            // Convert to Multi-Sided Asset Table
+            const sides = [];
+            for (let i = 0; i < items.length; i++) {
+                const item = items[i];
+                let assetPath = '';
+                if (item.avatar) {
+                    assetPath = (await downloadAssetToLocal(item.avatar, uploadsDir, campaignId)) || item.avatar;
+                }
+                sides.push({
+                    id: `side_${i}_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
+                    name: item.name || `Side ${i + 1}`,
+                    assetPath: assetPath || 'favicon.svg',
+                    url: assetPath || 'favicon.svg',
+                    weight: Math.max(1, parseInt(item.weight, 10) || 1)
+                });
+            }
+
+            results.assetTables.push({
+                id: `asset_table_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
+                name: tableName,
+                isAssetTable: true,
+                sides,
+                defaultSideIndex: 0
+            });
+        } else {
+            // Text-only -> Convert to Custom Dice Roll Table
+            let totalWeight = 0;
+            const rowsWithWeight = items.map((it) => {
+                const weight = Math.max(1, parseInt(it.weight, 10) || 1);
+                totalWeight += weight;
+                return { name: it.name || '', weight };
+            });
+
+            // Map cumulative weights to min-max ranges
+            let current = 1;
+            const rows = rowsWithWeight.map((it) => {
+                const min = current;
+                const max = current + it.weight - 1;
+                current = max + 1;
+                return {
+                    min,
+                    max,
+                    text: it.name
+                };
+            });
+
+            const dice = `1d${totalWeight}`;
+
+            results.customTables.push({
+                id: `table_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
+                name: tableName,
+                dice,
+                diceFormula: dice,
+                caption: tableName,
+                colLabels: [dice, 'Result'],
+                rows
+            });
+        }
+    }
+
+    return results;
 }

@@ -10,7 +10,7 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
     rel="stylesheet">
-  <link rel="icon" type="image/png" href="../icon.png">
+  <link rel="icon" type="image/png" href="icon.png">
   <link rel="stylesheet" href="dashboard.css">
 </head>
 
@@ -47,6 +47,10 @@
           <span class="status-dot"></span>
           <span id="overall-status-text">Initializing...</span>
         </div>
+        <button type="button" class="btn btn-sm btn-outline prep-only vtt-hidden" id="btn-prep-logout"
+          title="Sign out of Web Prep">
+          🔒 Log Out
+        </button>
       </div>
     </header>
 
@@ -141,6 +145,98 @@
                 <span class="icon">🚀</span> Start Online Tunnel
               </button>
             </div>
+            <div class="online-security-notice vtt-hidden" id="online-security-notice">
+              🔒 Set a <strong>GM Username &amp; Password</strong> below to enable online tunneling and P2P sharing.
+            </div>
+          </div>
+        </section>
+
+        <!-- Master GM Login & Server Security Credentials Card -->
+        <section class="card gm-credentials-card span-2">
+          <div class="card-header">
+            <h2>👑 Master GM &amp; Server Security Credentials</h2>
+            <span class="badge" id="gm-cred-status-badge">Checking...</span>
+          </div>
+          <div class="card-body">
+            <p class="section-desc">
+              Protects your Game Master seat and is <strong>required</strong> before starting online hosting (Cloudflare Tunnel, P2P sharing, or remote dashboard access). Local offline play works with or without a password.
+            </p>
+            <div class="credentials-form-row">
+              <div class="input-group">
+                <label for="gm-username-input">GM Username</label>
+                <input type="text" id="gm-username-input" placeholder="e.g. DungeonMaster" />
+              </div>
+              <div class="input-group">
+                <label for="gm-password-input">GM Password</label>
+                <div class="password-field-wrap">
+                  <input type="password" id="gm-password-input"
+                    placeholder="Enter new password (or leave blank to keep)" />
+                  <button type="button" class="btn-toggle-pw" id="btn-toggle-pw-visibility"
+                    title="Show/Hide Password">👁️</button>
+                </div>
+              </div>
+              <div class="cred-actions" style="display: flex; gap: 8px;">
+                <button class="btn btn-accent" id="btn-save-gm-creds">
+                  💾 Save Credentials
+                </button>
+                <button class="btn btn-outline" id="btn-clear-gm-password" type="button"
+                  title="Remove password (only allowed when offline)">
+                  🔓 Remove Password
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Direct STUN P2P Room Card -->
+        <section class="card p2p-card span-2">
+          <div class="card-header">
+            <h2>⚡ Direct STUN P2P Room (Zero Cloud / Free)</h2>
+            <span class="badge badge-online" id="p2p-status-badge">P2P Active</span>
+          </div>
+          <div class="card-body">
+            <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 12px;">
+              <div>
+                <span class="label" style="display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-dim); margin-bottom: 4px;">P2P Room Code (Crypto-Random)</span>
+                <code id="p2p-room-code-display" style="font-size: 1.4rem; letter-spacing: 2px; font-weight: 700; color: #f59e0b; background: rgba(0,0,0,0.3); padding: 4px 12px; border-radius: 6px; border: 1px solid rgba(245, 158, 11, 0.3);">ABCD-2345</code>
+              </div>
+              <div style="display: flex; gap: 8px;">
+                <button class="btn btn-secondary" id="btn-copy-p2p-code" title="Copy Room Code to clipboard">📋 Copy Code</button>
+                <button class="btn btn-secondary" id="btn-regen-p2p-code" title="Generate New Room Code">🔄 New Code</button>
+              </div>
+            </div>
+
+            <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 12px; background: rgba(255,255,255,0.03); border-radius: 6px; border: 1px solid var(--border-color);">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <span style="font-size: 1.2rem;">👥</span>
+                <div>
+                  <span class="value" id="p2p-peer-count" style="font-weight: 600; font-size: 13px;">0 Peers Connected</span>
+                  <span style="display: block; font-size: 11px; color: var(--text-dim);">Direct UDP hole punch via Google &amp; Cloudflare STUN</span>
+                </div>
+              </div>
+              <button class="btn btn-primary btn-sm" id="btn-copy-p2p-link">
+                🔗 Copy 1-Click P2P Join Link
+              </button>
+            </div>
+
+            <details style="margin-top: 10px; padding: 8px 12px; background: rgba(0,0,0,0.2); border-radius: 6px; border: 1px solid var(--border-color);">
+              <summary style="cursor: pointer; font-size: 12px; color: var(--text-dim); user-select: none;">⚙️ Optional Custom TURN / STUN Relay (for strict 4G/5G NATs)</summary>
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 8px; margin-top: 10px;">
+                <input type="text" id="input-custom-turn-url" class="form-control" placeholder="turn:turn.example.com:3478" style="font-size: 12px;" />
+                <input type="text" id="input-custom-turn-user" class="form-control" placeholder="TURN username (optional)" style="font-size: 12px;" />
+                <input type="password" id="input-custom-turn-pass" class="form-control" placeholder="TURN credential (optional)" style="font-size: 12px;" />
+                <button type="button" class="btn btn-secondary btn-sm" id="btn-save-ice-config">💾 Save ICE Config</button>
+              </div>
+            </details>
+
+            <div class="launcher-button-row" style="margin-top: 14px;">
+              <button class="btn btn-large btn-launch" id="btn-launch-app-p2p" style="flex: 1;">
+                ⚔️ Open VTT Window (P2P)
+              </button>
+              <button class="btn btn-large btn-outline" id="btn-launch-browser-p2p" style="flex: 1;">
+                🌐 Open in Browser (P2P)
+              </button>
+            </div>
           </div>
         </section>
 
@@ -154,7 +250,7 @@
             <div class="share-banner">
               <div class="share-url-container">
                 <span class="share-label">Player URL:</span>
-                <input type="text" readonly id="share-url-input" value="https://mygame.forgedvtt.com/vtt.html" />
+                <input type="text" readonly id="share-url-input" value="https://mygame.forgedvtt.com/play" />
               </div>
               <button class="btn btn-secondary" id="btn-copy-url">
                 📋 Copy Link
@@ -243,43 +339,6 @@
     <!-- VIEW 2: GM DASHBOARD -->
     <main class="dashboard-view" id="view-gm">
       <div class="gm-grid">
-        <!-- Master GM Login Credentials Card -->
-        <section class="card gm-credentials-card">
-          <div class="card-header">
-            <h2>👑 Master GM Tabletop Credentials</h2>
-            <span class="badge" id="gm-cred-status-badge">Checking...</span>
-          </div>
-          <div class="card-body">
-            <p class="section-desc">
-              Protect your Game Master seat. When logging into the tabletop with Role = "Game Master" and this username,
-              a <strong>"Password?"</strong> prompt will be required.
-            </p>
-            <div class="credentials-form-row">
-              <div class="input-group">
-                <label for="gm-username-input">GM Username</label>
-                <input type="text" id="gm-username-input" placeholder="e.g. DungeonMaster" />
-              </div>
-              <div class="input-group">
-                <label for="gm-password-input">GM Password</label>
-                <div class="password-field-wrap">
-                  <input type="password" id="gm-password-input"
-                    placeholder="Enter new password (or leave blank to keep)" />
-                  <button type="button" class="btn-toggle-pw" id="btn-toggle-pw-visibility"
-                    title="Show/Hide Password">👁️</button>
-                </div>
-              </div>
-              <div class="cred-actions" style="display: flex; gap: 8px;">
-                <button class="btn btn-accent" id="btn-save-gm-creds">
-                  💾 Save Credentials
-                </button>
-                <button class="btn btn-outline" id="btn-clear-gm-password" type="button"
-                  title="Remove password to allow passwordless GM login">
-                  🔓 Remove Password
-                </button>
-              </div>
-            </div>
-          </div>
-        </section>
         <!-- Campaigns Management Card -->
         <section class="card gm-campaigns-card">
           <div class="card-header">
@@ -385,6 +444,9 @@
                     <button type="button" class="entity-tab-btn" data-entity-target="entity-panel-npcs">
                       👾 Custom NPCs (<span id="entity-count-npcs">0</span>)
                     </button>
+                    <button type="button" class="entity-tab-btn" data-entity-target="entity-panel-tables">
+                      🎲 Tables &amp; Decks (<span id="entity-count-tables">0</span>)
+                    </button>
                   </div>
 
                   <!-- Panel 1: Maps -->
@@ -466,6 +528,32 @@
                     </div>
                     <div class="entity-card-grid" id="grid-campaign-npcs">
                       <!-- Dynamic NPC cards -->
+                    </div>
+                  </div>
+
+                  <!-- Panel 5: Tables & Decks -->
+                  <div class="entity-panel" id="entity-panel-tables">
+                    <div class="entity-panel-toolbar">
+                      <span class="entity-panel-hint">Rollable tables, multi-sided asset tokens, and card decks in this campaign.</span>
+                      <div class="entity-toolbar-actions">
+                        <button type="button" class="btn btn-xs btn-outline" id="btn-import-table"
+                          title="Import Table or Deck (.zip, .json)">
+                          📥 Import Table/Deck
+                        </button>
+                        <button type="button" class="btn btn-xs btn-secondary" id="btn-export-all-tables"
+                          title="Export All Tables &amp; Decks">
+                          📤 Export All Tables
+                        </button>
+                      </div>
+                    </div>
+                    <div class="entity-filter-pills" id="tables-filter-pills" style="display:flex; gap:6px; margin: 8px 0 12px 0;">
+                      <button type="button" class="filter-pill active" data-filter="all">All</button>
+                      <button type="button" class="filter-pill" data-filter="custom">🎲 Roll Tables</button>
+                      <button type="button" class="filter-pill" data-filter="asset">🖼️ Asset Tables</button>
+                      <button type="button" class="filter-pill" data-filter="deck">🃏 Card Decks</button>
+                    </div>
+                    <div class="entity-card-grid" id="grid-campaign-tables">
+                      <!-- Dynamic table and deck cards -->
                     </div>
                   </div>
                 </div>
@@ -1320,6 +1408,10 @@
                               <input type="number" id="bf-item-charges" value="0" />
                             </div>
                             <div class="input-group span-3">
+                              <label>Linked Roll Table (Optional)</label>
+                              <input type="text" id="bf-item-linked-table" placeholder="e.g. Wand of Wonder Effects (or Table ID)" />
+                            </div>
+                            <div class="input-group span-3">
                               <label>Item Description & Magical Effects</label>
                               <textarea id="bf-item-desc" rows="4"
                                 placeholder="Description of properties, active abilities, and lore..."></textarea>
@@ -1541,6 +1633,47 @@
                             <label>Content & Story Notes</label>
                             <textarea id="bf-adv-desc" rows="10"
                               placeholder="Adventure outline, encounter tables, story narrative..."></textarea>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Category 9: Rollable Tables Form -->
+                      <div class="builder-form vtt-hidden" id="form-category-tables">
+                        <div class="form-section">
+                          <div class="section-title">Table Identity &amp; Formula</div>
+                          <div class="form-grid-3">
+                            <div class="input-group">
+                              <label>Table Name</label>
+                              <input type="text" id="bf-table-name" placeholder="e.g. Wand of Wonder Effects" />
+                            </div>
+                            <div class="input-group">
+                              <label>Dice Formula</label>
+                              <input type="text" id="bf-table-dice" placeholder="e.g. 1d100, 1d20, 2d6" value="1d100" />
+                            </div>
+                            <div class="input-group">
+                              <label>Caption / Subtitle</label>
+                              <input type="text" id="bf-table-caption" placeholder="e.g. Random Magical Effects" />
+                            </div>
+                          </div>
+                          <div class="form-grid-2" style="margin-top:8px;">
+                            <div class="input-group">
+                              <label>Dice Column Header</label>
+                              <input type="text" id="bf-table-col-dice" placeholder="e.g. d100" value="d100" />
+                            </div>
+                            <div class="input-group">
+                              <label>Result Column Header</label>
+                              <input type="text" id="bf-table-col-result" placeholder="e.g. Effect" value="Effect" />
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="form-section">
+                          <div class="section-title-row" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                            <div class="section-title" style="margin-bottom:0;">Table Rows &amp; Outcomes</div>
+                            <button type="button" class="btn btn-xs btn-outline" id="btn-add-table-row">➕ Add Row</button>
+                          </div>
+                          <div class="table-rows-builder-container" id="bf-table-rows-list" style="display:flex; flex-direction:column; gap:6px;">
+                            <!-- Dynamic Row Builders -->
                           </div>
                         </div>
                       </div>
@@ -2265,13 +2398,40 @@
       </div>
     </div>
 
+    <!-- Web /prep GM Login Gate Overlay -->
+    <div class="prep-login-overlay vtt-hidden" id="prep-login-overlay">
+      <div class="prep-login-card">
+        <div class="prep-login-header">
+          <img src="TextLogo.png" alt="ForgeDVTT" class="prep-login-logo" />
+          <h2>🎲 Session Prep Sign-In</h2>
+          <p>Enter your Master GM credentials to access Campaigns and Database Sources.</p>
+        </div>
+        <form id="prep-login-form" class="prep-login-form">
+          <div class="input-group">
+            <label for="prep-login-username">GM Username</label>
+            <input type="text" id="prep-login-username" autocomplete="username" placeholder="e.g. GMCosmic" required />
+          </div>
+          <div class="input-group">
+            <label for="prep-login-password">GM Password</label>
+            <input type="password" id="prep-login-password" autocomplete="current-password" placeholder="Enter GM password" required />
+          </div>
+          <div class="prep-login-error vtt-hidden" id="prep-login-error"></div>
+          <button type="submit" class="btn btn-primary btn-large" id="btn-prep-login-submit" style="width: 100%; margin-top: 8px;">
+            🔓 Unlock Session Prep
+          </button>
+        </form>
+      </div>
+    </div>
+
     <!-- Footer Status -->
     <footer class="footer-bar">
-      <span>ForgeDVTT Desktop v1.4.1</span>
+      <span>ForgeDVTT Desktop v1.5.0</span>
       <span>Cloudflare Tunnel: <span id="cf-avail-text">Bundled & Ready</span></span>
     </footer>
   </div>
 
+  <script src="static-storage-driver.js"></script>
+  <script src="web-api-bridge.js"></script>
   <script type="module" src="dashboard.js"></script>
 </body>
 

@@ -56,7 +56,7 @@ export function renderStep4(ctx) {
                                 cf.subOptions && cf.subOptions.length > 0
                                     ? `
                                 <div style="margin-top:6px; display:flex; align-items:center; gap:8px;">
-                                    <label style="font-size:0.75rem; color:var(--color-gold-light); font-weight:600;"><i class="fa-solid fa-paw"></i> Option:</label>
+                                    <label style="font-size:0.75rem; color:var(--color-gold-light); font-weight:600;"><i class="fa-solid fa-list-check"></i> Selection:</label>
                                     <select class="pc-wiz-feat-suboption-sel" data-feat-id="${cf.id}" style="padding:2px 8px; font-size:0.8rem; background:#1e1e1e; color:#fff; border:1px solid var(--color-border-subtle); border-radius:4px;">
                                         ${cf.subOptions
                                             .map(

@@ -1,0 +1,622 @@
+[
+  {
+    "id": "bg_acolyte_phb",
+    "name": "Acolyte",
+    "source": "PHB",
+    "page": 127,
+    "skills": "Insight, Religion",
+    "tools": "None",
+    "skillsData": {
+      "fixed": [
+        "Insight",
+        "Religion"
+      ],
+      "choose": null
+    },
+    "toolsData": {
+      "fixed": [],
+      "choose": null
+    },
+    "equipmentData": {
+      "fixedItems": [
+        {
+          "name": "holy symbol (a gift to you when you entered the priesthood)",
+          "quantity": 1,
+          "type": "item",
+          "containedGp": 0
+        },
+        {
+          "name": "sticks of incense",
+          "quantity": 5,
+          "type": "special",
+          "containedGp": 0
+        },
+        {
+          "name": "vestments",
+          "quantity": 1,
+          "type": "special",
+          "containedGp": 0
+        },
+        {
+          "name": "common clothes",
+          "quantity": 1,
+          "type": "item"
+        },
+        {
+          "name": "pouch",
+          "quantity": 1,
+          "type": "item",
+          "containedGp": 15
+        }
+      ],
+      "fixedGold": 15,
+      "choiceSets": [
+        {
+          "options": [
+            {
+              "key": "A",
+              "label": "prayer book",
+              "items": [
+                {
+                  "name": "prayer book",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                }
+              ],
+              "gold": 0
+            },
+            {
+              "key": "B",
+              "label": "prayer wheel",
+              "items": [
+                {
+                  "name": "prayer wheel",
+                  "quantity": 1,
+                  "type": "special",
+                  "containedGp": 0
+                }
+              ],
+              "gold": 0
+            }
+          ]
+        }
+      ]
+    },
+    "features": [
+      {
+        "name": "Feature: Shelter of the Faithful",
+        "description": "As an acolyte, you command the respect of those who share your faith, and you can perform the religious ceremonies of your deity. You and your adventuring companions can expect to receive free healing and care at a temple, shrine, or other established presence of your faith, though you must provide any material components needed for spells. Those who share your religion will support you (but only you) at a modest lifestyle.\n\nYou might also have ties to a specific temple dedicated to your chosen deity or pantheon, and you have a residence there. This could be the temple where you used to serve, if you remain on good terms with it, or a temple where you have found a new home. While near your temple, you can call upon the priests for assistance, provided the assistance you ask for is not hazardous and you remain in good standing with your temple."
+      }
+    ],
+    "description": "- **Skill Proficiencies:** Insight, Religion\n- **Languages:** Two of your choice\n- **Equipment:** A holy symbol (a gift to you when you entered the priesthood), a prayer book or prayer wheel, 5 sticks of incense, vestments, a set of common clothes, and a belt pouch containing 15 gp\n\n**Feature: Shelter of the Faithful**\n\nAs an acolyte, you command the respect of those who share your faith, and you can perform the religious ceremonies of your deity. You and your adventuring companions can expect to receive free healing and care at a temple, shrine, or other established presence of your faith, though you must provide any material components needed for spells. Those who share your religion will support you (but only you) at a modest lifestyle.\n\nYou might also have ties to a specific temple dedicated to your chosen deity or pantheon, and you have a residence there. This could be the temple where you used to serve, if you remain on good terms with it, or a temple where you have found a new home. While near your temple, you can call upon the priests for assistance, provided the assistance you ask for is not hazardous and you remain in good standing with your temple.\n\n**Suggested Characteristics**\n\nAcolytes are shaped by their experience in temples or other religious communities. Their study of the history and tenets of their faith and their relationships to temples, shrines, or hierarchies affect their mannerisms and ideals. Their flaws might be some hidden hypocrisy or heretical idea, or an ideal or bond taken to an extreme.",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": null,
+    "ability": null
+  },
+  {
+    "id": "bg_acolyte_xphb",
+    "name": "Acolyte",
+    "source": "XPHB",
+    "page": 178,
+    "skills": "Insight, Religion",
+    "tools": "Calligrapher's Supplies",
+    "skillsData": {
+      "fixed": [
+        "Insight",
+        "Religion"
+      ],
+      "choose": null
+    },
+    "toolsData": {
+      "fixed": [
+        "Calligrapher's Supplies"
+      ],
+      "choose": null
+    },
+    "equipmentData": {
+      "fixedItems": [],
+      "fixedGold": 0,
+      "choiceSets": [
+        {
+          "options": [
+            {
+              "key": "A",
+              "label": "Book (Prayers), calligrapher's supplies, holy symbol, 10x parchment, robe + 8 gp",
+              "items": [
+                {
+                  "name": "Book (Prayers)",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "calligrapher's supplies",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "holy symbol",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "parchment",
+                  "quantity": 10,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "robe",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                }
+              ],
+              "gold": 8
+            },
+            {
+              "key": "B",
+              "label": "50 gp",
+              "items": [],
+              "gold": 50
+            }
+          ]
+        }
+      ]
+    },
+    "features": [
+      {
+        "name": "Bonus Feat: Magic Initiate - Cleric",
+        "description": "This background grants the Magic Initiate - Cleric feat."
+      }
+    ],
+    "description": "- **Ability Scores:** Intelligence, Wisdom, Charisma\n- **Feat:** Magic Initiate (Cleric)\n- **Skill Proficiencies:** Insight, Religion\n- **Tool Proficiency:** Calligrapher's Supplies\n- **Equipment:** Choose A or B: (A) Calligrapher's Supplies, Book, Holy Symbol, Parchment (10 sheets), Robe, 8 GP; or (B) 50 GP",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "magic initiate; cleric|xphb": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "int",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "int",
+              "wis",
+              "cha"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "bg_criminal_xphb",
+    "name": "Criminal",
+    "source": "XPHB",
+    "page": 180,
+    "skills": "Sleight of hand, Stealth",
+    "tools": "Thieves' Tools",
+    "skillsData": {
+      "fixed": [
+        "Sleight of hand",
+        "Stealth"
+      ],
+      "choose": null
+    },
+    "toolsData": {
+      "fixed": [
+        "Thieves' Tools"
+      ],
+      "choose": null
+    },
+    "equipmentData": {
+      "fixedItems": [],
+      "fixedGold": 0,
+      "choiceSets": [
+        {
+          "options": [
+            {
+              "key": "A",
+              "label": "2x dagger, thieves' tools, crowbar, 2x pouch, traveler's clothes + 16 gp",
+              "items": [
+                {
+                  "name": "dagger",
+                  "quantity": 2,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "thieves' tools",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "crowbar",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "pouch",
+                  "quantity": 2,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "traveler's clothes",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                }
+              ],
+              "gold": 16
+            },
+            {
+              "key": "B",
+              "label": "50 gp",
+              "items": [],
+              "gold": 50
+            }
+          ]
+        }
+      ]
+    },
+    "features": [
+      {
+        "name": "Bonus Feat: Alert",
+        "description": "This background grants the Alert feat."
+      }
+    ],
+    "description": "- **Ability Scores:** Dexterity, Constitution, Intelligence\n- **Feat:** Alert\n- **Skill Proficiencies:** Sleight of Hand, Stealth\n- **Tool Proficiency:** Thieves' Tools\n- **Equipment:** Choose A or B: (A) Dagger, Thieves' Tools, Crowbar, Pouch, Traveler's Clothes, 16 GP; or (B) 50 GP",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "alert|xphb": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "con",
+              "int"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "dex",
+              "con",
+              "int"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "bg_sage_xphb",
+    "name": "Sage",
+    "source": "XPHB",
+    "page": 183,
+    "skills": "Arcana, History",
+    "tools": "Calligrapher's Supplies",
+    "skillsData": {
+      "fixed": [
+        "Arcana",
+        "History"
+      ],
+      "choose": null
+    },
+    "toolsData": {
+      "fixed": [
+        "Calligrapher's Supplies"
+      ],
+      "choose": null
+    },
+    "equipmentData": {
+      "fixedItems": [],
+      "fixedGold": 0,
+      "choiceSets": [
+        {
+          "options": [
+            {
+              "key": "A",
+              "label": "quarterstaff, calligrapher's supplies, book, 8x parchment, robe + 8 gp",
+              "items": [
+                {
+                  "name": "quarterstaff",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "calligrapher's supplies",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "book",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "parchment",
+                  "quantity": 8,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "robe",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                }
+              ],
+              "gold": 8
+            },
+            {
+              "key": "B",
+              "label": "50 gp",
+              "items": [],
+              "gold": 50
+            }
+          ]
+        }
+      ]
+    },
+    "features": [
+      {
+        "name": "Bonus Feat: Magic Initiate - Wizard",
+        "description": "This background grants the Magic Initiate - Wizard feat."
+      }
+    ],
+    "description": "- **Ability Scores:** Constitution, Intelligence, Wisdom\n- **Feat:** Magic Initiate (Wizard)\n- **Skill Proficiencies:** Arcana, History\n- **Tool Proficiency:** Calligrapher's Supplies\n- **Equipment:** Choose A or B: (A) Quarterstaff, Calligrapher's Supplies, Book (history), Parchment (8 sheets), Robe, 8 GP; or (B) 50 GP",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "magic initiate; wizard|xphb": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "con",
+              "int",
+              "wis"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "con",
+              "int",
+              "wis"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "bg_soldier_xphb",
+    "name": "Soldier",
+    "source": "XPHB",
+    "page": 185,
+    "skills": "Athletics, Intimidation",
+    "tools": "Choose 1 from AnyGamingSet",
+    "skillsData": {
+      "fixed": [
+        "Athletics",
+        "Intimidation"
+      ],
+      "choose": null
+    },
+    "toolsData": {
+      "fixed": [],
+      "choose": {
+        "count": 1,
+        "from": [
+          "AnyGamingSet"
+        ]
+      }
+    },
+    "equipmentData": {
+      "fixedItems": [],
+      "fixedGold": 0,
+      "choiceSets": [
+        {
+          "options": [
+            {
+              "key": "A",
+              "label": "spear, shortbow, arrows (20), Special Item, healer's kit, quiver, traveler's clothes + 14 gp",
+              "items": [
+                {
+                  "name": "spear",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "shortbow",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "arrows (20)",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "Special Item",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "healer's kit",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "quiver",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "traveler's clothes",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                }
+              ],
+              "gold": 14
+            },
+            {
+              "key": "B",
+              "label": "50 gp",
+              "items": [],
+              "gold": 50
+            }
+          ]
+        }
+      ]
+    },
+    "features": [
+      {
+        "name": "Bonus Feat: Savage Attacker",
+        "description": "This background grants the Savage Attacker feat."
+      }
+    ],
+    "description": "- **Ability Scores:** Strength, Dexterity, Constitution\n- **Feat:** Savage Attacker\n- **Skill Proficiencies:** Athletics, Intimidation\n- **Tool Proficiency:** Choose one kind of Gaming Set\n- **Equipment:** Choose A or B: (A) Spear, Shortbow, Arrow, Gaming Set (same as above), Healer's Kit, Quiver, Traveler's Clothes, 14 GP; or (B) 50 GP",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null,
+    "additionalSpells": null,
+    "feats": [
+      {
+        "savage attacker|xphb": true
+      }
+    ],
+    "ability": [
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "con"
+            ],
+            "weights": [
+              2,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "choose": {
+          "weighted": {
+            "from": [
+              "str",
+              "dex",
+              "con"
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ]
+  }
+]

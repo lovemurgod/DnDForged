@@ -56,6 +56,7 @@ if (!fs.existsSync(dstClassDir)) {
 }
 
 if (fs.existsSync(srcClassDir)) {
+    const classIndexMap = {};
     for (const file of fs.readdirSync(srcClassDir)) {
         if (!file.startsWith('class-') || !file.endsWith('.json')) continue;
         const filePath = path.join(srcClassDir, file);
@@ -87,11 +88,19 @@ if (fs.existsSync(srcClassDir)) {
 
             if ((cleanObj.class && cleanObj.class.length > 0) || (cleanObj.subclass && cleanObj.subclass.length > 0)) {
                 fs.writeFileSync(path.join(dstClassDir, file), JSON.stringify(cleanObj, null, 2), 'utf8');
+                const slug = file.replace(/^class-/, '').replace(/\.json$/, '');
+                classIndexMap[slug] = file;
             }
         } catch (err) {
             console.warn(`[build-srd-db] Notice copying class file ${file}:`, err.message);
         }
     }
+    fs.writeFileSync(path.join(dstClassDir, 'index.json'), JSON.stringify(classIndexMap, null, 2), 'utf8');
+}
+
+const charOptsFile = path.join(targetDataDir, 'charcreationoptions.json');
+if (!fs.existsSync(charOptsFile)) {
+    fs.writeFileSync(charOptsFile, JSON.stringify({ option: [] }, null, 2), 'utf8');
 }
 
 // 7. Summary calculation

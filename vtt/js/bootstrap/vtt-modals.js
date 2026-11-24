@@ -6,20 +6,44 @@
 
 export function setupSidebarTabs() {
     if (typeof document === 'undefined') return;
+    const sidebar = document.getElementById('vtt-sidebar');
     const tabs = document.querySelectorAll('.tab-header');
     tabs.forEach((tab) => {
         tab.addEventListener('click', () => {
             const target = tab.dataset.tab;
             if (!target) return;
+            const targetPanel = document.getElementById(target);
+            const isAlreadyActive = tab.classList.contains('active');
+
+            if (isAlreadyActive) {
+                // Explicit toggle close when active panel button is clicked again
+                tab.classList.remove('active');
+                if (targetPanel) targetPanel.classList.remove('active');
+                if (sidebar) sidebar.classList.remove('panel-open');
+                return;
+            }
+
             // Deactivate all
             tabs.forEach((t) => t.classList.remove('active'));
             document.querySelectorAll('.tab-panel').forEach((p) => p.classList.remove('active'));
 
-            // Activate current
+            // Activate current and open flyout drawer
             tab.classList.add('active');
-            const targetPanel = document.getElementById(target);
             if (targetPanel) {
                 targetPanel.classList.add('active');
+            }
+            if (sidebar) {
+                sidebar.classList.add('panel-open');
+            }
+
+            // Auto-scroll chat to latest messages on open
+            if (target === 'tab-chat') {
+                const msgList = document.getElementById('chat-messages');
+                if (msgList) {
+                    requestAnimationFrame(() => {
+                        msgList.scrollTop = msgList.scrollHeight;
+                    });
+                }
             }
         });
     });
@@ -56,8 +80,8 @@ export function tryDismissModal(modalEl) {
     // Attempt clicking a standard cancel/close button if present
     const closeBtn = modalEl.querySelector
         ? modalEl.querySelector(
-              '#btn-modal-cancel, #btn-map-modal-cancel, #btn-push-players-cancel, #btn-handout-cancel, #btn-view-handout-close, #btn-edit-map-cancel, #btn-edit-map-close-icon, #btn-token-edit-cancel, #btn-close-bestiary-filter, #btn-cancel-gm-password, #modal-cat-cancel, #modal-cat-close, #modal-macro-cancel, #modal-macro-close-btn, #modal-ability-cancel, #btn-import-cat-cancel, #cs-upcast-prompt-cancel, #upcast-prompt-cancel, #delete-prompt-cancel, .btn-close-modal, .vtt-modal-close'
-          )
+            '#btn-modal-cancel, #btn-map-modal-cancel, #btn-push-players-cancel, #btn-handout-cancel, #btn-view-handout-close, #btn-edit-map-cancel, #btn-edit-map-close-icon, #btn-token-edit-cancel, #btn-close-bestiary-filter, #btn-cancel-gm-password, #modal-cat-cancel, #modal-cat-close, #modal-macro-cancel, #modal-macro-close-btn, #modal-ability-cancel, #btn-import-cat-cancel, #cs-upcast-prompt-cancel, #upcast-prompt-cancel, #delete-prompt-cancel, .btn-close-modal, .vtt-modal-close'
+        )
         : null;
 
     if (closeBtn && typeof closeBtn.click === 'function') {

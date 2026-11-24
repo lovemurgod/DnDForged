@@ -4,14 +4,17 @@ import {
     serverConfig,
     activeGmTokens,
     generateGmSessionToken,
+    generatePlayerSessionToken,
     saveCampaigns,
     saveChat,
     extractSubdomain,
     getOrCreateCampaign,
+    sanitizeImportedObject,
     setActiveIo,
     isLoopbackRequest
 } from './state.js';
 import { verifyPassword, updateMapProperty } from '../utils.js';
+import { checkAndRecordGmAuthFailure, clearGmAuthFailures, isGmAuthRateLimited } from './routes/admin.js';
 import { registerCampaignBroadcaster } from './routes/campaigns.js';
 
 let activeIo = null;
@@ -30,7 +33,30 @@ export function broadcastCampaignSync(campaignId) {
     }
 }
 
-// Returns a minimal, high-performance campaign state slice tailored to the client's role.
+function sanitizeMapForPlayer(mapObj, username) {
+    if (!mapObj) return null;
+    const playerMap = structuredClone(mapObj);
+    if (playerMap.tokens) {
+        const safeTokens = {};
+        for (const tId in playerMap.tokens) {
+            const tok = playerMap.tokens[tId];
+            if (tok && tok.layer !== 'gm' && tok.isVisible !== false && !tok.hidden) {
+                safeTokens[tId] = tok;
+            }
+        }
+        playerMap.tokens = safeTokens;
+    }
+    playerMap.traps = Array.isArray(mapObj.traps)
+        ? mapObj.traps.filter((t) => t && !t.hidden && !t.isSecret && t.layer !== 'gm')
+        : [];
+    if (Array.isArray(playerMap.notes)) {
+        playerMap.notes = playerMap.notes.filter((n) => n && (n.isPublic || n.author === username));
+    }
+    if (Array.isArray(playerMap.portals)) {
+        playerMap.portals = playerMap.portals.filter((p) => p && !p.isSecret);
+    }
+    return playerMap;
+}
 // Inactive maps have heavy collections (walls, notes, non-background tokens, lights, shapes)
 // stripped, ensuring payloads stay far below Cloudflare's 1MB WebSocket frame limit (<50KB).
 function getPlayerMapOverride(camp, username) {
@@ -140,25 +166,7 @@ function getSanitizedCampaignSync(camp, role, username, campaignId = null) {
                 }
             } else if (role !== 'GM') {
                 // Active map for player view: strip GM secrets
-                const playerMap = structuredClone(m);
-                if (playerMap.tokens) {
-                    const safeTokens = {};
-                    for (const tId in playerMap.tokens) {
-                        const tok = playerMap.tokens[tId];
-                        if (tok && tok.layer !== 'gm' && tok.isVisible !== false && !tok.hidden) {
-                            safeTokens[tId] = tok;
-                        }
-                    }
-                    playerMap.tokens = safeTokens;
-                }
-                playerMap.traps = Array.isArray(m.traps) ? m.traps : [];
-                if (Array.isArray(playerMap.notes)) {
-                    playerMap.notes = playerMap.notes.filter((n) => n && (n.isPublic || n.author === username));
-                }
-                if (Array.isArray(playerMap.portals)) {
-                    playerMap.portals = playerMap.portals.filter((p) => p && !p.isSecret);
-                }
-                cloned.maps[mapId] = playerMap;
+                cloned.maps[mapId] = sanitizeMapForPlayer(m, username);
             } else {
                 // GM gets full map data
                 cloned.maps[mapId] = m;
@@ -229,9 +237,15 @@ export function initSocketServer(io) {
 
         // Handle player/GM registration to a campaign room
         socket.on('join', ({ campaignId, username, role, isSubWindow, gmPassword }) => {
+            const isLocal = isLoopbackRequest(socket.handshake);
             let targetCampaignId = campaignId || socketSubdomain || 'default';
 
             if (!campaigns[targetCampaignId]) {
+                if (role !== 'GM' && !isLocal && targetCampaignId !== 'default') {
+                    socket.emit('join_rejected', { reason: 'Campaign not found on this server.' });
+                    socket.disconnect(true);
+                    return;
+                }
                 getOrCreateCampaign(targetCampaignId);
             }
             const activeCampId = targetCampaignId;
@@ -241,8 +255,15 @@ export function initSocketServer(io) {
 
             // GM Role verification
             if (role === 'GM') {
-                const isLocal = isLoopbackRequest(socket.handshake);
                 const hasPasswordHash = !!serverConfig.gmCredentials?.hash;
+                if (isGmAuthRateLimited(socket.handshake)) {
+                    socket.emit('join_rejected', {
+                        reason: 'Too many failed GM login attempts. Please wait a minute before trying again.',
+                        code: 'RATE_LIMITED'
+                    });
+                    socket.disconnect(true);
+                    return;
+                }
 
                 // 1. Remote GM joins MUST have a configured password and provide valid credentials
                 if (!isLocal) {
@@ -257,7 +278,8 @@ export function initSocketServer(io) {
                         socket.disconnect(true);
                         return;
                     }
-                    if (hasGlobalGm && username.trim().toLowerCase() !== globalGmUser.toLowerCase()) {
+                    if (hasGlobalGm && String(username || '').trim().toLowerCase() !== globalGmUser.toLowerCase()) {
+                        checkAndRecordGmAuthFailure(socket.handshake);
                         socket.emit('join_rejected', {
                             reason: 'You are not the designated Game Master for this server.'
                         });
@@ -270,6 +292,7 @@ export function initSocketServer(io) {
                         serverConfig.gmCredentials.hash
                     );
                     if (!isValid) {
+                        checkAndRecordGmAuthFailure(socket.handshake);
                         socket.emit('join_rejected', {
                             reason: 'Incorrect GM Password.',
                             code: 'INVALID_PASSWORD'
@@ -277,6 +300,7 @@ export function initSocketServer(io) {
                         socket.disconnect(true);
                         return;
                     }
+                    clearGmAuthFailures(socket.handshake);
                     // Authoritative GM: update campaign's assigned GM username to authenticated GM
                     if (campaigns[activeCampId].gmUsername !== username) {
                         campaigns[activeCampId].gmUsername = username;
@@ -285,7 +309,8 @@ export function initSocketServer(io) {
                 } else {
                     // 2. Local loopback connection: allow convenient local login
                     if (hasGlobalGm) {
-                        if (username.trim().toLowerCase() !== globalGmUser.toLowerCase()) {
+                        if (String(username || '').trim().toLowerCase() !== globalGmUser.toLowerCase()) {
+                            checkAndRecordGmAuthFailure(socket.handshake);
                             socket.emit('join_rejected', {
                                 reason: 'You are not the designated Game Master for this server.'
                             });
@@ -299,6 +324,7 @@ export function initSocketServer(io) {
                                 serverConfig.gmCredentials.hash
                             );
                             if (!isValid) {
+                                checkAndRecordGmAuthFailure(socket.handshake);
                                 socket.emit('join_rejected', {
                                     reason: 'Incorrect GM Password.',
                                     code: 'INVALID_PASSWORD'
@@ -306,6 +332,7 @@ export function initSocketServer(io) {
                                 socket.disconnect(true);
                                 return;
                             }
+                            clearGmAuthFailures(socket.handshake);
                         }
                         if (campaigns[activeCampId].gmUsername !== username) {
                             campaigns[activeCampId].gmUsername = username;
@@ -316,7 +343,10 @@ export function initSocketServer(io) {
                         if (!campaigns[activeCampId].gmUsername) {
                             campaigns[activeCampId].gmUsername = username;
                             saveCampaigns();
-                        } else if (username !== campaigns[activeCampId].gmUsername) {
+                        } else if (
+                            String(username || '').trim().toLowerCase() !==
+                            String(campaigns[activeCampId].gmUsername || '').trim().toLowerCase()
+                        ) {
                             socket.emit('join_rejected', { reason: 'You are not the Game Master for this campaign.' });
                             socket.disconnect(true);
                             return;
@@ -325,14 +355,16 @@ export function initSocketServer(io) {
                 }
             }
 
-            // Prevent players from taking the GM's username
+            // Prevent players from taking the GM's username (case-insensitive & trimmed)
+            const cleanJoinUser = String(username || '').trim().toLowerCase();
             if (role === 'Player') {
-                if (hasGlobalGm && username.trim().toLowerCase() === globalGmUser.toLowerCase()) {
+                if (hasGlobalGm && cleanJoinUser === globalGmUser.toLowerCase()) {
                     socket.emit('join_rejected', { reason: 'That username is reserved for the Game Master.' });
                     socket.disconnect(true);
                     return;
                 }
-                if (campaigns[activeCampId].gmUsername && username === campaigns[activeCampId].gmUsername) {
+                const campGm = String(campaigns[activeCampId].gmUsername || '').trim().toLowerCase();
+                if (campGm && cleanJoinUser === campGm) {
                     socket.emit('join_rejected', { reason: 'That username is reserved for the Game Master.' });
                     socket.disconnect(true);
                     return;
@@ -341,9 +373,10 @@ export function initSocketServer(io) {
 
             let finalRole = role;
             if (finalRole === 'Player') {
-                // Enforce allowlist if it exists and is populated
+                // Enforce allowlist if populated (Presentation Display exemption applies ONLY to local loopback)
                 const allowed = campaigns[activeCampId].allowedUsers || [];
-                if (allowed.length > 0 && !allowed.includes(username)) {
+                const isLocalPresentation = isLocal && username === 'Presentation Display';
+                if (allowed.length > 0 && !allowed.includes(username) && !isLocalPresentation) {
                     socket.emit('join_rejected', { reason: 'Username not on the allowed list' });
                     socket.disconnect(true);
                     return;
@@ -387,9 +420,12 @@ export function initSocketServer(io) {
                 gmSessionToken = generateGmSessionToken();
                 socket.gmSessionToken = gmSessionToken;
             }
+            const playerSessionToken = generatePlayerSessionToken({ campaignId: activeCampId, username });
+            socket.playerSessionToken = playerSessionToken;
 
             socket.emit('joined', {
                 gmSessionToken,
+                playerSessionToken,
                 role: finalRole,
                 userRole: finalRole,
                 campaignState: getSanitizedCampaignSync(campaigns[activeCampId], finalRole, username, activeCampId),
@@ -533,7 +569,61 @@ export function initSocketServer(io) {
             }
         });
 
-        // Sync token state changes (legacy - full state)
+const PLAYER_FORBIDDEN_TOKEN_FIELDS = new Set([
+    '__proto__',
+    'constructor',
+    'prototype',
+    'owner',
+    'playerOwner',
+    'ownerUsername',
+    'players',
+    'assignedPlayers',
+    'characterId',
+    'sourceCharacterId',
+    'layer',
+    'hidden',
+    'isVisible',
+    'gmOnly',
+    'gmNotes'
+]);
+
+function filterPlayerTokenUpdate(payload, existingToken) {
+    const clean = sanitizeImportedObject(payload || {});
+    for (const k of PLAYER_FORBIDDEN_TOKEN_FIELDS) {
+        delete clean[k];
+    }
+    if (existingToken) {
+        for (const k of [
+            'owner',
+            'playerOwner',
+            'ownerUsername',
+            'players',
+            'assignedPlayers',
+            'characterId',
+            'sourceCharacterId',
+            'layer',
+            'hidden',
+            'isVisible',
+            'gmOnly',
+            'gmNotes'
+        ]) {
+            if (existingToken[k] !== undefined) {
+                clean[k] = existingToken[k];
+            }
+        }
+    }
+    return clean;
+}
+
+function filterPlayerTokenDelta(changes) {
+    const clean = sanitizeImportedObject(changes || {});
+    for (const k of PLAYER_FORBIDDEN_TOKEN_FIELDS) {
+        delete clean[k];
+    }
+    return clean;
+}
+
+// Sync token state changes (legacy - full state)
         socket.on('token:update', (data) => {
             const { campaignId } = socket;
             if (!campaignId || !campaigns[campaignId]) return;
@@ -551,22 +641,21 @@ export function initSocketServer(io) {
 
             // Handle single token format { token } gracefully
             if (data.token && data.token.id && !data.tokens) {
-                if (socket.role !== 'GM' && !isTokenControlledBySocket(data.token, socket, campaigns[campaignId])) {
-                    console.warn(
-                        `[Security] Unauthorized token update attempt by ${socket.username} for token ${data.token.id}`
-                    );
-                    return;
+                const targetMapForCheck = campaigns[campaignId].maps?.[mapId];
+                const existingOldTok = targetMapForCheck?.tokens?.[data.token.id];
+                if (socket.role !== 'GM') {
+                    if (!existingOldTok || !isTokenControlledBySocket(existingOldTok, socket, campaigns[campaignId])) {
+                        console.warn(
+                            `[Security] Unauthorized token update attempt by ${socket.username} for token ${data.token.id}`
+                        );
+                        return;
+                    }
                 }
-                let mapId =
-                    data.mapId ||
-                    (socket.role === 'GM'
-                        ? campaigns[campaignId].activeGMMapId || campaigns[campaignId].activeMapId
-                        : getPlayerMapOverride(campaigns[campaignId], socket.username) ||
-                          campaigns[campaignId].activeMapId);
 
                 let wasVisibleToPlayers = false;
                 let isVisibleToPlayers = false;
                 let tokenSnapshot = null;
+                let appliedChanges = data.token;
                 if (campaigns[campaignId].maps) {
                     let targetMap = campaigns[campaignId].maps[mapId];
                     let oldTok = targetMap?.tokens?.[data.token.id];
@@ -575,10 +664,15 @@ export function initSocketServer(io) {
                         wasVisibleToPlayers = oldTok
                             ? oldTok.layer !== 'gm' && oldTok.isVisible !== false && !oldTok.hidden
                             : false;
-                        const cloned = JSON.parse(JSON.stringify(data.token));
+                        const rawCloned = JSON.parse(JSON.stringify(data.token));
+                        const cloned =
+                            socket.role === 'GM'
+                                ? sanitizeImportedObject(rawCloned)
+                                : filterPlayerTokenUpdate(rawCloned, oldTok);
                         if (!cloned.id) cloned.id = data.token.id;
                         if (cloned._animReq) delete cloned._animReq;
                         targetMap.tokens[data.token.id] = cloned;
+                        appliedChanges = cloned;
                         isVisibleToPlayers = cloned.layer !== 'gm' && cloned.isVisible !== false && !cloned.hidden;
                         tokenSnapshot = cloned;
                         saveCampaigns();
@@ -594,7 +688,7 @@ export function initSocketServer(io) {
                             s.emit('token:updated_delta', {
                                 mapId,
                                 tokenId: data.token.id,
-                                changes: data.token,
+                                changes: appliedChanges,
                                 origin: socket.id
                             });
                         } else {
@@ -611,7 +705,7 @@ export function initSocketServer(io) {
                                 s.emit('token:updated_delta', {
                                     mapId,
                                     tokenId: data.token.id,
-                                    changes: data.token,
+                                    changes: appliedChanges,
                                     origin: socket.id
                                 });
                             }
@@ -621,7 +715,7 @@ export function initSocketServer(io) {
                     io.to(campaignId).emit('token:updated_delta', {
                         mapId,
                         tokenId: data.token.id,
-                        changes: data.token,
+                        changes: appliedChanges,
                         origin: socket.id
                     });
                 }
@@ -629,14 +723,15 @@ export function initSocketServer(io) {
             }
 
             if (campaigns[campaignId].maps && campaigns[campaignId].maps[mapId]) {
-                const cloned = JSON.parse(JSON.stringify(data.tokens || {}));
+                const cloned = sanitizeImportedObject(JSON.parse(JSON.stringify(data.tokens || {})));
                 const existingTokens = campaigns[campaignId].maps[mapId].tokens || {};
                 for (const id in cloned) {
                     if (socket.role !== 'GM') {
-                        const checkTok = existingTokens[id] || cloned[id];
-                        if (!isTokenControlledBySocket(checkTok, socket, campaigns[campaignId])) {
+                        const checkTok = existingTokens[id];
+                        if (!checkTok || !isTokenControlledBySocket(checkTok, socket, campaigns[campaignId])) {
                             continue;
                         }
+                        cloned[id] = filterPlayerTokenUpdate(cloned[id], checkTok);
                     }
                     if (cloned[id]?._animReq) delete cloned[id]._animReq;
                     existingTokens[id] = cloned[id];
@@ -675,8 +770,26 @@ export function initSocketServer(io) {
                 return;
             }
 
-            // Security check: Players may only add tokens they control (characters or companions)
+            const mapId =
+                data.mapId ||
+                (socket.role === 'GM'
+                    ? campaigns[campaignId].activeGMMapId || campaigns[campaignId].activeMapId
+                    : getPlayerMapOverride(campaigns[campaignId], socket.username) ||
+                      campaigns[campaignId].activeMapId);
+
+            // Security check: Players may only add new tokens they control (cannot overwrite existing tokens or spawn on GM layer)
             if (socket.role !== 'GM') {
+                const existingTarget = campaigns[campaignId].maps?.[mapId]?.tokens?.[data.tokenId];
+                if (existingTarget) {
+                    console.warn(
+                        `[Security] Player ${socket.username} attempted token:add overwrite on existing token ${data.tokenId}`
+                    );
+                    return;
+                }
+                if (data.token?.layer === 'gm' || data.token?.hidden === true || data.token?.isVisible === false) {
+                    console.warn(`[Security] Player ${socket.username} attempted to add hidden/GM token`);
+                    return;
+                }
                 const isAllowed = isTokenControlledBySocket(data.token, socket, campaigns[campaignId]);
                 if (!isAllowed) {
                     console.warn(`[Security] Player ${socket.username} attempted to add unauthorized token`);
@@ -687,14 +800,8 @@ export function initSocketServer(io) {
                 if (!data.token.ownerUsername) data.token.ownerUsername = socket.username;
             }
 
-            const mapId =
-                data.mapId ||
-                (socket.role === 'GM'
-                    ? campaigns[campaignId].activeGMMapId || campaigns[campaignId].activeMapId
-                    : getPlayerMapOverride(campaigns[campaignId], socket.username) ||
-                      campaigns[campaignId].activeMapId);
             if (campaigns[campaignId].maps && campaigns[campaignId].maps[mapId]) {
-                const cloned = JSON.parse(JSON.stringify(data.token || {}));
+                const cloned = sanitizeImportedObject(JSON.parse(JSON.stringify(data.token || {})));
                 if (!cloned.id) cloned.id = data.tokenId;
                 if (cloned._animReq) delete cloned._animReq;
                 if (!campaigns[campaignId].maps[mapId].tokens) campaigns[campaignId].maps[mapId].tokens = {};
@@ -743,6 +850,7 @@ export function initSocketServer(io) {
             let wasVisibleToPlayers = false;
             let isVisibleToPlayers = false;
             let tokenSnapshot = null;
+            let appliedChanges = data.changes;
 
             if (campaigns[campaignId].maps) {
                 let targetMap = campaigns[campaignId].maps[mapId];
@@ -758,11 +866,14 @@ export function initSocketServer(io) {
                             );
                             return;
                         }
+                        appliedChanges = filterPlayerTokenDelta(data.changes);
+                    } else {
+                        appliedChanges = sanitizeImportedObject(data.changes || {});
                     }
 
                     wasVisibleToPlayers =
                         existingToken.layer !== 'gm' && existingToken.isVisible !== false && !existingToken.hidden;
-                    Object.assign(existingToken, data.changes);
+                    Object.assign(existingToken, appliedChanges);
                     if (!existingToken.id) existingToken.id = data.tokenId;
                     if (existingToken._animReq) delete existingToken._animReq;
                     isVisibleToPlayers =
@@ -781,7 +892,7 @@ export function initSocketServer(io) {
                         s.emit('token:updated_delta', {
                             mapId,
                             tokenId: data.tokenId,
-                            changes: data.changes,
+                            changes: appliedChanges,
                             origin: socket.id
                         });
                     } else {
@@ -799,17 +910,17 @@ export function initSocketServer(io) {
                             s.emit('token:updated_delta', {
                                 mapId,
                                 tokenId: data.tokenId,
-                                changes: data.changes,
+                                changes: appliedChanges,
                                 origin: socket.id
                             });
                         }
                     }
                 }
-            } else {
+            } else if (tokenSnapshot) {
                 io.to(campaignId).emit('token:updated_delta', {
                     mapId,
                     tokenId: data.tokenId,
-                    changes: data.changes,
+                    changes: appliedChanges,
                     origin: socket.id
                 });
             }
@@ -2104,18 +2215,20 @@ export function initSocketServer(io) {
             broadcastCampaignSync(campaignId);
         });
 
-        // Client requests full data for a specific map
+        // Client requests full data for a specific map (non-GM players restricted to active player map & sanitized)
         socket.on('map:request_sync', (data) => {
             const { campaignId } = socket;
             if (!campaignId || !campaigns[campaignId]) return;
+            const playerActiveMap =
+                getPlayerMapOverride(campaigns[campaignId], socket.username) || campaigns[campaignId].activeMapId;
             const targetMapId =
-                data?.mapId ||
-                (socket.role === 'GM'
-                    ? campaigns[campaignId].activeGMMapId || campaigns[campaignId].activeMapId
-                    : getPlayerMapOverride(campaigns[campaignId], socket.username) ||
-                      campaigns[campaignId].activeMapId);
+                socket.role === 'GM'
+                    ? data?.mapId || campaigns[campaignId].activeGMMapId || campaigns[campaignId].activeMapId
+                    : playerActiveMap;
             if (campaigns[campaignId].maps && campaigns[campaignId].maps[targetMapId]) {
-                socket.emit('map:full_data', { mapId: targetMapId, map: campaigns[campaignId].maps[targetMapId] });
+                const rawMap = campaigns[campaignId].maps[targetMapId];
+                const payloadMap = socket.role === 'GM' ? rawMap : sanitizeMapForPlayer(rawMap, socket.username);
+                socket.emit('map:full_data', { mapId: targetMapId, map: payloadMap });
             }
         });
 
@@ -2168,7 +2281,22 @@ export function initSocketServer(io) {
                 return String(val).replace(/<[^>]*>/g, '');
             };
 
-            const safeMsg = msg && typeof msg === 'object' ? msg : {};
+            const stripTagsDeep = (val) => {
+                if (val === undefined || val === null || typeof val === 'number' || typeof val === 'boolean') return val;
+                if (typeof val === 'string') return stripTags(val);
+                if (Array.isArray(val)) return val.map((item) => stripTagsDeep(item));
+                if (typeof val === 'object') {
+                    const out = {};
+                    for (const [k, v] of Object.entries(val)) {
+                        if (k === '__proto__' || k === 'constructor' || k === 'prototype') continue;
+                        out[k] = stripTagsDeep(v);
+                    }
+                    return out;
+                }
+                return val;
+            };
+
+            const safeMsg = msg && typeof msg === 'object' ? sanitizeImportedObject(msg) : {};
             let cleanRoll = safeMsg.roll;
             if (cleanRoll && typeof cleanRoll === 'object') {
                 cleanRoll = {
@@ -2209,15 +2337,15 @@ export function initSocketServer(io) {
                 id: `chat_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
                 username: socket.username,
                 role: socket.role,
-                text: safeMsg.text,
+                text: safeMsg.text !== undefined ? stripTags(safeMsg.text) : safeMsg.text,
                 roll: cleanRoll || null,
-                abilityCard: safeMsg.abilityCard || null,
+                abilityCard: safeMsg.abilityCard ? stripTagsDeep(safeMsg.abilityCard) : null,
                 macroCard: cleanMacro || null,
-                itemCard: safeMsg.itemCard || null,
-                saveResolveCard: safeMsg.saveResolveCard || null,
-                massAttackCard: safeMsg.massAttackCard || null,
-                rollTableCard: safeMsg.rollTableCard || null,
-                cardDrawCard: safeMsg.cardDrawCard || null,
+                itemCard: safeMsg.itemCard ? stripTagsDeep(safeMsg.itemCard) : null,
+                saveResolveCard: safeMsg.saveResolveCard ? stripTagsDeep(safeMsg.saveResolveCard) : null,
+                massAttackCard: safeMsg.massAttackCard ? stripTagsDeep(safeMsg.massAttackCard) : null,
+                rollTableCard: safeMsg.rollTableCard ? stripTagsDeep(safeMsg.rollTableCard) : null,
+                cardDrawCard: safeMsg.cardDrawCard ? stripTagsDeep(safeMsg.cardDrawCard) : null,
                 timestamp: Date.now(),
                 hidden: false,
                 whisperToGM: safeMsg.whisperToGM || false,
@@ -2345,17 +2473,20 @@ export function initSocketServer(io) {
 
         // Private whisper (GM-only creature sheet rolls) — sent only back to the sender
         socket.on('chat:whisper', (msg) => {
+            if (!socket.campaignId) return;
+            const stripTags = (val) =>
+                typeof val === 'string' ? val.replace(/<[^>]*>/g, '') : val;
             const whisperMsg = {
                 username: socket.username,
                 role: socket.role,
-                text: msg.text,
-                roll: msg.roll || null,
-                macroCard: msg.macroCard || null,
-                spellCard: msg.spellCard || null,
-                abilityCard: msg.abilityCard || null,
-                itemCard: msg.itemCard || null,
-                saveResolveCard: msg.saveResolveCard || null,
-                massAttackCard: msg.massAttackCard || null,
+                text: msg?.text !== undefined ? stripTags(msg.text) : msg?.text,
+                roll: msg?.roll || null,
+                macroCard: msg?.macroCard || null,
+                spellCard: msg?.spellCard || null,
+                abilityCard: msg?.abilityCard || null,
+                itemCard: msg?.itemCard || null,
+                saveResolveCard: msg?.saveResolveCard || null,
+                massAttackCard: msg?.massAttackCard || null,
                 timestamp: Date.now()
             };
             // Send only to the requesting socket (GM sees it privately)
@@ -2383,6 +2514,26 @@ export function initSocketServer(io) {
                 x: data.x,
                 y: data.y,
                 zoom: data.zoom
+            });
+        });
+
+        // Sync presentation continuous camera mirror (GM only)
+        socket.on('presentation:camSync', (data) => {
+            const { campaignId } = socket;
+            if (!campaignId || socket.role !== 'GM') return;
+            socket.to(campaignId).emit('presentation:camSynced', {
+                mapId: data?.mapId,
+                x: data?.x,
+                y: data?.y,
+                zoom: data?.zoom
+            });
+        });
+
+        socket.on('presentation:camLock', (data) => {
+            const { campaignId } = socket;
+            if (!campaignId || socket.role !== 'GM') return;
+            socket.to(campaignId).emit('presentation:camLocked', {
+                locked: Boolean(data?.locked)
             });
         });
 

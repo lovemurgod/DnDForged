@@ -276,6 +276,10 @@ test.describe('Token Edit Modal (Lighting, Auras, Bars, Visual FX) E2E Suite', (
 
     test('Test 5: Multi-Aura Creation, Styling & Deletion', async () => {
         const { gmPage } = sandbox;
+        await gmPage.evaluate(() => {
+            const tok = window.VTT?.canvasEngine?.getTokens?.()?.['tok_hero_1'];
+            if (tok) tok.auras = [];
+        });
         const modal = await openModalForToken(gmPage, 'tok_hero_1');
 
         // 1. Click Add Aura

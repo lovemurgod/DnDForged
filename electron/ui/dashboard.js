@@ -16,11 +16,96 @@ import {
 
 document.addEventListener('DOMContentLoaded', async () => {
     const api = window.electronAPI;
+    const isWebPrepMode = Boolean(window.__FORGEDVTT_WEB_PREP__);
 
     if (!api) {
         console.error('window.electronAPI is undefined!');
         alert('Failed to connect to Electron backend bridge.');
         return;
+    }
+
+    async function ensureWebPrepAuthenticated() {
+        if (!isWebPrepMode || !window.__webPrepAuth) return true;
+
+        const overlay = document.getElementById('prep-login-overlay');
+        const form = document.getElementById('prep-login-form');
+        const userIpt = document.getElementById('prep-login-username');
+        const passIpt = document.getElementById('prep-login-password');
+        const errBox = document.getElementById('prep-login-error');
+        const submitBtn = document.getElementById('btn-prep-login-submit');
+
+        const showLoginOverlay = (msg = '') => {
+            if (!overlay) return;
+            overlay.classList.remove('vtt-hidden');
+            if (errBox) {
+                errBox.textContent = msg;
+                errBox.classList.toggle('vtt-hidden', !msg);
+            }
+            if (userIpt && !userIpt.value && window.__webPrepAuth.getUsername()) {
+                userIpt.value = window.__webPrepAuth.getUsername();
+            }
+            setTimeout(() => (userIpt?.value ? passIpt : userIpt)?.focus(), 50);
+        };
+
+        window.__onWebPrepAuthExpired = (msg) => {
+            showLoginOverlay(msg || 'Your session expired. Please sign in again.');
+        };
+
+        const alreadyValid = await window.__webPrepAuth.verifySession();
+        if (alreadyValid) {
+            overlay?.classList.add('vtt-hidden');
+            return true;
+        }
+
+        return new Promise((resolve) => {
+            showLoginOverlay();
+            if (!form) {
+                resolve(false);
+                return;
+            }
+            form.onsubmit = async (e) => {
+                e.preventDefault();
+                if (errBox) errBox.classList.add('vtt-hidden');
+                if (submitBtn) {
+                    submitBtn.disabled = true;
+                    submitBtn.textContent = 'Signing in...';
+                }
+                try {
+                    await window.__webPrepAuth.login(userIpt?.value.trim() || '', passIpt?.value || '');
+                    if (passIpt) passIpt.value = '';
+                    overlay?.classList.add('vtt-hidden');
+                    resolve(true);
+                } catch (err) {
+                    if (errBox) {
+                        errBox.textContent = err.message || 'Sign-in failed.';
+                        errBox.classList.remove('vtt-hidden');
+                    }
+                } finally {
+                    if (submitBtn) {
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = '🔓 Unlock Session Prep';
+                    }
+                }
+            };
+        });
+    }
+
+    if (isWebPrepMode) {
+        const detectedMode = await window.__webPrepAuth?.initMode?.();
+        if (detectedMode === 'static' || window.__FORGEDVTT_STATIC_WEB__) {
+            document.body.classList.add('static-web-mode');
+        } else {
+            document.body.classList.add('web-prep-mode');
+            const btnLogout = document.getElementById('btn-prep-logout');
+            if (btnLogout) {
+                btnLogout.classList.remove('vtt-hidden');
+                btnLogout.addEventListener('click', async () => {
+                    await window.__webPrepAuth?.logout();
+                    window.location.reload();
+                });
+            }
+            await ensureWebPrepAuthenticated();
+        }
     }
 
     // --- NAVIGATION TABS ---
@@ -87,6 +172,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     const shareUrlInput = document.getElementById('share-url-input');
     const btnCopyUrl = document.getElementById('btn-copy-url');
 
+    const p2pRoomCodeDisplay = document.getElementById('p2p-room-code-display');
+    const p2pStatusBadge = document.getElementById('p2p-status-badge');
+    const p2pPeerCount = document.getElementById('p2p-peer-count');
+    const btnCopyP2pCode = document.getElementById('btn-copy-p2p-code');
+    const btnRegenP2pCode = document.getElementById('btn-regen-p2p-code');
+    const btnCopyP2pLink = document.getElementById('btn-copy-p2p-link');
+    const btnLaunchAppP2p = document.getElementById('btn-launch-app-p2p');
+    const btnLaunchBrowserP2p = document.getElementById('btn-launch-browser-p2p');
+
     const btnLaunchAppVtt = document.getElementById('btn-launch-app-vtt');
     const btnLaunchBrowserVtt = document.getElementById('btn-launch-browser-vtt');
 
@@ -137,11 +231,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     const entityCountPlayers = document.getElementById('entity-count-players');
     const entityCountCompanions = document.getElementById('entity-count-companions');
     const entityCountNpcs = document.getElementById('entity-count-npcs');
+    const entityCountTables = document.getElementById('entity-count-tables');
 
     const gridCampaignMaps = document.getElementById('grid-campaign-maps');
     const gridCampaignPlayers = document.getElementById('grid-campaign-players');
     const gridCampaignCompanions = document.getElementById('grid-campaign-companions');
     const gridCampaignNpcs = document.getElementById('grid-campaign-npcs');
+    const gridCampaignTables = document.getElementById('grid-campaign-tables');
 
     const btnImportMap = document.getElementById('btn-import-map');
     const btnExportAllMaps = document.getElementById('btn-export-all-maps');
@@ -154,6 +250,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const btnImportNpc = document.getElementById('btn-import-npc');
     const btnExportAllNpcs = document.getElementById('btn-export-all-npcs');
+
+    const btnImportTable = document.getElementById('btn-import-table');
+    const btnExportAllTables = document.getElementById('btn-export-all-tables');
+    const tablesFilterPills = document.querySelectorAll('#tables-filter-pills .filter-pill');
+    let activeTableFilter = 'all';
 
     const gmDropzoneOverlay = document.getElementById('gm-dropzone-overlay');
 
@@ -203,13 +304,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     function updateShareLinkDisplay() {
         if (!currentStatus) return;
         if (currentStatus.isTunnelRunning) {
-            shareUrlInput.value = `${currentStatus.registeredUrl}/vtt.html`;
+            if (currentStatus.registeredUrl) {
+                shareUrlInput.value = `${currentStatus.registeredUrl}/play`;
+            } else {
+                shareUrlInput.value = 'Connecting & generating secure link...';
+            }
         } else {
             if (activeHostingMode === 'custom' && customDomainInput.value.trim()) {
                 const dom = customDomainInput.value.trim().replace(/^https?:\/\//i, '');
-                shareUrlInput.value = `https://${dom}/vtt.html`;
+                shareUrlInput.value = `https://${dom}/play`;
             } else {
-                shareUrlInput.value = `${currentStatus.localUrl}/vtt.html`;
+                shareUrlInput.value = `${currentStatus.localUrl}/play`;
             }
         }
     }
@@ -236,6 +341,20 @@ document.addEventListener('DOMContentLoaded', async () => {
                 btnToggleServer.disabled = false;
                 btnToggleServer.title = 'Stop the ForgeDVTT server';
             }
+        } else if (status.isServerStarting) {
+            serverStatusVal.textContent = `Waiting / Starting (${status.port || 5050})...`;
+            serverStatusVal.style.color = '#f59e0b';
+            btnToggleServer.textContent = 'Cancel Starting';
+            btnToggleServer.className = 'btn btn-warning';
+            btnToggleServer.disabled = false;
+            btnToggleServer.title = 'Cancel server startup';
+        } else if (status.isServerStopping) {
+            serverStatusVal.textContent = 'Flushing data & stopping...';
+            serverStatusVal.style.color = '#f59e0b';
+            btnToggleServer.textContent = 'Stopping...';
+            btnToggleServer.className = 'btn btn-secondary';
+            btnToggleServer.disabled = true;
+            btnToggleServer.title = 'Server is safely writing campaign state to disk';
         } else {
             serverStatusVal.textContent = 'Stopped';
             serverStatusVal.style.color = '#ef4444';
@@ -269,7 +388,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             tunnelBadge.className = 'badge badge-online';
             btnToggleTunnel.innerHTML = '<span class="icon">⏹️</span> Stop Tunnel';
             btnToggleTunnel.className = 'btn btn-secondary';
-            shareUrlInput.value = `${status.registeredUrl}/vtt.html`;
+            if (status.registeredUrl) {
+                shareUrlInput.value = `${status.registeredUrl}/play`;
+            } else {
+                shareUrlInput.value = 'Connecting & generating secure link...';
+            }
         } else {
             tunnelBadge.textContent = 'Tunnel Offline';
             tunnelBadge.className = 'badge badge-accent';
@@ -279,7 +402,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         // Overall status badge
-        if (status.isTunnelRunning) {
+        if (status.staticWebMode) {
+            overallText.textContent = 'Static Web P2P Ready';
+            overallBadge.style.background = 'rgba(16, 185, 129, 0.15)';
+            overallBadge.style.color = '#10b981';
+        } else if (status.webPrepMode) {
+            overallText.textContent = 'Host Connected';
+            overallBadge.style.background = 'rgba(16, 185, 129, 0.15)';
+            overallBadge.style.color = '#10b981';
+        } else if (status.isTunnelRunning) {
             overallText.textContent = 'Online Hosting Active';
             overallBadge.style.background = 'rgba(16, 185, 129, 0.15)';
             overallBadge.style.color = '#10b981';
@@ -301,6 +432,21 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (status.backupsDir) {
             backupsPathPreview.textContent = status.backupsDir;
             backupsPathPreview.title = status.backupsDir;
+        }
+
+        // Direct STUN P2P Room State
+        if (status.p2p) {
+            if (p2pRoomCodeDisplay && status.p2p.roomCode) {
+                p2pRoomCodeDisplay.textContent = status.p2p.roomCode;
+            }
+            if (p2pPeerCount) {
+                const count = status.p2p.peerCount || 0;
+                p2pPeerCount.textContent = `${count} Peer${count === 1 ? '' : 's'} Connected`;
+            }
+            if (p2pStatusBadge) {
+                p2pStatusBadge.textContent = status.p2p.active ? 'P2P Active' : 'P2P Ready';
+                p2pStatusBadge.className = status.p2p.active ? 'badge badge-online' : 'badge badge-accent';
+            }
         }
 
         // Domain preferences
@@ -326,6 +472,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     function updateGmBadge(username, hasPassword) {
+        const securityNotice = document.getElementById('online-security-notice');
         if (username) {
             if (hasPassword) {
                 gmCredStatusBadge.textContent = `Active: ${username} (Protected)`;
@@ -338,6 +485,22 @@ document.addEventListener('DOMContentLoaded', async () => {
             gmCredStatusBadge.textContent = 'No GM Credentials Set';
             gmCredStatusBadge.className = 'badge';
         }
+        if (securityNotice) {
+            securityNotice.classList.toggle('vtt-hidden', Boolean(username && hasPassword));
+        }
+    }
+
+    function requireGmCredentialsForOnline(actionLabel) {
+        if (currentStatus?.gmUsername && currentStatus?.hasGmPassword) {
+            return true;
+        }
+        alert(`Please set and save a GM Username and Password in Hosting & Server before ${actionLabel}.`);
+        if (gmUsernameInput && !gmUsernameInput.value.trim()) {
+            gmUsernameInput.focus();
+        } else if (gmPasswordInput) {
+            gmPasswordInput.focus();
+        }
+        return false;
     }
 
     // --- GM CREDENTIALS LOGIC ---
@@ -377,6 +540,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         try {
             const res = await api.setGmCredentials({ username, password });
             if (res.success) {
+                if (currentStatus) {
+                    currentStatus.gmUsername = res.username;
+                    currentStatus.hasGmPassword = Boolean(res.hasPassword);
+                }
                 appendLogLine(`[GM Security] Saved master GM credentials for "${username}".`);
                 updateGmBadge(res.username, res.hasPassword);
                 gmPasswordInput.value = '';
@@ -400,9 +567,15 @@ document.addEventListener('DOMContentLoaded', async () => {
                 alert('Please enter a GM Username.');
                 return;
             }
-            if (
+            if (currentStatus?.isTunnelRunning) {
+                const stopAndClear = confirm(
+                    'An online tunnel is currently active. Stop the online tunnel and remove the GM password?'
+                );
+                if (!stopAndClear) return;
+                await api.stopTunnel();
+            } else if (
                 !confirm(
-                    'Are you sure you want to remove the GM password? Any user connecting with this GM username will be able to join without entering a password.'
+                    'Are you sure you want to remove the GM password? Online hosting (Tunnel and P2P sharing) will be disabled until a new password is set.'
                 )
             ) {
                 return;
@@ -411,6 +584,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             try {
                 const res = await api.setGmCredentials({ username, clearPassword: true });
                 if (res.success) {
+                    if (currentStatus) {
+                        currentStatus.gmUsername = res.username;
+                        currentStatus.hasGmPassword = false;
+                    }
                     appendLogLine(`[GM Security] Removed GM password for "${username}".`);
                     updateGmBadge(res.username, false);
                     gmPasswordInput.value = '';
@@ -691,10 +868,17 @@ document.addEventListener('DOMContentLoaded', async () => {
         const npcChars = chars.filter((c) => isCustomNpc(c) && !isCompanion(c));
 
         const mapList = Object.values(maps);
+        const rollTablesObj = camp.rollTables || {};
+        const customTables = rollTablesObj.customTables || [];
+        const assetTables = rollTablesObj.assetTables || camp.assetTables || [];
+        const cardDecks = rollTablesObj.cardDecks || [];
+        const totalTablesAndDecks = customTables.length + assetTables.length + cardDecks.length;
+
         if (entityCountMaps) entityCountMaps.textContent = mapList.length;
         if (entityCountPlayers) entityCountPlayers.textContent = playerChars.length;
         if (entityCountCompanions) entityCountCompanions.textContent = companionChars.length;
         if (entityCountNpcs) entityCountNpcs.textContent = npcChars.length;
+        if (entityCountTables) entityCountTables.textContent = totalTablesAndDecks;
         if (statEntitiesCount) statEntitiesCount.textContent = chars.length;
         if (statMapsCount) statMapsCount.textContent = mapList.length;
 
@@ -815,6 +999,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             </div>
           </div>
           <div class="entity-card-actions">
+            <button class="btn btn-xs btn-outline btn-primary-hover btn-open-sheet" title="Open Character Sheet">
+              📜 Open
+            </button>
             <button class="btn btn-xs btn-outline btn-export-item" title="Export this ${typeKey}">
               📤 Export
             </button>
@@ -823,6 +1010,23 @@ document.addEventListener('DOMContentLoaded', async () => {
             </button>
           </div>
         `;
+                card.querySelector('.btn-open-sheet')?.addEventListener('click', async (e) => {
+                    e.stopPropagation();
+                    try {
+                        let targetUrl;
+                        if (currentStatus?.staticWebMode) {
+                            targetUrl = `../play/?campaign=${encodeURIComponent(camp.id)}&characterId=${encodeURIComponent(ch.id)}&openSheet=1`;
+                        } else if (currentStatus?.webPrepMode) {
+                            targetUrl = `${window.location.origin}/play?campaign=${encodeURIComponent(camp.id)}&characterId=${encodeURIComponent(ch.id)}&openSheet=1`;
+                        } else {
+                            const port = currentStatus?.port || 5050;
+                            targetUrl = `http://localhost:${port}/vtt/index.html?campaign=${encodeURIComponent(camp.id)}&characterId=${encodeURIComponent(ch.id)}&openSheet=1`;
+                        }
+                        await api.openVttApp(targetUrl);
+                    } catch (err) {
+                        alert(`Failed to launch tabletop: ${err.message}`);
+                    }
+                });
                 card.querySelector('.btn-export-item').addEventListener('click', async (e) => {
                     e.stopPropagation();
                     try {
@@ -833,7 +1037,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                             batch: false
                         });
                         if (res && res.success) {
-                            alert(`${ch.name || 'Item'} successfully exported to:\n${res.filePath}`);
+                            alert(`${ch.name || 'Item'} successfully exported to:\n${res.filePath || res.fileName || 'Downloads folder'}`);
                         } else if (!res?.canceled) {
                             alert(`Export failed: ${res?.error || 'Unknown error'}`);
                         }
@@ -875,6 +1079,115 @@ document.addEventListener('DOMContentLoaded', async () => {
         renderCharCards(gridCampaignPlayers, playerChars, 'player', 'No player character sheets in this campaign yet.');
         renderCharCards(gridCampaignCompanions, companionChars, 'companion', 'No companions in this campaign yet.');
         renderCharCards(gridCampaignNpcs, npcChars, 'customNpc', 'No custom NPCs in this campaign yet.');
+
+        function renderTableAndDeckCards() {
+            if (!gridCampaignTables) return;
+            gridCampaignTables.innerHTML = '';
+
+            let allItems = [];
+            customTables.forEach((t) => allItems.push({ ...t, _subType: 'custom' }));
+            assetTables.forEach((t) => allItems.push({ ...t, _subType: 'asset' }));
+            cardDecks.forEach((d) => allItems.push({ ...d, _subType: 'deck' }));
+
+            if (activeTableFilter !== 'all') {
+                allItems = allItems.filter((it) => it._subType === activeTableFilter);
+            }
+
+            if (allItems.length === 0) {
+                gridCampaignTables.innerHTML =
+                    '<div class="entity-empty-note">No tables or card decks matching filter. Use "Import Table/Deck" or create them in the VTT!</div>';
+                return;
+            }
+
+            allItems.forEach((it) => {
+                const card = document.createElement('div');
+                card.className = 'entity-card';
+                let icon = '🎲';
+                let badgeLabel = 'Custom Table';
+                let metaText = `${it.rows?.length || 0} rows (${it.dice || '1d100'})`;
+                let thumbImg = '';
+
+                if (it._subType === 'asset') {
+                    icon = '🖼️';
+                    badgeLabel = 'Asset Table';
+                    metaText = `${it.sides?.length || 0} sides`;
+                    if (it.sides && it.sides[0]?.assetPath) {
+                        thumbImg = resolveMediaUrl(it.sides[0].assetPath);
+                    }
+                } else if (it._subType === 'deck') {
+                    icon = '🃏';
+                    badgeLabel = 'Card Deck';
+                    metaText = `${it.cards?.length || 0} cards (${it.drawPile?.length ?? it.cards?.length ?? 0} in draw pile)`;
+                    if (it.backImg) thumbImg = resolveMediaUrl(it.backImg);
+                }
+
+                card.innerHTML = `
+                    <div class="entity-card-thumb" style="${thumbImg ? `background-image: url('${thumbImg}')` : ''}">
+                        ${!thumbImg ? `<span class="entity-thumb-icon">${icon}</span>` : ''}
+                    </div>
+                    <div class="entity-card-info">
+                        <div style="display:flex; align-items:center; gap:6px;">
+                            <span class="badge" style="font-size:0.65rem; padding:1px 5px;">${badgeLabel}</span>
+                        </div>
+                        <h4 class="entity-card-title" title="${it.name || 'Untitled'}">${it.name || 'Untitled'}</h4>
+                        <div class="entity-card-meta">
+                            <span>${metaText}</span>
+                        </div>
+                    </div>
+                    <div class="entity-card-actions">
+                        <button class="btn btn-xs btn-outline btn-export-item" title="Export this ${badgeLabel}">
+                            📤 Export
+                        </button>
+                        <button class="btn btn-xs btn-outline btn-danger-hover btn-delete-item" title="Delete this ${badgeLabel}">
+                            🗑️
+                        </button>
+                    </div>
+                `;
+
+                card.querySelector('.btn-export-item').addEventListener('click', async (e) => {
+                    e.stopPropagation();
+                    try {
+                        const res = await api.gmExportGranular({
+                            campaignId: camp.id,
+                            entityType: it._subType === 'deck' ? 'deck' : 'table',
+                            entityId: it.id,
+                            batch: false
+                        });
+                        if (res && res.success) {
+                            alert(`${it.name || 'Item'} successfully exported to:\n${res.filePath}`);
+                        } else if (!res?.canceled) {
+                            alert(`Export failed: ${res?.error || 'Unknown error'}`);
+                        }
+                    } catch (err) {
+                        alert(`Export failed: ${err.message}`);
+                    }
+                });
+
+                card.querySelector('.btn-delete-item').addEventListener('click', async (e) => {
+                    e.stopPropagation();
+                    if (!confirm(`Are you sure you want to delete ${badgeLabel} "${it.name || 'Untitled'}" from this campaign?`)) return;
+                    try {
+                        const res = await api.gmDeleteEntity({
+                            campaignId: camp.id,
+                            entityType: it._subType === 'deck' ? 'deck' : 'table',
+                            entityId: it.id
+                        });
+                        if (res && res.success) {
+                            appendLogLine(`[Campaigns] Deleted ${badgeLabel} "${it.name || it.id}" from "${camp.name}"`);
+                            await refreshSelectedCampaignEntities();
+                        } else {
+                            alert(`Failed to delete ${badgeLabel}: ${res?.error || 'Unknown error'}`);
+                        }
+                    } catch (err) {
+                        alert(`Error deleting ${badgeLabel}: ${err.message}`);
+                    }
+                });
+
+                gridCampaignTables.appendChild(card);
+            });
+        }
+
+        renderTableAndDeckCards();
     }
 
     // --- CAMPAIGN DUPLICATION, EXPORT, & IMPORT HANDLERS ---
@@ -920,8 +1233,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         try {
             const res = await api.gmExportCampaign(selectedCampaign.id);
             if (res && res.success) {
-                appendLogLine(`[Campaigns] Exported campaign "${selectedCampaign.name}" to ${res.filePath}`);
-                alert(`Campaign exported successfully to:\n${res.filePath}`);
+                const exportedLabel = res.filePath || res.fileName || 'Downloads folder';
+                appendLogLine(`[Campaigns] Exported campaign "${selectedCampaign.name}" to ${exportedLabel}`);
+                alert(`Campaign exported successfully to:\n${exportedLabel}`);
             } else if (!res?.canceled) {
                 alert(`Export failed: ${res?.error || 'Unknown error'}`);
             }
@@ -966,7 +1280,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 batch: true
             });
             if (res && res.success) {
-                alert(`Exported ${res.count} ${label} to:\n${res.filePath}`);
+                alert(`Exported ${res.count} ${label} to:\n${res.filePath || res.fileName || 'Downloads folder'}`);
             } else if (!res?.canceled) {
                 alert(`Export failed: ${res?.error || 'No items to export'}`);
             }
@@ -1005,6 +1319,22 @@ document.addEventListener('DOMContentLoaded', async () => {
     btnExportAllNpcs?.addEventListener('click', () => handleBatchExport('customNpc', 'Custom NPCs'));
     btnImportNpc?.addEventListener('click', () => handleGranularImport('customNpc', 'Custom NPC'));
 
+    btnExportAllTables?.addEventListener('click', () => handleBatchExport('tablesAndDecks', 'Tables and Decks'));
+    btnImportTable?.addEventListener('click', () => handleGranularImport('table', 'Table or Deck'));
+
+    if (tablesFilterPills) {
+        tablesFilterPills.forEach((pill) => {
+            pill.addEventListener('click', () => {
+                tablesFilterPills.forEach((p) => p.classList.remove('active'));
+                pill.classList.add('active');
+                activeTableFilter = pill.getAttribute('data-filter') || 'all';
+                if (selectedCampaignFull) {
+                    renderCampaignEntities(selectedCampaignFull);
+                }
+            });
+        });
+    }
+
     // --- GLOBAL DRAG & DROP IMPORT HANDLER ---
     let dragCounter = 0;
     window.addEventListener('dragenter', (e) => {
@@ -1036,7 +1366,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         for (let i = 0; i < files.length; i++) {
             const file = files[i];
-            const filePath = (api.getPathForFile ? api.getPathForFile(file) : file.path) || file.path;
+            const isWebMode = Boolean(currentStatus?.staticWebMode || currentStatus?.webPrepMode);
+            const filePath = (api.getPathForFile ? api.getPathForFile(file) : file.path) || file.path || file.name;
             if (!filePath) continue;
             const lower = filePath.toLowerCase();
             if (!lower.endsWith('.zip') && !lower.endsWith('.json')) continue;
@@ -1050,7 +1381,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             if (asCampaign) {
                 try {
-                    const res = await api.gmImportCampaign(filePath);
+                    const importPayload = isWebMode ? file : filePath;
+                    const res = await api.gmImportCampaign(importPayload);
                     if (res && res.success && res.campaign) {
                         appendLogLine(`[Drop Import] Imported campaign "${res.campaign.name}" from ${file.name}`);
                         await loadGmCampaigns();
@@ -1067,7 +1399,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 try {
                     const res = await api.gmImportGranular({
                         campaignId: selectedCampaign.id,
-                        explicitFilePath: filePath
+                        explicitFilePath: isWebMode ? null : filePath,
+                        explicitFile: isWebMode ? file : null
                     });
                     if (res && res.success) {
                         appendLogLine(
@@ -1164,10 +1497,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         const initialStatus = await api.getStatus();
         updateUI(initialStatus);
 
-        const initialLogs = await api.getLogs();
-        initialLogs.forEach(appendLogLine);
+        if (isWebPrepMode && !initialStatus?.staticWebMode) {
+            const gmTabBtn = document.getElementById('tab-btn-gm');
+            if (gmTabBtn) gmTabBtn.click();
+        } else {
+            const initialLogs = await api.getLogs();
+            initialLogs.forEach(appendLogLine);
 
-        await loadGmCredentials();
+            await loadGmCredentials();
+        }
     } catch (err) {
         console.error('Failed to fetch initial status:', err);
     }
@@ -1204,6 +1542,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     btnToggleServer.addEventListener('click', async () => {
+        if (currentStatus?.isServerStarting) {
+            if (api && api.cancelStartServer) {
+                btnToggleServer.textContent = 'Cancelling...';
+                btnToggleServer.disabled = true;
+                await api.cancelStartServer();
+            }
+            return;
+        }
+        if (currentStatus?.isServerStopping) {
+            return;
+        }
         if (currentStatus?.isServerRunning) {
             if (currentStatus?.isServerManaged === false) {
                 alert(
@@ -1221,11 +1570,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (currentStatus?.isTunnelRunning) {
             await api.stopTunnel();
         } else {
+            if (!requireGmCredentialsForOnline('starting an online tunnel')) return;
             const subdomain = subdomainInput.value.trim();
             const customDomain = customDomainInput.value.trim();
             const token = tokenInput.value.trim();
             btnToggleTunnel.disabled = true;
             btnToggleTunnel.textContent = 'Connecting...';
+            if (!token && activeHostingMode !== 'custom') {
+                shareUrlInput.value = 'Connecting & generating secure link...';
+            }
             try {
                 const res = await api.startTunnel({
                     mode: activeHostingMode,
@@ -1273,6 +1626,144 @@ document.addEventListener('DOMContentLoaded', async () => {
         await api.openVttBrowser(shareUrlInput.value);
     });
 
+    // Direct P2P Room Listeners
+    if (btnCopyP2pCode && p2pRoomCodeDisplay) {
+        btnCopyP2pCode.addEventListener('click', () => {
+            const code = p2pRoomCodeDisplay.textContent.trim();
+            navigator.clipboard.writeText(code);
+            const orig = btnCopyP2pCode.textContent;
+            btnCopyP2pCode.textContent = '✅ Copied!';
+            setTimeout(() => {
+                btnCopyP2pCode.textContent = orig;
+            }, 1500);
+        });
+    }
+
+    function buildP2pInviteUrl(baseUrl, code, includeCampaign = false) {
+        const params = [];
+        if (code) params.push(`p2p=${encodeURIComponent(code)}`);
+        if (includeCampaign && selectedCampaign?.id) {
+            params.push(`campaign=${encodeURIComponent(selectedCampaign.id)}`);
+        }
+        let full = params.length ? `${baseUrl}?${params.join('&')}` : baseUrl;
+        try {
+            const rawIce = localStorage.getItem('forgedvtt_ice_servers');
+            if (rawIce) {
+                const parsedIce = JSON.parse(rawIce);
+                if (Array.isArray(parsedIce) && parsedIce.length > 0) {
+                    full += `#ice=${encodeURIComponent(btoa(unescape(encodeURIComponent(JSON.stringify(parsedIce)))))}`;
+                }
+            }
+        } catch (_) {}
+        return full;
+    }
+
+    const inputCustomTurnUrl = document.getElementById('input-custom-turn-url');
+    const inputCustomTurnUser = document.getElementById('input-custom-turn-user');
+    const inputCustomTurnPass = document.getElementById('input-custom-turn-pass');
+    const btnSaveIceConfig = document.getElementById('btn-save-ice-config');
+    try {
+        const savedIce = localStorage.getItem('forgedvtt_ice_servers');
+        if (savedIce) {
+            const arr = JSON.parse(savedIce);
+            if (Array.isArray(arr) && arr[0]) {
+                if (inputCustomTurnUrl) inputCustomTurnUrl.value = arr[0].urls || '';
+                if (inputCustomTurnUser) inputCustomTurnUser.value = arr[0].username || '';
+                if (inputCustomTurnPass) inputCustomTurnPass.value = arr[0].credential || '';
+            }
+        }
+    } catch (_) {}
+
+    if (btnSaveIceConfig) {
+        btnSaveIceConfig.addEventListener('click', () => {
+            const urls = (inputCustomTurnUrl?.value || '').trim();
+            if (!urls) {
+                localStorage.removeItem('forgedvtt_ice_servers');
+                btnSaveIceConfig.textContent = '✅ Cleared';
+                setTimeout(() => (btnSaveIceConfig.textContent = '💾 Save ICE Config'), 1500);
+                return;
+            }
+            const entry = { urls };
+            const username = (inputCustomTurnUser?.value || '').trim();
+            const credential = (inputCustomTurnPass?.value || '').trim();
+            if (username) entry.username = username;
+            if (credential) entry.credential = credential;
+            localStorage.setItem('forgedvtt_ice_servers', JSON.stringify([entry]));
+            btnSaveIceConfig.textContent = '✅ Saved!';
+            setTimeout(() => (btnSaveIceConfig.textContent = '💾 Save ICE Config'), 1500);
+        });
+    }
+
+    if (btnRegenP2pCode) {
+        btnRegenP2pCode.addEventListener('click', async () => {
+            if (!currentStatus?.staticWebMode && !requireGmCredentialsForOnline('generating a P2P room code')) return;
+            if (api && api.p2pRegenCode) {
+                const newStatus = await api.p2pRegenCode();
+                if (newStatus && newStatus.roomCode && p2pRoomCodeDisplay) {
+                    p2pRoomCodeDisplay.textContent = newStatus.roomCode;
+                }
+            }
+        });
+    }
+
+    if (btnCopyP2pLink && p2pRoomCodeDisplay) {
+        btnCopyP2pLink.addEventListener('click', () => {
+            if (!currentStatus?.staticWebMode && !requireGmCredentialsForOnline('sharing a P2P join link')) return;
+            const code = p2pRoomCodeDisplay.textContent.trim();
+            const basePlayUrl = currentStatus?.staticWebMode
+                ? (window.location.hostname === 'forgedvtt.com'
+                      ? 'https://forgedvtt.com/play'
+                      : `${window.location.origin}/play`)
+                : currentStatus?.isTunnelRunning && currentStatus?.registeredUrl
+                  ? `${currentStatus.registeredUrl}/play`
+                  : 'https://forgedvtt.com/play';
+            const link = buildP2pInviteUrl(basePlayUrl, code, false);
+            navigator.clipboard.writeText(link);
+            const orig = btnCopyP2pLink.textContent;
+            btnCopyP2pLink.textContent = '✅ Link Copied!';
+            setTimeout(() => {
+                btnCopyP2pLink.textContent = orig;
+            }, 1500);
+        });
+    }
+
+    if (btnLaunchAppP2p) {
+        btnLaunchAppP2p.addEventListener('click', async () => {
+            if (!currentStatus?.staticWebMode && !currentStatus?.isServerRunning) {
+                const confirmed = confirm(
+                    'The local game server is currently stopped. Start the server and launch the desktop tabletop in P2P mode?'
+                );
+                if (!confirmed) return;
+            }
+            const code = p2pRoomCodeDisplay ? p2pRoomCodeDisplay.textContent.trim() : '';
+            const localBase = currentStatus?.staticWebMode
+                ? `${window.location.origin}/play`
+                : `${currentStatus?.localUrl || `http://localhost:${currentStatus?.port || 5050}`}/play`;
+            const targetUrl = buildP2pInviteUrl(localBase, code, true);
+            await api.openVttApp(targetUrl);
+        });
+    }
+
+    if (btnLaunchBrowserP2p) {
+        btnLaunchBrowserP2p.addEventListener('click', async () => {
+            if (!currentStatus?.staticWebMode && !requireGmCredentialsForOnline('opening P2P in a browser')) return;
+            if (!currentStatus?.staticWebMode && !currentStatus?.isServerRunning) {
+                const confirmed = confirm(
+                    'The local game server is currently stopped. Start the server and open in browser in P2P mode?'
+                );
+                if (!confirmed) return;
+            }
+            const code = p2pRoomCodeDisplay ? p2pRoomCodeDisplay.textContent.trim() : '';
+            const basePlayUrl = currentStatus?.staticWebMode
+                ? `${window.location.origin}/play`
+                : currentStatus?.isTunnelRunning && currentStatus?.registeredUrl
+                  ? `${currentStatus.registeredUrl}/play`
+                  : 'https://forgedvtt.com/play';
+            const targetUrl = buildP2pInviteUrl(basePlayUrl, code, true);
+            await api.openVttBrowser(targetUrl);
+        });
+    }
+
     // Folders handlers
     btnOpenDataDir.addEventListener('click', () => {
         api.openDataFolder();
@@ -1309,8 +1800,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         try {
             const res = await api.backupCampaign();
             if (res && res.success) {
-                appendLogLine(`[Backup] Campaign data successfully exported to: ${res.path}`);
-                alert(`Backup exported successfully to:\n${res.path}`);
+                const savedPath = res.path || res.filePath || 'Downloads folder';
+                appendLogLine(`[Backup] Campaign data successfully exported to: ${savedPath}`);
+                alert(`Backup exported successfully to:\n${savedPath}`);
             } else if (res && res.error) {
                 appendLogLine(`[Backup Error] ${res.error}`);
                 alert(`Backup failed: ${res.error}`);
@@ -1440,6 +1932,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const formCategoryFeats = document.getElementById('form-category-feats');
     const formCategoryBackgrounds = document.getElementById('form-category-backgrounds');
     const formCategoryAdventures = document.getElementById('form-category-adventures');
+    const formCategoryTables = document.getElementById('form-category-tables');
 
     // Active Entity JSON Editor
     const entityEntryJsonWrap = document.getElementById('entity-entry-json-wrap');
@@ -2112,15 +2605,14 @@ document.addEventListener('DOMContentLoaded', async () => {
                 <button class="btn btn-xs btn-outline btn-source-edit" data-action="edit" data-cat="${src.category}" data-code="${src.code}" title="Edit metadata or entries">
                   ✏️ Edit
                 </button>
-                ${
-                    src.isCustom
-                        ? `
+                ${src.isCustom
+                            ? `
                   <button class="btn btn-xs btn-outline btn-source-delete text-danger" data-action="delete" data-cat="${src.category}" data-code="${src.code}" title="Delete this custom source">
                     🗑️
                   </button>
                 `
-                        : ''
-                }
+                            : ''
+                        }
               </div>
             </td>
           `;
@@ -2336,12 +2828,15 @@ document.addEventListener('DOMContentLoaded', async () => {
             dragCounter = 0;
             sourcesDropzoneOverlay.classList.add('vtt-hidden');
             if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-                const filePaths = Array.from(e.dataTransfer.files)
-                    .map((f) => (api.getPathForFile ? api.getPathForFile(f) : f.path) || f.path)
-                    .filter(Boolean);
-                if (filePaths.length > 0) {
+                const isWebMode = Boolean(currentStatus?.staticWebMode || currentStatus?.webPrepMode);
+                const fileItems = isWebMode
+                    ? Array.from(e.dataTransfer.files)
+                    : Array.from(e.dataTransfer.files)
+                          .map((f) => (api.getPathForFile ? api.getPathForFile(f) : f.path) || f.path)
+                          .filter(Boolean);
+                if (fileItems.length > 0) {
                     openBulkImportWizard();
-                    await processBulkPaths(filePaths);
+                    await processBulkPaths(fileItems);
                 }
             }
         });
@@ -2470,7 +2965,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 api.sourcesSaveUiState({
                     lastPreset: sourcesPresetSelect?.value,
                     lastScope: activeCampaignScope
-                }).catch(() => {});
+                }).catch(() => { });
             }
             loadAllSources();
         });
@@ -2509,7 +3004,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 if (api && api.sourcesSyncToServer) {
                     await api.sourcesSyncToServer();
                 } else {
-                    await fetch('/api/server/sync-sources', { method: 'POST' }).catch(() => {});
+                    await fetch('/api/server/sync-sources', { method: 'POST' }).catch(() => { });
                 }
                 await loadAllSources();
                 showSystemToast(
@@ -2573,7 +3068,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 api.sourcesSaveUiState({
                     lastPreset: sourcesPresetSelect.value,
                     lastScope: activeCampaignScope
-                }).catch(() => {});
+                }).catch(() => { });
             }
         });
     }
@@ -2603,7 +3098,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                         api.sourcesSaveUiState({
                             lastPreset: preset,
                             lastScope: activeCampaignScope
-                        }).catch(() => {});
+                        }).catch(() => { });
                     }
                     await loadAllSources();
                 } else {
@@ -2864,7 +3359,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                         if (prov.attribution && editSourceAttribution) editSourceAttribution.value = prov.attribution;
                     }
                 }
-            } catch (_) {}
+            } catch (_) { }
         }
 
         if (tabKey === 'entities') {
@@ -2990,14 +3485,13 @@ document.addEventListener('DOMContentLoaded', async () => {
           </div>
         </div>
         <div class="entity-card-actions">
-          ${
-              isCustomSource
-                  ? `
+          ${isCustomSource
+                    ? `
           <button type="button" class="btn-card-action btn-duplicate" title="Duplicate entry">📋</button>
           <button type="button" class="btn-card-action btn-delete" title="Delete entry">🗑️</button>
           `
-                  : '<span class="text-muted" style="font-size: 11px;">🔒 Read-Only</span>'
-          }
+                    : '<span class="text-muted" style="font-size: 11px;">🔒 Read-Only</span>'
+                }
         </div>
       `;
 
@@ -3084,7 +3578,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             formCategoryRaces,
             formCategoryFeats,
             formCategoryBackgrounds,
-            formCategoryAdventures
+            formCategoryAdventures,
+            formCategoryTables
         ];
         allForms.forEach((f) => f?.classList.add('vtt-hidden'));
 
@@ -3096,7 +3591,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             races: formCategoryRaces,
             feats: formCategoryFeats,
             backgrounds: formCategoryBackgrounds,
-            adventures: formCategoryAdventures
+            adventures: formCategoryAdventures,
+            tables: formCategoryTables
         };
 
         if (map[cat]) map[cat].classList.remove('vtt-hidden');
@@ -3206,6 +3702,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             case 'adventures':
                 populateAdventuresForm(entity);
                 break;
+            case 'tables':
+                populateTablesForm(entity);
+                break;
         }
     }
 
@@ -3230,6 +3729,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 return readBackgroundsForm(current);
             case 'adventures':
                 return readAdventuresForm(current);
+            case 'tables':
+                return readTablesForm(current);
             default:
                 return current;
         }
@@ -3341,9 +3842,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             const text = b.querySelector('.card-block-textarea')?.value?.trim() || '';
             const lvlInput = b.querySelector('.card-block-level-input');
             const level = lvlInput ? parseInt(lvlInput.value, 10) || 3 : undefined;
-            if (title || text) {
+            const linkedTable = b.querySelector('.card-block-linked-table-input')?.value?.trim() || '';
+            if (title || text || linkedTable) {
                 const item = { name: title, text };
                 if (level !== undefined) item.level = level;
+                if (linkedTable) item.linkedTable = linkedTable;
                 items.push(item);
             }
         });
@@ -3493,9 +3996,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         const rawClasses = getVal('bf-spell-classes');
         const classes = rawClasses
             ? rawClasses
-                  .split(',')
-                  .map((s) => s.trim())
-                  .filter(Boolean)
+                .split(',')
+                .map((s) => s.trim())
+                .filter(Boolean)
             : [];
 
         return {
@@ -3581,6 +4084,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         setVal('bf-item-value', entity.valueGp ?? 100);
         setVal('bf-item-weight', entity.weightLbs ?? entity.weight ?? 1);
         setVal('bf-item-charges', entity.charges ?? 0);
+        setVal('bf-item-linked-table', entity.linkedTable || '');
         setVal('bf-item-desc', entity.description || '');
     }
 
@@ -3627,9 +4131,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             weaponProperties: weaponProps,
             properties: weaponProps
                 ? weaponProps
-                      .split(',')
-                      .map((s) => s.trim())
-                      .filter(Boolean)
+                    .split(',')
+                    .map((s) => s.trim())
+                    .filter(Boolean)
                 : [],
             isMagic: getCheck('bf-item-is-magic'),
             isSilvered: getCheck('bf-item-is-silvered'),
@@ -3639,6 +4143,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             weightLbs: weightLbs,
             weight: weightLbs,
             charges: getNum('bf-item-charges', 0),
+            linkedTable: getVal('bf-item-linked-table'),
             description: getVal('bf-item-desc')
         };
     }
@@ -3835,9 +4340,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         const rawSaves = getVal('bf-class-saves');
         const savingThrows = rawSaves
             ? rawSaves
-                  .split(',')
-                  .map((s) => s.trim().toUpperCase())
-                  .filter(Boolean)
+                .split(',')
+                .map((s) => s.trim().toUpperCase())
+                .filter(Boolean)
             : ['STR', 'CON'];
 
         const scContainer = document.getElementById('class-subclasses-container');
@@ -4004,6 +4509,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         return {
             ...current,
             name: getVal('bf-bg-name', 'New Background'),
+            ability: current?.ability,
+            feats: current?.feats,
             skillProficiencies: s,
             skills: s,
             toolProficiencies: t,
@@ -4033,6 +4540,95 @@ document.addEventListener('DOMContentLoaded', async () => {
             ...current,
             name: getVal('bf-adv-name', 'New Adventure Note'),
             description: getVal('bf-adv-desc')
+        };
+    }
+
+    // --- TABLES FORM ---
+    function populateTablesForm(entity) {
+        const setVal = (id, val) => {
+            const el = document.getElementById(id);
+            if (el) el.value = val ?? '';
+        };
+
+        setVal('bf-table-name', entity.name);
+        setVal('bf-table-dice', entity.dice || '1d100');
+        setVal('bf-table-caption', entity.caption || '');
+        setVal('bf-table-col-dice', entity.colLabels?.[0] || 'd100');
+        setVal('bf-table-col-result', entity.colLabels?.[1] || 'Effect');
+
+        renderTableRowsBuilder(entity.rows || []);
+    }
+
+    function renderTableRowsBuilder(rows) {
+        const list = document.getElementById('bf-table-rows-list');
+        if (!list) return;
+        list.innerHTML = '';
+
+        if (!Array.isArray(rows) || rows.length === 0) {
+            rows = [
+                { min: 1, max: 50, text: 'First sample outcome description.' },
+                { min: 51, max: 100, text: 'Second sample outcome description.' }
+            ];
+        }
+
+        rows.forEach((r) => {
+            const rowDiv = document.createElement('div');
+            rowDiv.className = 'table-row-item card-block-item';
+            rowDiv.style.cssText =
+                'display:flex; gap:8px; align-items:center; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:4px; padding:6px;';
+            rowDiv.innerHTML = `
+                <div style="display:flex; align-items:center; gap:4px; width:130px; flex-shrink:0;">
+                    <input type="number" class="table-row-min" value="${r.min ?? 1}" style="width:55px; padding:3px 6px; font-size:0.8rem; background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.15); color:#fff; border-radius:3px;" title="Minimum roll" />
+                    <span style="color:var(--color-text-muted); font-size:0.8rem;">–</span>
+                    <input type="number" class="table-row-max" value="${r.max ?? (r.min ?? 1)}" style="width:55px; padding:3px 6px; font-size:0.8rem; background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.15); color:#fff; border-radius:3px;" title="Maximum roll" />
+                </div>
+                <input type="text" class="table-row-text" value="${escapeHtml(r.text || '')}" placeholder="Outcome description..." style="flex:1; padding:3px 8px; font-size:0.85rem; background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.15); color:#fff; border-radius:3px;" />
+                <button type="button" class="btn-delete-row" title="Delete Row" style="color:#ef4444; background:transparent; border:none; cursor:pointer; font-size:1rem; padding:0 6px;">&times;</button>
+            `;
+
+            rowDiv.querySelector('.btn-delete-row').addEventListener('click', () => {
+                rowDiv.remove();
+                updateLivePreviewThrottled();
+            });
+
+            const inputs = rowDiv.querySelectorAll('input');
+            inputs.forEach((inp) => inp.addEventListener('input', () => updateLivePreviewThrottled()));
+
+            list.appendChild(rowDiv);
+        });
+    }
+
+    function readTablesForm(current) {
+        const getVal = (id, def = '') => document.getElementById(id)?.value ?? def;
+        const list = document.getElementById('bf-table-rows-list');
+        const rows = [];
+
+        if (list) {
+            const rowEls = list.querySelectorAll('.table-row-item');
+            rowEls.forEach((el) => {
+                const min = parseInt(el.querySelector('.table-row-min')?.value, 10) || 1;
+                const max = parseInt(el.querySelector('.table-row-max')?.value, 10) || min;
+                const text = el.querySelector('.table-row-text')?.value || '';
+                rows.push({ min, max, text });
+            });
+
+            return {
+                ...current,
+                name: getVal('bf-table-name', 'New Roll Table'),
+                dice: getVal('bf-table-dice', '1d100'),
+                caption: getVal('bf-table-caption'),
+                colLabels: [getVal('bf-table-col-dice', 'd100'), getVal('bf-table-col-result', 'Effect')],
+                rows
+            };
+        }
+
+        return {
+            ...current,
+            name: getVal('bf-table-name', 'New Roll Table'),
+            dice: getVal('bf-table-dice', '1d100'),
+            caption: getVal('bf-table-caption'),
+            colLabels: [getVal('bf-table-col-dice', 'd100'), getVal('bf-table-col-result', 'Effect')],
+            rows: current.rows || []
         };
     }
 
@@ -4072,6 +4668,11 @@ document.addEventListener('DOMContentLoaded', async () => {
           <input type="text" class="card-block-title-input" placeholder="Title / Name..." value="${escapeHtml(item.name || '')}" />
           <button type="button" class="btn-card-block-delete" title="Remove item">&times;</button>
         </div>
+        <div class="card-block-linked-table-wrap" style="display:flex; align-items:center; gap:6px; margin: 4px 0 6px 0; font-size:11px; color:#9ca3af;">
+          <i class="fa-solid fa-dice-d20" style="color:var(--color-gold-base);"></i>
+          <span>Linked Table:</span>
+          <input type="text" class="card-block-linked-table-input" placeholder="Table name or ID (optional)..." value="${escapeHtml(item.linkedTable || '')}" style="flex:1; padding:2px 6px; font-size:11px; border-radius:3px; border:1px solid rgba(255,255,255,0.12); background:rgba(0,0,0,0.3); color:#fff;" />
+        </div>
         <div class="card-block-body">
           <textarea class="card-block-textarea" rows="2" placeholder="Description / mechanical text...">${escapeHtml(item.text || '')}</textarea>
           <div class="quick-tags-bar">
@@ -4081,13 +4682,14 @@ document.addEventListener('DOMContentLoaded', async () => {
             <button type="button" class="tag-pill" data-tag="{@dc 13}">{@dc}</button>
             <button type="button" class="tag-pill" data-tag="{@spell fireball}">{@spell}</button>
             <button type="button" class="tag-pill" data-tag="{@condition poisoned}">{@condition}</button>
-            <button type="button" class="btn-auto-tag" title="Auto-convert plain dice & saves to 5e tags">⚡ Auto-Tag</button>
+            <button type="button" class="btn-auto-tag" title="Auto-convert plain dice & saves to format tags">⚡ Auto-Tag</button>
           </div>
         </div>
       `;
 
             const titleInput = block.querySelector('.card-block-title-input');
             const levelInput = block.querySelector('.card-block-level-input');
+            const linkedTableInput = block.querySelector('.card-block-linked-table-input');
             const textarea = block.querySelector('.card-block-textarea');
             const btnDelete = block.querySelector('.btn-card-block-delete');
             const btnAutoTag = block.querySelector('.btn-auto-tag');
@@ -4095,6 +4697,19 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (levelInput) {
                 levelInput.addEventListener('input', () => {
                     itemsArray[idx].level = parseInt(levelInput.value, 10) || 1;
+                    onUpdate(itemsArray);
+                    updateLivePreviewThrottled();
+                });
+            }
+
+            if (linkedTableInput) {
+                linkedTableInput.addEventListener('input', () => {
+                    const val = linkedTableInput.value.trim();
+                    if (val) {
+                        itemsArray[idx].linkedTable = val;
+                    } else {
+                        delete itemsArray[idx].linkedTable;
+                    }
                     onUpdate(itemsArray);
                     updateLivePreviewThrottled();
                 });
@@ -4329,6 +4944,50 @@ document.addEventListener('DOMContentLoaded', async () => {
                 entity.subclasses = arr;
             });
             updateLivePreview();
+        });
+    }
+
+    // Add Table Row button
+    const btnAddTableRow = document.getElementById('btn-add-table-row');
+    if (btnAddTableRow) {
+        btnAddTableRow.addEventListener('click', () => {
+            const list = document.getElementById('bf-table-rows-list');
+            if (!list) return;
+
+            const existingMaxInputs = list.querySelectorAll('.table-row-max');
+            let nextMin = 1;
+            if (existingMaxInputs.length > 0) {
+                const lastMax = parseInt(existingMaxInputs[existingMaxInputs.length - 1].value, 10);
+                if (!isNaN(lastMax)) nextMin = lastMax + 1;
+            }
+            const nextMax = nextMin;
+
+            const rowDiv = document.createElement('div');
+            rowDiv.className = 'table-row-item card-block-item';
+            rowDiv.style.cssText =
+                'display:flex; gap:8px; align-items:center; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:4px; padding:6px;';
+            rowDiv.innerHTML = `
+                <div style="display:flex; align-items:center; gap:4px; width:130px; flex-shrink:0;">
+                    <input type="number" class="table-row-min" value="${nextMin}" style="width:55px; padding:3px 6px; font-size:0.8rem; background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.15); color:#fff; border-radius:3px;" title="Minimum roll" />
+                    <span style="color:var(--color-text-muted); font-size:0.8rem;">–</span>
+                    <input type="number" class="table-row-max" value="${nextMax}" style="width:55px; padding:3px 6px; font-size:0.8rem; background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.15); color:#fff; border-radius:3px;" title="Maximum roll" />
+                </div>
+                <input type="text" class="table-row-text" value="" placeholder="Outcome description..." style="flex:1; padding:3px 8px; font-size:0.85rem; background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.15); color:#fff; border-radius:3px;" />
+                <button type="button" class="btn-delete-row" title="Delete Row" style="color:#ef4444; background:transparent; border:none; cursor:pointer; font-size:1rem; padding:0 6px;">&times;</button>
+            `;
+
+            rowDiv.querySelector('.btn-delete-row').addEventListener('click', () => {
+                rowDiv.remove();
+                updateLivePreviewThrottled();
+            });
+
+            const inputs = rowDiv.querySelectorAll('input');
+            inputs.forEach((inp) => inp.addEventListener('input', () => updateLivePreviewThrottled()));
+
+            list.appendChild(rowDiv);
+            const textInput = rowDiv.querySelector('.table-row-text');
+            if (textInput) textInput.focus();
+            updateLivePreviewThrottled();
         });
     }
 
@@ -4707,7 +5366,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         btnBrowseToken.addEventListener('click', async () => {
             try {
                 const res = await api.sourcesSelectAsset();
-                const chosenPath = res?.webPath || res?.filePath || res?.localPath;
+                const chosenPath = res?.webPath || res?.filePath || res?.localPath || res?.url;
                 if (res && res.success && chosenPath) {
                     const input = document.getElementById('bf-beast-token-url');
                     const preview = document.getElementById('bf-beast-token-preview');
@@ -4905,10 +5564,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                 entity.primaryAc !== undefined
                     ? entity.primaryAc
                     : Array.isArray(entity.ac)
-                      ? typeof entity.ac[0] === 'object'
-                          ? entity.ac[0]?.value || entity.ac[0]?.ac || 10
-                          : entity.ac[0]
-                      : entity.ac || 10;
+                        ? typeof entity.ac[0] === 'object'
+                            ? entity.ac[0]?.value || entity.ac[0]?.ac || 10
+                            : entity.ac[0]
+                        : entity.ac || 10;
             const acCond =
                 entity.acCondition ||
                 (Array.isArray(entity.ac) && entity.ac[0]?.condition ? entity.ac[0].condition : '');
@@ -4918,10 +5577,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                 entity.hpAvg !== undefined
                     ? entity.hpAvg
                     : entity.hp && typeof entity.hp === 'object'
-                      ? entity.hp.average || 10
-                      : typeof entity.hp === 'number'
-                        ? entity.hp
-                        : 10;
+                        ? entity.hp.average || 10
+                        : typeof entity.hp === 'number'
+                            ? entity.hp
+                            : 10;
             const hpFormula = entity.hpFormula || (entity.hp && typeof entity.hp === 'object' ? entity.hp.formula : '');
 
             // Speeds
@@ -4930,10 +5589,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                 entity.speedWalk !== undefined
                     ? entity.speedWalk
                     : speedObj.walk !== undefined
-                      ? speedObj.walk
-                      : typeof entity.speed === 'number'
-                        ? entity.speed
-                        : 30;
+                        ? speedObj.walk
+                        : typeof entity.speed === 'number'
+                            ? entity.speed
+                            : 30;
             const flySpeed = entity.speedFly !== undefined ? entity.speedFly : speedObj.fly || 0;
             const swimSpeed = entity.speedSwim !== undefined ? entity.speedSwim : speedObj.swim || 0;
             const climbSpeed = entity.speedClimb !== undefined ? entity.speedClimb : speedObj.climb || 0;
@@ -4956,8 +5615,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                     ? entity.senses
                     : toCommaSeparatedString(entity.senses)
                 : entity.passivePerception
-                  ? `passive Perception ${entity.passivePerception}`
-                  : '';
+                    ? `passive Perception ${entity.passivePerception}`
+                    : '';
             const languagesStr = entity.languages
                 ? typeof entity.languages === 'string'
                     ? entity.languages
@@ -5033,19 +5692,19 @@ document.addEventListener('DOMContentLoaded', async () => {
                             : '';
                         const scSpells = sc.spells
                             ? Object.entries(sc.spells)
-                                  .map(([lvl, info]) => {
-                                      const lvlLabel =
-                                          lvl === '0'
-                                              ? 'Cantrips (at will)'
-                                              : `Level ${lvl} (${info.slots || 1} slots)`;
-                                      const spellsList = Array.isArray(info.spells)
-                                          ? info.spells
-                                                .map((s) => VTTEntryResolver.resolveTags(`{@spell ${s}}`))
-                                                .join(', ')
-                                          : '';
-                                      return `<div style="font-size: 13px; margin-bottom: 4px;"><strong>${lvlLabel}:</strong> ${spellsList}</div>`;
-                                  })
-                                  .join('')
+                                .map(([lvl, info]) => {
+                                    const lvlLabel =
+                                        lvl === '0'
+                                            ? 'Cantrips (at will)'
+                                            : `Level ${lvl} (${info.slots || 1} slots)`;
+                                    const spellsList = Array.isArray(info.spells)
+                                        ? info.spells
+                                            .map((s) => VTTEntryResolver.resolveTags(`{@spell ${s}}`))
+                                            .join(', ')
+                                        : '';
+                                    return `<div style="font-size: 13px; margin-bottom: 4px;"><strong>${lvlLabel}:</strong> ${spellsList}</div>`;
+                                })
+                                .join('')
                             : '';
                         return `<div class="statblock-spellcasting-block">${scName}${scHeader}${scSpells}</div>`;
                     })
@@ -5106,8 +5765,8 @@ document.addEventListener('DOMContentLoaded', async () => {
           <div class="vtt-statblock-special-section vtt-variants-box" style="margin-top: 16px; border: 1px solid rgba(96, 165, 250, 0.3); background: rgba(96, 165, 250, 0.04); border-radius: 6px; padding: 12px;">
             <div class="statblock-section-heading" style="color: #60a5fa; border-bottom: 1px solid rgba(96, 165, 250, 0.4); margin-top: 0; padding-bottom: 4px;">🔄 Variants & Customizations</div>
             ${variants
-                .map(
-                    (v) => `
+                        .map(
+                            (v) => `
               <div style="margin-top: 10px;">
                 <div style="font-weight: 700; color: #93c5fd; font-size: 13px;">${escapeHtml(v.name || 'Variant')}</div>
                 <div style="font-size: 13px; line-height: 1.5; color: #e2e8f0; margin-top: 4px;">
@@ -5115,8 +5774,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 </div>
               </div>
             `
-                )
-                .join('')}
+                        )
+                        .join('')}
           </div>
         `;
             }
@@ -5196,8 +5855,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             const classesArr = Array.isArray(entity.classes)
                 ? entity.classes.map((c) => (typeof c === 'string' ? c : c.name))
                 : entity.classes
-                  ? [entity.classes]
-                  : [];
+                    ? [entity.classes]
+                    : [];
 
             const subclassesArr = Array.isArray(entity.subclasses)
                 ? entity.subclasses.map((s) => (typeof s === 'string' ? s : s.name || s.shortName))
@@ -5251,49 +5910,45 @@ document.addEventListener('DOMContentLoaded', async () => {
           <div class="statblock-prop-row"><strong>Components:</strong> ${VTTEntryResolver.resolveTags(components)}</div>
           <div class="statblock-prop-row"><strong>Duration:</strong> ${escapeHtml(duration)}</div>
 
-          ${
-              damageChipsHtml || saveBadgeHtml
-                  ? `
+          ${damageChipsHtml || saveBadgeHtml
+                    ? `
             <div class="statblock-prop-row" style="margin-top: 6px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
               ${damageChipsHtml} ${saveBadgeHtml}
             </div>
           `
-                  : ''
-          }
+                    : ''
+                }
 
-          ${
-              classesArr.length > 0
-                  ? `
+          ${classesArr.length > 0
+                    ? `
             <div class="statblock-prop-row" style="margin-top: 4px;">
               <strong>Classes:</strong> ${classesArr.map((c) => `<span class="badge" style="background: rgba(99, 102, 241, 0.15); border: 1px solid rgba(99, 102, 241, 0.3); font-size: 11px; margin: 2px;">${escapeHtml(c)}</span>`).join(' ')}
             </div>
           `
-                  : ''
-          }
+                    : ''
+                }
 
-          ${
-              subclassesArr.length > 0
-                  ? `
+          ${subclassesArr.length > 0
+                    ? `
             <div class="statblock-prop-row" style="font-size: 11px; color: #a5b4fc;">
               <strong>Subclasses:</strong> ${escapeHtml(subclassesArr.join(', '))}
             </div>
           `
-                  : ''
-          }
+                    : ''
+                }
 
           <hr class="tapered-rule" style="margin: 12px 0;" />
           <div style="font-size: 13px; line-height: 1.6; color: #e2e8f0;">
             ${descHtml}
           </div>
-          ${
-              higherHtml
-                  ? `
+          ${higherHtml
+                    ? `
             <div style="margin-top: 14px; padding-top: 8px; border-top: 1px solid rgba(255, 255, 255, 0.1); font-size: 13px; line-height: 1.5; color: #cbd5e1;">
               <strong style="color: #ffd700;">At Higher Levels.</strong> ${higherHtml}
             </div>
           `
-                  : ''
-          }
+                    : ''
+                }
         </div>
       `;
         }
@@ -5336,8 +5991,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 entity.weight !== undefined
                     ? `${entity.weight} lbs.`
                     : entity.weightLbs
-                      ? `${entity.weightLbs} lbs.`
-                      : '';
+                        ? `${entity.weightLbs} lbs.`
+                        : '';
 
             let descHtml = '';
             if (entity.descriptionHtml) descHtml = VTTEntryResolver.resolveTags(entity.descriptionHtml);
@@ -5379,11 +6034,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             </div>
             <hr class="tapered-rule" style="margin: 12px 0;" />
             <div class="statblock-section-heading" style="color: #818cf8;">Subclass Features</div>
-            ${
-                features.length > 0
-                    ? features
-                          .map(
-                              (f) => `
+            ${features.length > 0
+                        ? features
+                            .map(
+                                (f) => `
               <div style="margin-top: 12px; padding: 10px 14px; background: rgba(99, 102, 241, 0.06); border-left: 3px solid #818cf8; border-radius: 4px;">
                 <div style="display: flex; justify-content: space-between; align-items: baseline;">
                   <strong style="color: #c7d2fe; font-size: 14px;">${escapeHtml(f.name || 'Feature')}</strong>
@@ -5394,10 +6048,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                 </div>
               </div>
             `
-                          )
-                          .join('')
-                    : '<div class="text-muted" style="margin-top: 8px;">No feature details defined.</div>'
-            }
+                            )
+                            .join('')
+                        : '<div class="text-muted" style="margin-top: 8px;">No feature details defined.</div>'
+                    }
           </div>
         `;
             }
@@ -5407,9 +6061,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             const saves = Array.isArray(entity.savingThrows)
                 ? entity.savingThrows.join(', ')
                 : entity.savingThrows ||
-                  (Array.isArray(entity.proficiency)
-                      ? entity.proficiency.map((p) => p.toUpperCase()).join(', ')
-                      : 'None');
+                (Array.isArray(entity.proficiency)
+                    ? entity.proficiency.map((p) => p.toUpperCase()).join(', ')
+                    : 'None');
 
             // Aggregate features by level (1 to 20)
             const featuresByLevel = {};
@@ -5452,15 +6106,15 @@ document.addEventListener('DOMContentLoaded', async () => {
             <div class="statblock-section-heading" style="color: #818cf8;">Available Subclasses (${entity.subclasses.length})</div>
             <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px;">
               ${entity.subclasses
-                  .map(
-                      (sc) => `
+                        .map(
+                            (sc) => `
                 <div style="padding: 6px 10px; background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.3); border-radius: 4px; font-size: 12px; color: #c7d2fe;">
                   <strong>${escapeHtml(sc.name || sc.shortName)}</strong>
                   <span style="font-size: 10px; color: #818cf8; margin-left: 4px;">(${escapeHtml(sc.source || entity.source || '')})</span>
                 </div>
               `
-                  )
-                  .join('')}
+                        )
+                        .join('')}
             </div>
           </div>
         `;
@@ -5512,15 +6166,15 @@ document.addEventListener('DOMContentLoaded', async () => {
             const benefitsHtml =
                 Array.isArray(entity.benefits) && entity.benefits.length > 0
                     ? entity.benefits
-                          .map(
-                              (b) => `
+                        .map(
+                            (b) => `
         <li style="margin-bottom: 6px; font-size: 13px; line-height: 1.5; color: #fef3c7;">
           ${b.name ? `<strong style="color: #fbbf24;">${escapeHtml(b.name)}:</strong> ` : ''}
           ${formatPreviewTextWithRollables(b.text || b, b.name)}
         </li>
       `
-                          )
-                          .join('')
+                        )
+                        .join('')
                     : '';
 
             return `
@@ -5616,13 +6270,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             const traits = Array.isArray(entity.traits)
                 ? entity.traits
                 : Array.isArray(entity.entries)
-                  ? entity.entries
-                  : [];
+                    ? entity.entries
+                    : [];
             const traitsHtml =
                 traits.length > 0
                     ? traits
-                          .map(
-                              (t) => `
+                        .map(
+                            (t) => `
         <div class="statblock-entry-item" style="margin-top: 10px;">
           <strong style="color: #34d399;"><em>${escapeHtml(t.name || 'Trait')}.</em></strong>
           <div style="font-size: 13px; line-height: 1.5; color: #d1fae5; margin-top: 2px;">
@@ -5630,8 +6284,8 @@ document.addEventListener('DOMContentLoaded', async () => {
           </div>
         </div>
       `
-                          )
-                          .join('')
+                        )
+                        .join('')
                     : '<div class="text-muted" style="font-size: 12px; margin-top: 6px;">No racial traits defined.</div>';
 
             return `
@@ -5647,6 +6301,49 @@ document.addEventListener('DOMContentLoaded', async () => {
           ${traitsHtml}
         </div>
       `;
+        }
+
+        // -----------------------------------------------------------------------
+        // 8. ROLLABLE TABLES
+        // -----------------------------------------------------------------------
+        if (cat === 'tables') {
+            const rows = Array.isArray(entity.rows) ? entity.rows : [];
+            const col1 = entity.colLabels?.[0] || 'd100';
+            const col2 = entity.colLabels?.[1] || 'Effect';
+            const rowsHtml = rows
+                .map((r) => {
+                    const roll =
+                        r.min !== undefined
+                            ? r.min === r.max
+                                ? r.min
+                                : `${r.min}–${r.max}`
+                            : Array.isArray(r)
+                                ? r[0]
+                                : '1';
+                    const text = r.text || (Array.isArray(r) ? r[1] : String(r));
+                    return `<tr><td style="padding:4px 8px; text-align:center; border:1px solid rgba(255,255,255,0.1); font-weight:600; color:var(--color-gold-light);">${escapeHtml(String(roll))}</td><td style="padding:4px 8px; border:1px solid rgba(255,255,255,0.1); color:#cbd5e1;">${escapeHtml(text)}</td></tr>`;
+                })
+                .join('');
+
+            return `
+                <div class="roll-table-card-preview" style="background:var(--color-bg-card, rgba(17,24,39,0.8)); border:1px solid var(--color-gold-base); border-radius:6px; padding:12px; margin-bottom:12px;">
+                    <h2 class="item-card-title" style="color: var(--color-gold-light);">${escapeHtml(entity.name || 'Roll Table')}</h2>
+                    <div class="item-card-rarity">${escapeHtml(entity.dice || '1d100')} • ${escapeHtml(entity.source || '')}</div>
+                    ${entity.caption ? `<div style="font-size:12px; font-style:italic; color:#94a3b8; margin: 4px 0 8px 0;">${escapeHtml(entity.caption)}</div>` : ''}
+                    <hr class="tapered-rule" style="margin: 8px 0;" />
+                    <table style="width:100%; border-collapse:collapse; font-size:12px; margin-top:8px;">
+                        <thead>
+                            <tr style="background:rgba(212,175,55,0.15);">
+                                <th style="padding:5px 8px; border:1px solid rgba(255,255,255,0.15); color:var(--color-gold-light); width:80px;">${escapeHtml(col1)}</th>
+                                <th style="padding:5px 8px; border:1px solid rgba(255,255,255,0.15); color:var(--color-gold-light); text-align:left;">${escapeHtml(col2)}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${rowsHtml || '<tr><td colspan="2" style="padding:8px; text-align:center; opacity:0.5;">No rows defined</td></tr>'}
+                        </tbody>
+                    </table>
+                </div>
+            `;
         }
 
         // Default / adventures / lore
@@ -5733,8 +6430,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const critNotice = isCrit
                     ? ' <strong style="color: #10b981;">(CRIT! 🌟)</strong>'
                     : isFumble
-                      ? ' <strong style="color: #ef4444;">(FUMBLE! 💀)</strong>'
-                      : '';
+                        ? ' <strong style="color: #ef4444;">(FUMBLE! 💀)</strong>'
+                        : '';
 
                 entryHtml = `
           <span><strong>${label}</strong> (${rollExpr}): ${rollsStr}${modStr}${critNotice}</span>
@@ -6294,7 +6991,7 @@ Shortbow. Ranged Weapon Attack: +4 to hit, range 80/320 ft., one target. Hit: 5 
                             parsed._meta.provenance.attribution = editSourceAttribution.value.trim();
                         editSourceJsonEditor.value = JSON.stringify(parsed, null, 2);
                     }
-                } catch (_) {}
+                } catch (_) { }
             } else {
                 // 1. Commit active entity form changes
                 saveActiveEntity(false);
@@ -6764,8 +7461,8 @@ Shortbow. Ranged Weapon Attack: +4 to hit, range 80/320 ft., one target. Hit: 5 
                 const typeInfo = item.cr
                     ? `CR ${item.cr}`
                     : item.level !== undefined
-                      ? `Level ${item.level}`
-                      : item.type || '—';
+                        ? `Level ${item.level}`
+                        : item.type || '—';
                 html += `
           <tr class="search-result-row" data-category="${escapeHtml(item.category)}" data-name="${escapeHtml(item.name)}" data-source="${escapeHtml(item.source)}">
             <td><span class="result-cat-badge">${icon} ${escapeHtml(item.category)}</span></td>
@@ -7083,16 +7780,21 @@ Shortbow. Ranged Weapon Attack: +4 to hit, range 80/320 ft., one target. Hit: 5 
         bulkDropZone.addEventListener('drop', async (e) => {
             const dt = e.dataTransfer;
             if (!dt || !dt.files || dt.files.length === 0) return;
-            const paths = [];
+            const isWebMode = Boolean(currentStatus?.staticWebMode || currentStatus?.webPrepMode);
+            const items = [];
             for (let i = 0; i < dt.files.length; i++) {
-                const fPath =
-                    (api.getPathForFile ? api.getPathForFile(dt.files[i]) : dt.files[i].path) || dt.files[i].path;
-                if (fPath) {
-                    paths.push(fPath);
+                if (isWebMode) {
+                    items.push(dt.files[i]);
+                } else {
+                    const fPath =
+                        (api.getPathForFile ? api.getPathForFile(dt.files[i]) : dt.files[i].path) || dt.files[i].path;
+                    if (fPath) {
+                        items.push(fPath);
+                    }
                 }
             }
-            if (paths.length > 0) {
-                await processBulkPaths(paths);
+            if (items.length > 0) {
+                await processBulkPaths(items);
             }
         });
     }

@@ -1,0 +1,4162 @@
+let sharedSpellCache = null;
+let spellCache = null;
+let pSpellPromise = null;
+let racesDataCache = null;
+
+const AOE_LABEL_MAP = {
+    Y: 'Cylinder',
+    R: 'Circle / Radius',
+    Cone: 'Cone',
+    Line: 'Line',
+    Sphere: 'Sphere',
+    Cube: 'Cube',
+    Wall: 'Wall',
+    Hemisphere: 'Hemisphere',
+    'Single Target': 'Single Target',
+    'Multiple Targets': 'Multiple Targets'
+};
+
+async function fetchAllRaces() {
+    if (racesDataCache) return racesDataCache;
+    try {
+        let res = await fetch('/api/races/catalog');
+        if (!res.ok) res = await fetch('/data/races-catalog.json');
+        if (!res.ok) res = await fetch('data/races-catalog.json');
+        if (!res.ok) throw new Error('Races catalog not found');
+        const json = await res.json();
+        racesDataCache = Array.isArray(json) ? json : json.race || [];
+        return racesDataCache;
+    } catch (e) {
+        return [];
+    }
+}
+
+export function toSpellTitleCase(str) {
+    if (!str || typeof str !== 'string') return '';
+    const cleanStr = str.replace(/\{@spell ([^|}]+).*?\}/gi, '$1').trim();
+    if (!cleanStr) return '';
+
+    // If str ends with a bracketed tag like [PHB] or [XPHB], extract and preserve it
+    const tagMatch = cleanStr.match(/\s*(\[[a-zA-Z0-9_\s-]+\])$/);
+    let tag = '';
+    let mainStr = cleanStr;
+    if (tagMatch) {
+        tag = ' ' + tagMatch[1].toUpperCase();
+        mainStr = cleanStr.slice(0, tagMatch.index).trim();
+    }
+
+    const minorWords = new Set([
+        'of',
+        'the',
+        'in',
+        'on',
+        'at',
+        'to',
+        'for',
+        'with',
+        'and',
+        'or',
+        'from',
+        'by',
+        'a',
+        'an'
+    ]);
+    const words = mainStr.toLowerCase().split(/\s+/);
+    const title = words
+        .map((word, idx) => {
+            if (word.includes('-')) {
+                return word
+                    .split('-')
+                    .map((part, pIdx) => {
+                        if (pIdx > 0 && minorWords.has(part)) return part;
+                        return part.charAt(0).toUpperCase() + part.slice(1);
+                    })
+                    .join('-');
+            }
+            if (idx > 0 && idx < words.length - 1 && minorWords.has(word)) {
+                return word;
+            }
+            return word.charAt(0).toUpperCase() + word.slice(1);
+        })
+        .join(' ');
+    return title + tag;
+}
+
+export function getDisambiguatedSpellName(sp, cache) {
+    if (!sp || !sp.name) return '';
+    const rawName = toSpellTitleCase(sp.name.replace(/\s*\[.*?\]$/, ''));
+    const nameLower = rawName.toLowerCase().trim();
+    const effectiveCache =
+        cache || sharedSpellCache || (typeof window !== 'undefined' && window.VTTSpellManager?.getSpellCache?.());
+    const hasDuplicate =
+        effectiveCache &&
+        effectiveCache.some(
+            (s) =>
+                s.id !== sp.id &&
+                (s.name || '')
+                    .toLowerCase()
+                    .replace(/\s*\[.*?\]$/, '')
+                    .trim() === nameLower &&
+                (s.source || '').toUpperCase() !== (sp.source || '').toUpperCase()
+        );
+    if (hasDuplicate && sp.source) {
+        const srcTag = (sp.source || '').toUpperCase();
+        return `${rawName} [${srcTag}]`;
+    }
+    return rawName;
+}
+
+export function scaleUpcastFormula(upcastFormula, extra) {
+    if (!upcastFormula || extra <= 0) return '';
+    let formula = String(upcastFormula).trim();
+    if (!formula) return '';
+
+    const tokenRegex = /([+-]?)\s*(?:(\d*)[dD](\d+)((?:[a-zA-Z><=!]+\d*)*)|(\d+))/g;
+    let scaledParts = [];
+    let match;
+
+    while ((match = tokenRegex.exec(formula)) !== null) {
+        const sign = match[1] === '-' ? -1 : 1;
+        if (match[3] !== undefined) {
+            const count = match[2] ? parseInt(match[2], 10) : 1;
+            const faces = match[3];
+            const suffix = match[4] || '';
+            const scaledCount = count * extra;
+            const op = sign === -1 ? '-' : '+';
+            scaledParts.push(`${op} ${scaledCount}d${faces}${suffix}`);
+        } else if (match[5] !== undefined) {
+            const num = parseInt(match[5], 10);
+            const scaledNum = num * extra;
+            const op = sign === -1 ? '-' : '+';
+            scaledParts.push(`${op} ${scaledNum}`);
+        }
+    }
+
+    if (scaledParts.length === 0) {
+        return `+ ${formula}`;
+    }
+
+    return scaledParts.join(' ');
+}
+
+export function parseSpellToMacro(spData, newSpell) {
+    if (!spData || !newSpell) return;
+
+    if (!newSpell.source || newSpell.source.toUpperCase() === 'MM' || newSpell.source.toUpperCase() === 'XMM') {
+        newSpell.source = spData.source || '';
+    }
+    newSpell.school = spData.school || newSpell.school || '';
+    newSpell.castingTime = spData.castingTime || newSpell.castingTime || '';
+    newSpell.range = spData.range || newSpell.range || '';
+    newSpell.components = spData.components || newSpell.components || '';
+    newSpell.duration = spData.duration || newSpell.duration || '';
+
+    newSpell.description =
+        spData.descriptionHtml ||
+        spData.description ||
+        (Array.isArray(spData.entries)
+            ? spData.entries.map((e) => (typeof e === 'string' ? e : JSON.stringify(e))).join('<br>')
+            : '') ||
+        newSpell.description ||
+        '';
+    if (spData.higherLevelHtml && !newSpell.description.includes(spData.higherLevelHtml)) {
+        newSpell.description += (newSpell.description ? '<br>' : '') + spData.higherLevelHtml;
+    }
+
+    if (spData.concentration !== undefined) newSpell.concentration = !!spData.concentration;
+    else if (spData.duration && Array.isArray(spData.duration) && spData.duration.some((d) => d.concentration))
+        newSpell.concentration = true;
+    else if (spData.meta?.concentration) newSpell.concentration = true;
+    else if (newSpell.concentration === undefined) newSpell.concentration = false;
+
+    if (spData.ritual !== undefined) newSpell.ritual = !!spData.ritual;
+    newSpell.isMagic = spData.isMagic !== undefined ? !!spData.isMagic : true;
+    const isCantrip = spData.level === 0 || newSpell.level === 0 || newSpell.cantripScale;
+    const isMultiAttackCantrip = /eldritch blast/i.test(newSpell.name || spData.name || '');
+    if (isCantrip) {
+        newSpell.cantripScale = isMultiAttackCantrip
+            ? false
+            : spData.cantripScale !== undefined
+              ? !!spData.cantripScale
+              : true;
+    }
+
+    if (spData.damageList && Array.isArray(spData.damageList) && spData.damageList.length > 0) {
+        newSpell.damageList = JSON.parse(JSON.stringify(spData.damageList));
+        newSpell.damageList.forEach((d, rIdx) => {
+            if (isCantrip) {
+                if (d.cantripScale === undefined) {
+                    d.cantripScale = isMultiAttackCantrip
+                        ? false
+                        : rIdx === 0
+                          ? spData.cantripScale !== undefined
+                              ? !!spData.cantripScale
+                              : true
+                          : false;
+                }
+            } else {
+                if (d.upcastBonus === undefined) {
+                    d.upcastBonus = rIdx === 0 ? spData.upcastBonus || '' : '';
+                }
+                if (d.upcastScaleStep === undefined) {
+                    d.upcastScaleStep = rIdx === 0 ? spData.upcastScaleStep || 1 : 1;
+                }
+            }
+        });
+    }
+
+    if (spData.saveAbility) {
+        newSpell.saveAbility = spData.saveAbility.substring(0, 3).toUpperCase();
+        newSpell.saveDcStat = 'spell';
+    }
+
+    if (spData.attackStat && spData.attackStat !== 'none') {
+        newSpell.attackStat = spData.attackStat;
+        newSpell.attackProf = spData.attackStat === 'spell';
+    }
+
+    if (spData.upcastBonus) {
+        newSpell.upcastBonus = spData.upcastBonus;
+    }
+    if (spData.upcastScaleStep) {
+        newSpell.upcastScaleStep = spData.upcastScaleStep;
+    }
+
+    if (!spData.entries && !spData.descriptionHtml && !spData.description) return;
+
+    const rawEntriesText = JSON.stringify(
+        spData.entries || spData.descriptionHtml || spData.description || ''
+    ).toLowerCase();
+
+    if (
+        rawEntriesText.includes('spell attack') ||
+        rawEntriesText.includes('{@atk ms}') ||
+        rawEntriesText.includes('{@atk rs}') ||
+        rawEntriesText.includes('{@atk ms,rs}')
+    ) {
+        newSpell.attackStat = 'spell';
+        newSpell.attackProf = true;
+        newSpell.attackExtra = 0;
+        newSpell.attackBonus = '';
+    } else if (newSpell.attackStat === undefined) {
+        newSpell.attackStat = 'none';
+        newSpell.attackProf = false;
+    }
+
+    const saveMatch = rawEntriesText.match(
+        /(strength|dexterity|constitution|intelligence|wisdom|charisma) saving throw/
+    );
+    if (saveMatch && !newSpell.saveAbility) {
+        newSpell.saveDcStat = 'spell';
+        newSpell.saveDcExtra = 0;
+        newSpell.saveDcCustom = null;
+        newSpell.saveAbility = saveMatch[1].substring(0, 3).toUpperCase();
+    } else if (newSpell.saveDcStat === undefined) {
+        newSpell.saveDcStat = 'none';
+        newSpell.saveAbility = '';
+    }
+
+    // Parse damage / healing if not already set
+    if (!newSpell.damageList || newSpell.damageList.length === 0) {
+        const spName = (spData.name || '').toLowerCase();
+        const dmgInflict = Array.isArray(spData.damageInflict) ? spData.damageInflict : [];
+
+        // 1. Check scalingLevelDice first (common for cantrips like Toll the Dead, Eldritch Blast, etc.)
+        if (isCantrip && Array.isArray(spData.scalingLevelDice) && spData.scalingLevelDice.length > 0) {
+            const parsedList = [];
+            spData.scalingLevelDice.forEach((sld, idx) => {
+                const formula =
+                    sld.scaling?.['1'] || sld.scaling?.['cantrip'] || Object.values(sld.scaling || {})[0] || '1d8';
+                let type = 'Damage';
+                let label = '';
+                const rawLabel = (sld.label || '').toLowerCase();
+
+                const knownTypes = [
+                    'slashing',
+                    'piercing',
+                    'bludgeoning',
+                    'fire',
+                    'cold',
+                    'lightning',
+                    'thunder',
+                    'poison',
+                    'acid',
+                    'necrotic',
+                    'radiant',
+                    'force',
+                    'psychic',
+                    'healing'
+                ];
+                for (const kt of knownTypes) {
+                    if (rawLabel.includes(kt)) {
+                        type = kt.charAt(0).toUpperCase() + kt.slice(1);
+                        break;
+                    }
+                }
+                if (type === 'Damage' && dmgInflict.length > 0) {
+                    const matchedInflict = dmgInflict[idx] || dmgInflict[0];
+                    type = matchedInflict.charAt(0).toUpperCase() + matchedInflict.slice(1);
+                }
+
+                if (rawLabel.includes('wounded') || rawLabel.includes('missing')) {
+                    label = 'Wounded Target';
+                } else if (spData.scalingLevelDice.length > 1) {
+                    label = idx === 0 ? 'Normal' : `Variant ${idx + 1}`;
+                }
+
+                parsedList.push({
+                    id: 'dmg_' + Date.now() + Math.random(),
+                    formula,
+                    type,
+                    label,
+                    stat: ''
+                });
+            });
+            if (parsedList.length > 0) {
+                newSpell.damageList = parsedList;
+            }
+        } else if (isCantrip) {
+            if (spName.includes('booming blade')) {
+                newSpell.damageList = [
+                    { formula: '0d8', type: 'Thunder', id: 'dmg_bb_hit', label: 'On Hit' },
+                    { formula: '1d8', type: 'Thunder', id: 'dmg_bb_move', label: 'On Move' }
+                ];
+            } else if (spName.includes('green-flame blade')) {
+                newSpell.damageList = [
+                    { formula: '0d8', type: 'Fire', id: 'dmg_gfb_hit', label: 'Primary Target' },
+                    { formula: '1d8', type: 'Fire', stat: 'spell', id: 'dmg_gfb_sec', label: 'Secondary Target' }
+                ];
+            } else {
+                const dmgMatches = [
+                    ...rawEntriesText.matchAll(/\{@damage\s+([^}|]+)[^}]*\}(?:\s*([a-z]+)\s+damage)?/gi)
+                ];
+                if (dmgMatches.length > 0) {
+                    newSpell.damageList = dmgMatches.map((m, idx) => {
+                        const formula = m[1].trim();
+                        let type = m[2]
+                            ? m[2].charAt(0).toUpperCase() + m[2].slice(1)
+                            : dmgInflict[idx]
+                              ? dmgInflict[idx].charAt(0).toUpperCase() + dmgInflict[idx].slice(1)
+                              : dmgInflict[0]
+                                ? dmgInflict[0].charAt(0).toUpperCase() + dmgInflict[0].slice(1)
+                                : 'Damage';
+                        let label = '';
+                        if (dmgMatches.length > 1) {
+                            label = idx === 0 ? 'Normal' : `Option ${idx + 1}`;
+                        }
+                        return { formula, type, label, id: 'dmg_' + Date.now() + Math.random() };
+                    });
+                } else {
+                    const fallbackM = rawEntriesText.match(/(\d+d\d+)/i);
+                    if (fallbackM) {
+                        let type =
+                            dmgInflict.length > 0
+                                ? dmgInflict[0].charAt(0).toUpperCase() + dmgInflict[0].slice(1)
+                                : 'Damage';
+                        newSpell.damageList = [
+                            { formula: fallbackM[1], type, label: '', id: 'dmg_' + Date.now() + Math.random() }
+                        ];
+                    }
+                }
+            }
+        } else {
+            const isHealing =
+                (spData.miscTags && spData.miscTags.includes('HL')) || /regain|restore/i.test(rawEntriesText);
+            const isTempHp =
+                (spData.miscTags && spData.miscTags.includes('THP')) || /temporary hit point/i.test(rawEntriesText);
+
+            if (isHealing || isTempHp) {
+                const type = isHealing ? 'Healing' : 'Temp HP';
+                const hasSpellMod =
+                    /plus your spellcasting ability modifier|\+\s*your spellcasting ability modifier/i.test(
+                        rawEntriesText
+                    );
+                const stat = hasSpellMod ? 'spell' : 'none';
+                const dm =
+                    rawEntriesText.match(/\{@(?:dice|damage)\s+([^}|]+)[^}]*\}/i) ||
+                    rawEntriesText.match(/(\d+d\d+(?:\s*[+-]\s*\d+)?)/i);
+                if (dm) {
+                    const formula = (dm[1] || dm[0]).replace(/\{@(?:dice|damage)\s+([^}|]+)[^}]*\}/i, '$1').trim();
+                    newSpell.damageList = [{ formula, type, stat, label: '', id: 'dmg_' + Date.now() + Math.random() }];
+                } else {
+                    const flatMatch =
+                        rawEntriesText.match(/restoring\s+(\d+)/i) || rawEntriesText.match(/regains?\s+(\d+)/i);
+                    if (flatMatch) {
+                        newSpell.damageList = [
+                            { formula: flatMatch[1], type, stat, label: '', id: 'dmg_' + Date.now() + Math.random() }
+                        ];
+                    }
+                }
+            } else {
+                const dmgMatches = [
+                    ...rawEntriesText.matchAll(/\{@damage\s+([^}|]+)[^}]*\}(?:\s*([a-z]+)\s+damage)?/gi)
+                ];
+                if (dmgMatches.length > 0) {
+                    newSpell.damageList = dmgMatches.map((match, idx) => {
+                        let formula = match[1].trim();
+                        let type = match[2]
+                            ? match[2].charAt(0).toUpperCase() + match[2].slice(1)
+                            : dmgInflict[idx]
+                              ? dmgInflict[idx].charAt(0).toUpperCase() + dmgInflict[idx].slice(1)
+                              : dmgInflict[0]
+                                ? dmgInflict[0].charAt(0).toUpperCase() + dmgInflict[0].slice(1)
+                                : 'Damage';
+                        let label = '';
+                        if (dmgMatches.length > 1) {
+                            if (spName.includes('ice knife')) {
+                                label = idx === 0 ? 'On Hit' : 'Burst';
+                            } else {
+                                label = `Damage ${idx + 1}`;
+                            }
+                        }
+                        return { formula, type, label, id: 'dmg_' + Date.now() + Math.random() };
+                    });
+                }
+            }
+        }
+    }
+
+    if (window.Renderer && spData.entries) {
+        try {
+            const temp = document.createElement('div');
+            temp.innerHTML = window.Renderer.get().render({ entries: spData.entries });
+            newSpell.description = temp.textContent || temp.innerText || '';
+        } catch (e) {}
+    }
+
+    if (spData.entriesHigherLevel && !newSpell.upcastBonus) {
+        const hl = JSON.stringify(spData.entriesHigherLevel).toLowerCase();
+        let hlMatch = hl.match(/\{@scale(?:damage|dice)\s+[^|]+\|[^|]+\|([^}]+)\}/i);
+        if (hlMatch) {
+            newSpell.upcastBonus = hlMatch[1];
+        } else {
+            hlMatch = hl.match(/(?:increases by|gain (?:an additional )?)(?:\{@(?:damage|dice) )?(\d+d\d+|\d+)/i);
+            if (hlMatch) {
+                newSpell.upcastBonus = hlMatch[1];
+            }
+        }
+    }
+}
+
+if (typeof window !== 'undefined') {
+    window.toSpellTitleCase = toSpellTitleCase;
+    window.getDisambiguatedSpellName = getDisambiguatedSpellName;
+    window.scaleUpcastFormula = scaleUpcastFormula;
+    window.parseSpellToMacro = parseSpellToMacro;
+    window.VTTSpellManager = window.VTTSpellManager || {
+        init: (ctx) => {
+            if (ctx && ctx.spellCache) {
+                sharedSpellCache = ctx.spellCache;
+                spellCache = ctx.spellCache;
+            } else if (!spellCache && sharedSpellCache) {
+                spellCache = sharedSpellCache;
+            }
+        },
+        toSpellTitleCase: toSpellTitleCase,
+        getDisambiguatedSpellName: getDisambiguatedSpellName,
+        scaleUpcastFormula: scaleUpcastFormula,
+        loadSpells: () => loadSpells(),
+        cleanSpellBodyHtml: (html) => cleanSpellBodyHtml(html),
+        getSpellCache: () => sharedSpellCache || spellCache,
+        setSpellCache: (cache) => {
+            sharedSpellCache = cache;
+            spellCache = cache;
+            if (window.vttPlayerSheetAPI && window.vttPlayerSheetAPI.setSpellCache) {
+                window.vttPlayerSheetAPI.setSpellCache(cache);
+            }
+        },
+        invalidateSpellCache: () => invalidateSpellCache(),
+        getSpellMetaStrings: (sp, slKey) => getSpellMetaStrings(sp, slKey),
+        renderAndInjectSpell: (spellName, containerEl, fallbackDesc, sp, slKey, options) =>
+            renderAndInjectSpell(spellName, containerEl, fallbackDesc, sp, slKey, options),
+        renderSpellRowHtml: (sp, slKey, idx, options) => renderSpellRowHtml(sp, slKey, idx, options),
+        ensureSpellIsParsed: (sp, options) => ensureSpellIsParsed(sp, options),
+        parseSpellToMacro: parseSpellToMacro,
+        postSpellToChat: (sp, slKey, creatureName, visibility) => postSpellToChat(sp, slKey, creatureName, visibility),
+        promptUpcastLevel: (baseLvl, callback) => promptUpcastLevel(baseLvl, callback),
+        rollSpell: (sp, slKey, casterObj, options) => rollSpell(sp, slKey, casterObj, options)
+    };
+}
+
+export function setSpellCache(cache) {
+    sharedSpellCache = cache;
+}
+
+export function invalidateSpellCache() {
+    sharedSpellCache = null;
+    pSpellPromise = null;
+}
+
+export async function loadSpells(explicitCampId = null) {
+    if (sharedSpellCache) return sharedSpellCache;
+    if (pSpellPromise) return pSpellPromise;
+    const campId =
+        explicitCampId ||
+        (typeof window !== 'undefined'
+            ? window.VTT?.campaignId ||
+              window.VTT?.campaignState?.id ||
+              new URLSearchParams(window.location?.search || '').get('campaignId') ||
+              new URLSearchParams(window.location?.search || '').get('campaign') ||
+              ''
+            : '');
+    const qs = campId ? `?campaignId=${encodeURIComponent(campId)}&v=${Date.now()}` : `?v=${Date.now()}`;
+    pSpellPromise = fetch(`/data/spells-catalog.json${qs}`)
+        .then((res) => {
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            return res.json();
+        })
+        .then((spells) => {
+            sharedSpellCache = spells;
+            if (typeof window !== 'undefined' && window.vttPlayerSheetAPI && window.vttPlayerSheetAPI.setSpellCache) {
+                window.vttPlayerSheetAPI.setSpellCache(spells);
+            }
+            return spells;
+        })
+        .catch(async (err) => {
+            try {
+                const res = await fetch(`/api/spells/catalog${qs}`);
+                if (res.ok) {
+                    const spells = await res.json();
+                    sharedSpellCache = spells;
+                    if (
+                        typeof window !== 'undefined' &&
+                        window.vttPlayerSheetAPI &&
+                        window.vttPlayerSheetAPI.setSpellCache
+                    ) {
+                        window.vttPlayerSheetAPI.setSpellCache(spells);
+                    }
+                    return spells;
+                }
+            } catch (e) {}
+            if (typeof window !== 'undefined' && window.DataUtil && window.DataUtil.spell) {
+                const spells = await window.DataUtil.spell.pLoadAll();
+                sharedSpellCache = spells;
+                if (window.vttPlayerSheetAPI && window.vttPlayerSheetAPI.setSpellCache) {
+                    window.vttPlayerSheetAPI.setSpellCache(spells);
+                }
+                return spells;
+            }
+            pSpellPromise = null;
+            throw err;
+        });
+    return pSpellPromise;
+}
+
+export function cleanSpellBodyHtml(html) {
+    if (!html) return '';
+    if (typeof document === 'undefined') return html;
+
+    const temp = document.createElement('div');
+    if (!temp || typeof temp.querySelectorAll !== 'function') return html;
+    // Wrap in table/tbody if html contains <tr> so browser DOM parser preserves <tr> and <td> nodes
+    if (typeof html === 'string' && (html.includes('<tr') || html.includes('<td') || html.includes('<th'))) {
+        temp.innerHTML = `<table><tbody>${html}</tbody></table>`;
+    } else {
+        temp.innerHTML = html;
+    }
+
+    // 1. Remove existing .spell-meta containers
+    temp.querySelectorAll('.spell-meta').forEach((el) => el.remove());
+
+    // 2. Remove title header rows and source wrappers
+    temp.querySelectorAll(
+        '.ve-stats__th-name, .rd-spell__name, h1.ve-stats__h-name, tr.text-sub-header, .ve-stats__wrp-h-source'
+    ).forEach((el) => {
+        const row = el.closest('tr') || el;
+        if (!temp.contains || temp.contains(row)) row.remove();
+    });
+
+    // 3. Remove divider rows and source footers
+    temp.querySelectorAll(
+        'tr.ve-h-divider, tr.rd__b-divider, .vtt-spell-source-footer, .ve-rd__stats-name-page'
+    ).forEach((el) => {
+        const row = el.closest('tr') || el;
+        if (!temp.contains || temp.contains(row)) row.remove();
+    });
+
+    // 4. Target table rows (tr) containing level/school subtitle, metadata headers, or page source footers
+    const trs = Array.from(temp.querySelectorAll('tr'));
+    trs.forEach((tr) => {
+        if (!temp.contains(tr)) return;
+        const text = (tr.textContent || '').trim();
+
+        // Level/School subtitle row (e.g. "3rd-level evocation", "Evocation Cantrip", "Level 1 Abjuration")
+        const hasI = tr.querySelector('i') !== null;
+        const isLevelSchool =
+            hasI &&
+            (/(?:abjuration|conjuration|divination|enchantment|evocation|illusion|necromancy|transmutation)/i.test(
+                text
+            ) ||
+                /(?:\d+(?:st|nd|rd|th)-level|cantrip|level\s*\d+)/i.test(text)) &&
+            !text.includes('You ') &&
+            !text.includes('This spell');
+
+        // Metadata row (Casting Time, Range, Components, Duration)
+        const isMetaHeader = /(?:Casting Time|Range|Components|Duration)\s*:/i.test(text);
+
+        // Page source footer row (e.g. "PHB p255", "PHB'14 ʟ p255", "p255")
+        const isPageFooter =
+            tr.classList.contains('ve-text-right') ||
+            (/p\d+/i.test(text) && !text.includes('You ') && text.length < 80);
+
+        if (isLevelSchool || isMetaHeader || isPageFooter) {
+            tr.remove();
+        }
+    });
+
+    // 5. Check standalone block elements (td, div, p) for stray metadata headers, level/school titles, or page footers
+    const blocks = Array.from(temp.querySelectorAll('td, div, p'));
+    blocks.forEach((el) => {
+        if (!temp.contains(el)) return;
+        const text = (el.textContent || '').trim();
+
+        const isMetaHeader =
+            /(?:Casting Time|Range|Components|Duration)\s*:/i.test(text) && !text.includes('You ') && text.length < 150;
+        const isPageFooter =
+            /p\d+/i.test(text) &&
+            (text.includes('PHB') || text.includes('ʟ') || text.includes('Page')) &&
+            text.length < 40;
+        const isLevelSchool =
+            el.querySelector('i') &&
+            (/(?:abjuration|conjuration|divination|enchantment|evocation|illusion|necromancy|transmutation)/i.test(
+                text
+            ) ||
+                /(?:\d+(?:st|nd|rd|th)-level|cantrip|level\s*\d+)/i.test(text)) &&
+            !text.includes('You ') &&
+            text.length < 100;
+
+        if (isMetaHeader || isPageFooter || isLevelSchool) {
+            const row = el.closest('tr');
+            if (row && temp.contains(row)) row.remove();
+            else if (temp.contains(el)) el.remove();
+        }
+    });
+
+    // 6. Convert table structures to clean div elements
+    let cleanedHtml = temp.innerHTML;
+    cleanedHtml = cleanedHtml
+        .replace(/<\/?table[^>]*>/g, '')
+        .replace(/<\/?tbody[^>]*>/g, '')
+        .replace(/<\/?tr[^>]*>/g, '')
+        .replace(/<\/?td[^>]*>/g, '<div>')
+        .replace(/<\/td>/g, '</div>');
+
+    // 7. Clean up redundant line breaks and empty container spacing
+    cleanedHtml = cleanedHtml.replace(/<div>\s*(?:<br\s*\/?>\s*)*/gi, '<div>');
+    cleanedHtml = cleanedHtml.replace(/(?:<br\s*\/?>\s*)+/g, '<br>');
+    cleanedHtml = cleanedHtml.replace(/^(?:\s*<br\s*\/?>)+|(?:\s*<br\s*\/?>)+$/gi, '');
+
+    return cleanedHtml.trim();
+}
+
+if (typeof window !== 'undefined') {
+    window.cleanSpellBodyHtml = cleanSpellBodyHtml;
+}
+
+export function getSpellMetaStrings(sp, slKey) {
+    if (!sp || typeof sp !== 'object') return {};
+
+    let school = sp.school || '';
+    let levelVal = sp.level !== undefined ? sp.level : '';
+    let level = '';
+    if (levelVal !== undefined && levelVal !== null && levelVal !== '') {
+        let levelNum = Number(levelVal);
+        if (!isNaN(levelNum)) {
+            level = levelNum === 0 ? 'Cantrip' : `Level ${levelNum}`;
+        } else {
+            level = String(levelVal);
+        }
+    } else if (slKey) {
+        if (slKey === 'cantrip') level = 'Cantrip';
+        else if (typeof slKey === 'string' && slKey.startsWith('level')) {
+            const num = slKey.replace('level', '');
+            level = `Level ${num}`;
+        } else {
+            level = String(slKey);
+        }
+    }
+
+    let time = sp.castingTime || sp.time || '';
+    let range = sp.range || '';
+    let components = sp.components || '';
+    let duration = sp.duration || '';
+
+    return { school, level, time, range, components, duration };
+}
+
+export function renderAndInjectSpell(spellName, containerEl, fallbackDesc, sp, slKey, options = {}) {
+    if (!containerEl) return;
+
+    const cache =
+        sharedSpellCache || spellCache || (typeof window !== 'undefined' && window.VTTSpellManager?.getSpellCache?.());
+    let meta = getSpellMetaStrings(sp || { name: spellName }, slKey);
+    let rawBody = sp?.description || fallbackDesc || '';
+
+    // If description is missing and cache is not yet loaded, auto-load cache
+    if (!rawBody && !cache) {
+        containerEl.innerHTML =
+            '<div style="color:var(--color-text-muted); font-size:0.8rem; font-style:italic; padding:4px 0;"><i class="fa-solid fa-spinner fa-spin" style="margin-right:6px;"></i>Loading spell catalog...</div>';
+        loadSpells()
+            .then(() => {
+                renderAndInjectSpell(spellName, containerEl, fallbackDesc, sp, slKey, options);
+            })
+            .catch(() => {
+                containerEl.innerHTML = fallbackDesc
+                    ? `<div>${fallbackDesc.replace(/\n/g, '<br>')}</div>`
+                    : `<em>Could not find full text for ${spellName}</em>`;
+            });
+        return;
+    }
+    if (!cache) {
+        loadSpells().catch(() => {});
+    }
+
+    if (cache && spellName) {
+        const rawName = String(spellName)
+            .replace(/\s*\[.*?\]$/, '')
+            .toLowerCase()
+            .trim();
+        let spSrc =
+            (sp?.source || '').toLowerCase().trim() ||
+            (String(spellName).match(/\[([a-zA-Z0-9_-]+)\]$/)?.[1] || '').toLowerCase().trim();
+        if (spSrc === 'mm' || spSrc === 'xmm') spSrc = '';
+
+        let is2024 = options.is2024;
+        if (is2024 === undefined) {
+            if (spSrc) {
+                is2024 = spSrc === 'xphb' || spSrc === 'xdmg' || spSrc === 'xmm';
+            } else if (options.caster) {
+                is2024 =
+                    (options.caster.classes &&
+                        options.caster.classes.some(
+                            (c) => (c.name || '').includes('[XPHB]') || (c.source || '').toUpperCase() === 'XPHB'
+                        )) ||
+                    options.caster.source === 'XMM' ||
+                    options.caster.source === 'XPHB' ||
+                    options.caster.ruleset === '2024' ||
+                    !!options.caster.is2024;
+            } else {
+                is2024 = false;
+            }
+        }
+
+        let found = null;
+        if (spSrc) {
+            found = cache.find(
+                (s) =>
+                    (s.name || '').toLowerCase().trim() === rawName && (s.source || '').toLowerCase().trim() === spSrc
+            );
+        }
+        if (!found) {
+            if (is2024) {
+                found =
+                    cache.find(
+                        (s) =>
+                            (s.name || '').toLowerCase().trim() === rawName && (s.source || '').toUpperCase() === 'XPHB'
+                    ) ||
+                    cache.find(
+                        (s) =>
+                            (s.name || '').toLowerCase().trim() === rawName && (s.source || '').toUpperCase() === 'PHB'
+                    ) ||
+                    cache.find((s) => (s.name || '').toLowerCase().trim() === rawName);
+            } else {
+                found =
+                    cache.find(
+                        (s) =>
+                            (s.name || '').toLowerCase().trim() === rawName && (s.source || '').toUpperCase() === 'PHB'
+                    ) ||
+                    cache.find((s) => {
+                        const src = (s.source || '').toUpperCase();
+                        return (
+                            (s.name || '').toLowerCase().trim() === rawName &&
+                            src !== 'XPHB' &&
+                            src !== 'XDMG' &&
+                            src !== 'XMM'
+                        );
+                    }) ||
+                    cache.find(
+                        (s) =>
+                            (s.name || '').toLowerCase().trim() === rawName && (s.source || '').toUpperCase() === 'XPHB'
+                    ) ||
+                    cache.find((s) => (s.name || '').toLowerCase().trim() === rawName);
+            }
+        }
+
+        if (found) {
+            // If rawBody is currently empty, check if catalog item or previously fetched cache has the description
+            if (!rawBody && (found.descriptionHtml || found.description)) {
+                let candidateDesc = found.descriptionHtml || found.description || '';
+                if (found.higherLevelHtml && !candidateDesc.includes(found.higherLevelHtml)) {
+                    candidateDesc += (candidateDesc ? '<br>' : '') + found.higherLevelHtml;
+                }
+                rawBody = candidateDesc;
+            }
+            if (sp && typeof sp === 'object') {
+                if (rawBody && !sp.description) sp.description = rawBody;
+                if (!sp.school && found.school) sp.school = found.school;
+                if (!sp.castingTime && found.castingTime) sp.castingTime = found.castingTime;
+                if (!sp.range && found.range) sp.range = found.range;
+                if (!sp.components && found.components) sp.components = found.components;
+                if (!sp.duration && found.duration) sp.duration = found.duration;
+                if (!sp.source || sp.source === 'MM' || sp.source === 'XMM') sp.source = found.source;
+            }
+            meta = getSpellMetaStrings(sp || found, slKey);
+
+            // If catalog item doesn't have full descriptionHtml yet and rawBody is still empty, fetch asynchronously from source partition API
+            if (!rawBody && found.source && found.id) {
+                // Show metadata + loading spinner while fetch is ongoing
+                let interimMeta = '<div class="spell-meta" style="margin-bottom: 8px;">';
+                if (meta.level)
+                    interimMeta += `<div><i class="fa-solid fa-layer-group" style="width: 16px; text-align: center; margin-right: 4px;" title="Level"></i> <strong>Level:</strong> ${meta.level}</div>`;
+                if (meta.school)
+                    interimMeta += `<div><i class="fa-solid fa-graduation-cap" style="width: 16px; text-align: center; margin-right: 4px;" title="School"></i> <strong>School:</strong> ${meta.school}</div>`;
+                if (meta.time)
+                    interimMeta += `<div><i class="fa-solid fa-clock" style="width: 16px; text-align: center; margin-right: 4px;" title="Casting Time"></i> <strong>Casting Time:</strong> ${meta.time}</div>`;
+                if (meta.range)
+                    interimMeta += `<div><i class="fa-solid fa-ruler" style="width: 16px; text-align: center; margin-right: 4px;" title="Range"></i> <strong>Range:</strong> ${meta.range}</div>`;
+                if (meta.components)
+                    interimMeta += `<div><i class="fa-solid fa-hand-sparkles" style="width: 16px; text-align: center; margin-right: 4px;" title="Components"></i> <strong>Components:</strong> ${meta.components}</div>`;
+                if (meta.duration)
+                    interimMeta += `<div><i class="fa-solid fa-stopwatch" style="width: 16px; text-align: center; margin-right: 4px;" title="Duration"></i> <strong>Duration:</strong> ${meta.duration}</div>`;
+                interimMeta += '</div>';
+                containerEl.innerHTML =
+                    interimMeta +
+                    '<div class="spell-loading-desc" style="color:var(--color-text-muted); font-size:0.8rem; font-style:italic; padding:4px 0;"><i class="fa-solid fa-spinner fa-spin" style="margin-right:6px;"></i>Loading full description...</div>';
+
+                fetch(`/api/spell/${encodeURIComponent(found.source)}/${encodeURIComponent(found.id)}`)
+                    .then((r) => {
+                        if (!r.ok) throw new Error(`Spell fetch error: ${r.status}`);
+                        return r.json();
+                    })
+                    .then((full) => {
+                        if (!full || full.error) throw new Error(full?.error || 'Spell data error');
+                        Object.assign(found, full);
+                        let fullDesc = full.descriptionHtml || full.description || '';
+                        if (full.higherLevelHtml && !fullDesc.includes(full.higherLevelHtml)) {
+                            fullDesc += (fullDesc ? '<br>' : '') + full.higherLevelHtml;
+                        }
+                        found.descriptionHtml = fullDesc;
+                        if (sp && typeof sp === 'object') {
+                            sp.description = fullDesc;
+                            sp.source = found.source;
+                        }
+                        if (containerEl) {
+                            let bodyOut = fullDesc;
+                            if (typeof cleanSpellBodyHtml === 'function') bodyOut = cleanSpellBodyHtml(bodyOut);
+                            if (typeof window !== 'undefined' && typeof window.injectDiceChips === 'function')
+                                bodyOut = window.injectDiceChips(bodyOut);
+                            containerEl.innerHTML =
+                                interimMeta +
+                                (bodyOut ||
+                                    `<div style="color:var(--color-text-muted); font-size:0.8rem; font-style:italic;">No description available for ${spellName}.</div>`);
+                        }
+                    })
+                    .catch((err) => {
+                        console.warn('[VTTSpellManager] Failed to load full description for', spellName, err);
+                        if (containerEl) {
+                            containerEl.innerHTML =
+                                interimMeta +
+                                (fallbackDesc
+                                    ? `<div>${fallbackDesc.replace(/\n/g, '<br>')}</div>`
+                                    : `<div style="color:var(--color-text-muted); font-size:0.8rem; font-style:italic;">No description available for ${spellName}.</div>`);
+                        }
+                    });
+                return;
+            }
+        }
+    }
+
+    let metaHtml = '<div class="spell-meta" style="margin-bottom: 8px;">';
+    if (meta.level)
+        metaHtml += `<div><i class="fa-solid fa-layer-group" style="width: 16px; text-align: center; margin-right: 4px;" title="Level"></i> <strong>Level:</strong> ${meta.level}</div>`;
+    if (meta.school)
+        metaHtml += `<div><i class="fa-solid fa-graduation-cap" style="width: 16px; text-align: center; margin-right: 4px;" title="School"></i> <strong>School:</strong> ${meta.school}</div>`;
+    if (meta.time)
+        metaHtml += `<div><i class="fa-solid fa-clock" style="width: 16px; text-align: center; margin-right: 4px;" title="Casting Time"></i> <strong>Casting Time:</strong> ${meta.time}</div>`;
+    if (meta.range)
+        metaHtml += `<div><i class="fa-solid fa-ruler" style="width: 16px; text-align: center; margin-right: 4px;" title="Range"></i> <strong>Range:</strong> ${meta.range}</div>`;
+    if (meta.components)
+        metaHtml += `<div><i class="fa-solid fa-hand-sparkles" style="width: 16px; text-align: center; margin-right: 4px;" title="Components"></i> <strong>Components:</strong> ${meta.components}</div>`;
+    if (meta.duration)
+        metaHtml += `<div><i class="fa-solid fa-stopwatch" style="width: 16px; text-align: center; margin-right: 4px;" title="Duration"></i> <strong>Duration:</strong> ${meta.duration}</div>`;
+    metaHtml += '</div>';
+
+    if (typeof cleanSpellBodyHtml === 'function') {
+        rawBody = cleanSpellBodyHtml(rawBody);
+    }
+    if (typeof window !== 'undefined' && typeof window.injectDiceChips === 'function') {
+        rawBody = window.injectDiceChips(rawBody);
+    }
+
+    if (!rawBody && !meta.school && !meta.time && !meta.range && !meta.components && !meta.duration) {
+        containerEl.innerHTML = fallbackDesc
+            ? `<div>${fallbackDesc.replace(/\n/g, '<br>')}</div>`
+            : `<div style="color:var(--color-text-muted); font-size:0.8rem; font-style:italic;">No description available for ${spellName}.</div>`;
+    } else {
+        containerEl.innerHTML =
+            metaHtml +
+            (rawBody ||
+                `<div style="color:var(--color-text-muted); font-size:0.8rem; font-style:italic;">No description available for ${spellName}.</div>`);
+    }
+}
+
+export function renderSpellRowHtml(sp, slKey, idx, options = {}) {
+    if (!sp) return '';
+    const allowEdit = options.allowEdit !== false;
+    const isAllTab = !!options.isAllTab;
+    const prefix = options.classPrefix || 'pc-spell-';
+
+    const spName = typeof sp === 'string' ? sp.replace(/{@spell ([^|}]+).*?}/, '$1') : sp?.name || 'Unknown';
+    const isPrepared = typeof sp === 'object' && sp !== null ? sp.prepared !== false : true;
+    const opacity = !isPrepared && slKey !== 'cantrip' && slKey !== 'legacy' ? 'opacity: 0.6;' : '';
+    let badges = '';
+    const spText =
+        typeof sp === 'object' && sp !== null ? JSON.stringify(sp).toLowerCase() : String(spName).toLowerCase();
+    let isConcentration = typeof sp === 'object' && sp !== null ? sp.concentration : undefined;
+    let isRitual = typeof sp === 'object' && sp !== null ? sp.ritual : undefined;
+
+    if (isConcentration === undefined) {
+        isConcentration = !!(
+            (typeof sp === 'object' && sp !== null && sp.concentration) ||
+            (typeof sp === 'object' &&
+                sp !== null &&
+                typeof sp.duration === 'string' &&
+                sp.duration.toLowerCase().includes('concentration')) ||
+            (typeof sp === 'object' &&
+                sp !== null &&
+                Array.isArray(sp.duration) &&
+                sp.duration.some((d) => d.concentration)) ||
+            spText.includes('concentration')
+        );
+    }
+    if (isRitual === undefined) {
+        isRitual = !!(
+            (typeof sp === 'object' && sp !== null && sp.ritual) ||
+            (typeof sp === 'object' && sp !== null && sp.meta && sp.meta.ritual) ||
+            (typeof sp === 'object' &&
+                sp !== null &&
+                typeof sp.components === 'string' &&
+                sp.components.toLowerCase().includes('r')) ||
+            spText.includes('ritual')
+        );
+    }
+
+    if (isConcentration) {
+        badges += `<span class="badge badge-c" style="background:#f44336; color:#fff; border-radius:4px; padding:2px 4px; font-size:0.6rem; margin-left:4px;" title="Concentration">C</span>`;
+    }
+    if (isRitual) {
+        badges += `<span class="badge badge-r" style="background:#2196f3; color:#fff; border-radius:4px; padding:2px 4px; font-size:0.6rem; margin-left:4px;" title="Ritual">R</span>`;
+    }
+
+    // Source edition badge (2024 vs 2014 vs Supplement)
+    const spSource = typeof sp === 'object' && sp !== null && sp.source ? String(sp.source).toUpperCase() : '';
+    if (spSource) {
+        const is2024 = spSource === 'XPHB' || spSource === 'XDMG' || spSource === 'XMM';
+        const badgeBg = is2024 ? '#059669' : spSource === 'PHB' ? '#2563eb' : '#475569';
+        badges += `<span class="badge badge-src" style="background:${badgeBg}; color:#fff; border-radius:4px; padding:1px 4px; font-size:0.55rem; font-weight:700; margin-left:4px; vertical-align:middle;" title="Source: ${spSource}">${spSource}</span>`;
+    }
+
+    const cleanTitle = toSpellTitleCase(spName);
+    const attrName = cleanTitle.replace(/"/g, '&quot;');
+    const editBtnHtml = allowEdit
+        ? `<button class="btn btn-xxs btn-secondary ${prefix}edit" data-level="${slKey}" data-idx="${idx}"><i class="fa-solid fa-pen"></i></button>`
+        : '';
+
+    return `
+        <div class="spell-row ${prefix === 'cs-spell-' ? 'cs-spell-item' : 'pc-spell-item'} glass-flat" data-spell-name="${attrName}" data-level="${slKey}" data-idx="${idx}" data-prepared="${isPrepared}" draggable="${allowEdit}" style="padding:8px; display:flex; flex-direction:column; gap:4px; transition: border-color 0.15s, box-shadow 0.15s, opacity 0.15s; ${opacity}">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div style="display:flex; align-items:center; gap:6px;">
+                    ${
+                        allowEdit
+                            ? `<div class="${prefix}drag-handle" data-level="${slKey}" data-idx="${idx}" title="Click and drag to reorder spell" style="cursor:grab; padding:2px 6px 2px 2px; opacity:0.6; display:flex; align-items:center; user-select:none; transition:opacity 0.15s, color 0.15s;" onmouseover="if(!this.dataset.disabled){this.style.opacity='1'; this.style.color='var(--color-gold-base)';}" onmouseout="if(!this.dataset.disabled){this.style.opacity='0.6'; this.style.color='inherit';}">
+                        <i class="fa-solid fa-grip-vertical" style="font-size:0.85rem;"></i>
+                    </div>`
+                            : ''
+                    }
+                    <div class="${prefix}prep-toggle" data-level="${slKey}" data-idx="${idx}" style="cursor: pointer; color: var(--color-gold-base); font-size: 0.8rem; display: ${slKey === 'cantrip' || slKey === 'legacy' ? 'none' : 'block'};">
+                        <i class="${isPrepared ? 'fa-solid' : 'fa-regular'} fa-circle"></i>
+                    </div>
+                    <div class="${prefix}expand-btn" title="Expand Details" style="cursor: pointer; color: var(--color-text-muted); font-size: 0.7rem;">
+                        <i class="fa-solid fa-scroll"></i>
+                        <i class="fa-solid fa-chevron-right" style="transition:transform 0.2s;"></i>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:6px;">
+                        <div class="${prefix}post-chat" data-level="${slKey}" data-idx="${idx}" style="cursor:pointer;" title="Ping description to chat">
+                            <i class="fa-solid fa-comment-dots text-gradient-gold"></i>
+                        </div>
+                        <div class="${prefix}ping-macro" data-level="${slKey}" data-idx="${idx}" style="cursor:pointer; font-weight:600; color:var(--color-text-primary);" title="Roll Spell">
+                            <span class="${prefix}name">${cleanTitle}</span>${badges}
+                        </div>
+                    </div>
+                </div>
+                <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+                    ${editBtnHtml}
+                </div>
+            </div>
+            <div class="${prefix}details" style="display: none; margin-top:8px; padding-top:8px; border-top:1px solid rgba(255,255,255,0.1); font-size:0.8rem;">
+                <div class="${prefix}desc"><em>Loading spell details...</em></div>
+            </div>
+        </div>
+    `;
+}
+
+export async function ensureSpellIsParsed(sp, options = {}) {
+    if (!sp || typeof sp !== 'object') return null;
+    if (sp.macroPopulated && sp.description && sp.description.length > 0) return sp;
+
+    const spells = await loadSpells();
+    if (spells && sp.name) {
+        const rawName = String(sp.name)
+            .replace(/\s*\[.*?\]$/, '')
+            .toLowerCase()
+            .trim();
+        let spSrc =
+            (sp.source || '').toLowerCase().trim() ||
+            (String(sp.name).match(/\[([a-zA-Z0-9_-]+)\]$/)?.[1] || '').toLowerCase().trim();
+        if (spSrc === 'mm' || spSrc === 'xmm') spSrc = '';
+
+        let is2024 = options.is2024;
+        if (is2024 === undefined) {
+            if (spSrc) {
+                is2024 = spSrc === 'xphb' || spSrc === 'xdmg' || spSrc === 'xmm';
+            } else if (options.caster) {
+                is2024 =
+                    (options.caster.classes &&
+                        options.caster.classes.some(
+                            (c) => (c.name || '').includes('[XPHB]') || (c.source || '').toUpperCase() === 'XPHB'
+                        )) ||
+                    options.caster.source === 'XMM' ||
+                    options.caster.source === 'XPHB' ||
+                    options.caster.ruleset === '2024' ||
+                    !!options.caster.is2024;
+            } else {
+                is2024 = false;
+            }
+        }
+
+        let spData = null;
+        if (spSrc) {
+            spData = spells.find(
+                (s) =>
+                    (s.name || '').toLowerCase().trim() === rawName && (s.source || '').toLowerCase().trim() === spSrc
+            );
+        }
+        if (!spData) {
+            if (is2024) {
+                spData =
+                    spells.find(
+                        (s) =>
+                            (s.name || '').toLowerCase().trim() === rawName && (s.source || '').toUpperCase() === 'XPHB'
+                    ) ||
+                    spells.find(
+                        (s) =>
+                            (s.name || '').toLowerCase().trim() === rawName && (s.source || '').toUpperCase() === 'PHB'
+                    ) ||
+                    spells.find((s) => (s.name || '').toLowerCase().trim() === rawName);
+            } else {
+                spData =
+                    spells.find(
+                        (s) =>
+                            (s.name || '').toLowerCase().trim() === rawName && (s.source || '').toUpperCase() === 'PHB'
+                    ) ||
+                    spells.find((s) => {
+                        const src = (s.source || '').toUpperCase();
+                        return (
+                            (s.name || '').toLowerCase().trim() === rawName &&
+                            src !== 'XPHB' &&
+                            src !== 'XDMG' &&
+                            src !== 'XMM'
+                        );
+                    }) ||
+                    spells.find(
+                        (s) =>
+                            (s.name || '').toLowerCase().trim() === rawName && (s.source || '').toUpperCase() === 'XPHB'
+                    ) ||
+                    spells.find((s) => (s.name || '').toLowerCase().trim() === rawName);
+            }
+        }
+
+        if (spData) {
+            if (!spData.descriptionHtml && spData.source && spData.id) {
+                try {
+                    const res = await fetch(
+                        `/api/spell/${encodeURIComponent(spData.source)}/${encodeURIComponent(spData.id)}`
+                    );
+                    if (res.ok) {
+                        const full = await res.json();
+                        Object.assign(spData, full);
+                        if (full.descriptionHtml) spData.descriptionHtml = full.descriptionHtml;
+                    }
+                } catch (e) {}
+            }
+            try {
+                if (window.vttPlayerSheetAPI && window.vttPlayerSheetAPI.parseSpellToMacro) {
+                    window.vttPlayerSheetAPI.parseSpellToMacro(spData, sp);
+                } else {
+                    parseSpellToMacro(spData, sp);
+                }
+            } catch (parseErr) {
+                console.warn('[VTTSpellManager] Error inside parseSpellToMacro:', parseErr);
+            }
+            if (!sp.source || sp.source.toUpperCase() === 'MM' || sp.source.toUpperCase() === 'XMM') {
+                sp.source = spData.source || sp.source;
+            }
+            sp.macroPopulated = true;
+        }
+    }
+    return sp;
+}
+
+export function postSpellToChat(sp, slKey, creatureName = 'Creature', visibility = 'public') {
+    if (!sp) return;
+    const meta = getSpellMetaStrings(sp, slKey);
+
+    let metaHtml = '';
+    if (meta.level || meta.school || meta.time || meta.range || meta.components || meta.duration) {
+        metaHtml = '<div class="spell-meta" style="margin-bottom: 8px;">';
+        if (meta.level)
+            metaHtml += `<div><i class="fa-solid fa-layer-group" style="width: 16px; text-align: center; margin-right: 4px;" title="Level"></i> <strong>Level:</strong> ${meta.level}</div>`;
+        if (meta.school)
+            metaHtml += `<div><i class="fa-solid fa-graduation-cap" style="width: 16px; text-align: center; margin-right: 4px;" title="School"></i> <strong>School:</strong> ${meta.school}</div>`;
+        if (meta.time)
+            metaHtml += `<div><i class="fa-solid fa-clock" style="width: 16px; text-align: center; margin-right: 4px;" title="Casting Time"></i> <strong>Casting Time:</strong> ${meta.time}</div>`;
+        if (meta.range)
+            metaHtml += `<div><i class="fa-solid fa-ruler" style="width: 16px; text-align: center; margin-right: 4px;" title="Range"></i> <strong>Range:</strong> ${meta.range}</div>`;
+        if (meta.components)
+            metaHtml += `<div><i class="fa-solid fa-hand-sparkles" style="width: 16px; text-align: center; margin-right: 4px;" title="Components"></i> <strong>Components:</strong> ${meta.components}</div>`;
+        if (meta.duration)
+            metaHtml += `<div><i class="fa-solid fa-stopwatch" style="width: 16px; text-align: center; margin-right: 4px;" title="Duration"></i> <strong>Duration:</strong> ${meta.duration}</div>`;
+        metaHtml += '</div>';
+    }
+
+    let bodyText = sp.description || '';
+    if (typeof cleanSpellBodyHtml === 'function') {
+        bodyText = cleanSpellBodyHtml(bodyText);
+    }
+    if (typeof window.injectDiceChips === 'function') {
+        bodyText = window.injectDiceChips(bodyText);
+    }
+
+    const spName = toSpellTitleCase(sp.name || 'Spell');
+    const msgObj = {
+        text: `pings ${spName}`,
+        abilityCard: {
+            creatureName: creatureName,
+            abilityName: spName,
+            text: metaHtml + bodyText,
+            ...meta
+        }
+    };
+
+    const vttObj = activeVtt || window.VTT || window.vtt;
+    const socket = vttObj?.socket;
+    const username = vttObj?.username || '';
+
+    if (socket) {
+        if (visibility === 'private' || visibility === 'gm') {
+            msgObj.to = username;
+            socket.emit('chat:whisper', msgObj);
+        } else {
+            socket.emit('chat:msg', msgObj);
+        }
+    } else {
+        console.error('[SpellManager] Socket not found for postSpellToChat');
+    }
+}
+
+export function promptUpcastLevel(baseLvl, callback, options = {}) {
+    if (window.VTTSpellManager?.ensureSpellModalsExist) window.VTTSpellManager.ensureSpellModalsExist();
+    const modal = document.getElementById('modal-spell-upcast-prompt');
+    const select = document.getElementById('upcast-prompt-level');
+    if (!modal || !select) {
+        if (callback) callback(baseLvl, { expend: true });
+        return;
+    }
+    select.innerHTML = '';
+    const caster = options.caster;
+    const spell = options.spell;
+
+    // Display available slot counts when caster data is present
+    for (let i = baseLvl; i <= 9; i++) {
+        let slotInfo = '';
+        if (caster) {
+            const slotsObj = caster.spellSlots || caster.slots || {};
+            const sl = slotsObj['level' + i];
+            if (sl !== undefined) {
+                const cur =
+                    typeof sl === 'object' && sl.current !== undefined ? sl.current : typeof sl === 'number' ? sl : 0;
+                const max = typeof sl === 'object' && sl.max !== undefined ? sl.max : cur;
+                slotInfo = ` (${cur}/${max} slots)`;
+            }
+        }
+        select.innerHTML += `<option value="${i}">${i}${i === 1 ? 'st' : i === 2 ? 'nd' : i === 3 ? 'rd' : 'th'} Level${i === baseLvl ? ' (Base)' : ''}${slotInfo}</option>`;
+    }
+
+    // Ensure expend slot / usage checkbox is present
+    let expendWrap = document.getElementById('upcast-prompt-expend-wrap');
+    if (!expendWrap) {
+        expendWrap = document.createElement('div');
+        expendWrap.id = 'upcast-prompt-expend-wrap';
+        expendWrap.style.cssText = 'margin-bottom:14px; display:flex; align-items:center; gap:8px;';
+        expendWrap.innerHTML = `
+            <input type="checkbox" id="upcast-prompt-expend" checked style="margin:0; cursor:pointer;">
+            <label for="upcast-prompt-expend" style="margin:0; cursor:pointer; font-size:0.85rem; color:var(--color-text-secondary); user-select:none;">Expend Spell Slot / Daily Use</label>
+        `;
+        const formGroup = modal.querySelector('.form-group');
+        if (formGroup && formGroup.parentNode) {
+            formGroup.parentNode.insertBefore(expendWrap, formGroup.nextSibling);
+        }
+    }
+    const expendCheckbox = document.getElementById('upcast-prompt-expend');
+    if (expendCheckbox) expendCheckbox.checked = true;
+
+    const overlay = document.getElementById('pc-spell-overlay');
+    const mainSpellModal = document.getElementById('pc-spell-modal');
+
+    modal.classList.remove('vtt-hidden');
+    if (overlay) overlay.classList.remove('vtt-hidden');
+
+    const handleCast = () => {
+        const lvl = parseInt(select.value) || baseLvl;
+        const expend = expendCheckbox ? expendCheckbox.checked : true;
+        cleanup();
+        if (callback) callback(lvl, { expend });
+    };
+    const handleCancel = () => {
+        cleanup();
+        if (callback) callback(null);
+    };
+    const handleOverlayClick = (e) => {
+        if (e.target === overlay) handleCancel();
+    };
+    const handleEsc = (e) => {
+        if (e.key === 'Escape' || e.keyCode === 27) {
+            handleCancel();
+        }
+    };
+    const cleanup = () => {
+        modal.classList.add('vtt-hidden');
+        if (overlay && (!mainSpellModal || mainSpellModal.classList.contains('vtt-hidden'))) {
+            overlay.classList.add('vtt-hidden');
+        }
+        document.getElementById('upcast-prompt-cast')?.removeEventListener('click', handleCast);
+        document.getElementById('upcast-prompt-cancel')?.removeEventListener('click', handleCancel);
+        overlay?.removeEventListener('click', handleOverlayClick);
+        window.removeEventListener('keydown', handleEsc);
+    };
+
+    document.getElementById('upcast-prompt-cast')?.addEventListener('click', handleCast);
+    document.getElementById('upcast-prompt-cancel')?.addEventListener('click', handleCancel);
+    overlay?.addEventListener('click', handleOverlayClick);
+    window.addEventListener('keydown', handleEsc);
+}
+
+export function rollSpell(sp, slKey, casterObj = {}, options = {}) {
+    if (!sp) return;
+    const type = options.type || 'roll'; // 'roll', 'attack', 'save', 'damage'
+    const customCastLvl = options.castLvl !== undefined ? options.castLvl : null;
+    const visibility = options.visibility || 'public';
+    const casterName = casterObj.name || 'Caster';
+
+    // 1. Resolve caster statistics & ability mods
+    const getAbilityMod = (ab) => {
+        if (!ab) return 0;
+        const key = ab.toLowerCase();
+        let score = 10;
+        if (casterObj.stats && casterObj.stats[key] !== undefined) {
+            score = parseInt(casterObj.stats[key]) || 10;
+            if (casterObj.statMods && casterObj.statMods[key] !== undefined) {
+                score += parseInt(casterObj.statMods[key]) || 0;
+            }
+        } else if (casterObj[key] !== undefined) {
+            score = parseInt(casterObj[key]) || 10;
+        }
+        return Math.floor((score - 10) / 2);
+    };
+
+    const getProfBonus = (crOrLvl) => {
+        const val = parseFloat(crOrLvl) || 0;
+        if (val < 5) return 2;
+        if (val < 9) return 3;
+        if (val < 13) return 4;
+        if (val < 17) return 5;
+        if (val < 21) return 6;
+        if (val < 25) return 7;
+        if (val < 29) return 8;
+        return 9;
+    };
+
+    const crOrLvl = casterObj.cr ? casterObj.cr.cr || casterObj.cr : casterObj.level || 1;
+    const pb = casterObj.proficiencyBonus !== undefined ? casterObj.proficiencyBonus : getProfBonus(crOrLvl);
+
+    // Spellcasting ability determination
+    let abilityToUse =
+        sp.ability ||
+        (casterObj.spellSettings && casterObj.spellSettings.ability ? casterObj.spellSettings.ability : null) ||
+        (casterObj.spellAbility ? casterObj.spellAbility : null) ||
+        (casterObj.spellcastingAbility ? casterObj.spellcastingAbility : null);
+    if (
+        !abilityToUse &&
+        casterObj.spellcasting &&
+        Array.isArray(casterObj.spellcasting) &&
+        casterObj.spellcasting.length > 0
+    ) {
+        abilityToUse = casterObj.spellcasting[0].ability;
+    }
+    if (!abilityToUse) abilityToUse = 'int';
+    abilityToUse = abilityToUse.toLowerCase();
+    const spellCastingMod = getAbilityMod(abilityToUse);
+
+    // Global spell settings and toggles
+    let globalAtkMod = parseInt(casterObj.spellSettings?.atkMod || 0);
+    let globalDcMod = parseInt(casterObj.spellSettings?.dcMod || 0);
+    let globalDmgMod = parseInt(casterObj.spellSettings?.dmgMod || 0);
+
+    let atkToggleFormula = '';
+    let dmgToggleFormula = '';
+    let typedDmgToggles = [];
+
+    const toggles = casterObj.spellSettings?.toggles;
+    if (toggles && Array.isArray(toggles)) {
+        toggles
+            .filter((t) => t.enabled)
+            .forEach((t) => {
+                if (t.target === 'atk' || t.target === 'both') {
+                    let f = (t.formula || '').trim();
+                    if (f) {
+                        let cleanF = f.startsWith('+') || f.startsWith('-') ? f : '+' + f;
+                        atkToggleFormula += `${cleanF}[${t.name || 'Toggle'}]`;
+                    }
+                }
+                if (t.target === 'dc' || t.target === 'both') {
+                    globalDcMod += parseInt(t.formula) || 0;
+                }
+                if (t.target === 'dmg' || t.target === 'both') {
+                    if (t.dmgType && t.dmgType.trim() !== '') {
+                        typedDmgToggles.push(t);
+                    } else {
+                        let f = (t.formula || '').trim();
+                        if (f) {
+                            let cleanF = f.startsWith('+') || f.startsWith('-') ? f : '+' + f;
+                            dmgToggleFormula += `${cleanF}[${t.name || 'Toggle'}]`;
+                        }
+                    }
+                }
+            });
+    }
+
+    let trueSpellLevel = sp.level !== undefined && sp.level !== null ? parseInt(sp.level) : null;
+    if (trueSpellLevel === null && (slKey === 'cantrip' || slKey === 'legacy')) {
+        trueSpellLevel = 0;
+    } else if (trueSpellLevel === null && String(slKey).startsWith('level')) {
+        trueSpellLevel = parseInt(String(slKey).replace('level', '')) || 1;
+    }
+    const baseLvl =
+        trueSpellLevel !== null
+            ? trueSpellLevel
+            : slKey === 'cantrip' || slKey === 'legacy'
+              ? 0
+              : parseInt(String(slKey).replace('level', '')) || 0;
+    const castLvl = customCastLvl !== null ? customCastLvl : baseLvl;
+
+    let atkRoll = null;
+    let saveInfo = null;
+    let dmgRolls = [];
+
+    // 2. Attack Roll (ONLY IF SPELL HAS AN ATTACK)
+    const isAttackSpell = Boolean(
+        (sp.attackStat && sp.attackStat !== 'none' && sp.attackStat !== '') || sp.attackBonus || sp.isAttack
+    );
+
+    if ((type === 'roll' || type === 'attack') && isAttackSpell) {
+        let formula = '1d20';
+        if (sp.attackBonus) {
+            const bonusStr = String(sp.attackBonus).trim();
+            const cleanBonus = bonusStr.startsWith('+') || bonusStr.startsWith('-') ? bonusStr : `+${bonusStr}`;
+            formula += cleanBonus.includes('d') ? cleanBonus : ` + ${cleanBonus}`;
+        } else if (sp.atkMod !== undefined) {
+            const sign = sp.atkMod >= 0 ? '+' : '';
+            formula += ` ${sign}${sp.atkMod}`;
+        } else {
+            const isSpellStat = sp.attackStat === 'spell' || !sp.attackStat;
+            const statKey = isSpellStat ? abilityToUse : (sp.attackStat || 'int').toLowerCase();
+            const mod = getAbilityMod(statKey);
+            formula += ` ${mod >= 0 ? '+' : ''}${mod}[${(sp.attackStat || 'SPELL').toUpperCase()}]`;
+            if (sp.attackProf !== false) formula += ` + ${pb}[Prof]`;
+            if (sp.attackExtra) formula += ` ${sp.attackExtra >= 0 ? '+' : ''}${sp.attackExtra}`;
+        }
+        if (globalAtkMod !== 0) {
+            formula += ` ${globalAtkMod >= 0 ? '+' : ''}${globalAtkMod}[Global]`;
+        }
+        formula += atkToggleFormula;
+
+        const rawSpellGlobal = parseInt(casterObj.spellSettings?.critRange);
+        const globalSpellCrit = Math.max(1, Math.min(20, isNaN(rawSpellGlobal) ? 20 : rawSpellGlobal));
+        const rawSpellCrit = parseInt(sp.critRange);
+        const spellCrit = Math.max(1, Math.min(20, isNaN(rawSpellCrit) ? 20 : rawSpellCrit));
+        const spellCritRange = Math.min(spellCrit, globalSpellCrit);
+
+        const effectiveRollMode = options.rollMode || casterObj.activeRollMode || (typeof window !== 'undefined' && window.VTT ? window.VTT.currentRollMode : 'normal');
+        const rollOpts = { rollMode: effectiveRollMode, isAttack: true };
+
+        if (window.vttPlayerSheetAPI && window.vttPlayerSheetAPI.simulateRoll) {
+            atkRoll = window.vttPlayerSheetAPI.simulateRoll(formula, spellCritRange, null, rollOpts);
+        } else if (typeof window !== 'undefined' && typeof window.simulateRoll === 'function') {
+            atkRoll = window.simulateRoll(formula, spellCritRange, null, rollOpts);
+        } else {
+            if (effectiveRollMode === 'adv') {
+                const r1 = Math.floor(Math.random() * 20) + 1;
+                const r2 = Math.floor(Math.random() * 20) + 1;
+                const kept = Math.max(r1, r2);
+                atkRoll = { total: kept, rolls: [r1, r2], formula, isCritSuccess: kept >= spellCritRange, isCritFail: kept === 1 };
+            } else if (effectiveRollMode === 'dis') {
+                const r1 = Math.floor(Math.random() * 20) + 1;
+                const r2 = Math.floor(Math.random() * 20) + 1;
+                const kept = Math.min(r1, r2);
+                atkRoll = { total: kept, rolls: [r1, r2], formula, isCritSuccess: kept >= spellCritRange, isCritFail: kept === 1 };
+            } else {
+                const r = Math.floor(Math.random() * 20) + 1;
+                atkRoll = { total: r, rolls: [r], formula, isCritSuccess: r >= spellCritRange, isCritFail: r === 1 };
+            }
+        }
+    }
+
+    // 3. Save DC (ONLY IF SPELL HAS A VALID SAVE ABILITY AND DC SOURCE)
+    const hasSaveAbility = typeof sp.saveAbility === 'string' && sp.saveAbility.trim() !== '';
+    const hasSaveDcSource =
+        (sp.saveDcStat && sp.saveDcStat !== 'none') ||
+        sp.saveDcCustom ||
+        (sp.dc !== undefined && sp.dc !== null && !isNaN(parseInt(sp.dc)));
+
+    if ((type === 'roll' || type === 'save') && hasSaveAbility && hasSaveDcSource) {
+        let dc = 10;
+        if (sp.saveDcCustom) {
+            dc = parseInt(sp.saveDcCustom) || 10;
+        } else if (sp.dc !== undefined && sp.dc !== null && !isNaN(parseInt(sp.dc))) {
+            dc = parseInt(sp.dc);
+        } else {
+            const isSpellStat = sp.saveDcStat === 'spell' || !sp.saveDcStat;
+            const statKey = isSpellStat ? abilityToUse : (sp.saveDcStat || 'int').toLowerCase();
+            const stat = getAbilityMod(statKey);
+            const prof = sp.saveDcProf !== false ? pb : 0;
+            dc = 8 + prof + stat + (parseInt(sp.saveDcExtra) || 0) + globalDcMod;
+        }
+        const saveAb = sp.saveAbility.trim().substring(0, 3).toUpperCase();
+        saveInfo = { ability: saveAb, dc: dc };
+    }
+
+    // 4. Damage Calculation (Cantrip scaling & Upcasting)
+    if ((type === 'roll' || type === 'damage') && sp.damageList && sp.damageList.length > 0) {
+        let dList = JSON.parse(JSON.stringify(sp.damageList));
+
+        // Determine effective caster level
+        let casterLvl = 1;
+        if (casterObj && (casterObj.classes || (casterObj.level !== undefined && !casterObj.cr))) {
+            // Player Character - always use character level
+            casterLvl = parseInt(casterObj.level) || 1;
+        } else {
+            // Creature / Monster / Companion
+            if (sp && sp.casterLevel && parseInt(sp.casterLevel) > 0) {
+                casterLvl = parseInt(sp.casterLevel);
+            } else if (casterObj && casterObj.casterLevel && parseInt(casterObj.casterLevel) > 0) {
+                casterLvl = parseInt(casterObj.casterLevel);
+            } else if (casterObj && casterObj.spellcasterLevel && parseInt(casterObj.spellcasterLevel) > 0) {
+                casterLvl = parseInt(casterObj.spellcasterLevel);
+            } else if (casterObj && casterObj.masterLevel && parseInt(casterObj.masterLevel) > 0) {
+                casterLvl = parseInt(casterObj.masterLevel);
+            } else if (casterObj && casterObj.cr !== undefined) {
+                // Monster CR fallback (e.g., CR 12 -> level 12)
+                let crRaw = typeof casterObj.cr === 'object' ? casterObj.cr.cr || 0 : casterObj.cr;
+                if (crRaw === '1/8' || crRaw === '1/4' || crRaw === '1/2') {
+                    casterLvl = 1;
+                } else {
+                    casterLvl = Math.max(1, parseInt(crRaw) || 1);
+                }
+            } else {
+                casterLvl = parseInt(casterObj?.level) || 1;
+            }
+        }
+
+        const isCantripRoll = baseLvl === 0 && (sp.level === 0 || sp.level === undefined);
+        if (isCantripRoll) {
+            let cCount = casterLvl >= 17 ? 4 : casterLvl >= 11 ? 3 : casterLvl >= 5 ? 2 : 1;
+            for (let idx = 0; idx < dList.length; idx++) {
+                const d = dList[idx];
+                const rowCantripScale =
+                    d.cantripScale !== undefined
+                        ? Boolean(d.cantripScale)
+                        : idx === 0
+                          ? Boolean(sp.cantripScale !== false)
+                          : false;
+                if (rowCantripScale) {
+                    if (d.formula && /(?:\d+\s*)?[dD]\s*\d+/.test(d.formula)) {
+                        d.formula = d.formula.replace(/^(?:(\d+)\s*)?([dD]\s*\d+)/, (m, countStr, die) => {
+                            const count = countStr !== undefined && countStr !== '' ? parseInt(countStr) : 1;
+                            if (count === 0) {
+                                const extraDice = cCount - 1;
+                                return extraDice > 0 ? `${extraDice}${die}` : '0';
+                            }
+                            return `${cCount * count}${die}`;
+                        });
+                    }
+                }
+            }
+        } else if (castLvl > baseLvl) {
+            let rowSpecificScaled = false;
+            for (let idx = 0; idx < dList.length; idx++) {
+                const d = dList[idx];
+                const rowUpcast = d.upcastBonus !== undefined ? d.upcastBonus : idx === 0 ? sp.upcastBonus : '';
+                if (rowUpcast && String(rowUpcast).trim() !== '') {
+                    const step = d.upcastScaleStep || sp.upcastScaleStep || 1;
+                    const extra = Math.floor((castLvl - baseLvl) / step);
+                    if (extra > 0) {
+                        const scaledUpcastStr = scaleUpcastFormula(rowUpcast, extra);
+                        if (scaledUpcastStr) {
+                            d.formula = `${d.formula || ''} ${scaledUpcastStr}`.trim();
+                            rowSpecificScaled = true;
+                        }
+                    }
+                }
+            }
+
+            if (!rowSpecificScaled && sp.upcastBonus && dList[0]) {
+                const step = sp.upcastScaleStep || 1;
+                const extra = Math.floor((castLvl - baseLvl) / step);
+                if (extra > 0) {
+                    const scaledUpcastStr = scaleUpcastFormula(sp.upcastBonus, extra);
+                    if (scaledUpcastStr) {
+                        dList[0].formula = `${dList[0].formula || ''} ${scaledUpcastStr}`.trim();
+                    }
+                }
+            }
+        }
+
+        let isCrit = atkRoll && atkRoll.isCritSuccess;
+        const isHealingType = (typeStr) => /healing|temp\s*hp/i.test(typeStr || '');
+
+        dList.forEach((d) => {
+            let dform = d.formula || '';
+            if (isCrit && !isHealingType(d.type)) {
+                dform = dform.replace(
+                    /(?:(\d+)\s*)?[dD]\s*(\d+)/gi,
+                    (m, count, faces) => `${(count ? parseInt(count) : 1) * 2}d${faces}`
+                );
+            }
+            if (d.stat && d.stat !== 'none' && d.stat !== '') {
+                const isSpellStat = d.stat.toLowerCase() === 'spell';
+                const statKey = isSpellStat ? abilityToUse : d.stat.toLowerCase();
+                const mod = getAbilityMod(statKey);
+                dform += ` ${mod >= 0 ? '+' : ''}${mod}[${(d.stat || 'STAT').toUpperCase()}]`;
+            }
+            if (d.custom && d.custom.trim() !== '') {
+                let c = d.custom.trim();
+                let cleanC = c.startsWith('+') || c.startsWith('-') ? c : '+' + c;
+                dform += ` ${cleanC}[Custom]`;
+            }
+            if (d.prof) dform += ` + ${pb}[Prof]`;
+            if (d.extra) dform += ` + ${d.extra}[Extra]`;
+            if (globalDmgMod !== 0) {
+                dform += ` ${globalDmgMod >= 0 ? '+' : ''}${globalDmgMod}[Global]`;
+            }
+            dform += dmgToggleFormula;
+
+            let res = null;
+            if (window.vttPlayerSheetAPI && window.vttPlayerSheetAPI.simulateRoll) {
+                res = window.vttPlayerSheetAPI.simulateRoll(dform);
+            } else if (typeof window !== 'undefined' && typeof window.simulateRoll === 'function') {
+                res = window.simulateRoll(dform);
+            }
+            dmgRolls.push({
+                formula: dform,
+                type: d.type || (isHealingType(d.type) ? 'Healing' : 'Damage'),
+                label: d.label || '',
+                roll: res,
+                isMagic: sp.isMagic !== undefined ? !!sp.isMagic : true,
+                isSpell: true
+            });
+        });
+
+        // Add typed damage toggles
+        typedDmgToggles.forEach((t) => {
+            let cleanF = t.formula.startsWith('+') || t.formula.startsWith('-') ? t.formula : '+' + t.formula;
+            let rollFormula = `${cleanF}[${t.name || 'Toggle'}]`;
+            if (isCrit && !isHealingType(t.dmgType)) {
+                rollFormula = rollFormula.replace(
+                    /(?:(\d+)\s*)?[dD]\s*(\d+)/gi,
+                    (m, count, faces) => `${(count ? parseInt(count) : 1) * 2}d${faces}`
+                );
+            }
+            let res = null;
+            if (window.vttPlayerSheetAPI && window.vttPlayerSheetAPI.simulateRoll) {
+                res = window.vttPlayerSheetAPI.simulateRoll(rollFormula);
+            } else if (typeof window !== 'undefined' && typeof window.simulateRoll === 'function') {
+                res = window.simulateRoll(rollFormula);
+            }
+            dmgRolls.push({
+                formula: cleanF,
+                type: t.dmgType,
+                roll: res,
+                isMagic: sp.isMagic !== undefined ? !!sp.isMagic : true,
+                isSpell: true
+            });
+        });
+    }
+
+    // 5. Build standardized macroCard payload
+    const meta = getSpellMetaStrings(sp, slKey);
+    let cardTitle = toSpellTitleCase(sp.name || 'Spell');
+    if (castLvl && castLvl > baseLvl) cardTitle += ` (Level ${castLvl})`;
+    const isAllHealing =
+        sp.damageList &&
+        sp.damageList.length > 0 &&
+        sp.damageList.every((d) => /healing|temp\s*hp/i.test(d.type || ''));
+    if (type === 'attack') cardTitle += ' (Spell Attack)';
+    else if (type === 'save') cardTitle += ' (Spell Save)';
+    else if (type === 'damage') cardTitle += isAllHealing ? ' (Healing)' : ' (Damage)';
+
+    const card = {
+        charName: casterName,
+        macroName: cardTitle,
+        description: sp.macroDescription || '',
+        atkRoll: atkRoll,
+        saveInfo: saveInfo,
+        saveDc: saveInfo ? saveInfo.dc : undefined,
+        saveAbility: saveInfo ? saveInfo.ability : undefined,
+        dmgRolls: dmgRolls
+    };
+
+    const vttObj = activeVtt || window.VTT || window.vtt;
+    const socket = vttObj?.socket;
+    const username = vttObj?.username || '';
+
+    if (socket) {
+        const payload = { macroCard: card };
+        if (visibility === 'private' || visibility === 'gm') {
+            payload.whisperToGM = true;
+            socket.emit('chat:msg', payload);
+        } else {
+            socket.emit('chat:msg', payload);
+        }
+    }
+
+    return card;
+}
+
+let activeVtt = null;
+
+export function initVttSpellManager(vtt) {
+    activeVtt = vtt;
+    if (!spellCache && sharedSpellCache) spellCache = sharedSpellCache;
+    let activeSpellEditContext = { char: null, onSave: null };
+    let spellBulkSelection = new Set();
+    let activeSpellEditionFilter = 'all';
+    let classSet = new Set();
+    let subclassSet = new Set();
+    let modalSpellDamageRows = [];
+
+    let currentChar = null;
+    let saveAndEmit = null;
+    let renderSheetData = null;
+
+    // parseSpellToMacro is defined at module scope
+
+    function ensureSpellModalsExist() {
+        if (document.getElementById('pc-spell-modal')) return;
+
+        const container = document.createElement('div');
+        container.innerHTML = `
+            <!-- Spell Modal Overlay -->
+            <div id="pc-spell-overlay" class="vtt-sheet-submodal-overlay vtt-hidden"></div>
+            
+            <!-- Main Add Spell Modal -->
+            <div id="pc-spell-modal" class="vtt-sheet-submodal vtt-hidden" style="width:920px; height:85vh;">
+                <div style="padding:14px 18px; border-bottom:1px solid var(--color-border-subtle); display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.3);">
+                    <h3 style="margin:0; color:var(--color-gold-base); font-size:1.1rem; display:flex; align-items:center; gap:8px;" id="pc-spell-modal-title"><i class="fa-solid fa-book-bookmark"></i> Add Spell</h3>
+                    <button id="modal-spell-close" style="background:transparent; border:none; color:var(--color-text-muted); cursor:pointer; font-size:1.2rem;"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                
+                <input type="hidden" id="modal-spell-level" value="">
+                <input type="hidden" id="modal-spell-idx" value="-1">
+
+                <div style="display:flex; border-bottom:1px solid var(--color-border-subtle); background:rgba(0,0,0,0.2);">
+                    <button class="btn btn-xs pc-spell-modal-tab active" data-tab="search" style="flex:1; border-radius:0; border:none; border-bottom:2px solid var(--color-gold-base); background:transparent; color:var(--color-text-primary); padding:8px 12px; font-weight:600;"><i class="fa-solid fa-database"></i> Search Spell Database</button>
+                    <button class="btn btn-xs pc-spell-modal-tab" data-tab="custom" style="flex:1; border-radius:0; border:none; border-bottom:2px solid transparent; background:transparent; color:var(--color-text-muted); padding:8px 12px; font-weight:600;"><i class="fa-solid fa-wand-magic"></i> Custom Spell Editor</button>
+                </div>
+
+                <!-- Search Tab (2-Column Split Layout) -->
+                <div id="pc-spell-tab-search" style="padding:14px; overflow:hidden; flex:1; display:flex; gap:16px;">
+                    <!-- Left Column: Search & Selection -->
+                    <div style="flex:1; display:flex; flex-direction:column; gap:10px; min-width:320px; overflow:hidden;">
+                        <!-- Row 1: Search Bar & Edition Filter Buttons -->
+                        <div style="display:flex; gap:8px; align-items:center; width:100%;">
+                            <div style="position:relative; flex:1;">
+                                <i class="fa-solid fa-magnifying-glass" style="position:absolute; left:10px; top:50%; transform:translateY(-50%); color:var(--color-text-muted); font-size:0.85rem;"></i>
+                                <input type="text" id="modal-spell-search-input" placeholder="Search spells by name..." style="width:100%; padding-left:30px; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); border-radius:4px; color:var(--color-text-primary); height:34px; font-size:0.85rem;">
+                            </div>
+                            <div class="btn-group" id="modal-spell-edition-filter-group" style="display:inline-flex; border-radius:4px; overflow:hidden; border:1px solid var(--color-border-subtle); flex-shrink:0; height:34px;">
+                                <button type="button" class="btn btn-xs modal-spell-filter-edition active" data-edition="all" style="padding:4px 10px; font-size:0.75rem; background:var(--color-gold-base); color:#000; font-weight:bold; border:none; cursor:pointer;">All</button>
+                                <button type="button" class="btn btn-xs modal-spell-filter-edition" data-edition="phb" style="padding:4px 10px; font-size:0.75rem; background:#2a2a2a; color:var(--color-text-secondary); border:none; cursor:pointer;">PHB</button>
+                                <button type="button" class="btn btn-xs modal-spell-filter-edition" data-edition="xphb" style="padding:4px 10px; font-size:0.75rem; background:#2a2a2a; color:var(--color-text-secondary); border:none; cursor:pointer;">XPHB</button>
+                            </div>
+                        </div>
+
+                        <!-- Row 2: Sort & Filter Buttons -->
+                        <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
+                            <select id="modal-spell-sort" style="flex:1; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); border-radius:4px; color:var(--color-text-primary); height:32px; font-size:0.8rem; padding:0 8px; font-weight:600; cursor:pointer;" title="Sort Spells">
+                                <option value="name_asc">Sort: Name (A → Z)</option>
+                                <option value="name_desc">Sort: Name (Z → A)</option>
+                                <option value="level_asc">Sort: Level (0 → 9)</option>
+                                <option value="level_desc">Sort: Level (9 → 0)</option>
+                                <option value="school_asc">Sort: School (A → Z)</option>
+                                <option value="time">Sort: Casting Time</option>
+                                <option value="range">Sort: Range</option>
+                            </select>
+                            <button class="btn btn-secondary btn-sm" id="modal-spell-filter-btn" style="white-space:nowrap; display:flex; align-items:center; gap:6px; height:32px;"><i class="fa-solid fa-sliders"></i> Filters</button>
+                        </div>
+
+                        <!-- Row 3: Spell Level & School Dropdowns (Side-by-Side) -->
+                        <div style="display:flex; gap:8px; align-items:center;">
+                            <select id="modal-spell-quick-level" style="flex:1; background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); border-radius:4px; padding:4px 8px; font-size:0.8rem; height:32px;">
+                                <option value="">Any Level</option>
+                                <option value="0">Cantrip</option>
+                                <option value="1">1st Level</option>
+                                <option value="2">2nd Level</option>
+                                <option value="3">3rd Level</option>
+                                <option value="4">4th Level</option>
+                                <option value="5">5th Level</option>
+                                <option value="6">6th Level</option>
+                                <option value="7">7th Level</option>
+                                <option value="8">8th Level</option>
+                                <option value="9">9th Level</option>
+                            </select>
+                            <select id="modal-spell-quick-school" style="flex:1; background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); border-radius:4px; padding:4px 8px; font-size:0.8rem; height:32px;">
+                                <option value="">Any School</option>
+                                <option value="Abjuration">Abjuration</option>
+                                <option value="Conjuration">Conjuration</option>
+                                <option value="Divination">Divination</option>
+                                <option value="Enchantment">Enchantment</option>
+                                <option value="Evocation">Evocation</option>
+                                <option value="Illusion">Illusion</option>
+                                <option value="Necromancy">Necromancy</option>
+                                <option value="Transmutation">Transmutation</option>
+                            </select>
+                        </div>
+
+                        <!-- Row 4: Class Pill & Checkboxes -->
+                        <div id="modal-spell-quick-pills" style="display:flex; flex-wrap:wrap; gap:8px; font-size:0.78rem; align-items:center;">
+                            <button id="pill-class-toggle" data-active="true" style="background:rgba(212,175,55,0.2); border:1px solid var(--color-gold-base); color:var(--color-gold-base); border-radius:12px; padding:3px 10px; cursor:pointer; font-weight:600; display:flex; align-items:center; gap:6px;">
+                                <i class="fa-solid fa-user-shield"></i> <span id="pill-class-label">All Classes</span>
+                            </button>
+                            <label style="display:flex; align-items:center; gap:4px; margin:0; cursor:pointer; color:var(--color-text-muted); font-size:0.78rem;">
+                                <input type="checkbox" id="modal-spell-quick-conc"> Conc
+                            </label>
+                            <label style="display:flex; align-items:center; gap:4px; margin:0; cursor:pointer; color:var(--color-text-muted); font-size:0.78rem;">
+                                <input type="checkbox" id="modal-spell-quick-rit"> Ritual
+                            </label>
+                        </div>
+
+                        <!-- Advanced Filters Drawer -->
+                        <div id="modal-spell-advanced-drawer" class="vtt-hidden" style="background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); border-radius:6px; padding:10px; display:flex; flex-direction:column; gap:8px; font-size:0.8rem;">
+                            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+                                <div>
+                                    <label style="display:block; font-size:0.7rem; color:var(--color-text-muted);">Class</label>
+                                    <select id="modal-spell-filter-class" style="width:100%;"><option value="">Any Class</option></select>
+                                </div>
+                                <div>
+                                    <label style="display:block; font-size:0.7rem; color:var(--color-text-muted);">Subclass</label>
+                                    <select id="modal-spell-filter-subclass" style="width:100%;"><option value="">Any Subclass</option></select>
+                                </div>
+                                <div>
+                                    <label style="display:block; font-size:0.7rem; color:var(--color-text-muted);">Race / Species</label>
+                                    <select id="modal-spell-filter-race" style="width:100%;"><option value="">Any Race / Species</option></select>
+                                </div>
+                                <div>
+                                    <label style="display:block; font-size:0.7rem; color:var(--color-text-muted);">Condition Applied</label>
+                                    <select id="modal-spell-filter-condition" style="width:100%;"><option value="">Any Condition</option></select>
+                                </div>
+                                <div style="grid-column: span 2;">
+                                    <label style="display:block; font-size:0.7rem; color:var(--color-text-muted);">Area of Effect</label>
+                                    <select id="modal-spell-filter-area" style="width:100%;"><option value="">Any Area Shape</option></select>
+                                </div>
+                            </div>
+                            <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:4px;">
+                                <button class="btn btn-xs btn-secondary" id="modal-spell-filter-reset">Reset Filters</button>
+                            </div>
+                        </div>
+
+                        <!-- Results List -->
+                        <div id="modal-spell-search-results" style="border:1px solid var(--color-border-subtle); background:rgba(0,0,0,0.3); border-radius:4px; flex:1; overflow-y:auto; padding:4px;">
+                            <div style="padding:12px; text-align:center; color:var(--color-text-muted);">Loading spells...</div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Live Spell Preview Pane -->
+                    <div id="modal-spell-preview-pane" style="flex:1.15; min-width:340px; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); border-radius:6px; display:flex; flex-direction:column; overflow:hidden;">
+                        <div style="padding:16px; flex:1; overflow-y:auto;" id="modal-spell-preview-content">
+                            <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; color:var(--color-text-muted); text-align:center; padding:24px;">
+                                <i class="fa-solid fa-wand-magic-sparkles" style="font-size:2rem; margin-bottom:12px; opacity:0.4; color:var(--color-gold-base);"></i>
+                                <div style="font-size:0.9rem; font-weight:600; color:var(--color-text-primary);">Select a spell to preview</div>
+                                <div style="font-size:0.75rem; margin-top:4px; max-width:240px;">Click any spell in the left list to view its description, stats, damage, and tags.</div>
+                            </div>
+                        </div>
+                        <div id="modal-spell-preview-footer" class="vtt-hidden" style="padding:12px 16px; border-top:1px solid var(--color-border-subtle); background:rgba(0,0,0,0.3); display:flex; justify-content:flex-end;">
+                            <button class="btn btn-primary btn-sm" id="btn-import-single-spell" style="display:flex; align-items:center; gap:6px;"><i class="fa-solid fa-plus"></i> Add Spell to Sheet</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Custom Tab -->
+                <div id="pc-spell-tab-custom" class="vtt-hidden" style="padding:16px; overflow-y:auto; flex:1;">
+                    <div style="display:flex; gap:8px; margin-bottom:8px;">
+                        <div class="form-group" style="flex:2;">
+                            <label>Spell Name</label>
+                            <input type="text" id="modal-spell-name" style="width:100%;">
+                        </div>
+                        <div class="form-group" style="flex:1;">
+                            <label>School</label>
+                            <select id="modal-spell-school" style="width:100%;">
+                                <option value="">None</option>
+                                <option value="Abjuration">Abjuration</option>
+                                <option value="Conjuration">Conjuration</option>
+                                <option value="Divination">Divination</option>
+                                <option value="Enchantment">Enchantment</option>
+                                <option value="Evocation">Evocation</option>
+                                <option value="Illusion">Illusion</option>
+                                <option value="Necromancy">Necromancy</option>
+                                <option value="Transmutation">Transmutation</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div style="display:flex; gap:8px; margin-bottom:8px;">
+                        <div class="form-group" style="flex:1;">
+                            <label>Casting Time</label>
+                            <input type="text" id="modal-spell-time" placeholder="e.g. 1 action" style="width:100%;">
+                        </div>
+                        <div class="form-group" style="flex:1;">
+                            <label>Range</label>
+                            <input type="text" id="modal-spell-range" placeholder="e.g. 120 feet" style="width:100%;">
+                        </div>
+                    </div>
+                    <div style="display:flex; gap:8px; margin-bottom:12px;">
+                        <div class="form-group" style="flex:1;">
+                            <label>Components</label>
+                            <input type="text" id="modal-spell-components" placeholder="e.g. V, S, M" style="width:100%;">
+                        </div>
+                        <div class="form-group" style="flex:1;">
+                            <label>Duration</label>
+                            <input type="text" id="modal-spell-duration" placeholder="e.g. 1 round" style="width:100%;">
+                        </div>
+                    </div>
+                    <div style="display:flex; gap:16px; margin-bottom:12px; align-items:center;">
+                        <div class="form-group" style="display:flex; align-items:center; gap:6px;">
+                            <input type="checkbox" id="modal-spell-concentration" style="margin:0;">
+                            <label for="modal-spell-concentration" style="margin:0; font-size:0.85rem; cursor:pointer;">Concentration (C)</label>
+                        </div>
+                        <div class="form-group" style="display:flex; align-items:center; gap:6px;">
+                            <input type="checkbox" id="modal-spell-ritual" style="margin:0;">
+                            <label for="modal-spell-ritual" style="margin:0; font-size:0.85rem; cursor:pointer;">Ritual (R)</label>
+                        </div>
+                    </div>
+                    <div style="display:flex; gap:12px; margin-bottom:12px;">
+                        <div class="form-group" style="flex:1;">
+                            <label>Cast Frequency / Usage</label>
+                            <select id="modal-spell-uses-type" style="width:100%;">
+                                <option value="slot">Standard (Slot-Based)</option>
+                                <option value="at_will">At Will</option>
+                                <option value="long_rest">Per Long Rest (Daily)</option>
+                                <option value="short_rest">Per Short Rest</option>
+                                <option value="short_long">Per Short/Long Rest</option>
+                                <option value="custom">Custom Frequency</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="flex:1;">
+                            <label>Max Uses (per Rest/Day)</label>
+                            <input type="number" id="modal-spell-uses-max" placeholder="e.g. 1, 3" min="0" style="width:100%;">
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom:12px;">
+                        <label>Spell Description (Optional)</label>
+                        <textarea id="modal-spell-desc" style="width:100%; min-height:80px; resize:vertical; background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); padding:8px; font-family:var(--font-primary); font-size:0.8rem;"></textarea>
+                    </div>
+                    <h4 style="margin:8px 0; color:var(--color-gold-base);">Attack & Macro Settings</h4>
+                    <div class="form-group" style="margin-bottom:8px;">
+                        <label>Macro Description (Optional Chat Text)</label>
+                        <input type="text" id="modal-spell-macro-desc" placeholder="e.g. You hurl a mote of fire." style="width:100%;">
+                    </div>
+                    <div style="display:flex; gap:8px; margin-bottom:8px;">
+                        <div class="form-group" style="flex:1;">
+                            <label>Attack Roll</label>
+                            <select id="modal-spell-atk-stat" style="width:100%;">
+                                <option value="none">None</option>
+                                <option value="spell">Spellcasting Stat</option>
+                                <option value="STR">STR</option>
+                                <option value="DEX">DEX</option>
+                                <option value="CON">CON</option>
+                                <option value="INT">INT</option>
+                                <option value="WIS">WIS</option>
+                                <option value="CHA">CHA</option>
+                                <option value="custom">Custom</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="flex:1;">
+                            <label>Proficient</label>
+                            <div style="padding-top:4px;"><input type="checkbox" id="modal-spell-atk-prof"></div>
+                        </div>
+                        <div class="form-group" style="flex:1;">
+                            <label>Extra Atk Bonus</label>
+                            <input type="number" id="modal-spell-atk-extra" value="0" style="width:100%;">
+                        </div>
+                        <div class="form-group" style="flex:1;">
+                            <label>Custom Bonus</label>
+                            <input type="text" id="modal-spell-atk-custom" placeholder="e.g. 1d4+2" style="width:100%;">
+                        </div>
+                    </div>
+                    <div style="display:flex; gap:8px; margin-bottom:8px;">
+                        <div class="form-group" style="flex:1;">
+                            <label>Save DC Stat</label>
+                            <select id="modal-spell-save-dc-stat" style="width:100%;">
+                                <option value="none">None</option>
+                                <option value="spell">Spellcasting Stat</option>
+                                <option value="STR">STR</option>
+                                <option value="DEX">DEX</option>
+                                <option value="CON">CON</option>
+                                <option value="INT">INT</option>
+                                <option value="WIS">WIS</option>
+                                <option value="CHA">CHA</option>
+                                <option value="custom">Custom Fixed</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="flex:1;">
+                            <label>Extra DC Bonus</label>
+                            <input type="number" id="modal-spell-save-dc-extra" value="0" style="width:100%;">
+                        </div>
+                        <div class="form-group" style="flex:1;">
+                            <label>Fixed DC</label>
+                            <input type="number" id="modal-spell-save-dc-custom" style="width:100%;">
+                        </div>
+                        <div class="form-group" style="flex:1;">
+                            <label>Save Type (Target)</label>
+                            <select id="modal-spell-save-ability" style="width:100%;">
+                                <option value="">None</option>
+                                <option value="STR">STR Save</option>
+                                <option value="DEX">DEX Save</option>
+                                <option value="CON">CON Save</option>
+                                <option value="INT">INT Save</option>
+                                <option value="WIS">WIS Save</option>
+                                <option value="CHA">CHA Save</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+                        <input type="checkbox" id="modal-spell-is-magic" checked>
+                        <label for="modal-spell-is-magic" style="margin:0; font-size:0.85rem; cursor:pointer;">Magical Damage (Bypasses Nonmagical Resistance)</label>
+                    </div>
+                    <div id="modal-spell-damage-list" style="display:flex; flex-direction:column; gap:6px; margin-bottom:8px;"></div>
+                    <button class="btn btn-secondary btn-xxs" id="btn-add-spell-damage" style="margin-bottom:8px;">+ Add Damage Row</button>
+                </div>
+
+                <div style="padding:12px 16px; border-top:1px solid var(--color-border-subtle); display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.2);">
+                    <div id="modal-spell-selection-count" style="font-size:0.8rem; color:var(--color-text-muted);">0 spells selected</div>
+                    <div style="display:flex; gap:8px; align-items:center;">
+                        <button class="btn btn-danger btn-sm vtt-hidden" id="modal-spell-delete" style="margin-right:16px;">Delete Spell</button>
+                        <button class="btn btn-secondary btn-sm" id="modal-spell-cancel">Cancel</button>
+                        <button class="btn btn-primary btn-sm" id="modal-spell-save">Bulk Add Selected (0)</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filter Modal -->
+            <div id="pc-spell-filter-modal" class="vtt-sheet-submodal vtt-sheet-submodal-high vtt-hidden" style="width:400px;">
+                <div style="padding:16px; border-bottom:1px solid var(--color-border-subtle); display:flex; justify-content:space-between; align-items:center;">
+                    <h3 style="margin:0; color:var(--color-gold-base);">Filter Spells</h3>
+                    <button id="modal-spell-filter-close" style="background:transparent; border:none; color:var(--color-text-muted); cursor:pointer; font-size:1.2rem;"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <div style="padding:16px; display:flex; flex-direction:column; gap:12px;">
+                    <div class="form-group">
+                        <label>Level</label>
+                        <select id="modal-spell-filter-level" style="width:100%;">
+                            <option value="">Any Level</option>
+                            <option value="0">Cantrip</option>
+                            <option value="1">1st Level</option>
+                            <option value="2">2nd Level</option>
+                            <option value="3">3rd Level</option>
+                            <option value="4">4th Level</option>
+                            <option value="5">5th Level</option>
+                            <option value="6">6th Level</option>
+                            <option value="7">7th Level</option>
+                            <option value="8">8th Level</option>
+                            <option value="9">9th Level</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>School</label>
+                        <select id="modal-spell-filter-school" style="width:100%;">
+                            <option value="">Any School</option>
+                            <option value="A">Abjuration</option>
+                            <option value="C">Conjuration</option>
+                            <option value="D">Divination</option>
+                            <option value="E">Enchantment</option>
+                            <option value="V">Evocation</option>
+                            <option value="I">Illusion</option>
+                            <option value="N">Necromancy</option>
+                            <option value="T">Transmutation</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Class</label>
+                        <select id="modal-spell-filter-class" style="width:100%;">
+                            <option value="">Any Class</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Subclass</label>
+                        <select id="modal-spell-filter-subclass" style="width:100%;">
+                            <option value="">Any Subclass</option>
+                        </select>
+                    </div>
+                </div>
+                <div style="padding:12px 16px; border-top:1px solid var(--color-border-subtle); display:flex; justify-content:flex-end; gap:8px; background:rgba(0,0,0,0.2);">
+                    <button class="btn btn-secondary btn-sm" id="modal-spell-filter-clear">Clear Filters</button>
+                    <button class="btn btn-primary btn-sm" id="modal-spell-filter-apply">Apply Filters</button>
+                </div>
+            </div>
+            
+            <!-- Spell Settings Modal -->
+            <div id="pc-spell-settings-modal" class="vtt-sheet-submodal vtt-hidden" style="width:500px;">
+                <div style="padding:16px; border-bottom:1px solid var(--color-border-subtle); display:flex; justify-content:space-between; align-items:center;">
+                    <h3 style="margin:0; color:var(--color-gold-base);">Spell Settings & Toggles</h3>
+                    <button id="modal-spell-settings-close" style="background:transparent; border:none; color:var(--color-text-muted); cursor:pointer; font-size:1.2rem;"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <div style="padding:16px; overflow-y:auto; flex:1; display:flex; flex-direction:column; gap:16px;">
+                    <div style="display:flex; gap:12px;">
+                        <div class="form-group" style="flex:1;">
+                            <label>Spellcasting Ability</label>
+                            <select id="modal-settings-ability" style="width:100%;">
+                                <option value="STR">STR</option>
+                                <option value="DEX">DEX</option>
+                                <option value="CON">CON</option>
+                                <option value="INT">INT</option>
+                                <option value="WIS">WIS</option>
+                                <option value="CHA">CHA</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="flex:1; min-width:80px;">
+                            <label>Add'l Atk Mod</label>
+                            <input type="number" id="modal-settings-atk" value="0" style="width:100%;">
+                        </div>
+                        <div class="form-group" style="flex:1; min-width:80px;">
+                            <label>Add'l DC Mod</label>
+                            <input type="number" id="modal-settings-dc" value="0" style="width:100%;">
+                        </div>
+                        <div class="form-group" style="flex:1; min-width:80px;">
+                            <label>Add'l Dmg Mod</label>
+                            <input type="number" id="modal-settings-dmg" value="0" style="width:100%;">
+                        </div>
+                        <div class="form-group" style="flex:1; min-width:80px;">
+                            <label>Crit Threshold</label>
+                            <input type="number" id="modal-settings-crit-range" value="20" min="2" max="20" style="width:100%;">
+                        </div>
+                    </div>
+                    <div style="border-top:1px solid var(--color-border-subtle); padding-top:16px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                            <h4 style="margin:0;">Toggles</h4>
+                            <button id="btn-add-toggle" class="btn btn-xs btn-primary"><i class="fa-solid fa-plus"></i> Add Toggle</button>
+                        </div>
+                        <div id="modal-toggle-form" class="vtt-hidden" style="background:rgba(0,0,0,0.3); padding:8px; border:1px solid var(--color-border-subtle); border-radius:4px; margin-bottom:8px;">
+                            <input type="hidden" id="modal-toggle-idx" value="-1">
+                            <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:8px;">
+                                <input type="text" id="modal-toggle-name" placeholder="Name (e.g. Empowered Evocation)" style="flex:1; min-width:120px;">
+                                <input type="text" id="modal-toggle-formula" placeholder="Formula (e.g. +4)" style="flex:1; min-width:100px;">
+                                <select id="modal-toggle-target" style="flex:1; min-width:120px;">
+                                    <option value="both">Both</option>
+                                    <option value="atk">Attack</option>
+                                    <option value="dc">DC (Static Only)</option>
+                                    <option value="dmg">Damage</option>
+                                </select>
+                                <select id="modal-toggle-type" style="flex:1; min-width:120px;">
+                                    <option value="">None (Base Damage)</option>
+                                    <option value="Slashing">Slashing</option>
+                                    <option value="Piercing">Piercing</option>
+                                    <option value="Bludgeoning">Bludgeoning</option>
+                                    <option value="Fire">Fire</option>
+                                    <option value="Cold">Cold</option>
+                                    <option value="Lightning">Lightning</option>
+                                    <option value="Thunder">Thunder</option>
+                                    <option value="Poison">Poison</option>
+                                    <option value="Acid">Acid</option>
+                                    <option value="Necrotic">Necrotic</option>
+                                    <option value="Radiant">Radiant</option>
+                                    <option value="Force">Force</option>
+                                    <option value="Psychic">Psychic</option>
+                                    <option value="Healing">Healing</option>
+                                </select>
+                            </div>
+                            <div style="display:flex; justify-content:flex-end; gap:8px;">
+                                <button id="modal-toggle-cancel" class="btn btn-xs btn-secondary">Cancel</button>
+                                <button id="modal-toggle-save" class="btn btn-xs btn-primary">Save Toggle</button>
+                            </div>
+                        </div>
+                        <div id="modal-settings-toggles-list" style="display:flex; flex-direction:column; gap:8px;">
+                            <!-- Toggles injected here -->
+                        </div>
+                    </div>
+                </div>
+                <div style="padding:12px 16px; border-top:1px solid var(--color-border-subtle); display:flex; justify-content:flex-end; background:rgba(0,0,0,0.2);">
+                    <button id="modal-settings-save" class="btn btn-primary">Save Changes</button>
+                </div>
+            </div>
+            
+            <!-- Attack Settings Modal -->
+            <div id="pc-attack-settings-modal" class="vtt-sheet-submodal vtt-hidden" style="width:500px;">
+                <div style="padding:16px; border-bottom:1px solid var(--color-border-subtle); display:flex; justify-content:space-between; align-items:center;">
+                    <h3 style="margin:0; color:var(--color-gold-base);">Attack Settings & Toggles</h3>
+                    <button id="modal-attack-settings-close" style="background:transparent; border:none; color:var(--color-text-muted); cursor:pointer; font-size:1.2rem;"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <div style="padding:16px; overflow-y:auto; flex:1; display:flex; flex-direction:column; gap:16px;">
+                    <div style="display:flex; flex-wrap:wrap; gap:8px;">
+                        <div class="form-group" style="flex:1; min-width:100px;">
+                            <label>Global Atk Mod</label>
+                            <input type="number" id="modal-attack-settings-atk" value="0" style="width:100%;">
+                        </div>
+                        <div class="form-group" style="flex:1; min-width:100px;">
+                            <label>Global Dmg Mod</label>
+                            <input type="number" id="modal-attack-settings-dmg" value="0" style="width:100%;">
+                        </div>
+                        <div class="form-group" style="flex:1; min-width:100px;">
+                            <label>Global DC Mod</label>
+                            <input type="number" id="modal-attack-settings-dc" value="0" style="width:100%;">
+                        </div>
+                        <div class="form-group" style="flex:1; min-width:100px;">
+                            <label>Crit Threshold</label>
+                            <input type="number" id="modal-attack-settings-crit-range" value="20" min="2" max="20" style="width:100%;">
+                        </div>
+                    </div>
+                    <div style="border-top:1px solid var(--color-border-subtle); padding-top:16px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                            <h4 style="margin:0;">Toggles</h4>
+                            <button id="btn-add-attack-toggle" class="btn btn-xs btn-primary"><i class="fa-solid fa-plus"></i> Add Toggle</button>
+                        </div>
+                        <div id="modal-attack-toggle-form" class="vtt-hidden" style="background:rgba(0,0,0,0.3); padding:8px; border:1px solid var(--color-border-subtle); border-radius:4px; margin-bottom:8px;">
+                            <input type="hidden" id="modal-attack-toggle-idx" value="-1">
+                            <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:8px;">
+                                <input type="text" id="modal-attack-toggle-name" placeholder="Name (e.g. Sharpshooter)" style="flex:1; min-width:120px;">
+                                <input type="text" id="modal-attack-toggle-formula" placeholder="Formula (e.g. +2)" style="flex:1; min-width:100px;">
+                                <select id="modal-attack-toggle-target" style="flex:1; min-width:120px;">
+                                    <option value="both">Both</option>
+                                    <option value="atk">Attack</option>
+                                    <option value="dmg">Damage</option>
+                                    <option value="dc">DC (Static Only)</option>
+                                </select>
+                                <select id="modal-attack-toggle-type" style="flex:1; min-width:120px;">
+                                    <option value="">None (Base Damage)</option>
+                                    <option value="Slashing">Slashing</option>
+                                    <option value="Piercing">Piercing</option>
+                                    <option value="Bludgeoning">Bludgeoning</option>
+                                    <option value="Fire">Fire</option>
+                                    <option value="Cold">Cold</option>
+                                    <option value="Lightning">Lightning</option>
+                                    <option value="Thunder">Thunder</option>
+                                    <option value="Poison">Poison</option>
+                                    <option value="Acid">Acid</option>
+                                    <option value="Necrotic">Necrotic</option>
+                                    <option value="Radiant">Radiant</option>
+                                    <option value="Force">Force</option>
+                                    <option value="Psychic">Psychic</option>
+                                    <option value="Healing">Healing</option>
+                                </select>
+                            </div>
+                            <div style="display:flex; justify-content:flex-end; gap:8px;">
+                                <button id="modal-attack-toggle-cancel" class="btn btn-xs btn-secondary">Cancel</button>
+                                <button id="modal-attack-toggle-save" class="btn btn-xs btn-primary">Save Toggle</button>
+                            </div>
+                        </div>
+                        <div id="modal-attack-settings-toggles-list" style="display:flex; flex-direction:column; gap:8px;">
+                            <!-- Toggles injected here -->
+                        </div>
+                    </div>
+                </div>
+                <div style="padding:12px 16px; border-top:1px solid var(--color-border-subtle); display:flex; justify-content:flex-end; background:rgba(0,0,0,0.2);">
+                    <button id="modal-attack-settings-save" class="btn btn-primary">Save Changes</button>
+                </div>
+            </div>
+
+            <!-- Upcast Prompt Modal -->
+            <div id="modal-spell-upcast-prompt" class="vtt-sheet-submodal vtt-sheet-submodal-high vtt-hidden" style="width:300px; padding:16px;">
+                <h4 style="margin:0 0 12px 0; color:var(--color-gold-base);">Cast Spell</h4>
+                <div class="form-group" style="margin-bottom:16px;">
+                    <label>Cast at what level?</label>
+                    <select id="upcast-prompt-level" style="width:100%; padding:6px;"></select>
+                </div>
+                <div style="display:flex; gap:8px; justify-content:flex-end;">
+                    <button id="upcast-prompt-cancel" class="btn btn-sm btn-secondary">Cancel</button>
+                    <button id="upcast-prompt-cast" class="btn btn-sm btn-primary">Cast</button>
+                </div>
+            </div>
+            
+            <!-- Delete Prompt Modal -->
+            <div id="modal-spell-delete-prompt" class="vtt-sheet-submodal vtt-sheet-submodal-high vtt-hidden" style="width:300px; padding:16px;">
+                <h4 style="margin:0 0 12px 0; color:var(--color-gold-base);">Delete Spell</h4>
+                <div class="form-group" style="margin-bottom:16px;">
+                    <label style="color:var(--color-text-primary);">Are you sure you want to delete this spell?</label>
+                </div>
+                <div style="display:flex; gap:8px; justify-content:flex-end;">
+                    <button id="delete-prompt-cancel" class="btn btn-sm btn-secondary">Cancel</button>
+                    <button id="delete-prompt-confirm" class="btn btn-sm btn-danger">Delete</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(container);
+        setupSpellModalListeners();
+        setupSpellSettingsListeners();
+        setupAttackSettingsListeners();
+    }
+
+    function updateBulkAddButton() {
+        const count = spellBulkSelection.size;
+        const countEl = document.getElementById('modal-spell-selection-count');
+        const saveEl = document.getElementById('modal-spell-save');
+        if (countEl) countEl.textContent = `${count} spells selected`;
+        if (saveEl) saveEl.textContent = `Bulk Add Selected (${count})`;
+    }
+
+    let activePreviewSpell = null;
+
+    function renderSpellPreview(sp) {
+        activePreviewSpell = sp;
+        const contentEl = document.getElementById('modal-spell-preview-content');
+        const footerEl = document.getElementById('modal-spell-preview-footer');
+        if (!contentEl || !sp) return;
+
+        if (footerEl) footerEl.classList.remove('vtt-hidden');
+
+        let classesBadge = sp.classes?.length
+            ? sp.classes
+                  .map(
+                      (c) =>
+                          `<span style="background:rgba(212,175,55,0.15); border:1px solid var(--color-gold-base); color:var(--color-gold-base); padding:1px 6px; border-radius:10px; font-size:0.7rem; font-weight:600;">${c}</span>`
+                  )
+                  .join(' ')
+            : '';
+        let tagsBadge = '';
+        if (sp.areaTags?.length)
+            tagsBadge += sp.areaTags
+                .map(
+                    (t) =>
+                        `<span style="background:rgba(100,150,255,0.15); border:1px solid rgba(100,150,255,0.4); color:#90caf9; padding:1px 6px; border-radius:10px; font-size:0.7rem;">${AOE_LABEL_MAP[t] || t}</span>`
+                )
+                .join(' ');
+        if (sp.miscTags?.length)
+            tagsBadge += sp.miscTags
+                .map(
+                    (t) =>
+                        `<span style="background:rgba(150,255,150,0.15); border:1px solid rgba(150,255,150,0.4); color:#a5d6a7; padding:1px 6px; border-radius:10px; font-size:0.7rem;">${t}</span>`
+                )
+                .join(' ');
+        if (sp.conditionInflict?.length)
+            tagsBadge += sp.conditionInflict
+                .map(
+                    (t) =>
+                        `<span style="background:rgba(255,100,100,0.15); border:1px solid rgba(255,100,100,0.4); color:#ef9a9a; padding:1px 6px; border-radius:10px; font-size:0.7rem;">${t}</span>`
+                )
+                .join(' ');
+
+        let atkHtml =
+            sp.attackStat && sp.attackStat !== 'none'
+                ? `<span style="background:rgba(33,150,243,0.2); border:1px solid #64b5f6; color:#90caf9; padding:2px 8px; border-radius:4px; font-weight:bold; font-size:0.75rem;"><i class="fa-solid fa-crosshairs"></i> Spell Attack</span>`
+                : '';
+        let saveHtml = sp.saveAbility
+            ? `<span style="background:rgba(156,39,176,0.2); border:1px solid #ba68c8; color:#e1bee7; padding:2px 8px; border-radius:4px; font-weight:bold; font-size:0.75rem;"><i class="fa-solid fa-shield"></i> DC ${sp.saveAbility.toUpperCase()} Save</span>`
+            : '';
+        let dmgHtml = sp.damage
+            ? `<span style="background:rgba(233,30,99,0.2); border:1px solid #f48fb1; color:#f48fb1; padding:2px 8px; border-radius:4px; font-weight:bold; font-size:0.75rem;"><i class="fa-solid fa-burst"></i> ${sp.damage}</span>`
+            : '';
+        let upcastHtml = sp.upcastBonus
+            ? `<span style="background:rgba(76,175,80,0.2); border:1px solid #81c784; color:#a5d6a7; padding:2px 8px; border-radius:4px; font-weight:bold; font-size:0.75rem;"><i class="fa-solid fa-circle-arrow-up"></i> Upcast: +${sp.upcastBonus} ${sp.upcastScaleStep && sp.upcastScaleStep > 1 ? `every ${sp.upcastScaleStep} lvls` : 'per lvl'}</span>`
+            : '';
+
+        const spSource = (sp.source || '').toUpperCase();
+        const is2024 = spSource === 'XPHB' || spSource === 'XDMG' || spSource === 'XMM';
+        const badgeBg = is2024 ? '#059669' : spSource === 'PHB' ? '#2563eb' : '#475569';
+        const badgeText = is2024 ? `${spSource} • 2024` : spSource === 'PHB' ? `${spSource} • 2014` : spSource;
+        const displayTitle = getDisambiguatedSpellName(sp, spellCache);
+
+        contentEl.innerHTML = `
+            <div style="display:flex; flex-direction:column; gap:12px;">
+                <div style="border-bottom:1px solid var(--color-border-subtle); padding-bottom:8px;">
+                    <div style="display:flex; justify-content:space-between; align-items:baseline;">
+                        <h3 style="margin:0; color:var(--color-gold-base); font-size:1.15rem;">${displayTitle}</h3>
+                        <span style="font-size:0.7rem; color:#fff; background:${badgeBg}; padding:2px 6px; border-radius:4px; font-weight:600;">${badgeText}</span>
+                    </div>
+                    <div style="font-size:0.8rem; color:var(--color-text-muted); margin-top:2px;">
+                        ${sp.level === 0 ? 'Cantrip' : `Level ${sp.level}`} • ${sp.school}
+                    </div>
+                </div>
+
+                <div class="spell-meta-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:6px; background:rgba(0,0,0,0.3); padding:8px 10px; border-radius:6px; font-size:0.75rem; border:1px solid rgba(255,255,255,0.05);">
+                    <div><i class="fa-solid fa-clock" style="color:var(--color-gold-base); width:14px;"></i> <strong>Time:</strong> ${sp.castingTime}</div>
+                    <div><i class="fa-solid fa-ruler" style="color:var(--color-gold-base); width:14px;"></i> <strong>Range:</strong> ${sp.range}</div>
+                    <div><i class="fa-solid fa-hand-sparkles" style="color:var(--color-gold-base); width:14px;"></i> <strong>Comp:</strong> ${sp.components}</div>
+                    <div><i class="fa-solid fa-stopwatch" style="color:var(--color-gold-base); width:14px;"></i> <strong>Duration:</strong> ${sp.duration}</div>
+                    <div><i class="fa-solid fa-brain" style="color:${sp.concentration ? '#ff9800' : 'var(--color-text-muted)'}; width:14px;"></i> <strong>Conc:</strong> ${sp.concentration ? 'Yes' : 'No'}</div>
+                    <div><i class="fa-solid fa-book-open" style="color:${sp.ritual ? '#4caf50' : 'var(--color-text-muted)'}; width:14px;"></i> <strong>Ritual:</strong> ${sp.ritual ? 'Yes' : 'No'}</div>
+                </div>
+
+                ${classesBadge || tagsBadge ? `<div style="display:flex; flex-wrap:wrap; gap:4px;">${classesBadge} ${tagsBadge}</div>` : ''}
+
+                ${atkHtml || saveHtml || dmgHtml || upcastHtml ? `<div style="display:flex; flex-wrap:wrap; gap:6px; margin:2px 0;">${atkHtml} ${saveHtml} ${dmgHtml} ${upcastHtml}</div>` : ''}
+
+                <div style="font-size:0.8rem; line-height:1.4; color:var(--color-text-primary); border-top:1px solid var(--color-border-subtle); padding-top:8px;" class="spell-preview-description">
+                    ${sp.descriptionHtml || sp.description || '<em>Loading spell description...</em>'}
+                </div>
+            </div>
+        `;
+
+        if (!sp.descriptionHtml && sp.source && sp.id) {
+            fetch(`/api/spell/${encodeURIComponent(sp.source)}/${encodeURIComponent(sp.id)}`)
+                .then((r) => r.json())
+                .then((full) => {
+                    Object.assign(sp, full);
+                    if (activePreviewSpell && activePreviewSpell.id === sp.id) {
+                        const descEl = contentEl.querySelector('.spell-preview-description');
+                        if (descEl) {
+                            descEl.innerHTML =
+                                sp.descriptionHtml || sp.description || '<em>No description available.</em>';
+                        }
+                    }
+                })
+                .catch(() => {});
+        }
+    }
+
+    function populateFilterDropdowns() {
+        if (!spellCache) return;
+        const classSet = new Set();
+        const subclassSet = new Set();
+        const raceSet = new Set();
+        const condSet = new Set();
+        const areaSet = new Set();
+
+        spellCache.forEach((sp) => {
+            if (sp.classes) sp.classes.forEach((c) => classSet.add(c));
+            if (sp.subclasses) sp.subclasses.forEach((sc) => subclassSet.add(sc.name));
+            if (sp.races) sp.races.forEach((r) => raceSet.add(typeof r === 'string' ? r : r.name));
+            if (sp.conditionInflict) sp.conditionInflict.forEach((c) => condSet.add(c));
+            if (sp.areaTags) sp.areaTags.forEach((a) => areaSet.add(a));
+        });
+
+        const populateSelect = (id, set, labelMap = null) => {
+            const select = document.getElementById(id);
+            if (!select) return;
+            select.innerHTML = select.options[0].outerHTML;
+            const items = Array.from(set).map((val) => ({ value: val, label: labelMap ? labelMap[val] || val : val }));
+            items.sort((a, b) => a.label.localeCompare(b.label));
+            items.forEach((item) => {
+                const opt = document.createElement('option');
+                opt.value = item.value;
+                opt.textContent = item.label;
+                select.appendChild(opt);
+            });
+        };
+
+        populateSelect('modal-spell-filter-class', classSet);
+        populateSelect('modal-spell-filter-subclass', subclassSet);
+        populateSelect('modal-spell-filter-condition', condSet);
+        populateSelect('modal-spell-filter-area', areaSet, AOE_LABEL_MAP);
+
+        fetchAllRaces().then((races) => {
+            if (races && races.length) {
+                races.forEach((r) => {
+                    if (r.name && !r._isCopy) raceSet.add(r.name);
+                });
+            }
+            populateSelect('modal-spell-filter-race', raceSet);
+        });
+    }
+
+    function renderSpellSearchList() {
+        const container = document.getElementById('modal-spell-search-results');
+        if (!container) return;
+        if (!spellCache) {
+            container.innerHTML =
+                '<div style="padding:12px; text-align:center; color:var(--color-text-muted);">Loading spells...</div>';
+            loadSpells().then((spells) => {
+                spellCache = spells;
+                populateFilterDropdowns();
+                renderSpellSearchList();
+            });
+            return;
+        }
+
+        const searchStr = document.getElementById('modal-spell-search-input')?.value.toLowerCase().trim() || '';
+        const quickLvl = document.getElementById('modal-spell-quick-level')?.value || '';
+        const quickSch = document.getElementById('modal-spell-quick-school')?.value || '';
+        const quickConc = document.getElementById('modal-spell-quick-conc')?.checked || false;
+        const quickRit = document.getElementById('modal-spell-quick-rit')?.checked || false;
+
+        const filterCls = document.getElementById('modal-spell-filter-class')?.value || '';
+        const filterSub = document.getElementById('modal-spell-filter-subclass')?.value || '';
+        const filterRace = document.getElementById('modal-spell-filter-race')?.value || '';
+        const filterCond = document.getElementById('modal-spell-filter-condition')?.value || '';
+        const filterArea = document.getElementById('modal-spell-filter-area')?.value || '';
+        const sortBy = document.getElementById('modal-spell-sort')?.value || 'name_asc';
+
+        const filtered = spellCache.filter((sp) => {
+            if (activeSpellEditionFilter && activeSpellEditionFilter !== 'all') {
+                const spSrc = (sp.source || '').toLowerCase();
+                if (activeSpellEditionFilter === 'phb' && spSrc !== 'phb') return false;
+                if (activeSpellEditionFilter === 'xphb' && spSrc !== 'xphb') return false;
+            }
+            if (searchStr) {
+                const rawMatch = (sp.name || '').toLowerCase().includes(searchStr);
+                const taggedMatch = `${sp.name || ''} [${sp.source || ''}]`.toLowerCase().includes(searchStr);
+                if (!rawMatch && !taggedMatch) return false;
+            }
+            if (quickLvl !== '' && String(sp.level) !== String(quickLvl)) return false;
+            if (quickSch !== '' && sp.school !== quickSch) return false;
+            if (quickConc && !sp.concentration) return false;
+            if (quickRit && !sp.ritual) return false;
+
+            if (filterCls && (!sp.classes || !sp.classes.includes(filterCls))) return false;
+            if (filterSub && (!sp.subclasses || !sp.subclasses.some((s) => s.name === filterSub))) return false;
+            if (filterRace) {
+                const hasTag = sp.races && sp.races.some((r) => (typeof r === 'string' ? r : r.name) === filterRace);
+                const hasText = (sp.descriptionHtml || sp.description || '')
+                    .toLowerCase()
+                    .includes(filterRace.toLowerCase());
+                if (!hasTag && !hasText) return false;
+            }
+            if (filterCond && (!sp.conditionInflict || !sp.conditionInflict.includes(filterCond))) return false;
+            if (filterArea && (!sp.areaTags || !sp.areaTags.includes(filterArea))) return false;
+            return true;
+        });
+
+        filtered.sort((a, b) => {
+            switch (sortBy) {
+                case 'name_desc':
+                    return (b.name || '').localeCompare(a.name || '');
+                case 'level_asc':
+                    return a.level - b.level || (a.name || '').localeCompare(b.name || '');
+                case 'level_desc':
+                    return b.level - a.level || (a.name || '').localeCompare(b.name || '');
+                case 'school_asc':
+                    return (a.school || '').localeCompare(b.school || '') || (a.name || '').localeCompare(b.name || '');
+                case 'time':
+                    return (
+                        (a.castingTime || '').localeCompare(b.castingTime || '') ||
+                        (a.name || '').localeCompare(b.name || '')
+                    );
+                case 'range':
+                    return (a.range || '').localeCompare(b.range || '') || (a.name || '').localeCompare(b.name || '');
+                case 'name_asc':
+                default:
+                    return (a.name || '').localeCompare(b.name || '');
+            }
+        });
+
+        const displaySpells = filtered.slice(0, 250);
+        if (displaySpells.length === 0) {
+            container.innerHTML =
+                '<div style="padding:16px; text-align:center; color:var(--color-text-muted); font-size:0.85rem;">No spells found matching filters.</div>';
+            return;
+        }
+
+        let html = '';
+        displaySpells.forEach((sp) => {
+            const isSelected = spellBulkSelection.has(sp.id) || spellBulkSelection.has(sp.name);
+            const isPreviewActive = activePreviewSpell && activePreviewSpell.id === sp.id;
+            const spSrc = (sp.source || '').toUpperCase();
+            const is2024 = spSrc === 'XPHB' || spSrc === 'XDMG' || spSrc === 'XMM';
+            const badgeBg = is2024 ? '#059669' : spSrc === 'PHB' ? '#2563eb' : '#475569';
+            const displayTitle = getDisambiguatedSpellName(sp, spellCache);
+            html += `
+                <div class="spell-result-row ${isPreviewActive ? 'active-preview' : ''}" data-id="${sp.id}" style="display:flex; align-items:center; gap:8px; padding:6px 8px; border-bottom:1px solid rgba(255,255,255,0.05); cursor:pointer; background:${isPreviewActive ? 'rgba(212,175,55,0.15)' : 'transparent'}; border-left:${isPreviewActive ? '3px solid var(--color-gold-base)' : '3px solid transparent'}; font-size:0.8rem;">
+                    <input type="checkbox" class="spell-bulk-cb" data-id="${sp.id}" data-name="${displayTitle.replace(/"/g, '&quot;')}" ${isSelected ? 'checked' : ''} style="cursor:pointer; flex-shrink:0; width:16px; height:16px; margin:0 4px 0 0;">
+                    <div class="spell-row-info" style="display:flex; flex-direction:column; flex:1; min-width:0;">
+                        <div style="display:flex; align-items:center; gap:6px;">
+                            <span style="font-weight:600; font-size:0.85rem; color:var(--color-text-primary); text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">${displayTitle}</span>
+                            <span style="background:${badgeBg}; color:#fff; border-radius:3px; padding:1px 4px; font-size:0.55rem; font-weight:700; text-transform:uppercase;">${sp.source}</span>
+                        </div>
+                        <span style="font-size:0.7rem; color:var(--color-text-muted);">${sp.level === 0 ? 'Cantrip' : 'Lvl ' + sp.level} • ${sp.school}</span>
+                    </div>
+                    <i class="fa-solid fa-chevron-right" style="font-size:0.7rem; color:var(--color-text-muted); opacity:0.6; flex-shrink:0;"></i>
+                </div>
+            `;
+        });
+        if (filtered.length > 250) {
+            html += `<div style="padding:8px; text-align:center; font-size:0.75rem; color:var(--color-text-muted);">Showing 250 of ${filtered.length} results. Please refine search.</div>`;
+        }
+        container.innerHTML = html;
+
+        container.querySelectorAll('.spell-result-row').forEach((row) => {
+            row.addEventListener('click', (e) => {
+                if (e.target.classList.contains('spell-bulk-cb')) return;
+                const spId = row.dataset.id;
+                const spObj = spellCache.find((s) => s.id === spId);
+                if (spObj) {
+                    renderSpellPreview(spObj);
+                    container.querySelectorAll('.spell-result-row').forEach((r) => {
+                        r.style.background = 'transparent';
+                        r.style.borderLeft = '3px solid transparent';
+                    });
+                    row.style.background = 'rgba(212,175,55,0.15)';
+                    row.style.borderLeft = '3px solid var(--color-gold-base)';
+                }
+            });
+        });
+
+        container.querySelectorAll('.spell-bulk-cb').forEach((cb) =>
+            cb.addEventListener('change', (e) => {
+                const spKey = e.currentTarget.dataset.id || e.currentTarget.dataset.name;
+                if (e.currentTarget.checked) {
+                    spellBulkSelection.add(spKey);
+                } else {
+                    spellBulkSelection.delete(spKey);
+                }
+                updateBulkAddButton();
+            })
+        );
+    }
+
+    function openSpellModal(level, idx = -1, customChar = null, onSaveCallback = null, options = null) {
+        ensureSpellModalsExist();
+        const opts =
+            typeof onSaveCallback === 'object' && onSaveCallback !== null && !options ? onSaveCallback : options || {};
+        const saveCallback = typeof onSaveCallback === 'function' ? onSaveCallback : opts.onSave;
+        activeSpellEditContext = {
+            char: customChar || currentChar,
+            onSave: saveCallback,
+            options: opts,
+            targetSpell: opts.targetSpell || null,
+            blockId: opts.blockId || null,
+            sectionKey: opts.sectionKey || null,
+            spellId: opts.spellId || null,
+            onDelete: opts.onDelete || null
+        };
+        const lvlInput = document.getElementById('modal-spell-level');
+        const idxInput = document.getElementById('modal-spell-idx');
+        if (lvlInput) lvlInput.value = level;
+        if (idxInput) idxInput.value = idx;
+
+        const tabSearch = document.getElementById('pc-spell-tab-search');
+        const tabCustom = document.getElementById('pc-spell-tab-custom');
+        const btnSearch = document.querySelector('.pc-spell-modal-tab[data-tab="search"]');
+        const btnCustom = document.querySelector('.pc-spell-modal-tab[data-tab="custom"]');
+
+        const char = activeSpellEditContext.char;
+        let sp = opts.targetSpell || null;
+        if (!sp && idx >= 0 && char && char.spells) {
+            sp =
+                char.spells[level]?.[idx] ||
+                (level && level.startsWith('level') ? char.spells[level.replace('level', '')]?.[idx] : null) ||
+                (level === 'cantrip' ? char.spells['0']?.[idx] : null) ||
+                (/^\d+$/.test(level) ? char.spells[level === '0' ? 'cantrip' : 'level' + level]?.[idx] : null);
+        }
+        if (sp) {
+            const rawSpName = (sp.name || '')
+                .replace(/\s*\[.*?\]$/, '')
+                .toLowerCase()
+                .trim();
+            const spSrc =
+                (sp.source || '').toLowerCase().trim() ||
+                ((sp.name || '').match(/\[([a-zA-Z0-9_-]+)\]$/)?.[1] || '').toLowerCase().trim();
+            let spData = spellCache
+                ? spellCache.find((s) => {
+                      const sName = (s.name || '').toLowerCase().trim();
+                      if (sName !== rawSpName) return false;
+                      if (spSrc && (s.source || '').toLowerCase().trim() !== spSrc) return false;
+                      return true;
+                  })
+                : null;
+            if (!spData && spellCache) {
+                const is2024 =
+                    opts.is2024 !== undefined
+                        ? opts.is2024
+                        : (char?.classes &&
+                              char.classes.some(
+                                  (c) => (c.name || '').includes('[XPHB]') || (c.source || '').toUpperCase() === 'XPHB'
+                              )) ||
+                          char?.source === 'XMM' ||
+                          char?.source === 'XPHB' ||
+                          char?.ruleset === '2024' ||
+                          !!char?.is2024;
+                if (is2024) {
+                    spData =
+                        spellCache.find(
+                            (s) =>
+                                (s.name || '').toLowerCase().trim() === rawSpName &&
+                                (s.source || '').toUpperCase() === 'XPHB'
+                        ) ||
+                        spellCache.find(
+                            (s) =>
+                                (s.name || '').toLowerCase().trim() === rawSpName &&
+                                (s.source || '').toUpperCase() === 'PHB'
+                        ) ||
+                        spellCache.find((s) => (s.name || '').toLowerCase().trim() === rawSpName);
+                } else {
+                    spData =
+                        spellCache.find(
+                            (s) =>
+                                (s.name || '').toLowerCase().trim() === rawSpName &&
+                                (s.source || '').toUpperCase() === 'PHB'
+                        ) ||
+                        spellCache.find((s) => {
+                            const src = (s.source || '').toUpperCase();
+                            return (
+                                (s.name || '').toLowerCase().trim() === rawSpName &&
+                                src !== 'XPHB' &&
+                                src !== 'XDMG' &&
+                                src !== 'XMM'
+                            );
+                        }) ||
+                        spellCache.find(
+                            (s) =>
+                                (s.name || '').toLowerCase().trim() === rawSpName &&
+                                (s.source || '').toUpperCase() === 'XPHB'
+                        ) ||
+                        spellCache.find((s) => (s.name || '').toLowerCase().trim() === rawSpName);
+                }
+            }
+
+            document.getElementById('pc-spell-modal-title').textContent = 'Edit Spell';
+            document.getElementById('modal-spell-name').value = toSpellTitleCase(sp.name || '');
+            let desc = sp.description || (spData ? spData.descriptionHtml || '' : '');
+            if (desc.includes('<p>') || desc.includes('<div>')) {
+                const temp = document.createElement('div');
+                temp.innerHTML = desc;
+                desc = temp.textContent || temp.innerText || desc;
+            }
+            document.getElementById('modal-spell-desc').value = desc.trim();
+
+            const schoolEl = document.getElementById('modal-spell-school');
+            if (schoolEl) {
+                let sch = sp.school || (spData ? spData.school : '');
+                const schoolMap = {
+                    A: 'Abjuration',
+                    C: 'Conjuration',
+                    D: 'Divination',
+                    E: 'Enchantment',
+                    V: 'Evocation',
+                    I: 'Illusion',
+                    N: 'Necromancy',
+                    T: 'Transmutation'
+                };
+                schoolEl.value = schoolMap[sch] || sch;
+            }
+            const timeEl = document.getElementById('modal-spell-time');
+            if (timeEl) timeEl.value = sp.castingTime || (spData ? spData.castingTime : '');
+            const rangeEl = document.getElementById('modal-spell-range');
+            if (rangeEl) rangeEl.value = sp.range || (spData ? spData.range : '');
+            const compEl = document.getElementById('modal-spell-components');
+            if (compEl) compEl.value = sp.components || (spData ? spData.components : '');
+            const durEl = document.getElementById('modal-spell-duration');
+            if (durEl) durEl.value = sp.duration || (spData ? spData.duration : '');
+
+            const concEl = document.getElementById('modal-spell-concentration');
+            if (concEl) {
+                concEl.checked = sp.concentration !== undefined ? !!sp.concentration : !!spData?.concentration;
+            }
+            const ritEl = document.getElementById('modal-spell-ritual');
+            if (ritEl) {
+                ritEl.checked = sp.ritual !== undefined ? !!sp.ritual : !!spData?.ritual;
+            }
+            const isMagicEl = document.getElementById('modal-spell-is-magic');
+            if (isMagicEl) {
+                isMagicEl.checked =
+                    sp.isMagic !== undefined ? !!sp.isMagic : spData?.isMagic !== undefined ? !!spData.isMagic : true;
+            }
+
+            const usesTypeEl = document.getElementById('modal-spell-uses-type');
+            if (usesTypeEl)
+                usesTypeEl.value =
+                    sp.usesType || (sp.uses === 'at_will' ? 'at_will' : sp.usesMax ? 'long_rest' : 'slot');
+            const usesMaxEl = document.getElementById('modal-spell-uses-max');
+            if (usesMaxEl) usesMaxEl.value = sp.usesMax !== undefined ? sp.usesMax : '';
+
+            const macroDescEl = document.getElementById('modal-spell-macro-desc');
+            if (macroDescEl) macroDescEl.value = sp.macroDescription || '';
+
+            document.getElementById('modal-spell-atk-stat').value = sp.attackStat || spData?.attackStat || 'none';
+            document.getElementById('modal-spell-atk-prof').checked =
+                sp.attackProf !== undefined ? !!sp.attackProf : spData?.attackStat === 'spell';
+            document.getElementById('modal-spell-atk-extra').value = sp.attackExtra || 0;
+            document.getElementById('modal-spell-atk-custom').value = sp.attackBonus || '';
+            document.getElementById('modal-spell-save-dc-stat').value =
+                sp.saveDcStat || (spData?.saveAbility ? 'spell' : 'none');
+            document.getElementById('modal-spell-save-dc-extra').value = sp.saveDcExtra || 0;
+            document.getElementById('modal-spell-save-dc-custom').value = sp.saveDcCustom ?? '';
+            document.getElementById('modal-spell-save-ability').value =
+                sp.saveAbility || (spData ? (spData.saveAbility || '').substring(0, 3).toUpperCase() : '');
+
+            let dmgList = sp.damageList || (spData ? spData.damageList : []);
+            if (!dmgList || dmgList.length === 0) {
+                if (sp.damage) dmgList = [{ formula: sp.damage, type: sp.damageType || '' }];
+            }
+            modalSpellDamageRows = JSON.parse(JSON.stringify(dmgList || []));
+            const isCantripLevel = level === 'cantrip' || sp.level === 0 || (spData && spData.level === 0);
+            const isMultiAttackCantrip = /eldritch blast/i.test(sp.name || (spData && spData.name) || '');
+            modalSpellDamageRows.forEach((d, rIdx) => {
+                if (isCantripLevel) {
+                    if (d.cantripScale === undefined) {
+                        d.cantripScale =
+                            rIdx === 0
+                                ? sp.cantripScale !== undefined
+                                    ? !!sp.cantripScale
+                                    : isMultiAttackCantrip
+                                      ? false
+                                      : true
+                                : false;
+                    }
+                } else {
+                    if (d.upcastBonus === undefined) {
+                        d.upcastBonus = rIdx === 0 ? sp.upcastBonus || (spData ? spData.upcastBonus : '') || '' : '';
+                    }
+                    if (d.upcastScaleStep === undefined) {
+                        d.upcastScaleStep =
+                            rIdx === 0 ? sp.upcastScaleStep || (spData ? spData.upcastScaleStep : 1) || 1 : 1;
+                    }
+                }
+            });
+
+            const deleteBtn = document.getElementById('modal-spell-delete');
+            if (deleteBtn) {
+                deleteBtn.classList.remove('vtt-hidden');
+                deleteBtn.dataset.level = level;
+                deleteBtn.dataset.idx = idx;
+            }
+
+            if (tabSearch) tabSearch.classList.add('vtt-hidden');
+            if (tabCustom) tabCustom.classList.remove('vtt-hidden');
+            if (btnSearch) {
+                btnSearch.classList.remove('active');
+                btnSearch.style.borderBottomColor = 'transparent';
+                btnSearch.style.color = 'var(--color-text-muted)';
+            }
+            if (btnCustom) {
+                btnCustom.classList.add('active');
+                btnCustom.style.borderBottomColor = 'var(--color-gold-base)';
+                btnCustom.style.color = 'var(--color-text-primary)';
+            }
+            const saveBtn = document.getElementById('modal-spell-save');
+            if (saveBtn) saveBtn.textContent = 'Save Changes';
+        } else {
+            spellBulkSelection.clear();
+            activeSpellEditionFilter = 'all';
+            document.querySelectorAll('.modal-spell-filter-edition').forEach((b) => {
+                const isAll = b.dataset.edition === 'all';
+                b.classList.toggle('active', isAll);
+                b.style.background = isAll ? 'var(--color-gold-base)' : '#2a2a2a';
+                b.style.color = isAll ? '#000' : 'var(--color-text-secondary)';
+                b.style.fontWeight = isAll ? 'bold' : 'normal';
+            });
+            const titleEl = document.getElementById('pc-spell-modal-title');
+            if (titleEl) titleEl.textContent = 'Add Spell';
+            const nameInput = document.getElementById('modal-spell-name');
+            if (nameInput) nameInput.value = '';
+            const schoolInput = document.getElementById('modal-spell-school');
+            if (schoolInput) schoolInput.value = '';
+            const descInput = document.getElementById('modal-spell-desc');
+            if (descInput) descInput.value = '';
+            const concInput = document.getElementById('modal-spell-concentration');
+            if (concInput) concInput.checked = false;
+            const ritInput = document.getElementById('modal-spell-ritual');
+            if (ritInput) ritInput.checked = false;
+            const isMagicInput = document.getElementById('modal-spell-is-magic');
+            if (isMagicInput) isMagicInput.checked = true;
+            const macroDescInput = document.getElementById('modal-spell-macro-desc');
+            if (macroDescInput) macroDescInput.value = '';
+
+            const atkStatInput = document.getElementById('modal-spell-atk-stat');
+            if (atkStatInput) atkStatInput.value = 'none';
+            const atkProfInput = document.getElementById('modal-spell-atk-prof');
+            if (atkProfInput) atkProfInput.checked = false;
+            const atkExtraInput = document.getElementById('modal-spell-atk-extra');
+            if (atkExtraInput) atkExtraInput.value = '0';
+            const atkCustomInput = document.getElementById('modal-spell-atk-custom');
+            if (atkCustomInput) atkCustomInput.value = '';
+            const saveDcStatInput = document.getElementById('modal-spell-save-dc-stat');
+            if (saveDcStatInput) saveDcStatInput.value = 'none';
+            const saveDcExtraInput = document.getElementById('modal-spell-save-dc-extra');
+            if (saveDcExtraInput) saveDcExtraInput.value = '0';
+            const saveDcCustomInput = document.getElementById('modal-spell-save-dc-custom');
+            if (saveDcCustomInput) saveDcCustomInput.value = '';
+            const saveAbilityInput = document.getElementById('modal-spell-save-ability');
+            if (saveAbilityInput) saveAbilityInput.value = '';
+            modalSpellDamageRows = [];
+
+            const deleteBtn = document.getElementById('modal-spell-delete');
+            if (deleteBtn) deleteBtn.classList.add('vtt-hidden');
+
+            if (tabCustom) tabCustom.classList.add('vtt-hidden');
+            if (tabSearch) tabSearch.classList.remove('vtt-hidden');
+            if (btnCustom) {
+                btnCustom.classList.remove('active');
+                btnCustom.style.borderColor = 'transparent';
+                btnCustom.style.color = 'var(--color-text-muted)';
+            }
+            if (btnSearch) {
+                btnSearch.classList.add('active');
+                btnSearch.style.borderColor = 'var(--color-gold-base)';
+                btnSearch.style.color = 'var(--color-text-primary)';
+            }
+            const saveBtn = document.getElementById('modal-spell-save');
+            if (saveBtn) saveBtn.textContent = 'Add Spells';
+
+            const lvlMap = {
+                cantrip: '0',
+                level1: '1',
+                level2: '2',
+                level3: '3',
+                level4: '4',
+                level5: '5',
+                level6: '6',
+                level7: '7',
+                level8: '8',
+                level9: '9'
+            };
+            const startingLvl = lvlMap[level] || '';
+            const qlvl = document.getElementById('modal-spell-quick-level');
+            if (qlvl) qlvl.value = startingLvl;
+            const qsch = document.getElementById('modal-spell-quick-school');
+            if (qsch) qsch.value = '';
+            const qconc = document.getElementById('modal-spell-quick-conc');
+            if (qconc) qconc.checked = false;
+            const qrit = document.getElementById('modal-spell-quick-rit');
+            if (qrit) qrit.checked = false;
+
+            const primaryClass = char?.classes?.[0]?.name || char?.class || '';
+            const pillToggle = document.getElementById('pill-class-toggle');
+            const pillLabel = document.getElementById('pill-class-label');
+            const classSelect = document.getElementById('modal-spell-filter-class');
+
+            if (primaryClass && classSelect) {
+                classSelect.value = primaryClass;
+                if (pillLabel) pillLabel.textContent = `${primaryClass} Spells`;
+                if (pillToggle) {
+                    pillToggle.dataset.active = 'true';
+                    pillToggle.dataset.class = primaryClass;
+                    pillToggle.style.background = 'rgba(212,175,55,0.2)';
+                    pillToggle.style.color = 'var(--color-gold-base)';
+                    pillToggle.style.borderColor = 'var(--color-gold-base)';
+                }
+            } else {
+                if (classSelect) classSelect.value = '';
+                if (pillLabel) pillLabel.textContent = 'All Classes';
+                if (pillToggle) {
+                    pillToggle.dataset.active = 'false';
+                    pillToggle.dataset.class = '';
+                    pillToggle.style.background = 'rgba(0,0,0,0.3)';
+                    pillToggle.style.color = 'var(--color-text-muted)';
+                    pillToggle.style.borderColor = 'var(--color-border-subtle)';
+                }
+            }
+
+            const sInp = document.getElementById('modal-spell-search-input');
+            if (sInp) sInp.value = '';
+
+            activePreviewSpell = null;
+            const previewContent = document.getElementById('modal-spell-preview-content');
+            if (previewContent) {
+                previewContent.innerHTML = `
+                    <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; color:var(--color-text-muted); text-align:center; padding:24px;">
+                        <i class="fa-solid fa-wand-magic-sparkles" style="font-size:2rem; margin-bottom:12px; opacity:0.4; color:var(--color-gold-base);"></i>
+                        <div style="font-size:0.9rem; font-weight:600; color:var(--color-text-primary);">Select a spell to preview</div>
+                        <div style="font-size:0.75rem; margin-top:4px; max-width:240px;">Click any spell in the left list to view its description, stats, damage, and tags.</div>
+                    </div>
+                `;
+            }
+            document.getElementById('modal-spell-preview-footer')?.classList.add('vtt-hidden');
+            updateBulkAddButton();
+            renderSpellSearchList();
+        }
+
+        renderModalSpellDamage();
+        const modal = document.getElementById('pc-spell-modal');
+        const overlay = document.getElementById('pc-spell-overlay');
+        if (modal) modal.classList.remove('vtt-hidden');
+        if (overlay) overlay.classList.remove('vtt-hidden');
+    }
+
+    function closeSpellModal() {
+        document.getElementById('pc-spell-overlay')?.classList.add('vtt-hidden');
+        document.getElementById('pc-spell-modal')?.classList.add('vtt-hidden');
+        document.getElementById('pc-spell-filter-modal')?.classList.add('vtt-hidden');
+        document.getElementById('modal-spell-delete-prompt')?.classList.add('vtt-hidden');
+    }
+
+    function renderModalSpellDamage() {
+        const list = document.getElementById('modal-spell-damage-list');
+        if (!list) return;
+        const dmgTypes = [
+            'Slashing',
+            'Piercing',
+            'Bludgeoning',
+            'Fire',
+            'Cold',
+            'Lightning',
+            'Thunder',
+            'Poison',
+            'Acid',
+            'Necrotic',
+            'Radiant',
+            'Force',
+            'Psychic',
+            'Healing'
+        ];
+        const statOptions = [
+            { val: '', label: 'Stat (None)' },
+            { val: 'spell', label: 'Spellcasting Stat' },
+            { val: 'str', label: 'STR' },
+            { val: 'dex', label: 'DEX' },
+            { val: 'con', label: 'CON' },
+            { val: 'int', label: 'INT' },
+            { val: 'wis', label: 'WIS' },
+            { val: 'cha', label: 'CHA' }
+        ];
+
+        const lvlInput = document.getElementById('modal-spell-level');
+        const isCantrip = lvlInput && (lvlInput.value === 'cantrip' || lvlInput.value === '0' || lvlInput.value === 0);
+
+        list.innerHTML = modalSpellDamageRows
+            .map((d, i) => {
+                const hasScaling = isCantrip
+                    ? Boolean(d.cantripScale)
+                    : Boolean(d.upcastBonus && String(d.upcastBonus).trim() !== '');
+
+                return `
+            <div class="modal-spell-dmg-row-container" data-idx="${i}" style="display:flex; flex-direction:column; gap:4px; margin-bottom:6px;">
+                <div style="display:flex; gap:4px; align-items:center;">
+                    <input type="text" class="modal-spell-dmg-formula" data-idx="${i}" value="${d.formula || ''}" placeholder="1d8" style="width:18%; padding:4px; font-size:0.8rem;" title="Damage / Healing Formula">
+                    <select class="modal-spell-dmg-type" data-idx="${i}" style="width:18%; padding:4px; font-size:0.8rem;" title="Damage Type">
+                        <option value="">Type</option>
+                        ${dmgTypes.map((t) => `<option value="${t}" ${d.type === t ? 'selected' : ''}>${t}</option>`).join('')}
+                    </select>
+                    <input type="text" class="modal-spell-dmg-label" data-idx="${i}" value="${d.label || ''}" placeholder="Label (e.g. Normal)" style="width:20%; padding:4px; font-size:0.8rem;" title="Damage Roll Label">
+                    <select class="modal-spell-dmg-stat" data-idx="${i}" style="width:16%; padding:4px; font-size:0.8rem;" title="Ability Modifier">
+                        ${statOptions.map((s) => `<option value="${s.val}" ${(d.stat || '').toLowerCase() === s.val.toLowerCase() ? 'selected' : ''}>${s.label}</option>`).join('')}
+                    </select>
+                    <input type="text" class="modal-spell-dmg-custom" data-idx="${i}" value="${d.custom || ''}" placeholder="Mod (+2)" style="width:11%; padding:4px; font-size:0.8rem;" title="Custom Modifier">
+                    <button type="button" class="btn btn-xs ${hasScaling ? 'btn-primary' : 'btn-secondary'} modal-spell-dmg-scale" data-idx="${i}" style="width:10%; padding:4px 2px; font-size:0.75rem; font-weight:${hasScaling ? 'bold' : 'normal'}; border-color:${hasScaling ? 'var(--color-gold-base)' : 'var(--color-border-subtle)'};" title="Configure Scaling for this row">
+                        ${hasScaling ? '<i class="fa-solid fa-arrow-trend-up"></i> ' : ''}Scale
+                    </button>
+                    <button type="button" class="btn btn-xs btn-secondary modal-spell-dmg-del" data-idx="${i}" style="width:7%; padding:4px 2px;" title="Delete Row"><i class="fa-solid fa-trash"></i></button>
+                </div>
+                <div class="modal-spell-scale-drawer vtt-hidden" id="modal-spell-scale-drawer-${i}" style="background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); border-radius:4px; padding:8px 10px; margin-top:2px;">
+                    ${
+                        isCantrip
+                            ? `
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <input type="checkbox" class="modal-spell-row-cantrip-scale" id="modal-spell-row-cantrip-scale-${i}" data-idx="${i}" ${d.cantripScale ? 'checked' : ''} style="cursor:pointer;">
+                            <label for="modal-spell-row-cantrip-scale-${i}" style="margin:0; font-size:0.75rem; cursor:pointer; color:var(--color-text-primary);">
+                                Scale with Character Level (additional dice at 5th, 11th, and 17th level)
+                            </label>
+                        </div>
+                    `
+                            : `
+                        <div style="display:flex; gap:8px; align-items:center;">
+                            <div style="flex:2; display:flex; flex-direction:column; gap:2px;">
+                                <label style="margin:0; font-size:0.75rem; color:var(--color-text-muted);">Upcast Formula (Dice / Flat per interval)</label>
+                                <input type="text" class="modal-spell-row-upcast-bonus" data-idx="${i}" value="${d.upcastBonus || ''}" placeholder="e.g. 1d4+1, 1d8, or +2" style="width:100%; padding:4px; font-size:0.8rem;">
+                            </div>
+                            <div style="flex:1; display:flex; flex-direction:column; gap:2px;">
+                                <label style="margin:0; font-size:0.75rem; color:var(--color-text-muted);">Upcast Interval</label>
+                                <select class="modal-spell-row-upcast-step" data-idx="${i}" style="width:100%; padding:4px; font-size:0.8rem;">
+                                    <option value="1" ${(d.upcastScaleStep || 1) == 1 ? 'selected' : ''}>Every 1 Level</option>
+                                    <option value="2" ${(d.upcastScaleStep || 1) == 2 ? 'selected' : ''}>Every 2 Levels</option>
+                                </select>
+                            </div>
+                        </div>
+                    `
+                    }
+                </div>
+            </div>
+            `;
+            })
+            .join('');
+
+        document.querySelectorAll('.modal-spell-dmg-formula').forEach((el) => {
+            el.addEventListener('input', (e) => {
+                modalSpellDamageRows[e.target.dataset.idx].formula = e.target.value;
+            });
+            el.addEventListener('change', (e) => {
+                modalSpellDamageRows[e.target.dataset.idx].formula = e.target.value;
+            });
+        });
+        document.querySelectorAll('.modal-spell-dmg-type').forEach((el) => {
+            el.addEventListener('change', (e) => {
+                modalSpellDamageRows[e.target.dataset.idx].type = e.target.value;
+            });
+        });
+        document.querySelectorAll('.modal-spell-dmg-label').forEach((el) => {
+            el.addEventListener('input', (e) => {
+                modalSpellDamageRows[e.target.dataset.idx].label = e.target.value;
+            });
+            el.addEventListener('change', (e) => {
+                modalSpellDamageRows[e.target.dataset.idx].label = e.target.value;
+            });
+        });
+        document.querySelectorAll('.modal-spell-dmg-stat').forEach((el) => {
+            el.addEventListener('change', (e) => {
+                modalSpellDamageRows[e.target.dataset.idx].stat = e.target.value;
+            });
+        });
+        document.querySelectorAll('.modal-spell-dmg-custom').forEach((el) => {
+            el.addEventListener('input', (e) => {
+                modalSpellDamageRows[e.target.dataset.idx].custom = e.target.value;
+            });
+            el.addEventListener('change', (e) => {
+                modalSpellDamageRows[e.target.dataset.idx].custom = e.target.value;
+            });
+        });
+        document.querySelectorAll('.modal-spell-dmg-scale').forEach((el) => {
+            el.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                const idx = e.currentTarget.dataset.idx;
+                const drawer = document.getElementById(`modal-spell-scale-drawer-${idx}`);
+                if (drawer) {
+                    drawer.classList.toggle('vtt-hidden');
+                }
+            });
+        });
+        document.querySelectorAll('.modal-spell-row-cantrip-scale').forEach((el) => {
+            el.addEventListener('change', (e) => {
+                const idx = e.target.dataset.idx;
+                modalSpellDamageRows[idx].cantripScale = e.target.checked;
+                const scaleBtn = document.querySelector(`.modal-spell-dmg-scale[data-idx="${idx}"]`);
+                if (scaleBtn) {
+                    if (e.target.checked) {
+                        scaleBtn.classList.remove('btn-secondary');
+                        scaleBtn.classList.add('btn-primary');
+                        scaleBtn.style.borderColor = 'var(--color-gold-base)';
+                        scaleBtn.style.fontWeight = 'bold';
+                        scaleBtn.innerHTML = '<i class="fa-solid fa-arrow-trend-up"></i> Scale';
+                    } else {
+                        scaleBtn.classList.remove('btn-primary');
+                        scaleBtn.classList.add('btn-secondary');
+                        scaleBtn.style.borderColor = 'var(--color-border-subtle)';
+                        scaleBtn.style.fontWeight = 'normal';
+                        scaleBtn.innerHTML = 'Scale';
+                    }
+                }
+            });
+        });
+        document.querySelectorAll('.modal-spell-row-upcast-bonus').forEach((el) => {
+            const updateUpcast = (e) => {
+                const idx = e.target.dataset.idx;
+                modalSpellDamageRows[idx].upcastBonus = e.target.value;
+                const scaleBtn = document.querySelector(`.modal-spell-dmg-scale[data-idx="${idx}"]`);
+                if (scaleBtn) {
+                    const hasUpcast = Boolean(e.target.value && e.target.value.trim() !== '');
+                    if (hasUpcast) {
+                        scaleBtn.classList.remove('btn-secondary');
+                        scaleBtn.classList.add('btn-primary');
+                        scaleBtn.style.borderColor = 'var(--color-gold-base)';
+                        scaleBtn.style.fontWeight = 'bold';
+                        scaleBtn.innerHTML = '<i class="fa-solid fa-arrow-trend-up"></i> Scale';
+                    } else {
+                        scaleBtn.classList.remove('btn-primary');
+                        scaleBtn.classList.add('btn-secondary');
+                        scaleBtn.style.borderColor = 'var(--color-border-subtle)';
+                        scaleBtn.style.fontWeight = 'normal';
+                        scaleBtn.innerHTML = 'Scale';
+                    }
+                }
+            };
+            el.addEventListener('input', updateUpcast);
+            el.addEventListener('change', updateUpcast);
+        });
+        document.querySelectorAll('.modal-spell-row-upcast-step').forEach((el) => {
+            el.addEventListener('change', (e) => {
+                const idx = e.target.dataset.idx;
+                modalSpellDamageRows[idx].upcastScaleStep = parseInt(e.target.value) || 1;
+            });
+        });
+        document.querySelectorAll('.modal-spell-dmg-del').forEach((el) =>
+            el.addEventListener('click', (e) => {
+                modalSpellDamageRows.splice(e.currentTarget.dataset.idx, 1);
+                renderModalSpellDamage();
+            })
+        );
+    }
+
+    function setupSpellModalListeners() {
+        document.getElementById('pc-spell-overlay')?.addEventListener('click', () => {
+            closeSpellModal();
+            document.getElementById('pc-spell-filter-modal')?.classList.add('vtt-hidden');
+            document.getElementById('pc-spell-settings-modal')?.classList.add('vtt-hidden');
+            document.getElementById('pc-attack-settings-modal')?.classList.add('vtt-hidden');
+            document.getElementById('modal-spell-upcast-prompt')?.classList.add('vtt-hidden');
+            document.getElementById('modal-spell-delete-prompt')?.classList.add('vtt-hidden');
+            document.getElementById('pc-spell-overlay')?.classList.add('vtt-hidden');
+        });
+        document.getElementById('modal-spell-close')?.addEventListener('click', closeSpellModal);
+        document.getElementById('modal-spell-cancel')?.addEventListener('click', closeSpellModal);
+        document.getElementById('modal-spell-filter-close')?.addEventListener('click', () => {
+            document.getElementById('pc-spell-filter-modal')?.classList.add('vtt-hidden');
+        });
+        document.getElementById('modal-spell-settings-close')?.addEventListener('click', () => {
+            document.getElementById('pc-spell-settings-modal')?.classList.add('vtt-hidden');
+            if (document.getElementById('pc-spell-modal')?.classList.contains('vtt-hidden')) {
+                document.getElementById('pc-spell-overlay')?.classList.add('vtt-hidden');
+            }
+        });
+        document.getElementById('modal-attack-settings-close')?.addEventListener('click', () => {
+            document.getElementById('pc-attack-settings-modal')?.classList.add('vtt-hidden');
+            if (document.getElementById('pc-spell-modal')?.classList.contains('vtt-hidden')) {
+                document.getElementById('pc-spell-overlay')?.classList.add('vtt-hidden');
+            }
+        });
+
+        window.addEventListener('keydown', (e) => {
+            if (e.key !== 'Escape') return;
+            const spellModals = [
+                'modal-spell-delete-prompt',
+                'modal-spell-upcast-prompt',
+                'pc-spell-filter-modal',
+                'pc-spell-settings-modal',
+                'pc-attack-settings-modal',
+                'pc-spell-modal'
+            ];
+            for (const id of spellModals) {
+                const el = document.getElementById(id);
+                if (el && !el.classList.contains('vtt-hidden')) {
+                    el.classList.add('vtt-hidden');
+                    const anyOther = spellModals.some(
+                        (mId) => mId !== id && !document.getElementById(mId)?.classList.contains('vtt-hidden')
+                    );
+                    if (!anyOther) {
+                        document.getElementById('pc-spell-overlay')?.classList.add('vtt-hidden');
+                    }
+                    e.stopPropagation();
+                    break;
+                }
+            }
+        });
+
+        document.querySelectorAll('.pc-spell-modal-tab').forEach((btn) =>
+            btn.addEventListener('click', (e) => {
+                const tab = e.currentTarget.dataset.tab;
+                const tabSearch = document.getElementById('pc-spell-tab-search');
+                const tabCustom = document.getElementById('pc-spell-tab-custom');
+                const btnSearch = document.querySelector('.pc-spell-modal-tab[data-tab="search"]');
+                const btnCustom = document.querySelector('.pc-spell-modal-tab[data-tab="custom"]');
+
+                if (tab === 'search') {
+                    if (tabCustom) tabCustom.classList.add('vtt-hidden');
+                    if (tabSearch) tabSearch.classList.remove('vtt-hidden');
+                    if (btnCustom) {
+                        btnCustom.classList.remove('active');
+                        btnCustom.style.borderBottomColor = 'transparent';
+                        btnCustom.style.color = 'var(--color-text-muted)';
+                    }
+                    if (btnSearch) {
+                        btnSearch.classList.add('active');
+                        btnSearch.style.borderBottomColor = 'var(--color-gold-base)';
+                        btnSearch.style.color = 'var(--color-text-primary)';
+                    }
+                    const saveBtn = document.getElementById('modal-spell-save');
+                    if (saveBtn) saveBtn.textContent = 'Bulk Add Selected (0)';
+                } else {
+                    if (tabSearch) tabSearch.classList.add('vtt-hidden');
+                    if (tabCustom) tabCustom.classList.remove('vtt-hidden');
+                    if (btnSearch) {
+                        btnSearch.classList.remove('active');
+                        btnSearch.style.borderBottomColor = 'transparent';
+                        btnSearch.style.color = 'var(--color-text-muted)';
+                    }
+                    if (btnCustom) {
+                        btnCustom.classList.add('active');
+                        btnCustom.style.borderBottomColor = 'var(--color-gold-base)';
+                        btnCustom.style.color = 'var(--color-text-primary)';
+                    }
+                    const saveBtn = document.getElementById('modal-spell-save');
+                    if (saveBtn)
+                        saveBtn.textContent =
+                            document.getElementById('modal-spell-idx').value >= 0 ? 'Save Changes' : 'Add Custom Spell';
+                }
+            })
+        );
+
+        // Pill Class Toggle Button
+        document.getElementById('pill-class-toggle')?.addEventListener('click', () => {
+            const pillToggle = document.getElementById('pill-class-toggle');
+            const pillLabel = document.getElementById('pill-class-label');
+            const classSelect = document.getElementById('modal-spell-filter-class');
+            const pClass = pillToggle?.dataset?.class || '';
+            const isActive = pillToggle?.dataset?.active === 'true';
+
+            if (isActive) {
+                pillToggle.dataset.active = 'false';
+                pillToggle.style.background = 'rgba(0,0,0,0.3)';
+                pillToggle.style.color = 'var(--color-text-muted)';
+                pillToggle.style.borderColor = 'var(--color-border-subtle)';
+                if (pillLabel) pillLabel.textContent = 'All Classes';
+                if (classSelect) classSelect.value = '';
+            } else if (pClass) {
+                pillToggle.dataset.active = 'true';
+                pillToggle.style.background = 'rgba(212,175,55,0.2)';
+                pillToggle.style.color = 'var(--color-gold-base)';
+                pillToggle.style.borderColor = 'var(--color-gold-base)';
+                if (pillLabel) pillLabel.textContent = `${pClass} Spells`;
+                if (classSelect) classSelect.value = pClass;
+            }
+            renderSpellSearchList();
+        });
+
+        // Edition filter buttons in Spell Search modal
+        document.querySelectorAll('.modal-spell-filter-edition').forEach((btn) => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('.modal-spell-filter-edition').forEach((b) => {
+                    b.classList.remove('active');
+                    b.style.background = '#2a2a2a';
+                    b.style.color = 'var(--color-text-secondary)';
+                    b.style.fontWeight = 'normal';
+                });
+                const t = e.currentTarget;
+                t.classList.add('active');
+                t.style.background = 'var(--color-gold-base)';
+                t.style.color = '#000';
+                t.style.fontWeight = 'bold';
+                activeSpellEditionFilter = t.dataset.edition || 'all';
+                renderSpellSearchList();
+            });
+        });
+
+        // Quick, Sort & Advanced Filter listeners
+        [
+            'modal-spell-quick-level',
+            'modal-spell-quick-school',
+            'modal-spell-quick-conc',
+            'modal-spell-quick-rit',
+            'modal-spell-search-input',
+            'modal-spell-sort',
+            'modal-spell-filter-class',
+            'modal-spell-filter-subclass',
+            'modal-spell-filter-race',
+            'modal-spell-filter-condition',
+            'modal-spell-filter-area'
+        ].forEach((id) => {
+            document.getElementById(id)?.addEventListener('input', renderSpellSearchList);
+            document.getElementById(id)?.addEventListener('change', renderSpellSearchList);
+        });
+
+        // Filter Drawer Toggle Button
+        document.getElementById('modal-spell-filter-btn')?.addEventListener('click', () => {
+            const drawer = document.getElementById('modal-spell-advanced-drawer');
+            if (drawer) drawer.classList.toggle('vtt-hidden');
+        });
+
+        // Filter Reset Button
+        document.getElementById('modal-spell-filter-reset')?.addEventListener('click', () => {
+            [
+                'modal-spell-filter-class',
+                'modal-spell-filter-subclass',
+                'modal-spell-filter-race',
+                'modal-spell-filter-condition',
+                'modal-spell-filter-area'
+            ].forEach((id) => {
+                const el = document.getElementById(id);
+                if (el) el.value = '';
+            });
+            const pillToggle = document.getElementById('pill-class-toggle');
+            const pillLabel = document.getElementById('pill-class-label');
+            if (pillToggle) {
+                pillToggle.dataset.active = 'false';
+                pillToggle.style.background = 'rgba(0,0,0,0.3)';
+                pillToggle.style.color = 'var(--color-text-muted)';
+                pillToggle.style.borderColor = 'var(--color-border-subtle)';
+                if (pillLabel) pillLabel.textContent = 'All Classes';
+            }
+            document.querySelectorAll('.modal-spell-filter-edition').forEach((b) => {
+                const isAll = b.dataset.edition === 'all';
+                b.classList.toggle('active', isAll);
+                b.style.background = isAll ? 'var(--color-gold-base)' : '#2a2a2a';
+                b.style.color = isAll ? '#000' : 'var(--color-text-secondary)';
+                b.style.fontWeight = isAll ? 'bold' : 'normal';
+            });
+            activeSpellEditionFilter = 'all';
+            renderSpellSearchList();
+        });
+
+        // Single Add Spell Button from Live Preview Pane
+        document.getElementById('btn-import-single-spell')?.addEventListener('click', async (e) => {
+            if (!activePreviewSpell) return;
+            const char =
+                activeSpellEditContext && activeSpellEditContext.char ? activeSpellEditContext.char : currentChar;
+            if (!char) return;
+            const lvlMapInverse = {
+                0: 'cantrip',
+                1: 'level1',
+                2: 'level2',
+                3: 'level3',
+                4: 'level4',
+                5: 'level5',
+                6: 'level6',
+                7: 'level7',
+                8: 'level8',
+                9: 'level9'
+            };
+            const targetLevel = document.getElementById('modal-spell-level').value;
+            const levelKey = lvlMapInverse[activePreviewSpell.level] || targetLevel || 'cantrip';
+
+            if (!char.spells) char.spells = {};
+            if (!char.spells[levelKey]) char.spells[levelKey] = [];
+
+            const finalSpellName = getDisambiguatedSpellName(activePreviewSpell, spellCache);
+
+            if (!char.spells[levelKey].find((s) => (s.name || '').toLowerCase() === finalSpellName.toLowerCase())) {
+                if (!activePreviewSpell.descriptionHtml && activePreviewSpell.source && activePreviewSpell.id) {
+                    try {
+                        const res = await fetch(
+                            `/api/spell/${encodeURIComponent(activePreviewSpell.source)}/${encodeURIComponent(activePreviewSpell.id)}`
+                        );
+                        if (res.ok) {
+                            const full = await res.json();
+                            Object.assign(activePreviewSpell, full);
+                        }
+                    } catch (err) {}
+                }
+                const newSpell = {
+                    id: 'sp_' + Date.now() + Math.random(),
+                    name: finalSpellName,
+                    description: '',
+                    prepared: false,
+                    macroPopulated: true,
+                    level: activePreviewSpell.level,
+                    source: activePreviewSpell.source
+                };
+                parseSpellToMacro(activePreviewSpell, newSpell);
+                newSpell.name = finalSpellName;
+                char.spells[levelKey].push(newSpell);
+
+                // If adding to a specific monster spellcasting block and innate/slot section
+                if (activeSpellEditContext && activeSpellEditContext.blockId && char.spellcasting) {
+                    const sc = char.spellcasting.find((b) => b.id === activeSpellEditContext.blockId);
+                    if (sc) {
+                        if (activeSpellEditContext.sectionKey === 'will') {
+                            sc.innateObj = sc.innateObj || { will: [], daily: {} };
+                            sc.innateObj.will = sc.innateObj.will || [];
+                            sc.will = sc.will || [];
+                            newSpell.uses = 'at_will';
+                            newSpell.innate = true;
+                            if (!sc.innateObj.will.some((s) => s.name.toLowerCase() === newSpell.name.toLowerCase())) {
+                                sc.innateObj.will.push(newSpell);
+                            }
+                            if (
+                                !sc.will.some(
+                                    (s) =>
+                                        (typeof s === 'string' ? s.toLowerCase() : s.name.toLowerCase()) ===
+                                        newSpell.name.toLowerCase()
+                                )
+                            ) {
+                                sc.will.push(newSpell);
+                            }
+                        } else if (activeSpellEditContext.sectionKey) {
+                            const dayKey = activeSpellEditContext.sectionKey;
+                            const usesMax = parseInt(dayKey) || 1;
+                            sc.innateObj = sc.innateObj || { will: [], daily: {} };
+                            sc.innateObj.daily = sc.innateObj.daily || {};
+                            sc.innateObj.daily[dayKey] = sc.innateObj.daily[dayKey] || [];
+                            sc.daily = sc.daily || {};
+                            sc.daily[dayKey] = sc.daily[dayKey] || [];
+                            newSpell.usesMax = usesMax;
+                            newSpell.usesRemaining = usesMax;
+                            newSpell.dailyKey = dayKey;
+                            newSpell.innate = true;
+                            if (
+                                !sc.innateObj.daily[dayKey].some(
+                                    (s) => s.name.toLowerCase() === newSpell.name.toLowerCase()
+                                )
+                            ) {
+                                sc.innateObj.daily[dayKey].push(newSpell);
+                            }
+                            if (
+                                !sc.daily[dayKey].some(
+                                    (s) =>
+                                        (typeof s === 'string' ? s.toLowerCase() : s.name.toLowerCase()) ===
+                                        newSpell.name.toLowerCase()
+                                )
+                            ) {
+                                sc.daily[dayKey].push(newSpell);
+                            }
+                        } else if (sc.spellsObj) {
+                            sc.spellsObj[levelKey] = sc.spellsObj[levelKey] || [];
+                            if (
+                                !sc.spellsObj[levelKey].some(
+                                    (s) => s.name.toLowerCase() === newSpell.name.toLowerCase()
+                                )
+                            ) {
+                                sc.spellsObj[levelKey].push(newSpell);
+                            }
+                        }
+                    }
+                }
+
+                if (activeSpellEditContext && activeSpellEditContext.onSave) {
+                    activeSpellEditContext.onSave(char);
+                } else if (typeof saveAndEmit === 'function' && typeof renderSheetData === 'function') {
+                    saveAndEmit(char);
+                    renderSheetData(char);
+                }
+
+                const btn = e.currentTarget;
+                const origText = btn.innerHTML;
+                btn.innerHTML = '<i class="fa-solid fa-check"></i> Added to Sheet!';
+                btn.classList.remove('btn-primary');
+                btn.classList.add('btn-success');
+                setTimeout(() => {
+                    btn.innerHTML = origText;
+                    btn.classList.remove('btn-success');
+                    btn.classList.add('btn-primary');
+                }, 1800);
+            } else {
+                alert(`${finalSpellName} is already added to this character!`);
+            }
+        });
+
+        document.getElementById('modal-spell-delete')?.addEventListener('click', (e) => {
+            const level = e.currentTarget.dataset.level;
+            const idx = e.currentTarget.dataset.idx;
+            if (level && idx !== undefined) {
+                const promptModal = document.getElementById('modal-spell-delete-prompt');
+                if (promptModal) {
+                    promptModal.classList.remove('vtt-hidden');
+                    document.getElementById('pc-spell-overlay')?.classList.remove('vtt-hidden');
+                    const confirmBtn = document.getElementById('delete-prompt-confirm');
+                    if (confirmBtn) {
+                        confirmBtn.dataset.level = level;
+                        confirmBtn.dataset.idx = idx;
+                    }
+                }
+            }
+        });
+
+        document.getElementById('delete-prompt-cancel')?.addEventListener('click', () => {
+            document.getElementById('modal-spell-delete-prompt')?.classList.add('vtt-hidden');
+        });
+
+        document.getElementById('delete-prompt-confirm')?.addEventListener('click', (e) => {
+            const char =
+                activeSpellEditContext && activeSpellEditContext.char ? activeSpellEditContext.char : currentChar;
+            if (!char) return;
+            if (activeSpellEditContext && activeSpellEditContext.onDelete && activeSpellEditContext.targetSpell) {
+                activeSpellEditContext.onDelete(char, activeSpellEditContext.targetSpell);
+                document.getElementById('modal-spell-delete-prompt')?.classList.add('vtt-hidden');
+                closeSpellModal();
+                if (activeSpellEditContext.onSave) activeSpellEditContext.onSave(char);
+                return;
+            }
+            const level = e.currentTarget.dataset.level;
+            const idx = e.currentTarget.dataset.idx;
+            if (level && idx !== undefined) {
+                if (char.spells && char.spells[level]) {
+                    char.spells[level].splice(idx, 1);
+                }
+                document.getElementById('modal-spell-delete-prompt')?.classList.add('vtt-hidden');
+                closeSpellModal();
+                if (activeSpellEditContext && activeSpellEditContext.onSave) {
+                    activeSpellEditContext.onSave(char);
+                } else {
+                    saveAndEmit(char);
+                    renderSheetData(char);
+                }
+            }
+        });
+
+        document.getElementById('btn-add-spell-damage')?.addEventListener('click', () => {
+            const lvlInput = document.getElementById('modal-spell-level');
+            const isCantrip =
+                lvlInput && (lvlInput.value === 'cantrip' || lvlInput.value === '0' || lvlInput.value === 0);
+            const isFirstRow = modalSpellDamageRows.length === 0;
+            modalSpellDamageRows.push({
+                id: 'dmg_' + Date.now(),
+                formula: '1d8',
+                type: '',
+                label: '',
+                stat: '',
+                custom: '',
+                cantripScale: isCantrip ? isFirstRow : false,
+                upcastBonus: '',
+                upcastScaleStep: 1
+            });
+            renderModalSpellDamage();
+        });
+
+        document.getElementById('modal-spell-save')?.addEventListener('click', async () => {
+            const char =
+                activeSpellEditContext && activeSpellEditContext.char ? activeSpellEditContext.char : currentChar;
+            if (!char) return;
+            const isCustomTab = !document.getElementById('pc-spell-tab-custom').classList.contains('vtt-hidden');
+            const targetLevel = document.getElementById('modal-spell-level').value;
+
+            if (isCustomTab) {
+                const level = targetLevel;
+                const idx = parseInt(document.getElementById('modal-spell-idx').value);
+                const rawName = document.getElementById('modal-spell-name').value.trim();
+                const name = toSpellTitleCase(rawName);
+                const description = document.getElementById('modal-spell-desc').value;
+                const school = document.getElementById('modal-spell-school')?.value || '';
+                const castingTime = document.getElementById('modal-spell-time')?.value || '';
+                const range = document.getElementById('modal-spell-range')?.value || '';
+                const components = document.getElementById('modal-spell-components')?.value || '';
+                const duration = document.getElementById('modal-spell-duration')?.value || '';
+                const concentration = document.getElementById('modal-spell-concentration')
+                    ? document.getElementById('modal-spell-concentration').checked
+                    : false;
+                const ritual = document.getElementById('modal-spell-ritual')
+                    ? document.getElementById('modal-spell-ritual').checked
+                    : false;
+                const macroDescription = document.getElementById('modal-spell-macro-desc')?.value || '';
+                const attackStat = document.getElementById('modal-spell-atk-stat').value;
+                const attackProf = document.getElementById('modal-spell-atk-prof').checked;
+                const attackExtra = parseInt(document.getElementById('modal-spell-atk-extra').value) || 0;
+                const attackBonus = document.getElementById('modal-spell-atk-custom').value;
+                const saveDcStat = document.getElementById('modal-spell-save-dc-stat').value;
+                const saveDcExtra = parseInt(document.getElementById('modal-spell-save-dc-extra').value) || 0;
+                const saveDcCustom =
+                    document.getElementById('modal-spell-save-dc-custom').value !== ''
+                        ? parseInt(document.getElementById('modal-spell-save-dc-custom').value)
+                        : null;
+                const saveAbility = document.getElementById('modal-spell-save-ability').value;
+                const isMagic = document.getElementById('modal-spell-is-magic')
+                    ? document.getElementById('modal-spell-is-magic').checked
+                    : true;
+                const damageList = modalSpellDamageRows;
+                const cantripScale = damageList.some((d) => d.cantripScale);
+                const upcastBonus =
+                    damageList.find((d) => d.upcastBonus && d.upcastBonus.trim() !== '')?.upcastBonus ||
+                    damageList[0]?.upcastBonus ||
+                    '';
+                const upcastScaleStep =
+                    parseInt(damageList.find((d) => d.upcastScaleStep)?.upcastScaleStep) ||
+                    parseInt(damageList[0]?.upcastScaleStep) ||
+                    1;
+                const usesType = document.getElementById('modal-spell-uses-type')?.value || 'slot';
+                const usesMaxRaw = document.getElementById('modal-spell-uses-max')?.value.trim();
+                const usesMax = usesMaxRaw !== undefined && usesMaxRaw !== '' ? parseInt(usesMaxRaw) || 0 : undefined;
+                const usesRemaining = usesMax !== undefined ? usesMax : undefined;
+
+                if (!name) return alert('Spell name is required.');
+
+                if (activeSpellEditContext && activeSpellEditContext.targetSpell) {
+                    const target = activeSpellEditContext.targetSpell;
+                    Object.assign(target, {
+                        name,
+                        description,
+                        school,
+                        castingTime,
+                        range,
+                        components,
+                        duration,
+                        concentration,
+                        ritual,
+                        isMagic,
+                        macroDescription,
+                        attackStat,
+                        attackProf,
+                        attackExtra,
+                        attackBonus,
+                        saveDcStat,
+                        saveDcExtra,
+                        saveDcCustom,
+                        saveAbility,
+                        damageList,
+                        cantripScale,
+                        upcastBonus,
+                        upcastScaleStep,
+                        usesType,
+                        usesMax,
+                        usesRemaining,
+                        macroPopulated: true
+                    });
+                    closeSpellModal();
+                    if (activeSpellEditContext && activeSpellEditContext.onSave) {
+                        activeSpellEditContext.onSave(char, target);
+                    }
+                    return;
+                }
+
+                if (!char.spells) char.spells = {};
+                if (!char.spells[level]) char.spells[level] = [];
+
+                if (idx >= 0) {
+                    char.spells[level][idx] = {
+                        ...char.spells[level][idx],
+                        name,
+                        description,
+                        school,
+                        castingTime,
+                        range,
+                        components,
+                        duration,
+                        concentration,
+                        ritual,
+                        isMagic,
+                        macroDescription,
+                        attackStat,
+                        attackProf,
+                        attackExtra,
+                        attackBonus,
+                        saveDcStat,
+                        saveDcExtra,
+                        saveDcCustom,
+                        saveAbility,
+                        damageList,
+                        cantripScale,
+                        upcastBonus,
+                        upcastScaleStep,
+                        usesType,
+                        usesMax,
+                        usesRemaining,
+                        macroPopulated: true
+                    };
+                } else {
+                    const newCustomSpell = {
+                        id: 'sp_' + Date.now() + Math.random(),
+                        name: toSpellTitleCase(name),
+                        description,
+                        school,
+                        castingTime,
+                        range,
+                        components,
+                        duration,
+                        concentration,
+                        ritual,
+                        isMagic,
+                        macroDescription,
+                        prepared: false,
+                        attackStat,
+                        attackProf,
+                        attackExtra,
+                        attackBonus,
+                        saveDcStat,
+                        saveDcExtra,
+                        saveDcCustom,
+                        saveAbility,
+                        damageList,
+                        cantripScale,
+                        upcastBonus,
+                        upcastScaleStep,
+                        usesType,
+                        usesMax,
+                        usesRemaining,
+                        macroPopulated: true
+                    };
+                    char.spells[level].push(newCustomSpell);
+
+                    if (activeSpellEditContext && char.spellcasting && Array.isArray(char.spellcasting)) {
+                        const sc =
+                            (activeSpellEditContext.blockId
+                                ? char.spellcasting.find((b) => b.id === activeSpellEditContext.blockId)
+                                : null) || char.spellcasting[0];
+                        if (sc) {
+                            if (activeSpellEditContext.sectionKey === 'will') {
+                                sc.innateObj = sc.innateObj || { will: [], daily: {} };
+                                sc.innateObj.will = sc.innateObj.will || [];
+                                sc.will = sc.will || [];
+                                newCustomSpell.uses = 'at_will';
+                                newCustomSpell.innate = true;
+                                sc.innateObj.will.push(newCustomSpell);
+                                sc.will.push(newCustomSpell);
+                            } else if (activeSpellEditContext.sectionKey) {
+                                const dayKey = activeSpellEditContext.sectionKey;
+                                const usesMax = parseInt(dayKey) || 1;
+                                sc.innateObj = sc.innateObj || { will: [], daily: {} };
+                                sc.innateObj.daily = sc.innateObj.daily || {};
+                                sc.innateObj.daily[dayKey] = sc.innateObj.daily[dayKey] || [];
+                                sc.daily = sc.daily || {};
+                                sc.daily[dayKey] = sc.daily[dayKey] || [];
+                                newCustomSpell.usesMax = usesMax;
+                                newCustomSpell.usesRemaining = usesMax;
+                                newCustomSpell.dailyKey = dayKey;
+                                newCustomSpell.innate = true;
+                                sc.innateObj.daily[dayKey].push(newCustomSpell);
+                                sc.daily[dayKey].push(newCustomSpell);
+                            } else {
+                                // Slot-based spell or cantrip
+                                sc.spellsObj = sc.spellsObj || {};
+                                sc.spellsObj[level] = sc.spellsObj[level] || [];
+                                if (
+                                    !sc.spellsObj[level].some(
+                                        (s) =>
+                                            s.id === newCustomSpell.id ||
+                                            s.name.toLowerCase() === newCustomSpell.name.toLowerCase()
+                                    )
+                                ) {
+                                    sc.spellsObj[level].push(newCustomSpell);
+                                }
+                                sc.spells = sc.spells || {};
+                                const lvlIdx = level === 'cantrip' ? '0' : level.replace('level', '');
+                                if (!sc.spells[lvlIdx]) {
+                                    sc.spells[lvlIdx] = { spells: [] };
+                                } else if (Array.isArray(sc.spells[lvlIdx])) {
+                                    sc.spells[lvlIdx] = { spells: sc.spells[lvlIdx] };
+                                } else if (!sc.spells[lvlIdx].spells) {
+                                    sc.spells[lvlIdx].spells = [];
+                                }
+                                if (
+                                    !sc.spells[lvlIdx].spells.some(
+                                        (s) =>
+                                            (typeof s === 'string' ? s.toLowerCase() : s.name?.toLowerCase()) ===
+                                            newCustomSpell.name.toLowerCase()
+                                    )
+                                ) {
+                                    sc.spells[lvlIdx].spells.push(newCustomSpell.name);
+                                }
+                            }
+                        }
+                    }
+                }
+            } else {
+                if (spellBulkSelection.size === 0) return alert('No spells selected.');
+                const lvlMapInverse = {
+                    0: 'cantrip',
+                    1: 'level1',
+                    2: 'level2',
+                    3: 'level3',
+                    4: 'level4',
+                    5: 'level5',
+                    6: 'level6',
+                    7: 'level7',
+                    8: 'level8',
+                    9: 'level9'
+                };
+
+                const selectedSpells = Array.from(spellBulkSelection);
+                for (const spKey of selectedSpells) {
+                    const spData = spellCache.find((s) => s.id === spKey || s.name === spKey);
+                    if (spData) {
+                        if (!spData.descriptionHtml && spData.source && spData.id) {
+                            try {
+                                const res = await fetch(
+                                    `/api/spell/${encodeURIComponent(spData.source)}/${encodeURIComponent(spData.id)}`
+                                );
+                                if (res.ok) {
+                                    const full = await res.json();
+                                    Object.assign(spData, full);
+                                }
+                            } catch (err) {}
+                        }
+                        const levelKey = lvlMapInverse[spData.level] || targetLevel;
+                        if (!char.spells) char.spells = {};
+                        if (!char.spells[levelKey]) char.spells[levelKey] = [];
+                        const finalSpellName = getDisambiguatedSpellName(spData, spellCache);
+                        if (
+                            !char.spells[levelKey].find(
+                                (s) => (s.name || '').toLowerCase() === finalSpellName.toLowerCase()
+                            )
+                        ) {
+                            const newSpell = {
+                                id: 'sp_' + Date.now() + Math.random(),
+                                name: finalSpellName,
+                                description: '',
+                                prepared: false,
+                                macroPopulated: true,
+                                level: spData.level,
+                                source: spData.source
+                            };
+                            parseSpellToMacro(spData, newSpell);
+                            newSpell.name = finalSpellName;
+                            char.spells[levelKey].push(newSpell);
+
+                            if (activeSpellEditContext && char.spellcasting && Array.isArray(char.spellcasting)) {
+                                const sc =
+                                    (activeSpellEditContext.blockId
+                                        ? char.spellcasting.find((b) => b.id === activeSpellEditContext.blockId)
+                                        : null) || char.spellcasting[0];
+                                if (sc) {
+                                    if (activeSpellEditContext.sectionKey === 'will') {
+                                        sc.innateObj = sc.innateObj || { will: [], daily: {} };
+                                        sc.innateObj.will = sc.innateObj.will || [];
+                                        sc.will = sc.will || [];
+                                        newSpell.uses = 'at_will';
+                                        newSpell.innate = true;
+                                        if (
+                                            !sc.innateObj.will.some(
+                                                (s) => s.name.toLowerCase() === newSpell.name.toLowerCase()
+                                            )
+                                        ) {
+                                            sc.innateObj.will.push(newSpell);
+                                        }
+                                        if (
+                                            !sc.will.some(
+                                                (s) =>
+                                                    (typeof s === 'string' ? s.toLowerCase() : s.name.toLowerCase()) ===
+                                                    newSpell.name.toLowerCase()
+                                            )
+                                        ) {
+                                            sc.will.push(newSpell);
+                                        }
+                                    } else if (activeSpellEditContext.sectionKey) {
+                                        const dayKey = activeSpellEditContext.sectionKey;
+                                        const usesMax = parseInt(dayKey) || 1;
+                                        sc.innateObj = sc.innateObj || { will: [], daily: {} };
+                                        sc.innateObj.daily = sc.innateObj.daily || {};
+                                        sc.innateObj.daily[dayKey] = sc.innateObj.daily[dayKey] || [];
+                                        sc.daily = sc.daily || {};
+                                        sc.daily[dayKey] = sc.daily[dayKey] || [];
+                                        newSpell.usesMax = usesMax;
+                                        newSpell.usesRemaining = usesMax;
+                                        newSpell.dailyKey = dayKey;
+                                        newSpell.innate = true;
+                                        if (
+                                            !sc.innateObj.daily[dayKey].some(
+                                                (s) => s.name.toLowerCase() === newSpell.name.toLowerCase()
+                                            )
+                                        ) {
+                                            sc.innateObj.daily[dayKey].push(newSpell);
+                                        }
+                                        if (
+                                            !sc.daily[dayKey].some(
+                                                (s) =>
+                                                    (typeof s === 'string' ? s.toLowerCase() : s.name.toLowerCase()) ===
+                                                    newSpell.name.toLowerCase()
+                                            )
+                                        ) {
+                                            sc.daily[dayKey].push(newSpell);
+                                        }
+                                    } else {
+                                        // Slot-based spell or cantrip
+                                        sc.spellsObj = sc.spellsObj || {};
+                                        sc.spellsObj[levelKey] = sc.spellsObj[levelKey] || [];
+                                        if (
+                                            !sc.spellsObj[levelKey].some(
+                                                (s) =>
+                                                    s.id === newSpell.id ||
+                                                    s.name.toLowerCase() === newSpell.name.toLowerCase()
+                                            )
+                                        ) {
+                                            sc.spellsObj[levelKey].push(newSpell);
+                                        }
+                                        sc.spells = sc.spells || {};
+                                        const lvlIdx = levelKey === 'cantrip' ? '0' : levelKey.replace('level', '');
+                                        if (!sc.spells[lvlIdx]) {
+                                            sc.spells[lvlIdx] = { spells: [] };
+                                        } else if (Array.isArray(sc.spells[lvlIdx])) {
+                                            sc.spells[lvlIdx] = { spells: sc.spells[lvlIdx] };
+                                        } else if (!sc.spells[lvlIdx].spells) {
+                                            sc.spells[lvlIdx].spells = [];
+                                        }
+                                        if (
+                                            !sc.spells[lvlIdx].spells.some(
+                                                (s) =>
+                                                    (typeof s === 'string'
+                                                        ? s.toLowerCase()
+                                                        : s.name?.toLowerCase()) === newSpell.name.toLowerCase()
+                                            )
+                                        ) {
+                                            sc.spells[lvlIdx].spells.push(newSpell.name);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            closeSpellModal();
+            if (activeSpellEditContext && activeSpellEditContext.onSave) {
+                activeSpellEditContext.onSave(char);
+            } else {
+                saveAndEmit(char);
+                renderSheetData(char);
+            }
+        });
+    }
+
+    function renderTogglesList() {
+        const list = document.getElementById('modal-settings-toggles-list');
+        if (!list) return;
+        const char = currentChar;
+        if (!char || !char.spellSettings || !char.spellSettings.toggles) {
+            list.innerHTML = '';
+            return;
+        }
+
+        let html = '';
+        char.spellSettings.toggles.forEach((t, i) => {
+            html += `
+                <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.3); padding:6px 8px; border-radius:4px; border:1px solid var(--color-border-subtle);">
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <input type="checkbox" class="toggle-enable-cb" data-idx="${i}" ${t.enabled ? 'checked' : ''}>
+                        <span style="font-weight:bold; font-size:0.85rem;">${t.name}</span>
+                        <span style="background:var(--color-surface-hover); padding:2px 4px; border-radius:4px; font-size:0.7rem;">${t.target.toUpperCase()}</span>
+                        ${t.dmgType ? `<span style="color:var(--color-text-subtle); font-size:0.7rem; border:1px solid currentColor; border-radius:4px; padding:1px 3px;">${t.dmgType}</span>` : ''}
+                        <span style="color:var(--color-gold-base); font-size:0.8rem;">${t.formula}</span>
+                    </div>
+                    <div style="display:flex; gap:4px;">
+                        <button class="btn btn-xxs btn-secondary toggle-edit-btn" data-idx="${i}"><i class="fa-solid fa-pen"></i></button>
+                        <button class="btn btn-xxs btn-secondary toggle-del-btn" data-idx="${i}"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </div>
+            `;
+        });
+        list.innerHTML = html;
+
+        list.querySelectorAll('.toggle-enable-cb').forEach((cb) =>
+            cb.addEventListener('change', (e) => {
+                const idx = e.currentTarget.dataset.idx;
+                char.spellSettings.toggles[idx].enabled = e.currentTarget.checked;
+                if (saveAndEmit && currentChar) saveAndEmit(currentChar);
+                if (renderSheetData && currentChar) renderSheetData(currentChar);
+            })
+        );
+
+        list.querySelectorAll('.toggle-edit-btn').forEach((btn) =>
+            btn.addEventListener('click', (e) => {
+                const idx = e.currentTarget.dataset.idx;
+                const t = char.spellSettings.toggles[idx];
+                document.getElementById('modal-toggle-idx').value = idx;
+                document.getElementById('modal-toggle-name').value = t.name;
+                document.getElementById('modal-toggle-formula').value = t.formula;
+                document.getElementById('modal-toggle-target').value = t.target;
+                document.getElementById('modal-toggle-type').value = t.dmgType || '';
+                document.getElementById('modal-toggle-form').classList.remove('vtt-hidden');
+                document.getElementById('btn-add-toggle').classList.add('vtt-hidden');
+            })
+        );
+
+        list.querySelectorAll('.toggle-del-btn').forEach((btn) =>
+            btn.addEventListener('click', (e) => {
+                if (confirm('Delete this toggle?')) {
+                    const idx = e.currentTarget.dataset.idx;
+                    char.spellSettings.toggles.splice(idx, 1);
+                    if (saveAndEmit && currentChar) saveAndEmit(currentChar);
+                    if (renderSheetData && currentChar) renderSheetData(currentChar);
+                    renderTogglesList();
+                }
+            })
+        );
+    }
+
+    function renderAttackTogglesList() {
+        const list = document.getElementById('modal-attack-settings-toggles-list');
+        if (!list) return;
+        const char = currentChar;
+        if (!char || !char.attackSettings || !char.attackSettings.toggles) {
+            list.innerHTML = '';
+            return;
+        }
+
+        let html = '';
+        char.attackSettings.toggles.forEach((t, i) => {
+            html += `
+                <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.3); padding:6px 8px; border-radius:4px; border:1px solid var(--color-border-subtle);">
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <input type="checkbox" class="attack-toggle-enable-cb" data-idx="${i}" ${t.enabled ? 'checked' : ''}>
+                        <span style="font-weight:bold; font-size:0.85rem;">${t.name}</span>
+                        <span style="background:var(--color-surface-hover); padding:2px 4px; border-radius:4px; font-size:0.7rem;">${t.target.toUpperCase()}</span>
+                        ${t.dmgType ? `<span style="color:var(--color-text-subtle); font-size:0.7rem; border:1px solid currentColor; border-radius:4px; padding:1px 3px;">${t.dmgType}</span>` : ''}
+                        <span style="color:var(--color-gold-base); font-size:0.8rem;">${t.formula}</span>
+                    </div>
+                    <div style="display:flex; gap:4px;">
+                        <button class="btn btn-xxs btn-secondary attack-toggle-edit-btn" data-idx="${i}"><i class="fa-solid fa-pen"></i></button>
+                        <button class="btn btn-xxs btn-secondary attack-toggle-del-btn" data-idx="${i}"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </div>
+            `;
+        });
+        list.innerHTML = html;
+
+        list.querySelectorAll('.attack-toggle-enable-cb').forEach((cb) =>
+            cb.addEventListener('change', (e) => {
+                const idx = e.currentTarget.dataset.idx;
+                char.attackSettings.toggles[idx].enabled = e.currentTarget.checked;
+                if (saveAndEmit && currentChar) saveAndEmit(currentChar);
+                if (renderSheetData && currentChar) renderSheetData(currentChar);
+            })
+        );
+
+        list.querySelectorAll('.attack-toggle-edit-btn').forEach((btn) =>
+            btn.addEventListener('click', (e) => {
+                const idx = e.currentTarget.dataset.idx;
+                const t = char.attackSettings.toggles[idx];
+                document.getElementById('modal-attack-toggle-idx').value = idx;
+                document.getElementById('modal-attack-toggle-name').value = t.name;
+                document.getElementById('modal-attack-toggle-formula').value = t.formula;
+                document.getElementById('modal-attack-toggle-target').value = t.target;
+                document.getElementById('modal-attack-toggle-type').value = t.dmgType || '';
+                document.getElementById('modal-attack-toggle-form').classList.remove('vtt-hidden');
+                document.getElementById('btn-add-attack-toggle').classList.add('vtt-hidden');
+            })
+        );
+
+        list.querySelectorAll('.attack-toggle-del-btn').forEach((btn) =>
+            btn.addEventListener('click', (e) => {
+                if (confirm('Delete this toggle?')) {
+                    const idx = e.currentTarget.dataset.idx;
+                    char.attackSettings.toggles.splice(idx, 1);
+                    if (saveAndEmit && currentChar) saveAndEmit(currentChar);
+                    if (renderSheetData && currentChar) renderSheetData(currentChar);
+                    renderAttackTogglesList();
+                }
+            })
+        );
+    }
+
+    function setupAttackSettingsListeners() {
+        document.getElementById('modal-attack-settings-close')?.addEventListener('click', () => {
+            document.getElementById('pc-attack-settings-modal').classList.add('vtt-hidden');
+            document.getElementById('pc-spell-overlay').classList.add('vtt-hidden');
+        });
+
+        document.getElementById('btn-add-attack-toggle')?.addEventListener('click', () => {
+            document.getElementById('modal-attack-toggle-idx').value = '-1';
+            document.getElementById('modal-attack-toggle-name').value = '';
+            document.getElementById('modal-attack-toggle-formula').value = '';
+            document.getElementById('modal-attack-toggle-target').value = 'both';
+            document.getElementById('modal-attack-toggle-type').value = '';
+            document.getElementById('modal-attack-toggle-form').classList.remove('vtt-hidden');
+            document.getElementById('btn-add-attack-toggle').classList.add('vtt-hidden');
+        });
+
+        document.getElementById('modal-attack-toggle-cancel')?.addEventListener('click', () => {
+            document.getElementById('modal-attack-toggle-form').classList.add('vtt-hidden');
+            document.getElementById('btn-add-attack-toggle').classList.remove('vtt-hidden');
+        });
+
+        document.getElementById('modal-attack-toggle-save')?.addEventListener('click', () => {
+            const idx = parseInt(document.getElementById('modal-attack-toggle-idx').value);
+            const name = document.getElementById('modal-attack-toggle-name').value.trim();
+            const formula = document.getElementById('modal-attack-toggle-formula').value.trim();
+            const target = document.getElementById('modal-attack-toggle-target').value;
+            const dmgType = document.getElementById('modal-attack-toggle-type').value;
+            if (!name || !formula) return alert('Name and Formula are required.');
+
+            const t = { id: 'atk_tgl_' + Date.now(), name, formula, target, dmgType, enabled: true };
+            if (idx >= 0) {
+                currentChar.attackSettings.toggles[idx] = t;
+            } else {
+                currentChar.attackSettings.toggles.push(t);
+            }
+            document.getElementById('modal-attack-toggle-form').classList.add('vtt-hidden');
+            document.getElementById('btn-add-attack-toggle').classList.remove('vtt-hidden');
+            if (saveAndEmit && currentChar) saveAndEmit(currentChar);
+            if (renderSheetData && currentChar) renderSheetData(currentChar);
+            renderAttackTogglesList();
+        });
+
+        document.getElementById('modal-attack-settings-save')?.addEventListener('click', () => {
+            currentChar.attackSettings.atkMod =
+                parseInt(document.getElementById('modal-attack-settings-atk').value) || 0;
+            currentChar.attackSettings.dmgMod =
+                parseInt(document.getElementById('modal-attack-settings-dmg').value) || 0;
+            currentChar.attackSettings.dcMod = parseInt(document.getElementById('modal-attack-settings-dc').value) || 0;
+            const rawAtkCrit = parseInt(document.getElementById('modal-attack-settings-crit-range')?.value);
+            currentChar.attackSettings.critRange = Math.max(1, Math.min(20, isNaN(rawAtkCrit) ? 20 : rawAtkCrit));
+            saveAndEmit(currentChar);
+            renderSheetData(currentChar);
+            document.getElementById('pc-attack-settings-modal').classList.add('vtt-hidden');
+            document.getElementById('pc-spell-overlay').classList.add('vtt-hidden');
+        });
+    }
+
+    function setupSpellSettingsListeners() {
+        document.getElementById('modal-spell-settings-close')?.addEventListener('click', () => {
+            document.getElementById('pc-spell-settings-modal').classList.add('vtt-hidden');
+            document.getElementById('pc-spell-overlay').classList.add('vtt-hidden');
+        });
+
+        document.getElementById('btn-add-toggle')?.addEventListener('click', () => {
+            document.getElementById('modal-toggle-idx').value = '-1';
+            document.getElementById('modal-toggle-name').value = '';
+            document.getElementById('modal-toggle-formula').value = '';
+            document.getElementById('modal-toggle-target').value = 'both';
+            document.getElementById('modal-toggle-type').value = '';
+            document.getElementById('modal-toggle-form').classList.remove('vtt-hidden');
+            document.getElementById('btn-add-toggle').classList.add('vtt-hidden');
+        });
+
+        document.getElementById('modal-toggle-cancel')?.addEventListener('click', () => {
+            document.getElementById('modal-toggle-form').classList.add('vtt-hidden');
+            document.getElementById('btn-add-toggle').classList.remove('vtt-hidden');
+        });
+
+        document.getElementById('modal-toggle-save')?.addEventListener('click', () => {
+            const idx = parseInt(document.getElementById('modal-toggle-idx').value);
+            const name = document.getElementById('modal-toggle-name').value.trim();
+            const formula = document.getElementById('modal-toggle-formula').value.trim();
+            const target = document.getElementById('modal-toggle-target').value;
+            const dmgType = document.getElementById('modal-toggle-type').value;
+            if (!name || !formula) return alert('Name and Formula are required.');
+
+            const t = { id: 'tgl_' + Date.now(), name, formula, target, dmgType, enabled: true };
+            if (idx >= 0) {
+                currentChar.spellSettings.toggles[idx] = t;
+            } else {
+                currentChar.spellSettings.toggles.push(t);
+            }
+            document.getElementById('modal-toggle-form').classList.add('vtt-hidden');
+            document.getElementById('btn-add-toggle').classList.remove('vtt-hidden');
+            if (saveAndEmit && currentChar) saveAndEmit(currentChar);
+            if (renderSheetData && currentChar) renderSheetData(currentChar);
+            renderTogglesList();
+        });
+
+        document.getElementById('modal-settings-save')?.addEventListener('click', () => {
+            const ab = document.getElementById('modal-settings-ability').value;
+            currentChar.spellSettings.ability = ab;
+            currentChar.spellAbility = ab;
+            currentChar.spellSettings.atkMod = parseInt(document.getElementById('modal-settings-atk').value) || 0;
+            currentChar.spellSettings.dcMod = parseInt(document.getElementById('modal-settings-dc').value) || 0;
+            currentChar.spellSettings.dmgMod = parseInt(document.getElementById('modal-settings-dmg').value) || 0;
+            const rawSpellCrit = parseInt(document.getElementById('modal-settings-crit-range')?.value);
+            currentChar.spellSettings.critRange = Math.max(1, Math.min(20, isNaN(rawSpellCrit) ? 20 : rawSpellCrit));
+            saveAndEmit(currentChar);
+            renderSheetData(currentChar);
+            document.getElementById('pc-spell-settings-modal').classList.add('vtt-hidden');
+            document.getElementById('pc-spell-overlay').classList.add('vtt-hidden');
+        });
+    }
+
+    // Expose global API
+    window.VTTSpellManager = {
+        init: (ctx) => {
+            currentChar = ctx.currentChar;
+            saveAndEmit = ctx.saveAndEmit;
+            renderSheetData = ctx.renderSheetData;
+            if (ctx.spellCache) {
+                spellCache = ctx.spellCache;
+                sharedSpellCache = ctx.spellCache;
+            } else if (!spellCache && sharedSpellCache) {
+                spellCache = sharedSpellCache;
+            }
+        },
+        openModal: (level, idx, customChar, onSaveCallback, options) => {
+            openSpellModal(level, idx, customChar, onSaveCallback, options);
+        },
+        openSpellModal: (level, idx, customChar, onSaveCallback, options) => {
+            openSpellModal(level, idx, customChar, onSaveCallback, options);
+        },
+        getSpellCache: () => sharedSpellCache || spellCache,
+        setSpellCache: (cache) => {
+            sharedSpellCache = cache;
+            spellCache = cache;
+            if (window.vttPlayerSheetAPI && window.vttPlayerSheetAPI.setSpellCache) {
+                window.vttPlayerSheetAPI.setSpellCache(cache);
+            }
+        },
+        invalidateSpellCache: () => invalidateSpellCache(),
+        toSpellTitleCase: (str) => toSpellTitleCase(str),
+        getDisambiguatedSpellName: (sp, cache) => getDisambiguatedSpellName(sp, cache),
+        loadSpells: (explicitCampId = null) => loadSpells(explicitCampId),
+        parseSpellToMacro: (spData, newSpell) => parseSpellToMacro(spData, newSpell),
+        cleanSpellBodyHtml: (html) => cleanSpellBodyHtml(html),
+        getSpellMetaStrings: (sp, slKey) => getSpellMetaStrings(sp, slKey),
+        renderAndInjectSpell: (spellName, containerEl, fallbackDesc, sp, slKey, options) =>
+            renderAndInjectSpell(spellName, containerEl, fallbackDesc, sp, slKey, options),
+        renderSpellRowHtml: (sp, slKey, idx, options) => renderSpellRowHtml(sp, slKey, idx, options),
+        ensureSpellIsParsed: (sp, options) => ensureSpellIsParsed(sp, options),
+        postSpellToChat: (sp, slKey, creatureName, visibility) => postSpellToChat(sp, slKey, creatureName, visibility),
+        promptUpcastLevel: (baseLvl, callback) => promptUpcastLevel(baseLvl, callback),
+        scaleUpcastFormula: (formula, extra) => scaleUpcastFormula(formula, extra),
+        rollSpell: (sp, slKey, casterObj, options) => rollSpell(sp, slKey, casterObj, options),
+        ensureSpellModalsExist: () => ensureSpellModalsExist(),
+        renderTogglesList: () => renderTogglesList(),
+        renderAttackTogglesList: () => renderAttackTogglesList()
+    };
+    window.vttSpellManagerAPI = window.VTTSpellManager;
+    window.openSpellModal = openSpellModal;
+    return window.VTTSpellManager;
+}

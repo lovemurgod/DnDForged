@@ -1,6 +1,7 @@
 import express from 'express';
 import path from 'path';
 import fs from 'fs';
+import http from 'http';
 import https from 'https';
 import crypto from 'crypto';
 import dns from 'dns';
@@ -14,7 +15,11 @@ import {
     extractSubdomain,
     isDiscordHost,
     isAllowedMediaUrl,
-    verifyGmOrSecret
+    isAuthorizedGmOrSecret,
+    isLoopbackRequest,
+    isValidAssetPath,
+    verifyGmOrSecret,
+    verifyPlayerOrGmSession
 } from '../state.js';
 
 export const mediaRouter = express.Router();
@@ -94,7 +99,72 @@ export function isPrivateOrLoopbackIp(ip) {
     return false;
 }
 
-export async function safeFetchMedia(targetUrl, maxRedirects = 3) {
+const SAFE_MEDIA_PROXY_EXTS = new Set(['.png', '.jpg', '.jpeg', '.webp', '.gif', '.webm', '.mp4']);
+
+function requestWithPinnedLookup(targetUrl, resolvedRecord, headers, timeoutMs = 15000) {
+    return new Promise((resolve, reject) => {
+        const parsed = new URL(targetUrl);
+        const mod = parsed.protocol === 'https:' ? https : http;
+        const req = mod.request(
+            parsed,
+            {
+                method: 'GET',
+                headers,
+                lookup: (hostname, options, cb) => {
+                    if (typeof options === 'function') {
+                        return options(null, resolvedRecord.address, resolvedRecord.family);
+                    }
+                    if (options && options.all) {
+                        return cb(null, [{ address: resolvedRecord.address, family: resolvedRecord.family }]);
+                    }
+                    return cb(null, resolvedRecord.address, resolvedRecord.family);
+                }
+            },
+            (res) => {
+                const status = res.statusCode || 200;
+                if ([301, 302, 303, 307, 308].includes(status)) {
+                    res.resume();
+                    return resolve({
+                        status,
+                        ok: false,
+                        headers: { get: (k) => res.headers[String(k).toLowerCase()] ?? null },
+                        text: async () => ''
+                    });
+                }
+                const chunks = [];
+                let totalBytes = 0;
+                const MAX_FETCH_BYTES = 25 * 1024 * 1024;
+                res.on('data', (chunk) => {
+                    totalBytes += chunk.length;
+                    if (totalBytes > MAX_FETCH_BYTES) {
+                        req.destroy(new Error('Remote response exceeds maximum allowed size'));
+                        return;
+                    }
+                    chunks.push(chunk);
+                });
+                res.on('end', () => {
+                    const buf = Buffer.concat(chunks);
+                    resolve({
+                        status,
+                        statusText: res.statusMessage || '',
+                        ok: status >= 200 && status < 300,
+                        headers: { get: (k) => res.headers[String(k).toLowerCase()] ?? null },
+                        text: async () => buf.toString('utf8'),
+                        buffer: async () => buf
+                    });
+                });
+                res.on('error', reject);
+            }
+        );
+        req.setTimeout(timeoutMs, () => {
+            req.destroy(new Error('Remote request timed out'));
+        });
+        req.on('error', reject);
+        req.end();
+    });
+}
+
+export async function safeFetchPublicUrl(targetUrl, { requireAllowedMediaDomain = false, maxRedirects = 3, headers = {} } = {}) {
     let currentUrl = targetUrl;
     let redirectCount = 0;
 
@@ -114,18 +184,26 @@ export async function safeFetchMedia(targetUrl, maxRedirects = 3) {
             throw new Error(`Forbidden protocol: ${parsed.protocol}`);
         }
 
-        if (!isAllowedMediaUrl(currentUrl)) {
+        if (requireAllowedMediaDomain && !isAllowedMediaUrl(currentUrl)) {
             throw new Error(`Target domain '${parsed.hostname}' is not permitted for media scraping`);
         }
 
-        // DNS resolution check: block hostnames that resolve to private or loopback IPs
+        if (isPrivateOrLoopbackIp(parsed.hostname)) {
+            throw new Error(`Target host resolved to prohibited IP address: ${parsed.hostname}`);
+        }
+
+        let selectedRecord;
         try {
             const records = await dns.promises.lookup(parsed.hostname, { all: true });
+            if (!records || records.length === 0) {
+                throw new Error(`No DNS records found for ${parsed.hostname}`);
+            }
             for (const record of records) {
                 if (isPrivateOrLoopbackIp(record.address)) {
                     throw new Error(`Target host resolved to prohibited IP address: ${record.address}`);
                 }
             }
+            selectedRecord = records[0];
         } catch (e) {
             if (e.message && e.message.includes('prohibited IP address')) {
                 throw e;
@@ -133,16 +211,13 @@ export async function safeFetchMedia(targetUrl, maxRedirects = 3) {
             throw new Error(`DNS resolution failed for ${parsed.hostname}: ${e.message}`, { cause: e });
         }
 
-        const res = await fetch(currentUrl, {
-            headers: {
-                'User-Agent':
-                    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-                Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8'
-            },
-            redirect: 'manual'
+        const res = await requestWithPinnedLookup(currentUrl, selectedRecord, {
+            'User-Agent':
+                'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            Accept: 'application/json,text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+            ...headers
         });
 
-        // Handle redirect
         if ([301, 302, 303, 307, 308].includes(res.status)) {
             const location = res.headers.get('location');
             if (!location) {
@@ -151,7 +226,7 @@ export async function safeFetchMedia(targetUrl, maxRedirects = 3) {
             const nextUrl = new URL(location, currentUrl).toString();
             redirectCount++;
             if (redirectCount > maxRedirects) {
-                throw new Error('Too many redirects encountered while resolving media');
+                throw new Error('Too many redirects encountered while resolving URL');
             }
             currentUrl = nextUrl;
             continue;
@@ -161,6 +236,10 @@ export async function safeFetchMedia(targetUrl, maxRedirects = 3) {
     }
 
     throw new Error('Too many redirects');
+}
+
+export async function safeFetchMedia(targetUrl, maxRedirects = 3) {
+    return safeFetchPublicUrl(targetUrl, { requireAllowedMediaDomain: true, maxRedirects });
 }
 
 export async function processMediaUrl(url) {
@@ -222,8 +301,8 @@ export async function processMediaUrl(url) {
     return finalUrl;
 }
 
-// Proxy for Discord CDN to bypass expiring signatures with strict hostname checking
-mediaRouter.get('/proxy-discord', (req, res) => {
+// Proxy for Discord CDN to bypass expiring signatures with strict hostname checking & safe media allowlist
+mediaRouter.get('/proxy-discord', verifyPlayerOrGmSession, (req, res) => {
     const targetUrl = req.query.url;
     if (!targetUrl || typeof targetUrl !== 'string') {
         return res.status(400).send('No URL provided');
@@ -241,35 +320,61 @@ mediaRouter.get('/proxy-discord', (req, res) => {
     }
 
     const hash = crypto.createHash('md5').update(targetUrl).digest('hex');
-    const extMatch = targetUrl.match(/\.([a-zA-Z0-9]+)(?:[\?#]|$)/);
-    const ext = extMatch ? `.${extMatch[1]}` : '';
-    const cachedFilePath = path.join(DISCORD_CACHE_DIR, `${hash}${ext}`);
+    const extMatch = parsed.pathname.match(/\.([a-zA-Z0-9]+)$/);
+    const rawExt = extMatch ? `.${extMatch[1].toLowerCase()}` : '.png';
+    if (!SAFE_MEDIA_PROXY_EXTS.has(rawExt)) {
+        return res.status(400).send('Unsupported Discord media file type');
+    }
+    const cachedFilePath = path.resolve(DISCORD_CACHE_DIR, `${hash}${rawExt}`);
+    if (!isValidAssetPath(cachedFilePath, DISCORD_CACHE_DIR)) {
+        return res.status(403).send('Forbidden');
+    }
 
+    res.setHeader('X-Content-Type-Options', 'nosniff');
     if (fs.existsSync(cachedFilePath)) {
         return res.sendFile(cachedFilePath);
     }
 
+    const MAX_PROXY_BYTES = 25 * 1024 * 1024;
     https
         .get(targetUrl, (response) => {
             if (response.statusCode === 200) {
-                const fileStream = fs.createWriteStream(cachedFilePath);
-                response.pipe(fileStream);
-                response.pipe(res);
-
-                fileStream.on('error', (err) => {
-                    console.error('Error writing to discord cache:', err);
+                const chunks = [];
+                let totalBytes = 0;
+                response.on('data', (chunk) => {
+                    totalBytes += chunk.length;
+                    if (totalBytes > MAX_PROXY_BYTES) {
+                        response.destroy();
+                        if (!res.headersSent) res.status(413).send('Discord media exceeds limit');
+                        return;
+                    }
+                    chunks.push(chunk);
+                });
+                response.on('end', () => {
+                    const buf = Buffer.concat(chunks);
+                    try {
+                        fs.writeFileSync(cachedFilePath, buf);
+                    } catch (err) {
+                        console.error('Error writing to discord cache:', err);
+                    }
+                    if (!res.headersSent) {
+                        if (response.headers['content-type']) {
+                            res.setHeader('Content-Type', response.headers['content-type']);
+                        }
+                        res.send(buf);
+                    }
                 });
             } else {
                 res.status(response.statusCode).send('Failed to fetch from Discord');
             }
         })
         .on('error', (err) => {
-            res.status(500).send('Proxy error: ' + err.message);
+            if (!res.headersSent) res.status(500).send('Proxy error: ' + err.message);
         });
 });
 
 // Resolve media URL (e.g. Pinterest pin.it shortlinks, pinterest.com pin pages, shortlinks)
-mediaRouter.get('/resolve-media-url', async (req, res) => {
+mediaRouter.get('/resolve-media-url', verifyPlayerOrGmSession, async (req, res) => {
     const targetUrl = req.query.url;
     if (!targetUrl || typeof targetUrl !== 'string') {
         return res.status(400).json({ error: 'No URL provided' });
@@ -372,7 +477,7 @@ mediaRouter.get('/resolve-media-url', async (req, res) => {
 });
 
 // Player token URL processor
-mediaRouter.post('/player-token/url', async (req, res) => {
+mediaRouter.post('/player-token/url', verifyPlayerOrGmSession, async (req, res) => {
     const { url } = req.body;
     if (!url) return res.status(400).json({ error: 'URL required' });
     const finalUrl = await processMediaUrl(url);
@@ -448,7 +553,10 @@ imageRouter.get(['/img/*', '/vtt/img/*'], async (req, res, next) => {
         safePath = path.join('img', safePath);
     }
 
-    const userTarget = path.join(ASSETS_DIR, safePath);
+    const userTarget = path.resolve(ASSETS_DIR, safePath);
+    if (!isValidAssetPath(userTarget, ASSETS_DIR)) {
+        return res.status(403).send('Forbidden: Invalid asset path');
+    }
     if (fs.existsSync(userTarget) && fs.statSync(userTarget).isFile()) {
         return sendImageFile(userTarget, res);
     }
@@ -505,10 +613,13 @@ imageRouter.get(['/img/*', '/vtt/img/*'], async (req, res, next) => {
         }
     }
 
-    // Also check raw encoded path locally
-    const rawRel = req.path.replace(/^[\\/]?(?:vtt[\\/])/i, '');
-    const rawTarget = path.join(rootDir, '5etools-src', rawRel);
-    if (fs.existsSync(rawTarget) && fs.statSync(rawTarget).isFile()) {
+    const rawRel = path.normalize(decodedPath).replace(/^(\.\.[\/\\])+/, '').replace(/^[\\/]?(?:vtt[\\/])/i, '');
+    const rawTarget = path.resolve(rootDir, '5etools-src', rawRel);
+    if (
+        isValidAssetPath(rawTarget, path.join(rootDir, '5etools-src')) &&
+        fs.existsSync(rawTarget) &&
+        fs.statSync(rawTarget).isFile()
+    ) {
         return sendImageFile(rawTarget, res);
     }
 
@@ -608,6 +719,7 @@ imageRouter.get(['/img/*', '/vtt/img/*'], async (req, res, next) => {
         }
     }
 
+    const canPersistMirrorCache = isAuthorizedGmOrSecret(req) || isLoopbackRequest(req);
     for (const mirrorUrl of candidates) {
         try {
             const response = await fetch(mirrorUrl, {
@@ -618,23 +730,25 @@ imageRouter.get(['/img/*', '/vtt/img/*'], async (req, res, next) => {
             if (response.ok) {
                 const buf = Buffer.from(await response.arrayBuffer());
                 if (buf.length > 50) {
-                    // Cache in user assets directory (writable even in packaged mode)
-                    try {
-                        const userDir = path.dirname(userTarget);
-                        if (!fs.existsSync(userDir)) fs.mkdirSync(userDir, { recursive: true });
-                        fs.writeFileSync(userTarget, buf);
-                    } catch (cacheErr) {
-                        // Notice log only; never fail the download response due to disk cache notice
-                    }
+                    if (canPersistMirrorCache) {
+                        // Cache in user assets directory (writable even in packaged mode)
+                        try {
+                            const userDir = path.dirname(userTarget);
+                            if (!fs.existsSync(userDir)) fs.mkdirSync(userDir, { recursive: true });
+                            fs.writeFileSync(userTarget, buf);
+                        } catch (cacheErr) {
+                            // Notice log only; never fail the download response due to disk cache notice
+                        }
 
-                    // If not running in packaged asar, also cache in dev directories if writable
-                    if (!rootDir.includes('.asar')) {
-                        for (const devTarget of [localTarget, vttTarget]) {
-                            try {
-                                const dir = path.dirname(devTarget);
-                                if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-                                fs.writeFileSync(devTarget, buf);
-                            } catch (e) {}
+                        // If not running in packaged asar, also cache in dev directories if writable
+                        if (!rootDir.includes('.asar')) {
+                            for (const devTarget of [localTarget, vttTarget]) {
+                                try {
+                                    const dir = path.dirname(devTarget);
+                                    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+                                    fs.writeFileSync(devTarget, buf);
+                                } catch (e) {}
+                            }
                         }
                     }
 

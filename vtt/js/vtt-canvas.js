@@ -1651,8 +1651,9 @@ export function initVttCanvas(vtt) {
         });
     const resolveRulerPortalBending = (pts) => resolveRulerPortalBendingExt(pts, portals, currentMapId);
     const getGridDistanceSettings = (g = grid) => getGridDistanceSettingsExt(g);
-    const calcDistanceFormatted = (pixels, g = grid) => calcDistanceFormattedExt(pixels, g);
-    const calcDistanceFt = (pixels, g = grid) => calcDistanceFtExt(pixels, g);
+    const calcDistanceFormatted = (pixels, g = grid, coords = null) =>
+        calcDistanceFormattedExt(pixels, g, coords);
+    const calcDistanceFt = (pixels, g = grid, coords = null) => calcDistanceFtExt(pixels, g, coords);
     const drawMeasurementTemplate = (...args) => drawMeasurementTemplateExt(...args);
     const drawTargetRoomContent = (ctx, tm, tmid, tw, th, tt, twalls, cA, cB, opts = {}) =>
         drawTargetRoomContentExt(ctx, tm, tmid, tw, th, tt, twalls, cA, cB, {
@@ -1943,7 +1944,7 @@ export function initVttCanvas(vtt) {
     }
 
     // Grid alignment settings
-    let grid = { size: 50, offsetX: 0, offsetY: 0, scale: 1.0, feetPerSquare: 5 };
+    let grid = { size: 50, offsetX: 0, offsetY: 0, scale: 1.0, feetPerSquare: 5, diagonalRule: '5ft' };
     let isGridDirty = true;
     function markGridDirty() {
         isGridDirty = true;
@@ -2216,7 +2217,8 @@ export function initVttCanvas(vtt) {
         if (underGridOverlay) underGridOverlay.innerHTML = '';
 
         // 2. Load grid config
-        grid = mapData.grid || { size: 50, offsetX: 0, offsetY: 0, scale: 1.0, feetPerSquare: 5 };
+        grid = mapData.grid || { size: 50, offsetX: 0, offsetY: 0, scale: 1.0, feetPerSquare: 5, diagonalRule: '5ft' };
+        if (grid && !grid.diagonalRule) grid.diagonalRule = '5ft';
         syncGridConfigInputs();
 
         // 3. Load tokens, walls, shapes
@@ -2455,6 +2457,16 @@ export function initVttCanvas(vtt) {
     }
     function updateContainerTransform() {
         updateContainerTransformExt(container, panX, panY, zoom);
+        if (vtt.role === 'GM' && window.VTT?.presentationEngine?.onGmCameraMoved) {
+            window.VTT.presentationEngine.onGmCameraMoved({
+                panX,
+                panY,
+                zoom,
+                currentMapId,
+                viewportWidth: viewport ? viewport.clientWidth : 1920,
+                viewportHeight: viewport ? viewport.clientHeight : 1080
+            });
+        }
     }
     function updateCoordinateDisplay(mouse) {
         updateCoordinateDisplayExt(mouse, grid);

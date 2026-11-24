@@ -6,7 +6,9 @@ import { fileURLToPath } from 'url';
 import {
     isRoll20CharacterJson,
     convertRoll20Character,
-    normalizeRoll20ImageUrl
+    normalizeRoll20ImageUrl,
+    sanitizeRoll20Html,
+    resolveRoll20Expression
 } from '../electron/importers/roll20-importer.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -657,4 +659,166 @@ test('Roll20 Character Importer - Token Art & Avatar Image Fetching (CDN Rewrite
     } finally {
         fs.rmSync(tmpUploadsDir, { recursive: true, force: true });
     }
+});
+
+test('Roll20 Character Importer - Deep Enhancements Verification', async () => {
+    // 1. sanitizeRoll20Html
+    assert.strictEqual(
+        sanitizeRoll20Html('<p>First paragraph</p><p>Second paragraph with <b>bold</b> &amp; &quot;quotes&quot;</p>'),
+        'First paragraph\n\nSecond paragraph with bold & "quotes"'
+    );
+    assert.strictEqual(
+        sanitizeRoll20Html('<ul><li>Item 1</li><li>Item 2</li></ul>'),
+        '- Item 1\n- Item 2'
+    );
+    assert.strictEqual(
+        sanitizeRoll20Html('%3Cp%3EEncoded%20Bio%20with%20%26nbsp%3B%20spaces%3C%2Fp%3E'),
+        'Encoded Bio with   spaces'
+    );
+
+    // 2. resolveRoll20Expression
+    const dummyCtx = {
+        level: 10,
+        pb: 4,
+        mods: { str: 2, dex: 3, con: 2, int: 1, wis: 2, cha: 5 },
+        spellSaveDc: 17,
+        spellAtkMod: 9,
+        spellDcMod: 2,
+        classes: [{ name: 'Paladin', level: 6 }, { name: 'Sorcerer', level: 4 }]
+    };
+    assert.strictEqual(
+        resolveRoll20Expression('@{Mattshadow|charisma_mod} + 3d8', dummyCtx),
+        '5 + 3d8'
+    );
+    assert.strictEqual(
+        resolveRoll20Expression('@{spell_save_dc} + @{spell_dc_mod}', dummyCtx),
+        '17 + 2'
+    );
+    assert.strictEqual(
+        resolveRoll20Expression('{?{Bonus|0} + 1d6}', dummyCtx),
+        '0 + 1d6'
+    );
+
+    // 3. Real Fixture Test: Matt_Saiyan_lv_17_items.json
+    const mattRaw = JSON.parse(fs.readFileSync(path.join(samplesDir, 'Matt_Saiyan_lv_17_items.json'), 'utf8'));
+    const mattConverted = await convertRoll20Character(mattRaw, 'camp_enhancements_test', {});
+
+    // Token vision, lighting and auras
+    assert.strictEqual(mattConverted.senses.darkvision, 120, 'Night vision distance 120 must map to senses.darkvision');
+    assert.strictEqual(mattConverted.tokenSight, 120, 'Token sight must be set to 120');
+    assert.strictEqual(mattConverted.tokenLightEnabled, true, 'Token light must be enabled');
+    assert.strictEqual(mattConverted.tokenLightBright, 120, 'Token bright light distance must be 120');
+    assert.strictEqual(mattConverted.tokenLightDim, 5, 'Token dim light distance must be 5');
+    assert.ok(mattConverted.tokenAuras.length >= 1, 'Token aura 1 must be present');
+    assert.strictEqual(mattConverted.tokenAuras[0].range, 10, 'Aura range must be 10');
+    assert.strictEqual(mattConverted.tokenAuras[0].color, '#6aa84f', 'Aura color must match');
+    assert.strictEqual(mattConverted.tokenAuras[0].square, true, 'Aura square flag must match');
+
+    // Categories
+    assert.strictEqual(mattConverted.abilityCategories.length, 6, 'Must provide 6 standard ability categories');
+    assert.ok(mattConverted.abilityCards.length > 0, 'Ability cards must be populated');
+    assert.ok(
+        mattConverted.abilityCards.every((c) => Boolean(c.categoryId)),
+        'All ability cards must be assigned to a category'
+    );
+    const classCards = mattConverted.abilityCards.filter((c) => c.categoryId === 'cat_class');
+    assert.ok(classCards.length > 0, 'Class ability cards must exist');
+
+    // Metadata
+    assert.strictEqual(typeof mattConverted.alignment, 'string', 'Alignment must be a string');
+    assert.strictEqual(typeof mattConverted.experience, 'number', 'Experience must be a number');
+
+    // 4. Synthetic character testing versatile damage, save effect, multiclass spells, initiative & passive perception
+    const synthCharacter = {
+        name: 'Synthetica',
+        attribs: [
+            { name: 'character_name', current: 'Synthetica' },
+            { name: 'class', current: 'Warlock' },
+            { name: 'base_level', current: '5' },
+            { name: 'multiclass1', current: 'Bard' },
+            { name: 'multiclass1_lvl', current: '3' },
+            { name: 'strength', current: '10' },
+            { name: 'dexterity', current: '14' },
+            { name: 'constitution', current: '14' },
+            { name: 'intelligence', current: '10' },
+            { name: 'wisdom', current: '12' },
+            { name: 'charisma', current: '18' },
+            { name: 'initmod', current: '3' },
+            { name: 'initiative_style', current: '{@{d20},@{d20}}kh1' },
+            { name: 'passive_wisdom', current: '16' }, // base 10 + 1 (wis) = 11, so diff is +5
+            { name: 'alignment', current: 'Chaotic Good' },
+            { name: 'experience', current: '34000' },
+            // Attack with versatile & save effect
+            { name: 'repeating_attack_atk1_atkname', current: 'Warhammer of Smiting' },
+            { name: 'repeating_attack_atk1_atkbonus', current: '+7' },
+            { name: 'repeating_attack_atk1_dmgbase', current: '1d8 + @{strength_mod}' },
+            { name: 'repeating_attack_atk1_dmgtype', current: 'bludgeoning' },
+            { name: 'repeating_attack_atk1_versatile_alt', current: '1d10 + @{strength_mod}' },
+            { name: 'repeating_attack_atk1_saveattr', current: 'Strength' },
+            { name: 'repeating_attack_atk1_savedc', current: '15' },
+            { name: 'repeating_attack_atk1_saveeffect', current: 'Pushed 10 ft on failed save' },
+            // Multiclass Spells: Warlock spell (CHA) and multiclass Wizard spell (INT)
+            { name: 'repeating_spell-1_sp1_spellname', current: 'Hellish Rebuke' },
+            { name: 'repeating_spell-1_sp1_spellattack', current: 'None' },
+            { name: 'repeating_spell-1_sp1_spellsave', current: 'DEX' },
+            { name: 'repeating_spell-1_sp1_spell_ability', current: '@{charisma_mod}+' },
+            { name: 'repeating_spell-1_sp1_spellsavesuccess', current: 'Half damage' },
+            { name: 'repeating_spell-1_sp1_spelldamage', current: '2d10' },
+            { name: 'repeating_spell-1_sp1_spelldamagetype', current: 'fire' },
+            { name: 'repeating_spell-1_sp2_spellname', current: 'Burning Hands' },
+            { name: 'repeating_spell-1_sp2_spellattack', current: 'Ranged' },
+            { name: 'repeating_spell-1_sp2_spellsave', current: 'DEX' },
+            { name: 'repeating_spell-1_sp2_spell_ability', current: '@{intelligence_mod}+' },
+            { name: 'repeating_spell-1_sp2_spellsavesuccess', current: 'Half damage' },
+            { name: 'repeating_spell-1_sp2_spelldamage', current: '3d6' },
+            { name: 'repeating_spell-1_sp2_spelldamagetype', current: 'fire' },
+            // Global save / skill mods with Roll20 syntax
+            { name: 'repeating_savemod_sm1_global_save_name', current: 'Aura of Protection' },
+            { name: 'repeating_savemod_sm1_global_save_roll', current: '+@{charisma_mod}' },
+            { name: 'repeating_savemod_sm1_global_save_active_flag', current: '1' }
+        ]
+    };
+
+    const synthConverted = await convertRoll20Character(synthCharacter, 'camp_synth_test', {});
+
+    // Metadata
+    assert.strictEqual(synthConverted.alignment, 'Chaotic Good');
+    assert.strictEqual(synthConverted.experience, 34000);
+
+    // Initiative bonus & advantage
+    assert.strictEqual(synthConverted.initiativeAdvantage, true, 'Initiative advantage must be detected from kh1');
+    const initToggle = synthConverted.skillToggles.find((t) => t.target === 'initiative');
+    assert.ok(initToggle, 'Initiative toggle must be created');
+    assert.strictEqual(initToggle.formula, '+3', 'Initiative bonus formula must match initmod');
+
+    // Passive perception toggle
+    const ppToggle = synthConverted.skillToggles.find((t) => t.target === 'passive_perception');
+    assert.ok(ppToggle, 'Passive perception toggle must be created');
+    assert.strictEqual(ppToggle.formula, '+5', 'Passive perception bonus formula must be diff from base');
+
+    // Resolved save toggle formula
+    const auraToggle = synthConverted.saveToggles.find((t) => t.name === 'Aura of Protection');
+    assert.ok(auraToggle, 'Aura save toggle must exist');
+    assert.strictEqual(auraToggle.formula, '+4', 'Aura save formula must resolve charisma mod');
+
+    // Attack versatile and save effect
+    const warhammer = synthConverted.macros.find((m) => m.name === 'Warhammer of Smiting');
+    assert.ok(warhammer, 'Warhammer macro must exist');
+    assert.ok(warhammer.versatile, 'Versatile damage object must exist');
+    assert.strictEqual(warhammer.versatile.formula, '1d10 + 0', 'Versatile formula must be resolved');
+    assert.strictEqual(warhammer.versatile.type, 'bludgeoning');
+    assert.strictEqual(warhammer.saveEffect, 'Pushed 10 ft on failed save');
+    assert.ok(warhammer.description.includes('Save Effect: Pushed 10 ft on failed save'));
+
+    // Multiclass spell ability and save success
+    const rebuke = synthConverted.spells.level1.find((s) => s.name === 'Hellish Rebuke');
+    assert.ok(rebuke, 'Hellish Rebuke must exist');
+    assert.strictEqual(rebuke.saveDcStat, 'spell', 'Spell saveDcStat should remain spell when matching primary ability');
+    assert.strictEqual(rebuke.saveSuccess, 'Half damage', 'Spell saveSuccess must be preserved');
+
+    const hands = synthConverted.spells.level1.find((s) => s.name === 'Burning Hands');
+    assert.ok(hands, 'Burning Hands must exist');
+    assert.strictEqual(hands.attackStat, 'int', 'Multiclass spell attackStat must resolve to individual ability');
+    assert.strictEqual(hands.saveDcStat, 'int', 'Multiclass spell saveDcStat must resolve to individual ability');
+    assert.strictEqual(hands.saveSuccess, 'Half damage');
 });

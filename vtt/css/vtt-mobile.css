@@ -252,6 +252,7 @@ screen and (pointer: coarse) and (max-width: 1366px) {
     body:has(#player-sheet-panel.open) #vtt-initiative-carousel-container,
     body:has(#player-sheet-panel.open) #vtt-sidebar-zoom,
     body:has(#player-sheet-panel.open) #vtt-mobile-nav,
+    body:has(#player-sheet-panel.open) #vtt-sidebar,
     body:has(#player-sheet-panel.open) #vtt-coordinates-indicator,
     body:has(#player-sheet-panel:not(.minimized)) #vtt-mobile-tools-fab,
     body:has(#player-sheet-panel:not(.minimized)) #vtt-mobile-tools-menu,
@@ -266,6 +267,7 @@ screen and (pointer: coarse) and (max-width: 1366px) {
     body:has(#creature-sheet-panel.open) #vtt-initiative-carousel-container,
     body:has(#creature-sheet-panel.open) #vtt-sidebar-zoom,
     body:has(#creature-sheet-panel.open) #vtt-mobile-nav,
+    body:has(#creature-sheet-panel.open) #vtt-sidebar,
     body:has(#creature-sheet-panel.open) #vtt-coordinates-indicator,
     body:has(#creature-sheet-panel:not(.minimized)) #vtt-mobile-tools-fab,
     body:has(#creature-sheet-panel:not(.minimized)) #vtt-mobile-tools-menu,
@@ -466,11 +468,13 @@ screen and (pointer: coarse) and (max-width: 1366px) {
         -webkit-backdrop-filter: none !important;
         border: none !important;
         border-bottom: 1px solid rgba(212, 175, 55, 0.25) !important;
-        transform: translateY(100%) !important;
+        transform: translateY(100dvh) !important;
         visibility: hidden !important;
         pointer-events: none !important;
         transition: transform 0.3s cubic-bezier(0.33, 1, 0.68, 1), visibility 0.3s !important;
         box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.7) !important;
+        padding: 0 !important;
+        gap: 0 !important;
     }
 
     #vtt-sidebar.mobile-drawer-open {
@@ -495,6 +499,13 @@ screen and (pointer: coarse) and (max-width: 1366px) {
         flex-direction: column !important;
         overflow: hidden !important;
         position: relative !important;
+        right: 0 !important;
+        transform: none !important;
+        opacity: 1 !important;
+        visibility: inherit !important;
+        pointer-events: auto !important;
+        border: none !important;
+        box-shadow: none !important;
     }
 
     /* Drawer Header with Title, Back Button and Close Button */
@@ -528,6 +539,10 @@ screen and (pointer: coarse) and (max-width: 1366px) {
         align-items: center !important;
         justify-content: center !important;
         cursor: pointer !important;
+    }
+
+    .mobile-drawer-back-btn.vtt-hidden {
+        display: none !important;
     }
 
     .mobile-drawer-title {
@@ -752,6 +767,7 @@ screen and (pointer: coarse) and (max-width: 1366px) {
         display: flex !important;
         flex-direction: column !important;
         overflow: hidden !important;
+        padding-top: calc(52px + env(safe-area-inset-top, 0px)) !important;
     }
 
     #player-sheet-panel.open,
@@ -1098,6 +1114,37 @@ screen and (pointer: coarse) and (max-width: 1366px) {
     .pc-roll-hd.btn {
         min-height: 36px !important;
         padding: 6px 12px !important;
+    }
+
+    /* Mobile Capsule Controls & Touch Target Expansion */
+    .ps-segmented-capsule,
+    .cs-segmented-capsule {
+        height: 36px !important;
+        padding: 2px 4px !important;
+    }
+
+    .ps-roll-mode-btn,
+    .cs-roll-mode-btn {
+        min-height: 32px !important;
+        min-width: 46px !important;
+        font-size: 0.82rem !important;
+        padding: 4px 8px !important;
+    }
+
+    .ps-whisper-btn,
+    .cs-whisper-btn {
+        min-height: 32px !important;
+        min-width: 44px !important;
+        padding: 4px 8px !important;
+    }
+
+    #ps-btn-sheet-settings,
+    #cs-btn-sheet-settings {
+        min-width: 36px !important;
+        min-height: 36px !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
     }
 
     /* ========================================================================
@@ -1586,6 +1633,10 @@ screen and (pointer: coarse) and (max-width: 1366px) {
         align-items: center !important;
         justify-content: center !important;
         cursor: pointer !important;
+    }
+
+    .mobile-drawer-back-btn.vtt-hidden {
+        display: none !important;
     }
 
     .mobile-init-sheet-actions {
@@ -2114,6 +2165,10 @@ screen and (pointer: coarse) and (max-width: 1366px) {
         cursor: pointer !important;
     }
 
+    .mobile-drawer-back-btn.vtt-hidden {
+        display: none !important;
+    }
+
     .vtt-sheet-close:active {
         background: rgba(239, 68, 68, 0.25) !important;
         color: #ef4444 !important;
@@ -2589,6 +2644,10 @@ screen and (pointer: coarse) and (max-width: 1366px) {
         align-items: center !important;
         justify-content: center !important;
         cursor: pointer !important;
+    }
+
+    .mobile-drawer-back-btn.vtt-hidden {
+        display: none !important;
     }
 
     .mobile-combat-pill-btn:active {
@@ -3106,6 +3165,18 @@ html.force-mobile-ui:not(.force-desktop-ui) #vtt-sidebar {
     display: flex !important;
     flex-direction: column !important;
     background: rgba(12, 16, 26, 0.98) !important;
+    padding: 0 !important;
+    gap: 0 !important;
+}
+
+html.force-mobile-ui:not(.force-desktop-ui) #vtt-sidebar .sidebar-content {
+    right: 0 !important;
+    transform: none !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    border: none !important;
+    box-shadow: none !important;
 }
 
 html.force-mobile-ui:not(.force-desktop-ui) #vtt-coordinates-indicator {

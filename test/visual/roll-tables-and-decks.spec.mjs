@@ -11,6 +11,7 @@
  * 6. Card Placement on Canvas & Tabletop Card Flipping
  * 7. Multi-Sided Asset Table Placement & State Cycling
  * 8. Two-Player Live Sync: GM Draws / Places Card -> Player Real-Time Reception
+ * 9. Item Roll Table Integration: Inventory Drawer & Chat Ping
  */
 
 import { test, expect } from '@playwright/test';
@@ -36,6 +37,22 @@ function resetSandboxFixtures() {
                 }
                 if (camp.rollTables) {
                     delete camp.rollTables;
+                }
+                if (camp.maps) {
+                    for (const map of Object.values(camp.maps)) {
+                        if (map.tokens) {
+                            for (const tid of Object.keys(map.tokens)) {
+                                if (
+                                    tid.startsWith('token_card_') ||
+                                    tid.startsWith('token_table_') ||
+                                    map.tokens[tid]?.isCardToken ||
+                                    map.tokens[tid]?.multiSided
+                                ) {
+                                    delete map.tokens[tid];
+                                }
+                            }
+                        }
+                    }
                 }
             }
             fs.writeFileSync(campPath, JSON.stringify(campData, null, 2));
@@ -101,8 +118,14 @@ test.describe('Roll Tables & Card Decks E2E Suite', () => {
      * Helper to open the Roll Tables sidebar tab on the GM page.
      */
     async function openTablesTab(page, subtab = 'subtab-roll-tables') {
-        const tabBtn = page.locator('.tab-header[data-tab="tab-tables"]');
-        await tabBtn.click();
+        const isAlreadyActive = await page.evaluate(() => {
+            const btn = document.querySelector('.tab-header[data-tab="tab-tables"]');
+            return btn ? btn.classList.contains('active') : false;
+        });
+        if (!isAlreadyActive) {
+            const tabBtn = page.locator('.tab-header[data-tab="tab-tables"]');
+            await tabBtn.click();
+        }
         await expect(page.locator('#tab-tables')).toBeVisible();
 
         const subtabBtn = page.locator(`.tables-subtab-btn[data-subtab="${subtab}"]`);
@@ -535,6 +558,16 @@ test.describe('Roll Tables & Card Decks E2E Suite', () => {
             playerInitialChatCount,
             { timeout: 8000 }
         );
+
+        // Ensure player chat tab is active
+        const playerChatTabActive = await playerPage.evaluate(() => {
+            const btn = document.querySelector('.tab-header[data-tab="tab-chat"]');
+            return btn ? btn.classList.contains('active') : false;
+        });
+        if (!playerChatTabActive) {
+            await playerPage.locator('.tab-header[data-tab="tab-chat"]').click();
+        }
+
         const playerChat = playerPage.locator('#chat-messages');
         await expect(playerChat.locator('.card-draw-chat').last()).toBeVisible();
 
@@ -579,5 +612,105 @@ test.describe('Roll Tables & Card Decks E2E Suite', () => {
             return window.VTT?.canvasEngine?.getTokens()?.[id]?.activeTokenIndex;
         }, syncedToken.id);
         expect(playerFlippedSide).toBe(1);
+    });
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // Test 9: Item Roll Table Integration (Inventory & Chat Ping)
+    // ─────────────────────────────────────────────────────────────────────────
+    test('Test 9: Item Roll Table Integration - Wand of Wonder roll from inventory and chat ping', async () => {
+        const { gmPage } = sandbox;
+
+        // 1. Inject Wand of Wonder into Valeros's inventory and ensure catalog is pre-warmed
+        await gmPage.evaluate(async () => {
+            if (window.VTT?.rollTablesEngine?.ensureCompendiumCatalog) {
+                await window.VTT.rollTablesEngine.ensureCompendiumCatalog();
+            }
+            const char = window.VTT?.campaignState?.characters?.['char_valeros_1'];
+            if (char) {
+                if (!char.equipment) char.equipment = [];
+                char.equipment = char.equipment.filter((e) => e.name !== 'Wand of Wonder');
+                char.equipment.unshift({
+                    id: 'eq_wand_of_wonder_test',
+                    name: 'Wand of Wonder',
+                    qty: 1,
+                    weight: 1,
+                    description: 'While holding this wand, you can roll d100 on the table to discover what happens.'
+                });
+                if (window.VTT.playerSheet && window.VTT.playerSheet.currentCharacter?.id === 'char_valeros_1') {
+                    window.VTT.playerSheet.render();
+                }
+            }
+        });
+
+        // 2. Open Valeros Player Sheet
+        await gmPage.evaluate(() => {
+            if (window.VTT?.playerSheet) {
+                window.VTT.playerSheet.openSheet('char_valeros_1');
+            }
+        });
+
+        const sheetPanel = gmPage.locator('#player-sheet-panel');
+        await expect(sheetPanel).toBeVisible({ timeout: 5000 });
+
+        // Switch to Equipment Tab
+        await sheetPanel.locator('.ps-tab-btn[data-tab="ps-equipment"]').click();
+        await expect(sheetPanel.locator('#ps-equipment')).toBeVisible();
+
+        // 3. Find Wand of Wonder row
+        const wowRow = sheetPanel.locator('.equip-row').filter({ hasText: 'Wand of Wonder' }).first();
+        await expect(wowRow).toBeVisible();
+
+        // Expand description drawer
+        const toggle = wowRow.locator('.pc-equip-toggle');
+        await toggle.click();
+
+        // Verify the roll table button is present inside the drawer
+        const rollBtn = wowRow.locator('.pc-item-table-roll-btn');
+        await expect(rollBtn).toBeVisible({ timeout: 4000 });
+        await expect(rollBtn).toContainText('Roll Table');
+
+        // 4. Click the Roll Table button
+        const initialMsgCount = await gmPage.evaluate(
+            () => document.querySelectorAll('#chat-messages .chat-message').length
+        );
+
+        await rollBtn.click();
+
+        // Wait for rolltable-chat-card to appear in chat
+        await gmPage.waitForFunction(
+            (cnt) => document.querySelectorAll('#chat-messages .chat-message').length > cnt,
+            initialMsgCount,
+            { timeout: 8000 }
+        );
+
+        // Ensure chat tab is active so chat messages are visible
+        const chatTabActive = await gmPage.evaluate(() => {
+            const btn = document.querySelector('.tab-header[data-tab="tab-chat"]');
+            return btn ? btn.classList.contains('active') : false;
+        });
+        if (!chatTabActive) {
+            await gmPage.locator('.tab-header[data-tab="tab-chat"]').click();
+        }
+
+        const lastChatMsg = gmPage.locator('#chat-messages .chat-message').last();
+        await expect(lastChatMsg.locator('.rolltable-chat-card')).toBeVisible();
+        await expect(lastChatMsg.locator('.rolltable-chat-card')).toContainText('Wand of Wonder');
+
+        // 5. Ping Item to Chat
+        const pingBtn = wowRow.locator('.pc-equip-ping');
+        await pingBtn.click();
+
+        // Wait for item card in chat
+        await gmPage.waitForFunction(
+            (cnt) => document.querySelectorAll('#chat-messages .chat-message').length > cnt,
+            initialMsgCount + 1,
+            { timeout: 8000 }
+        );
+
+        const itemCardMsg = gmPage.locator('#chat-messages .chat-message').last();
+        await expect(itemCardMsg.locator('.macro-chat-card')).toBeVisible();
+        const chatRollBtn = itemCardMsg.locator('.btn-chat-roll-table');
+        await expect(chatRollBtn).toBeVisible();
+        await expect(chatRollBtn).toContainText('Roll Table');
     });
 });

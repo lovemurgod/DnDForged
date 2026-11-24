@@ -2,6 +2,9 @@
  * Player Sheet Token Art, Sizing, Auras & FX Settings Modal
  */
 
+import { openTokenCropper } from '../../canvas/tokens/vtt-token-cropper.js';
+import { isAnimatedMedia, promptAnimatedMediaChoice } from '../../canvas/tokens/vtt-canvas-token-borders.js';
+
 let tempPlayerAurasList = [];
 
 export function getTempPlayerAurasList() {
@@ -319,6 +322,45 @@ export function renderPlayerTokenGallery(options = {}) {
             wrapper.appendChild(badge);
         }
 
+        const cropBtn = document.createElement('button');
+        cropBtn.className = 'btn btn-secondary btn-xxs pc-token-gal-crop';
+        cropBtn.dataset.idx = idx;
+        cropBtn.style.cssText = 'position:absolute; bottom:2px; left:2px; padding:2px 4px;';
+        cropBtn.title = 'Crop / Frame Token Art';
+        cropBtn.innerHTML = '<i class="fa-solid fa-crop"></i>';
+        wrapper.appendChild(cropBtn);
+
+        cropBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (isAnimatedMedia(imgObj.url, imgObj.name)) {
+                if (!confirm('Cropping an animated token will freeze its animation into a static frame. Do you want to continue?')) {
+                    return;
+                }
+            }
+            openTokenCropper({
+                sourceUrl: imgObj.originalUrl || imgObj.url,
+                initialFraming: imgObj.framing || {},
+                initialBorder: currentChar.tokenBorder || {
+                    shape: 'circle',
+                    style: 'solid',
+                    color: '#007bff',
+                    width: 3
+                },
+                tokenName: currentChar.name || 'Hero',
+                onSave: (result) => {
+                    imgObj.url = result.url;
+                    imgObj.originalUrl = result.originalUrl;
+                    imgObj.framing = result.framing;
+                    if (result.border) {
+                        currentChar.tokenBorder = result.border;
+                    }
+                    currentChar.activeTokenIndex = idx;
+                    updateTokenPortrait(result.url);
+                    renderPlayerTokenGallery(options);
+                }
+            });
+        });
+
         const delBtn = document.createElement('button');
         delBtn.className = 'btn btn-danger btn-xxs pc-token-gal-del';
         delBtn.dataset.idx = idx;
@@ -378,16 +420,64 @@ export function setupPlayerTokenEditListeners(options = {}) {
             try {
                 const res = await fetch('/api/player-token/url', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers:
+                        typeof window !== 'undefined' && typeof window.vttAuthHeaders === 'function'
+                            ? window.vttAuthHeaders({ 'Content-Type': 'application/json' })
+                            : { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ url: rawUrl })
                 });
                 if (res.ok) {
                     const data = await res.json();
-                    if (!currentChar.tokenImages) currentChar.tokenImages = [];
-                    currentChar.tokenImages.push({ url: data.url, name: 'URL Media' });
-                    currentChar.activeTokenIndex = currentChar.tokenImages.length - 1;
                     if (urlInput) urlInput.value = '';
-                    renderPlayerTokenGallery(options);
+
+                    const addDirect = () => {
+                        if (!currentChar.tokenImages) currentChar.tokenImages = [];
+                        currentChar.tokenImages.push({
+                            url: data.url,
+                            originalUrl: rawUrl,
+                            name: 'URL Media'
+                        });
+                        currentChar.activeTokenIndex = currentChar.tokenImages.length - 1;
+                        updateTokenPortrait(data.url);
+                        renderPlayerTokenGallery(options);
+                    };
+
+                    const openCropper = () => {
+                        openTokenCropper({
+                            sourceUrl: data.url,
+                            tokenName: currentChar.name || 'Hero',
+                            initialBorder: currentChar.tokenBorder || {
+                                shape: 'circle',
+                                style: 'solid',
+                                color: '#007bff',
+                                width: 3
+                            },
+                            onSave: (result) => {
+                                if (!currentChar.tokenImages) currentChar.tokenImages = [];
+                                currentChar.tokenImages.push({
+                                    url: result.url,
+                                    originalUrl: result.originalUrl,
+                                    framing: result.framing,
+                                    name: 'URL Media'
+                                });
+                                if (result.border) currentChar.tokenBorder = result.border;
+                                currentChar.activeTokenIndex = currentChar.tokenImages.length - 1;
+                                updateTokenPortrait(result.url);
+                                renderPlayerTokenGallery(options);
+                            }
+                        });
+                    };
+
+                    if (isAnimatedMedia(data.url, rawUrl)) {
+                        promptAnimatedMediaChoice({
+                            url: data.url,
+                            fileName: rawUrl,
+                            onDirect: addDirect,
+                            onCrop: openCropper
+                        });
+                    } else {
+                        openCropper();
+                    }
                 } else {
                     alert('Failed to process URL.');
                 }
@@ -426,10 +516,56 @@ export function setupPlayerTokenEditListeners(options = {}) {
             });
             if (res.ok) {
                 const data = await res.json();
-                if (!currentChar.tokenImages) currentChar.tokenImages = [];
-                currentChar.tokenImages.push({ url: data.url, name: file.name });
-                currentChar.activeTokenIndex = currentChar.tokenImages.length - 1;
-                renderPlayerTokenGallery(options);
+                fileInput.value = '';
+
+                const addDirect = () => {
+                    if (!currentChar.tokenImages) currentChar.tokenImages = [];
+                    currentChar.tokenImages.push({
+                        url: data.url,
+                        originalUrl: data.url,
+                        name: file.name
+                    });
+                    currentChar.activeTokenIndex = currentChar.tokenImages.length - 1;
+                    updateTokenPortrait(data.url);
+                    renderPlayerTokenGallery(options);
+                };
+
+                const openCropper = () => {
+                    openTokenCropper({
+                        sourceUrl: data.url,
+                        tokenName: currentChar.name || 'Hero',
+                        initialBorder: currentChar.tokenBorder || {
+                            shape: 'circle',
+                            style: 'solid',
+                            color: '#007bff',
+                            width: 3
+                        },
+                        onSave: (result) => {
+                            if (!currentChar.tokenImages) currentChar.tokenImages = [];
+                            currentChar.tokenImages.push({
+                                url: result.url,
+                                originalUrl: result.originalUrl,
+                                framing: result.framing,
+                                name: file.name
+                            });
+                            if (result.border) currentChar.tokenBorder = result.border;
+                            currentChar.activeTokenIndex = currentChar.tokenImages.length - 1;
+                            updateTokenPortrait(result.url);
+                            renderPlayerTokenGallery(options);
+                        }
+                    });
+                };
+
+                if (isAnimatedMedia(data.url, file.name)) {
+                    promptAnimatedMediaChoice({
+                        url: data.url,
+                        fileName: file.name,
+                        onDirect: addDirect,
+                        onCrop: openCropper
+                    });
+                } else {
+                    openCropper();
+                }
             } else {
                 const errData = await res.json().catch(() => null);
                 alert('Upload failed: ' + (errData?.error || res.statusText || 'Server error'));
@@ -438,7 +574,6 @@ export function setupPlayerTokenEditListeners(options = {}) {
             alert('Error: ' + e.message);
         } finally {
             btn.innerHTML = originalText;
-            fileInput.value = '';
         }
     });
 
@@ -508,6 +643,15 @@ export function setupPlayerTokenEditListeners(options = {}) {
         if (span) span.textContent = `${Math.round(e.target.value * 100)}%`;
     });
 
+    document.getElementById('pc-token-edit-border-width')?.addEventListener('input', (e) => {
+        const span = document.getElementById('val-pc-token-edit-border-width');
+        if (span) span.textContent = `${e.target.value}px`;
+    });
+    document.getElementById('pc-token-edit-border-style')?.addEventListener('change', (e) => {
+        const fg = document.getElementById('pc-token-edit-frame-group');
+        if (fg) fg.classList.toggle('vtt-hidden', e.target.value !== 'frame');
+    });
+
     // Save
     document.getElementById('modal-pc-token-edit-save')?.addEventListener('click', () => {
         const currentChar = getCurrentChar();
@@ -515,6 +659,21 @@ export function setupPlayerTokenEditListeners(options = {}) {
 
         currentChar.tokenSize = parseFloat(document.getElementById('pc-token-edit-size')?.value) || 1;
         currentChar.tokenSight = parseInt(document.getElementById('pc-token-edit-sight')?.value) || 60;
+
+        // Border & Shape
+        const pcBorderShape = document.getElementById('pc-token-edit-border-shape')?.value || 'circle';
+        const pcBorderStyle = document.getElementById('pc-token-edit-border-style')?.value || 'solid';
+        const pcBorderFrame = document.getElementById('pc-token-edit-frame-preset')?.value || 'none';
+        const pcBorderColor = document.getElementById('pc-token-edit-border-color')?.value || '#007bff';
+        const pcBorderWidth = parseInt(document.getElementById('pc-token-edit-border-width')?.value) || 3;
+
+        currentChar.tokenBorder = {
+            shape: pcBorderShape,
+            style: pcBorderStyle,
+            framePreset: pcBorderFrame,
+            color: pcBorderColor,
+            width: pcBorderWidth
+        };
 
         // Auras
         currentChar.tokenAuras = tempPlayerAurasList.map((a) => {
@@ -554,13 +713,17 @@ export function setupPlayerTokenEditListeners(options = {}) {
                     t.size = currentChar.tokenSize;
                     t.sightRange = currentChar.tokenSight;
                     const _cleanActiveUrl = activeImageUrl.split('?')[0].toLowerCase();
-                    t.isGif = _cleanActiveUrl.endsWith('.gif');
+                    t.isGif = _cleanActiveUrl.endsWith('.gif') || activeImageUrl.includes('.gif');
                     t.isVideo =
                         !t.isGif &&
                         (_cleanActiveUrl.endsWith('.mp4') ||
                             _cleanActiveUrl.endsWith('.webm') ||
                             _cleanActiveUrl.endsWith('.ogg') ||
-                            activeImageUrl.includes('youtube.com'));
+                            _cleanActiveUrl.endsWith('.m4v') ||
+                            _cleanActiveUrl.endsWith('.mov') ||
+                            activeImageUrl.includes('youtube.com') ||
+                            activeImageUrl.includes('youtu.be') ||
+                            activeImageUrl.includes('pinimg.com/videos'));
 
                     t.auras = JSON.parse(JSON.stringify(currentChar.tokenAuras || []));
                     if (t.auras.length > 0) {
@@ -587,6 +750,10 @@ export function setupPlayerTokenEditListeners(options = {}) {
                     t.fxShadowOffset = currentChar.fxShadowOffset;
                     t.fxShadowColor = currentChar.fxShadowColor;
                     t.fxShadowOpacity = currentChar.fxShadowOpacity;
+
+                    t.border = JSON.parse(JSON.stringify(currentChar.tokenBorder || {}));
+                    t.ringColor = currentChar.tokenBorder?.color || '#007bff';
+                    t.isBorderless = currentChar.tokenBorder?.style === 'none';
 
                     t.name = currentChar.name;
                     t.hp = currentChar.hpCurrent;
@@ -656,6 +823,60 @@ export function ensurePlayerTokenEditModalExists(options = {}) {
                         <label>Sight Range (ft)</label>
                         <input type="number" id="pc-token-edit-sight" min="0" max="240" step="5" value="60" style="width:100%;" disabled title="Token Sight is managed automatically from the Build Tab Vision settings.">
                         <small style="color:var(--color-text-muted); font-size:0.7rem; margin-top:2px; display:block;">Managed by Build Tab</small>
+                    </div>
+                </div>
+
+                <!-- Token Border & Frame Section -->
+                <div class="form-group border-top-subtle pt-3 mt-3">
+                    <h4 style="margin: 0 0 12px 0; font-size: 0.9rem; color: var(--color-gold-base); font-family: var(--font-heading); display: flex; align-items: center; justify-content: space-between;">
+                        <span><i class="fa-solid fa-shapes"></i> Token Border & Frame</span>
+                    </h4>
+                    <div class="flex-row">
+                        <div class="form-group w-50" style="margin-bottom: 8px;">
+                            <label style="font-size: 0.72rem; color: var(--color-text-secondary); margin-bottom: 2px;">Border Shape</label>
+                            <select id="pc-token-edit-border-shape" style="width: 100%; font-size: 0.8rem; padding: 4px 6px;">
+                                <option value="circle">Circle (Round)</option>
+                                <option value="squircle">Squircle (Rounded Square)</option>
+                                <option value="square">Square</option>
+                                <option value="hexagon">Hexagon</option>
+                                <option value="octagon">Octagon</option>
+                                <option value="shield">Shield</option>
+                            </select>
+                        </div>
+                        <div class="form-group w-50" style="margin-bottom: 8px;">
+                            <label style="font-size: 0.72rem; color: var(--color-text-secondary); margin-bottom: 2px;">Border Style</label>
+                            <select id="pc-token-edit-border-style" style="width: 100%; font-size: 0.8rem; padding: 4px 6px;">
+                                <option value="solid">Solid Line</option>
+                                <option value="double">Double Ring</option>
+                                <option value="dashed">Dashed Line</option>
+                                <option value="glow">Neon Glow</option>
+                                <option value="frame">Thematic Frame</option>
+                                <option value="none">Borderless</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="pc-token-edit-frame-group" class="form-group vtt-hidden" style="margin-bottom: 8px;">
+                        <label style="font-size: 0.72rem; color: var(--color-gold-base); margin-bottom: 2px;">Thematic Frame Preset</label>
+                        <select id="pc-token-edit-frame-preset" style="width: 100%; font-size: 0.8rem; padding: 4px 6px;">
+                            <option value="ornate_gold">✨ Ornate Gold Filigree</option>
+                            <option value="silver_mithral">🛡️ Mithral Silver Ring</option>
+                            <option value="gothic_iron">⛓️ Gothic Spiked Iron</option>
+                            <option value="arcane_runic">🔮 Glowing Arcane Runes</option>
+                            <option value="legendary_crown">👑 Legendary Boss Crown</option>
+                        </select>
+                    </div>
+                    <div class="flex-row">
+                        <div class="form-group w-50" style="margin-bottom: 0;">
+                            <label style="font-size: 0.72rem; color: var(--color-text-secondary); margin-bottom: 2px;">Border Color</label>
+                            <input type="color" id="pc-token-edit-border-color" value="#007bff" style="width: 44px; height: 32px; border: 1px solid var(--color-border-subtle); border-radius: 4px; padding: 0; cursor: pointer; background: none;">
+                        </div>
+                        <div class="form-group w-50" style="margin-bottom: 0;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px;">
+                                <label style="font-size: 0.72rem; color: var(--color-text-secondary);">Thickness</label>
+                                <span id="val-pc-token-edit-border-width" style="font-family: monospace; font-size: 0.75rem; color: var(--color-gold-base);">3px</span>
+                            </div>
+                            <input type="range" id="pc-token-edit-border-width" min="1" max="8" step="1" value="3" style="width: 100%; cursor: pointer;">
+                        </div>
                     </div>
                 </div>
 
@@ -839,8 +1060,26 @@ export function openPlayerTokenEditModal(char, options = {}) {
         else shaDet.classList.add('vtt-hidden');
     }
 
+    const pcBorder = char.tokenBorder || {};
+    const bShapeEl = document.getElementById('pc-token-edit-border-shape');
+    const bStyleEl = document.getElementById('pc-token-edit-border-style');
+    const bFrameEl = document.getElementById('pc-token-edit-frame-preset');
+    const bFrameGroup = document.getElementById('pc-token-edit-frame-group');
+    const bColorEl = document.getElementById('pc-token-edit-border-color');
+    const bWidthEl = document.getElementById('pc-token-edit-border-width');
+    const bWidthVal = document.getElementById('val-pc-token-edit-border-width');
+
+    if (bShapeEl) bShapeEl.value = pcBorder.shape || 'circle';
+    if (bStyleEl) bStyleEl.value = pcBorder.style || 'solid';
+    if (bFrameEl) bFrameEl.value = pcBorder.framePreset || 'none';
+    if (bFrameGroup) bFrameGroup.classList.toggle('vtt-hidden', (pcBorder.style || 'solid') !== 'frame');
+    if (bColorEl) bColorEl.value = pcBorder.color || '#007bff';
+    if (bWidthEl) bWidthEl.value = pcBorder.width !== undefined ? pcBorder.width : 3;
+    if (bWidthVal) bWidthVal.textContent = `${pcBorder.width !== undefined ? pcBorder.width : 3}px`;
+
     renderPlayerTokenGallery(options);
 
     document.getElementById('modal-pc-token-edit')?.classList.remove('vtt-hidden');
     document.getElementById('modal-pc-token-edit-overlay')?.classList.remove('vtt-hidden');
 }
+                       

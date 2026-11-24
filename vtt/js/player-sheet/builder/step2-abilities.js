@@ -33,6 +33,43 @@ export function renderStep2(ctx) {
     };
     const statList = ['str', 'dex', 'con', 'int', 'wis', 'cha'];
 
+    // Extract Background Recommended Abilities (2024 / XPHB)
+    const matchedBg = ctx.matchedBg;
+    const bgRecStats = new Set();
+    if (matchedBg && matchedBg.ability) {
+        const abList = Array.isArray(matchedBg.ability) ? matchedBg.ability : [matchedBg.ability];
+        abList.forEach((entry) => {
+            if (!entry) return;
+            if (entry.choose && Array.isArray(entry.choose.from)) {
+                entry.choose.from.forEach((s) => bgRecStats.add(s.toLowerCase()));
+            } else if (typeof entry === 'object') {
+                Object.keys(entry).forEach((k) => {
+                    if (['str', 'dex', 'con', 'int', 'wis', 'cha'].includes(k.toLowerCase())) {
+                        bgRecStats.add(k.toLowerCase());
+                    }
+                });
+            }
+        });
+    }
+
+    const sortedStatList = [...statList].sort((a, b) => {
+        const aRec = bgRecStats.has(a);
+        const bRec = bgRecStats.has(b);
+        if (aRec && !bRec) return -1;
+        if (!aRec && bRec) return 1;
+        return 0;
+    });
+
+    const renderBgAsiOptions = (selectedStat, bonusText) => {
+        return sortedStatList
+            .map((s) => {
+                const isRec = bgRecStats.has(s);
+                const isSel = selectedStat === s;
+                return `<option value="${s}" ${isSel ? 'selected' : ''}>${statNames[s]} (${bonusText})${isRec ? ' ★ Background Recommended' : ''}</option>`;
+            })
+            .join('');
+    };
+
     bodyEl.innerHTML = `
         <!-- Generation Method Selector -->
         <div class="builder-section-box">
@@ -305,19 +342,19 @@ export function renderStep2(ctx) {
                             <div style="display:flex; align-items:center; gap:6px;">
                                 <span style="font-size:0.8rem; font-weight:600; color:var(--color-gold-light);">+1 Stat 1:</span>
                                 <select id="pc-wiz-bgasi-1-1" style="padding:4px 8px; font-size:0.8rem; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); border-radius:4px;">
-                                    ${statList.map((s) => `<option value="${s}" ${workingChar.bgAsiPlus1_1 === s ? 'selected' : ''}>${statNames[s]} (+1)</option>`).join('')}
+                                    ${renderBgAsiOptions(workingChar.bgAsiPlus1_1, '+1')}
                                 </select>
                             </div>
                             <div style="display:flex; align-items:center; gap:6px;">
                                 <span style="font-size:0.8rem; font-weight:600; color:var(--color-gold-light);">+1 Stat 2:</span>
                                 <select id="pc-wiz-bgasi-1-2" style="padding:4px 8px; font-size:0.8rem; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); border-radius:4px;">
-                                    ${statList.map((s) => `<option value="${s}" ${workingChar.bgAsiPlus1_2 === s ? 'selected' : ''}>${statNames[s]} (+1)</option>`).join('')}
+                                    ${renderBgAsiOptions(workingChar.bgAsiPlus1_2, '+1')}
                                 </select>
                             </div>
                             <div style="display:flex; align-items:center; gap:6px;">
                                 <span style="font-size:0.8rem; font-weight:600; color:var(--color-gold-light);">+1 Stat 3:</span>
                                 <select id="pc-wiz-bgasi-1-3" style="padding:4px 8px; font-size:0.8rem; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); border-radius:4px;">
-                                    ${statList.map((s) => `<option value="${s}" ${workingChar.bgAsiPlus1_3 === s ? 'selected' : ''}>${statNames[s]} (+1)</option>`).join('')}
+                                    ${renderBgAsiOptions(workingChar.bgAsiPlus1_3, '+1')}
                                 </select>
                             </div>
                         </div>
@@ -327,13 +364,13 @@ export function renderStep2(ctx) {
                             <div style="display:flex; align-items:center; gap:6px;">
                                 <span style="font-size:0.8rem; font-weight:600; color:var(--color-gold-light);">+2 Bonus:</span>
                                 <select id="pc-wiz-bgasi-2" style="padding:4px 8px; font-size:0.8rem; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); border-radius:4px;">
-                                    ${statList.map((s) => `<option value="${s}" ${workingChar.bgAsiPlus2 === s ? 'selected' : ''}>${statNames[s]} (+2)</option>`).join('')}
+                                    ${renderBgAsiOptions(workingChar.bgAsiPlus2, '+2')}
                                 </select>
                             </div>
                             <div style="display:flex; align-items:center; gap:6px;">
                                 <span style="font-size:0.8rem; font-weight:600; color:var(--color-gold-light);">+1 Bonus:</span>
                                 <select id="pc-wiz-bgasi-1" style="padding:4px 8px; font-size:0.8rem; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); border-radius:4px;">
-                                    ${statList.map((s) => `<option value="${s}" ${workingChar.bgAsiPlus1 === s ? 'selected' : ''}>${statNames[s]} (+1)</option>`).join('')}
+                                    ${renderBgAsiOptions(workingChar.bgAsiPlus1, '+1')}
                                 </select>
                             </div>
                         </div>
