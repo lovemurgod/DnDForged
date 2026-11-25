@@ -146,8 +146,15 @@
                 req.onerror = () => resolve([]);
             });
             for (const rec of records) {
-                if (rec?.id && rec.blob && !blobUrlCache.has(rec.id) && typeof URL?.createObjectURL === 'function') {
-                    blobUrlCache.set(rec.id, URL.createObjectURL(rec.blob));
+                if (rec?.id && rec.blob && typeof URL?.createObjectURL === 'function') {
+                    const objUrl = blobUrlCache.get(rec.id) || URL.createObjectURL(rec.blob);
+                    blobUrlCache.set(rec.id, objUrl);
+                    if (rec.urlPath) {
+                        blobUrlCache.set(rec.urlPath, objUrl);
+                        if (rec.urlPath.startsWith('/')) {
+                            blobUrlCache.set(rec.urlPath.slice(1), objUrl);
+                        }
+                    }
                 }
             }
         } catch (_) {
@@ -159,8 +166,23 @@
     }
 
     function getAssetIdFromUrl(url) {
-        if (typeof url !== 'string' || !url.startsWith(ASSET_URL_PREFIX)) return null;
-        return url.slice(ASSET_URL_PREFIX.length).split('?')[0].trim();
+        if (typeof url !== 'string') return null;
+        let clean = url.split('?')[0].trim();
+        try {
+            clean = decodeURIComponent(clean);
+        } catch (_) {
+            /* keep raw string if malformed URI */
+        }
+        if (clean.startsWith(ASSET_URL_PREFIX)) {
+            return clean.slice(ASSET_URL_PREFIX.length).trim();
+        }
+        if (clean.startsWith('/assets/') || clean.startsWith('/vtt-uploads/')) {
+            return `local:${clean}`;
+        }
+        if (clean.startsWith('assets/') || clean.startsWith('vtt-uploads/')) {
+            return `local:/${clean}`;
+        }
+        return null;
     }
 
     global.__resolveStaticAssetUrl = function (url) {
@@ -168,6 +190,9 @@
         if (!assetId) return null;
         if (blobUrlCache.has(assetId)) {
             return blobUrlCache.get(assetId);
+        }
+        if (typeof url === 'string' && blobUrlCache.has(url.split('?')[0].trim())) {
+            return blobUrlCache.get(url.split('?')[0].trim());
         }
         if (!pendingAssetLoads.has(assetId)) {
             pendingAssetLoads.add(assetId);
@@ -177,6 +202,10 @@
                     if (rec?.blob && typeof URL?.createObjectURL === 'function') {
                         const objUrl = URL.createObjectURL(rec.blob);
                         blobUrlCache.set(assetId, objUrl);
+                        if (rec.urlPath) {
+                            blobUrlCache.set(rec.urlPath, objUrl);
+                            if (rec.urlPath.startsWith('/')) blobUrlCache.set(rec.urlPath.slice(1), objUrl);
+                        }
                         global.VTT?.canvasEngine?.refreshAssetUrl?.(url);
                     }
                 })
@@ -852,7 +881,18 @@
             return jsonResponse({ error: 'Entry not found' }, 404);
         }
 
-        // Rewrite root-relative /data/*, /vtt/data/*, /img/*, and /vtt/img/* so <base href="/play/"> resolves them
+        // Serve desktop-folder /assets/* and /vtt-uploads/* blobs from IndexedDB if synced
+        if ((pathname.startsWith('/assets/') || pathname.startsWith('/vtt-uploads/')) && method === 'GET') {
+            const rec = await global.__staticAssetStore?.getBlob?.(pathname);
+            if (rec?.blob) {
+                return new Response(rec.blob, {
+                    status: 200,
+                    headers: { 'Content-Type': rec.mimeType || rec.blob.type || 'application/octet-stream' }
+                });
+            }
+        }
+
+        // Rewrite root-relative /data/*, /vtt/data/*, /img/*, and /vtt/img/* so relative paths resolve them
         if (pathname.startsWith('/vtt/data/') || pathname.startsWith('/vtt/img/')) {
             return originalFetch(pathname.slice('/vtt/'.length) + (parsedUrl.search || ''), init);
         }

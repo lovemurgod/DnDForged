@@ -195,6 +195,28 @@ test('Static shim BroadcastChannel aligns on { type: "campaigns-updated" }', asy
     );
 });
 
+test('Static shim resolves desktop-folder /assets/* and /vtt-uploads/* paths via __resolveStaticAssetUrl', () => {
+    const mockWindow = {
+        __FORGEDVTT_STATIC_WEB__: true,
+        location: { origin: 'https://example.test' },
+        fetch: async () => new Response('{}', { status: 200 })
+    };
+    const shimCode = fs.readFileSync(path.join(process.cwd(), 'vtt', 'js', 'network', 'vtt-static-shim.js'), 'utf8');
+    vm.runInNewContext(shimCode, {
+        window: mockWindow,
+        localStorage: { getItem: () => null },
+        URL,
+        Response,
+        setTimeout,
+        clearTimeout
+    });
+
+    const placeholder = mockWindow.__resolveStaticAssetUrl('/assets/Tokens/Bandit%20Captain.png');
+    assert.ok(placeholder.startsWith('data:image/svg+xml'));
+    const uploadPlaceholder = mockWindow.__resolveStaticAssetUrl('/vtt-uploads/hero_token.webp');
+    assert.ok(uploadPlaceholder.startsWith('data:image/svg+xml'));
+});
+
 test('Express /api/campaigns/import extracts uploaded .zip campaign archives', async () => {
     const { campaignsRouter } = await import('../server/routes/campaigns.js');
     const { campaigns } = await import('../server/state.js');

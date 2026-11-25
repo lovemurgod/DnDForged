@@ -279,7 +279,7 @@ export function initVttHandouts(vtt) {
             if (window.Renderer?.dice?.bindRollButtons) {
                 try {
                     window.Renderer.dice.bindRollButtons(viewDesc);
-                } catch (e) { }
+                } catch (e) {}
             }
         } else {
             viewDesc.textContent = handout.desc || '';
@@ -1024,7 +1024,7 @@ export function initVttHandouts(vtt) {
             if (window.Renderer?.dice?.bindRollButtons) {
                 try {
                     window.Renderer.dice.bindRollButtons(htmlBox);
-                } catch (e) { }
+                } catch (e) {}
             }
             previewContainerEl.appendChild(htmlBox);
         } else if (item.desc) {

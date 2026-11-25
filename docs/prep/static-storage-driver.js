@@ -484,7 +484,7 @@
             const assetsDir = await this.dirHandle.getDirectoryHandle('assets', { create: true });
             const manifest = {};
             for (const rec of records) {
-                if (!rec?.id || !rec.blob) continue;
+                if (!rec?.id || !rec.blob || String(rec.id).startsWith('local:')) continue;
                 manifest[rec.id] = {
                     id: rec.id,
                     name: rec.name || rec.id,
@@ -512,6 +512,54 @@
             if (!this.dirHandle) return;
             const db = await this._openAssetIdb();
             if (!db || !db.objectStoreNames.contains('assets')) return;
+
+            const putAssetRecord = (rec) =>
+                new Promise((resolve) => {
+                    const tx = db.transaction('assets', 'readwrite');
+                    tx.objectStore('assets').put(rec);
+                    tx.oncomplete = () => resolve();
+                    tx.onerror = () => resolve();
+                });
+
+            const walkDirFiles = async (dirHandle, prefix = '') => {
+                const out = [];
+                for await (const [name, handle] of dirHandle.entries()) {
+                    const rel = prefix ? `${prefix}/${name}` : name;
+                    if (handle.kind === 'directory') {
+                        out.push(...(await walkDirFiles(handle, rel)));
+                    } else if (handle.kind === 'file') {
+                        out.push({ name, rel, handle });
+                    }
+                }
+                return out;
+            };
+
+            const insertTreeNode = (root, relPath, url) => {
+                const parts = String(relPath).split('/').filter(Boolean);
+                if (!parts.length) return;
+                let cur = root;
+                let built = '';
+                for (let i = 0; i < parts.length - 1; i++) {
+                    const part = parts[i];
+                    built = built ? `${built}/${part}` : part;
+                    if (!Array.isArray(cur.children)) cur.children = [];
+                    let folder = cur.children.find((c) => c && c.type === 'folder' && c.name === part);
+                    if (!folder) {
+                        folder = { name: part, path: built, type: 'folder', children: [] };
+                        cur.children.push(folder);
+                    }
+                    cur = folder;
+                }
+                const fileName = parts[parts.length - 1];
+                if (!Array.isArray(cur.children)) cur.children = [];
+                if (!cur.children.some((c) => c && c.path === relPath)) {
+                    cur.children.push({ id: `local:${url}`, name: fileName, path: relPath, type: 'file', url });
+                }
+            };
+
+            const tree = (await idbGet('assetTree')) || { name: 'Root', path: '', type: 'folder', children: [] };
+
+            // 1. Sync E:\ForgeDVTT\assets\** (supports both forgedvtt-asset:// manifest records & desktop /assets/* files)
             try {
                 const assetsDir = await this.dirHandle.getDirectoryHandle('assets', { create: false });
                 let manifest = {};
@@ -520,34 +568,62 @@
                     const mfile = await mfh.getFile();
                     manifest = JSON.parse(await mfile.text());
                 } catch (_) {}
-                for await (const [name, handle] of assetsDir.entries()) {
-                    if (handle.kind !== 'file' || name === 'manifest.json') continue;
-                    const existing = await new Promise((resolve) => {
-                        const tx = db.transaction('assets', 'readonly');
-                        const req = tx.objectStore('assets').get(name);
-                        req.onsuccess = () => resolve(req.result || null);
-                        req.onerror = () => resolve(null);
-                    });
-                    if (!existing) {
-                        const file = await handle.getFile();
+
+                const assetFiles = await walkDirFiles(assetsDir);
+                for (const { name, rel, handle } of assetFiles) {
+                    if (rel === 'manifest.json') continue;
+                    const file = await handle.getFile();
+                    const isStaticAssetId = !rel.includes('/') && (Boolean(manifest[name]) || /^asset_\d+_/.test(name));
+                    if (isStaticAssetId) {
                         const meta = manifest[name] || {};
-                        await new Promise((resolve) => {
-                            const tx = db.transaction('assets', 'readwrite');
-                            tx.objectStore('assets').put({
-                                id: name,
-                                name: meta.name || name,
-                                path: meta.path || meta.name || name,
-                                folderPath: meta.folderPath || '',
-                                mimeType: meta.mimeType || file.type || 'application/octet-stream',
-                                blob: file,
-                                createdAt: meta.createdAt || Date.now()
-                            });
-                            tx.oncomplete = () => resolve();
-                            tx.onerror = () => resolve();
+                        await putAssetRecord({
+                            id: name,
+                            name: meta.name || name,
+                            path: meta.path || meta.name || name,
+                            folderPath: meta.folderPath || '',
+                            mimeType: meta.mimeType || file.type || 'application/octet-stream',
+                            blob: file,
+                            createdAt: meta.createdAt || Date.now()
                         });
+                    } else {
+                        const urlPath = `/assets/${rel}`;
+                        await putAssetRecord({
+                            id: `local:${urlPath}`,
+                            urlPath,
+                            name,
+                            path: rel,
+                            folderPath: rel.includes('/') ? rel.split('/').slice(0, -1).join('/') : '',
+                            mimeType: file.type || 'application/octet-stream',
+                            blob: file,
+                            createdAt: file.lastModified || Date.now()
+                        });
+                        insertTreeNode(tree, rel, urlPath);
                     }
                 }
             } catch (_) {}
+
+            // 2. Sync E:\ForgeDVTT\uploads\** (desktop /vtt-uploads/* campaign/token uploads)
+            try {
+                const uploadsDir = await this.dirHandle.getDirectoryHandle('uploads', { create: false });
+                const uploadFiles = await walkDirFiles(uploadsDir);
+                for (const { name, rel, handle } of uploadFiles) {
+                    const file = await handle.getFile();
+                    const urlPath = `/vtt-uploads/${rel}`;
+                    await putAssetRecord({
+                        id: `local:${urlPath}`,
+                        urlPath,
+                        name,
+                        path: `uploads/${rel}`,
+                        folderPath: 'uploads',
+                        mimeType: file.type || 'application/octet-stream',
+                        blob: file,
+                        createdAt: file.lastModified || Date.now()
+                    });
+                    insertTreeNode(tree, `uploads/${rel}`, urlPath);
+                }
+            } catch (_) {}
+
+            await idbSet('assetTree', tree);
             await this._mirrorIdbAssetsToDir().catch(() => {});
         }
 

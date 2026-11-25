@@ -502,11 +502,15 @@
         resolveAssetUrl(url) {
             if (!url || typeof url !== 'string') return null;
             const isPrivateP2pAsset =
-                url.startsWith('forgedvtt-asset://') || url.startsWith('/vtt-uploads/') || url.startsWith('/assets/');
+                url.startsWith('forgedvtt-asset://') ||
+                url.startsWith('/vtt-uploads/') ||
+                url.startsWith('vtt-uploads/') ||
+                url.startsWith('/assets/') ||
+                url.startsWith('assets/');
             if (!isPrivateP2pAsset) return null;
 
             if (this.isHost) {
-                if (url.startsWith('forgedvtt-asset://') && typeof global.__resolveStaticAssetUrl === 'function') {
+                if (typeof global.__resolveStaticAssetUrl === 'function' && global.__FORGEDVTT_STATIC_WEB__) {
                     return global.__resolveStaticAssetUrl(url);
                 }
                 return null;
@@ -518,13 +522,17 @@
         async _handlePeerAssetRequest(url, senderPeer) {
             if (!this.isHost || !senderPeer || !senderPeer.joined || typeof url !== 'string') return;
             const isSafeLocal =
-                url.startsWith('forgedvtt-asset://') || url.startsWith('/vtt-uploads/') || url.startsWith('/assets/');
+                url.startsWith('forgedvtt-asset://') ||
+                url.startsWith('/vtt-uploads/') ||
+                url.startsWith('vtt-uploads/') ||
+                url.startsWith('/assets/') ||
+                url.startsWith('assets/');
             if (!isSafeLocal || url.includes('..') || url.includes('\0')) return;
 
             try {
                 let blob = null;
                 let mimeType = 'application/octet-stream';
-                if (url.startsWith('forgedvtt-asset://') && global.__staticAssetStore?.getBlob) {
+                if (global.__staticAssetStore?.getBlob) {
                     const rec = await global.__staticAssetStore.getBlob(url);
                     if (rec instanceof Blob) {
                         blob = rec;
@@ -533,7 +541,8 @@
                         blob = rec.blob;
                         mimeType = rec.mimeType || rec.blob.type || mimeType;
                     }
-                } else if (typeof fetch === 'function') {
+                }
+                if (!blob && typeof fetch === 'function') {
                     const headers = typeof global.vttAuthHeaders === 'function' ? global.vttAuthHeaders() : {};
                     const res = await fetch(url, { headers });
                     if (res.ok) {
