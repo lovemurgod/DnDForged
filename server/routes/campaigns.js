@@ -44,16 +44,20 @@ campaignsRouter.get('/campaigns', (req, res) => {
         getOrCreateCampaign(sub);
     }
     const campaignsList = Object.values(campaigns).map((c) => {
+        const safeName =
+            typeof c.name === 'string' && c.name.trim()
+                ? c.name.trim()
+                : String(c.id || 'Untitled Campaign');
         if (!isAuthed) {
             // Intentionally public metadata to populate login campaign selector
             return {
                 id: c.id,
-                name: c.name
+                name: safeName
             };
         }
         return {
             id: c.id,
-            name: c.name,
+            name: safeName,
             description: c.description || '',
             allowedUsers: c.allowedUsers || [],
             knownPlayers: c.knownPlayers || [],
@@ -443,13 +447,63 @@ campaignsRouter.get('/campaigns/:id/export', verifyGmOrSecret, (req, res) => {
     });
 });
 
-// Export single entity (map, character, table, deck) for browser download
+function collectBatchEntities(campaign, entityType) {
+    if (entityType === 'map') {
+        return Object.values(campaign.maps || {});
+    }
+    if (entityType === 'player') {
+        return Object.values(campaign.characters || {}).filter(
+            (c) => !c?.isCompanion && !c?.isCustomNpc && c?.type !== 'npc'
+        );
+    }
+    if (entityType === 'companion') {
+        return Object.values(campaign.characters || {}).filter((c) => Boolean(c?.isCompanion));
+    }
+    if (entityType === 'customNpc' || entityType === 'npc') {
+        return Object.values(campaign.characters || {}).filter((c) =>
+            Boolean(c?.isCustomNpc || c?.type === 'npc')
+        );
+    }
+    if (entityType === 'tablesAndDecks' || entityType === 'table') {
+        return [
+            ...(campaign.rollTables?.customTables || []),
+            ...(campaign.rollTables?.assetTables || []),
+            ...(campaign.assetTables || []),
+            ...(campaign.rollTables?.cardDecks || [])
+        ];
+    }
+    return [];
+}
+
+// Export single entity or batch of entities (map, character, table, deck) for browser download
 campaignsRouter.get('/campaigns/:id/export-granular', verifyGmOrSecret, (req, res) => {
     const campaign = campaigns[req.params.id];
     if (!campaign) return res.status(404).json({ success: false, error: 'Campaign not found' });
 
     const entityType = String(req.query.entityType || '');
     const entityId = String(req.query.entityId || '');
+    const isBatch = String(req.query.batch || '').toLowerCase() === 'true';
+
+    if (isBatch) {
+        const items = collectBatchEntities(campaign, entityType);
+        if (!items.length) {
+            return res.status(404).json({ success: false, error: 'No items found to export' });
+        }
+        const safeType = entityType.replace(/[^a-zA-Z0-9_-]/g, '_') || 'entities';
+        const payload = {
+            format: 'forgedvtt-batch-v1',
+            entityType,
+            exportedAt: new Date().toISOString(),
+            items
+        };
+        return res.json({
+            success: true,
+            count: items.length,
+            fileName: `${campaign.id}-${safeType}-batch.json`,
+            content: JSON.stringify(payload, null, 2)
+        });
+    }
+
     let entity = null;
 
     if (entityType === 'map') {

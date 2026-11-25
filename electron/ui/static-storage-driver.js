@@ -530,17 +530,40 @@
         }
 
         async applyPreset({ preset, campaignId = null }) {
-            this.sourcesConfig.uiState.lastPreset = preset;
-            if (preset === '2024-ruleset') {
-                await this.toggleSource('SRD 5.2', true, campaignId);
-                await this.toggleSource('SRD 5.1', false, campaignId);
-            } else if (preset === '2014-ruleset') {
-                await this.toggleSource('SRD 5.1', true, campaignId);
-                await this.toggleSource('SRD 5.2', false, campaignId);
-            } else {
-                await this.toggleSource('SRD 5.1', true, campaignId);
-                await this.toggleSource('SRD 5.2', true, campaignId);
+            const customSources = this.sourcesConfig.customSources || [];
+            const setEnabledForAll = async (isEnabledFn) => {
+                await this.toggleSource('SRD 5.1', Boolean(isEnabledFn({ code: 'SRD 5.1', edition: '2014' })), campaignId);
+                await this.toggleSource('SRD 5.2', Boolean(isEnabledFn({ code: 'SRD 5.2', edition: '2024' })), campaignId);
+                const seen = new Set(['SRD 5.1', 'SRD 5.2']);
+                for (const src of customSources) {
+                    if (!src?.code || seen.has(src.code)) continue;
+                    seen.add(src.code);
+                    await this.toggleSource(src.code, Boolean(isEnabledFn(src)), campaignId);
+                }
+            };
+
+            switch (preset) {
+                case '2024-ruleset':
+                    await setEnabledForAll((s) => s.code !== 'SRD 5.1' && s.edition !== '2014');
+                    break;
+                case '2014-classic':
+                    await setEnabledForAll((s) => s.code !== 'SRD 5.2' && s.edition !== '2024');
+                    break;
+                case 'core-only':
+                case 'all-official':
+                    await setEnabledForAll((s) => s.code === 'SRD 5.1' || s.code === 'SRD 5.2');
+                    break;
+                case 'everything':
+                    await setEnabledForAll(() => true);
+                    break;
+                case 'disable-all':
+                    await setEnabledForAll(() => false);
+                    break;
+                default:
+                    return { success: false, error: `Unknown preset '${preset}'` };
             }
+
+            this.sourcesConfig.uiState.lastPreset = preset;
             await this._saveSourcesConfig();
             return { success: true };
         }

@@ -9,6 +9,7 @@ import {
     verifyGmOrSecret,
     isAuthorizedGmOrSecret,
     isLoopbackRequest,
+    isSameSiteOrLocalBrowserRequest,
     getActiveIo,
     generateGmSessionToken,
     revokeGmSessionToken,
@@ -25,8 +26,19 @@ export function registerCompendiumInvalidator(fn) {
 
 // Server Config Sync & Data Directory API
 adminRouter.get('/server/data-dir', (req, res) => {
-    if (isAuthorizedGmOrSecret(req) || isLoopbackRequest(req)) {
-        return res.json({ success: true, activeDataDir: DATA_DIR });
+    const authenticated = isAuthorizedGmOrSecret(req);
+    if (authenticated || isLoopbackRequest(req)) {
+        const hasGmPassword = Boolean(serverConfig.gmCredentials?.hash);
+        const passwordlessLoopback =
+            !hasGmPassword && isLoopbackRequest(req) && isSameSiteOrLocalBrowserRequest(req);
+        return res.json({
+            success: true,
+            activeDataDir: DATA_DIR,
+            authenticated,
+            hasGmPassword,
+            gmUsername: authenticated ? serverConfig.gmCredentials?.username || '' : '',
+            passwordlessLoopback
+        });
     }
     // Remote unauthenticated probes receive a clean health ping without host path disclosure
     res.json({ success: true });

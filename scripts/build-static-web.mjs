@@ -122,6 +122,22 @@ if (fs.existsSync(iconSrc)) {
     fs.copyFileSync(iconSrc, path.join(docsPrepDir, 'icon.png'));
 }
 
+const resolverSrc = path.join(rootDir, 'vtt', 'js', 'vtt-entry-resolver.js');
+if (!fs.existsSync(resolverSrc)) {
+    throw new Error(`Missing required static /prep dependency: ${resolverSrc}`);
+}
+fs.copyFileSync(resolverSrc, path.join(docsPrepDir, 'vtt-entry-resolver.js'));
+
+const prepSchemasPath = path.join(docsPrepDir, 'builder-schemas.js');
+if (fs.existsSync(prepSchemasPath)) {
+    let schemasJs = fs.readFileSync(prepSchemasPath, 'utf8');
+    schemasJs = schemasJs.replaceAll('../../vtt/js/vtt-entry-resolver.js', './vtt-entry-resolver.js');
+    if (schemasJs.includes('../../vtt/')) {
+        throw new Error('docs/prep/builder-schemas.js still contains unbundled ../../vtt/ imports.');
+    }
+    fs.writeFileSync(prepSchemasPath, schemasJs, 'utf8');
+}
+
 const prepIndex = path.join(docsPrepDir, 'index.html');
 if (fs.existsSync(prepIndex)) {
     let prepHtml = fs.readFileSync(prepIndex, 'utf8');

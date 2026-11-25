@@ -52,4 +52,31 @@ test('Static Web P2P Build: docs/play & docs/prep', async (t) => {
         const dashJs = fs.readFileSync(path.join(rootDir, 'electron', 'ui', 'dashboard.js'), 'utf8');
         assert.ok(dashJs.includes("'https://forgedvtt.com/play'"), 'Desktop P2P share link must default to forgedvtt.com/play');
     });
+
+    await t.test('docs/prep bundles vtt-entry-resolver.js with zero dangling ../../vtt/ imports and no duplicate IDs', () => {
+        const resolverPath = path.join(rootDir, 'docs', 'prep', 'vtt-entry-resolver.js');
+        assert.ok(fs.existsSync(resolverPath), 'docs/prep/vtt-entry-resolver.js must exist');
+        const schemasJs = fs.readFileSync(path.join(rootDir, 'docs', 'prep', 'builder-schemas.js'), 'utf8');
+        assert.ok(schemasJs.includes("'./vtt-entry-resolver.js'"), 'docs/prep/builder-schemas.js must import local resolver');
+        assert.equal(schemasJs.includes('../../vtt/'), false, 'docs/prep/builder-schemas.js must not use ../../vtt/');
+
+        for (const htmlRel of ['electron/ui/index.html', 'docs/prep/index.html']) {
+            const html = fs.readFileSync(path.join(rootDir, htmlRel), 'utf8');
+            const seen = new Set();
+            for (const m of html.matchAll(/\bid=["']([^"']+)["']/g)) {
+                assert.equal(seen.has(m[1]), false, `Duplicate element id "${m[1]}" in ${htmlRel}`);
+                seen.add(m[1]);
+            }
+            assert.ok(html.includes('id="btn-gm-export-backup"'), `${htmlRel} must expose Hybrid backup button`);
+            assert.ok(html.includes('id="btn-gm-restore-backup"'), `${htmlRel} must expose Hybrid restore button`);
+            assert.equal(html.includes('id="modal-compendium-inspect"'), false, `${htmlRel} must not keep dead inspect modal`);
+        }
+    });
+
+    await t.test('Electron builder configs unpack electron/**/* for packaged local server execution', () => {
+        const pkg = JSON.parse(fs.readFileSync(path.join(rootDir, 'package.json'), 'utf8'));
+        const srdCfg = JSON.parse(fs.readFileSync(path.join(rootDir, 'electron-builder-srd.json'), 'utf8'));
+        assert.ok(pkg.build.asarUnpack.includes('electron/**/*'), 'package.json must unpack electron/**/*');
+        assert.ok(srdCfg.asarUnpack.includes('electron/**/*'), 'electron-builder-srd.json must unpack electron/**/*');
+    });
 });

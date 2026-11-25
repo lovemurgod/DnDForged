@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import crypto from 'crypto';
 import { fileURLToPath } from 'url';
 import { getBrewEntities } from './brew-data-loader.mjs';
 
@@ -697,8 +698,14 @@ function normalizeAbilityEntry(entry, actionType, charName) {
     const descriptionHtml = renderEntriesToHtml(entries);
     const macro = parseActionMacroData(name, entries, charName);
 
+    const stableHash = crypto
+        .createHash('sha1')
+        .update(`${charName || ''}|${actionType || ''}|${name}|${JSON.stringify(entries)}`)
+        .digest('hex')
+        .slice(0, 4);
+
     return {
-        id: `act_${name.toLowerCase().replace(/[^a-z0-9]/g, '_')}_${Math.random().toString(36).substr(2, 4)}`,
+        id: `act_${name.toLowerCase().replace(/[^a-z0-9]/g, '_')}_${stableHash}`,
         name,
         actionType, // 'action', 'bonus', 'reaction', 'trait', 'legendary', 'mythic', 'lair'
         descriptionHtml,

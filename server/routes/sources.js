@@ -1,4 +1,5 @@
 import express from 'express';
+import crypto from 'crypto';
 import fs from 'fs';
 import os from 'os';
 import path from 'path';
@@ -7,7 +8,8 @@ import {
     DATA_DIR,
     verifyGmOrSecret,
     loadSourcesConfig,
-    getActiveIo
+    getActiveIo,
+    isValidAssetPath
 } from '../state.js';
 import { SourceManager } from '../../electron/source-manager.js';
 
@@ -265,41 +267,122 @@ sourcesRouter.get('/sources/export', verifyGmOrSecret, (req, res) => {
     }
 });
 
+const BULK_STAGE_TTL_MS = 30 * 60 * 1000;
+const stagedBulkBatches = new Map();
+
+function pruneExpiredBulkStages() {
+    const now = Date.now();
+    for (const [token, entry] of stagedBulkBatches.entries()) {
+        if (!entry || now - entry.createdAt >= BULK_STAGE_TTL_MS) {
+            stagedBulkBatches.delete(token);
+            if (entry?.dir) {
+                try {
+                    fs.rmSync(entry.dir, { recursive: true, force: true });
+                } catch (_) {}
+            }
+        }
+    }
+}
+
 sourcesRouter.post('/sources/inspect-bulk', verifyGmOrSecret, (req, res) => {
     const { files } = req.body || {};
     if (!Array.isArray(files) || files.length === 0) {
         return res.status(400).json({ success: false, error: 'files array is required' });
     }
-    const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'forgedvtt-bulk-'));
+    pruneExpiredBulkStages();
+
+    const stageToken = crypto.randomBytes(16).toString('hex');
+    const stageRoot = path.join(DATA_DIR, 'scratch', 'bulk-stage');
+    const stageDir = path.join(stageRoot, stageToken);
+    fs.mkdirSync(stageDir, { recursive: true });
+
     try {
         const tmpPaths = [];
         for (const f of files) {
             if (!f || !f.name || f.content === undefined) continue;
             const safeName = path.basename(String(f.name)).replace(/[^a-zA-Z0-9._-]/g, '_') || 'source.json';
-            const dest = path.join(tmpDir, safeName);
+            const dest = path.resolve(stageDir, safeName);
+            if (!isValidAssetPath(dest, stageDir)) continue;
             fs.writeFileSync(dest, typeof f.content === 'string' ? f.content : JSON.stringify(f.content), 'utf8');
             tmpPaths.push(dest);
         }
-        res.json(getSourceManager().inspectImportFiles(tmpPaths));
+
+        const inspected = getSourceManager().inspectImportFiles(tmpPaths);
+        if (!inspected?.success || !Array.isArray(inspected.candidates) || inspected.candidates.length === 0) {
+            try {
+                fs.rmSync(stageDir, { recursive: true, force: true });
+            } catch (_) {}
+            return res.json(inspected);
+        }
+
+        stagedBulkBatches.set(stageToken, { dir: stageDir, createdAt: Date.now() });
+        const safeCandidates = inspected.candidates.map((cand) => ({
+            ...cand,
+            filePath: '',
+            originalPath: cand.fileName,
+            stageToken,
+            stageFileName: cand.fileName
+        }));
+        return res.json({
+            ...inspected,
+            candidates: safeCandidates,
+            files: safeCandidates
+        });
     } catch (err) {
-        res.status(500).json({ success: false, error: err.message });
-    } finally {
         try {
-            fs.rmSync(tmpDir, { recursive: true, force: true });
+            fs.rmSync(stageDir, { recursive: true, force: true });
         } catch (_) {}
+        return res.status(500).json({ success: false, error: err.message });
     }
 });
 
 sourcesRouter.post('/sources/execute-bulk', verifyGmOrSecret, (req, res) => {
+    const consumedTokens = new Set();
     try {
+        pruneExpiredBulkStages();
         const { candidates, conflictDecisions } = req.body || {};
-        const result = getSourceManager().bulkImportSources(candidates, conflictDecisions);
+        if (!Array.isArray(candidates) || candidates.length === 0) {
+            return res.status(400).json({ success: false, error: 'candidates array is required' });
+        }
+
+        const resolvedCandidates = [];
+        for (const cand of candidates) {
+            if (cand?.selected === false) continue;
+            const token = String(cand?.stageToken || '');
+            const stage = token ? stagedBulkBatches.get(token) : null;
+            const baseName = path.basename(String(cand?.stageFileName || cand?.fileName || ''));
+            const stagedPath = stage && baseName ? path.resolve(stage.dir, baseName) : '';
+            if (!stage || !stagedPath || !isValidAssetPath(stagedPath, stage.dir) || !fs.existsSync(stagedPath)) {
+                return res.status(400).json({
+                    success: false,
+                    error: 'Staged upload expired or invalid. Please re-select the files.'
+                });
+            }
+            consumedTokens.add(token);
+            resolvedCandidates.push({
+                ...cand,
+                filePath: stagedPath,
+                originalPath: baseName
+            });
+        }
+
+        const result = getSourceManager().bulkImportSources(resolvedCandidates, conflictDecisions);
         if (result && result.success) {
             broadcastSourcesSync();
         }
-        res.json(result);
+        return res.json(result);
     } catch (err) {
-        res.status(500).json({ success: false, error: err.message });
+        return res.status(500).json({ success: false, error: err.message });
+    } finally {
+        for (const token of consumedTokens) {
+            const stage = stagedBulkBatches.get(token);
+            stagedBulkBatches.delete(token);
+            if (stage?.dir) {
+                try {
+                    fs.rmSync(stage.dir, { recursive: true, force: true });
+                } catch (_) {}
+            }
+        }
     }
 });
 

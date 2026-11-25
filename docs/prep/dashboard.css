@@ -4580,10 +4580,20 @@ body {
 
 
 /* --- Web /prep Mode & Login Gate --- */
+.web-prep-only {
+  display: none !important;
+}
+
+body.web-prep-mode .web-prep-only {
+  display: inline-flex !important;
+}
+
 body.web-prep-mode #tab-btn-hosting,
 body.web-prep-mode #view-hosting,
 body.web-prep-mode #btn-reveal-source-file,
-body.web-prep-mode #btn-select-import-folder {
+body.web-prep-mode #btn-select-import-folder,
+body.web-prep-mode #btn-browse-import-zip,
+body.static-web-mode #btn-browse-import-zip {
   display: none !important;
 }
 

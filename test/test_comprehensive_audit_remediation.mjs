@@ -334,6 +334,30 @@ test('Comprehensive Audit Remediation Suite', async (t) => {
         const batchExp = drv.exportGranular({ campaignId: 'default', entityType: 'map', batch: true });
         assert.equal(batchExp.success, true);
         assert.equal(batchExp.count, 1);
+
+        // Rulebook preset switching must accurately enable/disable SRD 5.1, SRD 5.2, and custom sources
+        await drv.applyPreset({ preset: '2014-classic' });
+        let src2014 = await drv.getAllSources();
+        assert.equal(src2014.categories[0].sources.find((s) => s.code === 'SRD 5.1').enabled, true);
+        assert.equal(src2014.categories[0].sources.find((s) => s.code === 'SRD 5.2').enabled, false);
+
+        await drv.applyPreset({ preset: '2024-ruleset' });
+        let src2024 = await drv.getAllSources();
+        assert.equal(src2024.categories[0].sources.find((s) => s.code === 'SRD 5.1').enabled, false);
+        assert.equal(src2024.categories[0].sources.find((s) => s.code === 'SRD 5.2').enabled, true);
+
+        await drv.applyPreset({ preset: 'disable-all' });
+        let srcNone = await drv.getAllSources();
+        assert.equal(srcNone.sources.some((s) => s.enabled), false, 'disable-all must disable every source');
+
+        await drv.applyPreset({ preset: 'everything' });
+        let srcAll = await drv.getAllSources();
+        assert.equal(srcAll.sources.every((s) => s.enabled), true, 'everything must enable every source');
+
+        await drv.applyPreset({ preset: 'all-official' });
+        let srcOfficial = await drv.getAllSources();
+        assert.equal(srcOfficial.categories[0].sources.find((s) => s.code === 'CUSTOM1').enabled, false);
+        assert.equal(srcOfficial.categories[0].sources.find((s) => s.code === 'SRD 5.1').enabled, true);
     });
 
     await t.test('VttP2PAdapter enforces host role allowlist, kicks rejected peers, chunks packets, and destroys peer', () => {

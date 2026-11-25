@@ -78,11 +78,6 @@ contextBridge.exposeInMainWorld('electronAPI', {
   p2pStartRoom: (params) => ipcRenderer.invoke('p2p-start-room', params),
   p2pStopRoom: () => ipcRenderer.invoke('p2p-stop-room'),
   p2pRegenCode: () => ipcRenderer.invoke('p2p-regen-code'),
-  onP2pStatusUpdate: (callback) => {
-    const subscription = (_, data) => callback(data);
-    ipcRenderer.on('p2p-status-update', subscription);
-    return () => ipcRenderer.removeListener('p2p-status-update', subscription);
-  },
 
   onStatusUpdate: (callback) => {
     const subscription = (_, data) => callback(data);

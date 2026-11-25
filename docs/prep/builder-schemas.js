@@ -2,7 +2,7 @@
  * Builder Schemas & Form <-> JSON Mappers for DnDForged Homebrew Studio
  */
 
-export { VTTEntryResolver } from '../../vtt/js/vtt-entry-resolver.js';
+export { VTTEntryResolver } from './vtt-entry-resolver.js';
 
 export const BUILDER_CATEGORIES = [
     { id: 'bestiary', name: 'Bestiary', icon: '🐉', singular: 'Monster / NPC' },

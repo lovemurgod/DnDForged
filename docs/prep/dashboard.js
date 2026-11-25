@@ -98,13 +98,15 @@ document.addEventListener('DOMContentLoaded', async () => {
             document.body.classList.add('web-prep-mode');
             const btnLogout = document.getElementById('btn-prep-logout');
             if (btnLogout) {
-                btnLogout.classList.remove('vtt-hidden');
                 btnLogout.addEventListener('click', async () => {
                     await window.__webPrepAuth?.logout();
                     window.location.reload();
                 });
             }
             await ensureWebPrepAuthenticated();
+            if (btnLogout) {
+                btnLogout.classList.toggle('vtt-hidden', !window.__webPrepAuth?.getToken?.());
+            }
         }
     }
 
@@ -1794,9 +1796,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
-    btnBackupCampaign.addEventListener('click', async () => {
-        btnBackupCampaign.disabled = true;
-        btnBackupCampaign.textContent = 'Exporting...';
+    async function handleBackupCampaignClick(triggerBtn, idleLabel) {
+        if (triggerBtn) {
+            triggerBtn.disabled = true;
+            triggerBtn.textContent = 'Exporting...';
+        }
         try {
             const res = await api.backupCampaign();
             if (res && res.success) {
@@ -1811,19 +1815,24 @@ document.addEventListener('DOMContentLoaded', async () => {
             appendLogLine(`[Backup Error] ${e.message}`);
             alert(`Backup error: ${e.message}`);
         } finally {
-            btnBackupCampaign.disabled = false;
-            btnBackupCampaign.textContent = '💾 Export Backup';
+            if (triggerBtn) {
+                triggerBtn.disabled = false;
+                triggerBtn.textContent = idleLabel;
+            }
         }
-    });
+    }
 
-    btnRestoreBackup?.addEventListener('click', async () => {
-        btnRestoreBackup.disabled = true;
-        btnRestoreBackup.textContent = 'Restoring...';
+    async function handleRestoreBackupClick(triggerBtn, idleLabel) {
+        if (triggerBtn) {
+            triggerBtn.disabled = true;
+            triggerBtn.textContent = 'Restoring...';
+        }
         try {
             const res = await api.restoreBackup();
             if (res && res.success) {
+                const count = res.count || res.restoredCount || 1;
                 appendLogLine(
-                    `[Backup] Successfully restored ${res.count || 'campaign'} from: ${res.path || 'backup'}`
+                    `[Backup] Successfully restored ${count} campaign(s) from: ${res.path || 'backup'}`
                 );
                 try {
                     await loadGmCampaigns();
@@ -1835,7 +1844,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 } catch (refreshErr) {
                     console.warn('[Backup] Notice refreshing campaign UI after restore:', refreshErr);
                 }
-                alert(`Backup restored successfully (${res.count || 1} campaign(s))!`);
+                alert(`Backup restored successfully (${count} campaign(s))!`);
             } else if (res && res.error) {
                 appendLogLine(`[Backup Error] Restore failed: ${res.error}`);
                 alert(`Restore failed: ${res.error}`);
@@ -1844,10 +1853,20 @@ document.addEventListener('DOMContentLoaded', async () => {
             appendLogLine(`[Backup Error] ${e.message}`);
             alert(`Restore error: ${e.message}`);
         } finally {
-            btnRestoreBackup.disabled = false;
-            btnRestoreBackup.textContent = '📥 Restore Backup';
+            if (triggerBtn) {
+                triggerBtn.disabled = false;
+                triggerBtn.textContent = idleLabel;
+            }
         }
-    });
+    }
+
+    btnBackupCampaign?.addEventListener('click', () => handleBackupCampaignClick(btnBackupCampaign, '💾 Export Backup'));
+    btnRestoreBackup?.addEventListener('click', () => handleRestoreBackupClick(btnRestoreBackup, '📥 Restore Backup'));
+
+    const btnGmExportBackup = document.getElementById('btn-gm-export-backup');
+    const btnGmRestoreBackup = document.getElementById('btn-gm-restore-backup');
+    btnGmExportBackup?.addEventListener('click', () => handleBackupCampaignClick(btnGmExportBackup, '💾 Backup'));
+    btnGmRestoreBackup?.addEventListener('click', () => handleRestoreBackupClick(btnGmRestoreBackup, '📥 Restore'));
 
     // =========================================================================
     // DATABASE SOURCES & HOMEBREW DASHBOARD LOGIC
@@ -2077,7 +2096,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     let initialSourceSnapshot = null;
     let activeClassLevel = 1;
     let expandedCategories = new Set();
-    let globalSearchResults = null;
     let activeTableSort = { col: 'name', ascending: true };
     let activeSourceSearch = '';
     let activeStatusFilter = 'all';
@@ -2211,170 +2229,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const term = activeSourceSearch.toLowerCase().trim();
 
-        // 1. If Global Compendium Search is active
-        if (globalSearchResults !== null) {
-            const activeCat = activeGlobalCatFilter;
-            const categoriesToDisplay = currentSourcesData.categories.filter((c) => !activeCat || c.id === activeCat);
-
-            let totalResultsRendered = 0;
-
-            for (const cat of categoriesToDisplay) {
-                let catResults = globalSearchResults.filter((r) => r.category === cat.id);
-                if (catResults.length === 0) continue;
-
-                totalResultsRendered += catResults.length;
-
-                // Apply sorting
-                catResults.sort((a, b) => {
-                    let valA = '',
-                        valB = '';
-                    if (activeTableSort.col === 'source') {
-                        valA = (a.source || '').toLowerCase();
-                        valB = (b.source || '').toLowerCase();
-                    } else if (activeTableSort.col === 'details') {
-                        valA = (a.summary || a.details || '').toLowerCase();
-                        valB = (b.summary || b.details || '').toLowerCase();
-                    } else {
-                        valA = (a.name || '').toLowerCase();
-                        valB = (b.name || '').toLowerCase();
-                    }
-                    const cmp = valA.localeCompare(valB, undefined, { numeric: true });
-                    return activeTableSort.ascending ? cmp : -cmp;
-                });
-
-                const isExpanded = true;
-                const card = document.createElement('div');
-                card.className = `source-category-card ${isExpanded ? 'expanded' : ''}`;
-                card.id = `cat-card-${cat.id}`;
-
-                const sortIndicator = (col) => {
-                    if (activeTableSort.col === col) {
-                        return `<span class="sort-indicator">${activeTableSort.ascending ? '▲' : '▼'}</span>`;
-                    }
-                    return `<span class="sort-indicator">↕</span>`;
-                };
-
-                const sortClass = (col) => {
-                    if (activeTableSort.col === col) {
-                        return `sortable-th ${activeTableSort.ascending ? 'sorted-asc' : 'sorted-desc'}`;
-                    }
-                    return 'sortable-th';
-                };
-
-                card.innerHTML = `
-          <div class="category-header-wrap" data-cat-id="${cat.id}">
-            <div class="category-title-left">
-              <span class="category-icon">${cat.icon || '📁'}</span>
-              <div class="category-title-text">
-                <h3>
-                  ${cat.name}
-                  <span class="category-badge-count" id="cat-count-${cat.id}">
-                    ${catResults.length} Found
-                  </span>
-                </h3>
-              </div>
-            </div>
-            <div class="category-header-actions" onclick="event.stopPropagation();">
-              <button class="btn-cat-action btn-cat-custom" data-action="add-custom" data-cat="${cat.id}" title="Create new homebrew source in ${cat.name}">✨ Add Custom</button>
-              <span class="accordion-chevron">▼</span>
-            </div>
-          </div>
-          <div class="category-content-wrap">
-            <div class="sources-table-container">
-              <table class="sources-data-table">
-                <thead>
-                  <tr>
-                    <th class="${sortClass('name')}" data-sort="name">
-                      Entry Name ${sortIndicator('name')}
-                    </th>
-                    <th class="${sortClass('source')}" data-sort="source" style="width: 120px;">
-                      Source ${sortIndicator('source')}
-                    </th>
-                    <th class="${sortClass('details')}" data-sort="details" style="width: 170px;">
-                      Details / CR / Lvl ${sortIndicator('details')}
-                    </th>
-                    <th style="width: 150px; text-align: right;">Actions</th>
-                  </tr>
-                </thead>
-                <tbody id="search-rows-${cat.id}"></tbody>
-              </table>
-            </div>
-          </div>
-        `;
-
-                // Accordion toggle
-                const headerWrap = card.querySelector('.category-header-wrap');
-                headerWrap.addEventListener('click', () => {
-                    card.classList.toggle('expanded');
-                });
-
-                // Add custom button
-                card.querySelector('[data-action="add-custom"]')?.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    openCreateCustomModal(cat.id);
-                });
-
-                // Table headers sort
-                card.querySelectorAll('th.sortable-th').forEach((th) => {
-                    th.addEventListener('click', () => {
-                        const col = th.getAttribute('data-sort');
-                        if (activeTableSort.col === col) {
-                            activeTableSort.ascending = !activeTableSort.ascending;
-                        } else {
-                            activeTableSort.col = col;
-                            activeTableSort.ascending = true;
-                        }
-                        renderCategoriesAccordion();
-                    });
-                });
-
-                // Populate search rows
-                const tbody = card.querySelector(`#search-rows-${cat.id}`);
-                for (const item of catResults) {
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `
-            <td>
-              <strong style="color: var(--text-main); font-weight: 600;">${escapeHtml(item.name || 'Unknown')}</strong>
-            </td>
-            <td>
-              <span class="source-code-badge ${item.isCustom ? 'custom' : ''}">${escapeHtml(item.source || 'SRD')}</span>
-            </td>
-            <td>
-              <span class="text-muted" style="font-size: 12px;">${escapeHtml(item.summary || item.details || '—')}</span>
-            </td>
-            <td style="text-align: right; white-space: nowrap;">
-              <button type="button" class="btn btn-xs btn-outline btn-search-inspect" title="Quick 5e Preview">👁️ Inspect</button>
-              <button type="button" class="btn btn-xs btn-primary btn-search-edit" title="Edit in Studio">✏️ Edit</button>
-            </td>
-          `;
-
-                    tr.querySelector('.btn-search-inspect').addEventListener('click', () => {
-                        openInspectModal(cat.id, item.name, item.source);
-                    });
-
-                    tr.querySelector('.btn-search-edit').addEventListener('click', () => {
-                        openEditSourceModal(cat.id, item.source);
-                    });
-
-                    tbody.appendChild(tr);
-                }
-
-                sourcesCategoriesAccordion.appendChild(card);
-            }
-
-            if (totalResultsRendered === 0) {
-                sourcesCategoriesAccordion.innerHTML = `
-          <div class="loading-placeholder" style="padding: 40px 20px;">
-            <div style="font-size: 28px; margin-bottom: 8px;">🔍</div>
-            <div style="font-size: 15px; font-weight: 600; color: var(--text-main);">No matching compendium entries found.</div>
-            <div class="text-muted" style="margin-top: 4px;">Try searching with different keywords or switch category filter to "All Categories".</div>
-          </div>
-        `;
-            }
-            return;
-        }
-
-        // 2. Default state: Sourcebooks Table View
         for (const cat of currentSourcesData.categories) {
             const matchingSources = cat.sources.filter((src) => {
                 if (activeStatusFilter === 'active' && !src.enabled) return false;
@@ -2675,117 +2529,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     function renderSourcesView() {
         renderCategoriesAccordion();
-    }
-
-    // =========================================================================
-    // GLOBAL COMPENDIUM SEARCH & SORT LOGIC
-    // =========================================================================
-    async function triggerGlobalSearch() {
-        const rawTerm = globalCompendiumSearchInput ? globalCompendiumSearchInput.value.trim() : '';
-        if (!rawTerm) {
-            globalSearchResults = null;
-            renderCategoriesAccordion();
-            return;
-        }
-
-        if (sourcesCategoriesAccordion) {
-            sourcesCategoriesAccordion.innerHTML = `
-        <div class="loading-placeholder" style="padding: 40px 20px;">
-          <div class="spinner-inline" style="margin-bottom: 8px;">⏳</div>
-          <div style="font-size: 15px; font-weight: 600; color: var(--text-main);">Searching active compendium for "${escapeHtml(rawTerm)}"...</div>
-        </div>
-      `;
-        }
-
-        try {
-            const res = await api.sourcesSearchCompendium({
-                query: rawTerm,
-                category: activeGlobalCatFilter || 'all',
-                campaignId: activeCampaignScope || null,
-                limit: 100
-            });
-
-            if (res && res.success) {
-                globalSearchResults = res.results || [];
-            } else {
-                globalSearchResults = [];
-            }
-        } catch (err) {
-            console.error('Error executing global compendium search:', err);
-            globalSearchResults = [];
-        }
-
-        renderCategoriesAccordion();
-    }
-
-    // =========================================================================
-    // 5E COMPENDIUM INSPECT MODAL
-    // =========================================================================
-    async function openInspectModal(category, name, source) {
-        const modal = document.getElementById('modal-compendium-inspect');
-        const titleEl = document.getElementById('inspect-modal-title');
-        const badgeEl = document.getElementById('inspect-modal-badge');
-        const srcEl = document.getElementById('inspect-modal-source');
-        const bodyEl = document.getElementById('inspect-modal-body');
-        const footerInfo = document.getElementById('inspect-modal-footer-info');
-        const btnStudio = document.getElementById('btn-inspect-open-studio');
-
-        if (!modal) return;
-
-        modal.classList.remove('vtt-hidden');
-        if (titleEl) titleEl.textContent = name || 'Compendium Entry';
-        if (badgeEl) badgeEl.textContent = (category || 'Compendium').toUpperCase();
-        if (srcEl) srcEl.textContent = source || 'SRD';
-        if (footerInfo) footerInfo.textContent = `Sourcebook: ${source || 'Official Rulebook'}`;
-        if (bodyEl)
-            bodyEl.innerHTML =
-                '<div class="loading-placeholder"><div class="spinner-inline" style="margin-bottom: 8px;">⏳</div>Loading compendium entry...</div>';
-
-        if (btnStudio) {
-            btnStudio.onclick = () => {
-                modal.classList.add('vtt-hidden');
-                openEditSourceModal(category, source);
-            };
-        }
-
-        try {
-            const res = await api.sourcesGetEntityFullData({ category, name, source });
-            if (res && res.success && res.entity) {
-                bodyEl.innerHTML = generateEntityStatblockHtml(category, res.entity);
-                bodyEl.querySelectorAll('.rollable-pill, .dice-chip, .vtt-dc-badge').forEach((btn) => {
-                    btn.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        const rollExpr = btn.getAttribute('data-formula') || btn.getAttribute('data-roll');
-                        const dcVal = btn.getAttribute('data-dc');
-                        const label = btn.getAttribute('data-label') || btn.textContent.trim() || 'Roll';
-                        simulateDiceRoll(rollExpr, label, dcVal);
-                    });
-                });
-            } else {
-                bodyEl.innerHTML = `
-          <div class="loading-placeholder">
-            Could not load full entry for "${escapeHtml(name)}".
-            <br/><span style="font-size: 11px; color: var(--text-dim);">${escapeHtml(res?.error || 'Source data not found')}</span>
-          </div>
-        `;
-            }
-        } catch (err) {
-            bodyEl.innerHTML = `<div class="loading-placeholder text-danger">Error loading entry: ${escapeHtml(err.message)}</div>`;
-        }
-    }
-
-    const btnCloseInspectModal = document.getElementById('btn-close-inspect-modal');
-    const btnInspectClose = document.getElementById('btn-inspect-close');
-    if (btnCloseInspectModal) {
-        btnCloseInspectModal.addEventListener('click', () => {
-            document.getElementById('modal-compendium-inspect')?.classList.add('vtt-hidden');
-        });
-    }
-    if (btnInspectClose) {
-        btnInspectClose.addEventListener('click', () => {
-            document.getElementById('modal-compendium-inspect')?.classList.add('vtt-hidden');
-        });
     }
 
     // Campaign Reset Button
@@ -7378,8 +7121,7 @@ Shortbow. Ranged Weapon Attack: +4 to hit, range 80/320 ft., one target. Hit: 5 
         globalCompendiumSearchInput.addEventListener('input', () => {
             const q = globalCompendiumSearchInput.value.trim();
             if (btnClearGlobalSearch) {
-                if (q) btnClearGlobalSearch.classList.remove('vtt-hidden');
-                else btnClearGlobalSearch.classList.add('vtt-hidden');
+                btnClearGlobalSearch.classList.toggle('visible', Boolean(q));
             }
             clearTimeout(globalSearchDebounceTimer);
             globalSearchDebounceTimer = setTimeout(() => {
@@ -7390,7 +7132,7 @@ Shortbow. Ranged Weapon Attack: +4 to hit, range 80/320 ft., one target. Hit: 5 
         globalCompendiumSearchInput.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 globalCompendiumSearchInput.value = '';
-                if (btnClearGlobalSearch) btnClearGlobalSearch.classList.add('vtt-hidden');
+                if (btnClearGlobalSearch) btnClearGlobalSearch.classList.remove('visible');
                 performGlobalSearch();
             }
         });
@@ -7399,7 +7141,7 @@ Shortbow. Ranged Weapon Attack: +4 to hit, range 80/320 ft., one target. Hit: 5 
     if (btnClearGlobalSearch) {
         btnClearGlobalSearch.addEventListener('click', () => {
             if (globalCompendiumSearchInput) globalCompendiumSearchInput.value = '';
-            btnClearGlobalSearch.classList.add('vtt-hidden');
+            btnClearGlobalSearch.classList.remove('visible');
             performGlobalSearch();
         });
     }

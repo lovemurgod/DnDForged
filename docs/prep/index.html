@@ -344,6 +344,14 @@
           <div class="card-header">
             <h2>📖 Campaigns Management</h2>
             <div class="card-header-actions">
+              <button class="btn btn-sm btn-outline web-prep-only" id="btn-gm-export-backup"
+                title="Export full server backup JSON">
+                💾 Backup
+              </button>
+              <button class="btn btn-sm btn-outline web-prep-only" id="btn-gm-restore-backup"
+                title="Restore campaigns and sources from a backup JSON">
+                📥 Restore
+              </button>
               <button class="btn btn-sm btn-outline" id="btn-gm-import-campaign"
                 title="Import an exported campaign (.zip or .json)">
                 📥 Import Campaign
@@ -1856,26 +1864,6 @@
       </div>
     </div>
 
-    <!-- Quick Inspect Compendium Modal -->
-    <div class="modal-overlay vtt-hidden" id="modal-compendium-inspect" style="z-index: 1060;">
-      <div class="modal-card modal-medium" style="max-width: 650px;">
-        <div class="modal-header">
-          <div class="modal-header-title">
-            <h3 id="inspect-modal-title">Entry Preview</h3>
-            <span class="badge" id="inspect-modal-badge">5e</span>
-          </div>
-          <button class="modal-close" id="btn-close-compendium-inspect">&times;</button>
-        </div>
-        <div class="modal-body" id="inspect-modal-body" style="padding: 20px; max-height: 80vh; overflow-y: auto;">
-          <div class="loading-placeholder"><i class="fa-solid fa-spinner fa-spin"></i> Loading entry details...</div>
-        </div>
-        <div class="modal-footer"
-          style="display: flex; justify-content: flex-end; gap: 10px; padding: 12px 20px; border-top: 1px solid var(--border-color);">
-          <button type="button" class="btn btn-sm btn-outline" id="btn-inspect-close">Close</button>
-        </div>
-      </div>
-    </div>
-
     <!-- Clone from Compendium Modal -->
     <div class="modal-overlay vtt-hidden" id="modal-clone-compendium">
       <div class="modal-card modal-medium">
@@ -2360,31 +2348,6 @@
           <button type="button" class="btn btn-primary" id="btn-execute-url-import">
             🚀 Download & Import
           </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Instant 5e Compendium Inspect Modal -->
-    <div class="modal-overlay vtt-hidden" id="modal-compendium-inspect" style="z-index: 1060;">
-      <div class="modal-card modal-large"
-        style="max-width: 860px; max-height: 90vh; display: flex; flex-direction: column;">
-        <div class="modal-header">
-          <div class="modal-header-title">
-            <h3 id="inspect-modal-title">Entity Name</h3>
-            <span class="badge" id="inspect-modal-badge">BESTIARY</span>
-            <span class="source-code-badge" id="inspect-modal-source">SRD</span>
-          </div>
-          <button class="modal-close" id="btn-close-inspect-modal">&times;</button>
-        </div>
-        <div class="modal-body" style="overflow-y: auto; padding: 20px; flex: 1;" id="inspect-modal-body">
-          <div class="loading-placeholder">Loading compendium entry...</div>
-        </div>
-        <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center;">
-          <div class="text-muted" style="font-size: 12px;" id="inspect-modal-footer-info"></div>
-          <div style="display: flex; gap: 8px;">
-            <button type="button" class="btn btn-secondary" id="btn-inspect-close">Close</button>
-            <button type="button" class="btn btn-primary" id="btn-inspect-open-studio">✏️ Edit in Studio</button>
-          </div>
         </div>
       </div>
     </div>

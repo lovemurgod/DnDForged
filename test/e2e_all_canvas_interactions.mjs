@@ -42,7 +42,7 @@ if (typeof electronPkg === 'string' || !electronPkg?.app) {
         });
 
         try {
-            await win.loadURL('http://localhost:5050/vtt.html');
+            await win.loadURL(process.env.FORGEDVTT_E2E_URL || 'http://localhost:5050/vtt.html');
             await new Promise((r) => setTimeout(r, 2000));
 
             // Join as GM using default campaign GM username

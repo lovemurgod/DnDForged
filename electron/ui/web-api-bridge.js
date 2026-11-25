@@ -90,13 +90,19 @@
         return JSON.parse(text);
     }
 
+    let hybridAuthState = {
+        hasGmPassword: true,
+        passwordlessLoopback: false,
+        serverUsername: ''
+    };
+
     window.__webPrepAuth = {
         getToken,
         getUsername: () => {
             try {
-                return sessionStorage.getItem(USER_KEY) || '';
+                return sessionStorage.getItem(USER_KEY) || hybridAuthState.serverUsername || '';
             } catch (_) {
-                return '';
+                return hybridAuthState.serverUsername || '';
             }
         },
         async initMode() {
@@ -120,14 +126,21 @@
         },
         async verifySession() {
             const token = getToken();
-            if (!token) return false;
             try {
-                const res = await fetch('/api/server/data-dir', {
-                    headers: { 'x-gm-token': token }
-                });
+                const headers = token ? { 'x-gm-token': token } : {};
+                const res = await fetch('/api/server/data-dir', { headers });
                 if (!res.ok) return false;
                 const data = await res.json();
-                return Boolean(data && typeof data.activeDataDir === 'string');
+                if (!data || typeof data.activeDataDir !== 'string') return false;
+                hybridAuthState = {
+                    hasGmPassword: data.hasGmPassword !== false,
+                    passwordlessLoopback: Boolean(data.passwordlessLoopback),
+                    serverUsername: typeof data.gmUsername === 'string' ? data.gmUsername : ''
+                };
+                if (token && data.authenticated === false) {
+                    setSession('', '');
+                }
+                return Boolean(data.authenticated || hybridAuthState.passwordlessLoopback);
             } catch (_) {
                 return false;
             }
@@ -143,6 +156,8 @@
                 throw new Error(data.error || `Login failed (${res.status})`);
             }
             setSession(data.token, data.username);
+            hybridAuthState.hasGmPassword = true;
+            hybridAuthState.serverUsername = data.username || '';
             return data;
         },
         async logout() {
@@ -189,8 +204,10 @@
                 port: window.location.port || 5050,
                 localUrl: window.location.origin,
                 registeredUrl: window.location.origin,
-                gmUsername: window.__webPrepAuth.getUsername() || 'GM',
-                hasGmPassword: true,
+                gmUsername:
+                    window.__webPrepAuth.getUsername() ||
+                    (hybridAuthState.hasGmPassword ? 'GM' : ''),
+                hasGmPassword: hybridAuthState.hasGmPassword,
                 webPrepMode: true,
                 staticWebMode: false
             };
@@ -259,7 +276,8 @@
                     await drv()._saveSourcesConfig();
                 }
                 await drv()._saveCampaigns();
-                return { success: true, restoredCount: Object.keys(backupData.campaigns).length };
+                const count = Object.keys(backupData.campaigns).length;
+                return { success: true, count, restoredCount: count };
             }
             return await apiFetch('/api/server/restore', {
                 method: 'POST',
@@ -278,7 +296,7 @@
             }
             return {
                 username: window.__webPrepAuth.getUsername(),
-                hasPassword: true
+                hasPassword: hybridAuthState.hasGmPassword
             };
         },
         setGmCredentials: async ({ username, password, clearPassword }) => {
@@ -369,10 +387,11 @@
                 await drv()._saveCampaigns();
                 return { success: true, campaign: created };
             }
-            return await apiFetch('/api/campaigns', {
+            const created = await apiFetch('/api/campaigns', {
                 method: 'POST',
                 body: JSON.stringify(payload)
             });
+            return created?.campaign ? created : { success: true, campaign: created };
         },
         gmDeleteCampaign: async (id) => {
             if (isStatic()) {
