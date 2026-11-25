@@ -1,5 +1,6 @@
 // ForgeDVTT Player Sheet Module
 import { VTTDiceParser } from './vtt-dice-parser.js';
+import { resolveMonsterTokenUrl } from './vtt-utils.js';
 import {
     cleanId,
     resolveCharClassLevel,
@@ -3696,12 +3697,7 @@ export function initVttPlayerSheet(vtt) {
                         } catch (e) {}
                     }
                     if (!tokenUrl && (m.source || m.name)) {
-                        const cleanName =
-                            typeof window.Parser !== 'undefined'
-                                ? window.Parser.nameToTokenName(m.name)
-                                : (m.name || '').replace(/"/g, '').trim();
-                        const source = m.source || 'MM';
-                        tokenUrl = `img/bestiary/tokens/${source}/${cleanName}.webp`;
+                        tokenUrl = resolveMonsterTokenUrl(m);
                     }
                     if (tokenUrl) {
                         c.tokenImages = [{ url: tokenUrl, name: 'Default Token', isDefault: true }];
@@ -3995,12 +3991,7 @@ export function initVttPlayerSheet(vtt) {
                         } catch (e) {}
                     }
                     if (!defaultToken && (finalMonsterData.source || finalMonsterData.name)) {
-                        const cleanName =
-                            typeof window.Parser !== 'undefined'
-                                ? window.Parser.nameToTokenName(finalMonsterData.name)
-                                : (finalMonsterData.name || '').replace(/"/g, '').trim();
-                        const source = finalMonsterData.source || 'MM';
-                        defaultToken = `img/bestiary/tokens/${source}/${cleanName}.webp`;
+                        defaultToken = resolveMonsterTokenUrl(finalMonsterData);
                     }
                     const initialTokens = defaultToken
                         ? [{ url: defaultToken, name: 'Default Token', isDefault: true }]

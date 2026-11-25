@@ -35,6 +35,31 @@ function initPresentationClient(vtt = {}) {
 
     let isCameraLocked = false;
     const socket = vtt.socket || (typeof window !== 'undefined' ? window.VTT?.socket : null);
+    let presentationBc = null;
+    try {
+        if (typeof BroadcastChannel !== 'undefined') {
+            presentationBc = new BroadcastChannel('forgedvtt_presentation_sync');
+            presentationBc.unref?.();
+            presentationBc.onmessage = (ev) => {
+                const msg = ev?.data;
+                if (!msg || !msg.type) return;
+                if (msg.type === 'camSync' && !isCameraLocked) {
+                    const canvasEngine = vtt.canvasEngine || window.VTT?.canvasEngine;
+                    const currentMapId = canvasEngine?.getCurrentMapId ? canvasEngine.getCurrentMapId() : null;
+                    if (!msg.data?.mapId || !currentMapId || msg.data.mapId === currentMapId) {
+                        canvasEngine?.panTo?.(msg.data.x, msg.data.y, msg.data.zoom || null, 120);
+                    }
+                } else if (msg.type === 'camLock' && typeof msg.locked === 'boolean') {
+                    isCameraLocked = msg.locked;
+                } else if (msg.type === 'campaignSync' && msg.campaignState) {
+                    const canvasEngine = vtt.canvasEngine || window.VTT?.canvasEngine;
+                    canvasEngine?.syncCampaignState?.(msg.campaignState);
+                }
+            };
+        }
+    } catch (_) {
+        /* ignore BroadcastChannel unavailable */
+    }
 
     if (socket) {
         socket.on('presentation:camSynced', (data) => {
@@ -88,6 +113,15 @@ function initGmPresentationHost(vtt = {}) {
     let popupMonitor = null;
     let throttleTimer = null;
     let pendingCamData = null;
+    let presentationBc = null;
+    try {
+        if (typeof BroadcastChannel !== 'undefined') {
+            presentationBc = new BroadcastChannel('forgedvtt_presentation_sync');
+            presentationBc.unref?.();
+        }
+    } catch (_) {
+        /* ignore BroadcastChannel unavailable */
+    }
 
     const btnLaunch = typeof document !== 'undefined' ? document.getElementById('btn-launch-presentation') : null;
     const btnClose = typeof document !== 'undefined' ? document.getElementById('btn-close-presentation') : null;
@@ -145,8 +179,11 @@ function initGmPresentationHost(vtt = {}) {
             }
         }
 
-        // Web or Electron fallback
-        const url = `${window.location.origin}/vtt/index.html?mode=presentation&campaign=${encodeURIComponent(campaignId)}`;
+        // Web or Electron fallback (relative to current VTT base path so /play/, /vtt/, and subpaths all resolve)
+        const urlObj = new URL('./', typeof window !== 'undefined' ? window.location.href : 'http://localhost/');
+        urlObj.searchParams.set('mode', 'presentation');
+        urlObj.searchParams.set('campaign', campaignId);
+        const url = urlObj.href;
         if (popupRef && !popupRef.closed) {
             popupRef.focus();
         } else {
@@ -214,17 +251,19 @@ function initGmPresentationHost(vtt = {}) {
 
     if (chkCamSync) {
         chkCamSync.onchange = () => {
+            const locked = !chkCamSync.checked;
             const socket = vtt.socket || (typeof window !== 'undefined' ? window.VTT?.socket : null);
             if (socket) {
-                socket.emit('presentation:camLock', { locked: !chkCamSync.checked });
+                socket.emit('presentation:camLock', { locked });
             }
+            presentationBc?.postMessage({ type: 'camLock', locked });
         };
     }
 
     function onGmCameraMoved(camData) {
         if (chkCamSync && !chkCamSync.checked) return;
         const socket = vtt.socket || (typeof window !== 'undefined' ? window.VTT?.socket : null);
-        if (!socket) return;
+        if (!socket && !presentationBc) return;
 
         pendingCamData = camData;
         if (!throttleTimer) {
@@ -235,12 +274,16 @@ function initGmPresentationHost(vtt = {}) {
                 const centerX = (viewportWidth / 2 - panX) / zoom;
                 const centerY = (viewportHeight / 2 - panY) / zoom;
 
-                socket.emit('presentation:camSync', {
+                const camPayload = {
                     mapId: currentMapId,
                     x: centerX,
                     y: centerY,
                     zoom: zoom
-                });
+                };
+                if (socket) {
+                    socket.emit('presentation:camSync', camPayload);
+                }
+                presentationBc?.postMessage({ type: 'camSync', data: camPayload });
             }, 60);
         }
     }

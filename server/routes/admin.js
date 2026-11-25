@@ -16,6 +16,7 @@ import {
     activeGmTokens
 } from '../state.js';
 import { verifyPassword } from '../../utils.js';
+import { p2pBridge } from '../p2p-bridge.js';
 
 export const adminRouter = express.Router();
 
@@ -112,17 +113,29 @@ const GM_LOGIN_MAX_ATTEMPTS = 5;
 const gmLoginAttempts = new Map();
 
 export function getClientIpKey(req) {
-    const socketAddr = req.ip || req.socket?.remoteAddress || req.address || 'local';
-    const isBehindLocalProxy = socketAddr === '127.0.0.1' || socketAddr === '::1' || socketAddr === '::ffff:127.0.0.1';
+    const socketAddr = String(req.ip || req.socket?.remoteAddress || req.address || 'local').trim() || 'local';
+    const cleanSocket = socketAddr.replace(/^::ffff:/, '');
+    const isBehindLocalProxy = cleanSocket === '127.0.0.1' || cleanSocket === '::1' || cleanSocket === 'localhost';
     if (isBehindLocalProxy) {
         const cf = req.headers?.['cf-connecting-ip'];
+        const cfIp = (Array.isArray(cf) ? cf[0] : cf ? String(cf) : '').trim().slice(0, 64);
+        if (cfIp) {
+            return cfIp.replace(/^::ffff:/, '');
+        }
         const xff = req.headers?.['x-forwarded-for'];
-        const forwarded = (Array.isArray(cf) ? cf[0] : cf) || (typeof xff === 'string' ? xff.split(',')[0] : '');
-        if (forwarded && String(forwarded).trim()) {
-            return String(forwarded).trim();
+        if (typeof xff === 'string' && xff.trim()) {
+            const parts = xff
+                .split(',')
+                .map((s) => s.trim().replace(/^::ffff:/, ''))
+                .filter(Boolean);
+            const isLocalHop = (h) => h === '127.0.0.1' || h === '::1' || h === 'localhost';
+            // Prefer rightmost non-local proxy-appended IP so spoofed leftmost hops cannot rotate rate-limit buckets
+            const rightmostNonLocal = [...parts].reverse().find((p) => !isLocalHop(p));
+            const picked = (rightmostNonLocal || parts[0] || '').slice(0, 64);
+            if (picked) return picked;
         }
     }
-    return String(socketAddr).trim() || 'local';
+    return cleanSocket;
 }
 
 function pruneExpiredLoginAttempts(now) {
@@ -131,6 +144,9 @@ function pruneExpiredLoginAttempts(now) {
         if (!rec || now - rec.windowStart >= GM_LOGIN_WINDOW_MS) {
             gmLoginAttempts.delete(key);
         }
+    }
+    if (gmLoginAttempts.size >= 1000) {
+        gmLoginAttempts.clear();
     }
 }
 
@@ -218,4 +234,34 @@ adminRouter.get('/sources/disabled', (req, res) => {
     const campId = req.query.campaignId || extractSubdomain(req.headers.host);
     const disabledSet = getDisabledSourcesSet(campId);
     res.json({ disabledSources: Array.from(disabledSet) });
+});
+
+// Direct P2P room status & host peer sync bridge
+adminRouter.get('/p2p/status', verifyGmOrSecret, (req, res) => {
+    return res.json(p2pBridge.getStatus());
+});
+
+adminRouter.post('/p2p/peers', verifyGmOrSecret, (req, res) => {
+    const { roomCode, peers } = req.body || {};
+    if (roomCode && (!p2pBridge.active || p2pBridge.roomCode !== roomCode)) {
+        p2pBridge.startRoom({ roomCode: String(roomCode).trim().toUpperCase() });
+    }
+    const status = p2pBridge.syncPeers(Array.isArray(peers) ? peers : []);
+    return res.json({ success: true, ...status });
+});
+
+adminRouter.post('/p2p/start', verifyGmOrSecret, (req, res) => {
+    const status = p2pBridge.startRoom(req.body || {});
+    return res.json({ success: true, ...status });
+});
+
+adminRouter.post('/p2p/stop', verifyGmOrSecret, (_req, res) => {
+    const status = p2pBridge.stopRoom();
+    return res.json({ success: true, ...status });
+});
+
+adminRouter.post('/p2p/regen', verifyGmOrSecret, (_req, res) => {
+    const newCode = p2pBridge.generateRoomCode();
+    const status = p2pBridge.startRoom({ roomCode: newCode });
+    return res.json({ success: true, ...status });
 });

@@ -220,12 +220,22 @@ if (typeof window !== 'undefined') {
             if (m.tokenUrl) return m.tokenUrl;
             if (m.tokenImg) return m.tokenImg;
             if (m.imgUrl) return m.imgUrl;
+            if (typeof window.resolveMonsterTokenUrl === 'function') {
+                return window.resolveMonsterTokenUrl(m) || 'favicon.svg';
+            }
             const src = m.source || 'MM';
             const cleanName =
                 typeof window.Parser !== 'undefined' && window.Parser?.nameToTokenName
                     ? window.Parser.nameToTokenName(m.name)
-                    : (m.name || '').replace(/"/g, '').trim();
-            return `img/bestiary/tokens/${src}/${cleanName}.webp`;
+                    : String(m.name || '')
+                          .normalize('NFD')
+                          .replace(/[\u0300-\u036f]/g, '')
+                          .replace(/Æ/g, 'AE')
+                          .replace(/æ/g, 'ae')
+                          .replace(/[<>:"/\\|?*]/g, '')
+                          .trim();
+            const ext = window.__FORGEDVTT_STATIC_WEB__ || window.VTT?.srdTokensOnly ? 'svg' : 'webp';
+            return `img/bestiary/tokens/${src}/${cleanName}.${ext}`;
         };
     }
 }

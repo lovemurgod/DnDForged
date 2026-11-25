@@ -1,4 +1,4 @@
-import { escapeHtml } from './vtt-utils.js';
+import { escapeHtml, getSafeVttUrl } from './vtt-utils.js';
 
 export function sanitizeHtmlContent(rawHtml) {
     if (!rawHtml) return '';
@@ -15,7 +15,11 @@ export function sanitizeHtmlContent(rawHtml) {
 function sanitizeHandoutMediaUrl(rawUrl) {
     if (!rawUrl || typeof rawUrl !== 'string') return '';
     const trimmed = rawUrl.trim();
-    if (/^(https?:\/\/|\/|data:(?:image|video)\/|blob:|assets\/|img\/|data\/|vtt-uploads\/)/i.test(trimmed)) {
+    if (
+        /^(https?:\/\/|\/|data:(?:image|video)\/|blob:|forgedvtt-asset:\/\/|assets\/|img\/|data\/|vtt-uploads\/)/i.test(
+            trimmed
+        )
+    ) {
         return trimmed;
     }
     if (!/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(trimmed)) {
@@ -42,14 +46,15 @@ export function parseMediaUrl(url) {
         return `<iframe src="https://player.vimeo.com/video/${escapeHtml(vmMatch[1])}" width="100%" height="400" frameborder="0" allow="autoplay; fullscreen" allowfullscreen style="border-radius:8px; border:1px solid var(--color-border-subtle);"></iframe>`;
     }
 
-    const escapedUrl = escapeHtml(safeUrl);
+    const escapedRawUrl = escapeHtml(safeUrl);
+    const resolvedMediaUrl = escapeHtml(getSafeVttUrl(safeUrl));
     // Raw video
     if (safeUrl.match(/\.(mp4|webm|ogg)(\?.*)?$/i)) {
-        return `<video src="${escapedUrl}" controls style="max-width:100%; max-height:400px; border-radius:8px; border:1px solid var(--color-border-subtle);"></video>`;
+        return `<video src="${resolvedMediaUrl}" controls data-raw-src="${escapedRawUrl}" style="max-width:100%; max-height:400px; border-radius:8px; border:1px solid var(--color-border-subtle);"></video>`;
     }
 
     // Default to Image
-    return `<img src="${escapedUrl}" style="max-width:100%; max-height:400px; border-radius:8px; border:1px solid var(--color-border-subtle); object-fit:contain;" alt="Handout Media">`;
+    return `<img src="${resolvedMediaUrl}" data-raw-src="${escapedRawUrl}" style="max-width:100%; max-height:400px; border-radius:8px; border:1px solid var(--color-border-subtle); object-fit:contain;" alt="Handout Media">`;
 }
 
 export function initVttHandouts(vtt) {
@@ -1004,9 +1009,10 @@ export function initVttHandouts(vtt) {
         if (item.type === 'image' && item.url) {
             const imgBox = document.createElement('div');
             imgBox.className = 'import-preview-img-box';
+            const resolvedPreview = escapeHtml(getSafeVttUrl(item.url));
             imgBox.innerHTML = `
-                <img src="${item.url}" class="import-preview-img" alt="${item.title}" onerror="this.onerror=null; this.src='img/TextLogo.png';">
-                <div style="font-size:0.75rem; color:var(--color-text-muted); margin-top:6px;">${item.url}</div>
+                <img src="${resolvedPreview}" data-raw-src="${escapeHtml(item.url)}" class="import-preview-img" alt="${escapeHtml(item.title)}" onerror="this.onerror=null; this.src='img/TextLogo.png';">
+                <div style="font-size:0.75rem; color:var(--color-text-muted); margin-top:6px;">${escapeHtml(item.url)}</div>
             `;
             previewContainerEl.appendChild(imgBox);
         }

@@ -1,6 +1,7 @@
 import { spawn, execSync } from 'child_process';
 import readline from 'readline';
 import fs from 'fs';
+import os from 'os';
 import path from 'path';
 import net from 'net';
 import { fileURLToPath } from 'url';
@@ -125,16 +126,44 @@ function isValidTunnelToken(str) {
   }
 }
 
+function getSavedConfigPath() {
+  if (process.env.FORGEDVTT_CONFIG_FILE && fs.existsSync(process.env.FORGEDVTT_CONFIG_FILE)) {
+    return process.env.FORGEDVTT_CONFIG_FILE;
+  }
+  const candidates = [];
+  if (process.env.APPDATA) {
+    candidates.push(path.join(process.env.APPDATA, 'forgedvtt', 'forge-config.json'));
+  }
+  if (process.platform === 'darwin') {
+    candidates.push(path.join(os.homedir(), 'Library', 'Application Support', 'forgedvtt', 'forge-config.json'));
+  } else {
+    candidates.push(path.join(process.env.XDG_CONFIG_HOME || path.join(os.homedir(), '.config'), 'forgedvtt', 'forge-config.json'));
+  }
+  return candidates.find((p) => fs.existsSync(p)) || '';
+}
+
 function getSavedAppConfig() {
-  const appData = process.env.APPDATA;
-  if (!appData) return null;
-  const cfgPath = path.join(appData, 'forgedvtt', 'forge-config.json');
+  const cfgPath = getSavedConfigPath();
+  if (!cfgPath) return null;
   try {
-    if (fs.existsSync(cfgPath)) {
-      return JSON.parse(fs.readFileSync(cfgPath, 'utf8'));
-    }
+    return JSON.parse(fs.readFileSync(cfgPath, 'utf8'));
   } catch (e) { }
   return null;
+}
+
+async function waitForServerHealth(port, serverProcess, timeoutMs = 10000) {
+  const deadline = Date.now() + timeoutMs;
+  while (Date.now() < deadline) {
+    if (serverProcess && serverProcess.exitCode !== null) return false;
+    try {
+      const res = await fetch(`http://127.0.0.1:${port}/api/server/data-dir`, {
+        signal: AbortSignal.timeout(800)
+      });
+      if (res.ok) return true;
+    } catch (_) { }
+    await new Promise((r) => setTimeout(r, 200));
+  }
+  return false;
 }
 
 async function main() {
@@ -187,24 +216,28 @@ async function main() {
     console.log('🔑 Using saved Cloudflare Tunnel Token.');
   }
 
-  const defaultSubdomain = (appConfig?.subdomain || 'cosmic').toLowerCase().replace(/[^a-z0-9-]/g, '') || 'cosmic';
-  let subdomain = '';
-  while (!subdomain) {
-    const input = await prompt(`👉 Enter subdomain slug for this session [default: ${defaultSubdomain}]: `);
-    if (!input) {
-      subdomain = defaultSubdomain;
-      break;
+  const hasNamedToken = Boolean(token && isValidTunnelToken(token));
+  let registeredUrl = '';
+  if (hasNamedToken) {
+    const defaultSubdomain = (appConfig?.subdomain || 'cosmic').toLowerCase().replace(/[^a-z0-9-]/g, '') || 'cosmic';
+    let subdomain = '';
+    while (!subdomain) {
+      const input = await prompt(`👉 Enter subdomain slug for this session [default: ${defaultSubdomain}]: `);
+      if (!input) {
+        subdomain = defaultSubdomain;
+        break;
+      }
+      const cleaned = input.toLowerCase().replace(/[^a-z0-9-]/g, '');
+      if (cleaned.length >= 2 && cleaned.length <= 32) {
+        subdomain = cleaned;
+      } else {
+        console.log('⚠️  Subdomain must be between 2 and 32 alphanumeric characters.');
+      }
     }
-    const cleaned = input.toLowerCase().replace(/[^a-z0-9-]/g, '');
-    if (cleaned.length >= 2 && cleaned.length <= 32) {
-      subdomain = cleaned;
-    } else {
-      console.log('⚠️  Subdomain must be between 2 and 32 alphanumeric characters.');
-    }
-  }
 
-  const hostname = subdomain === '@' ? 'forgedvtt.com' : `${subdomain}.forgedvtt.com`;
-  const registeredUrl = `https://${hostname}`;
+    const hostname = subdomain === '@' ? 'forgedvtt.com' : `${subdomain}.forgedvtt.com`;
+    registeredUrl = `https://${hostname}`;
+  }
 
   const requestedPort = getRequestedPort(appConfig);
   let activePort = requestedPort;
@@ -243,27 +276,43 @@ async function main() {
 
   if (!isOccupied || activePort !== requestedPort) {
     console.log(`\n🚀 Starting local ForgeDVTT Node server on port ${activePort}...`);
+    const childEnv = {
+      ...process.env,
+      PORT: String(activePort)
+    };
+    const cfgPath = getSavedConfigPath();
+    if (cfgPath && !childEnv.FORGEDVTT_CONFIG_FILE) {
+      childEnv.FORGEDVTT_CONFIG_FILE = cfgPath;
+    }
+    const dataDir = process.env.FORGEDVTT_DATA_DIR || appConfig?.campaignDataDir;
+    if (dataDir) {
+      childEnv.FORGEDVTT_DATA_DIR = dataDir;
+    }
+    if (process.env.FORGEDVTT_SERVER_SECRET) {
+      childEnv.FORGEDVTT_SERVER_SECRET = process.env.FORGEDVTT_SERVER_SECRET;
+    }
     serverProcess = spawn(process.execPath, ['server.js'], {
       cwd: __dirname,
-      env: {
-        ...process.env,
-        PORT: String(activePort)
-      },
+      env: childEnv,
       stdio: 'inherit'
     });
     serverProcess.on('error', (err) => {
       console.error('\n❌ [Server Error] Failed to start server:', err.message);
     });
-    // Wait for server to initialize
-    await new Promise(r => setTimeout(r, 1500));
+    const healthy = await waitForServerHealth(activePort, serverProcess, 10000);
+    if (!healthy) {
+      console.error('\n❌ [Server Error] Local server did not become ready in time.');
+      process.exit(1);
+    }
   }
 
   console.log('🌐 Launching Cloudflare Tunnel...');
   const tunnelArgs = ['--protocol', 'http2', '--no-prechecks'];
+  const tunnelEnv = { ...process.env };
 
-  const hasNamedToken = Boolean(token && isValidTunnelToken(token));
   if (hasNamedToken) {
-    tunnelArgs.push('tunnel', 'run', '--token', token);
+    tunnelArgs.push('tunnel', 'run');
+    tunnelEnv.TUNNEL_TOKEN = token;
   } else {
     tunnelArgs.push('tunnel', '--config', '', '--url', `http://127.0.0.1:${activePort}`);
   }
@@ -271,6 +320,7 @@ async function main() {
   const tunnelCwd = path.dirname(cloudflaredBin);
   const tunnelProcess = spawn(cloudflaredBin, tunnelArgs, {
     cwd: tunnelCwd,
+    env: tunnelEnv,
     stdio: 'inherit'
   });
 
@@ -281,14 +331,14 @@ async function main() {
   console.log('\n======================================================');
   console.log('   🎉  YOUR FORGEDVTT GAME IS ONLINE!');
   if (hasNamedToken) {
-    console.log(`   🌐  Selected Game URL: ${registeredUrl}/vtt.html`);
+    console.log(`   🌐  Selected Game URL: ${registeredUrl}/play`);
     console.log(`   🌐  Portal / Launcher: https://forgedvtt.com/`);
     console.log('   🔒  Subdomain Isolation: ACTIVE');
   } else {
     console.log('   🌐  Quick Tunnel Mode: EPHEMERAL');
     console.log('   👉  Look below for your generated https://*.trycloudflare.com link');
   }
-  console.log(`   💻  Local Access:      http://localhost:${activePort}/`);
+  console.log(`   💻  Local Access:      http://localhost:${activePort}/play`);
   console.log('======================================================');
   if (hasNamedToken) {
     console.log('\n💡 Tip: Any subdomain (e.g. mygame.forgedvtt.com) automatically loads');

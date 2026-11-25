@@ -4,6 +4,8 @@
  * dynamic lighting, fog of war, persistent shapes, annotations, and visual effects.
  */
 
+import { resolveMonsterTokenUrl } from '../vtt-utils.js';
+
 export function setupSocketSync(ctx = {}) {
     const vtt = ctx.vtt || (typeof window !== 'undefined' ? window.VTT : {});
     const socket = vtt?.socket;
@@ -763,13 +765,7 @@ export function setupSocketSync(ctx = {}) {
                         token.img = char.tokenImages[idx].url;
                     }
                 } else if (char.monsterData && char.monsterData.hasToken) {
-                    const p =
-                        typeof Parser !== 'undefined' ? Parser : typeof window !== 'undefined' ? window.Parser : null;
-                    const cleanName =
-                        p && p.nameToTokenName
-                            ? p.nameToTokenName(char.monsterData.name)
-                            : (char.monsterData.name || '').replace(/"/g, '').trim();
-                    token.img = `img/bestiary/tokens/${char.monsterData.source}/${cleanName}.webp`;
+                    token.img = resolveMonsterTokenUrl(char.monsterData) || token.img;
                 } else if (!char.monsterData && (!char.tokenImages || char.tokenImages.length === 0)) {
                     token.img =
                         window.VTT && window.VTT.generateArcaneToken

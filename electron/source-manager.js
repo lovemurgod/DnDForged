@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { execFileSync } from 'child_process';
-import { safeFetchPublicUrl } from '../server/routes/media.js';
+import { safeFetchPublicUrl } from '../server/url-safety.js';
 
 /**
  * Category Definitions for DnDForged Databases

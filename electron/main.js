@@ -3,6 +3,7 @@ const require = createRequire(import.meta.url);
 const { app, BrowserWindow, ipcMain, shell, Tray, Menu, dialog, session } = require('electron');
 import path from 'path';
 import fs from 'fs';
+import os from 'os';
 import { fileURLToPath } from 'url';
 import { spawn, execFileSync, execSync } from 'child_process';
 import net from 'net';
@@ -618,25 +619,37 @@ async function startTunnel(params = {}) {
         isServerRunning = true;
     }
 
-    const isQuickTunnel = mode !== 'custom' && (!currentTunnelToken || !isValidTunnelToken(currentTunnelToken));
+    const hasValidToken = Boolean(currentTunnelToken && isValidTunnelToken(currentTunnelToken));
+    const userCloudflaredConfig = path.join(os.homedir(), '.cloudflared', 'config.yml');
+    const hasUserCloudflaredConfig = fs.existsSync(userCloudflaredConfig);
+
+    if (mode === 'custom' && customDomain && !hasValidToken && !hasUserCloudflaredConfig) {
+        const msg = 'Custom Domain mode requires either a Cloudflare Tunnel Token or ~/.cloudflared/config.yml.';
+        appendLog(`[Tunnel Error] ${msg}`);
+        return { success: false, error: msg };
+    }
+
+    const isQuickTunnel = !(mode === 'custom' && customDomain) && !hasValidToken;
+    const tunnelArgs = ['--protocol', 'http2', '--no-prechecks'];
+    const tunnelEnv = { ...process.env };
 
     if (mode === 'custom' && customDomain) {
         registeredUrl = `https://${customDomain}`;
         appendLog(`Launching Cloudflare Tunnel for Custom Domain: ${customDomain}`);
-    } else if (currentTunnelToken && isValidTunnelToken(currentTunnelToken)) {
+        if (hasValidToken) {
+            tunnelArgs.push('tunnel', 'run');
+            tunnelEnv.TUNNEL_TOKEN = currentTunnelToken;
+        } else {
+            tunnelArgs.push('tunnel', '--config', userCloudflaredConfig, 'run');
+        }
+    } else if (hasValidToken) {
         registeredUrl = `https://${currentSubdomain}.forgedvtt.com`;
         appendLog(`Launching Cloudflare Tunnel for subdomain: ${currentSubdomain}.forgedvtt.com`);
-    } else {
-        registeredUrl = ''; // Pending quick tunnel allocation from Cloudflare Edge
-        appendLog('Launching zero-config Cloudflare Quick Tunnel...');
-    }
-
-    const tunnelArgs = ['--protocol', 'http2', '--no-prechecks'];
-    const tunnelEnv = { ...process.env };
-    if (currentTunnelToken && isValidTunnelToken(currentTunnelToken)) {
         tunnelArgs.push('tunnel', 'run');
         tunnelEnv.TUNNEL_TOKEN = currentTunnelToken;
     } else {
+        registeredUrl = ''; // Pending quick tunnel allocation from Cloudflare Edge
+        appendLog('Launching zero-config Cloudflare Quick Tunnel...');
         tunnelArgs.push('tunnel', '--config', '', '--url', `http://127.0.0.1:${getServerPort()}`);
     }
 
@@ -761,10 +774,11 @@ function attachWindowSecurityGuards(win, { allowLocalPopouts = false } = {}) {
         try {
             const parsed = new URL(rawUrl);
             const h = parsed.hostname.toLowerCase();
+            const defaultPort = parsed.protocol === 'https:' ? 443 : 80;
             return (
                 (parsed.protocol === 'http:' || parsed.protocol === 'https:') &&
                 (h === 'localhost' || h === '127.0.0.1') &&
-                Number(parsed.port || 80) === getServerPort()
+                Number(parsed.port || defaultPort) === getServerPort()
             );
         } catch {
             return false;
@@ -1084,7 +1098,34 @@ ipcMain.handle('open-vtt-app', async (_, targetUrl) => {
     if (!isServerRunning) {
         await startServer();
     }
-    return openVTTWindow(targetUrl);
+    const defaultUrl = `http://localhost:${getServerPort()}/vtt/index.html`;
+    if (targetUrl) {
+        try {
+            const parsed = new URL(targetUrl);
+            const h = parsed.hostname.toLowerCase();
+            const defaultPort = parsed.protocol === 'https:' ? 443 : 80;
+            if (
+                (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') ||
+                (h !== 'localhost' && h !== '127.0.0.1') ||
+                Number(parsed.port || defaultPort) !== getServerPort()
+            ) {
+                console.warn(`[Security] Blocked non-local URL in open-vtt-app: ${targetUrl}`);
+                return Promise.reject(new Error('Invalid local VTT URL'));
+            }
+        } catch (err) {
+            return Promise.reject(new Error('Malformed VTT URL', { cause: err }));
+        }
+    }
+    return openVTTWindow(targetUrl || defaultUrl);
+});
+ipcMain.handle('open-external', async (_, rawUrl) => {
+    try {
+        const parsed = new URL(String(rawUrl || ''));
+        if (parsed.protocol === 'http:' || parsed.protocol === 'https:') {
+            return shell.openExternal(parsed.toString());
+        }
+    } catch (_) {}
+    return Promise.reject(new Error('Invalid external URL protocol'));
 });
 ipcMain.handle('open-presentation-window', async (_, params = {}) => {
     if (!isServerRunning) {
@@ -1824,23 +1865,17 @@ ipcMain.handle('gm-delete-entity', async (_, { campaignId, entityType, entityId 
             } else if (entityType === 'table' || entityType === 'deck' || camp.rollTables || camp.assetTables) {
                 const rt = camp.rollTables || {};
                 let found = false;
-                if (Array.isArray(rt.customTables)) {
-                    const initLen = rt.customTables.length;
-                    rt.customTables = rt.customTables.filter((t) => t.id !== entityId);
-                    if (rt.customTables.length < initLen) {
-                        found = true;
-                        entityType = 'table';
+                for (const tableKey of ['tables', 'customTables', 'assetTables']) {
+                    if (Array.isArray(rt[tableKey])) {
+                        const initLen = rt[tableKey].length;
+                        rt[tableKey] = rt[tableKey].filter((t) => t.id !== entityId);
+                        if (rt[tableKey].length < initLen) {
+                            found = true;
+                            entityType = 'table';
+                        }
                     }
                 }
-                if (!found && Array.isArray(rt.assetTables)) {
-                    const initLen = rt.assetTables.length;
-                    rt.assetTables = rt.assetTables.filter((t) => t.id !== entityId);
-                    if (rt.assetTables.length < initLen) {
-                        found = true;
-                        entityType = 'table';
-                    }
-                }
-                if (!found && Array.isArray(camp.assetTables)) {
+                if (Array.isArray(camp.assetTables)) {
                     const initLen = camp.assetTables.length;
                     camp.assetTables = camp.assetTables.filter((t) => t.id !== entityId);
                     if (camp.assetTables.length < initLen) {
@@ -1848,12 +1883,14 @@ ipcMain.handle('gm-delete-entity', async (_, { campaignId, entityType, entityId 
                         entityType = 'table';
                     }
                 }
-                if (!found && Array.isArray(rt.cardDecks)) {
-                    const initLen = rt.cardDecks.length;
-                    rt.cardDecks = rt.cardDecks.filter((d) => d.id !== entityId);
-                    if (rt.cardDecks.length < initLen) {
-                        found = true;
-                        entityType = 'deck';
+                for (const deckKey of ['decks', 'cardDecks']) {
+                    if (Array.isArray(rt[deckKey])) {
+                        const initLen = rt[deckKey].length;
+                        rt[deckKey] = rt[deckKey].filter((d) => d.id !== entityId);
+                        if (rt[deckKey].length < initLen) {
+                            found = true;
+                            entityType = 'deck';
+                        }
                     }
                 }
                 if (found) {
@@ -2323,9 +2360,15 @@ ipcMain.handle('gm-export-granular', async (_, { campaignId, entityType, entityI
         }
     } else if (entityType === 'table' || entityType === 'deck' || entityType === 'tablesAndDecks') {
         const rollTablesObj = campaign.rollTables || {};
-        const customTables = rollTablesObj.customTables || [];
+        const customTables =
+            (Array.isArray(rollTablesObj.tables) && rollTablesObj.tables.length
+                ? rollTablesObj.tables
+                : rollTablesObj.customTables) || [];
         const assetTables = rollTablesObj.assetTables || campaign.assetTables || [];
-        const cardDecks = rollTablesObj.cardDecks || [];
+        const cardDecks =
+            (Array.isArray(rollTablesObj.decks) && rollTablesObj.decks.length
+                ? rollTablesObj.decks
+                : rollTablesObj.cardDecks) || [];
 
         if (batch || entityType === 'tablesAndDecks') {
             items = [
@@ -2472,7 +2515,11 @@ ipcMain.handle('gm-import-granular', async (_, { campaignId, explicitFilePath })
         }
         if (currentCamp) {
             if (!currentCamp.rollTables) currentCamp.rollTables = {};
-            if (!currentCamp.rollTables.customTables) currentCamp.rollTables.customTables = [];
+            if (!Array.isArray(currentCamp.rollTables.tables)) {
+                currentCamp.rollTables.tables = Array.isArray(currentCamp.rollTables.customTables)
+                    ? [...currentCamp.rollTables.customTables]
+                    : [];
+            }
             if (!currentCamp.rollTables.assetTables) currentCamp.rollTables.assetTables = [];
 
             const uploadsDir = path.join(appConfig.campaignDataDir, 'campaigns', campaignId, 'uploads');
@@ -2482,7 +2529,8 @@ ipcMain.handle('gm-import-granular', async (_, { campaignId, explicitFilePath })
                 try {
                     const conv = await convertRoll20TableToVTT(item.data, uploadsDir, campaignId);
                     if (conv.customTables?.length > 0) {
-                        currentCamp.rollTables.customTables.push(...conv.customTables);
+                        currentCamp.rollTables.tables.push(...conv.customTables);
+                        currentCamp.rollTables.customTables = currentCamp.rollTables.tables;
                         tableCount += conv.customTables.length;
                     }
                     if (conv.assetTables?.length > 0) {
@@ -2739,28 +2787,38 @@ ipcMain.handle('gm-import-granular', async (_, { campaignId, explicitFilePath })
                             camp.rollTables.assetTables.push(cloned);
                             importedIds.push(tId);
                         } else if (item.cards || item._entityCategory === 'cardDeck') {
-                            if (!camp.rollTables.cardDecks) camp.rollTables.cardDecks = [];
+                            if (!Array.isArray(camp.rollTables.decks)) {
+                                camp.rollTables.decks = Array.isArray(camp.rollTables.cardDecks)
+                                    ? [...camp.rollTables.cardDecks]
+                                    : [];
+                            }
                             let dId = item.id;
                             let dName = item.name || 'Imported Card Deck';
-                            if (!dId || camp.rollTables.cardDecks.some((d) => d.id === dId)) {
+                            if (!dId || camp.rollTables.decks.some((d) => d.id === dId)) {
                                 dId = `deck_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
                                 dName = `${dName} (Copy)`;
                             }
                             const cloned = { ...item, id: dId, name: dName };
                             delete cloned._entityCategory;
-                            camp.rollTables.cardDecks.push(cloned);
+                            camp.rollTables.decks.push(cloned);
+                            camp.rollTables.cardDecks = camp.rollTables.decks;
                             importedIds.push(dId);
                         } else {
-                            if (!camp.rollTables.customTables) camp.rollTables.customTables = [];
+                            if (!Array.isArray(camp.rollTables.tables)) {
+                                camp.rollTables.tables = Array.isArray(camp.rollTables.customTables)
+                                    ? [...camp.rollTables.customTables]
+                                    : [];
+                            }
                             let tId = item.id;
                             let tName = item.name || 'Imported Roll Table';
-                            if (!tId || camp.rollTables.customTables.some((t) => t.id === tId)) {
+                            if (!tId || camp.rollTables.tables.some((t) => t.id === tId)) {
                                 tId = `table_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
                                 tName = `${tName} (Copy)`;
                             }
                             const cloned = { ...item, id: tId, name: tName };
                             delete cloned._entityCategory;
-                            camp.rollTables.customTables.push(cloned);
+                            camp.rollTables.tables.push(cloned);
+                            camp.rollTables.customTables = camp.rollTables.tables;
                             importedIds.push(tId);
                         }
                     } else {
@@ -3050,8 +3108,10 @@ app.whenReady().then(async () => {
     createWindow();
     createTray();
 
-    // Start default STUN P2P room session and wire status updates
-    p2pBridge.startRoom();
+    // Start default STUN P2P room session only once GM credentials are configured, and wire status updates
+    if (hasConfiguredGmCredentials()) {
+        p2pBridge.startRoom();
+    }
     p2pBridge.on('peer:connected', () => notifyStatusChange());
     p2pBridge.on('peer:disconnected', () => notifyStatusChange());
 

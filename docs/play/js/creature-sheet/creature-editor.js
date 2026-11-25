@@ -11,6 +11,7 @@ import {
 import { resolveSpellcastingType, get5eSlotsForCaster } from './creature-spells.js';
 import { openTokenCropper } from '../canvas/tokens/vtt-token-cropper.js';
 import { isAnimatedMedia, promptAnimatedMediaChoice } from '../canvas/tokens/vtt-canvas-token-borders.js';
+import { resolveMonsterTokenUrl } from '../vtt-utils.js';
 
 export const DND_5E_SKILLS = [
     { key: 'acrobatics', name: 'Acrobatics', ability: 'dex' },
@@ -764,12 +765,7 @@ export function openEditModal(m, charId, ctx = {}) {
         } catch (e) {}
     }
     if (!defaultTokenUrl && (m.source || m.name)) {
-        const cleanName =
-            typeof window !== 'undefined' && window.Parser?.nameToTokenName
-                ? window.Parser.nameToTokenName(m.name)
-                : (m.name || '').replace(/"/g, '').trim();
-        const source = m.source || 'MM';
-        defaultTokenUrl = `img/bestiary/tokens/${source}/${cleanName}.webp`;
+        defaultTokenUrl = resolveMonsterTokenUrl(m);
     }
     if (defaultTokenUrl && !char.defaultTokenDeleted) {
         const hasDefault = char.tokenImages.some(

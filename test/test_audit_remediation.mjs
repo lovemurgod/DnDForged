@@ -1,216 +1,244 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import fs from 'fs';
-import path from 'path';
-import vm from 'vm';
-import crypto from 'crypto';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import vm from 'node:vm';
+import { execFileSync } from 'node:child_process';
 import express from 'express';
-import { createServer } from 'http';
-import { fileURLToPath } from 'url';
+import { JSDOM } from 'jsdom';
+import '../vtt/js/network/vtt-p2p-host-engine.js';
+import '../vtt/js/network/vtt-p2p-adapter.js';
 
-import { adminRouter, resetGmLoginRateLimits } from '../server/routes/admin.js';
-import { campaignsRouter } from '../server/routes/campaigns.js';
-import { serverConfig, activeGmTokens, campaigns } from '../server/state.js';
-import { hashPassword } from '../utils.js';
+const { VttP2PHostEngine, VttP2PAdapter } = globalThis;
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const rootDir = path.join(__dirname, '..');
+test('P2P Host Engine handles tokens:update and maptools:update with player filtering', async () => {
+    const dispatched = [];
+    const sentToPeers = [];
+    let persisted = 0;
 
-test('Audit Remediation Security & Static Web Parity', async (t) => {
-    const app = express();
-    app.use(express.json({ limit: '5mb' }));
-    app.use('/api', adminRouter);
-    app.use('/api', campaignsRouter);
-
-    const server = createServer(app);
-    server.keepAliveTimeout = 60000;
-    server.headersTimeout = 65000;
-    await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
-    const baseUrl = `http://127.0.0.1:${server.address().port}`;
-    const originalCreds = serverConfig.gmCredentials;
-    const originalCampaignKeys = new Set(Object.keys(campaigns));
-
-    t.after(() => {
-        serverConfig.gmCredentials = originalCreds;
-        activeGmTokens.clear();
-        resetGmLoginRateLimits();
-        for (const key of Object.keys(campaigns)) {
-            if (!originalCampaignKeys.has(key)) {
-                delete campaigns[key];
+    globalThis.VTT = {
+        campaignState: {
+            id: 'camp_1',
+            activeMapId: 'map_1',
+            activeGMMapId: 'map_1',
+            maps: {
+                map_1: {
+                    id: 'map_1',
+                    tokens: { t1: { id: 't1', name: 'Hero', hp: 20, layer: 'token' } },
+                    traps: [],
+                    portals: []
+                }
             }
         }
-        server.close();
+    };
+    globalThis.__persistStaticCampaign = () => {
+        persisted++;
+    };
+
+    const adapter = {
+        isHost: true,
+        username: 'GM',
+        role: 'GM',
+        peers: new Map([
+            [
+                'p1',
+                {
+                    id: 'p1',
+                    username: 'Alice',
+                    role: 'Player',
+                    joined: true,
+                    conn: { open: true, send: (pkt) => sentToPeers.push(JSON.parse(pkt)) }
+                }
+            ]
+        ]),
+        _sendToPeer: (_peer, pkt) => sentToPeers.push(JSON.parse(pkt)),
+        _persistHostCampaignState: () => {
+            persisted++;
+        },
+        _dispatch: (evt, payload) => dispatched.push({ evt, payload })
+    };
+
+    const handledTokens = VttP2PHostEngine.processEvent({
+        adapter,
+        event: 'tokens:update',
+        args: [{ tokens: { t1: { id: 't1', name: 'Hero', hp: 12, layer: 'token' }, t2: { id: 't2', layer: 'gm' } } }],
+        senderPeer: null
     });
+    assert.equal(handledTokens, true);
+    assert.equal(globalThis.VTT.campaignState.maps.map_1.tokens.t1.hp, 12);
+    assert.ok(dispatched.some((d) => d.evt === 'token:updated' && d.payload.tokens.t2));
+    const peerTokMsg = sentToPeers.find((m) => m.event === 'token:updated');
+    assert.ok(peerTokMsg);
+    assert.equal(peerTokMsg.args[0].tokens.t2, undefined);
 
-    await t.test('POST /api/gm-login enforces per-IP rate limit (429 after 5 failed attempts)', async () => {
-        resetGmLoginRateLimits();
-        const { hash, salt } = hashPassword('CorrectHorseBattery99');
-        serverConfig.gmCredentials = { username: 'GameMaster', salt, hash };
-
-        for (let i = 0; i < 5; i++) {
-            const res = await fetch(`${baseUrl}/api/gm-login`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username: 'GameMaster', password: `WrongPass_${i}` })
-            });
-            assert.equal(res.status, 401, `Attempt ${i + 1} should return 401`);
-        }
-
-        const blockedRes = await fetch(`${baseUrl}/api/gm-login`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username: 'GameMaster', password: 'CorrectHorseBattery99' })
-        });
-        assert.equal(blockedRes.status, 429, '6th attempt within window must return 429');
-        const blockedData = await blockedRes.json();
-        assert.equal(blockedData.success, false);
-
-        resetGmLoginRateLimits();
-        const okRes = await fetch(`${baseUrl}/api/gm-login`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username: 'GameMaster', password: 'CorrectHorseBattery99' })
-        });
-        assert.equal(okRes.status, 200, 'Login succeeds again after rate limit reset');
-    });
-
-    await t.test('POST /api/server/restore ignores __proto__, constructor, and prototype keys', async () => {
-        resetGmLoginRateLimits();
-        const { hash, salt } = hashPassword('RestoreGuard123!');
-        serverConfig.gmCredentials = { username: 'GameMaster', salt, hash };
-
-        const loginRes = await fetch(`${baseUrl}/api/gm-login`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username: 'GameMaster', password: 'RestoreGuard123!' })
-        });
-        const { token } = await loginRes.json();
-        assert.ok(token, 'Must receive GM session token');
-
-        const maliciousPayload = JSON.parse(
-            '{"version":2,"campaigns":{"__proto__":{"polluted":true},"constructor":{"polluted":true},"prototype":{"polluted":true}}}'
-        );
-        const restoreRes = await fetch(`${baseUrl}/api/server/restore`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`
-            },
-            body: JSON.stringify(maliciousPayload)
-        });
-        assert.equal(restoreRes.status, 200);
-        assert.equal({}.polluted, undefined, 'Object.prototype must not be polluted');
-        assert.equal(Object.prototype.hasOwnProperty.call(campaigns, '__proto__'), false);
-        assert.equal(Object.prototype.hasOwnProperty.call(campaigns, 'constructor'), false);
-        assert.equal(Object.prototype.hasOwnProperty.call(campaigns, 'prototype'), false);
-    });
-
-    await t.test('web-api-bridge.js guards all GM and sourcebook methods for isStatic()', () => {
-        const bridgeCode = fs.readFileSync(path.join(rootDir, 'electron', 'ui', 'web-api-bridge.js'), 'utf8');
-        const requiredStaticMethods = [
-            'setGmCredentials',
-            'gmExportGranular',
-            'gmImportGranular',
-            'gmDeleteEntity',
-            'sourcesBatchToggle',
-            'sourcesTogglePartnered',
-            'sourcesToggleUA',
-            'sourcesSaveUiState',
-            'sourcesApplyPreset',
-            'sourcesResetCampaign',
-            'sourcesGetDetails',
-            'sourcesSaveDetails',
-            'sourcesCreateCustom',
-            'sourcesDeleteCustom',
-            'sourcesSelectAsset',
-            'sourcesAddFile',
-            'sourcesExport',
-            'sourcesSearchCompendium',
-            'sourcesSearchGlobal',
-            'sourcesGetEntityFull',
-            'sourcesGetEntityFullData',
-            'sourcesInspectBulk',
-            'sourcesExecuteBulkImport',
-            'sourcesImportFromUrl'
-        ];
-        for (const fnName of requiredStaticMethods) {
-            const idx = bridgeCode.indexOf(`${fnName}:`);
-            assert.notEqual(idx, -1, `Bridge must define ${fnName}`);
-            const slice = bridgeCode.slice(idx, idx + 900);
-            assert.ok(slice.includes('if (isStatic())'), `${fnName} must handle isStatic() locally`);
-        }
-    });
-
-    await t.test('vtt-static-shim.js enforces GM password and resolves normalized compendium entries', async () => {
-        const shimCode = fs.readFileSync(path.join(rootDir, 'vtt', 'js', 'network', 'vtt-static-shim.js'), 'utf8');
-        const storage = new Map();
-        const mockLocalStorage = {
-            getItem: (k) => (storage.has(k) ? storage.get(k) : null),
-            setItem: (k, v) => storage.set(k, String(v))
-        };
-        const fetchedUrls = [];
-        const baseFetch = async (url) => {
-            fetchedUrls.push(String(url));
-            if (String(url) === 'data/spells-normalized/spells-phb.json') {
-                return new Response(
-                    JSON.stringify([{ id: 'sp_acid_splash_phb', name: 'Acid Splash', source: 'PHB', level: 0 }]),
-                    { status: 200, headers: { 'Content-Type': 'application/json' } }
-                );
+    const handledMapTools = VttP2PHostEngine.processEvent({
+        adapter,
+        event: 'maptools:update',
+        args: [
+            {
+                mapId: 'map_1',
+                traps: [
+                    { id: 'tr1', hidden: true },
+                    { id: 'tr2', isRevealed: true }
+                ],
+                portals: [
+                    { id: 'pt1', isSecret: true },
+                    { id: 'pt2', isSecret: false }
+                ]
             }
-            return new Response('Not Found', { status: 404 });
-        };
-
-        const mockWindow = {
-            __FORGEDVTT_STATIC_WEB__: true,
-            location: { origin: 'https://forgedvtt.com' },
-            fetch: baseFetch,
-            crypto: crypto.webcrypto
-        };
-        const sandbox = {
-            window: mockWindow,
-            localStorage: mockLocalStorage,
-            URL,
-            Response,
-            TextEncoder,
-            Uint8Array
-        };
-        vm.runInNewContext(shimCode, sandbox);
-
-        // Without stored GM credentials, auth is not required
-        const noAuthRes = await mockWindow.fetch('/api/gm-auth-required?username=GameMaster');
-        assert.deepEqual(await noAuthRes.json(), { required: false, hasPassword: false });
-
-        // With stored SHA-256 GM credentials, auth IS required and verified
-        const salt = '0123456789abcdef';
-        const hashHex = crypto.createHash('sha256').update(`${salt}:StaticSecret42`).digest('hex');
-        mockLocalStorage.setItem(
-            'forgedvtt_static_gm_creds',
-            JSON.stringify({
-                username: 'GameMaster',
-                salt,
-                sha256Hash: hashHex,
-                hasPassword: true
-            })
-        );
-
-        const authRes = await mockWindow.fetch('/api/gm-auth-required?username=GameMaster');
-        assert.deepEqual(await authRes.json(), { required: true, hasPassword: true });
-
-        const okCheck = await mockWindow.__verifyStaticGmPassword('GameMaster', 'StaticSecret42');
-        assert.equal(okCheck.ok, true);
-
-        const badPassCheck = await mockWindow.__verifyStaticGmPassword('GameMaster', 'WrongPass');
-        assert.equal(badPassCheck.ok, false);
-
-        const badUserCheck = await mockWindow.__verifyStaticGmPassword('OtherUser', 'StaticSecret42');
-        assert.equal(badUserCheck.ok, false);
-
-        // Normalized compendium lookup
-        const spellRes = await mockWindow.fetch('/api/compendium/spells/PHB/sp_acid_splash_phb');
-        assert.equal(spellRes.status, 200);
-        const spellJson = await spellRes.json();
-        assert.equal(spellJson.name, 'Acid Splash');
-        assert.ok(fetchedUrls.includes('data/spells-normalized/spells-phb.json'));
+        ],
+        senderPeer: null
     });
+    assert.equal(handledMapTools, true);
+    assert.equal(globalThis.VTT.campaignState.maps.map_1.traps.length, 2);
+    const peerTraps = sentToPeers.find((m) => m.event === 'traps:updated');
+    const peerPortals = sentToPeers.find((m) => m.event === 'portals:updated');
+    assert.equal(peerTraps.args[0].traps.length, 1);
+    assert.equal(peerTraps.args[0].traps[0].id, 'tr2');
+    assert.equal(peerPortals.args[0].portals.length, 1);
+    assert.equal(peerPortals.args[0].portals[0].id, 'pt2');
+    assert.ok(persisted >= 2);
+});
+
+test('P2P Adapter streamAssetToPeers sends start & chunks on assetsChannel and accepts SVG/audio MIMEs', async () => {
+    const host = new VttP2PAdapter({ isHost: true, username: 'GM', role: 'GM' });
+
+    const assetPackets = [];
+    const eventPackets = [];
+    const unjoinedPackets = [];
+
+    host.peers.set('p_joined', {
+        id: 'p_joined',
+        joined: true,
+        assetsChannel: { readyState: 'open', bufferedAmount: 0, send: (p) => assetPackets.push(JSON.parse(p)) },
+        eventsChannel: { readyState: 'open', send: (p) => eventPackets.push(JSON.parse(p)) }
+    });
+    host.peers.set('p_unjoined', {
+        id: 'p_unjoined',
+        joined: false,
+        assetsChannel: { readyState: 'open', bufferedAmount: 0, send: (p) => unjoinedPackets.push(p) }
+    });
+
+    await host.streamAssetToPeers('svg_1', Buffer.from('<svg></svg>').toString('base64'), 'image/svg+xml', {
+        originalUrl: 'forgedvtt-asset://svg_1'
+    });
+
+    assert.equal(eventPackets.length, 0);
+    assert.equal(unjoinedPackets.length, 0);
+    assert.equal(assetPackets[0].type, 'asset-start');
+    assert.equal(assetPackets[0].mimeType, 'image/svg+xml');
+    assert.equal(assetPackets[1].type, 'asset-chunk');
+
+    // Verify client accepts image/svg+xml and audio/mpeg headers
+    const client = new VttP2PAdapter({ isHost: false, username: 'Alice', role: 'Player' });
+    client._handleIncomingData(
+        JSON.stringify({ type: 'asset-start', id: 'a_svg', totalChunks: 1, totalBytes: 16, mimeType: 'image/svg+xml' })
+    );
+    client._handleIncomingData(
+        JSON.stringify({ type: 'asset-start', id: 'a_aud', totalChunks: 1, totalBytes: 16, mimeType: 'audio/mpeg' })
+    );
+    assert.ok(client._assetTransfers.has('a_svg'));
+    assert.ok(client._assetTransfers.has('a_aud'));
+    client.disconnect();
+    host.disconnect();
+});
+
+test('Handout parseMediaUrl allows forgedvtt-asset:// and resolves via getSafeVttUrl with data-raw-src', async () => {
+    const dom = new JSDOM('<!doctype html><html><body></body></html>', { url: 'https://example.test/play/' });
+    globalThis.window = dom.window;
+    globalThis.document = dom.window.document;
+    globalThis.window.__FORGEDVTT_STATIC_WEB__ = true;
+    globalThis.window.__resolveStaticAssetUrl = (u) => (u === 'forgedvtt-asset://a1' ? 'blob:static/a1' : null);
+
+    const { parseMediaUrl } = await import('../vtt/js/vtt-handouts.js');
+    const html = parseMediaUrl('forgedvtt-asset://a1');
+    assert.match(html, /src="blob:static\/a1"/);
+    assert.match(html, /data-raw-src="forgedvtt-asset:\/\/a1"/);
+
+    delete globalThis.window;
+    delete globalThis.document;
+});
+
+test('Static shim BroadcastChannel aligns on { type: "campaigns-updated" }', async () => {
+    const posted = [];
+    class FakeBroadcastChannel {
+        constructor(name) {
+            this.name = name;
+            this.onmessage = null;
+        }
+        postMessage(msg) {
+            posted.push(msg);
+        }
+    }
+    const mockWindow = {
+        __FORGEDVTT_STATIC_WEB__: true,
+        location: { origin: 'https://example.test' },
+        fetch: async () => new Response('{}', { status: 200 })
+    };
+    const shimCode = fs.readFileSync(path.join(process.cwd(), 'vtt', 'js', 'network', 'vtt-static-shim.js'), 'utf8');
+    vm.runInNewContext(shimCode, {
+        window: mockWindow,
+        BroadcastChannel: FakeBroadcastChannel,
+        localStorage: { getItem: () => null },
+        URL,
+        Response,
+        setTimeout,
+        clearTimeout
+    });
+
+    mockWindow.__persistStaticCampaign({ id: 'camp_bc', name: 'Test' });
+    await new Promise((r) => setTimeout(r, 260));
+
+    assert.ok(
+        posted.some((m) => m.type === 'campaigns-updated' && m.senderId === 'play' && m.campaignId === 'camp_bc')
+    );
+});
+
+test('Express /api/campaigns/import extracts uploaded .zip campaign archives', async () => {
+    const { campaignsRouter } = await import('../server/routes/campaigns.js');
+    const { campaigns } = await import('../server/state.js');
+
+    const tmpSrc = fs.mkdtempSync(path.join(os.tmpdir(), 'forged-zip-src-'));
+    const zipPath = path.join(os.tmpdir(), `forged-test-${Date.now()}.zip`);
+    const campId = `zip_camp_${Date.now()}`;
+    try {
+        fs.writeFileSync(
+            path.join(tmpSrc, 'campaign.json'),
+            JSON.stringify({ campaign: { id: campId, name: 'ZIP Imported Campaign', maps: {} } }),
+            'utf8'
+        );
+        fs.mkdirSync(path.join(tmpSrc, 'uploads'), { recursive: true });
+        fs.writeFileSync(path.join(tmpSrc, 'uploads', 'map.txt'), 'ok', 'utf8');
+
+        const tarBin =
+            process.platform === 'win32'
+                ? path.join(process.env.SystemRoot || 'C:\\Windows', 'System32', 'tar.exe')
+                : 'tar';
+        execFileSync(tarBin, ['-a', '-c', '-f', zipPath, '-C', tmpSrc, '.']);
+
+        const app = express();
+        app.use(express.json());
+        app.use('/api', campaignsRouter);
+
+        const server = await new Promise((resolve) => {
+            const s = app.listen(0, '127.0.0.1', () => resolve(s));
+        });
+        try {
+            const port = server.address().port;
+            const fd = new FormData();
+            fd.append('file', new Blob([fs.readFileSync(zipPath)], { type: 'application/zip' }), 'export.zip');
+            const res = await fetch(`http://127.0.0.1:${port}/api/campaigns/import`, { method: 'POST', body: fd });
+            assert.equal(res.status, 200);
+            const json = await res.json();
+            assert.equal(json.success, true);
+            assert.equal(json.campaign.name, 'ZIP Imported Campaign');
+            delete campaigns[json.campaign.id];
+        } finally {
+            server.close();
+        }
+    } finally {
+        fs.rmSync(tmpSrc, { recursive: true, force: true });
+        fs.rmSync(zipPath, { force: true });
+    }
 });

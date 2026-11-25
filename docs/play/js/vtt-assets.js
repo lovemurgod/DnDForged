@@ -1,3 +1,5 @@
+import { getSafeVttUrl } from './vtt-utils.js';
+
 document.addEventListener('DOMContentLoaded', () => {
     const assetTabBtn = document.querySelector('[data-tab="tab-assets"]');
     if (!assetTabBtn) return; // Not present on this view
@@ -414,7 +416,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 thumbInner = `<img class="asset-thumb" src="https://img.youtube.com/vi/${ytMatch[1]}/mqdefault.jpg" alt="${safeName}" loading="lazy">`;
             } else {
                 if (isGif) badgeHtml = `<span class="asset-media-badge"><i class="fa-solid fa-bolt"></i> GIF</span>`;
-                thumbInner = `<img class="asset-thumb" src="${escapeHtml(item.url)}" alt="${safeName}" loading="lazy">`;
+                thumbInner = `<img class="asset-thumb" src="${escapeHtml(getSafeVttUrl(item.url))}" data-raw-src="${escapeHtml(item.url)}" alt="${safeName}" loading="lazy">`;
             }
 
             el.innerHTML = `
@@ -436,7 +438,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (!mountedVideo && thumbWrap) {
                         mountedVideo = document.createElement('video');
                         mountedVideo.className = 'asset-thumb';
-                        mountedVideo.src = item.url;
+                        mountedVideo.dataset.rawSrc = item.url;
+                        mountedVideo.src = getSafeVttUrl(item.url);
                         mountedVideo.muted = true;
                         mountedVideo.loop = true;
                         mountedVideo.playsInline = true;
@@ -987,7 +990,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (isVideo) {
             const vid = document.createElement('video');
-            vid.src = item.url;
+            vid.dataset.rawSrc = item.url;
+            vid.src = getSafeVttUrl(item.url);
             vid.controls = true;
             vid.autoplay = true;
             vid.loop = true;
@@ -1004,7 +1008,8 @@ document.addEventListener('DOMContentLoaded', () => {
             previewInfo.textContent = `YouTube Video (${ytMatch[1]})`;
         } else {
             const img = new Image();
-            img.src = item.url;
+            img.dataset.rawSrc = item.url;
+            img.src = getSafeVttUrl(item.url);
             img.style.maxWidth = '100%';
             img.style.maxHeight = '100%';
             img.style.objectFit = 'contain';
@@ -1025,9 +1030,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btnPreviewCopy) {
         btnPreviewCopy.addEventListener('click', () => {
             if (activePreviewAsset && activePreviewAsset.url) {
-                const fullUrl = activePreviewAsset.url.startsWith('http')
-                    ? activePreviewAsset.url
-                    : window.location.origin + activePreviewAsset.url;
+                const u = activePreviewAsset.url;
+                const fullUrl =
+                    u.startsWith('http') ||
+                    u.startsWith('data:') ||
+                    u.startsWith('blob:') ||
+                    u.startsWith('forgedvtt-asset://')
+                        ? u
+                        : window.location.origin + u;
                 navigator.clipboard.writeText(fullUrl).then(() => {
                     btnPreviewCopy.innerHTML = `<i class="fa-solid fa-check"></i> Copied!`;
                     setTimeout(() => {
@@ -1092,7 +1102,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const { item } = assetContextMenuTarget;
         document.getElementById('vtt-asset-context-menu').classList.add('vtt-hidden');
         if (item.url) {
-            const fullUrl = item.url.startsWith('http') ? item.url : window.location.origin + item.url;
+            const u = item.url;
+            const fullUrl =
+                u.startsWith('http') ||
+                u.startsWith('data:') ||
+                u.startsWith('blob:') ||
+                u.startsWith('forgedvtt-asset://')
+                    ? u
+                    : window.location.origin + u;
             navigator.clipboard.writeText(fullUrl);
         }
     });
@@ -1354,7 +1371,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const isSel = localSelected.has(item);
                     return `
                     <div class="picker-asset-thumb" data-idx="${idx}" style="border: 2px solid ${isSel ? 'var(--color-gold-base)' : 'rgba(255,255,255,0.1)'}; border-radius: 6px; overflow: hidden; background: #0c0a14; cursor: pointer; display: flex; flex-direction: column; align-items: center; padding: 4px; box-shadow: ${isSel ? '0 0 8px rgba(212,175,55,0.4)' : 'none'};">
-                        <img src="${item.url}" alt="${escapeHtml(item.name)}" style="width:100%; height:75px; object-fit:cover; border-radius:4px;" onerror="this.src='favicon.svg'">
+                        <img src="${escapeHtml(getSafeVttUrl(item.url))}" data-raw-src="${escapeHtml(item.url)}" alt="${escapeHtml(item.name)}" style="width:100%; height:75px; object-fit:cover; border-radius:4px;" onerror="this.src='favicon.svg'">
                         <div style="font-size:0.65rem; color:#fff; text-align:center; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; width:100%; margin-top:2px;">
                             ${escapeHtml(item.name)}
                         </div>

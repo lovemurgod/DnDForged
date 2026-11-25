@@ -1,8 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import '../vtt/js/network/vtt-p2p-host-engine.js';
 import '../vtt/js/network/vtt-p2p-adapter.js';
 
-const { VttP2PAdapter, DEFAULT_ICE_SERVERS } = globalThis;
+const { VttP2PAdapter, VttP2PHostEngine, DEFAULT_ICE_SERVERS } = globalThis;
 import { p2pBridge, DEFAULT_STUN_SERVERS } from '../server/p2p-bridge.js';
 
 test('[P2P Adapter] Default ICE and STUN servers are configured with Google and Cloudflare', () => {
@@ -318,4 +319,197 @@ test('[P2P Adapter] Incomplete asset chunk transfer TTL cleanup', () => {
     // Disconnect must clear all transfer timers and purge memory
     adapter.disconnect();
     assert.strictEqual(adapter._assetTransfers.size, 0);
+});
+
+test('[P2P Host Engine] Enforces permissions, token visibility transitions, and rolltables state', () => {
+    const campaign = {
+        id: 'camp_p2p_engine',
+        name: 'P2P Test Campaign',
+        activeMapId: 'map_1',
+        activeGMMapId: 'map_1',
+        characters: {
+            char_hero: { id: 'char_hero', name: 'Valeros', owner: 'Alice', assignedPlayers: ['Alice'] }
+        },
+        maps: {
+            map_1: {
+                id: 'map_1',
+                name: 'Tavern',
+                tokens: {
+                    tok_hero: {
+                        id: 'tok_hero',
+                        name: 'Valeros',
+                        owner: 'Alice',
+                        layer: 'token',
+                        hidden: false,
+                        isVisible: true,
+                        x: 100,
+                        y: 100
+                    },
+                    tok_ambush: {
+                        id: 'tok_ambush',
+                        name: 'Goblin Assassin',
+                        layer: 'token',
+                        hidden: true,
+                        isVisible: false,
+                        x: 200,
+                        y: 200
+                    }
+                },
+                walls: [],
+                lights: [],
+                notes: [],
+                traps: [],
+                portals: [],
+                drawings: {},
+                shapes: {}
+            }
+        },
+        initiative: { combatants: [], currentRound: 1, activeTurnIndex: -1, isVisible: false },
+        rollTables: { tables: [], assetTables: [], decks: [] }
+    };
+
+    const prevVtt = globalThis.VTT;
+    globalThis.VTT = { campaignState: campaign, chatHistory: [] };
+
+    try {
+        const host = new VttP2PAdapter({
+            isHost: true,
+            role: 'GM',
+            username: 'DM',
+            campaignId: 'camp_p2p_engine'
+        });
+        host.connected = true;
+
+        const playerPackets = [];
+        const alicePeer = {
+            id: 'p2p_alice',
+            joined: true,
+            role: 'Player',
+            username: 'Alice',
+            eventsChannel: {
+                readyState: 'open',
+                send: (msg) => playerPackets.push(JSON.parse(msg))
+            }
+        };
+        host.peers.set(alicePeer.id, alicePeer);
+
+        // Player cannot execute GM-only events (blocked by _isPlayerAllowedEvent)
+        host._handleIncomingData({ type: 'event', event: 'map:switch', args: [{ mapId: 'map_other' }] }, alicePeer);
+        assert.strictEqual(campaign.activeMapId, 'map_1');
+
+        // Player CAN update their own visible token
+        playerPackets.length = 0;
+        host._handleIncomingData(
+            {
+                type: 'event',
+                event: 'token:update_delta',
+                args: [{ mapId: 'map_1', tokenId: 'tok_hero', changes: { x: 250, y: 300 } }]
+            },
+            alicePeer
+        );
+        assert.strictEqual(campaign.maps.map_1.tokens.tok_hero.x, 250);
+        assert.ok(playerPackets.some((p) => p.event === 'token:updated_delta' && p.args?.[0]?.changes?.x === 250));
+
+        // GM reveals hidden token -> must emit token:added to players and token:updated_delta locally
+        playerPackets.length = 0;
+        let localDeltaCount = 0;
+        host.on('token:updated_delta', () => {
+            localDeltaCount++;
+        });
+        host.emit('token:update_delta', {
+            mapId: 'map_1',
+            tokenId: 'tok_ambush',
+            changes: { hidden: false, isVisible: true }
+        });
+        assert.strictEqual(localDeltaCount, 1);
+        assert.ok(playerPackets.some((p) => p.event === 'token:added' && p.args?.[0]?.tokenId === 'tok_ambush'));
+
+        // GM hides it again -> must emit token:deleted to players
+        playerPackets.length = 0;
+        host.emit('token:update_delta', {
+            mapId: 'map_1',
+            tokenId: 'tok_ambush',
+            changes: { hidden: true, isVisible: false }
+        });
+        assert.ok(playerPackets.some((p) => p.event === 'token:deleted' && p.args?.[0]?.tokenId === 'tok_ambush'));
+    } finally {
+        globalThis.VTT = prevVtt;
+    }
+});
+
+test('[P2P Adapter] Normalizes room codes and streams requested assets over WebRTC data channels', async () => {
+    assert.strictEqual(VttP2PAdapter.normalizeRoomCode(' ab12 cd34 '), 'AB12-CD34');
+
+    const host = new VttP2PAdapter({ isHost: true, role: 'GM', username: 'DM', campaignId: 'camp_1' });
+    const player = new VttP2PAdapter({ isHost: false, role: 'Player', username: 'Bob', campaignId: 'camp_1' });
+
+    const assetRawUrl = 'forgedvtt-asset://unit-test-map';
+    const sampleBytes = new Uint8Array([137, 80, 78, 71, 13, 10, 26, 10, 1, 2, 3, 4]);
+    const prevAssetStore = globalThis.__staticAssetStore;
+    globalThis.__staticAssetStore = {
+        async getBlob(url) {
+            if (url === assetRawUrl) {
+                return new Blob([sampleBytes], { type: 'image/png' });
+            }
+            return null;
+        }
+    };
+
+    try {
+        // Wire bi-directional mock channels between player and host
+        const hostSidePeer = {
+            id: player.id,
+            joined: true,
+            username: 'Bob',
+            role: 'Player',
+            eventsChannel: {
+                readyState: 'open',
+                bufferedAmount: 0,
+                send: (msg) => player._handleIncomingData(JSON.parse(msg))
+            },
+            assetsChannel: {
+                readyState: 'open',
+                bufferedAmount: 0,
+                send: (msg) => player._handleIncomingData(JSON.parse(msg))
+            }
+        };
+        host.peers.set(player.id, hostSidePeer);
+
+        player.connected = true;
+        player.hostPeer = {
+            open: true,
+            eventsChannel: {
+                readyState: 'open',
+                send: (msg) => host._handleIncomingData(msg, hostSidePeer)
+            }
+        };
+
+        let receivedEvent = null;
+        player.on('asset:received', (evt) => {
+            receivedEvent = evt;
+        });
+
+        player.requestAsset(assetRawUrl);
+
+        for (let i = 0; i < 40 && !receivedEvent; i++) {
+            await new Promise((r) => setTimeout(r, 25));
+        }
+
+        assert.ok(receivedEvent, 'Player must receive streamed asset');
+        assert.strictEqual(receivedEvent.id !== undefined, true);
+        assert.strictEqual(receivedEvent.originalUrl, assetRawUrl);
+        assert.ok(receivedEvent.url.startsWith('data:image/png;base64,') || receivedEvent.url.startsWith('blob:'));
+        assert.strictEqual(player.resolveAssetUrl(assetRawUrl), receivedEvent.blobUrl || receivedEvent.url);
+    } finally {
+        globalThis.__staticAssetStore = prevAssetStore;
+    }
+
+    // Verify p2pBridge.syncPeers tracks peer additions and removals
+    p2pBridge.startRoom({ roomCode: 'TEST-9999' });
+    const synced = p2pBridge.syncPeers([{ id: 'peer_1', username: 'Aragorn', role: 'Player' }]);
+    assert.strictEqual(synced.peerCount, 1);
+    assert.strictEqual(synced.peers[0].username, 'Aragorn');
+    const emptied = p2pBridge.syncPeers([]);
+    assert.strictEqual(emptied.peerCount, 0);
+    p2pBridge.stopRoom();
 });

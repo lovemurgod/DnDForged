@@ -112,6 +112,41 @@ class P2PBridge extends EventEmitter {
     }
 
     /**
+     * Sync full peer list reported by the host tabletop P2P adapter.
+     */
+    syncPeers(peersList = []) {
+        if (!Array.isArray(peersList)) return this.getStatus();
+        const nextIds = new Set();
+        const prevCount = this.peers.size;
+        for (const p of peersList) {
+            if (!p || !p.id) continue;
+            nextIds.add(p.id);
+            const existing = this.peers.get(p.id);
+            const info = {
+                id: p.id,
+                username: p.username || existing?.username || 'Player',
+                role: p.role || existing?.role || 'Player',
+                connectedAt: existing?.connectedAt || p.connectedAt || Date.now(),
+                lastSeen: Date.now()
+            };
+            this.peers.set(p.id, info);
+            if (!existing) {
+                this.emit('peer:connected', info);
+            }
+        }
+        for (const [id, peer] of this.peers.entries()) {
+            if (!nextIds.has(id)) {
+                this.peers.delete(id);
+                this.emit('peer:disconnected', peer);
+            }
+        }
+        if (this.peers.size !== prevCount) {
+            this.emit('peers:synced', this.getStatus());
+        }
+        return this.getStatus();
+    }
+
+    /**
      * Returns the live status payload of the P2P bridge
      */
     getStatus() {
@@ -135,12 +170,25 @@ class P2PBridge extends EventEmitter {
         socket.isP2P = true;
         socket.username = username;
         socket.role = role || 'Player';
+        socket.rooms = new Set([socket.id]);
         socket.handshake = {
             headers: { host: 'localhost:5050' },
             address: '127.0.0.1' // Treated as verified local channel
         };
+        socket.join = (room) => {
+            if (room) socket.rooms.add(room);
+        };
+        socket.leave = (room) => {
+            if (room) socket.rooms.delete(room);
+        };
+        socket.to = (room) => ({
+            emit: (event, payload) => this.emit('p2p:room-emit', { room, exclude: socket.id, event, payload })
+        });
+        socket.broadcast = {
+            emit: (event, payload) => this.emit('p2p:broadcast', { exclude: socket.id, event, payload })
+        };
 
-        socket.disconnect = (closeConnection = true) => {
+        socket.disconnect = () => {
             this.unregisterPeer(peerId);
             socket.emit('disconnect', 'p2p closed');
         };

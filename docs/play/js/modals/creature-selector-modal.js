@@ -4,6 +4,8 @@
  * and previewing Bestiary creatures for Companion creation, Custom NPC import, and more.
  */
 
+import { resolveMonsterTokenUrl } from '../vtt-utils.js';
+
 // Helper to calculate or fallback token image URL
 export function getCreatureTokenUrl(monster) {
     if (!monster) return 'favicon.svg';
@@ -17,12 +19,8 @@ export function getCreatureTokenUrl(monster) {
         } catch (_) {}
     }
     if (monster.hasToken || monster.source || monster.name) {
-        const cleanName =
-            typeof Parser !== 'undefined'
-                ? Parser.nameToTokenName(monster.name)
-                : (monster.name || '').replace(/"/g, '').trim();
-        const source = monster.source || 'MM';
-        return `img/bestiary/tokens/${source}/${cleanName}.webp`;
+        const resolved = resolveMonsterTokenUrl(monster);
+        if (resolved) return resolved;
     }
     if (typeof window !== 'undefined' && window.VTT?.generateArcaneToken) {
         return window.VTT.generateArcaneToken(monster.name || 'Creature', 'monster');

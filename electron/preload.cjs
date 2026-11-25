@@ -19,6 +19,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   stopTunnel: () => ipcRenderer.invoke('stop-tunnel'),
   openVttApp: (url) => ipcRenderer.invoke('open-vtt-app', url),
   openVttBrowser: (url) => ipcRenderer.invoke('open-vtt-browser', url),
+  openExternal: (url) => ipcRenderer.invoke('open-external', url),
   openPresentationWindow: (params) => ipcRenderer.invoke('open-presentation-window', params),
   closePresentationWindow: () => ipcRenderer.invoke('close-presentation-window'),
   updateServerPort: (params) => ipcRenderer.invoke('config-update-port', params),

@@ -1,7 +1,7 @@
 // ForgeDVTT Creature Sheet — Renderer Subsystem
 // Handles panel DOM rendering, stat blocks, HP tracking, token avatars, legendary sections, and panel resizing.
 
-import { escapeHtml } from '../vtt-utils.js';
+import { escapeHtml, resolveMonsterTokenUrl } from '../vtt-utils.js';
 import {
     buildTypeString,
     buildSpeedString,
@@ -221,12 +221,8 @@ export function getMonsterImageUrl(m, ctx = {}) {
 
     // 5. Fallback path generator based on 5etools naming conventions
     if (m.hasToken || m.source || m.name) {
-        const cleanName =
-            typeof window !== 'undefined' && window.Parser?.nameToTokenName
-                ? window.Parser.nameToTokenName(m.name)
-                : (m.name || '').replace(/"/g, '').trim();
-        const source = m.source || 'MM';
-        return `img/bestiary/tokens/${source}/${cleanName}.webp`;
+        const resolved = resolveMonsterTokenUrl(m);
+        if (resolved) return resolved;
     }
 
     return generateArcaneTokenDataUrl(m.name || 'Creature', 'monster');

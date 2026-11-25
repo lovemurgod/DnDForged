@@ -1,7 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import crypto from 'crypto';
 import fs from 'fs';
+import http from 'http';
+import os from 'os';
 import path from 'path';
+import vm from 'vm';
+import { spawn } from 'child_process';
 import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -15,7 +20,7 @@ test('Static Web P2P Build: docs/play & docs/prep', async (t) => {
     await t.test('generates docs/play/index.html with /play/ base href and static flag', () => {
         assert.ok(fs.existsSync(playIndexPath), 'docs/play/index.html must exist');
         const html = fs.readFileSync(playIndexPath, 'utf8');
-        assert.ok(html.includes('<base href="/play/">'), 'docs/play/index.html must use <base href="/play/">');
+        assert.ok(!html.includes('<base href='), 'docs/play/index.html must use relative paths without <base>');
         assert.ok(html.includes('window.__FORGEDVTT_STATIC_WEB__ = true'), 'Must set static web flag');
         assert.ok(
             !html.includes('/socket.io/socket.io.js'),
@@ -107,5 +112,234 @@ test('Static Web P2P Build: docs/play & docs/prep', async (t) => {
         const srdCfg = JSON.parse(fs.readFileSync(path.join(rootDir, 'electron-builder-srd.json'), 'utf8'));
         assert.ok(pkg.build.asarUnpack.includes('electron/**/*'), 'package.json must unpack electron/**/*');
         assert.ok(srdCfg.asarUnpack.includes('electron/**/*'), 'electron-builder-srd.json must unpack electron/**/*');
+    });
+
+    await t.test('docs/play/sheet.html includes static P2P popout dependencies and local asset refs exist', () => {
+        const sheetPath = path.join(rootDir, 'docs', 'play', 'sheet.html');
+        assert.ok(fs.existsSync(sheetPath), 'docs/play/sheet.html must exist');
+        const sheetHtml = fs.readFileSync(sheetPath, 'utf8');
+        assert.ok(!sheetHtml.includes('<base href='), 'docs/play/sheet.html must use relative paths without <base>');
+        assert.ok(sheetHtml.includes('window.__FORGEDVTT_STATIC_WEB__ = true'), 'sheet.html must set static flag');
+        for (const reqScript of [
+            'js/network/vtt-static-shim.js',
+            'lib/peerjs.min.js',
+            'js/network/vtt-p2p-host-engine.js',
+            'js/network/vtt-p2p-adapter.js',
+            'lib/purify.min.js'
+        ]) {
+            assert.ok(sheetHtml.includes(reqScript), `docs/play/sheet.html must load ${reqScript}`);
+            assert.ok(
+                fs.existsSync(path.join(rootDir, 'docs', 'play', reqScript)),
+                `Missing bundled asset docs/play/${reqScript}`
+            );
+        }
+
+        // Verify all local <script src> and <link href> assets in play & prep pages exist on disk
+        for (const [pageRel, baseDir] of [
+            ['docs/play/index.html', path.join(rootDir, 'docs', 'play')],
+            ['docs/play/sheet.html', path.join(rootDir, 'docs', 'play')],
+            ['docs/prep/index.html', path.join(rootDir, 'docs', 'prep')]
+        ]) {
+            const html = fs.readFileSync(path.join(rootDir, pageRel), 'utf8');
+            for (const m of html.matchAll(/(?:src|href)=["']([^"']+)["']/g)) {
+                const ref = m[1];
+                if (/^(https?:|data:|blob:|#|\/play\/|mailto:|javascript:)/i.test(ref)) continue;
+                const cleanRef = ref.split('?')[0].split('#')[0];
+                if (!cleanRef || cleanRef === '../play/' || cleanRef === '../prep/') continue;
+                const resolved = cleanRef.startsWith('../')
+                    ? path.resolve(baseDir, cleanRef)
+                    : path.resolve(baseDir, cleanRef.replace(/^\/+/, ''));
+                assert.ok(fs.existsSync(resolved), `Missing local asset "${ref}" referenced by ${pageRel}`);
+            }
+        }
+    });
+
+    await t.test('1:1 CC0 SVG token integrity across all SRD creatures in docs/play', () => {
+        const catalogPath = path.join(rootDir, 'docs', 'play', 'data', 'bestiary-catalog.json');
+        const creatures = JSON.parse(fs.readFileSync(catalogPath, 'utf8'));
+        assert.ok(Array.isArray(creatures) && creatures.length > 0, 'bestiary-catalog.json must be non-empty');
+
+        const tokenDir = path.join(rootDir, 'docs', 'play', 'img', 'bestiary', 'tokens');
+        const filesInTokenDir = fs.readdirSync(tokenDir);
+        const webpFiles = filesInTokenDir.filter((f) => f.toLowerCase().endsWith('.webp'));
+        assert.strictEqual(webpFiles.length, 0, 'Static SRD token directory must not contain .webp files');
+
+        for (const creature of creatures) {
+            assert.ok(creature.tokenUrl, `Creature ${creature.name} must define tokenUrl`);
+            assert.ok(
+                creature.tokenUrl.endsWith('.svg'),
+                `Creature ${creature.name} tokenUrl (${creature.tokenUrl}) must use .svg in static SRD build`
+            );
+            const relTokenPath = creature.tokenUrl.replace(/^\/+/, '');
+            const fullTokenPath = path.join(rootDir, 'docs', 'play', relTokenPath);
+            assert.ok(fs.existsSync(fullTokenPath), `Missing SVG token file ${fullTokenPath} for ${creature.name}`);
+            const svgHeader = fs.readFileSync(fullTokenPath, 'utf8').slice(0, 200);
+            assert.ok(svgHeader.includes('<svg'), `Token ${fullTokenPath} must be valid SVG XML`);
+        }
+    });
+
+    await t.test('vtt-static-shim.js API handlers return strict 404/[] and enforce SRD/custom filtering', async () => {
+        const shimCode = fs.readFileSync(path.join(rootDir, 'vtt', 'js', 'network', 'vtt-static-shim.js'), 'utf8');
+        const store = new Map();
+        const origFetch = async (url) => {
+            if (String(url).includes('bestiary-catalog.json')) {
+                return new Response(
+                    JSON.stringify([
+                        { id: 'c1', name: 'Goblin', source: 'MM' },
+                        { id: 'c2', name: 'Aarakocra', source: 'XMM' }
+                    ]),
+                    { status: 200, headers: { 'Content-Type': 'application/json' } }
+                );
+            }
+            return new Response('Not Found', { status: 404 });
+        };
+        const sandbox = {
+            window: null,
+            globalThis: null,
+            self: null,
+            __FORGEDVTT_STATIC_WEB__: true,
+            location: { href: 'https://forgedvtt.com/play/', origin: 'https://forgedvtt.com', pathname: '/play/' },
+            localStorage: {
+                getItem: (k) => (store.has(k) ? store.get(k) : null),
+                setItem: (k, v) => store.set(k, String(v)),
+                removeItem: (k) => store.delete(k)
+            },
+            crypto: crypto.webcrypto,
+            fetch: origFetch,
+            Request,
+            Response,
+            Headers,
+            URL,
+            URLSearchParams,
+            Blob,
+            BroadcastChannel: class {
+                postMessage() {}
+            },
+            console,
+            setTimeout,
+            clearTimeout
+        };
+        sandbox.window = sandbox;
+        sandbox.globalThis = sandbox;
+        sandbox.self = sandbox;
+        vm.runInNewContext(shimCode, sandbox);
+
+        const tablesCat = await sandbox.fetch('/api/tables/catalog');
+        assert.strictEqual(tablesCat.status, 200);
+        assert.deepStrictEqual(await tablesCat.json(), []);
+
+        const decksCat = await sandbox.fetch('/api/decks/catalog');
+        assert.strictEqual(decksCat.status, 200);
+        assert.deepStrictEqual(await decksCat.json(), []);
+
+        const missingTable = await sandbox.fetch('/api/tables/nonexistent_table');
+        assert.strictEqual(missingTable.status, 404);
+
+        const missingDeck = await sandbox.fetch('/api/decks/nonexistent_deck');
+        assert.strictEqual(missingDeck.status, 404);
+
+        const missingHandout = await sandbox.fetch('/api/handouts/phb');
+        assert.strictEqual(missingHandout.status, 404);
+
+        // Disabling SRD 5.1 must exclude MM creatures while keeping XMM
+        store.set('forgedvtt_static_disabled_sources', JSON.stringify(['SRD 5.1']));
+        const filteredBestiary = await sandbox.fetch('/api/bestiary/catalog');
+        assert.strictEqual(filteredBestiary.status, 200);
+        const filteredRows = await filteredBestiary.json();
+        assert.strictEqual(filteredRows.length, 1);
+        assert.strictEqual(filteredRows[0].name, 'Aarakocra');
+    });
+
+    await t.test('docs website pages expose /play/ and /prep/ with updated ports and config paths', () => {
+        for (const page of ['index.html', 'getting-started.html', 'self-hosted-vtt.html', 'app-guide.html']) {
+            const html = fs.readFileSync(path.join(rootDir, 'docs', page), 'utf8');
+            assert.ok(html.includes('href="play/"'), `${page} must link to play/`);
+            assert.ok(html.includes('href="prep/"'), `${page} must link to prep/`);
+        }
+        const selfHosted = fs.readFileSync(path.join(rootDir, 'docs', 'self-hosted-vtt.html'), 'utf8');
+        assert.ok(!selfHosted.includes(':3000'), 'self-hosted-vtt.html must not document stale port :3000');
+        assert.ok(selfHosted.includes(':5050'), 'self-hosted-vtt.html must document port :5050');
+
+        const appGuide = fs.readFileSync(path.join(rootDir, 'docs', 'app-guide.html'), 'utf8');
+        assert.ok(!appGuide.includes('<code>auth.json</code>'), 'app-guide.html must not reference stale auth.json');
+        assert.ok(appGuide.includes('forge-config.json'), 'app-guide.html must document forge-config.json');
+        assert.ok(!appGuide.includes('Rebuild Catalogs'), 'app-guide.html must not reference removed Rebuild Catalogs');
+
+        const gsHtml = fs.readFileSync(path.join(rootDir, 'docs', 'getting-started.html'), 'utf8');
+        assert.ok(!gsHtml.includes('Enter\n          Campaign') && !gsHtml.includes('Enter Campaign'));
+        assert.ok(gsHtml.includes('Enter\n          Tabletop') || gsHtml.includes('Enter Tabletop'));
+
+        const sitemap = fs.readFileSync(path.join(rootDir, 'docs', 'sitemap.xml'), 'utf8');
+        assert.ok(sitemap.includes('https://forgedvtt.com/play/'));
+        assert.ok(sitemap.includes('https://forgedvtt.com/prep/'));
+    });
+
+    await t.test('server.js serves /play/sheet.html, SRD .svg fallback, and non-default /vtt-uploads', async () => {
+        const tmpDataDir = fs.mkdtempSync(path.join(os.tmpdir(), 'forgedvtt-srv-test-'));
+        const secret = 'test_secret_123456';
+        const uploadDir = path.join(tmpDataDir, 'campaigns', 'camp_alpha', 'uploads');
+        fs.mkdirSync(uploadDir, { recursive: true });
+        fs.writeFileSync(path.join(uploadDir, 'hello.txt'), 'upload-ok', 'utf8');
+
+        const port = 19000 + Math.floor(Math.random() * 10000);
+        const child = spawn(process.execPath, [path.join(rootDir, 'server.js')], {
+            cwd: rootDir,
+            env: {
+                ...process.env,
+                PORT: String(port),
+                FORGEDVTT_DATA_DIR: tmpDataDir,
+                FORGEDVTT_CONFIG_FILE: path.join(tmpDataDir, 'forge-config.json'),
+                FORGEDVTT_SERVER_SECRET: secret
+            },
+            stdio: ['ignore', 'pipe', 'pipe']
+        });
+
+        try {
+            let ready = false;
+            for (let i = 0; i < 40; i++) {
+                try {
+                    const r = await fetch(`http://127.0.0.1:${port}/api/server/data-dir`, {
+                        signal: AbortSignal.timeout(500)
+                    });
+                    if (r.ok) {
+                        ready = true;
+                        break;
+                    }
+                } catch (_) {}
+                await new Promise((r) => setTimeout(r, 150));
+            }
+            assert.ok(ready, 'Express server must start and pass health check');
+
+            const sheetRes = await fetch(`http://127.0.0.1:${port}/play/sheet.html`);
+            assert.strictEqual(sheetRes.status, 200);
+            const sheetJsRes = await fetch(`http://127.0.0.1:${port}/play/js/vtt-sheet-popout.js`);
+            assert.strictEqual(sheetJsRes.status, 200);
+
+            const uploadRes = await fetch(`http://127.0.0.1:${port}/vtt-uploads/hello.txt`);
+            assert.strictEqual(uploadRes.status, 200);
+            assert.strictEqual(await uploadRes.text(), 'upload-ok');
+            assert.ok(uploadRes.headers.get('content-security-policy')?.includes('sandbox'));
+
+            const traversalStatus = await new Promise((resolve, reject) => {
+                const req = http.get(
+                    { hostname: '127.0.0.1', port, path: '/vtt-uploads/%2e%2e/campaigns.json' },
+                    (res) => {
+                        res.resume();
+                        resolve(res.statusCode);
+                    }
+                );
+                req.on('error', reject);
+            });
+            assert.strictEqual(traversalStatus, 403);
+        } finally {
+            try {
+                await fetch(`http://127.0.0.1:${port}/api/server/shutdown`, {
+                    method: 'POST',
+                    headers: { 'x-server-secret': secret }
+                });
+            } catch (_) {}
+            if (child.exitCode === null) child.kill();
+            fs.rmSync(tmpDataDir, { recursive: true, force: true });
+        }
     });
 });

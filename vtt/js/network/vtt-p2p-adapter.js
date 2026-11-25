@@ -15,15 +15,23 @@
     ];
 
     const CHUNK_SIZE = 16 * 1024; // 16 KB binary/RPC chunks safe for desktop and mobile WebRTC stacks
-    const MAX_ASSET_CHUNKS = 2048;
-    const MAX_ASSET_BYTES = 25 * 1024 * 1024;
+    const MAX_ASSET_CHUNKS = 8192; // 128 MB max chunked payload
+    const MAX_ASSET_BYTES = 100 * 1024 * 1024;
+    const TRANSPARENT_ASSET_PLACEHOLDER =
+        'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="1" height="1"/>';
     const SAFE_P2P_ASSET_MIMES = new Set([
         'image/png',
         'image/jpeg',
         'image/webp',
         'image/gif',
+        'image/svg+xml',
         'video/webm',
-        'video/mp4'
+        'video/mp4',
+        'audio/mpeg',
+        'audio/ogg',
+        'audio/wav',
+        'audio/webm',
+        'application/octet-stream'
     ]);
     const SIGNAL_PREFIX_OFFER = 'dndvtt://offer/';
     const SIGNAL_PREFIX_ANSWER = 'dndvtt://answer/';
@@ -37,16 +45,36 @@
     const PLAYER_ALLOWED_P2P_EVENTS = new Set([
         'chat:msg',
         'chat:whisper',
+        'chat:save_resolved',
+        'chat:mass_attack_resolved',
+        'chat:macro_resolved',
         'map:ping',
         'map:request_sync',
+        'map:switch-player',
+        'player:map_override',
         'token:request_sync',
         'token:update',
         'token:add',
         'token:update_delta',
+        'token:delete',
+        'token:force_select_gm',
+        'tokens:damage_fx',
+        'tokens:heal_fx',
         'character:update',
         'character:create',
+        'character:delete',
         'initiative:update',
-        'dice:roll'
+        'dice:roll',
+        'game:set_pause',
+        'door:toggle',
+        'trap:trigger',
+        'portal:teleport_inter_map',
+        'portal:teleport_inter_map_batch',
+        'shapes:update',
+        'drawings:update',
+        'measure:update',
+        'measure:clear',
+        'deck:state_update'
     ]);
 
     function loadConfiguredIceServers(explicitServers) {
@@ -88,6 +116,7 @@
             this.role = options.role || (this.isHost ? 'GM' : 'Player');
             this.username = options.username || '';
             this.campaignId = options.campaignId || 'default';
+            this.gmPassword = options.gmPassword || null;
             this.iceServers = loadConfiguredIceServers(options.iceServers);
 
             this.id = 'p2p_' + Math.random().toString(36).substring(2, 10);
@@ -95,6 +124,7 @@
             this.isConnecting = false;
             this._peer = null;
             this._reconnectTimer = null;
+            this._expressPersistTimer = null;
 
             // Event listeners map: eventName -> Set(callbacks)
             this._listeners = new Map();
@@ -108,6 +138,8 @@
             // Asset & RPC chunk reassembly caches
             this._assetTransfers = new Map();
             this._rpcTransfers = new Map();
+            this._remoteAssetBlobCache = new Map();
+            this._pendingAssetRequests = new Set();
 
             // Emulate socket.io sub-object
             this.io = {
@@ -159,10 +191,62 @@
             }
         }
 
+        _persistHostCampaignState(campObj) {
+            const target = campObj || global.VTT?.campaignState;
+            if (!this.isHost || !target) return;
+            if (typeof global.__persistStaticCampaign === 'function') {
+                global.__persistStaticCampaign(target);
+                return;
+            }
+            if (typeof fetch !== 'function' || !target.id) return;
+            if (this._expressPersistTimer) clearTimeout(this._expressPersistTimer);
+            this._expressPersistTimer = setTimeout(async () => {
+                try {
+                    const headers = {
+                        'Content-Type': 'application/json',
+                        ...(typeof global.vttAuthHeaders === 'function' ? global.vttAuthHeaders() : {})
+                    };
+                    await fetch(`/api/campaigns/${encodeURIComponent(target.id)}`, {
+                        method: 'PUT',
+                        headers,
+                        body: JSON.stringify(target)
+                    });
+                } catch (_) {
+                    /* ignore background sync errors */
+                }
+            }, 350);
+        }
+
+        _syncPeersToBackendBridge() {
+            if (!this.isHost || global.__FORGEDVTT_STATIC_WEB__ || typeof fetch !== 'function') return;
+            try {
+                const peerList = Array.from(this.peers.values())
+                    .filter((p) => p.joined)
+                    .map((p) => ({ id: p.id, username: p.username, role: p.role }));
+                const headers = {
+                    'Content-Type': 'application/json',
+                    ...(typeof global.vttAuthHeaders === 'function' ? global.vttAuthHeaders() : {})
+                };
+                fetch('/api/p2p/peers', {
+                    method: 'POST',
+                    headers,
+                    body: JSON.stringify({ peers: peerList })
+                }).catch(() => {});
+            } catch (_) {
+                /* ignore */
+            }
+        }
+
         emit(event, ...args) {
             if (this.isHost && event === 'join') {
                 this._handleHostSelfJoin(args[0]);
                 return this;
+            }
+
+            if (this.isHost && global.VttP2PHostEngine && typeof global.VttP2PHostEngine.processEvent === 'function') {
+                if (global.VttP2PHostEngine.processEvent({ adapter: this, event, args, senderPeer: null })) {
+                    return this;
+                }
             }
 
             // Priority 1: Mid-session campaign state sanitization for player peers
@@ -170,8 +254,8 @@
                 this.isHost &&
                 (event === 'campaign:state-sync' || event === 'campaign:updated' || event === 'campaign:update')
             ) {
-                const rawCamp = args[0] || window.VTT?.campaignState;
-                for (const [peerId, peer] of this.peers.entries()) {
+                const rawCamp = args[0] || global.VTT?.campaignState;
+                for (const [, peer] of this.peers.entries()) {
                     const sanitized = this._sanitizeCampaignStateForPlayer(rawCamp, peer.username || 'Player');
                     const env = JSON.stringify({
                         type: 'event',
@@ -186,15 +270,16 @@
                 return this;
             }
 
-            // Priority 1: Suppress GM-layer / hidden token movements and updates from player peers
+            // Priority 1: Persist GM/hidden tokens locally before suppressing broadcast to players
             if (this.isHost && (event === 'token:update' || event === 'token:add')) {
                 const tok = args[0]?.token;
                 if (tok && (tok.layer === 'gm' || tok.isVisible === false || tok.hidden)) {
-                    // Do not broadcast GM layer / hidden tokens to players
+                    this._persistHostCampaignState();
                     return this;
                 }
             }
 
+            let outboundArgs = args;
             if (this.isHost && event === 'tokens:update') {
                 const tokensObj = args[0]?.tokens;
                 if (tokensObj && typeof tokensObj === 'object') {
@@ -202,8 +287,11 @@
                         const safeTokens = tokensObj.filter(
                             (t) => t && t.layer !== 'gm' && t.isVisible !== false && !t.hidden
                         );
-                        if (safeTokens.length === 0) return this;
-                        args[0].tokens = safeTokens;
+                        if (safeTokens.length === 0) {
+                            this._persistHostCampaignState();
+                            return this;
+                        }
+                        outboundArgs = [{ ...args[0], tokens: safeTokens }, ...args.slice(1)];
                     } else {
                         const safeTokens = {};
                         for (const k in tokensObj) {
@@ -212,49 +300,40 @@
                                 safeTokens[k] = t;
                             }
                         }
-                        if (Object.keys(safeTokens).length === 0) return this;
-                        args[0].tokens = safeTokens;
+                        if (Object.keys(safeTokens).length === 0) {
+                            this._persistHostCampaignState();
+                            return this;
+                        }
+                        outboundArgs = [{ ...args[0], tokens: safeTokens }, ...args.slice(1)];
                     }
                 }
             }
 
             if (this.isHost && event === 'token:update_delta') {
-                const { mapId, tokenId, changes } = args[0] || {};
-                const currentToken = window.VTT?.campaignState?.maps?.[mapId]?.tokens?.[tokenId];
+                const { mapId, tokenId } = args[0] || {};
+                const currentToken = global.VTT?.campaignState?.maps?.[mapId]?.tokens?.[tokenId];
                 if (
                     currentToken &&
                     (currentToken.layer === 'gm' || currentToken.isVisible === false || currentToken.hidden)
                 ) {
+                    this._persistHostCampaignState();
                     return this;
                 }
             }
 
-            const persistHostState = () => {
-                if (
-                    this.isHost &&
-                    typeof global !== 'undefined' &&
-                    typeof global.__persistStaticCampaign === 'function' &&
-                    global.VTT?.campaignState
-                ) {
-                    global.__persistStaticCampaign(global.VTT.campaignState);
-                }
-            };
-
             const envelope = JSON.stringify({
                 type: 'event',
                 event,
-                args,
+                args: outboundArgs,
                 sender: this.username,
                 role: this.role,
                 timestamp: Date.now()
             });
 
             if (this.isHost) {
-                persistHostState();
-                // Host broadcast to all connected peer data channels
+                this._persistHostCampaignState();
                 this._broadcastToPeers(envelope);
             } else {
-                // Client sends directly to host
                 if (this.hostPeer) {
                     this._sendToPeer(this.hostPeer, envelope);
                 } else {
@@ -265,12 +344,47 @@
         }
 
         async _handleHostSelfJoin(joinData = {}) {
-            let campaignState = window.VTT?.campaignState || null;
+            let gmSessionToken = global.VTT?.gmSessionToken || null;
+            if (!global.__FORGEDVTT_STATIC_WEB__ && typeof fetch === 'function') {
+                const pw = joinData.gmPassword ?? this.gmPassword;
+                const uName = joinData.username || this.username;
+                if (pw) {
+                    try {
+                        const loginRes = await fetch('/api/gm-login', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ username: uName, password: pw })
+                        });
+                        const loginData = await loginRes.json().catch(() => ({}));
+                        if (!loginRes.ok || !loginData.success) {
+                            this._dispatch('join_rejected', {
+                                reason: loginData.error || 'Incorrect GM Password.'
+                            });
+                            return;
+                        }
+                        if (loginData.token) {
+                            gmSessionToken = loginData.token;
+                            if (global.VTT) global.VTT.gmSessionToken = gmSessionToken;
+                        }
+                    } catch (err) {
+                        console.warn('[P2P Adapter] Express GM login error:', err);
+                    }
+                }
+            }
+
+            let campaignState = global.VTT?.campaignState || null;
             if (!campaignState && typeof fetch === 'function') {
                 try {
-                    const res = await fetch(`/api/campaigns/${encodeURIComponent(this.campaignId)}`);
+                    const headers = typeof global.vttAuthHeaders === 'function' ? global.vttAuthHeaders() : {};
+                    if (gmSessionToken) headers['x-gm-token'] = gmSessionToken;
+                    const res = await fetch(`/api/campaigns/${encodeURIComponent(this.campaignId)}`, { headers });
                     if (res.ok) {
                         campaignState = await res.json();
+                    } else if (res.status === 401 || res.status === 403) {
+                        this._dispatch('join_rejected', {
+                            reason: 'GM authentication required to access this server campaign.'
+                        });
+                        return;
                     }
                 } catch (e) {
                     console.warn('[P2P Adapter] Could not fetch campaign from server:', e);
@@ -281,10 +395,16 @@
                 this._dispatch('joined', {
                     role: 'GM',
                     userRole: 'GM',
-                    campaignState: campaignState || { id: this.campaignId, name: 'P2P Campaign' },
-                    chatHistory: window.VTT?.chatHistory || []
+                    gmSessionToken,
+                    campaignState: campaignState || {
+                        id: this.campaignId,
+                        name: 'P2P Campaign',
+                        maps: {},
+                        characters: {}
+                    },
+                    chatHistory: global.VTT?.chatHistory || []
                 });
-            }, 50);
+            }, 30);
         }
 
         disconnect() {
@@ -300,6 +420,7 @@
                 if (transfer?.timeoutId) clearTimeout(transfer.timeoutId);
             }
             this._assetTransfers.clear();
+            this._pendingAssetRequests.clear();
             for (const rpc of this._rpcTransfers.values()) {
                 if (rpc?.timeoutId) clearTimeout(rpc.timeoutId);
             }
@@ -366,6 +487,76 @@
             return true;
         }
 
+        requestAsset(url) {
+            if (!url || typeof url !== 'string' || this.isHost) return null;
+            if (this._remoteAssetBlobCache.has(url)) {
+                return this._remoteAssetBlobCache.get(url);
+            }
+            if (this.connected && this.hostPeer && !this._pendingAssetRequests.has(url)) {
+                this._pendingAssetRequests.add(url);
+                this._sendToPeer(this.hostPeer, JSON.stringify({ type: 'asset-request', url }));
+            }
+            return TRANSPARENT_ASSET_PLACEHOLDER;
+        }
+
+        resolveAssetUrl(url) {
+            if (!url || typeof url !== 'string') return null;
+            const isPrivateP2pAsset =
+                url.startsWith('forgedvtt-asset://') || url.startsWith('/vtt-uploads/') || url.startsWith('/assets/');
+            if (!isPrivateP2pAsset) return null;
+
+            if (this.isHost) {
+                if (url.startsWith('forgedvtt-asset://') && typeof global.__resolveStaticAssetUrl === 'function') {
+                    return global.__resolveStaticAssetUrl(url);
+                }
+                return null;
+            }
+
+            return this.requestAsset(url);
+        }
+
+        async _handlePeerAssetRequest(url, senderPeer) {
+            if (!this.isHost || !senderPeer || !senderPeer.joined || typeof url !== 'string') return;
+            const isSafeLocal =
+                url.startsWith('forgedvtt-asset://') || url.startsWith('/vtt-uploads/') || url.startsWith('/assets/');
+            if (!isSafeLocal || url.includes('..') || url.includes('\0')) return;
+
+            try {
+                let blob = null;
+                let mimeType = 'application/octet-stream';
+                if (url.startsWith('forgedvtt-asset://') && global.__staticAssetStore?.getBlob) {
+                    const rec = await global.__staticAssetStore.getBlob(url);
+                    if (rec instanceof Blob) {
+                        blob = rec;
+                        mimeType = rec.type || mimeType;
+                    } else if (rec?.blob) {
+                        blob = rec.blob;
+                        mimeType = rec.mimeType || rec.blob.type || mimeType;
+                    }
+                } else if (typeof fetch === 'function') {
+                    const headers = typeof global.vttAuthHeaders === 'function' ? global.vttAuthHeaders() : {};
+                    const res = await fetch(url, { headers });
+                    if (res.ok) {
+                        blob = await res.blob();
+                        mimeType = res.headers.get('content-type')?.split(';')[0]?.trim() || blob.type || mimeType;
+                    }
+                }
+                if (!blob) return;
+                const arrayBuf = await blob.arrayBuffer();
+                const bytes = new Uint8Array(arrayBuf);
+                let binary = '';
+                const step = 0x8000;
+                for (let i = 0; i < bytes.length; i += step) {
+                    binary += String.fromCharCode(...bytes.subarray(i, i + step));
+                }
+                const base64Data = btoa(binary);
+                const assetId = `p2p_asset_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+                await this._streamAssetToPeer(senderPeer, assetId, base64Data, mimeType, { originalUrl: url });
+            } catch (err) {
+                console.warn(`[P2P Adapter] Could not fulfill asset request for ${url}:`, err);
+            }
+        }
+
         _handleIncomingData(rawMessage, senderPeer = null) {
             let payload;
             try {
@@ -411,6 +602,13 @@
                     break;
                 }
 
+                case 'asset-request': {
+                    if (this.isHost && senderPeer) {
+                        this._handlePeerAssetRequest(payload.url, senderPeer);
+                    }
+                    break;
+                }
+
                 case 'event': {
                     const { event, args } = payload;
 
@@ -421,7 +619,7 @@
                         const playerName = String(joinData.username || 'Player').trim() || 'Player';
 
                         // Allowlist & reserved GM name verification
-                        const campState = window.VTT?.campaignState;
+                        const campState = global.VTT?.campaignState;
                         const gmName = String(campState?.gmUsername || this.username || '')
                             .trim()
                             .toLowerCase();
@@ -454,6 +652,7 @@
                         senderPeer.joined = true;
                         senderPeer.username = playerName;
                         senderPeer.role = playerRole;
+                        this._syncPeersToBackendBridge();
 
                         // Authoritative sanitization: GM secrets never sent to players
                         const sanitizedState = this._sanitizeCampaignStateForPlayer(campState, playerName);
@@ -465,7 +664,7 @@
                                     role: playerRole,
                                     userRole: playerRole,
                                     campaignState: sanitizedState,
-                                    chatHistory: (window.VTT?.chatHistory || []).slice(-50)
+                                    chatHistory: (global.VTT?.chatHistory || []).slice(-50)
                                 }
                             ]
                         });
@@ -494,6 +693,11 @@
                             );
                             return;
                         }
+                        if (global.VttP2PHostEngine && typeof global.VttP2PHostEngine.processEvent === 'function') {
+                            if (global.VttP2PHostEngine.processEvent({ adapter: this, event, args, senderPeer })) {
+                                return;
+                            }
+                        }
                     }
 
                     // Dispatch to local listeners
@@ -501,9 +705,7 @@
 
                     // If Host, persist and forward/rebroadcast player-safe events to other peers (except sender)
                     if (this.isHost && senderPeer) {
-                        if (typeof global.__persistStaticCampaign === 'function' && global.VTT?.campaignState) {
-                            global.__persistStaticCampaign(global.VTT.campaignState);
-                        }
+                        this._persistHostCampaignState();
                         const safeForward = JSON.stringify({
                             type: 'event',
                             event,
@@ -594,6 +796,12 @@
             delete clone.gmCredentials;
             delete clone.activeGMMapId;
 
+            if (!clone.mapOrder && clone.maps) clone.mapOrder = Object.keys(clone.maps);
+            const activeIds = new Set();
+            if (clone.activeMapId) activeIds.add(clone.activeMapId);
+            const overrideId = clone.playerMapOverrides?.[username];
+            if (overrideId) activeIds.add(overrideId);
+
             if (clone.maps) {
                 for (const mapId in clone.maps) {
                     const m = clone.maps[mapId];
@@ -612,7 +820,17 @@
                         m.portals = m.portals.filter((p) => p && !p.isSecret);
                     }
                     m.traps = [];
-                    m.notes = [];
+                    if (activeIds.size > 0 && !activeIds.has(mapId)) {
+                        m.walls = [];
+                        m.lights = [];
+                        m.shapes = {};
+                        m.drawings = {};
+                        m.notes = [];
+                    } else {
+                        m.notes = Array.isArray(m.notes)
+                            ? m.notes.filter((n) => n && (n.isPublic || n.author === username))
+                            : [];
+                    }
                 }
             }
             return clone;
@@ -623,15 +841,38 @@
                 if (transfer?.timeoutId) {
                     clearTimeout(transfer.timeoutId);
                 }
-                // Reconstruct full binary or base64 blob
                 const fullBase64 = transfer.chunks.join('');
                 const dataUrl = `data:${transfer.mimeType};base64,${fullBase64}`;
                 this._assetTransfers.delete(id);
 
-                // Notify asset consumers (canvas / cache)
+                let resolvedUrl = dataUrl;
+                const origUrl = transfer.meta?.originalUrl;
+                if (origUrl) {
+                    this._pendingAssetRequests.delete(origUrl);
+                    if (
+                        typeof atob === 'function' &&
+                        typeof Blob !== 'undefined' &&
+                        typeof URL?.createObjectURL === 'function'
+                    ) {
+                        try {
+                            const binStr = atob(fullBase64);
+                            const bytes = new Uint8Array(binStr.length);
+                            for (let i = 0; i < binStr.length; i++) bytes[i] = binStr.charCodeAt(i);
+                            const blob = new Blob([bytes], { type: transfer.mimeType });
+                            resolvedUrl = URL.createObjectURL(blob);
+                        } catch (_) {
+                            resolvedUrl = dataUrl;
+                        }
+                    }
+                    this._remoteAssetBlobCache.set(origUrl, resolvedUrl);
+                    global.VTT?.canvasEngine?.refreshAssetUrl?.(origUrl);
+                }
+
                 this._dispatch('asset:received', {
                     id,
+                    originalUrl: origUrl,
                     url: dataUrl,
+                    blobUrl: resolvedUrl,
                     meta: transfer.meta
                 });
             } catch (err) {
@@ -639,24 +880,63 @@
             }
         }
 
-        _sendRawPacket(peer, text) {
-            if (peer.conn?.open) {
+        _sendRawPacket(peer, text, preferAssets = false) {
+            const ch = preferAssets && peer.assetsChannel?.readyState === 'open' ? peer.assetsChannel : null;
+            if (ch) {
+                ch.send(text);
+            } else if (peer.conn?.open) {
                 peer.conn.send(text);
             } else if (peer.eventsChannel?.readyState === 'open') {
                 peer.eventsChannel.send(text);
             }
         }
 
-        _sendToPeer(peer, message) {
+        _getBufferedAmount(peer, preferAssets = false) {
+            const dc =
+                preferAssets && peer.assetsChannel?.readyState === 'open'
+                    ? peer.assetsChannel
+                    : peer.conn?.dataChannel || peer.eventsChannel;
+            return dc && typeof dc.bufferedAmount === 'number' ? dc.bufferedAmount : 0;
+        }
+
+        async _streamAssetToPeer(peer, assetId, base64Data, mimeType = 'image/jpeg', meta = {}) {
+            if (!peer || !base64Data) return;
+            const totalLen = base64Data.length;
+            const totalChunks = Math.ceil(totalLen / CHUNK_SIZE);
+            const startPacket = JSON.stringify({
+                type: 'asset-start',
+                id: assetId,
+                totalChunks,
+                totalBytes: totalLen,
+                mimeType,
+                meta
+            });
+            this._sendToPeer(peer, startPacket, true);
+
+            for (let i = 0; i < totalChunks; i++) {
+                const chunkPacket = JSON.stringify({
+                    type: 'asset-chunk',
+                    id: assetId,
+                    index: i,
+                    data: base64Data.slice(i * CHUNK_SIZE, (i + 1) * CHUNK_SIZE)
+                });
+                this._sendRawPacket(peer, chunkPacket, true);
+                if (i % 10 === 0 || this._getBufferedAmount(peer, true) > 256 * 1024) {
+                    await new Promise((r) => setTimeout(r, 8));
+                }
+            }
+        }
+
+        _sendToPeer(peer, message, preferAssets = false) {
             try {
                 const str = typeof message === 'string' ? message : JSON.stringify(message);
                 if (str.length <= CHUNK_SIZE) {
-                    this._sendRawPacket(peer, str);
+                    this._sendRawPacket(peer, str, preferAssets);
                     return;
                 }
                 const rpcId = `rpc_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
                 const totalChunks = Math.ceil(str.length / CHUNK_SIZE);
-                this._sendRawPacket(peer, JSON.stringify({ type: 'rpc-start', id: rpcId, totalChunks }));
+                this._sendRawPacket(peer, JSON.stringify({ type: 'rpc-start', id: rpcId, totalChunks }), preferAssets);
                 for (let i = 0; i < totalChunks; i++) {
                     this._sendRawPacket(
                         peer,
@@ -665,7 +945,8 @@
                             id: rpcId,
                             index: i,
                             data: str.slice(i * CHUNK_SIZE, (i + 1) * CHUNK_SIZE)
-                        })
+                        }),
+                        preferAssets
                     );
                 }
             } catch (err) {
@@ -691,7 +972,6 @@
             const totalLen = base64Data.length;
             const totalChunks = Math.ceil(totalLen / CHUNK_SIZE);
 
-            // 1. Send start header
             const startPacket = JSON.stringify({
                 type: 'asset-start',
                 id: assetId,
@@ -700,21 +980,30 @@
                 mimeType,
                 meta
             });
-            this._broadcastToPeers(startPacket);
+            for (const [, peer] of this.peers.entries()) {
+                if (peer.joined) {
+                    this._sendToPeer(peer, startPacket, true);
+                }
+            }
 
-            // 2. Stream chunks sequentially
             for (let i = 0; i < totalChunks; i++) {
-                const chunkSlice = base64Data.substr(i * CHUNK_SIZE, CHUNK_SIZE);
+                const chunkSlice = base64Data.slice(i * CHUNK_SIZE, (i + 1) * CHUNK_SIZE);
                 const chunkPacket = JSON.stringify({
                     type: 'asset-chunk',
                     id: assetId,
                     index: i,
                     data: chunkSlice
                 });
-                this._broadcastToPeers(chunkPacket);
+                let needsBackpressure = false;
+                for (const [, peer] of this.peers.entries()) {
+                    if (!peer.joined) continue;
+                    this._sendRawPacket(peer, chunkPacket, true);
+                    if (this._getBufferedAmount(peer, true) > 256 * 1024) {
+                        needsBackpressure = true;
+                    }
+                }
 
-                // Small pause every 10 chunks to avoid saturating RTCDataChannel buffer
-                if (i % 10 === 0) {
+                if (i % 10 === 0 || needsBackpressure) {
                     await new Promise((r) => setTimeout(r, 8));
                 }
             }
@@ -755,11 +1044,13 @@
             };
             eventsChannel.onclose = () => {
                 this.peers.delete(peerId);
+                this._syncPeersToBackendBridge();
                 this._dispatch('peer:disconnected', { peerId });
             };
             pc.onconnectionstatechange = () => {
-                if (['failed', 'closed', 'disconnected'].includes(pc.connectionState)) {
+                if (['failed', 'closed'].includes(pc.connectionState)) {
                     this.peers.delete(peerId);
+                    this._syncPeersToBackendBridge();
                     this._dispatch('peer:disconnected', { peerId });
                 }
             };
@@ -813,7 +1104,7 @@
                 }
             };
             pc.onconnectionstatechange = () => {
-                if (['failed', 'closed', 'disconnected'].includes(pc.connectionState)) {
+                if (['failed', 'closed'].includes(pc.connectionState)) {
                     this.connected = false;
                     this._dispatch('disconnect', `webrtc ${pc.connectionState}`);
                 }
@@ -871,17 +1162,33 @@
         // PUBLIC BROKER SIGNALING (1-Click 6-Digit Room Codes)
         // =========================================================================
 
+        static normalizeRoomCode(rawCode) {
+            const clean = String(rawCode || '')
+                .toUpperCase()
+                .replace(/[^A-Z0-9]/g, '');
+            if (clean.length === 8) {
+                return `${clean.slice(0, 4)}-${clean.slice(4)}`;
+            }
+            return String(rawCode || '')
+                .toUpperCase()
+                .trim();
+        }
+
         /**
-         * Connects using a 6-digit room code via the public signaling broker.
+         * Connects using a room code via the public signaling broker.
          */
         async connectWithRoomCode(roomCode) {
             this.isConnecting = true;
-            const code = String(roomCode).toUpperCase().trim();
+            const code = VttP2PAdapter.normalizeRoomCode(roomCode);
 
             return new Promise((resolve, reject) => {
+                let settled = false;
                 const timeout = setTimeout(() => {
                     this.isConnecting = false;
-                    reject(new Error('P2P connection timed out (possible Symmetric NAT).'));
+                    if (!settled) {
+                        settled = true;
+                        reject(new Error('P2P connection timed out (possible Symmetric NAT).'));
+                    }
                 }, 10000);
 
                 // Check if PeerJS library is available in global scope
@@ -903,11 +1210,17 @@
                     if (this.isHost) {
                         peer.on('open', (id) => {
                             clearTimeout(timeout);
+                            const wasReconnecting = settled;
+                            settled = true;
                             this.connected = true;
                             this.isConnecting = false;
-                            this._dispatch('connect');
-                            this._dispatch('p2p:host-ready', { roomCode: code, peerId: id });
-                            resolve({ roomCode: code, peerId: id });
+                            if (wasReconnecting) {
+                                this._dispatch('io:reconnect');
+                            } else {
+                                this._dispatch('connect');
+                                this._dispatch('p2p:host-ready', { roomCode: code, peerId: id });
+                                resolve({ roomCode: code, peerId: id });
+                            }
                         });
 
                         peer.on('connection', (conn) => {
@@ -918,6 +1231,7 @@
                             const conn = peer.connect(`dndforged-${code}`, { reliable: true });
                             conn.on('open', () => {
                                 clearTimeout(timeout);
+                                settled = true;
                                 this.connected = true;
                                 this.isConnecting = false;
                                 this.hostPeer = { conn, eventsChannel: conn };
@@ -948,10 +1262,14 @@
                     peer.on('error', (err) => {
                         clearTimeout(timeout);
                         this.isConnecting = false;
-                        reject(err);
+                        if (!settled) {
+                            settled = true;
+                            reject(err);
+                        } else {
+                            this._dispatch('io:reconnect_attempt', 1);
+                        }
                     });
                 } else {
-                    // Fallback to manual mode if no broker library loaded
                     clearTimeout(timeout);
                     reject(new Error('Signaling broker library not loaded. Please use Manual Invite Code mode.'));
                 }
@@ -960,16 +1278,25 @@
 
         _wirePeerJsConnection(conn) {
             const peerId = conn.peer;
-            const peerRecord = { id: peerId, conn, eventsChannel: conn, status: 'connected' };
+            const peerRecord = { id: peerId, conn, eventsChannel: conn, status: 'connecting' };
             this.peers.set(peerId, peerRecord);
 
+            conn.on('open', () => {
+                peerRecord.status = 'connected';
+                this._dispatch('peer:connected', { peerId });
+            });
             conn.on('data', (data) => this._handleIncomingData(data, peerRecord));
             conn.on('close', () => {
                 this.peers.delete(peerId);
+                this._syncPeersToBackendBridge();
                 this._dispatch('peer:disconnected', { peerId });
             });
-
-            this._dispatch('peer:connected', { peerId });
+            conn.on('error', (err) => {
+                console.warn(`[P2P Adapter] Peer connection error (${peerId}):`, err);
+                this.peers.delete(peerId);
+                this._syncPeersToBackendBridge();
+                this._dispatch('peer:disconnected', { peerId });
+            });
         }
 
         // =========================================================================

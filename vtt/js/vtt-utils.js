@@ -8,15 +8,70 @@
  */
 export function getSafeVttUrl(url) {
     if (!url || typeof url !== 'string') return url;
+    const isStaticWeb = typeof window !== 'undefined' && Boolean(window.__FORGEDVTT_STATIC_WEB__);
     if (url.includes('discordapp.com') || url.includes('discordapp.net')) {
+        if (isStaticWeb) return url;
         return '/api/proxy-discord?url=' + encodeURIComponent(url);
     }
+    if (
+        typeof window !== 'undefined' &&
+        window.VTT?.socket &&
+        typeof window.VTT.socket.resolveAssetUrl === 'function'
+    ) {
+        const resolved = window.VTT.socket.resolveAssetUrl(url);
+        if (resolved) return resolved;
+    }
+    if (typeof window !== 'undefined' && typeof window.__resolveStaticAssetUrl === 'function') {
+        const resolved = window.__resolveStaticAssetUrl(url);
+        if (resolved) return resolved;
+    }
     if (url.startsWith('img/bestiary/tokens/') || url.startsWith('/img/bestiary/tokens/')) {
-        const sep = url.includes('?') ? '&' : '?';
+        let outUrl = url;
+        if (isStaticWeb && outUrl.toLowerCase().endsWith('.webp')) {
+            outUrl = outUrl.slice(0, -5) + '.svg';
+        }
+        const sep = outUrl.includes('?') ? '&' : '?';
         const version = (typeof window !== 'undefined' && window?.VTT?.buildVersion) || '1';
-        return url + sep + 'v=' + encodeURIComponent(version);
+        return outUrl + sep + 'v=' + encodeURIComponent(version);
     }
     return url;
+}
+
+/**
+ * Normalizes a creature name to the canonical token filename (preserving spaces/hyphens).
+ * @param {string} name
+ * @returns {string}
+ */
+export function normalizeMonsterTokenFilename(name) {
+    return String(name || '')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/Æ/g, 'AE')
+        .replace(/æ/g, 'ae')
+        .replace(/[<>:"/\\|?*]/g, '')
+        .trim();
+}
+
+/**
+ * Resolves the canonical bestiary token image URL for a monster object,
+ * using .svg in Static Web / SRD-only mode and .webp otherwise.
+ * @param {object} monster
+ * @returns {string|null}
+ */
+export function resolveMonsterTokenUrl(monster) {
+    if (!monster) return null;
+    if (monster.tokenImg) return monster.tokenImg;
+    if (monster.tokenUrl) return monster.tokenUrl;
+    if (monster.imgUrl) return monster.imgUrl;
+    const isStaticWeb = typeof window !== 'undefined' && Boolean(window.__FORGEDVTT_STATIC_WEB__);
+    const ext = isStaticWeb || (typeof window !== 'undefined' && window.VTT?.srdTokensOnly) ? 'svg' : 'webp';
+    const src = monster.source || 'MM';
+    const cleanName =
+        typeof Parser !== 'undefined' && Parser?.nameToTokenName
+            ? Parser.nameToTokenName(monster.name)
+            : normalizeMonsterTokenFilename(monster.name);
+    if (!cleanName) return null;
+    return `img/bestiary/tokens/${src}/${cleanName}.${ext}`;
 }
 
 /**
@@ -163,6 +218,8 @@ if (typeof window !== 'undefined') {
     window.VTT = window.VTT || {};
     window.VTT.utils = {
         getSafeVttUrl,
+        normalizeMonsterTokenFilename,
+        resolveMonsterTokenUrl,
         escapeHtml,
         stripHtml,
         clamp,
@@ -177,5 +234,8 @@ if (typeof window !== 'undefined') {
     }
     if (!window.getPlayerMapOverride) {
         window.getPlayerMapOverride = getPlayerMapOverride;
+    }
+    if (!window.resolveMonsterTokenUrl) {
+        window.resolveMonsterTokenUrl = resolveMonsterTokenUrl;
     }
 }

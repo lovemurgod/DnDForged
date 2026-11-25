@@ -165,7 +165,7 @@ export function isSameSiteOrLocalBrowserRequest(req) {
     const secFetch = String(req.headers['sec-fetch-site'] || '').toLowerCase();
     if (secFetch === 'cross-site') return false;
     const origin = req.headers.origin;
-    if (origin && origin !== 'null' && !isLocalOriginUrl(origin)) {
+    if (origin && !isLocalOriginUrl(origin)) {
         return false;
     }
     if (!origin && req.headers.referer && !isLocalOriginUrl(req.headers.referer)) {
@@ -180,7 +180,10 @@ export function isLoopbackRequest(req) {
     const isLocalIp = ip === '127.0.0.1' || ip === '::1' || ip === '::ffff:127.0.0.1';
     // Check if request was forwarded through proxy / tunnel from a remote address
     const forwarded =
-        req.headers?.['x-forwarded-for'] || req.headers?.['cf-connecting-ip'] || req.headers?.['x-real-ip'];
+        req.headers?.['x-forwarded-for'] ||
+        req.headers?.forwarded ||
+        req.headers?.['cf-connecting-ip'] ||
+        req.headers?.['x-real-ip'];
     return isLocalIp && !forwarded;
 }
 
@@ -636,6 +639,14 @@ export function sanitizeImportedObject(value) {
     return clean;
 }
 
+const dataDirChangeCallbacks = [];
+
+export function onDatabaseDirectoryChanged(fn) {
+    if (typeof fn === 'function' && !dataDirChangeCallbacks.includes(fn)) {
+        dataDirChangeCallbacks.push(fn);
+    }
+}
+
 export function setDatabaseDirectory(newDir) {
     if (!newDir || typeof newDir !== 'string' || newDir.includes('\0')) {
         throw new Error('Invalid database directory path');
@@ -655,6 +666,13 @@ export function setDatabaseDirectory(newDir) {
     }
     loadDatabase();
     loadSourcesConfig();
+    for (const cb of dataDirChangeCallbacks) {
+        try {
+            cb(DATA_DIR);
+        } catch (err) {
+            console.warn('[Database] Directory change callback error:', err.message);
+        }
+    }
     console.log(`[Database] Dynamically switched active DATA_DIR to: ${DATA_DIR}`);
 }
 

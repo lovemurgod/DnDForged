@@ -50,11 +50,14 @@ test.describe('Bestiary Compendium Spawning & Creature Rolls E2E Suite', () => {
     });
 
     async function ensureBestiaryTabActive(page) {
-        const btnLib = page.locator('button.tab-header[data-tab="tab-library"]');
-        if (await btnLib.isVisible()) {
-            await btnLib.click();
-        }
         const libraryTab = page.locator('#tab-library');
+        const isAlreadyActive = await libraryTab.evaluate((el) => el.classList.contains('active')).catch(() => false);
+        if (!isAlreadyActive) {
+            const btnLib = page.locator('button.tab-header[data-tab="tab-library"]');
+            if (await btnLib.isVisible()) {
+                await btnLib.click();
+            }
+        }
         await expect(libraryTab).toHaveClass(/active/, { timeout: 5000 });
         // Ensure Official sub-tab active
         const officialTab = page.locator('#lib-official');

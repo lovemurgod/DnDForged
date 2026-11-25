@@ -8,6 +8,7 @@ import {
     DEFAULT_TOKEN_DROP_CONFIG
 } from './canvas/tokens/vtt-canvas-token-drop-config.js';
 import { openCreatureSelectorModal } from './modals/creature-selector-modal.js';
+import { resolveMonsterTokenUrl } from './vtt-utils.js';
 
 export function initVttDataBridge(vtt) {
     const listContainer = document.getElementById('library-monster-list');
@@ -914,12 +915,8 @@ export function initVttDataBridge(vtt) {
             } catch (e) {}
         }
         if (monster.hasToken || monster.source || monster.name) {
-            const cleanName =
-                typeof Parser !== 'undefined'
-                    ? Parser.nameToTokenName(monster.name)
-                    : (monster.name || '').replace(/"/g, '').trim();
-            const source = monster.source || 'MM';
-            return `img/bestiary/tokens/${source}/${cleanName}.webp`;
+            const resolved = resolveMonsterTokenUrl(monster);
+            if (resolved) return resolved;
         }
         // Fallback to offline arcane token
         return window.VTT?.generateArcaneToken
@@ -2807,8 +2804,8 @@ export function initVttDataBridge(vtt) {
             }
         }
 
-        // Local image path
-        const baseUrl = '/img/';
+        // Local image path (relative under active <base href>)
+        const baseUrl = 'img/';
         const mapUrl = baseUrl + targetMap.href.path;
         const thumbPath =
             (targetMap.hrefThumbnail && targetMap.hrefThumbnail.path) ||

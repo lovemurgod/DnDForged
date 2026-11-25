@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <base href="/play/">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ForgeD VTT - Sheet</title>
@@ -27,14 +26,20 @@
     <!-- 3D WebGL Dice Engine Stylesheet -->
     <link rel="stylesheet" href="css/dice-3d.css">
     
-    <!-- Socket.io -->
+    <!-- Socket.io & Static/P2P Shim -->
     <script>window.__FORGEDVTT_STATIC_WEB__ = true;</script>
     <script src="js/network/vtt-static-shim.js"></script>
-    
+    <script src="lib/peerjs.min.js"></script>
+    <script src="js/network/vtt-p2p-host-engine.js"></script>
+    <script src="js/network/vtt-p2p-adapter.js"></script>
+
     <!-- Three.js, Cannon.js & 3D WebGL Dice Engine -->
     <script src="lib/three.min.js"></script>
     <script src="lib/cannon.min.js"></script>
     <script src="js/dice-3d.js"></script>
+
+    <!-- DOMPurify Standalone Sanitizer (XSS Protection) -->
+    <script src="lib/purify.min.js"></script>
     
     <!-- ForgeDVTT Standalone Parsers & Utilities -->
     <script type="module" src="js/vtt-dice-parser.js"></script>
@@ -166,25 +171,88 @@
             window.Dice3D.init({ containerId: 'dice-box-canvas-container' });
         }
 
-        // Initialize Socket.io Connection
-        const socket = io({
-            query: {
-                campaignId: savedCampaign,
-                username: savedUser,
-                role: savedRole
-            }
-        });
-        window.VTT.socket = socket;
-
-        socket.on('connect', () => {
-            console.log(`[Standalone Sheet] Connected to campaign "${savedCampaign}"`);
-            socket.emit('join', {
-                campaignId: savedCampaign,
-                username: savedUser,
-                role: savedRole,
-                isSubWindow: true
+        // Initialize Socket.IO or Static/P2P BroadcastChannel Relay Connection
+        const isStaticOrNoIo =
+            Boolean(window.__FORGEDVTT_STATIC_WEB__) ||
+            typeof io === 'undefined' ||
+            Boolean(urlParams.get('p2p'));
+        const socketListeners = new Map();
+        const makeLocalRelaySocket = () => {
+            const s = {
+                connected: true,
+                id: 'sheet_relay_' + Math.random().toString(36).slice(2, 8),
+                on: (evt, cb) => {
+                    if (!socketListeners.has(evt)) socketListeners.set(evt, new Set());
+                    socketListeners.get(evt).add(cb);
+                },
+                off: (evt, cb) => {
+                    if (socketListeners.has(evt)) {
+                        if (cb) socketListeners.get(evt).delete(cb);
+                        else socketListeners.delete(evt);
+                    }
+                },
+                emit: (evt, ...args) => {
+                    if (evt === 'join') return;
+                    SheetWindowManager.broadcast({ action: 'SHEET_SOCKET_EMIT', event: evt, args });
+                },
+                _dispatch: (evt, ...args) => {
+                    if (socketListeners.has(evt)) {
+                        for (const cb of socketListeners.get(evt)) {
+                            try {
+                                cb(...args);
+                            } catch (e) {}
+                        }
+                    }
+                }
+            };
+            SheetWindowManager.onSocketEvent((pkt) => {
+                if (pkt?.event) s._dispatch(pkt.event, ...(Array.isArray(pkt.args) ? pkt.args : []));
             });
-        });
+            return s;
+        };
+
+        let socket;
+        if (isStaticOrNoIo) {
+            socket = makeLocalRelaySocket();
+            window.VTT.socket = socket;
+            setTimeout(async () => {
+                let camp = window.opener?.VTT?.campaignState || null;
+                if (!camp && typeof fetch === 'function') {
+                    try {
+                        const res = await fetch(`/api/campaigns/${encodeURIComponent(savedCampaign)}`);
+                        if (res.ok) camp = await res.json();
+                    } catch (_) {}
+                }
+                socket._dispatch('joined', {
+                    campaignState: camp || { id: savedCampaign, name: 'Campaign', characters: {} }
+                });
+            }, 20);
+        } else {
+            socket = io({
+                query: {
+                    campaignId: savedCampaign,
+                    username: savedUser,
+                    role: savedRole
+                }
+            });
+            window.VTT.socket = socket;
+
+            socket.on('connect', () => {
+                console.log(`[Standalone Sheet] Connected to campaign "${savedCampaign}"`);
+                let gmSessionToken = window.opener?.VTT?.gmSessionToken || null;
+                try {
+                    if (!gmSessionToken) gmSessionToken = sessionStorage.getItem('forgedvtt_gm_token_vtt') || null;
+                } catch (_) {}
+                if (gmSessionToken) window.VTT.gmSessionToken = gmSessionToken;
+                socket.emit('join', {
+                    campaignId: savedCampaign,
+                    username: savedUser,
+                    role: savedRole,
+                    gmSessionToken,
+                    isSubWindow: true
+                });
+            });
+        }
 
         // Initialize Modules
         window.VTT.creatureSheet = initVttCreatureSheet(window.VTT);

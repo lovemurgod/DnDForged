@@ -19,6 +19,7 @@ import {
   ASSETS_DIR,
   VTT_DIR,
   VTT_DATA_DIR,
+  TUNNEL_ROOT_DOMAINS,
   campaigns,
   extractSubdomain,
   getOrCreateCampaign,
@@ -42,6 +43,22 @@ import { initSocketServer, broadcastCampaignSync } from './server/socket.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+function isHostMatch(hostname, domain) {
+  return hostname === domain || hostname.endsWith('.' + domain);
+}
+
+function isAllowedTunnelOrigin(origin) {
+  if (!origin) return false;
+  try {
+    const parsed = new URL(origin);
+    if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') return false;
+    const h = parsed.hostname.toLowerCase();
+    return TUNNEL_ROOT_DOMAINS.some((domain) => isHostMatch(h, domain));
+  } catch {
+    return false;
+  }
+}
+
 function isAllowedWebOrigin(origin, requestHost) {
   if (!origin) return true;
   if (isLocalOriginUrl(origin)) return true;
@@ -51,7 +68,7 @@ function isAllowedWebOrigin(origin, requestHost) {
     const reqHostLower = requestHost ? String(requestHost).toLowerCase() : '';
     if (reqHostLower && parsed.host.toLowerCase() === reqHostLower) return true;
     const h = parsed.hostname.toLowerCase();
-    return h === 'forgedvtt.com' || h === 'www.forgedvtt.com';
+    return isHostMatch(h, 'forgedvtt.com');
   } catch {
     return false;
   }
@@ -61,7 +78,7 @@ const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: (origin, cb) => cb(null, isAllowedWebOrigin(origin, null) || origin?.includes('trycloudflare.com') || origin?.includes('ngrok') || origin?.includes('localtunnel.me')),
+    origin: (origin, cb) => cb(null, isAllowedWebOrigin(origin, null) || isAllowedTunnelOrigin(origin)),
     methods: ["GET", "POST"]
   },
   allowRequest: (req, cb) => {
@@ -153,6 +170,7 @@ app.get(['/download/installer', '/download/latest', '/download/setup', '/downloa
 // Uploads with per-campaign subdomain isolation, strict path validation & legacy fallbacks
 app.use('/vtt-uploads', (req, res, next) => {
   res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('Content-Security-Policy', "sandbox; default-src 'none'; img-src 'self'; media-src 'self'");
   let decodedPath = '';
   try {
     decodedPath = decodeURIComponent(req.path);
@@ -168,28 +186,52 @@ app.use('/vtt-uploads', (req, res, next) => {
 
   const relPath = decodedPath.replace(/^[/\\]+/, '');
   const rawCamp = extractSubdomain(req.headers.host) || req.query.campaignId || req.headers['x-campaign-id'];
-  const sub = typeof rawCamp === 'string' ? rawCamp.trim() : null;
+  const sub = typeof rawCamp === 'string' ? rawCamp.replace(/[^a-zA-Z0-9_-]/g, '').trim() : '';
 
   // 1. Check campaign-specific uploads directory if campaign or subdomain is active
+  const campaignsRoot = path.resolve(DATA_DIR, 'campaigns');
   if (sub) {
-    const subDir = path.join(DATA_DIR, 'campaigns', sub, 'uploads');
+    const subDir = path.resolve(campaignsRoot, sub, 'uploads');
     const subFilePath = path.resolve(subDir, relPath);
-    if (isValidAssetPath(subFilePath, subDir) && fs.existsSync(subFilePath) && fs.statSync(subFilePath).isFile()) {
+    if (
+      isValidAssetPath(subDir, campaignsRoot) &&
+      isValidAssetPath(subFilePath, subDir) &&
+      fs.existsSync(subFilePath) &&
+      fs.statSync(subFilePath).isFile()
+    ) {
       return res.sendFile(subFilePath);
     }
   }
 
-  // 2. Check root UPLOADS_DIR (and default campaign uploads when no campaign subdomain/id was supplied)
+  // 2. Check root UPLOADS_DIR (and campaign uploads folders safely when no explicit campaign was specified)
   const globalFilePath = path.resolve(UPLOADS_DIR, relPath);
   if (isValidAssetPath(globalFilePath, UPLOADS_DIR) && fs.existsSync(globalFilePath) && fs.statSync(globalFilePath).isFile()) {
     return res.sendFile(globalFilePath);
   }
 
   if (!sub) {
-    const defaultUploadsDir = path.join(DATA_DIR, 'campaigns', 'default', 'uploads');
+    const defaultUploadsDir = path.join(campaignsRoot, 'default', 'uploads');
     const defaultFilePath = path.resolve(defaultUploadsDir, relPath);
     if (isValidAssetPath(defaultFilePath, defaultUploadsDir) && fs.existsSync(defaultFilePath) && fs.statSync(defaultFilePath).isFile()) {
       return res.sendFile(defaultFilePath);
+    }
+    if (fs.existsSync(campaignsRoot)) {
+      try {
+        for (const entry of fs.readdirSync(campaignsRoot, { withFileTypes: true })) {
+          if (!entry.isDirectory() || entry.name === 'default') continue;
+          const campUploadsDir = path.resolve(campaignsRoot, entry.name, 'uploads');
+          const campFilePath = path.resolve(campUploadsDir, relPath);
+          if (
+            isValidAssetPath(campFilePath, campUploadsDir) &&
+            fs.existsSync(campFilePath) &&
+            fs.statSync(campFilePath).isFile()
+          ) {
+            return res.sendFile(campFilePath);
+          }
+        }
+      } catch (err) {
+        console.warn('[Uploads] Failed scanning campaign upload folders:', err.message);
+      }
     }
   }
 
@@ -202,14 +244,22 @@ app.use('/assets/players', (req, res, next) => {
   res.setHeader('Content-Security-Policy', "sandbox; default-src 'none'; img-src 'self'; media-src 'self'");
   next();
 });
-app.use('/assets', express.static(ASSETS_DIR, {
-  maxAge: '2h',
-  etag: true,
-  lastModified: true,
-  setHeaders: (res) => {
-    res.setHeader('X-Content-Type-Options', 'nosniff');
+let cachedAssetsDir = null;
+let cachedAssetsStatic = null;
+app.use('/assets', (req, res, next) => {
+  if (cachedAssetsDir !== ASSETS_DIR || !cachedAssetsStatic) {
+    cachedAssetsDir = ASSETS_DIR;
+    cachedAssetsStatic = express.static(ASSETS_DIR, {
+      maxAge: '2h',
+      etag: true,
+      lastModified: true,
+      setHeaders: (r) => {
+        r.setHeader('X-Content-Type-Options', 'nosniff');
+      }
+    });
   }
-}));
+  return cachedAssetsStatic(req, res, next);
+});
 
 // Cross-wire module listeners
 registerCompendiumInvalidator(invalidateCompendiumCaches);
@@ -278,8 +328,8 @@ const CODE_CACHE_OPTS = { maxAge: 0, etag: true, lastModified: true };
 const LIB_CACHE_OPTS = { maxAge: '24h', etag: true, lastModified: true };
 
 // Serve standalone ForgeDVTT client data statically with compression & caching
-app.use(['/data', '/vtt/data'], express.static(VTT_DATA_DIR, STATIC_CACHE_OPTS));
-app.use(['/data', '/vtt/data'], (req, res, next) => {
+app.use(['/data', '/vtt/data', '/play/data'], express.static(VTT_DATA_DIR, STATIC_CACHE_OPTS));
+app.use(['/data', '/vtt/data', '/play/data'], (req, res, next) => {
   const relPath = req.path.replace(/^[/\\]+/, '');
   const target = path.resolve(VTT_DATA_DIR, relPath);
   if (!isValidAssetPath(target, VTT_DATA_DIR)) {
@@ -291,7 +341,28 @@ app.use(['/data', '/vtt/data'], (req, res, next) => {
   next();
 });
 
-app.use('/vtt', express.static(VTT_DIR, {
+// SRD CC0 Token fallback: serve .svg token cleanly when legacy .webp path is requested and .webp is absent
+const tokensImgDir = path.join(VTT_DIR, 'img', 'bestiary', 'tokens');
+app.use(['/img/bestiary/tokens', '/vtt/img/bestiary/tokens', '/play/img/bestiary/tokens'], (req, res, next) => {
+  const reqPath = req.path || '';
+  if (/\.webp$/i.test(reqPath)) {
+    const rel = reqPath.replace(/^[/\\]+/, '');
+    const webpTarget = path.resolve(tokensImgDir, rel);
+    if (!isValidAssetPath(webpTarget, tokensImgDir)) {
+      return res.status(403).send('Forbidden: Invalid token path');
+    }
+    if (!fs.existsSync(webpTarget)) {
+      const svgTarget = webpTarget.replace(/\.webp$/i, '.svg');
+      if (isValidAssetPath(svgTarget, tokensImgDir) && fs.existsSync(svgTarget) && fs.statSync(svgTarget).isFile()) {
+        res.setHeader('Cache-Control', 'public, max-age=7200');
+        return res.type('image/svg+xml').sendFile(svgTarget);
+      }
+    }
+  }
+  next();
+});
+
+const VTT_STATIC_MIDDLEWARE = express.static(VTT_DIR, {
   maxAge: '1h',
   etag: true,
   lastModified: true,
@@ -300,7 +371,9 @@ app.use('/vtt', express.static(VTT_DIR, {
       res.setHeader('Cache-Control', 'no-cache, must-revalidate');
     }
   }
-}));
+});
+app.use('/vtt', VTT_STATIC_MIDDLEWARE);
+app.use('/play', VTT_STATIC_MIDDLEWARE);
 
 app.get(['/vtt', '/vtt/', '/vtt.html'], (req, res) => {
   res.setHeader('Cache-Control', 'no-cache, must-revalidate');
@@ -311,6 +384,7 @@ app.get(['/vtt', '/vtt/', '/vtt.html'], (req, res) => {
 app.use('/css', express.static(path.join(VTT_DIR, 'css'), STATIC_CACHE_OPTS));
 app.use('/js', express.static(path.join(VTT_DIR, 'js'), CODE_CACHE_OPTS));
 app.use('/lib', express.static(path.join(VTT_DIR, 'lib'), LIB_CACHE_OPTS));
+app.use(['/audio', '/vtt/audio', '/play/audio'], express.static(path.join(VTT_DIR, 'audio'), STATIC_CACHE_OPTS));
 app.use(['/img', '/vtt/img'], express.static(path.join(VTT_DIR, 'img'), STATIC_CACHE_OPTS));
 
 // Serve 5etools-src statically as optional companion / compendium if present

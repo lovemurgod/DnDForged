@@ -88,28 +88,48 @@ function generateSvgToken(name, typeStr) {
 </svg>`;
 }
 
+function normalizeTokenName(name) {
+    return String(name || '')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/Æ/g, 'AE')
+        .replace(/æ/g, 'ae')
+        .replace(/[<>:"/\\|?*]/g, '')
+        .trim();
+}
+
+function resolveRelativeTokenSvgPath(creature) {
+    const rawUrl = creature.tokenUrl || creature.tokenImg || '';
+    const match = String(rawUrl).match(/^\/?img\/bestiary\/tokens\/(.+)$/i);
+    if (match && match[1]) {
+        return match[1].replace(/\.[^.]+$/, '.svg');
+    }
+    const source = creature.source || 'MM';
+    const cleanName = normalizeTokenName(creature.name);
+    return cleanName ? `${source}/${cleanName}.svg` : null;
+}
+
 let generatedCount = 0;
 
 if (fs.existsSync(catalogPath)) {
     const catalog = JSON.parse(fs.readFileSync(catalogPath, 'utf8'));
     for (const creature of catalog) {
-        const source = creature.source || 'MM';
-        const srcDir = path.join(targetTokenDir, source);
+        const relSvgPath = resolveRelativeTokenSvgPath(creature);
+        if (!relSvgPath) continue;
+
+        const svgPath = path.join(targetTokenDir, ...relSvgPath.split('/'));
+        const srcDir = path.dirname(svgPath);
         if (!fs.existsSync(srcDir)) {
             fs.mkdirSync(srcDir, { recursive: true });
         }
 
-        const cleanName = (creature.name || '').replace(/[^a-zA-Z0-9]/g, '');
-        if (!cleanName) continue;
-
-        // Save SVG token with clean name
-        const svgPath = path.join(srcDir, `${cleanName}.svg`);
+        // Write genuine SVG token only (never write SVG XML into .webp files)
         fs.writeFileSync(svgPath, generateSvgToken(creature.name, creature.type), 'utf8');
 
-        // Also save SVG as webp/fallback so any direct .webp URL resolves smoothly
-        const webpPath = path.join(srcDir, `${cleanName}.webp`);
-        if (!fs.existsSync(webpPath)) {
-            fs.writeFileSync(webpPath, generateSvgToken(creature.name, creature.type), 'utf8');
+        // Remove any legacy fake .webp file matching this token name if present
+        const legacyWebpPath = svgPath.replace(/\.svg$/i, '.webp');
+        if (fs.existsSync(legacyWebpPath)) {
+            fs.unlinkSync(legacyWebpPath);
         }
 
         generatedCount++;

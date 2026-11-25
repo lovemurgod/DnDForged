@@ -69,6 +69,8 @@
             Guide</a>
         </div>
       </div>
+      <a href="play/">Play Online</a>
+      <a href="prep/">Session Prep</a>
       <a href="feedback.html">Feedback</a>
     </nav>
     <a class="btn-vtt-gold site-download"
@@ -271,7 +273,10 @@
                 </li>
                 <li><code>assets/</code> — Uploaded battlemap graphics, custom token portraits, audio files, and video
                   loops.</li>
-                <li><code>auth.json</code> — Cryptographic hash of your Game Master password.</li>
+                <li><code>forge-config.json</code> (App Config) — Stores server port, tunnel domain preferences, active
+                  data folder path, and the cryptographic hash of your Game Master credentials.</li>
+                <li>Browser mode note: <a href="prep/">Browser Session Prep</a> and <a href="play/">Play Online</a>
+                  persist these same structures locally in IndexedDB or a linked folder via Chrome/Edge File System Access.</li>
               </ul>
             </div>
 
@@ -606,18 +611,19 @@
             </div>
 
             <div class="manual-subcard">
-              <h3 class=""><i class="fa-solid fa-rotate"></i> Running the Database Rebuilder</h3>
-              <p>After adding custom JSON packages, compile them into the active game catalog:</p>
+              <h3 class=""><i class="fa-solid fa-rotate"></i> Hot-Reloading Custom Sources</h3>
+              <p>After adding or toggling custom JSON packages in the Control Center or <a href="prep/">Session Prep</a>:</p>
               <ul>
-                <li><strong>In the Desktop App:</strong> Open the <strong>Database Sources</strong> tab in the Control
-                  Center and click <strong>Rebuild Catalogs</strong>.</li>
-                <li><strong>Via Developer Terminal:</strong> Run <code>npm run build:dbs</code> in the project root.
-                </li>
+                <li><strong>Automatic Live Sync:</strong> Changes saved or imported in the <strong>Database
+                    Sources</strong> tab automatically hot-reload compendium caches and broadcast live updates to active
+                  tabletop clients.</li>
+                <li><strong>Via Developer Terminal:</strong> Run <code>npm run build:dbs</code> in the project root to
+                  rebuild static bundled compendium indexes.</li>
                 <li><strong>Automatic Deduplication:</strong> ForgeDVTT resolves duplicate slugs by prioritizing custom
                   campaign homebrew over core SRD entries.</li>
                 <li><strong>Token Fallbacks:</strong> If a creature lacks artwork, ForgeDVTT automatically renders a
                   clean
-                  procedural initial-letter badge token on the canvas.</li>
+                  procedural initial-letter or CC0 SVG badge token on the canvas.</li>
               </ul>
             </div>
           </div>

@@ -83,35 +83,44 @@ for (const file of fs.readdirSync(path.join(rootDir, 'vtt'))) {
     }
 }
 
-// Rewrite docs/play/index.html and sheet.html for static /play/ base path
+// Helper to rewrite HTML files in docs/play for relative subpath-safe assets & P2P boot
+function transformPlayHtml(html, { isSheet = false } = {}) {
+    let out = html;
+    // Strip <base href="/vtt/"> so relative asset paths resolve cleanly under any mount (/play/ or /repo/play/) without speculative preload 404s
+    out = out.replace(/<base href="\/vtt\/">\s*/i, '');
+    out = out.replace(/<script src="\/socket\.io\/socket\.io\.js"><\/script>/i, () => {
+        if (!isSheet) {
+            return '<script>window.__FORGEDVTT_STATIC_WEB__ = true;</script>';
+        }
+        const parts = ['<script>window.__FORGEDVTT_STATIC_WEB__ = true;</script>'];
+        if (!out.includes('js/network/vtt-static-shim.js')) {
+            parts.push('    <script src="js/network/vtt-static-shim.js"></script>');
+        }
+        if (!out.includes('lib/peerjs.min.js')) {
+            parts.push('    <script src="lib/peerjs.min.js"></script>');
+        }
+        if (!out.includes('js/network/vtt-p2p-host-engine.js')) {
+            parts.push('    <script src="js/network/vtt-p2p-host-engine.js"></script>');
+        }
+        if (!out.includes('js/network/vtt-p2p-adapter.js')) {
+            parts.push('    <script src="js/network/vtt-p2p-adapter.js"></script>');
+        }
+        if (!out.includes('lib/purify.min.js')) {
+            parts.push('    <script src="lib/purify.min.js"></script>');
+        }
+        return parts.join('\n');
+    });
+    return out;
+}
+
 const playIndex = path.join(docsPlayDir, 'index.html');
 if (fs.existsSync(playIndex)) {
-    let html = fs.readFileSync(playIndex, 'utf8');
-    html = html.replace('<base href="/vtt/">', '<base href="/play/">');
-    html = html.replace(
-        '    <script src="/socket.io/socket.io.js"></script>\n',
-        '    <script>window.__FORGEDVTT_STATIC_WEB__ = true;</script>\n'
-    );
-    html = html.replace(
-        '    <script src="/socket.io/socket.io.js"></script>\r\n',
-        '    <script>window.__FORGEDVTT_STATIC_WEB__ = true;</script>\r\n'
-    );
-    fs.writeFileSync(playIndex, html, 'utf8');
+    fs.writeFileSync(playIndex, transformPlayHtml(fs.readFileSync(playIndex, 'utf8'), { isSheet: false }), 'utf8');
 }
 
 const playSheet = path.join(docsPlayDir, 'sheet.html');
 if (fs.existsSync(playSheet)) {
-    let sheetHtml = fs.readFileSync(playSheet, 'utf8');
-    if (!sheetHtml.includes('<base href=')) {
-        sheetHtml = sheetHtml.replace(/<head>/i, '<head>\n    <base href="/play/">');
-    } else {
-        sheetHtml = sheetHtml.replace(/<base href="\/vtt\/">/i, '<base href="/play/">');
-    }
-    sheetHtml = sheetHtml.replace(
-        /<script src="\/socket\.io\/socket\.io\.js"><\/script>/i,
-        '<script>window.__FORGEDVTT_STATIC_WEB__ = true;</script>\n    <script src="js/network/vtt-static-shim.js"></script>'
-    );
-    fs.writeFileSync(playSheet, sheetHtml, 'utf8');
+    fs.writeFileSync(playSheet, transformPlayHtml(fs.readFileSync(playSheet, 'utf8'), { isSheet: true }), 'utf8');
 }
 
 // 4. Sync Control Center UI into docs/prep
@@ -141,10 +150,6 @@ if (fs.existsSync(prepSchemasPath)) {
 const prepIndex = path.join(docsPrepDir, 'index.html');
 if (fs.existsSync(prepIndex)) {
     let prepHtml = fs.readFileSync(prepIndex, 'utf8');
-    prepHtml = prepHtml.replace(
-        '<link rel="icon" type="image/png" href="../icon.png">',
-        '<link rel="icon" type="image/png" href="icon.png">'
-    );
     prepHtml = prepHtml.replace(
         '<script src="static-storage-driver.js"></script>',
         '<script>window.__FORGEDVTT_STATIC_WEB__ = true;</script>\n  <script src="static-storage-driver.js"></script>'

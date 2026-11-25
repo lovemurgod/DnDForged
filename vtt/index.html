@@ -79,6 +79,7 @@
     <script src="/socket.io/socket.io.js"></script>
     <script src="js/network/vtt-static-shim.js"></script>
     <script src="lib/peerjs.min.js"></script>
+    <script src="js/network/vtt-p2p-host-engine.js"></script>
     <script src="js/network/vtt-p2p-adapter.js"></script>
 
     <!-- Three.js, Cannon.js & 3D WebGL Dice Engine -->
@@ -143,15 +144,34 @@
                         <!-- P2P Room Configuration Fields -->
                         <div id="login-p2p-group" class="vtt-hidden"
                             style="margin-bottom: 14px; background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px; border: 1px solid var(--color-border-subtle);">
+                            <div style="display: flex; gap: 6px; margin-bottom: 10px;">
+                                <button type="button" class="btn btn-primary btn-xs active" id="btn-p2p-mode-host" style="flex: 1;">
+                                    <i class="fa-solid fa-crown"></i> Host Game (GM)
+                                </button>
+                                <button type="button" class="btn btn-secondary btn-xs" id="btn-p2p-mode-join" style="flex: 1;">
+                                    <i class="fa-solid fa-right-to-bracket"></i> Join Room (Player)
+                                </button>
+                            </div>
                             <div class="form-group" style="margin-bottom: 8px;">
                                 <label for="login-p2p-code"><i class="fa-solid fa-key"></i> P2P Room Code</label>
-                                <input type="text" id="login-p2p-code" placeholder="e.g. ABCD-2345"
-                                    style="text-transform: uppercase;">
+                                <div style="display: flex; gap: 6px; align-items: center;">
+                                    <input type="text" id="login-p2p-code" placeholder="Auto-generated for Host, or enter ABCD-2345"
+                                        style="text-transform: uppercase; flex: 1;">
+                                    <button type="button" id="btn-login-p2p-regen" class="btn btn-secondary btn-xs"
+                                        title="Generate New Room Code"><i class="fa-solid fa-rotate"></i></button>
+                                    <button type="button" id="btn-login-p2p-copy" class="btn btn-secondary btn-xs"
+                                        title="Copy Player Invite Link"><i class="fa-solid fa-link"></i></button>
+                                </div>
                             </div>
                             <details style="margin-top: 6px;">
                                 <summary style="font-size: 0.78rem; color: var(--color-gold-light); cursor: pointer;"><i
-                                        class="fa-solid fa-file-lines"></i> Or Paste Serverless Invite Text</summary>
-                                <textarea id="login-p2p-manual" placeholder="Paste dndvtt://offer/... here"
+                                        class="fa-solid fa-file-lines"></i> Serverless Manual WebRTC (Offer / Answer)</summary>
+                                <div id="login-p2p-manual-host-wrap" style="margin-top: 6px;">
+                                    <button type="button" id="btn-login-p2p-manual-host" class="btn btn-secondary btn-xs btn-block">
+                                        <i class="fa-solid fa-handshake"></i> Host via Manual Invite Text
+                                    </button>
+                                </div>
+                                <textarea id="login-p2p-manual" placeholder="Players: paste GM's dndvtt://offer/... here"
                                     style="width: 100%; height: 60px; font-size: 0.75rem; font-family: monospace; margin-top: 4px;"></textarea>
                                 <div id="login-p2p-answer-group" class="vtt-hidden" style="margin-top: 8px;">
                                     <label for="login-p2p-answer-output" style="font-size: 0.75rem; color: #38bdf8;">Your P2P Answer (Send back to GM):</label>
@@ -2494,6 +2514,11 @@
                                 <div class="config-card vtt-hidden" id="config-manual-p2p-card">
                                     <h4><i class="fa-solid fa-handshake text-gradient-gold"></i> Manual WebRTC Peer Pair</h4>
                                     <p class="config-desc text-muted">Copy Offer to share with player, then paste player Answer below:</p>
+                                    <div style="display: flex; gap: 6px; margin-bottom: 6px;">
+                                        <button id="btn-config-new-offer" type="button" class="btn btn-xs btn-secondary">
+                                            <i class="fa-solid fa-plus"></i> Generate New Offer
+                                        </button>
+                                    </div>
                                     <textarea id="config-manual-offer-output" readonly onclick="this.select()"
                                         style="width: 100%; height: 54px; font-size: 0.72rem; font-family: monospace; margin-bottom: 6px;"></textarea>
                                     <textarea id="config-manual-answer-input" placeholder="Paste dndvtt://answer/... from player here"

@@ -161,12 +161,13 @@ export function startSocketConnection(campaignId, username, role, gmPassword = n
     }
 
     let socket;
+    const isPresentationMirror = ctx.p2pMode === 'presentation-mirror';
     if (ctx.isP2P) {
         if (typeof window.VttP2PAdapter === 'undefined') {
             console.error('VttP2PAdapter client library not loaded!');
             resetBtnJoin();
             showLoginError('P2P Adapter library missing. Please reload.');
-            return;
+            return () => {};
         }
 
         const isHost = role === 'GM';
@@ -174,36 +175,22 @@ export function startSocketConnection(campaignId, username, role, gmPassword = n
             isHost,
             role,
             username,
-            campaignId
+            campaignId,
+            gmPassword
         });
 
-        if (ctx.p2pMode === 'manual') {
-            if (isHost) {
+        if (isHost && ctx.isP2P && !isPresentationMirror) {
+            const manualCard = document.getElementById('config-manual-p2p-card');
+            const offerOut = document.getElementById('config-manual-offer-output');
+            const btnNewOffer = document.getElementById('btn-config-new-offer');
+            const btnApplyAns = document.getElementById('btn-config-apply-answer');
+            const ansInput = document.getElementById('config-manual-answer-input');
+            if (manualCard) manualCard.classList.remove('vtt-hidden');
+            const wireManualOfferFlow = () => {
                 socket
                     .createHostManualOffer()
                     .then((offerStr) => {
-                        const offerOut = document.getElementById('config-manual-offer-output');
-                        const manualCard = document.getElementById('config-manual-p2p-card');
                         if (offerOut) offerOut.value = offerStr;
-                        if (manualCard) manualCard.classList.remove('vtt-hidden');
-                        const btnApplyAns = document.getElementById('btn-config-apply-answer');
-                        const ansInput = document.getElementById('config-manual-answer-input');
-                        if (btnApplyAns && ansInput) {
-                            btnApplyAns.onclick = async () => {
-                                const rawAns = ansInput.value.trim();
-                                if (!rawAns) return;
-                                try {
-                                    await socket.applyHostManualAnswer(rawAns);
-                                    ansInput.value = '';
-                                    JqueryUtil?.doToast?.({
-                                        type: 'success',
-                                        content: 'Peer Answer applied! Connecting player...'
-                                    });
-                                } catch (err) {
-                                    alert(`Invalid Player Answer: ${err.message}`);
-                                }
-                            };
-                        }
                         navigator.clipboard?.writeText(offerStr).catch(() => {});
                         if (typeof JqueryUtil !== 'undefined' && JqueryUtil.doToast) {
                             JqueryUtil.doToast({
@@ -216,7 +203,55 @@ export function startSocketConnection(campaignId, username, role, gmPassword = n
                         console.error('[P2P] Host offer generation failed:', err);
                         showLoginError(`Failed to generate P2P Offer: ${err.message}`);
                     });
-            } else if (ctx.p2pData) {
+            };
+            if (btnNewOffer) {
+                btnNewOffer.onclick = () => wireManualOfferFlow();
+            }
+            if (btnApplyAns && ansInput) {
+                btnApplyAns.onclick = async () => {
+                    const rawAns = ansInput.value.trim();
+                    if (!rawAns) return;
+                    try {
+                        await socket.applyHostManualAnswer(rawAns);
+                        ansInput.value = '';
+                        if (typeof JqueryUtil !== 'undefined' && JqueryUtil.doToast) {
+                            JqueryUtil.doToast({
+                                type: 'success',
+                                content: 'Peer Answer applied! Connecting player...'
+                            });
+                        }
+                    } catch (err) {
+                        alert(`Invalid Player Answer: ${err.message}`);
+                    }
+                };
+            }
+            if (ctx.p2pMode === 'manual') {
+                wireManualOfferFlow();
+                setTimeout(() => socket._dispatch('connect'), 10);
+            }
+        }
+        if (isPresentationMirror) {
+            // Static web local Presentation Window mirrors opener/BroadcastChannel without PeerJS
+            setTimeout(async () => {
+                let camp = window.opener?.VTT?.campaignState || null;
+                if (!camp && typeof fetch === 'function') {
+                    try {
+                        const res = await fetch(`/api/campaigns/${encodeURIComponent(campaignId)}`);
+                        if (res.ok) camp = await res.json();
+                    } catch (_) {
+                        /* ignore */
+                    }
+                }
+                socket.connected = true;
+                socket._dispatch('joined', {
+                    role: 'Player',
+                    userRole: 'Player',
+                    campaignState: camp || { id: campaignId, name: 'Presentation Campaign' },
+                    chatHistory: []
+                });
+            }, 30);
+        } else if (ctx.p2pMode === 'manual') {
+            if (!isHost && ctx.p2pData) {
                 socket
                     .createPlayerManualAnswer(ctx.p2pData)
                     .then((answerStr) => {
@@ -234,25 +269,51 @@ export function startSocketConnection(campaignId, username, role, gmPassword = n
                     })
                     .catch((err) => {
                         console.error('[P2P] Manual answer failed:', err);
+                        resetBtnJoin();
                         showLoginError(`Invalid P2P Offer text: ${err.message}`);
                     });
             }
-        } else if (ctx.p2pCode) {
-            socket.connectWithRoomCode(ctx.p2pCode).catch((err) => {
-                console.warn('[P2P] Room code connection failed:', err);
+        } else {
+            const roomCode = (ctx.p2pCode || '').trim().toUpperCase();
+            if (roomCode) {
+                socket.connectWithRoomCode(roomCode).catch((err) => {
+                    console.warn('[P2P] Room code connection failed:', err);
+                    if (isHost) {
+                        // Allow GM to enter tabletop solo/offline even if public broker is unreachable
+                        if (typeof JqueryUtil !== 'undefined' && JqueryUtil.doToast) {
+                            JqueryUtil.doToast({
+                                type: 'warning',
+                                content: `P2P Broker unavailable (${err.message}). Entered local/solo GM mode; use Manual WebRTC Pair in Settings if needed.`
+                            });
+                        }
+                        socket.connected = true;
+                        socket._dispatch('connect');
+                    } else {
+                        resetBtnJoin();
+                        const staticFallbackMsg = window.__FORGEDVTT_STATIC_WEB__
+                            ? `P2P Connection failed (${err.message}). Try Serverless Invite Text or configure a TURN relay in /prep.`
+                            : `P2P Connection failed (${err.message}). Switch to Web Server tab to connect via Cloudflare.`;
+                        showLoginError(staticFallbackMsg);
+                    }
+                });
+            } else if (isHost) {
+                // Solo/offline GM fallback when no room code was supplied
+                socket.connected = true;
+                setTimeout(() => socket._dispatch('connect'), 10);
+            } else {
                 resetBtnJoin();
-                const staticFallbackMsg = window.__FORGEDVTT_STATIC_WEB__
-                    ? `P2P Connection failed (${err.message}). Try Serverless Invite Text or configure a TURN relay in /prep.`
-                    : `P2P Connection failed (${err.message}). Switch to Web Server tab to connect via Cloudflare.`;
-                showLoginError(staticFallbackMsg);
-            });
+                showLoginError('Please enter a P2P Room Code or paste a Serverless Invite.');
+                return () => {};
+            }
         }
     } else {
         // Initialise Resilient Socket connection with infinite auto-reconnect
         const ioFn = typeof io !== 'undefined' ? io : window.io || null;
         if (!ioFn) {
             console.error('Socket.io client library not loaded!');
-            return;
+            resetBtnJoin();
+            showLoginError('Socket.io client library missing. Switch to Direct P2P or reload.');
+            return () => {};
         }
 
         socket = ioFn({
@@ -284,14 +345,27 @@ export function startSocketConnection(campaignId, username, role, gmPassword = n
 
     window.VTT.socket = socket;
 
-    // Sync URL indicators
+    // Sync URL indicators (preserving current path/subpath)
     const absoluteHost = window.location.origin;
+    const currentPlayBase = window.location.href.split(/[?#]/)[0];
     const elLocalUrl = document.getElementById('config-local-url');
     const elRemoteUrl = document.getElementById('config-remote-url');
-    if (elLocalUrl) elLocalUrl.value = `${absoluteHost}/play`;
-    if (elRemoteUrl) elRemoteUrl.value = `${absoluteHost}/play`;
+    if (elLocalUrl) elLocalUrl.value = currentPlayBase;
+    if (elRemoteUrl) {
+        if (ctx.isP2P && ctx.p2pCode) {
+            const inv = new URL(currentPlayBase);
+            inv.searchParams.set('p2p', ctx.p2pCode);
+            elRemoteUrl.value = inv.href;
+        } else {
+            elRemoteUrl.value = currentPlayBase;
+        }
+    }
 
     let connTimeout = setTimeout(() => {
+        if (ctx.isP2P && ctx.p2pMode === 'manual' && role !== 'GM') {
+            // Player is waiting for GM to apply manual WebRTC answer
+            return;
+        }
         if (!socket.connected && !hasJoinedSession) {
             resetBtnJoin();
             if (ctx.isP2P) {
@@ -424,8 +498,12 @@ export function startSocketConnection(campaignId, username, role, gmPassword = n
             resetBtnJoin();
             if (modalGmPassword) modalGmPassword.classList.add('vtt-hidden');
             window.VTT.campaignState = campaignState;
+            window.VTT.campaignId = campaignState?.id || campaignId;
             if (gmSessionToken) {
                 window.VTT.gmSessionToken = gmSessionToken;
+                try {
+                    sessionStorage.setItem('forgedvtt_gm_token_vtt', gmSessionToken);
+                } catch (_) {}
             }
             if (playerSessionToken) {
                 window.VTT.playerSessionToken = playerSessionToken;
@@ -568,6 +646,40 @@ export function startSocketConnection(campaignId, username, role, gmPassword = n
                 }
                 window.VTT._modulesInitialized = true;
                 window.VTT._modulesInitializationState = 'initialized';
+
+                // Relay socket emits from popped-out P2P/Static sheet windows & forward live updates
+                if (window.SheetWindowManager?.onSocketRelay) {
+                    window.SheetWindowManager.onSocketRelay(({ event, args }) => {
+                        if (event && window.VTT.socket) {
+                            window.VTT.socket.emit(event, ...(Array.isArray(args) ? args : []));
+                        }
+                    });
+                    for (const fwdEvt of [
+                        'character:updated',
+                        'character:deleted',
+                        'token:updated_delta',
+                        'chat:msg',
+                        'campaign:state-sync'
+                    ]) {
+                        socket.on(fwdEvt, (...args) => {
+                            window.SheetWindowManager.broadcast({ action: 'SHEET_SOCKET_EVENT', event: fwdEvt, args });
+                        });
+                    }
+                }
+
+                // Honor ?openSheet=1&characterId=... deep-links from /prep
+                const sp = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
+                const openSheetCharId = sp?.get('characterId');
+                if (sp?.get('openSheet') === '1' && openSheetCharId) {
+                    const ch = window.VTT.campaignState?.characters?.[openSheetCharId];
+                    if (ch) {
+                        if (ch.monsterData && window.VTT.creatureSheet?.openSheet) {
+                            window.VTT.creatureSheet.openSheet(ch.monsterData, null, ch.id);
+                        } else if (window.VTT.playerSheet?.openSheet) {
+                            window.VTT.playerSheet.openSheet(ch.id);
+                        }
+                    }
+                }
             } catch (err) {
                 window.VTT._modulesInitialized = false;
                 window.VTT._modulesInitializationState = 'failed';

@@ -9,6 +9,7 @@ import {
 } from './vtt-canvas-token-rollers.js';
 import { showApplyDamageModal } from './vtt-canvas-mass-actions.js';
 import { applyTokenLightingPreset } from '../vtt-canvas-lighting.js';
+import { resolveMonsterTokenUrl } from '../../vtt-utils.js';
 
 export function changeTokenZOrder(tokenId, action, options = {}) {
     const { tokens = {}, renderAll = () => {} } = options;
@@ -339,12 +340,7 @@ export function showTokenContextMenu(tokenId, clientX, clientY, options = {}) {
             } catch (e) {}
         }
         if (monster.hasToken || monster.source || monster.name) {
-            const cleanName =
-                typeof window !== 'undefined' && window.Parser?.nameToTokenName
-                    ? window.Parser.nameToTokenName(monster.name)
-                    : (monster.name || '').replace(/"/g, '').trim();
-            const source = monster.source || 'MM';
-            return `img/bestiary/tokens/${source}/${cleanName}.webp`;
+            return resolveMonsterTokenUrl(monster);
         }
         return vtt.generateArcaneToken ? vtt.generateArcaneToken(monster?.name || 'Creature', 'monster') : null;
     };

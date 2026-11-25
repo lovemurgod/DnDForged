@@ -12,7 +12,7 @@ import {
 
 import { drawMeasurementTemplate } from './vtt-canvas-measure.js';
 import { isHexGrid, getNearestHexFeatures } from './vtt-canvas-grid-renderer.js';
-import { escapeHtml } from '../vtt-utils.js';
+import { escapeHtml, resolveMonsterTokenUrl } from '../vtt-utils.js';
 
 export function calcPortalCenter(portal) {
     if (!portal || !portal.geom) return { x: 0, y: 0 };
@@ -430,11 +430,7 @@ export function resolveTokenImageSrc(token, campaignState = null) {
         if (c.tokenUrl) return c.tokenUrl;
         if (c.monsterData?.tokenUrl) return c.monsterData.tokenUrl;
         if (c.monsterData?.source && c.name) {
-            const cleanName =
-                typeof Parser !== 'undefined'
-                    ? Parser.nameToTokenName(c.name)
-                    : (c.name || '').replace(/"/g, '').trim();
-            return `img/bestiary/tokens/${c.monsterData.source}/${cleanName}.webp`;
+            return resolveMonsterTokenUrl({ ...c.monsterData, name: c.name });
         }
     }
     return null;

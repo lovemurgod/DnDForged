@@ -10,6 +10,8 @@ class SheetWindowManagerClass {
         this.openWindows = new Map(); // sheetKey -> windowProxy
         this.remoteActiveSheets = new Map(); // sheetKey -> timestamp last seen (TTL 3000ms)
         this.dockCallbacks = [];
+        this.socketRelayCallbacks = [];
+        this.socketEventCallbacks = [];
         this.isStandalone = false;
         this.currentSheetKey = null;
         this.heartbeatTimer = null;
@@ -21,6 +23,7 @@ class SheetWindowManagerClass {
         if (typeof BroadcastChannel !== 'undefined') {
             try {
                 this.channel = new BroadcastChannel('forgedvtt_sheet_sync');
+                this.channel.unref?.();
                 this.channel.onmessage = (event) => this.handleBroadcastMessage(event.data);
             } catch (e) {
                 console.warn('[SheetWindowManager] BroadcastChannel not supported or failed:', e);
@@ -73,6 +76,18 @@ class SheetWindowManagerClass {
                     this.remoteActiveSheets.delete(data.sheetKey);
                     this.openWindows.delete(data.sheetKey);
                     this.dockCallbacks.forEach((cb) => cb(data.sheetData));
+                }
+                break;
+
+            case 'SHEET_SOCKET_EMIT':
+                if (!this.isStandalone && data.event) {
+                    this.socketRelayCallbacks.forEach((cb) => cb({ event: data.event, args: data.args }));
+                }
+                break;
+
+            case 'SHEET_SOCKET_EVENT':
+                if (this.isStandalone && data.event) {
+                    this.socketEventCallbacks.forEach((cb) => cb({ event: data.event, args: data.args }));
                 }
                 break;
         }
@@ -331,6 +346,14 @@ class SheetWindowManagerClass {
      */
     onDock(callback) {
         this.dockCallbacks.push(callback);
+    }
+
+    onSocketRelay(callback) {
+        this.socketRelayCallbacks.push(callback);
+    }
+
+    onSocketEvent(callback) {
+        this.socketEventCallbacks.push(callback);
     }
 }
 

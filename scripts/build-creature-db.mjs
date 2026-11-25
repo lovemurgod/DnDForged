@@ -1501,9 +1501,10 @@ function buildCreatureDatabase() {
             .replace(/[\u0300-\u036f]/g, '')
             .replace(/Æ/g, 'AE')
             .replace(/æ/g, 'ae')
-            .replace(/"/g, '')
+            .replace(/[<>:"/\\|?*]/g, '')
             .trim();
-        const tokenImg = `img/bestiary/tokens/${tokenSource}/${tokenCleanName}.webp`;
+        const tokenExt = isSrdOnly ? 'svg' : 'webp';
+        const tokenImg = `img/bestiary/tokens/${tokenSource}/${tokenCleanName}.${tokenExt}`;
 
         // Normalize Spellcasting
         const spellcasting = normalizeSpellcasting(m, spellsLookup);

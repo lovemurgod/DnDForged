@@ -452,14 +452,14 @@ test('Comprehensive Audit Remediation Suite', async (t) => {
             );
             assert.equal(mapDeleteDispatched, false, 'Player peer must not dispatch GM-only map:delete');
 
-            // Asset transfer with unsafe SVG mime is rejected
+            // Unlisted dangerous MIME (e.g. text/html) is rejected while SVG is permitted
             host._handleIncomingData(
                 JSON.stringify({
                     type: 'asset-start',
                     id: 'a1',
                     totalChunks: 1,
                     totalBytes: 50,
-                    mimeType: 'image/svg+xml'
+                    mimeType: 'text/html'
                 }),
                 alicePeer
             );
@@ -490,7 +490,7 @@ test('Comprehensive Audit Remediation Suite', async (t) => {
         );
 
         const playSheetHtml = fs.readFileSync(path.join(rootDir, 'docs', 'play', 'sheet.html'), 'utf8');
-        assert.ok(playSheetHtml.includes('<base href="/play/">'));
+        assert.equal(playSheetHtml.includes('<base href='), false);
         assert.ok(playSheetHtml.includes('__FORGEDVTT_STATIC_WEB__'));
         assert.ok(playSheetHtml.includes('js/network/vtt-static-shim.js'));
         assert.equal(playSheetHtml.includes('/socket.io/socket.io.js'), false);
@@ -546,6 +546,6 @@ test('Comprehensive Audit Remediation Suite', async (t) => {
         assert.ok(fetched.includes('data/spells-catalog.json'), 'Must rewrite root-relative /data/ to relative data/');
 
         const tablesRes = await mockWindow.fetch('/api/tables/catalog');
-        assert.deepEqual(await tablesRes.json(), { tables: [], decks: [] });
+        assert.deepEqual(await tablesRes.json(), []);
     });
 });

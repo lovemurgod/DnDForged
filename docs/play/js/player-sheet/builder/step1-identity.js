@@ -3,6 +3,8 @@
  * Species, Subrace, Background, Multiclassing rows, Senses, Speeds, and Bio.
  */
 
+import { getSafeVttUrl } from '../../vtt-utils.js';
+
 export function renderStep1(ctx) {
     const {
         bodyEl,
@@ -100,7 +102,7 @@ export function renderStep1(ctx) {
                 <!-- Circular Avatar Preview with active indicator -->
                 <div style="display:flex; flex-direction:column; align-items:center; gap:8px;">
                     <div id="pc-wiz-token-preview-circle" style="width:72px; height:72px; border-radius:50%; border:2px solid var(--color-gold-base); overflow:hidden; background:rgba(0,0,0,0.5); box-shadow:0 0 12px rgba(212,175,55,0.35); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
-                        <img id="pc-wiz-active-token-img" src="${activeTokenUrl}" alt="Token Art" style="width:100%; height:100%; object-fit:cover; display:block;" onerror="this.src='favicon.svg'">
+                        <img id="pc-wiz-active-token-img" src="${getSafeVttUrl(activeTokenUrl)}" data-raw-src="${activeTokenUrl}" alt="Token Art" style="width:100%; height:100%; object-fit:cover; display:block;" onerror="this.src='favicon.svg'">
                     </div>
                     <span class="badge" style="background:rgba(212,175,55,0.15); color:var(--color-gold-base); font-size:0.65rem; padding:1px 6px; border-radius:3px;">Active Token</span>
                 </div>
@@ -137,7 +139,7 @@ export function renderStep1(ctx) {
                                         const isActive = idx === workingChar.activeTokenIndex;
                                         return `
                                     <div class="pc-wiz-token-thumb-item" data-idx="${idx}" style="position:relative; width:40px; height:40px; border-radius:50%; border:2px solid ${isActive ? 'var(--color-gold-base)' : 'var(--color-border-subtle)'}; overflow:hidden; cursor:pointer; background:rgba(0,0,0,0.5); box-shadow:${isActive ? '0 0 8px rgba(212,175,55,0.6)' : 'none'};" title="${tok.name || 'Token'}">
-                                        <img src="${u}" style="width:100%; height:100%; object-fit:cover;" onerror="this.src='favicon.svg'">
+                                        <img src="${getSafeVttUrl(u)}" data-raw-src="${u}" style="width:100%; height:100%; object-fit:cover;" onerror="this.src='favicon.svg'">
                                         <button type="button" class="pc-wiz-del-token-btn" data-idx="${idx}" style="position:absolute; top:-2px; right:-2px; width:16px; height:16px; border-radius:50%; background:#ef4444; border:none; color:#fff; font-size:9px; display:flex; align-items:center; justify-content:center; cursor:pointer; padding:0;" title="Remove this token">&times;</button>
                                     </div>
                                     `;

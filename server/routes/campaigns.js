@@ -1,6 +1,8 @@
 import express from 'express';
 import path from 'path';
 import fs from 'fs';
+import os from 'os';
+import { execFileSync } from 'child_process';
 import multer from 'multer';
 import {
     DATA_DIR,
@@ -178,16 +180,100 @@ campaignsRouter.post('/campaigns/:id/duplicate', verifyGmOrSecret, (req, res) =>
     res.json({ success: true, campaign: cloned });
 });
 
+const zipImportUpload = multer({
+    dest: path.join(os.tmpdir(), 'forgedvtt-zip-uploads'),
+    limits: { fileSize: 100 * 1024 * 1024 }
+});
+
+const maybeMultipartZip = (req, res, next) =>
+    req.is('multipart/form-data') ? zipImportUpload.single('file')(req, res, next) : next();
+
+function getSystemTarBin() {
+    if (process.platform === 'win32') {
+        const winTar = path.join(process.env.SystemRoot || 'C:\\Windows', 'System32', 'tar.exe');
+        return fs.existsSync(winTar) ? winTar : 'tar.exe';
+    }
+    return 'tar';
+}
+
+function copyUploadsSafely(srcDir, dstDir) {
+    if (!fs.existsSync(srcDir)) return;
+    fs.mkdirSync(dstDir, { recursive: true });
+    const srcRoot = fs.realpathSync(srcDir);
+    const dstRoot = fs.realpathSync(dstDir);
+    for (const entry of fs.readdirSync(srcRoot, { withFileTypes: true })) {
+        const s = path.join(srcRoot, entry.name);
+        const d = path.join(dstRoot, entry.name);
+        if (!s.startsWith(srcRoot + path.sep) || !d.startsWith(dstRoot + path.sep)) continue;
+        if (entry.isSymbolicLink()) continue;
+        if (entry.isDirectory()) {
+            copyUploadsSafely(s, d);
+        } else if (entry.isFile()) {
+            fs.copyFileSync(s, d);
+        }
+    }
+}
+
+function withExtractedZip(zipFilePath, fn) {
+    const extractDir = fs.mkdtempSync(path.join(os.tmpdir(), 'forgedvtt-zip-ext-'));
+    try {
+        execFileSync(getSystemTarBin(), ['-xf', zipFilePath, '-C', extractDir], { stdio: 'ignore' });
+        return fn(extractDir);
+    } finally {
+        try {
+            fs.rmSync(zipFilePath, { force: true });
+        } catch (_) {}
+        try {
+            fs.rmSync(extractDir, { recursive: true, force: true });
+        } catch (_) {}
+    }
+}
+
 // Import full campaign into server
-campaignsRouter.post('/campaigns/import', verifyGmOrSecret, (req, res) => {
-    const { campaign } = req.body;
+campaignsRouter.post('/campaigns/import', verifyGmOrSecret, maybeMultipartZip, (req, res) => {
+    let stagedUploadsDir = null;
+    try {
+        if (req.file) {
+            withExtractedZip(req.file.path, (extractDir) => {
+                const campJsonPath = path.join(extractDir, 'campaign.json');
+                const manifestPath = path.join(extractDir, 'manifest.json');
+                const targetJson = fs.existsSync(campJsonPath)
+                    ? campJsonPath
+                    : fs.existsSync(manifestPath)
+                      ? manifestPath
+                      : null;
+                if (targetJson) {
+                    const parsed = JSON.parse(fs.readFileSync(targetJson, 'utf8'));
+                    req.body = { ...(req.body || {}), campaign: parsed?.campaign || parsed };
+                }
+                const extUploads = path.join(extractDir, 'uploads');
+                if (fs.existsSync(extUploads)) {
+                    stagedUploadsDir = fs.mkdtempSync(path.join(os.tmpdir(), 'forgedvtt-zip-up-'));
+                    copyUploadsSafely(extUploads, stagedUploadsDir);
+                }
+            });
+        }
+    } catch (err) {
+        return res.status(400).json({ error: `Invalid ZIP archive: ${err.message}` });
+    }
+
+    const { campaign } = req.body || {};
     if (!campaign || !campaign.name) {
+        if (stagedUploadsDir) fs.rmSync(stagedUploadsDir, { recursive: true, force: true });
         return res.status(400).json({ error: 'Invalid campaign data for import' });
     }
 
     let campId = campaign.id;
     if (!campId || campaigns[campId]) {
         campId = (campaign.name || 'imported').toLowerCase().replace(/[^a-z0-9]/gi, '_') + '_' + Date.now();
+    }
+
+    if (stagedUploadsDir) {
+        try {
+            copyUploadsSafely(stagedUploadsDir, path.join(DATA_DIR, 'assets', 'campaigns', campId, 'uploads'));
+        } finally {
+            fs.rmSync(stagedUploadsDir, { recursive: true, force: true });
+        }
     }
 
     let campDataToImport = campaign;
@@ -217,12 +303,58 @@ campaignsRouter.post('/campaigns/import', verifyGmOrSecret, (req, res) => {
 });
 
 // Import granular entity (map, player, companion, customNpc) into a campaign
-campaignsRouter.post('/campaigns/:id/import-entity', verifyGmOrSecret, (req, res) => {
+campaignsRouter.post('/campaigns/:id/import-entity', verifyGmOrSecret, maybeMultipartZip, (req, res) => {
     const campId = req.params.id;
     const campaign = campaigns[campId];
-    if (!campaign) return res.status(404).json({ error: 'Campaign not found' });
+    if (!campaign) {
+        if (req.file?.path) {
+            try {
+                fs.rmSync(req.file.path, { force: true });
+            } catch (_) {}
+        }
+        return res.status(404).json({ error: 'Campaign not found' });
+    }
 
-    const { entityType, entity, entities } = req.body;
+    try {
+        if (req.file) {
+            withExtractedZip(req.file.path, (extractDir) => {
+                const entityPath = path.join(extractDir, 'entity.json');
+                const manifestPath = path.join(extractDir, 'manifest.json');
+                const targetJson = fs.existsSync(entityPath)
+                    ? entityPath
+                    : fs.existsSync(manifestPath)
+                      ? manifestPath
+                      : fs
+                            .readdirSync(extractDir)
+                            .map((f) => path.join(extractDir, f))
+                            .find((p) => p.endsWith('.json') && fs.statSync(p).isFile());
+                if (targetJson) {
+                    const parsed = JSON.parse(fs.readFileSync(targetJson, 'utf8'));
+                    const parsedEntities = Array.isArray(parsed?.items)
+                        ? parsed.items
+                        : Array.isArray(parsed?.entities)
+                          ? parsed.entities
+                          : Array.isArray(parsed)
+                            ? parsed
+                            : null;
+                    req.body = {
+                        ...(req.body || {}),
+                        entityType: req.body?.entityType || parsed?.entityType,
+                        entities: parsedEntities,
+                        entity: parsed?.entity || (!parsedEntities ? parsed : null)
+                    };
+                }
+                const extUploads = path.join(extractDir, 'uploads');
+                if (fs.existsSync(extUploads)) {
+                    copyUploadsSafely(extUploads, path.join(DATA_DIR, 'assets', 'campaigns', campId, 'uploads'));
+                }
+            });
+        }
+    } catch (err) {
+        return res.status(400).json({ error: `Invalid ZIP archive: ${err.message}` });
+    }
+
+    const { entityType, entity, entities } = req.body || {};
     const items = Array.isArray(entities) ? entities : entity ? [entity] : [];
     if (items.length === 0) {
         return res.status(400).json({ error: 'No entity data provided' });
@@ -283,28 +415,38 @@ campaignsRouter.post('/campaigns/:id/import-entity', verifyGmOrSecret, (req, res
                 campaign.rollTables.assetTables.push(cloned);
                 importedIds.push(tId);
             } else if (item.cards || item._entityCategory === 'cardDeck') {
-                if (!campaign.rollTables.cardDecks) campaign.rollTables.cardDecks = [];
+                if (!Array.isArray(campaign.rollTables.decks)) {
+                    campaign.rollTables.decks = Array.isArray(campaign.rollTables.cardDecks)
+                        ? [...campaign.rollTables.cardDecks]
+                        : [];
+                }
                 let dId = item.id;
                 let dName = item.name || 'Imported Card Deck';
-                if (!dId || campaign.rollTables.cardDecks.some((d) => d.id === dId)) {
+                if (!dId || campaign.rollTables.decks.some((d) => d.id === dId)) {
                     dId = `deck_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
                     dName = `${dName} (Copy)`;
                 }
                 const cloned = { ...item, id: dId, name: dName };
                 delete cloned._entityCategory;
-                campaign.rollTables.cardDecks.push(cloned);
+                campaign.rollTables.decks.push(cloned);
+                campaign.rollTables.cardDecks = campaign.rollTables.decks;
                 importedIds.push(dId);
             } else {
-                if (!campaign.rollTables.customTables) campaign.rollTables.customTables = [];
+                if (!Array.isArray(campaign.rollTables.tables)) {
+                    campaign.rollTables.tables = Array.isArray(campaign.rollTables.customTables)
+                        ? [...campaign.rollTables.customTables]
+                        : [];
+                }
                 let tId = item.id;
                 let tName = item.name || 'Imported Roll Table';
-                if (!tId || campaign.rollTables.customTables.some((t) => t.id === tId)) {
+                if (!tId || campaign.rollTables.tables.some((t) => t.id === tId)) {
                     tId = `table_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
                     tName = `${tName} (Copy)`;
                 }
                 const cloned = { ...item, id: tId, name: tName };
                 delete cloned._entityCategory;
-                campaign.rollTables.customTables.push(cloned);
+                campaign.rollTables.tables.push(cloned);
+                campaign.rollTables.customTables = campaign.rollTables.tables;
                 importedIds.push(tId);
             }
         } else {
@@ -373,23 +515,17 @@ campaignsRouter.delete('/campaigns/:id/entities/:entityId', verifyGmOrSecret, (r
     } else if (campaign.rollTables || campaign.assetTables) {
         const rt = campaign.rollTables || {};
         let found = false;
-        if (Array.isArray(rt.customTables)) {
-            const initLen = rt.customTables.length;
-            rt.customTables = rt.customTables.filter((t) => t.id !== entityId);
-            if (rt.customTables.length < initLen) {
-                found = true;
-                entityType = 'table';
+        for (const tableKey of ['tables', 'customTables', 'assetTables']) {
+            if (Array.isArray(rt[tableKey])) {
+                const initLen = rt[tableKey].length;
+                rt[tableKey] = rt[tableKey].filter((t) => t.id !== entityId);
+                if (rt[tableKey].length < initLen) {
+                    found = true;
+                    entityType = 'table';
+                }
             }
         }
-        if (!found && Array.isArray(rt.assetTables)) {
-            const initLen = rt.assetTables.length;
-            rt.assetTables = rt.assetTables.filter((t) => t.id !== entityId);
-            if (rt.assetTables.length < initLen) {
-                found = true;
-                entityType = 'table';
-            }
-        }
-        if (!found && Array.isArray(campaign.assetTables)) {
+        if (Array.isArray(campaign.assetTables)) {
             const initLen = campaign.assetTables.length;
             campaign.assetTables = campaign.assetTables.filter((t) => t.id !== entityId);
             if (campaign.assetTables.length < initLen) {
@@ -397,12 +533,14 @@ campaignsRouter.delete('/campaigns/:id/entities/:entityId', verifyGmOrSecret, (r
                 entityType = 'table';
             }
         }
-        if (!found && Array.isArray(rt.cardDecks)) {
-            const initLen = rt.cardDecks.length;
-            rt.cardDecks = rt.cardDecks.filter((d) => d.id !== entityId);
-            if (rt.cardDecks.length < initLen) {
-                found = true;
-                entityType = 'deck';
+        for (const deckKey of ['decks', 'cardDecks']) {
+            if (Array.isArray(rt[deckKey])) {
+                const initLen = rt[deckKey].length;
+                rt[deckKey] = rt[deckKey].filter((d) => d.id !== entityId);
+                if (rt[deckKey].length < initLen) {
+                    found = true;
+                    entityType = 'deck';
+                }
             }
         }
         if (found) {
@@ -461,12 +599,20 @@ function collectBatchEntities(campaign, entityType) {
         return Object.values(campaign.characters || {}).filter((c) => Boolean(c?.isCustomNpc || c?.type === 'npc'));
     }
     if (entityType === 'tablesAndDecks' || entityType === 'table') {
-        return [
-            ...(campaign.rollTables?.customTables || []),
-            ...(campaign.rollTables?.assetTables || []),
-            ...(campaign.assetTables || []),
-            ...(campaign.rollTables?.cardDecks || [])
-        ];
+        const rt = campaign.rollTables || {};
+        const tables = (Array.isArray(rt.tables) && rt.tables.length ? rt.tables : rt.customTables) || [];
+        const assetTables = rt.assetTables || campaign.assetTables || [];
+        const decks = (Array.isArray(rt.decks) && rt.decks.length ? rt.decks : rt.cardDecks) || [];
+        const combined = [...tables, ...assetTables, ...decks];
+        const seen = new Set();
+        return combined.filter((item) => {
+            const k = item?.id || item?.name;
+            if (!k || !seen.has(k)) {
+                if (k) seen.add(k);
+                return true;
+            }
+            return false;
+        });
     }
     return [];
 }
@@ -507,12 +653,16 @@ campaignsRouter.get('/campaigns/:id/export-granular', verifyGmOrSecret, (req, re
     } else if (['player', 'companion', 'customNpc', 'npc', 'character'].includes(entityType)) {
         entity = campaign.characters?.[entityId];
     } else if (entityType === 'table') {
+        const rt = campaign.rollTables || {};
+        const tables = (Array.isArray(rt.tables) && rt.tables.length ? rt.tables : rt.customTables) || [];
         entity =
-            (campaign.rollTables?.customTables || []).find((t) => t.id === entityId) ||
-            (campaign.rollTables?.assetTables || []).find((t) => t.id === entityId) ||
+            tables.find((t) => t.id === entityId) ||
+            (rt.assetTables || []).find((t) => t.id === entityId) ||
             (campaign.assetTables || []).find((t) => t.id === entityId);
     } else if (entityType === 'deck') {
-        entity = (campaign.rollTables?.cardDecks || []).find((d) => d.id === entityId);
+        const rt = campaign.rollTables || {};
+        const decks = (Array.isArray(rt.decks) && rt.decks.length ? rt.decks : rt.cardDecks) || [];
+        entity = decks.find((d) => d.id === entityId);
     }
 
     if (!entity) {

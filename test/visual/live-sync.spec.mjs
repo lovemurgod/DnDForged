@@ -88,7 +88,7 @@ test.describe('Two-Player Live Synchronization (Desktop GM <-> Desktop Player)',
         await gmPage.evaluate(() => {
             const ce = window.VTT.canvasEngine;
             const tokens = ce.getTokens();
-            const tok = tokens['tok_monster_1'];
+            const tok = tokens['tok_swarm_goblin_1'];
             tok.hp = 3;
             tok.conditions = ['stunned'];
             window.VTT.socket.emit('token:update', { mapId: ce.getCurrentMapId(), token: tok });
@@ -100,14 +100,14 @@ test.describe('Two-Player Live Synchronization (Desktop GM <-> Desktop Player)',
             () => {
                 const ce = window.VTT.canvasEngine;
                 const tokens = ce?.getTokens?.();
-                const tok = tokens?.['tok_monster_1'];
+                const tok = tokens?.['tok_swarm_goblin_1'];
                 return tok && tok.hp === 3 && Array.isArray(tok.conditions) && tok.conditions.includes('stunned');
             },
             { timeout: 10000 }
         );
 
         const monsterState = await playerPage.evaluate(() => {
-            const tok = window.VTT.canvasEngine.getTokens()['tok_monster_1'];
+            const tok = window.VTT.canvasEngine.getTokens()['tok_swarm_goblin_1'];
             return { hp: tok.hp, conditions: tok.conditions };
         });
         expect(monsterState.hp).toBe(3);
@@ -123,7 +123,7 @@ test.describe('Two-Player Live Synchronization (Desktop GM <-> Desktop Player)',
                 initiative: {
                     combatants: [
                         { id: 'tok_hero_1', name: 'Valeros', initiative: 18, isVisible: true },
-                        { id: 'tok_monster_1', name: 'Goblin Raider', initiative: 12, isVisible: true }
+                        { id: 'tok_swarm_goblin_1', name: 'Goblin Raider', initiative: 12, isVisible: true }
                     ],
                     currentRound: 1,
                     activeTurnIndex: 0,
@@ -282,7 +282,7 @@ test.describe('Two-Player Live Synchronization (Desktop GM <-> Mobile Player)', 
         await gmPage.evaluate(() => {
             const ce = window.VTT.canvasEngine;
             const tokens = ce.getTokens();
-            const tok = tokens['tok_monster_1'];
+            const tok = tokens['tok_swarm_goblin_1'];
             tok.hp = 1;
             tok.conditions = ['poisoned'];
             window.VTT.socket.emit('token:update', { mapId: ce.getCurrentMapId(), token: tok });
@@ -294,14 +294,14 @@ test.describe('Two-Player Live Synchronization (Desktop GM <-> Mobile Player)', 
             () => {
                 const ce = window.VTT.canvasEngine;
                 const tokens = ce?.getTokens?.();
-                const tok = tokens?.['tok_monster_1'];
+                const tok = tokens?.['tok_swarm_goblin_1'];
                 return tok && tok.hp === 1 && Array.isArray(tok.conditions) && tok.conditions.includes('poisoned');
             },
             { timeout: 10000 }
         );
 
         const monsterState = await playerPage.evaluate(() => {
-            const tok = window.VTT.canvasEngine.getTokens()['tok_monster_1'];
+            const tok = window.VTT.canvasEngine.getTokens()['tok_swarm_goblin_1'];
             return { hp: tok.hp, conditions: tok.conditions };
         });
         expect(monsterState.hp).toBe(1);
@@ -316,7 +316,7 @@ test.describe('Two-Player Live Synchronization (Desktop GM <-> Mobile Player)', 
                 initiative: {
                     combatants: [
                         { id: 'tok_hero_1', name: 'Valeros', initiative: 20, isVisible: true },
-                        { id: 'tok_monster_1', name: 'Goblin Raider', initiative: 8, isVisible: true }
+                        { id: 'tok_swarm_goblin_1', name: 'Goblin Raider', initiative: 8, isVisible: true }
                     ],
                     currentRound: 2,
                     activeTurnIndex: 1,

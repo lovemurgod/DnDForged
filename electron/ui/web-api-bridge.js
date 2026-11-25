@@ -215,6 +215,8 @@
                 ? ['[Static Web Prep] Running 100% in browser (Zero Server / Direct P2P).']
                 : ['[Web Prep] Connected to ForgeDVTT Host Server.'],
         startServer: async () => ({ success: !isStatic() }),
+        cancelStartServer: async () => ({ success: true }),
+        updateServerPort: async () => ({ success: true }),
         stopServer: async () => ({ success: false, error: 'Not available in web mode' }),
         startTunnel: async () => ({ success: false, error: 'Cloudflare Tunnel requires the Desktop App' }),
         stopTunnel: async () => ({ success: false, error: 'Not available in web mode' }),
@@ -308,10 +310,26 @@
         },
 
         // Direct P2P Room Management
-        p2pGetStatus: async () => (isStatic() ? drv().getP2pStatus() : { active: false, roomCode: '' }),
-        p2pStartRoom: async () => (isStatic() ? drv().getP2pStatus() : { success: false }),
-        p2pStopRoom: async () => ({ success: true }),
-        p2pRegenCode: async () => (isStatic() ? drv().regenP2pCode() : { success: false }),
+        p2pGetStatus: async () => {
+            if (isStatic()) return drv().getP2pStatus();
+            try {
+                return await apiFetch('/api/p2p/status');
+            } catch (_) {
+                return { active: false, roomCode: '', peerCount: 0, peers: [] };
+            }
+        },
+        p2pStartRoom: async (options = {}) => {
+            if (isStatic()) return drv().getP2pStatus();
+            return await apiFetch('/api/p2p/start', { method: 'POST', body: JSON.stringify(options) });
+        },
+        p2pStopRoom: async () => {
+            if (isStatic()) return { success: true };
+            return await apiFetch('/api/p2p/stop', { method: 'POST' });
+        },
+        p2pRegenCode: async () => {
+            if (isStatic()) return drv().regenP2pCode();
+            return await apiFetch('/api/p2p/regen', { method: 'POST' });
+        },
 
         // Campaign Management
         gmGetCampaigns: async () => {
@@ -379,6 +397,10 @@
                         }
                     },
                     characters: {},
+                    rollTables: { tables: [], assetTables: [], decks: [] },
+                    allowedUsers: Array.isArray(payload?.allowedUsers) ? payload.allowedUsers : [],
+                    knownPlayers: [],
+                    updatedAt: Date.now(),
                     initiative: { combatants: [], currentRound: 1, activeTurnIndex: -1, isVisible: false }
                 };
                 drv().campaigns[id] = created;
@@ -393,6 +415,9 @@
         },
         gmDeleteCampaign: async (id) => {
             if (isStatic()) {
+                if (Object.keys(drv().campaigns).length <= 1) {
+                    return { success: false, error: 'Cannot delete the last remaining campaign.' };
+                }
                 delete drv().campaigns[id];
                 await drv()._saveCampaigns();
                 return { success: true };
@@ -434,20 +459,39 @@
             return res;
         },
         gmImportCampaign: async (fileInput) => {
-            let parsed;
+            let fileObj = null;
+            let parsed = null;
             if (fileInput && typeof fileInput.text === 'function') {
-                parsed = await readJsonFile(fileInput);
+                fileObj = fileInput;
             } else if (fileInput && typeof fileInput === 'object' && typeof fileInput.content === 'string') {
                 parsed = JSON.parse(fileInput.content);
             } else {
-                const files = await pickFiles({ accept: '.json' });
+                const files = await pickFiles({ accept: '.json,.zip' });
                 if (!files.length) return { canceled: true };
-                parsed = await readJsonFile(files[0]);
+                fileObj = files[0];
             }
-            const campaign = parsed.campaign || parsed;
+            if (fileObj) {
+                const isZip = /\.zip$/i.test(fileObj.name || '');
+                if (isZip) {
+                    if (isStatic()) {
+                        return {
+                            success: false,
+                            error: 'ZIP campaign archives cannot be imported in offline browser-only mode. Please import an exported campaign .json file or use the Desktop App.'
+                        };
+                    }
+                    const fd = new FormData();
+                    fd.append('file', fileObj);
+                    return await apiFetch('/api/campaigns/import', { method: 'POST', body: fd });
+                }
+                parsed = await readJsonFile(fileObj);
+            }
+            const campaign = parsed?.campaign || parsed;
+            if (!campaign || typeof campaign !== 'object') {
+                return { success: false, error: 'Invalid campaign JSON' };
+            }
             if (isStatic()) {
                 const newId = (campaign.id || 'imported') + '_' + Date.now();
-                const cloned = { ...campaign, id: newId };
+                const cloned = { ...campaign, id: newId, updatedAt: Date.now() };
                 drv().campaigns[newId] = cloned;
                 await drv()._saveCampaigns();
                 return { success: true, campaign: cloned };
@@ -475,21 +519,52 @@
             }
             return res;
         },
-        gmImportGranular: async ({ campaignId, explicitFile }) => {
-            let parsed;
+        gmImportGranular: async ({ campaignId, explicitFile, entityType: hintEntityType }) => {
+            let fileObj = null;
+            let parsed = null;
             if (explicitFile && typeof explicitFile.text === 'function') {
-                parsed = await readJsonFile(explicitFile);
+                fileObj = explicitFile;
             } else if (explicitFile && typeof explicitFile === 'object' && typeof explicitFile.content === 'string') {
                 parsed = JSON.parse(explicitFile.content);
             } else {
-                const files = await pickFiles({ accept: '.json' });
+                const files = await pickFiles({ accept: '.json,.zip' });
                 if (!files.length) return { canceled: true };
-                parsed = await readJsonFile(files[0]);
+                fileObj = files[0];
             }
-            const entity = parsed.entity || parsed;
-            const entityType = parsed.entityType || undefined;
+            if (fileObj) {
+                if (/\.zip$/i.test(fileObj.name || '')) {
+                    if (isStatic()) {
+                        return {
+                            success: false,
+                            error: 'ZIP imports require the Desktop App or Host Server. Use JSON export/import in browser-only mode.'
+                        };
+                    }
+                    const fd = new FormData();
+                    fd.append('file', fileObj);
+                    if (hintEntityType) fd.append('entityType', hintEntityType);
+                    return await apiFetch(`/api/campaigns/${encodeURIComponent(campaignId)}/import-entity`, {
+                        method: 'POST',
+                        body: fd
+                    });
+                }
+                parsed = await readJsonFile(fileObj);
+            }
+            const entityType = parsed?.entityType || hintEntityType || undefined;
+            const entities = Array.isArray(parsed?.items) ? parsed.items : Array.isArray(parsed) ? parsed : null;
+            const entity = parsed?.entity || parsed;
             if (isStatic()) {
-                return await drv().importGranular({ campaignId, entityType, entity });
+                return await drv().importGranular({ campaignId, entityType, entity, entities });
+            }
+            if (entities) {
+                let importedCount = 0;
+                for (const item of entities) {
+                    const res = await apiFetch(`/api/campaigns/${encodeURIComponent(campaignId)}/import-entity`, {
+                        method: 'POST',
+                        body: JSON.stringify({ entityType, entity: item })
+                    });
+                    if (res?.success) importedCount += Number(res.count || 1);
+                }
+                return { success: importedCount > 0, count: importedCount };
             }
             return await apiFetch(`/api/campaigns/${encodeURIComponent(campaignId)}/import-entity`, {
                 method: 'POST',
@@ -669,13 +744,31 @@
         sourcesImportFromUrl: async (params) => {
             if (isStatic()) {
                 try {
-                    const res = await fetch(params?.url);
+                    const urlStr = String(params?.url || '').trim();
+                    const res = await fetch(urlStr);
                     if (!res.ok) return { success: false, error: `HTTP ${res.status}` };
                     const content = await res.text();
+                    let derivedName = '';
+                    try {
+                        derivedName = decodeURIComponent(
+                            new URL(urlStr, window.location.href).pathname.split('/').pop() || ''
+                        );
+                    } catch (_) {}
+                    const preferred = String(params?.code || params?.sourceName || derivedName || `url-${Date.now()}`)
+                        .replace(/\.json$/i, '')
+                        .replace(/[^a-zA-Z0-9_-]+/g, '_')
+                        .replace(/^_+|_+$/g, '');
                     return await drv().addDatabaseFile({
-                        category: params?.category || 'bestiary',
-                        fileName: params?.code || 'url-import.json',
-                        content
+                        category: params?.category || '',
+                        fileName: `${preferred || `URL_${Date.now()}`}.json`,
+                        content,
+                        metadata: {
+                            name: params?.sourceName || preferred || '',
+                            author: params?.attribution || '',
+                            license: params?.license || '',
+                            licenseUrl: params?.licenseUrl || '',
+                            attribution: params?.attribution || ''
+                        }
                     });
                 } catch (err) {
                     return {

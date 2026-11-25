@@ -734,9 +734,11 @@ export function renderTokensLayer(context = {}) {
                             const color = token.color || (token.isPlayer ? '#007bff' : '#dc3545');
                             node.src = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="${encodeURIComponent(color)}" stroke="%23ffffff" stroke-width="4"/><text x="50" y="65" font-size="44" font-family="sans-serif" font-weight="bold" fill="%23ffffff" text-anchor="middle">${initial}</text></svg>`;
                         };
+                        node.dataset.rawSrc = token.img;
                         node.setAttribute('src', getSafeVttUrl(token.img));
                     } else if (needsVideo) {
                         node = document.createElement('video');
+                        node.dataset.rawSrc = token.img;
                         node.setAttribute('src', getSafeVttUrl(token.img));
                         node.muted = true;
                         node.defaultMuted = true;
@@ -806,6 +808,7 @@ export function renderTokensLayer(context = {}) {
                             node.src = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="${encodeURIComponent(color)}" stroke="%23ffffff" stroke-width="4"/><text x="50" y="65" font-size="44" font-family="sans-serif" font-weight="bold" fill="%23ffffff" text-anchor="middle">${initial}</text></svg>`;
                         };
                     }
+                    node.dataset.rawSrc = token.img;
                     node.setAttribute('src', getSafeVttUrl(token.img));
                     if (node.tagName === 'VIDEO') {
                         node.muted = true;

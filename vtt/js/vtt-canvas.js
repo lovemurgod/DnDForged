@@ -3607,6 +3607,28 @@ export function initVttCanvas(vtt) {
         isDraggingToken: () => !!dragTargetId,
         openTokenEditModal,
         renderAll,
+        refreshAssetUrl: (rawUrl) => {
+            if (!rawUrl) {
+                renderAll();
+                return;
+            }
+            vttImageCache.remove(rawUrl);
+            for (const key of Array.from(drawingImageCache.keys())) {
+                if (key === rawUrl || key.includes(rawUrl)) drawingImageCache.delete(key);
+            }
+            const curMap = currentMapId ? vtt.campaignState?.maps?.[currentMapId] : null;
+            if (curMap?.mapImage === rawUrl) {
+                setMapBackground(rawUrl);
+            }
+            if (typeof document !== 'undefined') {
+                document.querySelectorAll('img[data-raw-src], video[data-raw-src]').forEach((el) => {
+                    if (el.dataset.rawSrc === rawUrl) {
+                        el.src = getSafeVttUrl(rawUrl);
+                    }
+                });
+            }
+            renderAll();
+        },
         setGamePauseState: (paused) => {
             vtt.isPaused = !!paused;
             if (paused && vtt.role !== 'GM') {

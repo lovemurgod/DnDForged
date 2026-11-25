@@ -34,6 +34,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         const errBox = document.getElementById('prep-login-error');
         const submitBtn = document.getElementById('btn-prep-login-submit');
 
+        let activeLoginResolve = null;
+
         const showLoginOverlay = (msg = '') => {
             if (!overlay) return;
             overlay.classList.remove('vtt-hidden');
@@ -47,22 +49,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             setTimeout(() => (userIpt?.value ? passIpt : userIpt)?.focus(), 50);
         };
 
-        window.__onWebPrepAuthExpired = (msg) => {
-            showLoginOverlay(msg || 'Your session expired. Please sign in again.');
-        };
-
-        const alreadyValid = await window.__webPrepAuth.verifySession();
-        if (alreadyValid) {
-            overlay?.classList.add('vtt-hidden');
-            return true;
-        }
-
-        return new Promise((resolve) => {
-            showLoginOverlay();
-            if (!form) {
-                resolve(false);
-                return;
-            }
+        if (form) {
             form.onsubmit = async (e) => {
                 e.preventDefault();
                 if (errBox) errBox.classList.add('vtt-hidden');
@@ -74,7 +61,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                     await window.__webPrepAuth.login(userIpt?.value.trim() || '', passIpt?.value || '');
                     if (passIpt) passIpt.value = '';
                     overlay?.classList.add('vtt-hidden');
-                    resolve(true);
+                    if (activeLoginResolve) {
+                        const res = activeLoginResolve;
+                        activeLoginResolve = null;
+                        res(true);
+                    }
                 } catch (err) {
                     if (errBox) {
                         errBox.textContent = err.message || 'Sign-in failed.';
@@ -87,6 +78,25 @@ document.addEventListener('DOMContentLoaded', async () => {
                     }
                 }
             };
+        }
+
+        window.__onWebPrepAuthExpired = (msg) => {
+            showLoginOverlay(msg || 'Your session expired. Please sign in again.');
+        };
+
+        const alreadyValid = await window.__webPrepAuth.verifySession();
+        if (alreadyValid) {
+            overlay?.classList.add('vtt-hidden');
+            return true;
+        }
+
+        return new Promise((resolve) => {
+            if (!form) {
+                resolve(false);
+                return;
+            }
+            activeLoginResolve = resolve;
+            showLoginOverlay();
         });
     }
 
@@ -871,9 +881,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const mapList = Object.values(maps);
         const rollTablesObj = camp.rollTables || {};
-        const customTables = rollTablesObj.customTables || [];
+        const customTables =
+            (Array.isArray(rollTablesObj.tables) && rollTablesObj.tables.length
+                ? rollTablesObj.tables
+                : rollTablesObj.customTables) || [];
         const assetTables = rollTablesObj.assetTables || camp.assetTables || [];
-        const cardDecks = rollTablesObj.cardDecks || [];
+        const cardDecks =
+            (Array.isArray(rollTablesObj.decks) && rollTablesObj.decks.length
+                ? rollTablesObj.decks
+                : rollTablesObj.cardDecks) || [];
         const totalTablesAndDecks = customTables.length + assetTables.length + cardDecks.length;
 
         if (entityCountMaps) entityCountMaps.textContent = mapList.length;
@@ -1019,7 +1035,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                         if (currentStatus?.staticWebMode) {
                             targetUrl = `../play/?campaign=${encodeURIComponent(camp.id)}&characterId=${encodeURIComponent(ch.id)}&openSheet=1`;
                         } else if (currentStatus?.webPrepMode) {
-                            targetUrl = `${window.location.origin}/play?campaign=${encodeURIComponent(camp.id)}&characterId=${encodeURIComponent(ch.id)}&openSheet=1`;
+                            targetUrl = `${window.location.origin}/play/?campaign=${encodeURIComponent(camp.id)}&characterId=${encodeURIComponent(ch.id)}&openSheet=1`;
                         } else {
                             const port = currentStatus?.port || 5050;
                             targetUrl = `http://localhost:${port}/vtt/index.html?campaign=${encodeURIComponent(camp.id)}&characterId=${encodeURIComponent(ch.id)}&openSheet=1`;
@@ -1305,7 +1321,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         try {
             const res = await api.gmImportGranular({
                 campaignId: selectedCampaign.id,
-                explicitFilePath: null
+                explicitFilePath: null,
+                entityType
             });
             if (res && res.success) {
                 alert(`Successfully imported ${res.count} ${label} into "${selectedCampaign.name}"!`);
@@ -1511,6 +1528,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (isWebPrepMode && !initialStatus?.staticWebMode) {
             const gmTabBtn = document.getElementById('tab-btn-gm');
             if (gmTabBtn) gmTabBtn.click();
+        } else if (initialStatus?.staticWebMode) {
+            await loadGmCredentials();
+            await loadGmCampaigns();
+            window.addEventListener('forgedvtt:campaigns-updated', () => {
+                loadGmCampaigns();
+            });
         } else {
             const initialLogs = await api.getLogs();
             initialLogs.forEach(appendLogLine);
@@ -1650,13 +1673,20 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
-    function buildP2pInviteUrl(baseUrl, code, includeCampaign = false) {
+    function buildP2pInviteUrl(baseUrl, code, includeCampaign = false, role = '') {
+        let normalizedBase = String(baseUrl || '').trim();
+        if (normalizedBase && !normalizedBase.endsWith('/') && !/\.[a-z0-9]+$/i.test(normalizedBase)) {
+            normalizedBase += '/';
+        }
         const params = [];
         if (code) params.push(`p2p=${encodeURIComponent(code)}`);
         if (includeCampaign && selectedCampaign?.id) {
             params.push(`campaign=${encodeURIComponent(selectedCampaign.id)}`);
         }
-        let full = params.length ? `${baseUrl}?${params.join('&')}` : baseUrl;
+        if (role) {
+            params.push(`role=${encodeURIComponent(role)}`);
+        }
+        let full = params.length ? `${normalizedBase}?${params.join('&')}` : normalizedBase;
         try {
             const rawIce = localStorage.getItem('forgedvtt_ice_servers');
             if (rawIce) {
@@ -1717,6 +1747,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
+    function resolveStaticPlayBaseUrl() {
+        try {
+            return new URL('../play/', window.location.href).href.replace(/\/$/, '');
+        } catch (_) {
+            return `${window.location.origin}/play`;
+        }
+    }
+
     if (btnCopyP2pLink && p2pRoomCodeDisplay) {
         btnCopyP2pLink.addEventListener('click', () => {
             if (!currentStatus?.staticWebMode && !requireGmCredentialsForOnline('sharing a P2P join link')) return;
@@ -1724,7 +1762,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const basePlayUrl = currentStatus?.staticWebMode
                 ? window.location.hostname === 'forgedvtt.com'
                     ? 'https://forgedvtt.com/play'
-                    : `${window.location.origin}/play`
+                    : resolveStaticPlayBaseUrl()
                 : currentStatus?.isTunnelRunning && currentStatus?.registeredUrl
                   ? `${currentStatus.registeredUrl}/play`
                   : 'https://forgedvtt.com/play';
@@ -1748,9 +1786,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
             const code = p2pRoomCodeDisplay ? p2pRoomCodeDisplay.textContent.trim() : '';
             const localBase = currentStatus?.staticWebMode
-                ? `${window.location.origin}/play`
+                ? resolveStaticPlayBaseUrl()
                 : `${currentStatus?.localUrl || `http://localhost:${currentStatus?.port || 5050}`}/play`;
-            const targetUrl = buildP2pInviteUrl(localBase, code, true);
+            const targetUrl = buildP2pInviteUrl(localBase, code, true, 'GM');
             await api.openVttApp(targetUrl);
         });
     }
@@ -1766,11 +1804,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
             const code = p2pRoomCodeDisplay ? p2pRoomCodeDisplay.textContent.trim() : '';
             const basePlayUrl = currentStatus?.staticWebMode
-                ? `${window.location.origin}/play`
+                ? resolveStaticPlayBaseUrl()
                 : currentStatus?.isTunnelRunning && currentStatus?.registeredUrl
                   ? `${currentStatus.registeredUrl}/play`
-                  : 'https://forgedvtt.com/play';
-            const targetUrl = buildP2pInviteUrl(basePlayUrl, code, true);
+                  : `${currentStatus?.localUrl || `http://localhost:${currentStatus?.port || 5050}`}/play`;
+            const targetUrl = buildP2pInviteUrl(basePlayUrl, code, true, 'GM');
             await api.openVttBrowser(targetUrl);
         });
     }

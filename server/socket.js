@@ -3,6 +3,7 @@ import {
     chatLogs,
     serverConfig,
     activeGmTokens,
+    isValidGmToken,
     generateGmSessionToken,
     generatePlayerSessionToken,
     saveCampaigns,
@@ -236,85 +237,55 @@ export function initSocketServer(io) {
         const socketSubdomain = extractSubdomain(socket.handshake.headers.host);
 
         // Handle player/GM registration to a campaign room
-        socket.on('join', ({ campaignId, username, role, isSubWindow, gmPassword }) => {
-            const isLocal = isLoopbackRequest(socket.handshake);
-            let targetCampaignId = campaignId || socketSubdomain || 'default';
+        socket.on(
+            'join',
+            ({ campaignId, username, role, isSubWindow, gmPassword, gmSessionToken: providedGmSessionToken } = {}) => {
+                const isLocal = isLoopbackRequest(socket.handshake);
+                let targetCampaignId = campaignId || socketSubdomain || 'default';
 
-            if (!campaigns[targetCampaignId]) {
-                if (role !== 'GM' && !isLocal && targetCampaignId !== 'default') {
-                    socket.emit('join_rejected', { reason: 'Campaign not found on this server.' });
-                    socket.disconnect(true);
-                    return;
-                }
-                getOrCreateCampaign(targetCampaignId);
-            }
-            const activeCampId = targetCampaignId;
-
-            const globalGmUser = (serverConfig.gmCredentials?.username || '').trim();
-            const hasGlobalGm = !!globalGmUser;
-
-            // GM Role verification
-            if (role === 'GM') {
-                const hasPasswordHash = !!serverConfig.gmCredentials?.hash;
-                if (isGmAuthRateLimited(socket.handshake)) {
-                    socket.emit('join_rejected', {
-                        reason: 'Too many failed GM login attempts. Please wait a minute before trying again.',
-                        code: 'RATE_LIMITED'
-                    });
-                    socket.disconnect(true);
-                    return;
-                }
-
-                // 1. Remote GM joins MUST have a configured password and provide valid credentials
-                if (!isLocal) {
-                    if (!hasPasswordHash) {
-                        console.warn(
-                            `[Security] Remote connection from ${socket.handshake.address} attempted GM role without configured server password. Rejecting join.`
-                        );
-                        socket.emit('join_rejected', {
-                            reason: 'Remote Game Master login requires a password configured in the GM Dashboard.',
-                            code: 'PASSWORD_REQUIRED'
-                        });
+                if (!campaigns[targetCampaignId]) {
+                    if (role !== 'GM' && !isLocal && targetCampaignId !== 'default') {
+                        socket.emit('join_rejected', { reason: 'Campaign not found on this server.' });
                         socket.disconnect(true);
                         return;
                     }
-                    if (
-                        hasGlobalGm &&
-                        String(username || '')
-                            .trim()
-                            .toLowerCase() !== globalGmUser.toLowerCase()
-                    ) {
-                        checkAndRecordGmAuthFailure(socket.handshake);
-                        socket.emit('join_rejected', {
-                            reason: 'You are not the designated Game Master for this server.'
-                        });
-                        socket.disconnect(true);
-                        return;
-                    }
-                    const isValid = verifyPassword(
-                        gmPassword || '',
-                        serverConfig.gmCredentials.salt,
-                        serverConfig.gmCredentials.hash
+                    getOrCreateCampaign(targetCampaignId);
+                }
+                const activeCampId = targetCampaignId;
+
+                const globalGmUser = (serverConfig.gmCredentials?.username || '').trim();
+                const hasGlobalGm = !!globalGmUser;
+
+                // GM Role verification
+                if (role === 'GM') {
+                    const hasPasswordHash = !!serverConfig.gmCredentials?.hash;
+                    const hasValidSubToken = Boolean(
+                        isSubWindow && providedGmSessionToken && isValidGmToken(providedGmSessionToken)
                     );
-                    if (!isValid) {
-                        checkAndRecordGmAuthFailure(socket.handshake);
+                    if (isGmAuthRateLimited(socket.handshake)) {
                         socket.emit('join_rejected', {
-                            reason: 'Incorrect GM Password.',
-                            code: 'INVALID_PASSWORD'
+                            reason: 'Too many failed GM login attempts. Please wait a minute before trying again.',
+                            code: 'RATE_LIMITED'
                         });
                         socket.disconnect(true);
                         return;
                     }
-                    clearGmAuthFailures(socket.handshake);
-                    // Authoritative GM: update campaign's assigned GM username to authenticated GM
-                    if (campaigns[activeCampId].gmUsername !== username) {
-                        campaigns[activeCampId].gmUsername = username;
-                        saveCampaigns();
-                    }
-                } else {
-                    // 2. Local loopback connection: allow convenient local login
-                    if (hasGlobalGm) {
+
+                    // 1. Remote GM joins MUST have a configured password and provide valid credentials (or a valid GM session token from subwindow)
+                    if (!isLocal) {
+                        if (!hasPasswordHash) {
+                            console.warn(
+                                `[Security] Remote connection from ${socket.handshake.address} attempted GM role without configured server password. Rejecting join.`
+                            );
+                            socket.emit('join_rejected', {
+                                reason: 'Remote Game Master login requires a password configured in the GM Dashboard.',
+                                code: 'PASSWORD_REQUIRED'
+                            });
+                            socket.disconnect(true);
+                            return;
+                        }
                         if (
+                            hasGlobalGm &&
                             String(username || '')
                                 .trim()
                                 .toLowerCase() !== globalGmUser.toLowerCase()
@@ -326,142 +297,190 @@ export function initSocketServer(io) {
                             socket.disconnect(true);
                             return;
                         }
-                        if (hasPasswordHash) {
-                            const isValid = verifyPassword(
+                        const isValid =
+                            hasValidSubToken ||
+                            verifyPassword(
                                 gmPassword || '',
                                 serverConfig.gmCredentials.salt,
                                 serverConfig.gmCredentials.hash
                             );
-                            if (!isValid) {
-                                checkAndRecordGmAuthFailure(socket.handshake);
-                                socket.emit('join_rejected', {
-                                    reason: 'Incorrect GM Password.',
-                                    code: 'INVALID_PASSWORD'
-                                });
-                                socket.disconnect(true);
-                                return;
-                            }
-                            clearGmAuthFailures(socket.handshake);
+                        if (!isValid) {
+                            checkAndRecordGmAuthFailure(socket.handshake);
+                            socket.emit('join_rejected', {
+                                reason: 'Incorrect GM Password.',
+                                code: 'INVALID_PASSWORD'
+                            });
+                            socket.disconnect(true);
+                            return;
                         }
+                        clearGmAuthFailures(socket.handshake);
+                        // Authoritative GM: update campaign's assigned GM username to authenticated GM
                         if (campaigns[activeCampId].gmUsername !== username) {
                             campaigns[activeCampId].gmUsername = username;
                             saveCampaigns();
                         }
                     } else {
-                        // Passwordless fallback on loopback
-                        if (!campaigns[activeCampId].gmUsername) {
-                            campaigns[activeCampId].gmUsername = username;
-                            saveCampaigns();
-                        } else if (
-                            String(username || '')
-                                .trim()
-                                .toLowerCase() !==
-                            String(campaigns[activeCampId].gmUsername || '')
-                                .trim()
-                                .toLowerCase()
-                        ) {
-                            socket.emit('join_rejected', { reason: 'You are not the Game Master for this campaign.' });
-                            socket.disconnect(true);
-                            return;
+                        // 2. Local loopback connection: allow convenient local login
+                        if (hasGlobalGm) {
+                            if (
+                                String(username || '')
+                                    .trim()
+                                    .toLowerCase() !== globalGmUser.toLowerCase()
+                            ) {
+                                checkAndRecordGmAuthFailure(socket.handshake);
+                                socket.emit('join_rejected', {
+                                    reason: 'You are not the designated Game Master for this server.'
+                                });
+                                socket.disconnect(true);
+                                return;
+                            }
+                            if (hasPasswordHash) {
+                                const isValid =
+                                    hasValidSubToken ||
+                                    verifyPassword(
+                                        gmPassword || '',
+                                        serverConfig.gmCredentials.salt,
+                                        serverConfig.gmCredentials.hash
+                                    );
+                                if (!isValid) {
+                                    checkAndRecordGmAuthFailure(socket.handshake);
+                                    socket.emit('join_rejected', {
+                                        reason: 'Incorrect GM Password.',
+                                        code: 'INVALID_PASSWORD'
+                                    });
+                                    socket.disconnect(true);
+                                    return;
+                                }
+                                clearGmAuthFailures(socket.handshake);
+                            }
+                            if (campaigns[activeCampId].gmUsername !== username) {
+                                campaigns[activeCampId].gmUsername = username;
+                                saveCampaigns();
+                            }
+                        } else {
+                            // Passwordless fallback on loopback
+                            if (!campaigns[activeCampId].gmUsername) {
+                                campaigns[activeCampId].gmUsername = username;
+                                saveCampaigns();
+                            } else if (
+                                String(username || '')
+                                    .trim()
+                                    .toLowerCase() !==
+                                String(campaigns[activeCampId].gmUsername || '')
+                                    .trim()
+                                    .toLowerCase()
+                            ) {
+                                socket.emit('join_rejected', {
+                                    reason: 'You are not the Game Master for this campaign.'
+                                });
+                                socket.disconnect(true);
+                                return;
+                            }
                         }
                     }
                 }
-            }
 
-            // Prevent players from taking the GM's username (case-insensitive & trimmed)
-            const cleanJoinUser = String(username || '')
-                .trim()
-                .toLowerCase();
-            if (role === 'Player') {
-                if (hasGlobalGm && cleanJoinUser === globalGmUser.toLowerCase()) {
-                    socket.emit('join_rejected', { reason: 'That username is reserved for the Game Master.' });
-                    socket.disconnect(true);
-                    return;
-                }
-                const campGm = String(campaigns[activeCampId].gmUsername || '')
+                // Prevent players from taking the GM's username (case-insensitive & trimmed)
+                const cleanJoinUser = String(username || '')
                     .trim()
                     .toLowerCase();
-                if (campGm && cleanJoinUser === campGm) {
-                    socket.emit('join_rejected', { reason: 'That username is reserved for the Game Master.' });
-                    socket.disconnect(true);
-                    return;
+                if (role === 'Player') {
+                    if (hasGlobalGm && cleanJoinUser === globalGmUser.toLowerCase()) {
+                        socket.emit('join_rejected', { reason: 'That username is reserved for the Game Master.' });
+                        socket.disconnect(true);
+                        return;
+                    }
+                    const campGm = String(campaigns[activeCampId].gmUsername || '')
+                        .trim()
+                        .toLowerCase();
+                    if (campGm && cleanJoinUser === campGm) {
+                        socket.emit('join_rejected', { reason: 'That username is reserved for the Game Master.' });
+                        socket.disconnect(true);
+                        return;
+                    }
                 }
-            }
 
-            let finalRole = role;
-            if (finalRole === 'Player') {
-                // Enforce allowlist if populated (Presentation Display exemption applies ONLY to local loopback)
-                const allowed = campaigns[activeCampId].allowedUsers || [];
-                const isLocalPresentation = isLocal && username === 'Presentation Display';
-                if (allowed.length > 0 && !allowed.includes(username) && !isLocalPresentation) {
-                    socket.emit('join_rejected', { reason: 'Username not on the allowed list' });
-                    socket.disconnect(true);
-                    return;
+                let finalRole = role;
+                if (finalRole === 'Player') {
+                    // Enforce allowlist if populated (Presentation Display exemption applies ONLY to local loopback)
+                    const allowed = campaigns[activeCampId].allowedUsers || [];
+                    const isLocalPresentation = isLocal && username === 'Presentation Display';
+                    if (allowed.length > 0 && !allowed.includes(username) && !isLocalPresentation) {
+                        socket.emit('join_rejected', { reason: 'Username not on the allowed list' });
+                        socket.disconnect(true);
+                        return;
+                    }
                 }
-            }
 
-            socket.join(activeCampId);
-            socket.campaignId = activeCampId;
-            socket.username = username;
-            socket.role = finalRole;
-            socket.isSubWindow = !!isSubWindow;
+                socket.join(activeCampId);
+                socket.campaignId = activeCampId;
+                socket.username = username;
+                socket.role = finalRole;
+                socket.isSubWindow = !!isSubWindow;
 
-            if (!campaigns[activeCampId].knownPlayers) {
-                campaigns[activeCampId].knownPlayers = [];
-            }
-            if (!campaigns[activeCampId].knownPlayers.includes(username)) {
-                campaigns[activeCampId].knownPlayers.push(username);
-                saveCampaigns();
-            }
+                if (!campaigns[activeCampId].knownPlayers) {
+                    campaigns[activeCampId].knownPlayers = [];
+                }
+                if (!campaigns[activeCampId].knownPlayers.includes(username)) {
+                    campaigns[activeCampId].knownPlayers.push(username);
+                    saveCampaigns();
+                }
 
-            console.log(
-                `${username} joined campaign ${activeCampId} as ${finalRole}${socket.isSubWindow ? ' (Sub-Window)' : ''}`
-            );
+                console.log(
+                    `${username} joined campaign ${activeCampId} as ${finalRole}${socket.isSubWindow ? ' (Sub-Window)' : ''}`
+                );
 
-            // Welcome user and send current state (sanitized to avoid 1MB websocket limit)
-            const rawChat = (chatLogs[activeCampId] || []).slice(-50);
-            const sanitizedChat =
-                finalRole === 'GM'
-                    ? rawChat
-                    : rawChat.filter((m) => {
-                          if (m.whisperToGM) return m.username === username;
-                          if (m.whisperTo) {
-                              const tLower = String(m.whisperTo).toLowerCase().trim();
-                              return m.username === username || (username && username.toLowerCase().trim() === tLower);
-                          }
-                          return true;
-                      });
+                // Welcome user and send current state (sanitized to avoid 1MB websocket limit)
+                const rawChat = (chatLogs[activeCampId] || []).slice(-50);
+                const sanitizedChat =
+                    finalRole === 'GM'
+                        ? rawChat
+                        : rawChat.filter((m) => {
+                              if (m.whisperToGM) return m.username === username;
+                              if (m.whisperTo) {
+                                  const tLower = String(m.whisperTo).toLowerCase().trim();
+                                  return (
+                                      m.username === username || (username && username.toLowerCase().trim() === tLower)
+                                  );
+                              }
+                              return true;
+                          });
 
-            let gmSessionToken = null;
-            if (finalRole === 'GM') {
-                gmSessionToken = generateGmSessionToken();
-                socket.gmSessionToken = gmSessionToken;
-            }
-            const playerSessionToken = generatePlayerSessionToken({ campaignId: activeCampId, username });
-            socket.playerSessionToken = playerSessionToken;
+                let gmSessionToken = null;
+                if (finalRole === 'GM') {
+                    if (isSubWindow && providedGmSessionToken && isValidGmToken(providedGmSessionToken)) {
+                        gmSessionToken = providedGmSessionToken;
+                    } else {
+                        gmSessionToken = generateGmSessionToken();
+                        socket.gmSessionToken = gmSessionToken;
+                    }
+                }
+                const playerSessionToken = generatePlayerSessionToken({ campaignId: activeCampId, username });
+                socket.playerSessionToken = playerSessionToken;
 
-            socket.emit('joined', {
-                gmSessionToken,
-                playerSessionToken,
-                role: finalRole,
-                userRole: finalRole,
-                campaignState: getSanitizedCampaignSync(campaigns[activeCampId], finalRole, username, activeCampId),
-                chatHistory: sanitizedChat
-            });
-
-            // Notify others only if it is a primary window connection
-            if (!socket.isSubWindow) {
-                socket.to(activeCampId).emit('sys_message', {
-                    text: `${username} has joined the game.`,
-                    timestamp: Date.now()
+                socket.emit('joined', {
+                    gmSessionToken,
+                    playerSessionToken,
+                    role: finalRole,
+                    userRole: finalRole,
+                    campaignState: getSanitizedCampaignSync(campaigns[activeCampId], finalRole, username, activeCampId),
+                    chatHistory: sanitizedChat
                 });
-                broadcastCampaignSync(activeCampId);
+
+                // Notify others only if it is a primary window connection
+                if (!socket.isSubWindow) {
+                    socket.to(activeCampId).emit('sys_message', {
+                        text: `${username} has joined the game.`,
+                        timestamp: Date.now()
+                    });
+                    broadcastCampaignSync(activeCampId);
+                }
             }
-        });
+        );
 
         socket.on('allowlist:update', (data) => {
             const { campaignId } = socket;
-            if (!campaignId || !campaigns[campaignId]) return;
+            if (!campaignId || !campaigns[campaignId] || !data) return;
             if (socket.role !== 'GM') return;
 
             campaigns[campaignId].allowedUsers = data.allowedUsers;
@@ -473,7 +492,7 @@ export function initSocketServer(io) {
         // Sync handouts
         socket.on('handouts:update', (data) => {
             const { campaignId } = socket;
-            if (!campaignId || !campaigns[campaignId]) return;
+            if (!campaignId || !campaigns[campaignId] || !data) return;
             if (socket.role !== 'GM') return;
 
             campaigns[campaignId].handouts = data.handouts;
@@ -485,7 +504,7 @@ export function initSocketServer(io) {
         // Forward handouts:force_show
         socket.on('handouts:force_show', (data) => {
             const { campaignId } = socket;
-            if (!campaignId) return;
+            if (!campaignId || !data) return;
             if (socket.role !== 'GM') return;
 
             io.to(campaignId).emit('handouts:force_show', data);
@@ -494,7 +513,7 @@ export function initSocketServer(io) {
         // Sync Roll Tables, Asset Tables & Card Decks
         socket.on('rolltables:update', (data) => {
             const { campaignId } = socket;
-            if (!campaignId || !campaigns[campaignId]) return;
+            if (!campaignId || !campaigns[campaignId] || !data) return;
             if (socket.role !== 'GM') return;
 
             if (!campaigns[campaignId].rollTables) {
@@ -514,7 +533,7 @@ export function initSocketServer(io) {
         // Update single Deck state (drawPile, discardPile, drawnCards)
         socket.on('deck:state_update', (data) => {
             const { campaignId } = socket;
-            if (!campaignId || !campaigns[campaignId]) return;
+            if (!campaignId || !campaigns[campaignId] || !data || !data.deckId) return;
             const camp = campaigns[campaignId];
             if (!camp.rollTables || !Array.isArray(camp.rollTables.decks)) return;
             const deck = camp.rollTables.decks.find((d) => d.id === data.deckId);
@@ -641,7 +660,7 @@ export function initSocketServer(io) {
         }
 
         // Sync token state changes (legacy - full state)
-        socket.on('token:update', (data) => {
+        const handleTokensUpdate = (data) => {
             const { campaignId } = socket;
             if (!campaignId || !campaigns[campaignId]) return;
             if (socket.role !== 'GM' && campaigns[campaignId].isPaused) {
@@ -776,7 +795,9 @@ export function initSocketServer(io) {
                     }
                 }
             }
-        });
+        };
+        socket.on('token:update', handleTokensUpdate);
+        socket.on('tokens:update', handleTokensUpdate);
 
         // Add new token
         socket.on('token:add', (data) => {
@@ -952,13 +973,18 @@ export function initSocketServer(io) {
                 return;
             }
 
+            if (!data || !data.tokenId) return;
             const mapId =
                 data.mapId ||
                 (socket.role === 'GM'
                     ? campaigns[campaignId].activeGMMapId || campaigns[campaignId].activeMapId
                     : getPlayerMapOverride(campaigns[campaignId], socket.username) ||
                       campaigns[campaignId].activeMapId);
-            if (campaigns[campaignId].maps && campaigns[campaignId].maps[mapId]) {
+            if (
+                campaigns[campaignId].maps &&
+                campaigns[campaignId].maps[mapId] &&
+                campaigns[campaignId].maps[mapId].tokens
+            ) {
                 const existingToken = campaigns[campaignId].maps[mapId].tokens[data.tokenId];
                 if (!existingToken) return;
 
@@ -1261,6 +1287,28 @@ export function initSocketServer(io) {
                 mapId: targetMapId || data.mapId || campaigns[campaignId].activeMapId,
                 portals: data.portals || []
             });
+        });
+
+        socket.on('maptools:update', (data) => {
+            const { campaignId } = socket;
+            if (!campaignId || !campaigns[campaignId] || !data) return;
+            if (socket.role !== 'GM') return;
+            let saved = false;
+            if (Array.isArray(data.traps)) {
+                const mapId = updateMapProperty(campaigns, campaignId, data.mapId, 'traps', data.traps);
+                if (mapId) {
+                    saved = true;
+                    io.to(campaignId).emit('traps:updated', { mapId, traps: data.traps });
+                }
+            }
+            if (Array.isArray(data.portals)) {
+                const mapId = updateMapProperty(campaigns, campaignId, data.mapId, 'portals', data.portals);
+                if (mapId) {
+                    saved = true;
+                    io.to(campaignId).emit('portals:updated', { mapId, portals: data.portals });
+                }
+            }
+            if (saved) saveCampaigns();
         });
 
         socket.on('trap:trigger', (data) => {
@@ -1818,10 +1866,19 @@ export function initSocketServer(io) {
         // Create or update a character
         socket.on('character:update', (data) => {
             const { campaignId } = socket;
-            if (!campaignId || !campaigns[campaignId]) return;
+            if (
+                !campaignId ||
+                !campaigns[campaignId] ||
+                !data ||
+                !data.character ||
+                typeof data.character !== 'object'
+            ) {
+                return;
+            }
             if (!campaigns[campaignId].characters) campaigns[campaignId].characters = {};
 
-            const charId = data.character?.id;
+            const sanitizedCharacter = sanitizeImportedObject(data.character);
+            const charId = sanitizedCharacter?.id;
             if (!charId) return;
 
             if (socket.role !== 'GM') {
@@ -1835,24 +1892,24 @@ export function initSocketServer(io) {
                         return;
                     }
                 } else {
-                    data.character.owner = socket.username;
-                    data.character.ownerUsername = socket.username;
-                    if (!data.character.assignedPlayers) data.character.assignedPlayers = [socket.username];
-                    if (!data.character.players) data.character.players = [socket.username];
+                    sanitizedCharacter.owner = socket.username;
+                    sanitizedCharacter.ownerUsername = socket.username;
+                    if (!sanitizedCharacter.assignedPlayers) sanitizedCharacter.assignedPlayers = [socket.username];
+                    if (!sanitizedCharacter.players) sanitizedCharacter.players = [socket.username];
                 }
             }
 
-            campaigns[campaignId].characters[charId] = data.character;
+            campaigns[campaignId].characters[charId] = sanitizedCharacter;
             saveCampaigns();
 
             // Broadcast update to everyone
-            io.to(campaignId).emit('character:updated', { character: data.character, origin: socket.id });
+            io.to(campaignId).emit('character:updated', { character: sanitizedCharacter, origin: socket.id });
         });
 
         // Delete a character
         socket.on('character:delete', (data) => {
             const { campaignId } = socket;
-            if (!campaignId || !campaigns[campaignId] || !campaigns[campaignId].characters) return;
+            if (!campaignId || !campaigns[campaignId] || !campaigns[campaignId].characters || !data || !data.id) return;
 
             const existing = campaigns[campaignId].characters[data.id];
             if (!existing) return;
@@ -2587,7 +2644,7 @@ export function initSocketServer(io) {
         // Sync token force select event (player forces GM to select token)
         socket.on('token:force_select_gm', (data) => {
             const { campaignId } = socket;
-            if (!campaignId) return;
+            if (!campaignId || !data || !data.tokenId) return;
             socket.to(campaignId).emit('token:force_selected_gm', {
                 tokenId: data.tokenId,
                 username: socket.username

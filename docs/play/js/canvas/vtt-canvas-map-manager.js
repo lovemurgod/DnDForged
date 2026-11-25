@@ -2274,8 +2274,13 @@ export function setupMapUploadControls(managerState, options = {}) {
                 try {
                     btnCreateSubmit.disabled = true;
                     btnCreateSubmit.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Uploading...';
+                    const authHeaders =
+                        typeof window !== 'undefined' && typeof window.vttAuthHeaders === 'function'
+                            ? window.vttAuthHeaders()
+                            : {};
                     const res = await fetch('/api/upload', {
                         method: 'POST',
+                        headers: authHeaders,
                         body: formData
                     });
 

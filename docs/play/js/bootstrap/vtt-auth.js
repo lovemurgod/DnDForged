@@ -224,12 +224,67 @@ export function setupLoginHandlers(callbacks = {}) {
     });
     loadCampaigns();
 
+    const ROOM_CODE_ALPHABET = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
+    const generateLocalRoomCode = () => {
+        const bytes = new Uint8Array(8);
+        if (typeof crypto !== 'undefined' && typeof crypto.getRandomValues === 'function') {
+            crypto.getRandomValues(bytes);
+        } else {
+            for (let i = 0; i < 8; i++) bytes[i] = Math.floor(Math.random() * 256);
+        }
+        let code = '';
+        for (let i = 0; i < 8; i++) {
+            code += ROOM_CODE_ALPHABET[bytes[i] % ROOM_CODE_ALPHABET.length];
+            if (i === 3) code += '-';
+        }
+        return code;
+    };
+
+    const getOrCreateHostRoomCode = (forceNew = false) => {
+        try {
+            if (!forceNew && typeof localStorage !== 'undefined') {
+                const existing = localStorage.getItem('forgedvtt_static_p2p_code');
+                if (existing && existing.trim()) return existing.trim().toUpperCase();
+            }
+            const fresh = generateLocalRoomCode();
+            if (typeof localStorage !== 'undefined') {
+                localStorage.setItem('forgedvtt_static_p2p_code', fresh);
+            }
+            return fresh;
+        } catch (_) {
+            return generateLocalRoomCode();
+        }
+    };
+
     // P2P Connection Mode Setup
     const tabServer = document.getElementById('tab-login-server');
     const tabP2P = document.getElementById('tab-login-p2p');
     const p2pGroup = document.getElementById('login-p2p-group');
     const p2pCodeInput = document.getElementById('login-p2p-code');
     const p2pManualInput = document.getElementById('login-p2p-manual');
+    const btnP2pHost = document.getElementById('btn-p2p-mode-host');
+    const btnP2pJoin = document.getElementById('btn-p2p-mode-join');
+    const btnP2pRegen = document.getElementById('btn-login-p2p-regen');
+    const btnP2pCopy = document.getElementById('btn-login-p2p-copy');
+    const btnP2pManualHost = document.getElementById('btn-login-p2p-manual-host');
+    const manualHostWrap = document.getElementById('login-p2p-manual-host-wrap');
+    let forceManualHost = false;
+
+    const syncP2pRoleUi = (targetRole) => {
+        const isGm = targetRole === 'GM';
+        btnP2pHost?.classList.toggle('active', isGm);
+        btnP2pHost?.classList.toggle('btn-primary', isGm);
+        btnP2pHost?.classList.toggle('btn-secondary', !isGm);
+        btnP2pJoin?.classList.toggle('active', !isGm);
+        btnP2pJoin?.classList.toggle('btn-primary', !isGm);
+        btnP2pJoin?.classList.toggle('btn-secondary', isGm);
+        btnP2pRegen?.classList.toggle('vtt-hidden', !isGm);
+        btnP2pCopy?.classList.toggle('vtt-hidden', !isGm);
+        manualHostWrap?.classList.toggle('vtt-hidden', !isGm);
+        if (isGm && isP2PMode && p2pCodeInput && !p2pCodeInput.value.trim() && !urlParams?.get('p2p')) {
+            p2pCodeInput.value = getOrCreateHostRoomCode(false);
+        }
+    };
 
     const setConnectionMode = (p2p) => {
         isP2PMode = p2p;
@@ -249,7 +304,8 @@ export function setupLoginHandlers(callbacks = {}) {
                 hintText.innerHTML =
                     '<i class="fa-solid fa-bolt" style="margin-right: 4px; color: #f59e0b;"></i> <strong>Direct P2P:</strong> Low-latency direct connection between machines. Free & unlimited bandwidth. Best on home Wi-Fi/desktop.';
             }
-            if (p2pCodeInput) p2pCodeInput.focus();
+            syncP2pRoleUi(roleSelect ? roleSelect.value : 'GM');
+            if (p2pCodeInput && !p2pCodeInput.value) p2pCodeInput.focus();
         } else {
             tabServer?.classList.add('active');
             tabServer?.classList.remove('btn-secondary');
@@ -271,13 +327,64 @@ export function setupLoginHandlers(callbacks = {}) {
     tabServer?.addEventListener('click', () => setConnectionMode(false));
     tabP2P?.addEventListener('click', () => setConnectionMode(true));
 
-    if (urlParams?.get('p2p')) {
+    btnP2pHost?.addEventListener('click', () => {
+        if (roleSelect) roleSelect.value = 'GM';
+        if (p2pCodeInput && !p2pCodeInput.value.trim()) {
+            p2pCodeInput.value = getOrCreateHostRoomCode(false);
+        }
+        syncP2pRoleUi('GM');
+    });
+    btnP2pJoin?.addEventListener('click', () => {
+        if (roleSelect) roleSelect.value = 'Player';
+        if (p2pCodeInput && !urlParams?.get('p2p')) {
+            const savedHostCode = localStorage.getItem('forgedvtt_static_p2p_code');
+            if (savedHostCode && p2pCodeInput.value.trim().toUpperCase() === savedHostCode.trim().toUpperCase()) {
+                p2pCodeInput.value = '';
+            }
+        }
+        syncP2pRoleUi('Player');
+        p2pCodeInput?.focus();
+    });
+    roleSelect?.addEventListener('change', () => {
+        syncP2pRoleUi(roleSelect.value);
+    });
+    btnP2pRegen?.addEventListener('click', () => {
+        if (p2pCodeInput) p2pCodeInput.value = getOrCreateHostRoomCode(true);
+    });
+    btnP2pCopy?.addEventListener('click', () => {
+        const code = (p2pCodeInput?.value || getOrCreateHostRoomCode(false)).trim().toUpperCase();
+        if (p2pCodeInput && !p2pCodeInput.value.trim()) p2pCodeInput.value = code;
+        const inviteUrl = new URL('./', window.location.href);
+        inviteUrl.searchParams.set('p2p', code);
+        navigator.clipboard?.writeText(inviteUrl.href).catch(() => {});
+        const origHtml = btnP2pCopy.innerHTML;
+        btnP2pCopy.innerHTML = '<i class="fa-solid fa-check"></i>';
+        setTimeout(() => {
+            btnP2pCopy.innerHTML = origHtml;
+        }, 1500);
+    });
+    btnP2pManualHost?.addEventListener('click', () => {
+        forceManualHost = true;
+        if (roleSelect) roleSelect.value = 'GM';
+        syncP2pRoleUi('GM');
+        executeJoinGame();
+    });
+
+    const isStaticWeb = typeof window !== 'undefined' && Boolean(window.__FORGEDVTT_STATIC_WEB__);
+    if (isStaticWeb && tabServer) {
+        // Static web hosting has no Socket.IO server: always hide Web Server tab
+        tabServer.classList.add('vtt-hidden');
+    }
+    const urlP2pCode = urlParams?.get('p2p');
+    const urlRole = urlParams?.get('role');
+    if (urlP2pCode) {
+        if (roleSelect) {
+            roleSelect.value = urlRole === 'GM' ? 'GM' : 'Player';
+        }
+        if (p2pCodeInput) p2pCodeInput.value = urlP2pCode.toUpperCase();
         setConnectionMode(true);
-        if (p2pCodeInput) p2pCodeInput.value = urlParams.get('p2p').toUpperCase();
-    } else if (typeof window !== 'undefined' && window.__FORGEDVTT_STATIC_WEB__) {
-        // Static web hosting has no Socket.IO server: default cleanly to Direct P2P mode
+    } else if (isStaticWeb) {
         setConnectionMode(true);
-        if (tabServer) tabServer.classList.add('vtt-hidden');
     }
     const isPresentationMode = urlParams?.get('mode') === 'presentation' || urlParams?.get('presentation') === 'true';
     if (isPresentationMode) {
@@ -296,7 +403,12 @@ export function setupLoginHandlers(callbacks = {}) {
             if (typeof window !== 'undefined' && window.VTT) {
                 window.VTT.campaignId = targetCampaign;
             }
-            callbacks.onStartSocketConnection?.(targetCampaign, 'Presentation Display', 'Player');
+            const p2pCode = (urlParams.get('p2p') || '').trim().toUpperCase();
+            const usePresentationP2p = Boolean(p2pCode || window.__FORGEDVTT_STATIC_WEB__);
+            const presOptions = usePresentationP2p
+                ? { isP2P: true, p2pCode, p2pMode: p2pCode ? 'broker' : 'presentation-mirror' }
+                : { isP2P: false };
+            callbacks.onStartSocketConnection?.(targetCampaign, 'Presentation Display', 'Player', null, presOptions);
         };
 
         if (campaignLoadPromise) {
@@ -354,12 +466,26 @@ export function setupLoginHandlers(callbacks = {}) {
         }
         usernameInput?.classList.remove('form-control--error');
 
+        const manualVal = (p2pManualInput?.value || '').trim();
+        let enteredCode = (p2pCodeInput?.value || '').trim().toUpperCase();
+        if (isP2PMode && role === 'GM' && !enteredCode && !manualVal && !forceManualHost) {
+            enteredCode = getOrCreateHostRoomCode(false);
+            if (p2pCodeInput) p2pCodeInput.value = enteredCode;
+        }
+        if (isP2PMode && role !== 'GM' && !enteredCode && !manualVal) {
+            showLoginError('Please enter a P2P Room Code from your GM or paste a Serverless Invite.');
+            p2pCodeInput?.focus();
+            return;
+        }
+
+        const useManual = role === 'GM' ? forceManualHost : Boolean(manualVal);
+        forceManualHost = false;
         const p2pOptions = isP2PMode
             ? {
                   isP2P: true,
-                  p2pCode: (p2pCodeInput?.value || '').trim().toUpperCase(),
-                  p2pMode: (p2pManualInput?.value || '').trim() ? 'manual' : 'broker',
-                  p2pData: (p2pManualInput?.value || '').trim() || null
+                  p2pCode: enteredCode,
+                  p2pMode: useManual ? 'manual' : 'broker',
+                  p2pData: manualVal || null
               }
             : { isP2P: false };
 

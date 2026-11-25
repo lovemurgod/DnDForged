@@ -7,7 +7,8 @@ import {
     isAuthorizedGmOrSecret,
     isValidAssetPath,
     verifyGmOrSecret,
-    verifyPlayerOrGmSession
+    verifyPlayerOrGmSession,
+    onDatabaseDirectoryChanged
 } from '../state.js';
 import { processMediaUrl } from './media.js';
 
@@ -130,8 +131,12 @@ export function invalidateAssetTree() {
     cachedAssetTree = null;
 }
 
+onDatabaseDirectoryChanged(() => {
+    invalidateAssetTree();
+});
+
 // Get asset gallery tree
-assetsRouter.get('/assets', (req, res) => {
+assetsRouter.get('/assets', verifyPlayerOrGmSession, (req, res) => {
     try {
         if (!assetTreeDirty && cachedAssetTree) {
             return res.json(cachedAssetTree);

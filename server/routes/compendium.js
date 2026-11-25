@@ -8,7 +8,8 @@ import {
     extractSubdomain,
     getDisabledSourcesSet,
     loadCustomEntities,
-    extractEntityArray
+    extractEntityArray,
+    onDatabaseDirectoryChanged
 } from '../state.js';
 
 export const compendiumRouter = express.Router();
@@ -1674,3 +1675,7 @@ export function invalidateCompendiumCaches() {
     loadGzippedItemsCatalog();
     loadGzippedBestiaryCatalog();
 }
+
+onDatabaseDirectoryChanged(() => {
+    invalidateCompendiumCaches();
+});
