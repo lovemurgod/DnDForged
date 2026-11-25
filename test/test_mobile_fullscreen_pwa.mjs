@@ -158,9 +158,10 @@ test('Mobile Fullscreen API and PWA Standalone Integration Suite', async (t) => 
                 'vtt',
                 'window',
                 'document',
+                'navigator',
                 `${runnableJs}\nreturn initVttMobileAdapter(vtt);`
             );
-            const adapter = factory(mockVtt, window, window.document);
+            const adapter = factory(mockVtt, window, window.document, window.navigator);
 
             assert.ok(adapter, 'initMobileAdapter must return adapter');
             assert.equal(typeof adapter.toggleFullscreen, 'function', 'adapter must expose toggleFullscreen');

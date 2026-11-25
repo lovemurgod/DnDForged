@@ -15,7 +15,7 @@ if (testFiles.length === 0) {
     process.exit(1);
 }
 
-const nodeArgs = ['--test'];
+const nodeArgs = ['--test', '--test-concurrency=4'];
 if (useCoverage) {
     nodeArgs.push('--experimental-test-coverage');
 }

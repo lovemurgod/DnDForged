@@ -22,6 +22,8 @@ test('Phase 2: Remote GM Login / Logout API & Token Enforcement', async (t) => {
     app.use('/api', campaignsRouter);
 
     const server = createServer(app);
+    server.keepAliveTimeout = 60000;
+    server.headersTimeout = 65000;
     await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
     const baseUrl = `http://127.0.0.1:${server.address().port}`;
     const originalCreds = serverConfig.gmCredentials;
