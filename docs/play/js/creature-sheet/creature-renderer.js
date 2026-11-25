@@ -1174,12 +1174,21 @@ export function renderStatBlock(m, panel = null, ctx = {}) {
         : '';
 
     const globalRollMode = (typeof window !== 'undefined' && window.VTT?.currentRollMode) || null;
-    const globalWhisper = (typeof window !== 'undefined' && window.VTT?.whisperGM !== undefined) ? window.VTT.whisperGM : null;
+    const globalWhisper =
+        typeof window !== 'undefined' && window.VTT?.whisperGM !== undefined ? window.VTT.whisperGM : null;
 
     m.activeRollMode = globalRollMode || m.activeRollMode || (char && char.activeRollMode) || 'normal';
-    m.whisperToGM = globalWhisper !== null ? Boolean(globalWhisper) : (m.whisperToGM !== undefined ? Boolean(m.whisperToGM) : (char ? Boolean(char.whisperToGM) : false));
+    m.whisperToGM =
+        globalWhisper !== null
+            ? Boolean(globalWhisper)
+            : m.whisperToGM !== undefined
+              ? Boolean(m.whisperToGM)
+              : char
+                ? Boolean(char.whisperToGM)
+                : false;
 
-    const activeRollMode = (typeof window !== 'undefined' && window.VTT?.currentRollMode) || m.activeRollMode || 'normal';
+    const activeRollMode =
+        (typeof window !== 'undefined' && window.VTT?.currentRollMode) || m.activeRollMode || 'normal';
     const isWhisper = Boolean((typeof window !== 'undefined' && window.VTT?.whisperGM) || m.whisperToGM);
 
     const rollModeControlHtml = `

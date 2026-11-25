@@ -11,7 +11,7 @@ export function initVttPresentation(vtt = {}) {
         (typeof window !== 'undefined' && Boolean(window.VTT?.isPresentationMode)) ||
         (typeof location !== 'undefined' &&
             (new URLSearchParams(location.search).get('mode') === 'presentation' ||
-             new URLSearchParams(location.search).get('presentation') === 'true'));
+                new URLSearchParams(location.search).get('presentation') === 'true'));
 
     if (isPresentationMode) {
         return initPresentationClient(vtt);
@@ -91,12 +91,14 @@ function initGmPresentationHost(vtt = {}) {
 
     const btnLaunch = typeof document !== 'undefined' ? document.getElementById('btn-launch-presentation') : null;
     const btnClose = typeof document !== 'undefined' ? document.getElementById('btn-close-presentation') : null;
-    const chkCamSync = typeof document !== 'undefined' ? document.getElementById('config-presentation-camera-sync') : null;
+    const chkCamSync =
+        typeof document !== 'undefined' ? document.getElementById('config-presentation-camera-sync') : null;
 
     function updateUiState(isOpen) {
         if (btnLaunch) {
             if (isOpen) {
-                btnLaunch.innerHTML = '<i class="fa-solid fa-arrow-up-right-from-square"></i> Focus Presentation Window';
+                btnLaunch.innerHTML =
+                    '<i class="fa-solid fa-arrow-up-right-from-square"></i> Focus Presentation Window';
                 btnLaunch.classList.remove('btn-primary');
                 btnLaunch.classList.add('btn-secondary');
             } else {
@@ -110,7 +112,11 @@ function initGmPresentationHost(vtt = {}) {
         }
     }
 
-    if (typeof window !== 'undefined' && window.electronAPI && typeof window.electronAPI.onPresentationStatusUpdate === 'function') {
+    if (
+        typeof window !== 'undefined' &&
+        window.electronAPI &&
+        typeof window.electronAPI.onPresentationStatusUpdate === 'function'
+    ) {
         window.electronAPI.onPresentationStatusUpdate((data) => {
             if (data && data.isOpen === false) {
                 updateUiState(false);
@@ -119,15 +125,23 @@ function initGmPresentationHost(vtt = {}) {
     }
 
     async function launchPresentation() {
-        const campaignId = vtt.campaignId || (typeof window !== 'undefined' ? window.VTT?.campaignId : 'default') || 'default';
+        const campaignId =
+            vtt.campaignId || (typeof window !== 'undefined' ? window.VTT?.campaignId : 'default') || 'default';
 
-        if (typeof window !== 'undefined' && window.electronAPI && typeof window.electronAPI.openPresentationWindow === 'function') {
+        if (
+            typeof window !== 'undefined' &&
+            window.electronAPI &&
+            typeof window.electronAPI.openPresentationWindow === 'function'
+        ) {
             try {
                 await window.electronAPI.openPresentationWindow({ campaignId });
                 updateUiState(true);
                 return;
             } catch (err) {
-                console.warn('[ForgeDVTT] electronAPI.openPresentationWindow failed, falling back to window.open:', err);
+                console.warn(
+                    '[ForgeDVTT] electronAPI.openPresentationWindow failed, falling back to window.open:',
+                    err
+                );
             }
         }
 
@@ -166,7 +180,11 @@ function initGmPresentationHost(vtt = {}) {
             clearInterval(popupMonitor);
             popupMonitor = null;
         }
-        if (typeof window !== 'undefined' && window.electronAPI && typeof window.electronAPI.closePresentationWindow === 'function') {
+        if (
+            typeof window !== 'undefined' &&
+            window.electronAPI &&
+            typeof window.electronAPI.closePresentationWindow === 'function'
+        ) {
             try {
                 await window.electronAPI.closePresentationWindow();
             } catch (err) {

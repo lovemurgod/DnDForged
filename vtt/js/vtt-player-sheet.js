@@ -761,8 +761,10 @@ export function initVttPlayerSheet(vtt) {
     window.vttPlayerSheetAPI = {
         getCurrentCharacter: () => currentChar,
         getCurrentChar: () => currentChar,
-        isWhisperToGM: () => Boolean((typeof window !== 'undefined' && window.VTT?.whisperGM) || currentChar?.whisperToGM),
-        getActiveRollMode: () => (typeof window !== 'undefined' && window.VTT?.currentRollMode) || currentChar?.activeRollMode || 'normal',
+        isWhisperToGM: () =>
+            Boolean((typeof window !== 'undefined' && window.VTT?.whisperGM) || currentChar?.whisperToGM),
+        getActiveRollMode: () =>
+            (typeof window !== 'undefined' && window.VTT?.currentRollMode) || currentChar?.activeRollMode || 'normal',
         saveAndEmit: (c) => saveAndEmit(c || currentChar),
         renderSheetData: (c) => renderSheetData(c || currentChar),
         applyShortRest: (c) => applyShortRestCalc(c || currentChar),
@@ -3546,7 +3548,8 @@ export function initVttPlayerSheet(vtt) {
 
     // ─── Player Sheet Header Control Bar (Roll Mode, GM Whisper, Settings) ─────
     function updatePlayerSheetControlBar(char) {
-        const rollMode = (typeof window !== 'undefined' && window.VTT?.currentRollMode) || char?.activeRollMode || 'normal';
+        const rollMode =
+            (typeof window !== 'undefined' && window.VTT?.currentRollMode) || char?.activeRollMode || 'normal';
         const isWhisper = Boolean((typeof window !== 'undefined' && window.VTT?.whisperGM) || char?.whisperToGM);
         const controlBar = document.getElementById('ps-top-control-bar') || panel;
 
@@ -3583,7 +3586,9 @@ export function initVttPlayerSheet(vtt) {
 
     const psWhisperBtn = document.getElementById('ps-btn-gm-whisper');
     psWhisperBtn?.addEventListener('click', () => {
-        const currentWhisper = Boolean((typeof window !== 'undefined' && window.VTT?.whisperGM) || currentChar?.whisperToGM);
+        const currentWhisper = Boolean(
+            (typeof window !== 'undefined' && window.VTT?.whisperGM) || currentChar?.whisperToGM
+        );
         const nextWhisper = !currentWhisper;
         if (typeof window !== 'undefined' && window.VTT?.setGlobalWhisperGM) {
             window.VTT.setGlobalWhisperGM(nextWhisper);
@@ -3887,25 +3892,25 @@ export function initVttPlayerSheet(vtt) {
     if (btnCharAddCompanion) {
         btnCharAddCompanion.addEventListener('click', async () => {
             const selectOwnerForCompanion = (monster, fullMonsterPreloaded = null) => {
-                    const knownPlayers =
-                        vtt.campaignState && vtt.campaignState.knownPlayers ? vtt.campaignState.knownPlayers : [];
-                    const allowedUsers =
-                        vtt.campaignState && vtt.campaignState.allowedUsers ? vtt.campaignState.allowedUsers : [];
-                    const allPotentialPlayers = [...new Set([...knownPlayers, ...allowedUsers])];
+                const knownPlayers =
+                    vtt.campaignState && vtt.campaignState.knownPlayers ? vtt.campaignState.knownPlayers : [];
+                const allowedUsers =
+                    vtt.campaignState && vtt.campaignState.allowedUsers ? vtt.campaignState.allowedUsers : [];
+                const allPotentialPlayers = [...new Set([...knownPlayers, ...allowedUsers])];
 
-                    const ownerOverlay = document.createElement('div');
-                    ownerOverlay.className = 'vtt-sheet-submodal-overlay vtt-sheet-submodal-high';
-                    ownerOverlay.style.cssText =
-                        'position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:3020;';
-                    const ownerModal = document.createElement('div');
-                    ownerModal.className = 'vtt-sheet-submodal vtt-sheet-submodal-high glassmorphism';
-                    ownerModal.style.cssText =
-                        'position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:3025; width:min(400px, 92vw); padding:16px; border-radius:8px; border:1px solid var(--color-border-subtle);';
+                const ownerOverlay = document.createElement('div');
+                ownerOverlay.className = 'vtt-sheet-submodal-overlay vtt-sheet-submodal-high';
+                ownerOverlay.style.cssText =
+                    'position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:3020;';
+                const ownerModal = document.createElement('div');
+                ownerModal.className = 'vtt-sheet-submodal vtt-sheet-submodal-high glassmorphism';
+                ownerModal.style.cssText =
+                    'position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:3025; width:min(400px, 92vw); padding:16px; border-radius:8px; border:1px solid var(--color-border-subtle);';
 
-                    let optionsHtml = '<option value="*">All Players</option>';
-                    optionsHtml += allPotentialPlayers.map((p) => `<option value="${p}">${p}</option>`).join('');
+                let optionsHtml = '<option value="*">All Players</option>';
+                optionsHtml += allPotentialPlayers.map((p) => `<option value="${p}">${p}</option>`).join('');
 
-                    ownerModal.innerHTML = `
+                ownerModal.innerHTML = `
                         <h4 style="margin-top:0; color:var(--color-gold-base);">Assign Owner for ${monster.name}</h4>
                         <div class="form-group">
                             <label>Select Player</label>
@@ -3921,127 +3926,127 @@ export function initVttPlayerSheet(vtt) {
                         </div>
                     `;
 
-                    document.body.appendChild(ownerOverlay);
-                    document.body.appendChild(ownerModal);
+                document.body.appendChild(ownerOverlay);
+                document.body.appendChild(ownerModal);
 
-                    const closeOwnerModal = () => {
-                        ownerOverlay.remove();
-                        ownerModal.remove();
-                    };
-
-                    ownerModal.querySelector('#comp-owner-cancel').addEventListener('click', closeOwnerModal);
-                    ownerOverlay.addEventListener('click', closeOwnerModal);
-                    ownerModal.querySelector('#comp-owner-save').addEventListener('click', async () => {
-                        const owner = ownerModal.querySelector('#comp-owner-sel').value;
-                        const nickname = ownerModal.querySelector('#comp-nickname').value.trim() || monster.name;
-
-                        let hp = 20;
-                        if (typeof monster.hp === 'number') hp = monster.hp;
-                        else if (monster.hp && monster.hp.average) hp = monster.hp.average;
-
-                        // Hydrate full normalized creature data
-                        let fullMonster = fullMonsterPreloaded || null;
-                        if (!fullMonster) {
-                            if (window.fetchFullCreature) {
-                                fullMonster = await window.fetchFullCreature(monster.source, monster.id || monster.name);
-                            } else {
-                                try {
-                                    const r = await fetch(
-                                        `/api/creature/${encodeURIComponent(monster.source)}/${encodeURIComponent(monster.id || monster.name)}`
-                                    );
-                                    if (r.ok) fullMonster = await r.json();
-                                } catch (err) {}
-                                if (!fullMonster) {
-                                    try {
-                                        let partRes = await fetch(
-                                            `/data/bestiary-normalized/bestiary-${monster.source.toLowerCase()}.json`
-                                        );
-                                        if (!partRes.ok)
-                                            partRes = await fetch(
-                                                `/vtt/data/bestiary-normalized/bestiary-${monster.source.toLowerCase()}.json`
-                                            );
-                                        if (partRes.ok) {
-                                            const partition = await partRes.json();
-                                            const clean = (monster.id || monster.name).toLowerCase();
-                                            fullMonster = partition.find(
-                                                (m) => m.id?.toLowerCase() === clean || m.name?.toLowerCase() === clean
-                                            );
-                                        }
-                                    } catch (err) {}
-                                }
-                            }
-                        }
-                        const finalMonsterData = fullMonster
-                            ? JSON.parse(JSON.stringify(fullMonster))
-                            : JSON.parse(JSON.stringify(monster));
-                        if (nickname) {
-                            finalMonsterData.name = nickname;
-                        }
-
-                        let defaultToken =
-                            finalMonsterData.tokenImg || finalMonsterData.tokenUrl || finalMonsterData.imgUrl;
-                        if (
-                            !defaultToken &&
-                            typeof window.Renderer !== 'undefined' &&
-                            window.Renderer.monster?.getTokenUrl
-                        ) {
-                            try {
-                                defaultToken = window.Renderer.monster.getTokenUrl(finalMonsterData);
-                            } catch (e) {}
-                        }
-                        if (!defaultToken && (finalMonsterData.source || finalMonsterData.name)) {
-                            const cleanName =
-                                typeof window.Parser !== 'undefined'
-                                    ? window.Parser.nameToTokenName(finalMonsterData.name)
-                                    : (finalMonsterData.name || '').replace(/"/g, '').trim();
-                            const source = finalMonsterData.source || 'MM';
-                            defaultToken = `img/bestiary/tokens/${source}/${cleanName}.webp`;
-                        }
-                        const initialTokens = defaultToken
-                            ? [{ url: defaultToken, name: 'Default Token', isDefault: true }]
-                            : [];
-
-                        const newComp = {
-                            id: 'comp_' + Date.now(),
-                            name: nickname,
-                            isCompanion: true,
-                            assignedPlayers: owner ? [owner] : [],
-                            monsterData: finalMonsterData,
-                            tokenSight: window.parseMonsterVision ? window.parseMonsterVision(finalMonsterData) : 5,
-                            hpMax: hp,
-                            hpCurrent: hp,
-                            tempHp: 0,
-                            ac: monster.ac
-                                ? Array.isArray(monster.ac)
-                                    ? monster.ac[0].ac || monster.ac[0]
-                                    : typeof monster.ac === 'object'
-                                      ? monster.ac.ac
-                                      : monster.ac
-                                : 10,
-                            tokenImages: initialTokens,
-                            activeTokenIndex: 0
-                        };
-
-                        vtt.socket.emit('character:update', { character: newComp });
-                        closeOwnerModal();
-                    });
+                const closeOwnerModal = () => {
+                    ownerOverlay.remove();
+                    ownerModal.remove();
                 };
 
-                try {
-                    const selectorFn = window.VTT?.openCreatureSelectorModal || openCreatureSelectorModal;
-                    await selectorFn({
-                        title: 'Add Player Companion',
-                        confirmLabel: 'Choose Companion',
-                        confirmIcon: 'fa-paw',
-                        onSelect: (monster, fullMonster) => {
-                            selectOwnerForCompanion(monster, fullMonster);
+                ownerModal.querySelector('#comp-owner-cancel').addEventListener('click', closeOwnerModal);
+                ownerOverlay.addEventListener('click', closeOwnerModal);
+                ownerModal.querySelector('#comp-owner-save').addEventListener('click', async () => {
+                    const owner = ownerModal.querySelector('#comp-owner-sel').value;
+                    const nickname = ownerModal.querySelector('#comp-nickname').value.trim() || monster.name;
+
+                    let hp = 20;
+                    if (typeof monster.hp === 'number') hp = monster.hp;
+                    else if (monster.hp && monster.hp.average) hp = monster.hp.average;
+
+                    // Hydrate full normalized creature data
+                    let fullMonster = fullMonsterPreloaded || null;
+                    if (!fullMonster) {
+                        if (window.fetchFullCreature) {
+                            fullMonster = await window.fetchFullCreature(monster.source, monster.id || monster.name);
+                        } else {
+                            try {
+                                const r = await fetch(
+                                    `/api/creature/${encodeURIComponent(monster.source)}/${encodeURIComponent(monster.id || monster.name)}`
+                                );
+                                if (r.ok) fullMonster = await r.json();
+                            } catch (err) {}
+                            if (!fullMonster) {
+                                try {
+                                    let partRes = await fetch(
+                                        `/data/bestiary-normalized/bestiary-${monster.source.toLowerCase()}.json`
+                                    );
+                                    if (!partRes.ok)
+                                        partRes = await fetch(
+                                            `/vtt/data/bestiary-normalized/bestiary-${monster.source.toLowerCase()}.json`
+                                        );
+                                    if (partRes.ok) {
+                                        const partition = await partRes.json();
+                                        const clean = (monster.id || monster.name).toLowerCase();
+                                        fullMonster = partition.find(
+                                            (m) => m.id?.toLowerCase() === clean || m.name?.toLowerCase() === clean
+                                        );
+                                    }
+                                } catch (err) {}
+                            }
                         }
-                    });
-                } catch (e) {
-                    console.error('Error opening creature selector for companion:', e);
-                }
-            });
-        }
+                    }
+                    const finalMonsterData = fullMonster
+                        ? JSON.parse(JSON.stringify(fullMonster))
+                        : JSON.parse(JSON.stringify(monster));
+                    if (nickname) {
+                        finalMonsterData.name = nickname;
+                    }
+
+                    let defaultToken =
+                        finalMonsterData.tokenImg || finalMonsterData.tokenUrl || finalMonsterData.imgUrl;
+                    if (
+                        !defaultToken &&
+                        typeof window.Renderer !== 'undefined' &&
+                        window.Renderer.monster?.getTokenUrl
+                    ) {
+                        try {
+                            defaultToken = window.Renderer.monster.getTokenUrl(finalMonsterData);
+                        } catch (e) {}
+                    }
+                    if (!defaultToken && (finalMonsterData.source || finalMonsterData.name)) {
+                        const cleanName =
+                            typeof window.Parser !== 'undefined'
+                                ? window.Parser.nameToTokenName(finalMonsterData.name)
+                                : (finalMonsterData.name || '').replace(/"/g, '').trim();
+                        const source = finalMonsterData.source || 'MM';
+                        defaultToken = `img/bestiary/tokens/${source}/${cleanName}.webp`;
+                    }
+                    const initialTokens = defaultToken
+                        ? [{ url: defaultToken, name: 'Default Token', isDefault: true }]
+                        : [];
+
+                    const newComp = {
+                        id: 'comp_' + Date.now(),
+                        name: nickname,
+                        isCompanion: true,
+                        assignedPlayers: owner ? [owner] : [],
+                        monsterData: finalMonsterData,
+                        tokenSight: window.parseMonsterVision ? window.parseMonsterVision(finalMonsterData) : 5,
+                        hpMax: hp,
+                        hpCurrent: hp,
+                        tempHp: 0,
+                        ac: monster.ac
+                            ? Array.isArray(monster.ac)
+                                ? monster.ac[0].ac || monster.ac[0]
+                                : typeof monster.ac === 'object'
+                                  ? monster.ac.ac
+                                  : monster.ac
+                            : 10,
+                        tokenImages: initialTokens,
+                        activeTokenIndex: 0
+                    };
+
+                    vtt.socket.emit('character:update', { character: newComp });
+                    closeOwnerModal();
+                });
+            };
+
+            try {
+                const selectorFn = window.VTT?.openCreatureSelectorModal || openCreatureSelectorModal;
+                await selectorFn({
+                    title: 'Add Player Companion',
+                    confirmLabel: 'Choose Companion',
+                    confirmIcon: 'fa-paw',
+                    onSelect: (monster, fullMonster) => {
+                        selectOwnerForCompanion(monster, fullMonster);
+                    }
+                });
+            } catch (e) {
+                console.error('Error opening creature selector for companion:', e);
+            }
+        });
+    }
 
     if (btnCharAdd) {
         btnCharAdd.addEventListener('click', () => {
@@ -4421,7 +4426,9 @@ export function initVttPlayerSheet(vtt) {
     const sheetSocket = {
         emit: (evt, data) => {
             if (evt === 'chat:msg' && data && typeof data === 'object') {
-                const isWhisper = Boolean((typeof window !== 'undefined' && window.VTT?.whisperGM) || currentChar?.whisperToGM);
+                const isWhisper = Boolean(
+                    (typeof window !== 'undefined' && window.VTT?.whisperGM) || currentChar?.whisperToGM
+                );
                 if (isWhisper) {
                     data.whisperToGM = true;
                 }
@@ -4475,8 +4482,12 @@ export function initVttPlayerSheet(vtt) {
         if (!char) return;
         resolveCharacterSheetSettings(char);
         currentChar = char;
-        char.activeRollMode = (typeof window !== 'undefined' && window.VTT?.currentRollMode) || char.activeRollMode || 'normal';
-        char.whisperToGM = (typeof window !== 'undefined' && window.VTT?.whisperGM !== undefined) ? Boolean(window.VTT.whisperGM) : Boolean(char.whisperToGM);
+        char.activeRollMode =
+            (typeof window !== 'undefined' && window.VTT?.currentRollMode) || char.activeRollMode || 'normal';
+        char.whisperToGM =
+            typeof window !== 'undefined' && window.VTT?.whisperGM !== undefined
+                ? Boolean(window.VTT.whisperGM)
+                : Boolean(char.whisperToGM);
         updatePlayerSheetControlBar(char);
 
         if (window.VTTSpellManager) {
@@ -5224,7 +5235,7 @@ export function initVttPlayerSheet(vtt) {
                     const conStr = conMod >= 0 ? '+' + conMod : '' + conMod;
                     const formula = '1' + hd + conStr;
                     const roll = simulateRoll(formula);
-                    const healAmount = Math.max(1, (roll && typeof roll.total === 'number') ? roll.total : 1);
+                    const healAmount = Math.max(1, roll && typeof roll.total === 'number' ? roll.total : 1);
                     const oldHp = parseInt(char.hpCurrent) || 0;
                     const hpMax = parseInt(char.hpMax) || 1;
                     char.hpCurrent = Math.min(hpMax, oldHp + healAmount);
@@ -6237,7 +6248,12 @@ export function initVttPlayerSheet(vtt) {
                 const cleanG = globalMod.startsWith('+') || globalMod.startsWith('-') ? globalMod : '+' + globalMod;
                 formula += `${cleanG}[Global]`;
             }
-            if (char.settings?.jackOfAllTrades && !char.skillToggles?.some((t) => t.enabled && (t.target === 'initiative' || t.name?.includes('Jack of All Trades')))) {
+            if (
+                char.settings?.jackOfAllTrades &&
+                !char.skillToggles?.some(
+                    (t) => t.enabled && (t.target === 'initiative' || t.name?.includes('Jack of All Trades'))
+                )
+            ) {
                 const pb = getProfBonus(char.level);
                 const halfPb = Math.floor(pb / 2);
                 if (halfPb > 0) formula += `+${halfPb}[Jack of All Trades]`;
@@ -6617,7 +6633,11 @@ export function initVttPlayerSheet(vtt) {
 
                 emitPlayerChatMessage({
                     text: `[${char.name || 'Player'}: ${toolName} Check] rolls **Tool Check**`,
-                    roll: simulateRoll(formula, 20, e, { isTool: true, isProf: Boolean(isProf || isExp), tool: toolName })
+                    roll: simulateRoll(formula, 20, e, {
+                        isTool: true,
+                        isProf: Boolean(isProf || isExp),
+                        tool: toolName
+                    })
                 });
             });
         });

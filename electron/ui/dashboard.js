@@ -1039,7 +1039,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                             batch: false
                         });
                         if (res && res.success) {
-                            alert(`${ch.name || 'Item'} successfully exported to:\n${res.filePath || res.fileName || 'Downloads folder'}`);
+                            alert(
+                                `${ch.name || 'Item'} successfully exported to:\n${res.filePath || res.fileName || 'Downloads folder'}`
+                            );
                         } else if (!res?.canceled) {
                             alert(`Export failed: ${res?.error || 'Unknown error'}`);
                         }
@@ -1167,7 +1169,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                 card.querySelector('.btn-delete-item').addEventListener('click', async (e) => {
                     e.stopPropagation();
-                    if (!confirm(`Are you sure you want to delete ${badgeLabel} "${it.name || 'Untitled'}" from this campaign?`)) return;
+                    if (
+                        !confirm(
+                            `Are you sure you want to delete ${badgeLabel} "${it.name || 'Untitled'}" from this campaign?`
+                        )
+                    )
+                        return;
                     try {
                         const res = await api.gmDeleteEntity({
                             campaignId: camp.id,
@@ -1175,7 +1182,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                             entityId: it.id
                         });
                         if (res && res.success) {
-                            appendLogLine(`[Campaigns] Deleted ${badgeLabel} "${it.name || it.id}" from "${camp.name}"`);
+                            appendLogLine(
+                                `[Campaigns] Deleted ${badgeLabel} "${it.name || it.id}" from "${camp.name}"`
+                            );
                             await refreshSelectedCampaignEntities();
                         } else {
                             alert(`Failed to delete ${badgeLabel}: ${res?.error || 'Unknown error'}`);
@@ -1713,9 +1722,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (!currentStatus?.staticWebMode && !requireGmCredentialsForOnline('sharing a P2P join link')) return;
             const code = p2pRoomCodeDisplay.textContent.trim();
             const basePlayUrl = currentStatus?.staticWebMode
-                ? (window.location.hostname === 'forgedvtt.com'
-                      ? 'https://forgedvtt.com/play'
-                      : `${window.location.origin}/play`)
+                ? window.location.hostname === 'forgedvtt.com'
+                    ? 'https://forgedvtt.com/play'
+                    : `${window.location.origin}/play`
                 : currentStatus?.isTunnelRunning && currentStatus?.registeredUrl
                   ? `${currentStatus.registeredUrl}/play`
                   : 'https://forgedvtt.com/play';
@@ -1831,9 +1840,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const res = await api.restoreBackup();
             if (res && res.success) {
                 const count = res.count || res.restoredCount || 1;
-                appendLogLine(
-                    `[Backup] Successfully restored ${count} campaign(s) from: ${res.path || 'backup'}`
-                );
+                appendLogLine(`[Backup] Successfully restored ${count} campaign(s) from: ${res.path || 'backup'}`);
                 try {
                     await loadGmCampaigns();
                     await loadCampaignsForSourceScope();
@@ -1860,7 +1867,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    btnBackupCampaign?.addEventListener('click', () => handleBackupCampaignClick(btnBackupCampaign, '💾 Export Backup'));
+    btnBackupCampaign?.addEventListener('click', () =>
+        handleBackupCampaignClick(btnBackupCampaign, '💾 Export Backup')
+    );
     btnRestoreBackup?.addEventListener('click', () => handleRestoreBackupClick(btnRestoreBackup, '📥 Restore Backup'));
 
     const btnGmExportBackup = document.getElementById('btn-gm-export-backup');
@@ -2459,14 +2468,15 @@ document.addEventListener('DOMContentLoaded', async () => {
                 <button class="btn btn-xs btn-outline btn-source-edit" data-action="edit" data-cat="${src.category}" data-code="${src.code}" title="Edit metadata or entries">
                   ✏️ Edit
                 </button>
-                ${src.isCustom
-                            ? `
+                ${
+                    src.isCustom
+                        ? `
                   <button class="btn btn-xs btn-outline btn-source-delete text-danger" data-action="delete" data-cat="${src.category}" data-code="${src.code}" title="Delete this custom source">
                     🗑️
                   </button>
                 `
-                            : ''
-                        }
+                        : ''
+                }
               </div>
             </td>
           `;
@@ -2708,7 +2718,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 api.sourcesSaveUiState({
                     lastPreset: sourcesPresetSelect?.value,
                     lastScope: activeCampaignScope
-                }).catch(() => { });
+                }).catch(() => {});
             }
             loadAllSources();
         });
@@ -2747,7 +2757,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 if (api && api.sourcesSyncToServer) {
                     await api.sourcesSyncToServer();
                 } else {
-                    await fetch('/api/server/sync-sources', { method: 'POST' }).catch(() => { });
+                    await fetch('/api/server/sync-sources', { method: 'POST' }).catch(() => {});
                 }
                 await loadAllSources();
                 showSystemToast(
@@ -2811,7 +2821,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 api.sourcesSaveUiState({
                     lastPreset: sourcesPresetSelect.value,
                     lastScope: activeCampaignScope
-                }).catch(() => { });
+                }).catch(() => {});
             }
         });
     }
@@ -2841,7 +2851,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                         api.sourcesSaveUiState({
                             lastPreset: preset,
                             lastScope: activeCampaignScope
-                        }).catch(() => { });
+                        }).catch(() => {});
                     }
                     await loadAllSources();
                 } else {
@@ -3102,7 +3112,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                         if (prov.attribution && editSourceAttribution) editSourceAttribution.value = prov.attribution;
                     }
                 }
-            } catch (_) { }
+            } catch (_) {}
         }
 
         if (tabKey === 'entities') {
@@ -3228,13 +3238,14 @@ document.addEventListener('DOMContentLoaded', async () => {
           </div>
         </div>
         <div class="entity-card-actions">
-          ${isCustomSource
-                    ? `
+          ${
+              isCustomSource
+                  ? `
           <button type="button" class="btn-card-action btn-duplicate" title="Duplicate entry">📋</button>
           <button type="button" class="btn-card-action btn-delete" title="Delete entry">🗑️</button>
           `
-                    : '<span class="text-muted" style="font-size: 11px;">🔒 Read-Only</span>'
-                }
+                  : '<span class="text-muted" style="font-size: 11px;">🔒 Read-Only</span>'
+          }
         </div>
       `;
 
@@ -3739,9 +3750,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         const rawClasses = getVal('bf-spell-classes');
         const classes = rawClasses
             ? rawClasses
-                .split(',')
-                .map((s) => s.trim())
-                .filter(Boolean)
+                  .split(',')
+                  .map((s) => s.trim())
+                  .filter(Boolean)
             : [];
 
         return {
@@ -3874,9 +3885,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             weaponProperties: weaponProps,
             properties: weaponProps
                 ? weaponProps
-                    .split(',')
-                    .map((s) => s.trim())
-                    .filter(Boolean)
+                      .split(',')
+                      .map((s) => s.trim())
+                      .filter(Boolean)
                 : [],
             isMagic: getCheck('bf-item-is-magic'),
             isSilvered: getCheck('bf-item-is-silvered'),
@@ -4083,9 +4094,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         const rawSaves = getVal('bf-class-saves');
         const savingThrows = rawSaves
             ? rawSaves
-                .split(',')
-                .map((s) => s.trim().toUpperCase())
-                .filter(Boolean)
+                  .split(',')
+                  .map((s) => s.trim().toUpperCase())
+                  .filter(Boolean)
             : ['STR', 'CON'];
 
         const scContainer = document.getElementById('class-subclasses-container');
@@ -4323,7 +4334,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 <div style="display:flex; align-items:center; gap:4px; width:130px; flex-shrink:0;">
                     <input type="number" class="table-row-min" value="${r.min ?? 1}" style="width:55px; padding:3px 6px; font-size:0.8rem; background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.15); color:#fff; border-radius:3px;" title="Minimum roll" />
                     <span style="color:var(--color-text-muted); font-size:0.8rem;">–</span>
-                    <input type="number" class="table-row-max" value="${r.max ?? (r.min ?? 1)}" style="width:55px; padding:3px 6px; font-size:0.8rem; background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.15); color:#fff; border-radius:3px;" title="Maximum roll" />
+                    <input type="number" class="table-row-max" value="${r.max ?? r.min ?? 1}" style="width:55px; padding:3px 6px; font-size:0.8rem; background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.15); color:#fff; border-radius:3px;" title="Maximum roll" />
                 </div>
                 <input type="text" class="table-row-text" value="${escapeHtml(r.text || '')}" placeholder="Outcome description..." style="flex:1; padding:3px 8px; font-size:0.85rem; background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.15); color:#fff; border-radius:3px;" />
                 <button type="button" class="btn-delete-row" title="Delete Row" style="color:#ef4444; background:transparent; border:none; cursor:pointer; font-size:1rem; padding:0 6px;">&times;</button>
@@ -5307,10 +5318,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                 entity.primaryAc !== undefined
                     ? entity.primaryAc
                     : Array.isArray(entity.ac)
-                        ? typeof entity.ac[0] === 'object'
-                            ? entity.ac[0]?.value || entity.ac[0]?.ac || 10
-                            : entity.ac[0]
-                        : entity.ac || 10;
+                      ? typeof entity.ac[0] === 'object'
+                          ? entity.ac[0]?.value || entity.ac[0]?.ac || 10
+                          : entity.ac[0]
+                      : entity.ac || 10;
             const acCond =
                 entity.acCondition ||
                 (Array.isArray(entity.ac) && entity.ac[0]?.condition ? entity.ac[0].condition : '');
@@ -5320,10 +5331,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                 entity.hpAvg !== undefined
                     ? entity.hpAvg
                     : entity.hp && typeof entity.hp === 'object'
-                        ? entity.hp.average || 10
-                        : typeof entity.hp === 'number'
-                            ? entity.hp
-                            : 10;
+                      ? entity.hp.average || 10
+                      : typeof entity.hp === 'number'
+                        ? entity.hp
+                        : 10;
             const hpFormula = entity.hpFormula || (entity.hp && typeof entity.hp === 'object' ? entity.hp.formula : '');
 
             // Speeds
@@ -5332,10 +5343,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                 entity.speedWalk !== undefined
                     ? entity.speedWalk
                     : speedObj.walk !== undefined
-                        ? speedObj.walk
-                        : typeof entity.speed === 'number'
-                            ? entity.speed
-                            : 30;
+                      ? speedObj.walk
+                      : typeof entity.speed === 'number'
+                        ? entity.speed
+                        : 30;
             const flySpeed = entity.speedFly !== undefined ? entity.speedFly : speedObj.fly || 0;
             const swimSpeed = entity.speedSwim !== undefined ? entity.speedSwim : speedObj.swim || 0;
             const climbSpeed = entity.speedClimb !== undefined ? entity.speedClimb : speedObj.climb || 0;
@@ -5358,8 +5369,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                     ? entity.senses
                     : toCommaSeparatedString(entity.senses)
                 : entity.passivePerception
-                    ? `passive Perception ${entity.passivePerception}`
-                    : '';
+                  ? `passive Perception ${entity.passivePerception}`
+                  : '';
             const languagesStr = entity.languages
                 ? typeof entity.languages === 'string'
                     ? entity.languages
@@ -5435,19 +5446,19 @@ document.addEventListener('DOMContentLoaded', async () => {
                             : '';
                         const scSpells = sc.spells
                             ? Object.entries(sc.spells)
-                                .map(([lvl, info]) => {
-                                    const lvlLabel =
-                                        lvl === '0'
-                                            ? 'Cantrips (at will)'
-                                            : `Level ${lvl} (${info.slots || 1} slots)`;
-                                    const spellsList = Array.isArray(info.spells)
-                                        ? info.spells
-                                            .map((s) => VTTEntryResolver.resolveTags(`{@spell ${s}}`))
-                                            .join(', ')
-                                        : '';
-                                    return `<div style="font-size: 13px; margin-bottom: 4px;"><strong>${lvlLabel}:</strong> ${spellsList}</div>`;
-                                })
-                                .join('')
+                                  .map(([lvl, info]) => {
+                                      const lvlLabel =
+                                          lvl === '0'
+                                              ? 'Cantrips (at will)'
+                                              : `Level ${lvl} (${info.slots || 1} slots)`;
+                                      const spellsList = Array.isArray(info.spells)
+                                          ? info.spells
+                                                .map((s) => VTTEntryResolver.resolveTags(`{@spell ${s}}`))
+                                                .join(', ')
+                                          : '';
+                                      return `<div style="font-size: 13px; margin-bottom: 4px;"><strong>${lvlLabel}:</strong> ${spellsList}</div>`;
+                                  })
+                                  .join('')
                             : '';
                         return `<div class="statblock-spellcasting-block">${scName}${scHeader}${scSpells}</div>`;
                     })
@@ -5508,8 +5519,8 @@ document.addEventListener('DOMContentLoaded', async () => {
           <div class="vtt-statblock-special-section vtt-variants-box" style="margin-top: 16px; border: 1px solid rgba(96, 165, 250, 0.3); background: rgba(96, 165, 250, 0.04); border-radius: 6px; padding: 12px;">
             <div class="statblock-section-heading" style="color: #60a5fa; border-bottom: 1px solid rgba(96, 165, 250, 0.4); margin-top: 0; padding-bottom: 4px;">🔄 Variants & Customizations</div>
             ${variants
-                        .map(
-                            (v) => `
+                .map(
+                    (v) => `
               <div style="margin-top: 10px;">
                 <div style="font-weight: 700; color: #93c5fd; font-size: 13px;">${escapeHtml(v.name || 'Variant')}</div>
                 <div style="font-size: 13px; line-height: 1.5; color: #e2e8f0; margin-top: 4px;">
@@ -5517,8 +5528,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 </div>
               </div>
             `
-                        )
-                        .join('')}
+                )
+                .join('')}
           </div>
         `;
             }
@@ -5598,8 +5609,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             const classesArr = Array.isArray(entity.classes)
                 ? entity.classes.map((c) => (typeof c === 'string' ? c : c.name))
                 : entity.classes
-                    ? [entity.classes]
-                    : [];
+                  ? [entity.classes]
+                  : [];
 
             const subclassesArr = Array.isArray(entity.subclasses)
                 ? entity.subclasses.map((s) => (typeof s === 'string' ? s : s.name || s.shortName))
@@ -5653,45 +5664,49 @@ document.addEventListener('DOMContentLoaded', async () => {
           <div class="statblock-prop-row"><strong>Components:</strong> ${VTTEntryResolver.resolveTags(components)}</div>
           <div class="statblock-prop-row"><strong>Duration:</strong> ${escapeHtml(duration)}</div>
 
-          ${damageChipsHtml || saveBadgeHtml
-                    ? `
+          ${
+              damageChipsHtml || saveBadgeHtml
+                  ? `
             <div class="statblock-prop-row" style="margin-top: 6px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
               ${damageChipsHtml} ${saveBadgeHtml}
             </div>
           `
-                    : ''
-                }
+                  : ''
+          }
 
-          ${classesArr.length > 0
-                    ? `
+          ${
+              classesArr.length > 0
+                  ? `
             <div class="statblock-prop-row" style="margin-top: 4px;">
               <strong>Classes:</strong> ${classesArr.map((c) => `<span class="badge" style="background: rgba(99, 102, 241, 0.15); border: 1px solid rgba(99, 102, 241, 0.3); font-size: 11px; margin: 2px;">${escapeHtml(c)}</span>`).join(' ')}
             </div>
           `
-                    : ''
-                }
+                  : ''
+          }
 
-          ${subclassesArr.length > 0
-                    ? `
+          ${
+              subclassesArr.length > 0
+                  ? `
             <div class="statblock-prop-row" style="font-size: 11px; color: #a5b4fc;">
               <strong>Subclasses:</strong> ${escapeHtml(subclassesArr.join(', '))}
             </div>
           `
-                    : ''
-                }
+                  : ''
+          }
 
           <hr class="tapered-rule" style="margin: 12px 0;" />
           <div style="font-size: 13px; line-height: 1.6; color: #e2e8f0;">
             ${descHtml}
           </div>
-          ${higherHtml
-                    ? `
+          ${
+              higherHtml
+                  ? `
             <div style="margin-top: 14px; padding-top: 8px; border-top: 1px solid rgba(255, 255, 255, 0.1); font-size: 13px; line-height: 1.5; color: #cbd5e1;">
               <strong style="color: #ffd700;">At Higher Levels.</strong> ${higherHtml}
             </div>
           `
-                    : ''
-                }
+                  : ''
+          }
         </div>
       `;
         }
@@ -5734,8 +5749,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 entity.weight !== undefined
                     ? `${entity.weight} lbs.`
                     : entity.weightLbs
-                        ? `${entity.weightLbs} lbs.`
-                        : '';
+                      ? `${entity.weightLbs} lbs.`
+                      : '';
 
             let descHtml = '';
             if (entity.descriptionHtml) descHtml = VTTEntryResolver.resolveTags(entity.descriptionHtml);
@@ -5777,10 +5792,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             </div>
             <hr class="tapered-rule" style="margin: 12px 0;" />
             <div class="statblock-section-heading" style="color: #818cf8;">Subclass Features</div>
-            ${features.length > 0
-                        ? features
-                            .map(
-                                (f) => `
+            ${
+                features.length > 0
+                    ? features
+                          .map(
+                              (f) => `
               <div style="margin-top: 12px; padding: 10px 14px; background: rgba(99, 102, 241, 0.06); border-left: 3px solid #818cf8; border-radius: 4px;">
                 <div style="display: flex; justify-content: space-between; align-items: baseline;">
                   <strong style="color: #c7d2fe; font-size: 14px;">${escapeHtml(f.name || 'Feature')}</strong>
@@ -5791,10 +5807,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                 </div>
               </div>
             `
-                            )
-                            .join('')
-                        : '<div class="text-muted" style="margin-top: 8px;">No feature details defined.</div>'
-                    }
+                          )
+                          .join('')
+                    : '<div class="text-muted" style="margin-top: 8px;">No feature details defined.</div>'
+            }
           </div>
         `;
             }
@@ -5804,9 +5820,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             const saves = Array.isArray(entity.savingThrows)
                 ? entity.savingThrows.join(', ')
                 : entity.savingThrows ||
-                (Array.isArray(entity.proficiency)
-                    ? entity.proficiency.map((p) => p.toUpperCase()).join(', ')
-                    : 'None');
+                  (Array.isArray(entity.proficiency)
+                      ? entity.proficiency.map((p) => p.toUpperCase()).join(', ')
+                      : 'None');
 
             // Aggregate features by level (1 to 20)
             const featuresByLevel = {};
@@ -5849,15 +5865,15 @@ document.addEventListener('DOMContentLoaded', async () => {
             <div class="statblock-section-heading" style="color: #818cf8;">Available Subclasses (${entity.subclasses.length})</div>
             <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px;">
               ${entity.subclasses
-                        .map(
-                            (sc) => `
+                  .map(
+                      (sc) => `
                 <div style="padding: 6px 10px; background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.3); border-radius: 4px; font-size: 12px; color: #c7d2fe;">
                   <strong>${escapeHtml(sc.name || sc.shortName)}</strong>
                   <span style="font-size: 10px; color: #818cf8; margin-left: 4px;">(${escapeHtml(sc.source || entity.source || '')})</span>
                 </div>
               `
-                        )
-                        .join('')}
+                  )
+                  .join('')}
             </div>
           </div>
         `;
@@ -5909,15 +5925,15 @@ document.addEventListener('DOMContentLoaded', async () => {
             const benefitsHtml =
                 Array.isArray(entity.benefits) && entity.benefits.length > 0
                     ? entity.benefits
-                        .map(
-                            (b) => `
+                          .map(
+                              (b) => `
         <li style="margin-bottom: 6px; font-size: 13px; line-height: 1.5; color: #fef3c7;">
           ${b.name ? `<strong style="color: #fbbf24;">${escapeHtml(b.name)}:</strong> ` : ''}
           ${formatPreviewTextWithRollables(b.text || b, b.name)}
         </li>
       `
-                        )
-                        .join('')
+                          )
+                          .join('')
                     : '';
 
             return `
@@ -6013,13 +6029,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             const traits = Array.isArray(entity.traits)
                 ? entity.traits
                 : Array.isArray(entity.entries)
-                    ? entity.entries
-                    : [];
+                  ? entity.entries
+                  : [];
             const traitsHtml =
                 traits.length > 0
                     ? traits
-                        .map(
-                            (t) => `
+                          .map(
+                              (t) => `
         <div class="statblock-entry-item" style="margin-top: 10px;">
           <strong style="color: #34d399;"><em>${escapeHtml(t.name || 'Trait')}.</em></strong>
           <div style="font-size: 13px; line-height: 1.5; color: #d1fae5; margin-top: 2px;">
@@ -6027,8 +6043,8 @@ document.addEventListener('DOMContentLoaded', async () => {
           </div>
         </div>
       `
-                        )
-                        .join('')
+                          )
+                          .join('')
                     : '<div class="text-muted" style="font-size: 12px; margin-top: 6px;">No racial traits defined.</div>';
 
             return `
@@ -6061,8 +6077,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                                 ? r.min
                                 : `${r.min}–${r.max}`
                             : Array.isArray(r)
-                                ? r[0]
-                                : '1';
+                              ? r[0]
+                              : '1';
                     const text = r.text || (Array.isArray(r) ? r[1] : String(r));
                     return `<tr><td style="padding:4px 8px; text-align:center; border:1px solid rgba(255,255,255,0.1); font-weight:600; color:var(--color-gold-light);">${escapeHtml(String(roll))}</td><td style="padding:4px 8px; border:1px solid rgba(255,255,255,0.1); color:#cbd5e1;">${escapeHtml(text)}</td></tr>`;
                 })
@@ -6173,8 +6189,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const critNotice = isCrit
                     ? ' <strong style="color: #10b981;">(CRIT! 🌟)</strong>'
                     : isFumble
-                        ? ' <strong style="color: #ef4444;">(FUMBLE! 💀)</strong>'
-                        : '';
+                      ? ' <strong style="color: #ef4444;">(FUMBLE! 💀)</strong>'
+                      : '';
 
                 entryHtml = `
           <span><strong>${label}</strong> (${rollExpr}): ${rollsStr}${modStr}${critNotice}</span>
@@ -6734,7 +6750,7 @@ Shortbow. Ranged Weapon Attack: +4 to hit, range 80/320 ft., one target. Hit: 5 
                             parsed._meta.provenance.attribution = editSourceAttribution.value.trim();
                         editSourceJsonEditor.value = JSON.stringify(parsed, null, 2);
                     }
-                } catch (_) { }
+                } catch (_) {}
             } else {
                 // 1. Commit active entity form changes
                 saveActiveEntity(false);
@@ -7203,8 +7219,8 @@ Shortbow. Ranged Weapon Attack: +4 to hit, range 80/320 ft., one target. Hit: 5 
                 const typeInfo = item.cr
                     ? `CR ${item.cr}`
                     : item.level !== undefined
-                        ? `Level ${item.level}`
-                        : item.type || '—';
+                      ? `Level ${item.level}`
+                      : item.type || '—';
                 html += `
           <tr class="search-result-row" data-category="${escapeHtml(item.category)}" data-name="${escapeHtml(item.name)}" data-source="${escapeHtml(item.source)}">
             <td><span class="result-cat-badge">${icon} ${escapeHtml(item.category)}</span></td>

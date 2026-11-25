@@ -2,11 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import express from 'express';
 import { createServer } from 'http';
-import {
-    extractSubdomain,
-    TUNNEL_ROOT_DOMAINS,
-    SERVER_INTERNAL_SECRET
-} from '../server/state.js';
+import { extractSubdomain, TUNNEL_ROOT_DOMAINS, SERVER_INTERNAL_SECRET } from '../server/state.js';
 import { adminRouter } from '../server/routes/admin.js';
 
 test('Online Tunnel Remediation: Subdomain Extraction', async (t) => {
@@ -62,29 +58,35 @@ test('Online Tunnel Remediation: GET /api/server/data-dir Sanitization', async (
         assert.ok(data.activeDataDir.length > 0);
     });
 
-    await t.test('remote proxy request (CF-Connecting-IP) receives sanitized response without activeDataDir', async () => {
-        const res = await fetch(`${baseUrl}/api/server/data-dir`, {
-            headers: {
-                'CF-Connecting-IP': '198.51.100.24'
-            }
-        });
-        assert.equal(res.ok, true);
-        const data = await res.json();
-        assert.equal(data.success, true);
-        assert.equal(data.activeDataDir, undefined, 'activeDataDir must not be disclosed to remote callers');
-    });
+    await t.test(
+        'remote proxy request (CF-Connecting-IP) receives sanitized response without activeDataDir',
+        async () => {
+            const res = await fetch(`${baseUrl}/api/server/data-dir`, {
+                headers: {
+                    'CF-Connecting-IP': '198.51.100.24'
+                }
+            });
+            assert.equal(res.ok, true);
+            const data = await res.json();
+            assert.equal(data.success, true);
+            assert.equal(data.activeDataDir, undefined, 'activeDataDir must not be disclosed to remote callers');
+        }
+    );
 
-    await t.test('remote proxy request (X-Forwarded-For) receives sanitized response without activeDataDir', async () => {
-        const res = await fetch(`${baseUrl}/api/server/data-dir`, {
-            headers: {
-                'X-Forwarded-For': '203.0.113.50, 127.0.0.1'
-            }
-        });
-        assert.equal(res.ok, true);
-        const data = await res.json();
-        assert.equal(data.success, true);
-        assert.equal(data.activeDataDir, undefined);
-    });
+    await t.test(
+        'remote proxy request (X-Forwarded-For) receives sanitized response without activeDataDir',
+        async () => {
+            const res = await fetch(`${baseUrl}/api/server/data-dir`, {
+                headers: {
+                    'X-Forwarded-For': '203.0.113.50, 127.0.0.1'
+                }
+            });
+            assert.equal(res.ok, true);
+            const data = await res.json();
+            assert.equal(data.success, true);
+            assert.equal(data.activeDataDir, undefined);
+        }
+    );
 
     await t.test('remote request with authorized internal secret receives full activeDataDir', async () => {
         const res = await fetch(`${baseUrl}/api/server/data-dir`, {

@@ -37,10 +37,7 @@ test('Frontend P2P Gateway Parameter Forwarding', async (t) => {
     });
 
     await t.test('constructs p2pOptions and forwards to onStartSocketConnection', () => {
-        assert.ok(
-            authContent.includes('const p2pOptions = isP2PMode ? {'),
-            'vtt-auth.js must construct p2pOptions'
-        );
+        assert.ok(/const p2pOptions = isP2PMode\s*\?\s*\{/.test(authContent), 'vtt-auth.js must construct p2pOptions');
         assert.ok(
             authContent.includes('callbacks.onStartSocketConnection?.(campaignId, username, role, null, p2pOptions)'),
             'vtt-auth.js must pass p2pOptions to onStartSocketConnection on standard join'

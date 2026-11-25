@@ -164,7 +164,10 @@ function requestWithPinnedLookup(targetUrl, resolvedRecord, headers, timeoutMs =
     });
 }
 
-export async function safeFetchPublicUrl(targetUrl, { requireAllowedMediaDomain = false, maxRedirects = 3, headers = {} } = {}) {
+export async function safeFetchPublicUrl(
+    targetUrl,
+    { requireAllowedMediaDomain = false, maxRedirects = 3, headers = {} } = {}
+) {
     let currentUrl = targetUrl;
     let redirectCount = 0;
 
@@ -613,7 +616,10 @@ imageRouter.get(['/img/*', '/vtt/img/*'], async (req, res, next) => {
         }
     }
 
-    const rawRel = path.normalize(decodedPath).replace(/^(\.\.[\/\\])+/, '').replace(/^[\\/]?(?:vtt[\\/])/i, '');
+    const rawRel = path
+        .normalize(decodedPath)
+        .replace(/^(\.\.[\/\\])+/, '')
+        .replace(/^[\\/]?(?:vtt[\\/])/i, '');
     const rawTarget = path.resolve(rootDir, '5etools-src', rawRel);
     if (
         isValidAssetPath(rawTarget, path.join(rootDir, '5etools-src')) &&

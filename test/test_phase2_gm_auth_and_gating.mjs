@@ -109,20 +109,31 @@ test('Phase 2: Control Center Layout & Electron Online Security Gates', async (t
     const html = fs.readFileSync(path.join(rootDir, 'electron', 'ui', 'index.html'), 'utf8');
     const mainJs = fs.readFileSync(path.join(rootDir, 'electron', 'main.js'), 'utf8');
 
-    await t.test('places gm-credentials-card inside #view-hosting while keeping #view-gm and #view-sources separate', () => {
-        const hostingStart = html.indexOf('id="view-hosting"');
-        const gmStart = html.indexOf('id="view-gm"');
-        const sourcesStart = html.indexOf('id="view-sources"');
-        const credCardIdx = html.indexOf('class="card gm-credentials-card');
+    await t.test(
+        'places gm-credentials-card inside #view-hosting while keeping #view-gm and #view-sources separate',
+        () => {
+            const hostingStart = html.indexOf('id="view-hosting"');
+            const gmStart = html.indexOf('id="view-gm"');
+            const sourcesStart = html.indexOf('id="view-sources"');
+            const credCardIdx = html.indexOf('class="card gm-credentials-card');
 
-        assert.ok(hostingStart !== -1 && gmStart !== -1 && sourcesStart !== -1);
-        assert.ok(credCardIdx > hostingStart && credCardIdx < gmStart, 'gm-credentials-card must reside in #view-hosting');
-        assert.ok(html.indexOf('gm-campaigns-card') > gmStart && html.indexOf('gm-campaigns-card') < sourcesStart);
-    });
+            assert.ok(hostingStart !== -1 && gmStart !== -1 && sourcesStart !== -1);
+            assert.ok(
+                credCardIdx > hostingStart && credCardIdx < gmStart,
+                'gm-credentials-card must reside in #view-hosting'
+            );
+            assert.ok(html.indexOf('gm-campaigns-card') > gmStart && html.indexOf('gm-campaigns-card') < sourcesStart);
+        }
+    );
 
-    await t.test('gates startTunnel, P2P start/regen, and clearPassword while tunnel is active in electron/main.js', () => {
-        assert.ok(mainJs.includes('Set a GM Username and Password in Hosting & Server before starting an online tunnel.'));
-        assert.ok(mainJs.includes('hasConfiguredGmCredentials()'));
-        assert.ok(mainJs.includes('Stop the active online tunnel before removing the GM password.'));
-    });
+    await t.test(
+        'gates startTunnel, P2P start/regen, and clearPassword while tunnel is active in electron/main.js',
+        () => {
+            assert.ok(
+                mainJs.includes('Set a GM Username and Password in Hosting & Server before starting an online tunnel.')
+            );
+            assert.ok(mainJs.includes('hasConfiguredGmCredentials()'));
+            assert.ok(mainJs.includes('Stop the active online tunnel before removing the GM password.'));
+        }
+    );
 });

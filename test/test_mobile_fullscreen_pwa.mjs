@@ -34,22 +34,13 @@ test('Mobile Fullscreen API and PWA Standalone Integration Suite', async (t) => 
             htmlContent.includes('id="mobile-tool-fullscreen"'),
             'Must contain mobile-tool-fullscreen in tools menu'
         );
-        assert.ok(
-            htmlContent.includes('data-tool="fullscreen"'),
-            'Must have data-tool="fullscreen" attribute'
-        );
+        assert.ok(htmlContent.includes('data-tool="fullscreen"'), 'Must have data-tool="fullscreen" attribute');
         assert.ok(
             htmlContent.includes('id="vtt-mobile-install-banner"'),
             'Must contain vtt-mobile-install-banner container'
         );
-        assert.ok(
-            htmlContent.includes('id="btn-mobile-install-action"'),
-            'Must contain btn-mobile-install-action'
-        );
-        assert.ok(
-            htmlContent.includes('id="btn-mobile-install-dismiss"'),
-            'Must contain btn-mobile-install-dismiss'
-        );
+        assert.ok(htmlContent.includes('id="btn-mobile-install-action"'), 'Must contain btn-mobile-install-action');
+        assert.ok(htmlContent.includes('id="btn-mobile-install-dismiss"'), 'Must contain btn-mobile-install-dismiss');
     });
 
     await t.test('3. vtt/css/vtt-mobile.css styles install banner and honors desktop overrides', () => {
@@ -68,10 +59,7 @@ test('Mobile Fullscreen API and PWA Standalone Integration Suite', async (t) => 
     });
 
     await t.test('4. vtt-mobile-adapter.js integrates Fullscreen into FAB and More Tab', () => {
-        assert.ok(
-            jsContent.includes("toolKey === 'fullscreen'"),
-            'activateTool must handle fullscreen toolKey'
-        );
+        assert.ok(jsContent.includes("toolKey === 'fullscreen'"), 'activateTool must handle fullscreen toolKey');
         assert.ok(
             jsContent.includes('id="more-card-fullscreen"'),
             'injectMobileMoreTab must render more-card-fullscreen'
@@ -104,12 +92,12 @@ test('Mobile Fullscreen API and PWA Standalone Integration Suite', async (t) => 
         // Polyfill mobile/touch environment in JSDOM
         Object.defineProperty(window, 'innerWidth', { value: 768, writable: true, configurable: true });
         Object.defineProperty(window.navigator, 'maxTouchPoints', { value: 5, writable: true, configurable: true });
-        window.ontouchstart = () => { };
+        window.ontouchstart = () => {};
         if (!window.matchMedia) {
             window.matchMedia = (query) => ({
                 matches: query.includes('coarse') || query.includes('max-width'),
-                addListener: () => { },
-                removeListener: () => { }
+                addListener: () => {},
+                removeListener: () => {}
             });
         }
 
@@ -150,8 +138,8 @@ test('Mobile Fullscreen API and PWA Standalone Integration Suite', async (t) => 
         // Mock VTT context
         const mockVtt = {
             role: 'GM',
-            canvasEngine: { renderAll: () => { } },
-            chatEngine: { appendSystemMessage: () => { } }
+            canvasEngine: { renderAll: () => {} },
+            chatEngine: { appendSystemMessage: () => {} }
         };
 
         // Assign necessary DOM globals on globalThis for the evaluated module
@@ -162,7 +150,10 @@ test('Mobile Fullscreen API and PWA Standalone Integration Suite', async (t) => 
 
         try {
             // Execute mobile adapter factory (strip ES module export for new Function evaluation)
-            const runnableJs = jsContent.replace('export function initVttMobileAdapter', 'function initVttMobileAdapter');
+            const runnableJs = jsContent.replace(
+                'export function initVttMobileAdapter',
+                'function initVttMobileAdapter'
+            );
             const factory = new Function(
                 'vtt',
                 'window',

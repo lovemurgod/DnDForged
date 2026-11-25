@@ -45,11 +45,11 @@ export function initVttChat(vtt, chatHistory) {
     let savedRollMode = 'normal';
     try {
         savedRollMode = localStorage.getItem('vtt_current_roll_mode') || 'normal';
-    } catch (e) { }
+    } catch (e) {}
     let savedWhisperGM = false;
     try {
         savedWhisperGM = localStorage.getItem('vtt_whisper_to_gm') === 'true';
-    } catch (e) { }
+    } catch (e) {}
 
     vtt.currentRollMode = savedRollMode;
     window.VTT = window.VTT || {};
@@ -58,19 +58,21 @@ export function initVttChat(vtt, chatHistory) {
     window.VTT.whisperGM = savedWhisperGM;
 
     function updateAllRollModeButtonsUI(mode) {
-        document.querySelectorAll('.chat-roll-mode .roll-mode-btn, .ps-roll-mode-btn, .cs-roll-mode-btn').forEach((b) => {
-            if (b.id === 'btn-gm-whisper' || b.id === 'ps-btn-gm-whisper' || b.id === 'cs-btn-gm-whisper') return;
-            b.classList.remove('active', 'adv', 'dis');
-            if (b.dataset.mode === mode) {
-                b.classList.add('active');
-                if (mode === 'adv') b.classList.add('adv');
-                if (mode === 'dis') b.classList.add('dis');
-            }
-        });
+        document
+            .querySelectorAll('.chat-roll-mode .roll-mode-btn, .ps-roll-mode-btn, .cs-roll-mode-btn')
+            .forEach((b) => {
+                if (b.id === 'btn-gm-whisper' || b.id === 'ps-btn-gm-whisper' || b.id === 'cs-btn-gm-whisper') return;
+                b.classList.remove('active', 'adv', 'dis');
+                if (b.dataset.mode === mode) {
+                    b.classList.add('active');
+                    if (mode === 'adv') b.classList.add('adv');
+                    if (mode === 'dis') b.classList.add('dis');
+                }
+            });
     }
 
     function setGlobalRollMode(mode) {
-        const validMode = (mode === 'adv' || mode === 'dis') ? mode : 'normal';
+        const validMode = mode === 'adv' || mode === 'dis' ? mode : 'normal';
         vtt.currentRollMode = validMode;
         window.VTT = window.VTT || {};
         window.VTT.currentRollMode = validMode;
@@ -79,7 +81,7 @@ export function initVttChat(vtt, chatHistory) {
         }
         try {
             localStorage.setItem('vtt_current_roll_mode', validMode);
-        } catch (e) { }
+        } catch (e) {}
         updateAllRollModeButtonsUI(validMode);
     }
 
@@ -109,7 +111,7 @@ export function initVttChat(vtt, chatHistory) {
         }
         try {
             localStorage.setItem('vtt_whisper_to_gm', active ? 'true' : 'false');
-        } catch (e) { }
+        } catch (e) {}
         updateAllWhisperButtonsUI(active);
     }
 
@@ -267,8 +269,8 @@ export function initVttChat(vtt, chatHistory) {
                     dr.roll && Array.isArray(dr.roll.diceList)
                         ? dr.roll.diceList
                         : Array.isArray(dr.diceList)
-                            ? dr.diceList
-                            : null;
+                          ? dr.diceList
+                          : null;
                 if (Array.isArray(dmgDice) && dmgDice.length > 0) {
                     dmgDice.forEach((d) => allDice.push({ ...d, damageType: dr.type || null }));
                 } else {
@@ -340,7 +342,7 @@ export function initVttChat(vtt, chatHistory) {
                     if (row && row.dataset.cardData) {
                         try {
                             msgEl._saveResolveCardData = JSON.parse(decodeURIComponent(row.dataset.cardData));
-                        } catch (e) { }
+                        } catch (e) {}
                     }
                 }
                 if (msgEl._saveResolveCardData) {
@@ -366,7 +368,7 @@ export function initVttChat(vtt, chatHistory) {
                     if (row && row.dataset.cardData) {
                         try {
                             msgEl._massAttackCardData = JSON.parse(decodeURIComponent(row.dataset.cardData));
-                        } catch (e) { }
+                        } catch (e) {}
                     }
                 }
                 if (data.massAttackCard) {
@@ -397,7 +399,7 @@ export function initVttChat(vtt, chatHistory) {
                     if (row && row.dataset.cardData) {
                         try {
                             msgEl._macroCardData = JSON.parse(decodeURIComponent(row.dataset.cardData));
-                        } catch (e) { }
+                        } catch (e) {}
                     }
                 }
                 if (data.macroCard) {
@@ -550,7 +552,7 @@ export function initVttChat(vtt, chatHistory) {
                 if (rawJson) {
                     try {
                         tableData = JSON.parse(decodeURIComponent(rawJson));
-                    } catch (err) { }
+                    } catch (err) {}
                 }
                 const cName = rollCreatureTableBtn.dataset.creature || 'Creature';
                 const aName = rollCreatureTableBtn.dataset.ability || 'Table';
@@ -603,7 +605,7 @@ export function initVttChat(vtt, chatHistory) {
                 if (!cardData && rowEl && rowEl.dataset.cardData) {
                     try {
                         cardData = JSON.parse(decodeURIComponent(rowEl.dataset.cardData));
-                    } catch (err) { }
+                    } catch (err) {}
                 }
                 const action = actionBtn.dataset.action;
                 if (cardData && action) {
@@ -632,7 +634,7 @@ export function initVttChat(vtt, chatHistory) {
                 if (!cardData && rowEl && rowEl.dataset.cardData) {
                     try {
                         cardData = JSON.parse(decodeURIComponent(rowEl.dataset.cardData));
-                    } catch (err) { }
+                    } catch (err) {}
                 }
                 const action = saveResolveBtn.dataset.action;
                 if (cardData && action && window.VTT?.canvasEngine?.resolveSaveFromChat) {
@@ -656,7 +658,7 @@ export function initVttChat(vtt, chatHistory) {
                 if (!cardData && rowEl && rowEl.dataset.cardData) {
                     try {
                         cardData = JSON.parse(decodeURIComponent(rowEl.dataset.cardData));
-                    } catch (err) { }
+                    } catch (err) {}
                 }
                 if (cardData && window.VTT?.canvasEngine?.processMassAttackFromChat) {
                     massAttackBtn.disabled = true;
@@ -689,7 +691,7 @@ export function initVttChat(vtt, chatHistory) {
                 if (rowEl && rowEl.dataset.cardData) {
                     try {
                         cardData = JSON.parse(decodeURIComponent(rowEl.dataset.cardData));
-                    } catch (err) { }
+                    } catch (err) {}
                 }
                 if (!cardData && msgEl?._msgData?.trapCard) {
                     cardData = { ...msgEl._msgData.trapCard, isTrap: true };
@@ -1219,14 +1221,14 @@ export function initVttChat(vtt, chatHistory) {
             mc.saveInfo || (mc.saveDc && mc.saveAbility ? { ability: mc.saveAbility, dc: mc.saveDc } : null);
         const saveObj =
             rawSaveObj &&
-                rawSaveObj.ability &&
-                validAbilities.includes(rawSaveObj.ability.trim().toUpperCase()) &&
-                !isNaN(parseInt(rawSaveObj.dc)) &&
-                parseInt(rawSaveObj.dc) > 0
+            rawSaveObj.ability &&
+            validAbilities.includes(rawSaveObj.ability.trim().toUpperCase()) &&
+            !isNaN(parseInt(rawSaveObj.dc)) &&
+            parseInt(rawSaveObj.dc) > 0
                 ? {
-                    ...rawSaveObj,
-                    ability: rawSaveObj.ability.trim().substring(0, 3).toUpperCase()
-                }
+                      ...rawSaveObj,
+                      ability: rawSaveObj.ability.trim().substring(0, 3).toUpperCase()
+                  }
                 : null;
         if (saveObj) {
             const abLabel = `${saveObj.ability} Save DC`;
@@ -1249,7 +1251,7 @@ export function initVttChat(vtt, chatHistory) {
                 const icon = dmgIcons[normalizedType] || dmgIcons[dr.type] || 'fa-solid fa-droplet';
                 const bd = dr.roll
                     ? dr.roll.breakdownStr ||
-                    (dr.roll.diceList ? `[${dr.roll.diceList.map((d) => d.val).join(', ')}]` : '')
+                      (dr.roll.diceList ? `[${dr.roll.diceList.map((d) => d.val).join(', ')}]` : '')
                     : '';
                 const total = dr.roll ? dr.roll.total : 0;
                 const formulaText = (dr.formula || '').toUpperCase();
@@ -1295,7 +1297,7 @@ export function initVttChat(vtt, chatHistory) {
             let encodedData = '';
             try {
                 encodedData = encodeURIComponent(JSON.stringify(mc));
-            } catch (err) { }
+            } catch (err) {}
             const dataMsgAttr = msgId ? ` data-msg-id="${escapeHtml(msgId)}"` : '';
             actionsRow = `
                 <div class="macro-card-actions-row" data-card-data="${encodedData}"${dataMsgAttr}>
@@ -1435,7 +1437,7 @@ export function initVttChat(vtt, chatHistory) {
             let encodedData = '';
             try {
                 encodedData = encodeURIComponent(JSON.stringify(src));
-            } catch (err) { }
+            } catch (err) {}
             footerHtml = `
                 <div class="save-resolve-prompt">Apply half damage to tokens that succeeded on the save?</div>
                 <div class="save-resolve-actions-row" data-card-data="${encodedData}" data-msg-id="${msgId}">
@@ -1609,7 +1611,7 @@ export function initVttChat(vtt, chatHistory) {
             let encodedData = '';
             try {
                 encodedData = encodeURIComponent(JSON.stringify(mac));
-            } catch (err) { }
+            } catch (err) {}
             footerHtml = `
                 <div class="mass-attack-prompt">Select target token(s) on canvas and click Process</div>
                 <div class="mass-attack-actions-row" data-card-data="${encodedData}" data-msg-id="${msgId}">
@@ -1739,7 +1741,7 @@ export function initVttChat(vtt, chatHistory) {
             let encodedData = '';
             try {
                 encodedData = encodeURIComponent(JSON.stringify({ ...tc, isTrap: true, damageType: dmgType }));
-            } catch (err) { }
+            } catch (err) {}
 
             const actionButtonsHtml =
                 vtt.role === 'GM'
@@ -1770,25 +1772,27 @@ export function initVttChat(vtt, chatHistory) {
                     </div>
                     <div class="trap-chat-details">
                         ${tc.saveAbility && tc.saveAbility !== 'NONE' ? `<span class="trap-chat-badge"><i class="fa-solid fa-shield"></i> DC ${escapeHtml(tc.saveDc)} ${escapeHtml(tc.saveAbility)} Save</span>` : ''}
-                        ${tc.damageRoll
-                    ? `
+                        ${
+                            tc.damageRoll
+                                ? `
                             <span class="trap-chat-badge" style="background: rgba(239, 68, 68, 0.25); border-color: rgba(239, 68, 68, 0.6); color: #fca5a5;">
                                 <i class="fa-solid fa-burst"></i> Damage: <strong>${escapeHtml(tc.damageRoll.total)}</strong> ${escapeHtml(dmgTypeLabel)} <span style="font-size: 0.85em; opacity: 0.85;">(${escapeHtml(tc.damageRoll.breakdownStr || tc.damageRoll.formula || tc.damage || '')})</span>
                             </span>
                         `
-                    : tc.damage
-                        ? `<span class="trap-chat-badge"><i class="fa-solid fa-burst"></i> ${escapeHtml(tc.damage)} ${escapeHtml(dmgTypeLabel)}</span>`
-                        : ''
-                }
+                                : tc.damage
+                                  ? `<span class="trap-chat-badge"><i class="fa-solid fa-burst"></i> ${escapeHtml(tc.damage)} ${escapeHtml(dmgTypeLabel)}</span>`
+                                  : ''
+                        }
                     </div>
-                    ${tc.saveAbility && tc.saveAbility !== 'NONE'
-                    ? `
+                    ${
+                        tc.saveAbility && tc.saveAbility !== 'NONE'
+                            ? `
                         <button type="button" class="trap-chat-save-btn" data-trap-id="${escapeHtml(tc.trapId)}" data-token-id="${escapeHtml(tc.tokenId)}" data-ability="${escapeHtml(tc.saveAbility)}" data-dc="${escapeHtml(tc.saveDc)}">
                             <i class="fa-solid fa-dice-d20"></i> Roll ${escapeHtml(tc.saveAbility)} Save (DC ${escapeHtml(tc.saveDc)})
                         </button>
                     `
-                    : ''
-                }
+                            : ''
+                    }
                     ${actionButtonsHtml}
                 </div>
             `;
@@ -1961,8 +1965,8 @@ export function initVttChat(vtt, chatHistory) {
                     ? canvasEngine.getSelectedTokenIds
                         ? canvasEngine.getSelectedTokenIds()
                         : canvasEngine.getSelectedTokens
-                            ? canvasEngine.getSelectedTokens()
-                            : []
+                          ? canvasEngine.getSelectedTokens()
+                          : []
                     : [];
                 if (selectedTokenIds.length > 0) {
                     const canvasTokens = canvasEngine.getTokens ? canvasEngine.getTokens() : {};
@@ -2144,7 +2148,7 @@ export function initVttChat(vtt, chatHistory) {
                 if (!finalCoords) {
                     try {
                         finalCoords = JSON.parse(localStorage.getItem('vtt_initiative_custom_coords'));
-                    } catch (e) { }
+                    } catch (e) {}
                 }
                 if (!finalCoords) {
                     const rect = initContainer.getBoundingClientRect();
@@ -2335,7 +2339,7 @@ export function initVttChat(vtt, chatHistory) {
         try {
             localStorage.removeItem('vtt_initiative_docked_height');
             localStorage.removeItem('vtt_initiative_docked_width');
-        } catch (e) { }
+        } catch (e) {}
 
         // Restore saved position, orientation, and size on load
         const savedPosStyle = localStorage.getItem('vtt_initiative_position_style') || 'right';
@@ -2350,7 +2354,7 @@ export function initVttChat(vtt, chatHistory) {
                 let savedSize = null;
                 try {
                     savedSize = JSON.parse(localStorage.getItem('vtt_initiative_custom_size'));
-                } catch (e) { }
+                } catch (e) {}
 
                 if (savedCoords) {
                     [configPosition, hudPosition].forEach((sel) => {
@@ -2757,8 +2761,8 @@ export function initVttChat(vtt, chatHistory) {
                         typeof window.getSafeVttUrl === 'function'
                             ? window.getSafeVttUrl(actTargetImg)
                             : actTargetImg.includes('discordapp.com') || actTargetImg.includes('discordapp.net')
-                                ? '/api/proxy-discord?url=' + encodeURIComponent(actTargetImg)
-                                : actTargetImg;
+                              ? '/api/proxy-discord?url=' + encodeURIComponent(actTargetImg)
+                              : actTargetImg;
                     const cleanTarget = actTargetImg.split('?')[0].toLowerCase();
                     const isTargetVideo = (actToken && actToken.isVideo) || !!cleanTarget.match(/\.(mp4|webm|ogg)$/i);
                     const isTargetYt = actTargetImg.includes('youtube.com') || actTargetImg.includes('youtu.be');
@@ -2924,8 +2928,8 @@ export function initVttChat(vtt, chatHistory) {
                     typeof window.getSafeVttUrl === 'function'
                         ? window.getSafeVttUrl(targetImg)
                         : targetImg.includes('discordapp.com') || targetImg.includes('discordapp.net')
-                            ? '/api/proxy-discord?url=' + encodeURIComponent(targetImg)
-                            : targetImg;
+                          ? '/api/proxy-discord?url=' + encodeURIComponent(targetImg)
+                          : targetImg;
 
                 if (isTargetYt) {
                     avatarHtml = `<div class="init-token-avatar init-avatar-yt" title="YouTube Token">📺</div>`;
@@ -2976,7 +2980,9 @@ export function initVttChat(vtt, chatHistory) {
 
             const scoreNum = parseFloat(c.score);
             const displayScore = !isNaN(scoreNum)
-                ? (Number.isInteger(scoreNum) ? scoreNum : parseFloat(scoreNum.toFixed(2)))
+                ? Number.isInteger(scoreNum)
+                    ? scoreNum
+                    : parseFloat(scoreNum.toFixed(2))
                 : '—';
 
             row.innerHTML = `
@@ -3051,7 +3057,7 @@ export function initVttChat(vtt, chatHistory) {
             // Video hover listeners
             const videoEl = row.querySelector('video');
             if (videoEl) {
-                row.addEventListener('mouseenter', () => videoEl.play().catch(() => { }));
+                row.addEventListener('mouseenter', () => videoEl.play().catch(() => {}));
                 row.addEventListener('mouseleave', () => videoEl.pause());
             }
 
@@ -3205,14 +3211,14 @@ export function initVttChat(vtt, chatHistory) {
                 <div class="dice-menu-header">Roll d${targetFaces}</div>
                 <div class="dice-menu-options">
                     ${Array.from({ length: 10 }, (_, i) => i + 1)
-                    .map(
-                        (num) => `
+                        .map(
+                            (num) => `
                         <div class="dice-menu-option" data-count="${num}">
                             Roll ${num}d${targetFaces}
                         </div>
                     `
-                    )
-                    .join('')}
+                        )
+                        .join('')}
                 </div>
                 <div class="dice-menu-divider"></div>
                 <div class="dice-menu-custom">

@@ -15,7 +15,14 @@ import fs from 'fs';
 import os from 'os';
 import { fileURLToPath } from 'url';
 
-import { DATA_DIR, ASSETS_DIR, campaigns, SERVER_INTERNAL_SECRET, isValidAssetPath, generatePlayerSessionToken } from '../server/state.js';
+import {
+    DATA_DIR,
+    ASSETS_DIR,
+    campaigns,
+    SERVER_INTERNAL_SECRET,
+    isValidAssetPath,
+    generatePlayerSessionToken
+} from '../server/state.js';
 import { campaignsRouter } from '../server/routes/campaigns.js';
 import { assetsRouter } from '../server/routes/assets.js';
 import {

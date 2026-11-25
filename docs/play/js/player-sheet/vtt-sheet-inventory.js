@@ -18,16 +18,23 @@ import { escapeHtml } from '../vtt-utils.js';
 export function renderEquipRowHtml(eq, i, char) {
     const containers = char?.containers || [];
     const tableLookupName = eq.linkedTable
-        ? (typeof eq.linkedTable === 'string' ? eq.linkedTable : eq.linkedTable.name || eq.linkedTable.id)
+        ? typeof eq.linkedTable === 'string'
+            ? eq.linkedTable
+            : eq.linkedTable.name || eq.linkedTable.id
         : eq.name;
-    const matchedTable = typeof window !== 'undefined' && window.VTT?.rollTablesEngine?.findTableByItemNameSync
-        ? window.VTT.rollTablesEngine.findTableByItemNameSync(tableLookupName)
-        : null;
-    const effectiveTable = matchedTable || (eq.linkedTable ? {
-        id: typeof eq.linkedTable === 'string' ? eq.linkedTable : eq.linkedTable.id || eq.linkedTable.name,
-        name: typeof eq.linkedTable === 'string' ? eq.linkedTable : eq.linkedTable.name || eq.linkedTable.id,
-        dice: typeof eq.linkedTable === 'object' && eq.linkedTable.dice ? eq.linkedTable.dice : '1d20'
-    } : null);
+    const matchedTable =
+        typeof window !== 'undefined' && window.VTT?.rollTablesEngine?.findTableByItemNameSync
+            ? window.VTT.rollTablesEngine.findTableByItemNameSync(tableLookupName)
+            : null;
+    const effectiveTable =
+        matchedTable ||
+        (eq.linkedTable
+            ? {
+                  id: typeof eq.linkedTable === 'string' ? eq.linkedTable : eq.linkedTable.id || eq.linkedTable.name,
+                  name: typeof eq.linkedTable === 'string' ? eq.linkedTable : eq.linkedTable.name || eq.linkedTable.id,
+                  dice: typeof eq.linkedTable === 'object' && eq.linkedTable.dice ? eq.linkedTable.dice : '1d20'
+              }
+            : null);
 
     return `
         <div class="equip-row glass-flat" data-idx="${i}" data-container-id="${eq.containerId || ''}" draggable="true" style="padding:8px; display:flex; flex-direction:column; gap:4px; transition: border-color 0.15s, box-shadow 0.15s, opacity 0.15s;">
@@ -79,13 +86,17 @@ export function renderEquipRowHtml(eq, i, char) {
                         return html;
                     })()}
                 </div>
-                ${effectiveTable ? `
+                ${
+                    effectiveTable
+                        ? `
                     <div style="margin-top:8px; padding-top:6px; border-top:1px solid rgba(255,255,255,0.08); display:flex; justify-content:flex-end;">
                         <button type="button" class="btn btn-xs btn-primary pc-item-table-roll-btn" data-table-id="${escapeHtml(effectiveTable.id)}" data-table-name="${escapeHtml(effectiveTable.name)}" data-item-name="${escapeHtml(eq.name)}" style="display:inline-flex; align-items:center; gap:6px;">
                             <i class="fa-solid fa-dice-d20"></i> Roll Table (${escapeHtml(effectiveTable.dice || 'd100')})
                         </button>
                     </div>
-                ` : ''}
+                `
+                        : ''
+                }
             </div>
         </div>
     `;
@@ -313,18 +324,32 @@ export function wireInventoryEvents(char, ctx) {
             const idx = e.currentTarget.dataset.idx;
             const eq = char.equipment[idx];
             if (!eq) return;
-            const isWhisper = Boolean(char?.whisperToGM || (typeof window !== 'undefined' && window.vttPlayerSheetAPI?.isWhisperToGM?.()));
+            const isWhisper = Boolean(
+                char?.whisperToGM || (typeof window !== 'undefined' && window.vttPlayerSheetAPI?.isWhisperToGM?.())
+            );
             const tableLookupName = eq.linkedTable
-                ? (typeof eq.linkedTable === 'string' ? eq.linkedTable : eq.linkedTable.name || eq.linkedTable.id)
+                ? typeof eq.linkedTable === 'string'
+                    ? eq.linkedTable
+                    : eq.linkedTable.name || eq.linkedTable.id
                 : eq.name;
             const matchedTable = window.VTT?.rollTablesEngine?.findTableByItemNameSync
                 ? window.VTT.rollTablesEngine.findTableByItemNameSync(tableLookupName)
                 : null;
-            const effectiveTable = matchedTable || (eq.linkedTable ? {
-                id: typeof eq.linkedTable === 'string' ? eq.linkedTable : eq.linkedTable.id || eq.linkedTable.name,
-                name: typeof eq.linkedTable === 'string' ? eq.linkedTable : eq.linkedTable.name || eq.linkedTable.id,
-                dice: typeof eq.linkedTable === 'object' && eq.linkedTable.dice ? eq.linkedTable.dice : '1d20'
-            } : null);
+            const effectiveTable =
+                matchedTable ||
+                (eq.linkedTable
+                    ? {
+                          id:
+                              typeof eq.linkedTable === 'string'
+                                  ? eq.linkedTable
+                                  : eq.linkedTable.id || eq.linkedTable.name,
+                          name:
+                              typeof eq.linkedTable === 'string'
+                                  ? eq.linkedTable
+                                  : eq.linkedTable.name || eq.linkedTable.id,
+                          dice: typeof eq.linkedTable === 'object' && eq.linkedTable.dice ? eq.linkedTable.dice : '1d20'
+                      }
+                    : null);
 
             vtt.socket.emit('chat:msg', {
                 whisperToGM: isWhisper,
@@ -348,7 +373,9 @@ export function wireInventoryEvents(char, ctx) {
             e.stopPropagation();
             const tableId = btn.dataset.tableId;
             const itemName = btn.dataset.itemName;
-            const isWhisper = Boolean(char?.whisperToGM || (typeof window !== 'undefined' && window.vttPlayerSheetAPI?.isWhisperToGM?.()));
+            const isWhisper = Boolean(
+                char?.whisperToGM || (typeof window !== 'undefined' && window.vttPlayerSheetAPI?.isWhisperToGM?.())
+            );
             if (window.VTT?.rollTablesEngine?.rollLinkedTable) {
                 window.VTT.rollTablesEngine.rollLinkedTable(tableId, {
                     charName: char.name,

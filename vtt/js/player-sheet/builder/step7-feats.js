@@ -231,12 +231,43 @@ export const BATTLEMASTER_MANEUVERS = [
 ];
 
 export const WEAPON_OPTIONS = [
-    'Battleaxe', 'Blowgun', 'Club', 'Dagger', 'Dart', 'Flail', 'Glaive', 'Greataxe',
-    'Greatclub', 'Greatsword', 'Halberd', 'Hand Crossbow', 'Handaxe', 'Heavy Crossbow',
-    'Javelin', 'Lance', 'Light Crossbow', 'Light Hammer', 'Longbow', 'Longsword',
-    'Mace', 'Maul', 'Morningstar', 'Net', 'Pike', 'Quarterstaff', 'Rapier', 'Scimitar',
-    'Shortbow', 'Shortsword', 'Sickle', 'Sling', 'Spear', 'Trident', 'War Pick',
-    'Warhammer', 'Whip'
+    'Battleaxe',
+    'Blowgun',
+    'Club',
+    'Dagger',
+    'Dart',
+    'Flail',
+    'Glaive',
+    'Greataxe',
+    'Greatclub',
+    'Greatsword',
+    'Halberd',
+    'Hand Crossbow',
+    'Handaxe',
+    'Heavy Crossbow',
+    'Javelin',
+    'Lance',
+    'Light Crossbow',
+    'Light Hammer',
+    'Longbow',
+    'Longsword',
+    'Mace',
+    'Maul',
+    'Morningstar',
+    'Net',
+    'Pike',
+    'Quarterstaff',
+    'Rapier',
+    'Scimitar',
+    'Shortbow',
+    'Shortsword',
+    'Sickle',
+    'Sling',
+    'Spear',
+    'Trident',
+    'War Pick',
+    'Warhammer',
+    'Whip'
 ];
 
 export function evaluateFeatPrerequisites(feat, workingChar, effectiveStats) {
@@ -267,7 +298,17 @@ export function evaluateFeatPrerequisites(feat, workingChar, effectiveStats) {
         if (p.spellcasting) {
             const hasSpellcaster = (workingChar?.classes || []).some((c) => {
                 const name = (c.name || '').toLowerCase();
-                return ['wizard', 'sorcerer', 'cleric', 'druid', 'bard', 'warlock', 'paladin', 'ranger', 'artificer'].includes(name);
+                return [
+                    'wizard',
+                    'sorcerer',
+                    'cleric',
+                    'druid',
+                    'bard',
+                    'warlock',
+                    'paladin',
+                    'ranger',
+                    'artificer'
+                ].includes(name);
             });
             if (!hasSpellcaster && !workingChar?.isSpellcaster) {
                 return { met: false, text: 'Spellcasting ability required' };
@@ -410,8 +451,13 @@ export function renderStep7(ctx) {
                                         .map((f) => {
                                             const fId = `${f.id || f.name.replace(/\W+/g, '_').toLowerCase()}::${f.source || 'PHB'}`;
                                             const legacyId = f.id || f.name.replace(/\W+/g, '_').toLowerCase();
-                                            const isSelected = tier.selectedFeatId === fId || tier.selectedFeatId === legacyId;
-                                            const prereqCheck = evaluateFeatPrerequisites(f, workingChar, effectiveStats);
+                                            const isSelected =
+                                                tier.selectedFeatId === fId || tier.selectedFeatId === legacyId;
+                                            const prereqCheck = evaluateFeatPrerequisites(
+                                                f,
+                                                workingChar,
+                                                effectiveStats
+                                            );
                                             return `<option value="${fId}" ${isSelected ? 'selected' : ''}>${f.name} [${f.source || 'PHB'}]${!prereqCheck.met ? ' ⚠️' : ''}</option>`;
                                         })
                                         .join('')}
@@ -423,11 +469,18 @@ export function renderStep7(ctx) {
                                               const matchedFeat = rawFeats.find((f) => {
                                                   const compoundId = `${f.id || f.name.replace(/\W+/g, '_').toLowerCase()}::${f.source || 'PHB'}`;
                                                   const legacyId = f.id || f.name.replace(/\W+/g, '_').toLowerCase();
-                                                  return compoundId === tier.selectedFeatId || legacyId === tier.selectedFeatId;
+                                                  return (
+                                                      compoundId === tier.selectedFeatId ||
+                                                      legacyId === tier.selectedFeatId
+                                                  );
                                               });
                                               if (!matchedFeat) return '';
                                               const featNameLow = matchedFeat.name.toLowerCase();
-                                              const prereqCheck = evaluateFeatPrerequisites(matchedFeat, workingChar, effectiveStats);
+                                              const prereqCheck = evaluateFeatPrerequisites(
+                                                  matchedFeat,
+                                                  workingChar,
+                                                  effectiveStats
+                                              );
                                               const prereqWarningHtml = !prereqCheck.met
                                                   ? `
                                                   <div style="background:rgba(255,152,0,0.12); border:1px solid #ff9800; color:#ffb74d; padding:4px 8px; border-radius:4px; font-size:0.75rem; display:inline-flex; align-items:center; gap:6px; margin-top:2px;">
@@ -1023,9 +1076,11 @@ export function renderStep7(ctx) {
                                               }
                                               // 14. Fighting Initiate
                                               else if (/fighting initiate/i.test(featNameLow)) {
-                                                  const curStyle = tier.featSubChoices?.fightingStyle || FIGHTING_STYLES[0];
+                                                  const curStyle =
+                                                      tier.featSubChoices?.fightingStyle || FIGHTING_STYLES[0];
                                                   tier.featSubChoices = tier.featSubChoices || {};
-                                                  if (!tier.featSubChoices.fightingStyle) tier.featSubChoices.fightingStyle = curStyle;
+                                                  if (!tier.featSubChoices.fightingStyle)
+                                                      tier.featSubChoices.fightingStyle = curStyle;
                                                   subChoiceHtml += `
                                             <div style="background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); padding:10px; border-radius:6px; margin-top:6px; display:flex; flex-direction:column; gap:8px;">
                                                 <div style="display:flex; justify-content:space-between; align-items:center;">
@@ -1042,9 +1097,11 @@ export function renderStep7(ctx) {
                                               }
                                               // 15. Eldritch Adept
                                               else if (/eldritch adept/i.test(featNameLow)) {
-                                                  const curInvoc = tier.featSubChoices?.invocation || ELDRITCH_INVOCATIONS_BASIC[0];
+                                                  const curInvoc =
+                                                      tier.featSubChoices?.invocation || ELDRITCH_INVOCATIONS_BASIC[0];
                                                   tier.featSubChoices = tier.featSubChoices || {};
-                                                  if (!tier.featSubChoices.invocation) tier.featSubChoices.invocation = curInvoc;
+                                                  if (!tier.featSubChoices.invocation)
+                                                      tier.featSubChoices.invocation = curInvoc;
                                                   subChoiceHtml += `
                                             <div style="background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); padding:10px; border-radius:6px; margin-top:6px; display:flex; flex-direction:column; gap:8px;">
                                                 <div style="display:flex; justify-content:space-between; align-items:center;">
@@ -1064,8 +1121,10 @@ export function renderStep7(ctx) {
                                                   const curM1 = tier.featSubChoices?.metamagic1 || METAMAGIC_OPTIONS[0];
                                                   const curM2 = tier.featSubChoices?.metamagic2 || METAMAGIC_OPTIONS[1];
                                                   tier.featSubChoices = tier.featSubChoices || {};
-                                                  if (!tier.featSubChoices.metamagic1) tier.featSubChoices.metamagic1 = curM1;
-                                                  if (!tier.featSubChoices.metamagic2) tier.featSubChoices.metamagic2 = curM2;
+                                                  if (!tier.featSubChoices.metamagic1)
+                                                      tier.featSubChoices.metamagic1 = curM1;
+                                                  if (!tier.featSubChoices.metamagic2)
+                                                      tier.featSubChoices.metamagic2 = curM2;
                                                   subChoiceHtml += `
                                             <div style="background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); padding:10px; border-radius:6px; margin-top:6px; display:flex; flex-direction:column; gap:8px;">
                                                 <div style="display:flex; justify-content:space-between; align-items:center;">
@@ -1091,9 +1150,11 @@ export function renderStep7(ctx) {
                                               }
                                               // 17. Elemental Adept
                                               else if (/elemental adept/i.test(featNameLow)) {
-                                                  const curElem = tier.featSubChoices?.elementalType || ELEMENTAL_TYPES[0];
+                                                  const curElem =
+                                                      tier.featSubChoices?.elementalType || ELEMENTAL_TYPES[0];
                                                   tier.featSubChoices = tier.featSubChoices || {};
-                                                  if (!tier.featSubChoices.elementalType) tier.featSubChoices.elementalType = curElem;
+                                                  if (!tier.featSubChoices.elementalType)
+                                                      tier.featSubChoices.elementalType = curElem;
                                                   subChoiceHtml += `
                                             <div style="background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); padding:10px; border-radius:6px; margin-top:6px; display:flex; flex-direction:column; gap:8px;">
                                                 <div style="display:flex; justify-content:space-between; align-items:center;">
@@ -1110,11 +1171,15 @@ export function renderStep7(ctx) {
                                               }
                                               // 18. Martial Adept
                                               else if (/martial adept/i.test(featNameLow)) {
-                                                  const curMan1 = tier.featSubChoices?.maneuver1 || BATTLEMASTER_MANEUVERS[0];
-                                                  const curMan2 = tier.featSubChoices?.maneuver2 || BATTLEMASTER_MANEUVERS[1];
+                                                  const curMan1 =
+                                                      tier.featSubChoices?.maneuver1 || BATTLEMASTER_MANEUVERS[0];
+                                                  const curMan2 =
+                                                      tier.featSubChoices?.maneuver2 || BATTLEMASTER_MANEUVERS[1];
                                                   tier.featSubChoices = tier.featSubChoices || {};
-                                                  if (!tier.featSubChoices.maneuver1) tier.featSubChoices.maneuver1 = curMan1;
-                                                  if (!tier.featSubChoices.maneuver2) tier.featSubChoices.maneuver2 = curMan2;
+                                                  if (!tier.featSubChoices.maneuver1)
+                                                      tier.featSubChoices.maneuver1 = curMan1;
+                                                  if (!tier.featSubChoices.maneuver2)
+                                                      tier.featSubChoices.maneuver2 = curMan2;
                                                   subChoiceHtml += `
                                             <div style="background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); padding:10px; border-radius:6px; margin-top:6px; display:flex; flex-direction:column; gap:8px;">
                                                 <div style="display:flex; justify-content:space-between; align-items:center;">

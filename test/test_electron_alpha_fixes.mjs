@@ -52,7 +52,7 @@ async function isServerReady(port) {
             signal: AbortSignal.timeout(1000)
         });
         if (res.ok) return true;
-    } catch (e) { }
+    } catch (e) {}
     return false;
 }
 
@@ -542,7 +542,7 @@ console.log('\n[SUITE 5] Testing GM Dashboard Security, Offline CRUD & Isolated 
 const indexHtmlContent = fs.readFileSync(path.join(rootDir, 'electron', 'ui', 'index.html'), 'utf8');
 assert.strictEqual(
     indexHtmlContent.includes('</section>\n\n        <!-- Direct STUN P2P Room Card -->') ||
-    indexHtmlContent.includes('</section>\r\n\r\n        <!-- Direct STUN P2P Room Card -->'),
+        indexHtmlContent.includes('</section>\r\n\r\n        <!-- Direct STUN P2P Room Card -->'),
     true,
     'gm-credentials-card section must be closed before Direct STUN P2P Room Card'
 );
@@ -694,7 +694,7 @@ assert.strictEqual(
 
 try {
     fs.rmSync(suite5Dir, { recursive: true, force: true });
-} catch (e) { }
+} catch (e) {}
 
 console.log('  ✓ Isolated per-campaign backup structure verified to prevent cross-campaign asset flooding.');
 
@@ -859,7 +859,7 @@ console.log('  ✓ F-06: Homebrew Studio dirty check correctly detects unsaved m
 // Clean up suite 6 temp files
 try {
     fs.rmSync(suite6Dir, { recursive: true, force: true });
-} catch (e) { }
+} catch (e) {}
 
 // =========================================================================
 // SUITE 7: ROUND 3 FORENSIC AUDIT FIXES (F-08 through F-14)
@@ -1016,7 +1016,7 @@ console.log('  ✓ Verified external binary spawn working directory bypasses vir
 // Clean up temp directories
 try {
     fs.rmSync(testBaseDir, { recursive: true, force: true });
-} catch (e) { }
+} catch (e) {}
 
 console.log('\n===============================================================');
 console.log('🎉 ALL PRODUCTION REGRESSION TESTS PASSED CLEANLY!             ');

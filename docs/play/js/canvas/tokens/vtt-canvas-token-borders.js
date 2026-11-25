@@ -274,12 +274,20 @@ export function isAnimatedMedia(url = '', fileName = '') {
  * Generates an SVG string for geometric token shape borders.
  * Renders in a 100x100 viewBox, perfectly attached to the token shape's outer boundary.
  */
-export function getShapeBorderSvg(shape = 'circle', style = 'solid', color = '#007bff', width = 3, drawW = 100, drawH = 100, tokenId = 'default') {
+export function getShapeBorderSvg(
+    shape = 'circle',
+    style = 'solid',
+    color = '#007bff',
+    width = 3,
+    drawW = 100,
+    drawH = 100,
+    tokenId = 'default'
+) {
     if (!style || style === 'none') return '';
     const strokeCol = color || '#007bff';
     const strokeW = Math.max(1, width || 2);
     const strokeScale = 100 / Math.max(drawW, 1);
-    const strokeWidthAttr = Math.max(0.75, (strokeW * strokeScale)).toFixed(2);
+    const strokeWidthAttr = Math.max(0.75, strokeW * strokeScale).toFixed(2);
 
     let dashAttr = '';
     if (style === 'dashed') {
@@ -367,11 +375,13 @@ export function promptAnimatedMediaChoice(options = {}) {
     const overlay = document.createElement('div');
     overlay.id = 'modal-animated-media-prompt-overlay';
     overlay.className = 'vtt-sheet-submodal-overlay vtt-sheet-submodal-high';
-    overlay.style.cssText = 'position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.75); z-index:10050; display:flex; align-items:center; justify-content:center; backdrop-filter:blur(3px);';
+    overlay.style.cssText =
+        'position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.75); z-index:10050; display:flex; align-items:center; justify-content:center; backdrop-filter:blur(3px);';
 
     const card = document.createElement('div');
     card.className = 'login-card glassmorphism animated-fade-in';
-    card.style.cssText = 'max-width:420px; width:90%; background:var(--color-bg-secondary, #1a1d24); border:1px solid var(--color-gold-base, #d4af37); border-radius:8px; padding:20px; box-shadow:0 8px 32px rgba(0,0,0,0.8); text-align:center;';
+    card.style.cssText =
+        'max-width:420px; width:90%; background:var(--color-bg-secondary, #1a1d24); border:1px solid var(--color-gold-base, #d4af37); border-radius:8px; padding:20px; box-shadow:0 8px 32px rgba(0,0,0,0.8); text-align:center;';
 
     const mediaPreview = isVideo
         ? `<video src="${url}" autoplay loop muted playsinline style="max-width:140px; max-height:140px; border-radius:8px; border:2px solid var(--color-border-subtle, #333); margin:0 auto 12px; display:block; object-fit:cover;"></video>`

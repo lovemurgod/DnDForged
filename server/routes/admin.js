@@ -29,8 +29,7 @@ adminRouter.get('/server/data-dir', (req, res) => {
     const authenticated = isAuthorizedGmOrSecret(req);
     if (authenticated || isLoopbackRequest(req)) {
         const hasGmPassword = Boolean(serverConfig.gmCredentials?.hash);
-        const passwordlessLoopback =
-            !hasGmPassword && isLoopbackRequest(req) && isSameSiteOrLocalBrowserRequest(req);
+        const passwordlessLoopback = !hasGmPassword && isLoopbackRequest(req) && isSameSiteOrLocalBrowserRequest(req);
         return res.json({
             success: true,
             activeDataDir: DATA_DIR,
@@ -114,13 +113,11 @@ const gmLoginAttempts = new Map();
 
 export function getClientIpKey(req) {
     const socketAddr = req.ip || req.socket?.remoteAddress || req.address || 'local';
-    const isBehindLocalProxy =
-        socketAddr === '127.0.0.1' || socketAddr === '::1' || socketAddr === '::ffff:127.0.0.1';
+    const isBehindLocalProxy = socketAddr === '127.0.0.1' || socketAddr === '::1' || socketAddr === '::ffff:127.0.0.1';
     if (isBehindLocalProxy) {
         const cf = req.headers?.['cf-connecting-ip'];
         const xff = req.headers?.['x-forwarded-for'];
-        const forwarded =
-            (Array.isArray(cf) ? cf[0] : cf) || (typeof xff === 'string' ? xff.split(',')[0] : '');
+        const forwarded = (Array.isArray(cf) ? cf[0] : cf) || (typeof xff === 'string' ? xff.split(',')[0] : '');
         if (forwarded && String(forwarded).trim()) {
             return String(forwarded).trim();
         }
@@ -189,10 +186,7 @@ adminRouter.post('/gm-login', (req, res) => {
     }
 
     const cleanUser = (username || '').trim();
-    if (
-        cleanUser.toLowerCase() !== gmUser.toLowerCase() ||
-        !verifyPassword(String(password || ''), gmSalt, gmHash)
-    ) {
+    if (cleanUser.toLowerCase() !== gmUser.toLowerCase() || !verifyPassword(String(password || ''), gmSalt, gmHash)) {
         checkAndRecordGmAuthFailure(req);
         return res.status(401).json({
             success: false,

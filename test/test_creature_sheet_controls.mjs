@@ -134,7 +134,10 @@ test('Creature Sheet Controls - parseActionMacro honors m.activeRollMode on atta
 
     assert.ok(macroAdv.atkRoll, 'Should parse attack roll');
     assert.equal(macroAdv.atkRoll.diceList.length, 2, 'Should roll 2 dice for advantage');
-    assert.ok(macroAdv.atkRoll.diceList.some(d => d.dropped || d.isDropped), 'Should have dropped die for advantage');
+    assert.ok(
+        macroAdv.atkRoll.diceList.some((d) => d.dropped || d.isDropped),
+        'Should have dropped die for advantage'
+    );
 
     const mockMonsterDis = {
         name: 'Dragon',
@@ -153,17 +156,26 @@ test('Creature Sheet Controls - parseActionMacro honors m.activeRollMode on atta
 
     assert.ok(macroDis.atkRoll, 'Should parse attack roll');
     assert.equal(macroDis.atkRoll.diceList.length, 2, 'Should roll 2 dice for disadvantage');
-    assert.ok(macroDis.atkRoll.diceList.some(d => d.dropped || d.isDropped), 'Should have dropped die for disadvantage');
+    assert.ok(
+        macroDis.atkRoll.diceList.some((d) => d.dropped || d.isDropped),
+        'Should have dropped die for disadvantage'
+    );
 });
 
 test('Creature Sheet Controls - evaluateDiceHelper handles rollModeOverride directly', () => {
     const rollAdv = evaluateDiceHelper('1d20 + 5', false, 'adv');
     assert.equal(rollAdv.diceList.length, 2, 'adv override should produce 2 dice');
-    assert.ok(rollAdv.diceList.some(d => d.dropped), 'adv should flag dropped die');
+    assert.ok(
+        rollAdv.diceList.some((d) => d.dropped),
+        'adv should flag dropped die'
+    );
 
     const rollDis = evaluateDiceHelper('1d20 + 5', false, 'dis');
     assert.equal(rollDis.diceList.length, 2, 'dis override should produce 2 dice');
-    assert.ok(rollDis.diceList.some(d => d.dropped), 'dis should flag dropped die');
+    assert.ok(
+        rollDis.diceList.some((d) => d.dropped),
+        'dis should flag dropped die'
+    );
 });
 
 test('Player Sheet Controls - simulateRoll handles character activeRollMode', () => {
@@ -206,7 +218,7 @@ test('Player Sheet Controls - simulateRoll triggers Elven Accuracy Superadvantag
     const roll = simulateRoll('1d20 + 7', 20, mockEvent, { char: mockChar });
     assert.equal(roll.isSuperAdvantage, true, 'Should set isSuperAdvantage flag');
     assert.equal(roll.diceList.length, 3, 'Should roll 3 dice for Elven Accuracy');
-    assert.equal(roll.diceList.filter(d => d.isDropped).length, 2, 'Should drop 2 dice');
+    assert.equal(roll.diceList.filter((d) => d.isDropped).length, 2, 'Should drop 2 dice');
 });
 
 test('Creature Sheet Controls - parseSpellMacro honors rollModeOverride for spell attack', () => {
@@ -220,12 +232,18 @@ test('Creature Sheet Controls - parseSpellMacro honors rollModeOverride for spel
     const macroAdv = parseSpellMacro(mockSpell, stats, 'Mage', '', 'cantrip', 'adv');
     assert.ok(macroAdv.atkRoll, 'Should have atkRoll');
     assert.equal(macroAdv.atkRoll.diceList.length, 2, 'Should roll 2 dice for adv');
-    assert.ok(macroAdv.atkRoll.diceList.some(d => d.dropped), 'Should flag dropped die');
+    assert.ok(
+        macroAdv.atkRoll.diceList.some((d) => d.dropped),
+        'Should flag dropped die'
+    );
 
     const macroDis = parseSpellMacro(mockSpell, stats, 'Mage', '', 'cantrip', 'dis');
     assert.ok(macroDis.atkRoll, 'Should have atkRoll');
     assert.equal(macroDis.atkRoll.diceList.length, 2, 'Should roll 2 dice for dis');
-    assert.ok(macroDis.atkRoll.diceList.some(d => d.dropped), 'Should flag dropped die');
+    assert.ok(
+        macroDis.atkRoll.diceList.some((d) => d.dropped),
+        'Should flag dropped die'
+    );
 });
 
 test('Creature Sheet Controls - rollNpcSpell forwards activeRollMode to VTTSpellManager.rollSpell', () => {

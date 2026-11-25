@@ -278,7 +278,12 @@ export function initSocketServer(io) {
                         socket.disconnect(true);
                         return;
                     }
-                    if (hasGlobalGm && String(username || '').trim().toLowerCase() !== globalGmUser.toLowerCase()) {
+                    if (
+                        hasGlobalGm &&
+                        String(username || '')
+                            .trim()
+                            .toLowerCase() !== globalGmUser.toLowerCase()
+                    ) {
                         checkAndRecordGmAuthFailure(socket.handshake);
                         socket.emit('join_rejected', {
                             reason: 'You are not the designated Game Master for this server.'
@@ -309,7 +314,11 @@ export function initSocketServer(io) {
                 } else {
                     // 2. Local loopback connection: allow convenient local login
                     if (hasGlobalGm) {
-                        if (String(username || '').trim().toLowerCase() !== globalGmUser.toLowerCase()) {
+                        if (
+                            String(username || '')
+                                .trim()
+                                .toLowerCase() !== globalGmUser.toLowerCase()
+                        ) {
                             checkAndRecordGmAuthFailure(socket.handshake);
                             socket.emit('join_rejected', {
                                 reason: 'You are not the designated Game Master for this server.'
@@ -344,8 +353,12 @@ export function initSocketServer(io) {
                             campaigns[activeCampId].gmUsername = username;
                             saveCampaigns();
                         } else if (
-                            String(username || '').trim().toLowerCase() !==
-                            String(campaigns[activeCampId].gmUsername || '').trim().toLowerCase()
+                            String(username || '')
+                                .trim()
+                                .toLowerCase() !==
+                            String(campaigns[activeCampId].gmUsername || '')
+                                .trim()
+                                .toLowerCase()
                         ) {
                             socket.emit('join_rejected', { reason: 'You are not the Game Master for this campaign.' });
                             socket.disconnect(true);
@@ -356,14 +369,18 @@ export function initSocketServer(io) {
             }
 
             // Prevent players from taking the GM's username (case-insensitive & trimmed)
-            const cleanJoinUser = String(username || '').trim().toLowerCase();
+            const cleanJoinUser = String(username || '')
+                .trim()
+                .toLowerCase();
             if (role === 'Player') {
                 if (hasGlobalGm && cleanJoinUser === globalGmUser.toLowerCase()) {
                     socket.emit('join_rejected', { reason: 'That username is reserved for the Game Master.' });
                     socket.disconnect(true);
                     return;
                 }
-                const campGm = String(campaigns[activeCampId].gmUsername || '').trim().toLowerCase();
+                const campGm = String(campaigns[activeCampId].gmUsername || '')
+                    .trim()
+                    .toLowerCase();
                 if (campGm && cleanJoinUser === campGm) {
                     socket.emit('join_rejected', { reason: 'That username is reserved for the Game Master.' });
                     socket.disconnect(true);
@@ -569,31 +586,10 @@ export function initSocketServer(io) {
             }
         });
 
-const PLAYER_FORBIDDEN_TOKEN_FIELDS = new Set([
-    '__proto__',
-    'constructor',
-    'prototype',
-    'owner',
-    'playerOwner',
-    'ownerUsername',
-    'players',
-    'assignedPlayers',
-    'characterId',
-    'sourceCharacterId',
-    'layer',
-    'hidden',
-    'isVisible',
-    'gmOnly',
-    'gmNotes'
-]);
-
-function filterPlayerTokenUpdate(payload, existingToken) {
-    const clean = sanitizeImportedObject(payload || {});
-    for (const k of PLAYER_FORBIDDEN_TOKEN_FIELDS) {
-        delete clean[k];
-    }
-    if (existingToken) {
-        for (const k of [
+        const PLAYER_FORBIDDEN_TOKEN_FIELDS = new Set([
+            '__proto__',
+            'constructor',
+            'prototype',
             'owner',
             'playerOwner',
             'ownerUsername',
@@ -606,24 +602,45 @@ function filterPlayerTokenUpdate(payload, existingToken) {
             'isVisible',
             'gmOnly',
             'gmNotes'
-        ]) {
-            if (existingToken[k] !== undefined) {
-                clean[k] = existingToken[k];
+        ]);
+
+        function filterPlayerTokenUpdate(payload, existingToken) {
+            const clean = sanitizeImportedObject(payload || {});
+            for (const k of PLAYER_FORBIDDEN_TOKEN_FIELDS) {
+                delete clean[k];
             }
+            if (existingToken) {
+                for (const k of [
+                    'owner',
+                    'playerOwner',
+                    'ownerUsername',
+                    'players',
+                    'assignedPlayers',
+                    'characterId',
+                    'sourceCharacterId',
+                    'layer',
+                    'hidden',
+                    'isVisible',
+                    'gmOnly',
+                    'gmNotes'
+                ]) {
+                    if (existingToken[k] !== undefined) {
+                        clean[k] = existingToken[k];
+                    }
+                }
+            }
+            return clean;
         }
-    }
-    return clean;
-}
 
-function filterPlayerTokenDelta(changes) {
-    const clean = sanitizeImportedObject(changes || {});
-    for (const k of PLAYER_FORBIDDEN_TOKEN_FIELDS) {
-        delete clean[k];
-    }
-    return clean;
-}
+        function filterPlayerTokenDelta(changes) {
+            const clean = sanitizeImportedObject(changes || {});
+            for (const k of PLAYER_FORBIDDEN_TOKEN_FIELDS) {
+                delete clean[k];
+            }
+            return clean;
+        }
 
-// Sync token state changes (legacy - full state)
+        // Sync token state changes (legacy - full state)
         socket.on('token:update', (data) => {
             const { campaignId } = socket;
             if (!campaignId || !campaigns[campaignId]) return;
@@ -2282,7 +2299,8 @@ function filterPlayerTokenDelta(changes) {
             };
 
             const stripTagsDeep = (val) => {
-                if (val === undefined || val === null || typeof val === 'number' || typeof val === 'boolean') return val;
+                if (val === undefined || val === null || typeof val === 'number' || typeof val === 'boolean')
+                    return val;
                 if (typeof val === 'string') return stripTags(val);
                 if (Array.isArray(val)) return val.map((item) => stripTagsDeep(item));
                 if (typeof val === 'object') {
@@ -2474,8 +2492,7 @@ function filterPlayerTokenDelta(changes) {
         // Private whisper (GM-only creature sheet rolls) — sent only back to the sender
         socket.on('chat:whisper', (msg) => {
             if (!socket.campaignId) return;
-            const stripTags = (val) =>
-                typeof val === 'string' ? val.replace(/<[^>]*>/g, '') : val;
+            const stripTags = (val) => (typeof val === 'string' ? val.replace(/<[^>]*>/g, '') : val);
             const whisperMsg = {
                 username: socket.username,
                 role: socket.role,

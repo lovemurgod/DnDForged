@@ -1396,7 +1396,10 @@ export function rollSpell(sp, slKey, casterObj = {}, options = {}) {
         const spellCrit = Math.max(1, Math.min(20, isNaN(rawSpellCrit) ? 20 : rawSpellCrit));
         const spellCritRange = Math.min(spellCrit, globalSpellCrit);
 
-        const effectiveRollMode = options.rollMode || casterObj.activeRollMode || (typeof window !== 'undefined' && window.VTT ? window.VTT.currentRollMode : 'normal');
+        const effectiveRollMode =
+            options.rollMode ||
+            casterObj.activeRollMode ||
+            (typeof window !== 'undefined' && window.VTT ? window.VTT.currentRollMode : 'normal');
         const rollOpts = { rollMode: effectiveRollMode, isAttack: true };
 
         if (window.vttPlayerSheetAPI && window.vttPlayerSheetAPI.simulateRoll) {
@@ -1408,12 +1411,24 @@ export function rollSpell(sp, slKey, casterObj = {}, options = {}) {
                 const r1 = Math.floor(Math.random() * 20) + 1;
                 const r2 = Math.floor(Math.random() * 20) + 1;
                 const kept = Math.max(r1, r2);
-                atkRoll = { total: kept, rolls: [r1, r2], formula, isCritSuccess: kept >= spellCritRange, isCritFail: kept === 1 };
+                atkRoll = {
+                    total: kept,
+                    rolls: [r1, r2],
+                    formula,
+                    isCritSuccess: kept >= spellCritRange,
+                    isCritFail: kept === 1
+                };
             } else if (effectiveRollMode === 'dis') {
                 const r1 = Math.floor(Math.random() * 20) + 1;
                 const r2 = Math.floor(Math.random() * 20) + 1;
                 const kept = Math.min(r1, r2);
-                atkRoll = { total: kept, rolls: [r1, r2], formula, isCritSuccess: kept >= spellCritRange, isCritFail: kept === 1 };
+                atkRoll = {
+                    total: kept,
+                    rolls: [r1, r2],
+                    formula,
+                    isCritSuccess: kept >= spellCritRange,
+                    isCritFail: kept === 1
+                };
             } else {
                 const r = Math.floor(Math.random() * 20) + 1;
                 atkRoll = { total: r, rolls: [r], formula, isCritSuccess: r >= spellCritRange, isCritFail: r === 1 };

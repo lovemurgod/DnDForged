@@ -45,9 +45,7 @@ campaignsRouter.get('/campaigns', (req, res) => {
     }
     const campaignsList = Object.values(campaigns).map((c) => {
         const safeName =
-            typeof c.name === 'string' && c.name.trim()
-                ? c.name.trim()
-                : String(c.id || 'Untitled Campaign');
+            typeof c.name === 'string' && c.name.trim() ? c.name.trim() : String(c.id || 'Untitled Campaign');
         if (!isAuthed) {
             // Intentionally public metadata to populate login campaign selector
             return {
@@ -460,9 +458,7 @@ function collectBatchEntities(campaign, entityType) {
         return Object.values(campaign.characters || {}).filter((c) => Boolean(c?.isCompanion));
     }
     if (entityType === 'customNpc' || entityType === 'npc') {
-        return Object.values(campaign.characters || {}).filter((c) =>
-            Boolean(c?.isCustomNpc || c?.type === 'npc')
-        );
+        return Object.values(campaign.characters || {}).filter((c) => Boolean(c?.isCustomNpc || c?.type === 'npc'));
     }
     if (entityType === 'tablesAndDecks' || entityType === 'table') {
         return [

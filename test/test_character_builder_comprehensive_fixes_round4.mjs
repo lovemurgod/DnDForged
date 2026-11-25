@@ -1,5 +1,9 @@
 import assert from 'assert';
-import { extractSpeciesProficiencies, STANDARD_LANGUAGES_LIST, STANDARD_ARTISAN_TOOLS } from '../vtt/js/player-sheet/builder/builder-state.js';
+import {
+    extractSpeciesProficiencies,
+    STANDARD_LANGUAGES_LIST,
+    STANDARD_ARTISAN_TOOLS
+} from '../vtt/js/player-sheet/builder/builder-state.js';
 import { MARTIAL_WEAPONS, SIMPLE_WEAPONS } from '../vtt/js/player-sheet/builder/step5-equipment.js';
 import { evaluateFeatPrerequisites } from '../vtt/js/player-sheet/builder/step7-feats.js';
 import { convertRoll20Character } from '../electron/importers/roll20-importer.js';
@@ -121,8 +125,16 @@ const mockRoll20Data = {
 
 const imported = await convertRoll20Character(mockRoll20Data, 'test-campaign');
 assert(imported.settings !== undefined, 'char.settings must be defined on imported Roll20 character');
-assert.strictEqual(imported.settings.carryWeightMultiplier, 2, 'Half-Orc should have carryWeightMultiplier 2 (Powerful Build/Orc)');
-assert.strictEqual(imported.settings.brutalCritical, true, 'Level 9 Barbarian Half-Orc should have brutalCritical true');
+assert.strictEqual(
+    imported.settings.carryWeightMultiplier,
+    2,
+    'Half-Orc should have carryWeightMultiplier 2 (Powerful Build/Orc)'
+);
+assert.strictEqual(
+    imported.settings.brutalCritical,
+    true,
+    'Level 9 Barbarian Half-Orc should have brutalCritical true'
+);
 assert.strictEqual(imported.settings.halflingLucky, false, 'Non-halfling should have halflingLucky false');
 assert.strictEqual(imported.settings.autoRollDamage, false, 'autoRollDamage should default to false');
 console.log('✓ Test 5 Passed: Roll20 importer seeds char.settings with intelligent trait auto-detection.');

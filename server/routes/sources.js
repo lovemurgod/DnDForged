@@ -3,14 +3,7 @@ import crypto from 'crypto';
 import fs from 'fs';
 import os from 'os';
 import path from 'path';
-import {
-    rootDir,
-    DATA_DIR,
-    verifyGmOrSecret,
-    loadSourcesConfig,
-    getActiveIo,
-    isValidAssetPath
-} from '../state.js';
+import { rootDir, DATA_DIR, verifyGmOrSecret, loadSourcesConfig, getActiveIo, isValidAssetPath } from '../state.js';
 import { SourceManager } from '../../electron/source-manager.js';
 
 export const sourcesRouter = express.Router();

@@ -88,7 +88,14 @@ test('openCreatureSelectorModal renders two-column split modal, filters, sorts, 
             int: 3,
             wis: 12,
             cha: 6,
-            action: [{ name: 'Bite', entries: ['Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 7 (2d4 + 2) piercing damage.'] }]
+            action: [
+                {
+                    name: 'Bite',
+                    entries: [
+                        'Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 7 (2d4 + 2) piercing damage.'
+                    ]
+                }
+            ]
         },
         {
             id: 'bear',
@@ -218,7 +225,11 @@ test('openCreatureSelectorModal renders two-column split modal, filters, sorts, 
     // Stacking Context: Modal must strictly stack above overlay
     const overlayEl = document.querySelector('.creature-selector-overlay');
     assert.ok(overlayEl, 'Overlay should exist in DOM');
-    assert.equal(modal.style.zIndex, '3110', 'Modal element must have zIndex 3110 to avoid overlay intercepting clicks');
+    assert.equal(
+        modal.style.zIndex,
+        '3110',
+        'Modal element must have zIndex 3110 to avoid overlay intercepting clicks'
+    );
 
     // Confirm button click
     const confirmBtn = modal.querySelector('#csm-confirm-btn');
@@ -276,7 +287,11 @@ test('CSS Cleanliness: modals.css contains exactly one .creature-selector-modal 
 
     // Ensure no duplicate section definitions
     const headerMatches = modalsCss.match(/Creature Selector Modal \(Companion & Custom NPC Creation\)/g);
-    assert.equal(headerMatches ? headerMatches.length : 0, 1, 'modals.css must contain exactly one Creature Selector Modal section');
+    assert.equal(
+        headerMatches ? headerMatches.length : 0,
+        1,
+        'modals.css must contain exactly one Creature Selector Modal section'
+    );
 
     // Ensure z-index 3110 is specified for the modal and 3100 for overlay
     assert.ok(
@@ -292,7 +307,7 @@ test('CSS Cleanliness: modals.css contains exactly one .creature-selector-modal 
 test('Integration: vtt-player-sheet.js, vtt-data-bridge.js, and vtt-session.js contain creature selector integrations', () => {
     const playerSheetCode = fs.readFileSync(path.resolve('vtt/js/vtt-player-sheet.js'), 'utf8');
     assert.ok(
-        playerSheetCode.includes("openCreatureSelectorModal"),
+        playerSheetCode.includes('openCreatureSelectorModal'),
         'vtt-player-sheet.js must import and call openCreatureSelectorModal'
     );
     assert.ok(
@@ -302,7 +317,7 @@ test('Integration: vtt-player-sheet.js, vtt-data-bridge.js, and vtt-session.js c
 
     const dataBridgeCode = fs.readFileSync(path.resolve('vtt/js/vtt-data-bridge.js'), 'utf8');
     assert.ok(
-        dataBridgeCode.includes("openCreatureSelectorModal"),
+        dataBridgeCode.includes('openCreatureSelectorModal'),
         'vtt-data-bridge.js must import and call openCreatureSelectorModal'
     );
     assert.ok(
@@ -312,17 +327,14 @@ test('Integration: vtt-player-sheet.js, vtt-data-bridge.js, and vtt-session.js c
 
     const sessionCode = fs.readFileSync(path.resolve('vtt/js/bootstrap/vtt-session.js'), 'utf8');
     assert.ok(
-        sessionCode.includes("creature-selector-modal.js"),
+        sessionCode.includes('creature-selector-modal.js'),
         'vtt-session.js must load creature-selector-modal.js'
     );
 
     const modalsCss = fs.readFileSync(path.resolve('vtt/css/components/modals.css'), 'utf8');
+    assert.ok(modalsCss.includes('.creature-selector-modal'), 'modals.css must define .creature-selector-modal styles');
     assert.ok(
-        modalsCss.includes(".creature-selector-modal"),
-        'modals.css must define .creature-selector-modal styles'
-    );
-    assert.ok(
-        modalsCss.includes(".csm-mobile-preview-active"),
+        modalsCss.includes('.csm-mobile-preview-active'),
         'modals.css must define mobile responsive sliding view styles'
     );
 });

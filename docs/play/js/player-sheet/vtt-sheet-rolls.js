@@ -142,7 +142,10 @@ export function simulateRoll(formula, critRange = 20, optEvent = null, rollConte
         rollContext.isAttack ||
         rollContext.type === 'attack' ||
         activeFormula.match(/\[atk\]|\[attack\]/i) ||
-        (optEvent && (optEvent.target?.closest?.('.pc-macro-attack') || optEvent.target?.closest?.('.pc-weapon-roll') || optEvent.target?.closest?.('.pc-macro-roll-all')))
+        (optEvent &&
+            (optEvent.target?.closest?.('.pc-macro-attack') ||
+                optEvent.target?.closest?.('.pc-weapon-roll') ||
+                optEvent.target?.closest?.('.pc-macro-roll-all')))
     );
 
     let attackStat = (rollContext.stat || rollContext.attackStat || '').toLowerCase();
@@ -299,8 +302,15 @@ export function simulateRoll(formula, critRange = 20, optEvent = null, rollConte
     const diceList = rollResult.diceList || [];
     const isReliableEligible = Boolean(
         char?.settings?.reliableTalent &&
-        (rollContext.isSkill || rollContext.isTool || rollContext.type === 'skill' || rollContext.type === 'tool' || rollContext.isAbilityCheck) &&
-        (rollContext.isProf || rollContext.proficient || rollContext.isProficient || (rollContext.profMod && rollContext.profMod > 0))
+        (rollContext.isSkill ||
+            rollContext.isTool ||
+            rollContext.type === 'skill' ||
+            rollContext.type === 'tool' ||
+            rollContext.isAbilityCheck) &&
+        (rollContext.isProf ||
+            rollContext.proficient ||
+            rollContext.isProficient ||
+            (rollContext.profMod && rollContext.profMod > 0))
     );
 
     if (strippedFormula.match(/d20/i) && diceList.length > 0) {

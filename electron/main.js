@@ -433,7 +433,9 @@ async function startServer() {
         if (Date.now() - lastHeartbeatTime >= 12000) {
             lastHeartbeatTime = Date.now();
             const elapsed = Math.round((Date.now() - startTime) / 1000);
-            appendLog(`[Server Notice] Local server is initializing campaigns, compendiums & assets... (${elapsed}s elapsed)`);
+            appendLog(
+                `[Server Notice] Local server is initializing campaigns, compendiums & assets... (${elapsed}s elapsed)`
+            );
         }
 
         await new Promise((r) => setTimeout(r, 200));
@@ -953,7 +955,9 @@ function openPresentationWindow(campaignId = 'default') {
 
     attachWindowSecurityGuards(presentationWindow);
     presentationWindow.setMenuBarVisibility(false);
-    presentationWindow.loadURL(`http://localhost:${getServerPort()}/vtt/index.html?mode=presentation&campaign=${encodeURIComponent(campaignId)}`);
+    presentationWindow.loadURL(
+        `http://localhost:${getServerPort()}/vtt/index.html?mode=presentation&campaign=${encodeURIComponent(campaignId)}`
+    );
 
     presentationWindow.on('closed', () => {
         presentationWindow = null;
@@ -2491,7 +2495,9 @@ ipcMain.handle('gm-import-granular', async (_, { campaignId, explicitFilePath })
             }
 
             fs.writeFileSync(campFile, JSON.stringify(allCamps, null, 2), 'utf8');
-            appendLog(`[Roll20 Import] Converted and imported ${tableCount} Roll20 table(s) into campaign ${campaignId}`);
+            appendLog(
+                `[Roll20 Import] Converted and imported ${tableCount} Roll20 table(s) into campaign ${campaignId}`
+            );
             if (standardFiles.length === 0) {
                 return { success: true, count: tableCount, campaign: currentCamp };
             }

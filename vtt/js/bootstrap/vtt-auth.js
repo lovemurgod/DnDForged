@@ -189,8 +189,7 @@ export function setupLoginHandlers(callbacks = {}) {
             } catch (err) {
                 console.warn('Could not query campaigns list:', err);
                 const isStaticOrP2p = Boolean(
-                    (typeof window !== 'undefined' && window.__FORGEDVTT_STATIC_WEB__) ||
-                    urlParams?.get('p2p')
+                    (typeof window !== 'undefined' && window.__FORGEDVTT_STATIC_WEB__) || urlParams?.get('p2p')
                 );
                 if (isStaticOrP2p) {
                     campaignSelect.innerHTML = '';
@@ -247,7 +246,8 @@ export function setupLoginHandlers(callbacks = {}) {
                 btnJoin.disabled = false;
             }
             if (hintText) {
-                hintText.innerHTML = '<i class="fa-solid fa-bolt" style="margin-right: 4px; color: #f59e0b;"></i> <strong>Direct P2P:</strong> Low-latency direct connection between machines. Free & unlimited bandwidth. Best on home Wi-Fi/desktop.';
+                hintText.innerHTML =
+                    '<i class="fa-solid fa-bolt" style="margin-right: 4px; color: #f59e0b;"></i> <strong>Direct P2P:</strong> Low-latency direct connection between machines. Free & unlimited bandwidth. Best on home Wi-Fi/desktop.';
             }
             if (p2pCodeInput) p2pCodeInput.focus();
         } else {
@@ -262,7 +262,8 @@ export function setupLoginHandlers(callbacks = {}) {
                 btnJoin.disabled = true;
             }
             if (hintText) {
-                hintText.innerHTML = '<i class="fa-solid fa-shield-halved" style="margin-right: 4px; color: #38bdf8;"></i> <strong>Web Server:</strong> Standard host connection. Highly reliable across all networks, mobile data, and strict firewalls.';
+                hintText.innerHTML =
+                    '<i class="fa-solid fa-shield-halved" style="margin-right: 4px; color: #38bdf8;"></i> <strong>Web Server:</strong> Standard host connection. Highly reliable across all networks, mobile data, and strict firewalls.';
             }
         }
     };
@@ -290,7 +291,8 @@ export function setupLoginHandlers(callbacks = {}) {
         if (loginOverlay) loginOverlay.classList.add('vtt-hidden');
 
         const executePresentationJoin = () => {
-            const targetCampaign = urlParams.get('campaign') || urlParams.get('campaignId') || campaignSelect?.value || 'default';
+            const targetCampaign =
+                urlParams.get('campaign') || urlParams.get('campaignId') || campaignSelect?.value || 'default';
             if (typeof window !== 'undefined' && window.VTT) {
                 window.VTT.campaignId = targetCampaign;
             }
@@ -352,12 +354,14 @@ export function setupLoginHandlers(callbacks = {}) {
         }
         usernameInput?.classList.remove('form-control--error');
 
-        const p2pOptions = isP2PMode ? {
-            isP2P: true,
-            p2pCode: (p2pCodeInput?.value || '').trim().toUpperCase(),
-            p2pMode: (p2pManualInput?.value || '').trim() ? 'manual' : 'broker',
-            p2pData: (p2pManualInput?.value || '').trim() || null
-        } : { isP2P: false };
+        const p2pOptions = isP2PMode
+            ? {
+                  isP2P: true,
+                  p2pCode: (p2pCodeInput?.value || '').trim().toUpperCase(),
+                  p2pMode: (p2pManualInput?.value || '').trim() ? 'manual' : 'broker',
+                  p2pData: (p2pManualInput?.value || '').trim() || null
+              }
+            : { isP2P: false };
 
         if (rememberCb && rememberCb.checked) {
             localStorage.setItem('vtt_remember', 'true');

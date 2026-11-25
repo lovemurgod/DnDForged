@@ -247,7 +247,8 @@
         async reloadAll() {
             if (this.dirHandle) {
                 const diskCamps = await this._readJsonFromDir('campaigns.json');
-                this.campaigns = diskCamps && typeof diskCamps === 'object' ? diskCamps : { default: createDefaultCampaign() };
+                this.campaigns =
+                    diskCamps && typeof diskCamps === 'object' ? diskCamps : { default: createDefaultCampaign() };
                 const diskChat = await this._readJsonFromDir('chat-log.json');
                 this.chatLogs = diskChat && typeof diskChat === 'object' ? diskChat : {};
                 const diskSrc = await this._readJsonFromDir('sources-config.json');
@@ -262,9 +263,10 @@
                 await idbSet('campaigns', this.campaigns);
             } else {
                 const idbCamps = await idbGet('campaigns');
-                this.campaigns = idbCamps && typeof idbCamps === 'object' && Object.keys(idbCamps).length
-                    ? idbCamps
-                    : { default: createDefaultCampaign() };
+                this.campaigns =
+                    idbCamps && typeof idbCamps === 'object' && Object.keys(idbCamps).length
+                        ? idbCamps
+                        : { default: createDefaultCampaign() };
                 this.chatLogs = (await idbGet('chatLogs')) || {};
                 const idbSrc = await idbGet('sourcesConfig');
                 if (idbSrc) this.sourcesConfig = { ...this.sourcesConfig, ...idbSrc };
@@ -421,7 +423,9 @@
                 if (entityType === 'map') {
                     items = Object.values(camp.maps || {});
                 } else if (entityType === 'player') {
-                    items = Object.values(camp.characters || {}).filter((c) => !c?.isCompanion && !c?.isCustomNpc && c?.type !== 'npc');
+                    items = Object.values(camp.characters || {}).filter(
+                        (c) => !c?.isCompanion && !c?.isCustomNpc && c?.type !== 'npc'
+                    );
                 } else if (entityType === 'companion') {
                     items = Object.values(camp.characters || {}).filter((c) => c?.isCompanion);
                 } else if (entityType === 'customNpc') {
@@ -532,8 +536,16 @@
         async applyPreset({ preset, campaignId = null }) {
             const customSources = this.sourcesConfig.customSources || [];
             const setEnabledForAll = async (isEnabledFn) => {
-                await this.toggleSource('SRD 5.1', Boolean(isEnabledFn({ code: 'SRD 5.1', edition: '2014' })), campaignId);
-                await this.toggleSource('SRD 5.2', Boolean(isEnabledFn({ code: 'SRD 5.2', edition: '2024' })), campaignId);
+                await this.toggleSource(
+                    'SRD 5.1',
+                    Boolean(isEnabledFn({ code: 'SRD 5.1', edition: '2014' })),
+                    campaignId
+                );
+                await this.toggleSource(
+                    'SRD 5.2',
+                    Boolean(isEnabledFn({ code: 'SRD 5.2', edition: '2024' })),
+                    campaignId
+                );
                 const seen = new Set(['SRD 5.1', 'SRD 5.2']);
                 for (const src of customSources) {
                     if (!src?.code || seen.has(src.code)) continue;
@@ -582,9 +594,7 @@
             );
             if (found) {
                 const rawJson =
-                    typeof found.rawJson === 'string'
-                        ? found.rawJson
-                        : JSON.stringify(found.data || {}, null, 2);
+                    typeof found.rawJson === 'string' ? found.rawJson : JSON.stringify(found.data || {}, null, 2);
                 return {
                     success: true,
                     source: { ...found, isCustom: true, isBuiltin: false, filePath: 'Browser Storage' },
@@ -594,7 +604,13 @@
             }
             return {
                 success: true,
-                source: { code, category: category || 'bestiary', isBuiltin: true, isCustom: false, filePath: 'SRD Compendium' },
+                source: {
+                    code,
+                    category: category || 'bestiary',
+                    isBuiltin: true,
+                    isCustom: false,
+                    filePath: 'SRD Compendium'
+                },
                 rawJson: '{}',
                 data: {}
             };
@@ -609,7 +625,12 @@
                     parsedData = JSON.parse(data.rawJson);
                 } catch (_) {}
             }
-            const nextEntry = { ...data, ...(parsedData ? { data: parsedData } : {}), isCustom: true, isBuiltin: false };
+            const nextEntry = {
+                ...data,
+                ...(parsedData ? { data: parsedData } : {}),
+                isCustom: true,
+                isBuiltin: false
+            };
             if (idx !== -1) list[idx] = { ...list[idx], ...nextEntry };
             else list.push(nextEntry);
             await this._saveSourcesConfig();
@@ -684,7 +705,13 @@
                 const data = await res.json();
                 const items = Array.isArray(data) ? data : data?.entries || data?.items || [];
                 const q = query.trim().toLowerCase();
-                const filtered = q ? items.filter((it) => String(it.name || '').toLowerCase().includes(q)) : items;
+                const filtered = q
+                    ? items.filter((it) =>
+                          String(it.name || '')
+                              .toLowerCase()
+                              .includes(q)
+                      )
+                    : items;
                 return { success: true, results: filtered.slice(0, limit).map((it) => ({ ...it, category })) };
             } catch (_) {
                 return { success: false, results: [] };
@@ -692,9 +719,10 @@
         }
 
         async searchAllCompendium({ query = '', category, limit = 50 }) {
-            const cats = category && category !== 'all'
-                ? [category]
-                : ['bestiary', 'spells', 'items', 'classes', 'races', 'feats', 'backgrounds'];
+            const cats =
+                category && category !== 'all'
+                    ? [category]
+                    : ['bestiary', 'spells', 'items', 'classes', 'races', 'feats', 'backgrounds'];
             const all = [];
             for (const c of cats) {
                 const { results } = await this.searchCompendium({ category: c, query, limit });
@@ -707,8 +735,9 @@
         async getEntityFullData({ category, name, source }) {
             const { results } = await this.searchCompendium({ category, query: name, limit: 25 });
             const match = results.find(
-                (r) => String(r.name || '').toLowerCase() === String(name || '').toLowerCase() &&
-                       (!source || String(r.source || '').toLowerCase() === String(source).toLowerCase())
+                (r) =>
+                    String(r.name || '').toLowerCase() === String(name || '').toLowerCase() &&
+                    (!source || String(r.source || '').toLowerCase() === String(source).toLowerCase())
             );
             return match ? { success: true, entity: match } : { success: false, error: 'Entry not found' };
         }
@@ -723,7 +752,10 @@
                 const detected = detectCategoryAndEntries(parsed);
                 const fileName = f?.name || f?.fileName || 'custom.json';
                 const detectedSource =
-                    detected.sourceCode || String(fileName).replace(/\.json$/i, '').toUpperCase();
+                    detected.sourceCode ||
+                    String(fileName)
+                        .replace(/\.json$/i, '')
+                        .toUpperCase();
                 return {
                     fileName,
                     originalPath: fileName,
@@ -745,7 +777,12 @@
             for (const c of candidates) {
                 if (c.selected === false) continue;
                 const category = c.detectedCategory || c.category || 'bestiary';
-                const code = c.detectedSource || c.code || String(c.fileName || 'CUSTOM').replace(/\.json$/i, '').toUpperCase();
+                const code =
+                    c.detectedSource ||
+                    c.code ||
+                    String(c.fileName || 'CUSTOM')
+                        .replace(/\.json$/i, '')
+                        .toUpperCase();
                 const res = await this.addDatabaseFile({
                     category,
                     fileName: `${code}.json`,

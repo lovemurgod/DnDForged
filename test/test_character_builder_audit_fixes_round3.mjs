@@ -50,13 +50,15 @@ test('extractSpeciesProficiencies - Variant Human returns 1 skill choice, exclud
     assert.equal(result.skillChoice.count, 1, 'Variant Human provides 1 skill choice');
 });
 
-test('extractSpeciesProficiencies - Lizardfolk returns Hunter\'s Lore (Choose 2 of Animal Handling, Nature, Perception, Stealth, Survival)', () => {
+test("extractSpeciesProficiencies - Lizardfolk returns Hunter's Lore (Choose 2 of Animal Handling, Nature, Perception, Stealth, Survival)", () => {
     const lizardfolkRace = {
         name: 'Lizardfolk',
         traits: [
             {
                 name: "Hunter's Lore",
-                entries: ['You gain proficiency with two of the following skills of your choice: Animal Handling, Nature, Perception, Stealth, or Survival.']
+                entries: [
+                    'You gain proficiency with two of the following skills of your choice: Animal Handling, Nature, Perception, Stealth, or Survival.'
+                ]
             }
         ]
     };
@@ -72,12 +74,32 @@ test('extractSpeciesProficiencies - Lizardfolk returns Hunter\'s Lore (Choose 2 
 // ─── 2. FEAT SUB-CHOICES CONSTANTS & OPTIONS ──────────────────────────────────
 
 test('Feat Sub-Choices - Constants properly exported with standard 5e options', () => {
-    assert.ok(Array.isArray(FIGHTING_STYLES) && FIGHTING_STYLES.includes('Archery') && FIGHTING_STYLES.includes('Dueling'));
-    assert.ok(Array.isArray(ELDRITCH_INVOCATIONS_BASIC) && ELDRITCH_INVOCATIONS_BASIC.includes('Armor of Shadows') && ELDRITCH_INVOCATIONS_BASIC.includes('Devil\'s Sight'));
-    assert.ok(Array.isArray(METAMAGIC_OPTIONS) && METAMAGIC_OPTIONS.includes('Quickened Spell') && METAMAGIC_OPTIONS.includes('Twinned Spell'));
-    assert.ok(Array.isArray(ELEMENTAL_TYPES) && ELEMENTAL_TYPES.includes('Fire') && ELEMENTAL_TYPES.includes('Lightning'));
-    assert.ok(Array.isArray(BATTLEMASTER_MANEUVERS) && BATTLEMASTER_MANEUVERS.includes('Riposte') && BATTLEMASTER_MANEUVERS.includes('Trip Attack'));
-    assert.ok(Array.isArray(WEAPON_OPTIONS) && WEAPON_OPTIONS.includes('Longsword') && WEAPON_OPTIONS.includes('Heavy Crossbow'));
+    assert.ok(
+        Array.isArray(FIGHTING_STYLES) && FIGHTING_STYLES.includes('Archery') && FIGHTING_STYLES.includes('Dueling')
+    );
+    assert.ok(
+        Array.isArray(ELDRITCH_INVOCATIONS_BASIC) &&
+            ELDRITCH_INVOCATIONS_BASIC.includes('Armor of Shadows') &&
+            ELDRITCH_INVOCATIONS_BASIC.includes("Devil's Sight")
+    );
+    assert.ok(
+        Array.isArray(METAMAGIC_OPTIONS) &&
+            METAMAGIC_OPTIONS.includes('Quickened Spell') &&
+            METAMAGIC_OPTIONS.includes('Twinned Spell')
+    );
+    assert.ok(
+        Array.isArray(ELEMENTAL_TYPES) && ELEMENTAL_TYPES.includes('Fire') && ELEMENTAL_TYPES.includes('Lightning')
+    );
+    assert.ok(
+        Array.isArray(BATTLEMASTER_MANEUVERS) &&
+            BATTLEMASTER_MANEUVERS.includes('Riposte') &&
+            BATTLEMASTER_MANEUVERS.includes('Trip Attack')
+    );
+    assert.ok(
+        Array.isArray(WEAPON_OPTIONS) &&
+            WEAPON_OPTIONS.includes('Longsword') &&
+            WEAPON_OPTIONS.includes('Heavy Crossbow')
+    );
 });
 
 // ─── 3. RESOLVE CHARACTER SHEET SETTINGS & AUTOMATIONS ────────────────────────

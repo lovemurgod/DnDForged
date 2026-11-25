@@ -98,17 +98,14 @@ test('Audit Remediation Security & Static Web Parity', async (t) => {
             body: JSON.stringify(maliciousPayload)
         });
         assert.equal(restoreRes.status, 200);
-        assert.equal(({}).polluted, undefined, 'Object.prototype must not be polluted');
+        assert.equal({}.polluted, undefined, 'Object.prototype must not be polluted');
         assert.equal(Object.prototype.hasOwnProperty.call(campaigns, '__proto__'), false);
         assert.equal(Object.prototype.hasOwnProperty.call(campaigns, 'constructor'), false);
         assert.equal(Object.prototype.hasOwnProperty.call(campaigns, 'prototype'), false);
     });
 
     await t.test('web-api-bridge.js guards all GM and sourcebook methods for isStatic()', () => {
-        const bridgeCode = fs.readFileSync(
-            path.join(rootDir, 'electron', 'ui', 'web-api-bridge.js'),
-            'utf8'
-        );
+        const bridgeCode = fs.readFileSync(path.join(rootDir, 'electron', 'ui', 'web-api-bridge.js'), 'utf8');
         const requiredStaticMethods = [
             'setGmCredentials',
             'gmExportGranular',
@@ -144,10 +141,7 @@ test('Audit Remediation Security & Static Web Parity', async (t) => {
     });
 
     await t.test('vtt-static-shim.js enforces GM password and resolves normalized compendium entries', async () => {
-        const shimCode = fs.readFileSync(
-            path.join(rootDir, 'vtt', 'js', 'network', 'vtt-static-shim.js'),
-            'utf8'
-        );
+        const shimCode = fs.readFileSync(path.join(rootDir, 'vtt', 'js', 'network', 'vtt-static-shim.js'), 'utf8');
         const storage = new Map();
         const mockLocalStorage = {
             getItem: (k) => (storage.has(k) ? storage.get(k) : null),
@@ -158,9 +152,7 @@ test('Audit Remediation Security & Static Web Parity', async (t) => {
             fetchedUrls.push(String(url));
             if (String(url) === 'data/spells-normalized/spells-phb.json') {
                 return new Response(
-                    JSON.stringify([
-                        { id: 'sp_acid_splash_phb', name: 'Acid Splash', source: 'PHB', level: 0 }
-                    ]),
+                    JSON.stringify([{ id: 'sp_acid_splash_phb', name: 'Acid Splash', source: 'PHB', level: 0 }]),
                     { status: 200, headers: { 'Content-Type': 'application/json' } }
                 );
             }

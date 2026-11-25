@@ -457,7 +457,9 @@ export function wireBioEvents(char, ctx) {
             const name = e.currentTarget.dataset.name;
             const rawVal = char.proficiencies?.[type] || 'None';
             const val = sanitizeProficienciesText(rawVal, type === 'weapons') || 'None';
-            const isWhisper = Boolean(char?.whisperToGM || (typeof window !== 'undefined' && window.vttPlayerSheetAPI?.isWhisperToGM?.()));
+            const isWhisper = Boolean(
+                char?.whisperToGM || (typeof window !== 'undefined' && window.vttPlayerSheetAPI?.isWhisperToGM?.())
+            );
             vtt.socket.emit('chat:msg', {
                 whisperToGM: isWhisper,
                 text: `[${char.name || 'Player'}: ${name}]\n**Proficiencies:** ${val}`
@@ -750,7 +752,9 @@ export function wireAbilityCardsEvents(char, ctx) {
                 };
             }
 
-            const isWhisper = Boolean(char?.whisperToGM || (typeof window !== 'undefined' && window.vttPlayerSheetAPI?.isWhisperToGM?.()));
+            const isWhisper = Boolean(
+                char?.whisperToGM || (typeof window !== 'undefined' && window.vttPlayerSheetAPI?.isWhisperToGM?.())
+            );
             vtt.socket.emit('chat:msg', {
                 whisperToGM: isWhisper,
                 macroCard: mc
@@ -796,7 +800,9 @@ export function wireAbilityCardsEvents(char, ctx) {
                     }
                 ]
             };
-            const isWhisper = Boolean(char?.whisperToGM || (typeof window !== 'undefined' && window.vttPlayerSheetAPI?.isWhisperToGM?.()));
+            const isWhisper = Boolean(
+                char?.whisperToGM || (typeof window !== 'undefined' && window.vttPlayerSheetAPI?.isWhisperToGM?.())
+            );
             vtt.socket.emit('chat:msg', { whisperToGM: isWhisper, macroCard: mc });
         })
     );

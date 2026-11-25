@@ -142,7 +142,7 @@ async function run() {
         if (competingProcess) {
             try {
                 competingProcess.kill();
-            } catch { }
+            } catch {}
         }
         if (serverProcess) {
             console.log('\n[Cleanup] Shutting down test server...');

@@ -241,9 +241,10 @@
 
         if (pathname === '/api/campaigns') {
             const stored = await idbGet('campaigns');
-            const list = stored && typeof stored === 'object'
-                ? Object.values(stored).map((c) => ({ id: c.id, name: c.name || c.id }))
-                : [{ id: 'default', name: 'Default Campaign' }];
+            const list =
+                stored && typeof stored === 'object'
+                    ? Object.values(stored).map((c) => ({ id: c.id, name: c.name || c.id }))
+                    : [{ id: 'default', name: 'Default Campaign' }];
             return jsonResponse({
                 activeSubdomain: null,
                 campaigns: list.length ? list : [{ id: 'default', name: 'Default Campaign' }]

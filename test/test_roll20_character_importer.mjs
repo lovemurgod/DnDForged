@@ -667,10 +667,7 @@ test('Roll20 Character Importer - Deep Enhancements Verification', async () => {
         sanitizeRoll20Html('<p>First paragraph</p><p>Second paragraph with <b>bold</b> &amp; &quot;quotes&quot;</p>'),
         'First paragraph\n\nSecond paragraph with bold & "quotes"'
     );
-    assert.strictEqual(
-        sanitizeRoll20Html('<ul><li>Item 1</li><li>Item 2</li></ul>'),
-        '- Item 1\n- Item 2'
-    );
+    assert.strictEqual(sanitizeRoll20Html('<ul><li>Item 1</li><li>Item 2</li></ul>'), '- Item 1\n- Item 2');
     assert.strictEqual(
         sanitizeRoll20Html('%3Cp%3EEncoded%20Bio%20with%20%26nbsp%3B%20spaces%3C%2Fp%3E'),
         'Encoded Bio with   spaces'
@@ -684,20 +681,14 @@ test('Roll20 Character Importer - Deep Enhancements Verification', async () => {
         spellSaveDc: 17,
         spellAtkMod: 9,
         spellDcMod: 2,
-        classes: [{ name: 'Paladin', level: 6 }, { name: 'Sorcerer', level: 4 }]
+        classes: [
+            { name: 'Paladin', level: 6 },
+            { name: 'Sorcerer', level: 4 }
+        ]
     };
-    assert.strictEqual(
-        resolveRoll20Expression('@{Mattshadow|charisma_mod} + 3d8', dummyCtx),
-        '5 + 3d8'
-    );
-    assert.strictEqual(
-        resolveRoll20Expression('@{spell_save_dc} + @{spell_dc_mod}', dummyCtx),
-        '17 + 2'
-    );
-    assert.strictEqual(
-        resolveRoll20Expression('{?{Bonus|0} + 1d6}', dummyCtx),
-        '0 + 1d6'
-    );
+    assert.strictEqual(resolveRoll20Expression('@{Mattshadow|charisma_mod} + 3d8', dummyCtx), '5 + 3d8');
+    assert.strictEqual(resolveRoll20Expression('@{spell_save_dc} + @{spell_dc_mod}', dummyCtx), '17 + 2');
+    assert.strictEqual(resolveRoll20Expression('{?{Bonus|0} + 1d6}', dummyCtx), '0 + 1d6');
 
     // 3. Real Fixture Test: Matt_Saiyan_lv_17_items.json
     const mattRaw = JSON.parse(fs.readFileSync(path.join(samplesDir, 'Matt_Saiyan_lv_17_items.json'), 'utf8'));
@@ -813,7 +804,11 @@ test('Roll20 Character Importer - Deep Enhancements Verification', async () => {
     // Multiclass spell ability and save success
     const rebuke = synthConverted.spells.level1.find((s) => s.name === 'Hellish Rebuke');
     assert.ok(rebuke, 'Hellish Rebuke must exist');
-    assert.strictEqual(rebuke.saveDcStat, 'spell', 'Spell saveDcStat should remain spell when matching primary ability');
+    assert.strictEqual(
+        rebuke.saveDcStat,
+        'spell',
+        'Spell saveDcStat should remain spell when matching primary ability'
+    );
     assert.strictEqual(rebuke.saveSuccess, 'Half damage', 'Spell saveSuccess must be preserved');
 
     const hands = synthConverted.spells.level1.find((s) => s.name === 'Burning Hands');

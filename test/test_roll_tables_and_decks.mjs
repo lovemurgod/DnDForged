@@ -414,7 +414,9 @@ console.log('11. Testing Custom Table Dice Resolution & Explicit Linked Table Pr
     };
 
     const lookupKey = customItem.linkedTable
-        ? (typeof customItem.linkedTable === 'string' ? customItem.linkedTable : customItem.linkedTable.name || customItem.linkedTable.id)
+        ? typeof customItem.linkedTable === 'string'
+            ? customItem.linkedTable
+            : customItem.linkedTable.name || customItem.linkedTable.id
         : customItem.name;
 
     assert.equal(lookupKey, 'Chaos Wand Effects', 'Explicit linkedTable must take precedence over item name');

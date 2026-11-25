@@ -80,8 +80,8 @@ export function tryDismissModal(modalEl) {
     // Attempt clicking a standard cancel/close button if present
     const closeBtn = modalEl.querySelector
         ? modalEl.querySelector(
-            '#btn-modal-cancel, #btn-map-modal-cancel, #btn-push-players-cancel, #btn-handout-cancel, #btn-view-handout-close, #btn-edit-map-cancel, #btn-edit-map-close-icon, #btn-token-edit-cancel, #btn-close-bestiary-filter, #btn-cancel-gm-password, #modal-cat-cancel, #modal-cat-close, #modal-macro-cancel, #modal-macro-close-btn, #modal-ability-cancel, #btn-import-cat-cancel, #cs-upcast-prompt-cancel, #upcast-prompt-cancel, #delete-prompt-cancel, .btn-close-modal, .vtt-modal-close'
-        )
+              '#btn-modal-cancel, #btn-map-modal-cancel, #btn-push-players-cancel, #btn-handout-cancel, #btn-view-handout-close, #btn-edit-map-cancel, #btn-edit-map-close-icon, #btn-token-edit-cancel, #btn-close-bestiary-filter, #btn-cancel-gm-password, #modal-cat-cancel, #modal-cat-close, #modal-macro-cancel, #modal-macro-close-btn, #modal-ability-cancel, #btn-import-cat-cancel, #cs-upcast-prompt-cancel, #upcast-prompt-cancel, #delete-prompt-cancel, .btn-close-modal, .vtt-modal-close'
+          )
         : null;
 
     if (closeBtn && typeof closeBtn.click === 'function') {

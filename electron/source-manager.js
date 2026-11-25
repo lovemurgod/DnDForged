@@ -703,7 +703,7 @@ export class SourceManager {
             const totalSize = stats.size;
             const content = fs.readFileSync(tablesPath, 'utf8');
             const json = JSON.parse(content);
-            const rawList = Array.isArray(json?.table) ? json.table : (Array.isArray(json) ? json : []);
+            const rawList = Array.isArray(json?.table) ? json.table : Array.isArray(json) ? json : [];
 
             if (rawList.length === 0) return;
 
@@ -810,11 +810,7 @@ export class SourceManager {
                         entryCount = json.length;
                     } else if (typeof json === 'object') {
                         const primaryKey =
-                            categoryId === 'bestiary'
-                                ? 'monsters'
-                                : categoryId === 'tables'
-                                  ? 'table'
-                                  : categoryId;
+                            categoryId === 'bestiary' ? 'monsters' : categoryId === 'tables' ? 'table' : categoryId;
                         if (Array.isArray(json[primaryKey])) {
                             entryCount = json[primaryKey].length;
                         } else if (categoryId === 'tables' && Array.isArray(json.tables)) {
@@ -2283,7 +2279,8 @@ export class SourceManager {
                     else if (lower.includes('feat')) category = 'feats';
                     else if (lower.includes('background')) category = 'backgrounds';
                     else if (lower.includes('adventure') || lower.includes('book')) category = 'adventures';
-                    else if (lower.includes('table') || lower.includes('hazard') || lower.includes('deck')) category = 'tables';
+                    else if (lower.includes('table') || lower.includes('hazard') || lower.includes('deck'))
+                        category = 'tables';
 
                     if (Array.isArray(parsed)) entryCount = parsed.length;
                     else if (typeof parsed === 'object' && parsed !== null) {

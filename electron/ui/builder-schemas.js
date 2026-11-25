@@ -1783,9 +1783,7 @@ export function jsonToEntity(category, raw) {
                     const text = r
                         .slice(1)
                         .map((c) =>
-                            typeof c === 'object' && c !== null
-                                ? c.entry || c.text || JSON.stringify(c)
-                                : String(c)
+                            typeof c === 'object' && c !== null ? c.entry || c.text || JSON.stringify(c) : String(c)
                         )
                         .join(' | ');
                     let min = 1;

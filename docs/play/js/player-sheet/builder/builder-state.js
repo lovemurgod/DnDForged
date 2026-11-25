@@ -549,29 +549,78 @@ export const MULTICLASS_PROFICIENCIES = {
 };
 
 export const STANDARD_SKILLS_LIST = [
-    'Acrobatics', 'Animal Handling', 'Arcana', 'Athletics', 'Deception', 'History',
-    'Insight', 'Intimidation', 'Investigation', 'Medicine', 'Nature', 'Perception',
-    'Performance', 'Persuasion', 'Religion', 'Sleight of Hand', 'Stealth', 'Survival'
+    'Acrobatics',
+    'Animal Handling',
+    'Arcana',
+    'Athletics',
+    'Deception',
+    'History',
+    'Insight',
+    'Intimidation',
+    'Investigation',
+    'Medicine',
+    'Nature',
+    'Perception',
+    'Performance',
+    'Persuasion',
+    'Religion',
+    'Sleight of Hand',
+    'Stealth',
+    'Survival'
 ];
 
 export const STANDARD_LANGUAGES_LIST = [
-    'Common', 'Dwarvish', 'Elvish', 'Giant', 'Gnomish', 'Goblin', 'Halfling', 'Orc',
-    'Abyssal', 'Celestial', 'Draconic', 'Deep Speech', 'Infernal', 'Primordial', 'Sylvan', 'Undercommon'
+    'Common',
+    'Dwarvish',
+    'Elvish',
+    'Giant',
+    'Gnomish',
+    'Goblin',
+    'Halfling',
+    'Orc',
+    'Abyssal',
+    'Celestial',
+    'Draconic',
+    'Deep Speech',
+    'Infernal',
+    'Primordial',
+    'Sylvan',
+    'Undercommon'
 ];
 
 export const STANDARD_ARTISAN_TOOLS = [
-    "Alchemist's supplies", "Brewer's supplies", "Calligrapher's supplies", "Carpenter's tools",
-    "Cartographer's tools", "Cobbler's tools", "Cook's utensils", "Glassblower's tools",
-    "Jeweler's tools", "Leatherworker's tools", "Mason's tools", "Painter's supplies",
-    "Potter's tools", "Smith's tools", "Tinker's tools", "Weaver's tools", "Woodcarver's tools"
+    "Alchemist's supplies",
+    "Brewer's supplies",
+    "Calligrapher's supplies",
+    "Carpenter's tools",
+    "Cartographer's tools",
+    "Cobbler's tools",
+    "Cook's utensils",
+    "Glassblower's tools",
+    "Jeweler's tools",
+    "Leatherworker's tools",
+    "Mason's tools",
+    "Painter's supplies",
+    "Potter's tools",
+    "Smith's tools",
+    "Tinker's tools",
+    "Weaver's tools",
+    "Woodcarver's tools"
 ];
 
-export const STANDARD_GAMING_SETS = [
-    'Dice Set', 'Dragonchess Set', 'Playing Card Set', 'Three-Dragon Ante Set'
-];
+export const STANDARD_GAMING_SETS = ['Dice Set', 'Dragonchess Set', 'Playing Card Set', 'Three-Dragon Ante Set'];
 
 export const STANDARD_MUSICAL_INSTRUMENTS = [
-    'Bagpipes', 'Drum', 'Dulcimer', 'Flute', 'Lute', 'Lyre', 'Horn', 'Pan Flute', 'Shawm', 'Viol'
+    'Bagpipes',
+    'Drum',
+    'Dulcimer',
+    'Flute',
+    'Lute',
+    'Lyre',
+    'Horn',
+    'Pan Flute',
+    'Shawm',
+    'Viol'
 ];
 
 /**
@@ -614,7 +663,9 @@ export function extractSpeciesProficiencies(baseRace, subrace) {
                     ? t
                     : t?.description ||
                       (Array.isArray(t?.rawEntries) ? t.rawEntries.join(' ') : '') ||
-                      (Array.isArray(t?.entries) ? t.entries.map((e) => (typeof e === 'string' ? e : e?.name || '')).join(' ') : '')
+                      (Array.isArray(t?.entries)
+                          ? t.entries.map((e) => (typeof e === 'string' ? e : e?.name || '')).join(' ')
+                          : '')
             ).toLowerCase();
 
             if (tName.includes('keen senses')) skills.add('Perception');
@@ -629,19 +680,43 @@ export function extractSpeciesProficiencies(baseRace, subrace) {
             // Skill choices
             if (tName.includes('skill versatility') || tDesc.includes('two skills of your choice')) {
                 speciesSkillChoice = { count: 2, from: [...STANDARD_SKILLS_LIST], label: 'Skill Versatility' };
-            } else if ((r.name || '').toLowerCase().includes('human') && (tName.includes('skills') || tDesc.includes('one skill of your choice'))) {
+            } else if (
+                (r.name || '').toLowerCase().includes('human') &&
+                (tName.includes('skills') || tDesc.includes('one skill of your choice'))
+            ) {
                 speciesSkillChoice = { count: 1, from: [...STANDARD_SKILLS_LIST], label: 'Variant Human' };
             } else if (tName.includes('changeling instincts')) {
-                speciesSkillChoice = { count: 2, from: ['Deception', 'Insight', 'Intimidation', 'Persuasion'], label: 'Changeling Instincts' };
+                speciesSkillChoice = {
+                    count: 2,
+                    from: ['Deception', 'Insight', 'Intimidation', 'Persuasion'],
+                    label: 'Changeling Instincts'
+                };
             } else if (tName.includes('kenku recall')) {
-                speciesSkillChoice = { count: 2, from: ['Acrobatics', 'Deception', 'Stealth', 'Sleight of Hand'], label: 'Kenku Recall' };
+                speciesSkillChoice = {
+                    count: 2,
+                    from: ['Acrobatics', 'Deception', 'Stealth', 'Sleight of Hand'],
+                    label: 'Kenku Recall'
+                };
             } else if (tName.includes("hunter's lore")) {
-                speciesSkillChoice = { count: 2, from: ['Animal Handling', 'Nature', 'Perception', 'Stealth', 'Survival'], label: "Hunter's Lore" };
+                speciesSkillChoice = {
+                    count: 2,
+                    from: ['Animal Handling', 'Nature', 'Perception', 'Stealth', 'Survival'],
+                    label: "Hunter's Lore"
+                };
             }
 
             // Language choices in trait description
-            if (!speciesLanguageChoice && (tDesc.includes('extra language of your choice') || tDesc.includes('one language of your choice') || tDesc.includes('one other language of your choice'))) {
-                speciesLanguageChoice = { count: 1, from: [...STANDARD_LANGUAGES_LIST], label: 'Species Language Choice' };
+            if (
+                !speciesLanguageChoice &&
+                (tDesc.includes('extra language of your choice') ||
+                    tDesc.includes('one language of your choice') ||
+                    tDesc.includes('one other language of your choice'))
+            ) {
+                speciesLanguageChoice = {
+                    count: 1,
+                    from: [...STANDARD_LANGUAGES_LIST],
+                    label: 'Species Language Choice'
+                };
             }
 
             // Regex match specific skills while ignoring numbers/count words
@@ -671,10 +746,15 @@ export function extractSpeciesProficiencies(baseRace, subrace) {
                     });
                     const count = entry.anyStandard || entry.any || entry.choose?.count;
                     if (count && !speciesLanguageChoice) {
-                        const fromList = Array.isArray(entry.choose?.from) && entry.choose.from.length > 0
-                            ? entry.choose.from.map((s) => s.charAt(0).toUpperCase() + s.slice(1))
-                            : [...STANDARD_LANGUAGES_LIST];
-                        speciesLanguageChoice = { count: parseInt(count) || 1, from: fromList, label: 'Species Language Choice' };
+                        const fromList =
+                            Array.isArray(entry.choose?.from) && entry.choose.from.length > 0
+                                ? entry.choose.from.map((s) => s.charAt(0).toUpperCase() + s.slice(1))
+                                : [...STANDARD_LANGUAGES_LIST];
+                        speciesLanguageChoice = {
+                            count: parseInt(count) || 1,
+                            from: fromList,
+                            label: 'Species Language Choice'
+                        };
                     }
                 }
             });
@@ -692,11 +772,18 @@ export function extractSpeciesProficiencies(baseRace, subrace) {
                     if (tp.choose && !speciesToolChoice) {
                         speciesToolChoice = {
                             count: parseInt(tp.choose.count) || 1,
-                            from: Array.isArray(tp.choose.from) && tp.choose.from.length > 0 ? tp.choose.from : [...STANDARD_ARTISAN_TOOLS],
+                            from:
+                                Array.isArray(tp.choose.from) && tp.choose.from.length > 0
+                                    ? tp.choose.from
+                                    : [...STANDARD_ARTISAN_TOOLS],
                             label: 'Tool Proficiency Choice'
                         };
                     } else if (tp.artisan && !speciesToolChoice) {
-                        speciesToolChoice = { count: parseInt(tp.artisan) || 1, from: [...STANDARD_ARTISAN_TOOLS], label: "Artisan's Tools" };
+                        speciesToolChoice = {
+                            count: parseInt(tp.artisan) || 1,
+                            from: [...STANDARD_ARTISAN_TOOLS],
+                            label: "Artisan's Tools"
+                        };
                     }
                 }
             });

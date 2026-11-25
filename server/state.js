@@ -660,13 +660,7 @@ export function setDatabaseDirectory(newDir) {
 
 // Known reverse proxy / tunnel provider root domains whose subdomains
 // represent ephemeral routing identifiers rather than isolated campaigns
-export const TUNNEL_ROOT_DOMAINS = [
-    'trycloudflare.com',
-    'localtunnel.me',
-    'ngrok.io',
-    'ngrok.app',
-    'ngrok-free.app'
-];
+export const TUNNEL_ROOT_DOMAINS = ['trycloudflare.com', 'localtunnel.me', 'ngrok.io', 'ngrok.app', 'ngrok-free.app'];
 
 export function extractSubdomain(hostHeader) {
     if (!hostHeader) return null;

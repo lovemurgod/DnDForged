@@ -38,7 +38,6 @@ import {
 import { parseActionMacro } from '../vtt/js/creature-sheet/creature-roller.js';
 
 describe('Bestiary Compendium, Spawning & Creature Rolls Lifecycle Suite', () => {
-
     describe('1. Bestiary Catalog Querying & Archetypes', () => {
         const catalogPath = path.resolve('vtt', 'data', 'bestiary-catalog.json');
         let catalog = [];
@@ -232,19 +231,24 @@ describe('Bestiary Compendium, Spawning & Creature Rolls Lifecycle Suite', () =>
 
     describe('6. Action Macro Parsing (Attacks, To-Hit & Damage)', () => {
         it('should parse melee weapon attack with to-hit and damage expression', () => {
-            const entryText = '{@atk mw} {@hit 4} to hit, reach 5 ft., one target. {@h}5 ({@damage 1d6 + 2}) slashing damage.';
+            const entryText =
+                '{@atk mw} {@hit 4} to hit, reach 5 ft., one target. {@h}5 ({@damage 1d6 + 2}) slashing damage.';
             const macro = parseActionMacro('Scimitar', entryText, '', 'Goblin');
 
             assert.ok(macro, 'Action macro must be parsed');
             assert.ok(macro.atkRoll, 'Must contain atkRoll');
             assert.equal(macro.atkRoll.formula, '1d20+4');
             assert.ok(macro.dmgRolls.length > 0, 'Must contain at least one damage roll');
-            assert.ok(macro.dmgRolls[0].formula === '1d6 + 2' || macro.dmgRolls[0].formula === '2d6 + 2', 'Damage formula matches base or crit roll');
+            assert.ok(
+                macro.dmgRolls[0].formula === '1d6 + 2' || macro.dmgRolls[0].formula === '2d6 + 2',
+                'Damage formula matches base or crit roll'
+            );
             assert.equal(macro.dmgRolls[0].type.toLowerCase(), 'slashing');
         });
 
         it('should parse breath weapon / saving throw area of effect abilities', () => {
-            const entryText = 'The dragon exhales fire in a 60-foot cone. Each creature in that area must make a DC 21 Dexterity saving throw, taking 63 ({@damage 18d6}) fire damage on a failed save, or half as much damage on a successful one.';
+            const entryText =
+                'The dragon exhales fire in a 60-foot cone. Each creature in that area must make a DC 21 Dexterity saving throw, taking 63 ({@damage 18d6}) fire damage on a failed save, or half as much damage on a successful one.';
             const macro = parseActionMacro('Fire Breath', entryText, '', 'Adult Red Dragon');
 
             assert.ok(macro);

@@ -986,12 +986,24 @@ function loadTablesData() {
                 for (const it of itemList) {
                     if (!it.entries || !Array.isArray(it.entries)) continue;
                     for (const entry of it.entries) {
-                        if (entry && typeof entry === 'object' && entry.type === 'table' && Array.isArray(entry.rows) && entry.rows.length > 0) {
-                            const baseName = cleanCompendiumText(entry.caption || entry.name || entry.data?.genTables?.tableName || `${it.name} Effects`).trim();
-                            const finalTableName = baseName.toLowerCase().includes((it.name || '').toLowerCase()) ? baseName : `${it.name} — ${baseName}`;
-                            
+                        if (
+                            entry &&
+                            typeof entry === 'object' &&
+                            entry.type === 'table' &&
+                            Array.isArray(entry.rows) &&
+                            entry.rows.length > 0
+                        ) {
+                            const baseName = cleanCompendiumText(
+                                entry.caption || entry.name || entry.data?.genTables?.tableName || `${it.name} Effects`
+                            ).trim();
+                            const finalTableName = baseName.toLowerCase().includes((it.name || '').toLowerCase())
+                                ? baseName
+                                : `${it.name} — ${baseName}`;
+
                             // Prevent duplicate entries if already in rawList
-                            const alreadyExists = rawList.some((t) => (t.name || '').toLowerCase() === finalTableName.toLowerCase());
+                            const alreadyExists = rawList.some(
+                                (t) => (t.name || '').toLowerCase() === finalTableName.toLowerCase()
+                            );
                             if (!alreadyExists) {
                                 let diceFormula = '1d20';
                                 if (Array.isArray(entry.colLabels) && entry.colLabels.length > 0) {

@@ -638,7 +638,9 @@ export async function openCharacterBuilderModal(char, options = {}) {
                 return (
                     rBase === rawRaceName &&
                     !r.subraceName &&
-                    (reqRaceSrc ? (r.source || 'PHB').toUpperCase() === reqRaceSrc : (r.source === 'PHB' || r.source === 'XPHB'))
+                    (reqRaceSrc
+                        ? (r.source || 'PHB').toUpperCase() === reqRaceSrc
+                        : r.source === 'PHB' || r.source === 'XPHB')
                 );
             }) ||
             builderCache?.races?.find((r) => {
@@ -647,7 +649,11 @@ export async function openCharacterBuilderModal(char, options = {}) {
                     .replace(/\s*\([^)]*\).*$/, '')
                     .trim()
                     .toLowerCase();
-                return rBase === rawRaceName && !r.subraceName && (!reqRaceSrc || (r.source || 'PHB').toUpperCase() === reqRaceSrc);
+                return (
+                    rBase === rawRaceName &&
+                    !r.subraceName &&
+                    (!reqRaceSrc || (r.source || 'PHB').toUpperCase() === reqRaceSrc)
+                );
             }) ||
             builderCache?.races?.find((r) => {
                 const rBase = (r.raceName || r.name || '')
@@ -677,7 +683,9 @@ export async function openCharacterBuilderModal(char, options = {}) {
                     return (
                         (rBase === rawRaceName || !rawRaceName) &&
                         sName === rawSubraceName &&
-                        (reqSubraceSrc ? (r.source || 'PHB').toUpperCase() === reqSubraceSrc : (r.source === 'PHB' || r.source === 'XPHB'))
+                        (reqSubraceSrc
+                            ? (r.source || 'PHB').toUpperCase() === reqSubraceSrc
+                            : r.source === 'PHB' || r.source === 'XPHB')
                     );
                 }) ||
                 builderCache.races.find((r) => {
@@ -857,10 +865,15 @@ export async function openCharacterBuilderModal(char, options = {}) {
                         });
                         const count = lp.anyStandard || lp.any || lp.choose?.count;
                         if (count && !bgLanguageChoiceDef) {
-                            const fromList = Array.isArray(lp.choose?.from) && lp.choose.from.length > 0
-                                ? lp.choose.from.map((s) => s.charAt(0).toUpperCase() + s.slice(1))
-                                : [...STANDARD_LANGUAGES_LIST];
-                            bgLanguageChoiceDef = { count: parseInt(count) || 1, from: fromList, label: 'Background Language Choice' };
+                            const fromList =
+                                Array.isArray(lp.choose?.from) && lp.choose.from.length > 0
+                                    ? lp.choose.from.map((s) => s.charAt(0).toUpperCase() + s.slice(1))
+                                    : [...STANDARD_LANGUAGES_LIST];
+                            bgLanguageChoiceDef = {
+                                count: parseInt(count) || 1,
+                                from: fromList,
+                                label: 'Background Language Choice'
+                            };
                         }
                     }
                 });
@@ -872,11 +885,17 @@ export async function openCharacterBuilderModal(char, options = {}) {
                 bgLangs.forEach((l) => {
                     const cleanL = typeof l === 'string' ? l.trim() : '';
                     if (cleanL && !candidateLanguages.includes(cleanL)) {
-                        const choiceMatch = cleanL.match(/(?:choose\s+)?(one|two|\d+)\s+(?:other\s+|standard\s+)?languages?/i);
+                        const choiceMatch = cleanL.match(
+                            /(?:choose\s+)?(one|two|\d+)\s+(?:other\s+|standard\s+)?languages?/i
+                        );
                         if (choiceMatch && !bgLanguageChoiceDef) {
                             const wordMap = { one: 1, two: 2, three: 3 };
                             const cnt = parseInt(choiceMatch[1], 10) || wordMap[choiceMatch[1].toLowerCase()] || 1;
-                            bgLanguageChoiceDef = { count: cnt, from: [...STANDARD_LANGUAGES_LIST], label: 'Background Language Choice' };
+                            bgLanguageChoiceDef = {
+                                count: cnt,
+                                from: [...STANDARD_LANGUAGES_LIST],
+                                label: 'Background Language Choice'
+                            };
                         } else if (!/^(one|two|\d+)\s+language/i.test(cleanL)) {
                             candidateLanguages.push(cleanL);
                         }
@@ -898,15 +917,30 @@ export async function openCharacterBuilderModal(char, options = {}) {
                         if (tp.choose && !bgToolChoiceDef) {
                             bgToolChoiceDef = {
                                 count: parseInt(tp.choose.count) || 1,
-                                from: Array.isArray(tp.choose.from) && tp.choose.from.length > 0 ? tp.choose.from : [...STANDARD_ARTISAN_TOOLS],
+                                from:
+                                    Array.isArray(tp.choose.from) && tp.choose.from.length > 0
+                                        ? tp.choose.from
+                                        : [...STANDARD_ARTISAN_TOOLS],
                                 label: 'Background Tool Choice'
                             };
                         } else if (tp.artisan && !bgToolChoiceDef) {
-                            bgToolChoiceDef = { count: parseInt(tp.artisan) || 1, from: [...STANDARD_ARTISAN_TOOLS], label: "Artisan's Tools" };
+                            bgToolChoiceDef = {
+                                count: parseInt(tp.artisan) || 1,
+                                from: [...STANDARD_ARTISAN_TOOLS],
+                                label: "Artisan's Tools"
+                            };
                         } else if (tp.musicalInstrument && !bgToolChoiceDef) {
-                            bgToolChoiceDef = { count: parseInt(tp.musicalInstrument) || 1, from: [...STANDARD_MUSICAL_INSTRUMENTS], label: "Musical Instrument" };
+                            bgToolChoiceDef = {
+                                count: parseInt(tp.musicalInstrument) || 1,
+                                from: [...STANDARD_MUSICAL_INSTRUMENTS],
+                                label: 'Musical Instrument'
+                            };
                         } else if (tp.gamingSet && !bgToolChoiceDef) {
-                            bgToolChoiceDef = { count: parseInt(tp.gamingSet) || 1, from: [...STANDARD_GAMING_SETS], label: "Gaming Set" };
+                            bgToolChoiceDef = {
+                                count: parseInt(tp.gamingSet) || 1,
+                                from: [...STANDARD_GAMING_SETS],
+                                label: 'Gaming Set'
+                            };
                         }
                     }
                 });
@@ -1330,18 +1364,51 @@ export async function openCharacterBuilderModal(char, options = {}) {
                                     { name: 'Archery', description: '+2 bonus to attack rolls with ranged weapons.' },
                                     { name: 'Blind Fighting', description: 'Blindsight with a range of 10 feet.' },
                                     { name: 'Defense', description: '+1 bonus to Armor Class while wearing armor.' },
-                                    { name: 'Dueling', description: '+2 bonus to damage rolls when wielding a melee weapon in one hand and no other weapons.' },
-                                    { name: 'Great Weapon Fighting', description: 'Reroll 1 or 2 on damage dice for attacks with two-handed or versatile weapons.' },
-                                    { name: 'Interception', description: 'When a creature within 5 ft is hit, use reaction to reduce damage by 1d10 + prof bonus.' },
-                                    { name: 'Protection', description: 'Use reaction to impose disadvantage on an attack against a creature within 5 ft while wielding a shield.' },
-                                    { name: 'Superior Technique', description: 'Learn one Battle Master maneuver and gain one d6 superiority die.' },
-                                    { name: 'Thrown Weapon Fighting', description: '+2 bonus to damage rolls with thrown weapons.' },
-                                    { name: 'Two-Weapon Fighting', description: 'Add ability modifier to the damage of the second attack when two-weapon fighting.' },
-                                    { name: 'Unarmed Fighting', description: 'Unarmed strikes deal 1d6 (or 1d8 if not wielding weapons/shield) + STR damage.' }
+                                    {
+                                        name: 'Dueling',
+                                        description:
+                                            '+2 bonus to damage rolls when wielding a melee weapon in one hand and no other weapons.'
+                                    },
+                                    {
+                                        name: 'Great Weapon Fighting',
+                                        description:
+                                            'Reroll 1 or 2 on damage dice for attacks with two-handed or versatile weapons.'
+                                    },
+                                    {
+                                        name: 'Interception',
+                                        description:
+                                            'When a creature within 5 ft is hit, use reaction to reduce damage by 1d10 + prof bonus.'
+                                    },
+                                    {
+                                        name: 'Protection',
+                                        description:
+                                            'Use reaction to impose disadvantage on an attack against a creature within 5 ft while wielding a shield.'
+                                    },
+                                    {
+                                        name: 'Superior Technique',
+                                        description: 'Learn one Battle Master maneuver and gain one d6 superiority die.'
+                                    },
+                                    {
+                                        name: 'Thrown Weapon Fighting',
+                                        description: '+2 bonus to damage rolls with thrown weapons.'
+                                    },
+                                    {
+                                        name: 'Two-Weapon Fighting',
+                                        description:
+                                            'Add ability modifier to the damage of the second attack when two-weapon fighting.'
+                                    },
+                                    {
+                                        name: 'Unarmed Fighting',
+                                        description:
+                                            'Unarmed strikes deal 1d6 (or 1d8 if not wielding weapons/shield) + STR damage.'
+                                    }
                                 ];
                                 subOptions = fightingStyles;
                                 subOptionChoice = workingChar.featureSubChoices?.[featId] || fightingStyles[0].name;
-                                const chosen = fightingStyles.find(s => s.name.toLowerCase() === (subOptionChoice || '').toLowerCase()) || fightingStyles[0];
+                                const chosen =
+                                    fightingStyles.find(
+                                        (s) => s.name.toLowerCase() === (subOptionChoice || '').toLowerCase()
+                                    ) || fightingStyles[0];
                                 fullDesc = baseDesc + '\n\n**' + chosen.name + ':** ' + chosen.description;
                             } else if (key.includes('draconic ancestor')) {
                                 const dragons = [
@@ -1358,7 +1425,7 @@ export async function openCharacterBuilderModal(char, options = {}) {
                                 ];
                                 subOptions = dragons;
                                 subOptionChoice = workingChar.featureSubChoices?.[featId] || dragons[0].name;
-                                const chosen = dragons.find(s => s.name === subOptionChoice) || dragons[0];
+                                const chosen = dragons.find((s) => s.name === subOptionChoice) || dragons[0];
                                 fullDesc = baseDesc + '\n\n**' + chosen.name + ':** ' + chosen.description;
                             }
 
@@ -1448,13 +1515,25 @@ export async function openCharacterBuilderModal(char, options = {}) {
                                     }
                                 } else if (key.includes("hunter's prey")) {
                                     const hunterPrey = [
-                                        { name: 'Colossus Slayer', description: 'Once per turn, deal an extra 1d8 damage to a weapon attack target that is below its hit point maximum.' },
-                                        { name: 'Giant Killer', description: 'When a Large or larger creature within 5 ft hits or misses you, use reaction to attack it.' },
-                                        { name: 'Horde Breaker', description: 'Once on each turn when you make a weapon attack, make another attack with the same weapon against a different creature within 5 ft of the original target.' }
+                                        {
+                                            name: 'Colossus Slayer',
+                                            description:
+                                                'Once per turn, deal an extra 1d8 damage to a weapon attack target that is below its hit point maximum.'
+                                        },
+                                        {
+                                            name: 'Giant Killer',
+                                            description:
+                                                'When a Large or larger creature within 5 ft hits or misses you, use reaction to attack it.'
+                                        },
+                                        {
+                                            name: 'Horde Breaker',
+                                            description:
+                                                'Once on each turn when you make a weapon attack, make another attack with the same weapon against a different creature within 5 ft of the original target.'
+                                        }
                                     ];
                                     subOptions = hunterPrey;
                                     subOptionChoice = workingChar.featureSubChoices?.[featId] || hunterPrey[0].name;
-                                    const chosen = hunterPrey.find(s => s.name === subOptionChoice) || hunterPrey[0];
+                                    const chosen = hunterPrey.find((s) => s.name === subOptionChoice) || hunterPrey[0];
                                     fullDesc = baseDesc + '\n\n**' + chosen.name + ':** ' + chosen.description;
                                 }
 
@@ -2837,7 +2916,11 @@ export async function openCharacterBuilderModal(char, options = {}) {
                             const chosen = feat.subOptions.find((o) => o.name === sel.value);
                             if (chosen) {
                                 feat.description =
-                                    (feat.baseDescription || '') + '\n\n**' + chosen.name + ':** ' + (chosen.description || '');
+                                    (feat.baseDescription || '') +
+                                    '\n\n**' +
+                                    chosen.name +
+                                    ':** ' +
+                                    (chosen.description || '');
                             }
                         }
                     }
@@ -3377,7 +3460,10 @@ export async function openCharacterBuilderModal(char, options = {}) {
                                 if (weapons.length > 0) {
                                     fName = `Feat: Weapon Master (${weapons.join(', ')})`;
                                     const curWeapons = char.proficiencies.weapons
-                                        ? char.proficiencies.weapons.split(', ').map((s) => s.trim()).filter(Boolean)
+                                        ? char.proficiencies.weapons
+                                              .split(', ')
+                                              .map((s) => s.trim())
+                                              .filter(Boolean)
                                         : [];
                                     weapons.forEach((w) => {
                                         if (!curWeapons.includes(w)) curWeapons.push(w);

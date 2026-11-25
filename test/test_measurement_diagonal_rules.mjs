@@ -107,18 +107,26 @@ const waypoints_5105 = [
     { x: 100, y: 100 }
 ];
 const wpDist_5105 = calcDistanceFormatted(null, grid5105, waypoints_5105);
-assert.strictEqual(wpDist_5105.distance, 15, 'Two 1-diagonal segments on 5-10-5 should carry over diagonal alternation (15 ft)');
+assert.strictEqual(
+    wpDist_5105.distance,
+    15,
+    'Two 1-diagonal segments on 5-10-5 should carry over diagonal alternation (15 ft)'
+);
 
 // Waypoints with straight segment between diagonals on 5-10-5:
 // 1 diag (5ft) -> 2 straight (10ft) -> 1 diag (2nd diag: 10ft) -> total 25 ft (DMG p. 252 example)
 const dmgExampleWaypoints = [
     { x: 0, y: 0 },
-    { x: 50, y: 50 },     // 1 diag (5ft)
-    { x: 150, y: 50 },    // 2 straight (10ft)
-    { x: 200, y: 100 }    // 1 diag (2nd diag, counts as 10ft) -> 25ft
+    { x: 50, y: 50 }, // 1 diag (5ft)
+    { x: 150, y: 50 }, // 2 straight (10ft)
+    { x: 200, y: 100 } // 1 diag (2nd diag, counts as 10ft) -> 25ft
 ];
 const wpDmg = calcDistanceFormatted(null, grid5105, dmgExampleWaypoints);
-assert.strictEqual(wpDmg.distance, 25, 'DMG example with straight between diagonals should carry over diagonal count (25 ft)');
+assert.strictEqual(
+    wpDmg.distance,
+    25,
+    'DMG example with straight between diagonals should carry over diagonal count (25 ft)'
+);
 
 // 5. Hex Grid Behavior
 console.log('Test: Hex grid Euclidean distance preservation');

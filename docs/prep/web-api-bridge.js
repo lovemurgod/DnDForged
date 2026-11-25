@@ -204,9 +204,7 @@
                 port: window.location.port || 5050,
                 localUrl: window.location.origin,
                 registeredUrl: window.location.origin,
-                gmUsername:
-                    window.__webPrepAuth.getUsername() ||
-                    (hybridAuthState.hasGmPassword ? 'GM' : ''),
+                gmUsername: window.__webPrepAuth.getUsername() || (hybridAuthState.hasGmPassword ? 'GM' : ''),
                 hasGmPassword: hybridAuthState.hasGmPassword,
                 webPrepMode: true,
                 staticWebMode: false
@@ -573,7 +571,11 @@
         },
         sourcesSearchCompendium: ({ category, query, limit }) => {
             if (isStatic()) return drv().searchCompendium({ category, query, limit });
-            const qs = new URLSearchParams({ category: category || '', query: query || '', limit: String(limit || 50) }).toString();
+            const qs = new URLSearchParams({
+                category: category || '',
+                query: query || '',
+                limit: String(limit || 50)
+            }).toString();
             return apiFetch(`/api/sources/search?${qs}`);
         },
         sourcesSearchGlobal: ({ query, category, limit }) => {
@@ -596,9 +598,7 @@
         sourcesGetPreview: async ({ category, name, source }) => {
             if (isStatic()) {
                 const res = await drv().getEntityFullData({ category, name, source });
-                return res?.success && res.entity
-                    ? { success: true, statblock: res.entity, entity: res.entity }
-                    : res;
+                return res?.success && res.entity ? { success: true, statblock: res.entity, entity: res.entity } : res;
             }
             const qs = new URLSearchParams({ category, name, source }).toString();
             return apiFetch(`/api/sources/preview?${qs}`);
@@ -638,9 +638,7 @@
         sourcesSelectImportFiles: async () => {
             const files = await pickFiles({ accept: '.json', multiple: true });
             if (!files.length) return { success: false, canceled: true, paths: [], filePaths: [] };
-            const loaded = await Promise.all(
-                files.map(async (f) => ({ name: f.name, content: await f.text() }))
-            );
+            const loaded = await Promise.all(files.map(async (f) => ({ name: f.name, content: await f.text() })));
             return { success: true, canceled: false, paths: loaded, filePaths: loaded };
         },
         sourcesSelectImportFolder: async () => ({

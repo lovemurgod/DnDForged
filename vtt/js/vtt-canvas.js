@@ -1651,8 +1651,7 @@ export function initVttCanvas(vtt) {
         });
     const resolveRulerPortalBending = (pts) => resolveRulerPortalBendingExt(pts, portals, currentMapId);
     const getGridDistanceSettings = (g = grid) => getGridDistanceSettingsExt(g);
-    const calcDistanceFormatted = (pixels, g = grid, coords = null) =>
-        calcDistanceFormattedExt(pixels, g, coords);
+    const calcDistanceFormatted = (pixels, g = grid, coords = null) => calcDistanceFormattedExt(pixels, g, coords);
     const calcDistanceFt = (pixels, g = grid, coords = null) => calcDistanceFtExt(pixels, g, coords);
     const drawMeasurementTemplate = (...args) => drawMeasurementTemplateExt(...args);
     const drawTargetRoomContent = (ctx, tm, tmid, tw, th, tt, twalls, cA, cB, opts = {}) =>

@@ -8,12 +8,12 @@ import { p2pBridge, DEFAULT_STUN_SERVERS } from '../server/p2p-bridge.js';
 test('[P2P Adapter] Default ICE and STUN servers are configured with Google and Cloudflare', () => {
     assert.ok(Array.isArray(DEFAULT_ICE_SERVERS));
     assert.strictEqual(DEFAULT_ICE_SERVERS.length, 3);
-    assert.ok(DEFAULT_ICE_SERVERS.some(s => s.urls.includes('google.com')));
-    assert.ok(DEFAULT_ICE_SERVERS.some(s => s.urls.includes('cloudflare.com')));
+    assert.ok(DEFAULT_ICE_SERVERS.some((s) => s.urls.includes('google.com')));
+    assert.ok(DEFAULT_ICE_SERVERS.some((s) => s.urls.includes('cloudflare.com')));
 
     assert.ok(Array.isArray(DEFAULT_STUN_SERVERS));
-    assert.ok(DEFAULT_STUN_SERVERS.some(s => s.includes('google.com')));
-    assert.ok(DEFAULT_STUN_SERVERS.some(s => s.includes('cloudflare.com')));
+    assert.ok(DEFAULT_STUN_SERVERS.some((s) => s.includes('google.com')));
+    assert.ok(DEFAULT_STUN_SERVERS.some((s) => s.includes('cloudflare.com')));
 });
 
 test('[P2P Adapter] Instance initialization and Socket.io interface emulation', () => {
@@ -82,7 +82,8 @@ test('[P2P Adapter] Base64 encoding and decoding for manual invite text', () => 
 test('[P2P Adapter] Binary chunk reassembly for battlemaps and token assets', async () => {
     const adapter = new VttP2PAdapter();
     const assetId = 'map_dragon_lair_highres';
-    const sampleImageBase64 = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==';
+    const sampleImageBase64 =
+        'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==';
 
     let receivedAsset = null;
     adapter.on('asset:received', (data) => {

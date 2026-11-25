@@ -2202,7 +2202,9 @@ export function initVttRollTables(vtt) {
                 campMatch.dice ||
                 campMatch.diceFormula ||
                 (Array.isArray(campMatch.rows) && campMatch.rows.length > 0 ? `1d${campMatch.rows.length}` : null) ||
-                (Array.isArray(campMatch.entries) && campMatch.entries.length > 0 ? `1d${campMatch.entries.length}` : '1d20');
+                (Array.isArray(campMatch.entries) && campMatch.entries.length > 0
+                    ? `1d${campMatch.entries.length}`
+                    : '1d20');
 
             return {
                 id: campMatch.id,

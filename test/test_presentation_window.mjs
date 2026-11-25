@@ -14,7 +14,6 @@ const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, '..');
 
 describe('Presentation Window - Player-Facing Display', () => {
-
     describe('1. Scoped CSS Verification', () => {
         it('should have presentation.css imported in vtt.css', () => {
             const vttCssPath = path.join(rootDir, 'vtt', 'css', 'vtt.css');
@@ -39,7 +38,10 @@ describe('Presentation Window - Player-Facing Display', () => {
             const presCssPath = path.join(rootDir, 'vtt', 'css', 'components', 'presentation.css');
             const content = fs.readFileSync(presCssPath, 'utf8');
             assert.ok(content.includes('#vtt-initiative-carousel-container'));
-            assert.ok(!content.includes('#vtt-initiative-tracker'), 'Should not use artificial custom initiative tracker rules');
+            assert.ok(
+                !content.includes('#vtt-initiative-tracker'),
+                'Should not use artificial custom initiative tracker rules'
+            );
         });
     });
 
@@ -58,8 +60,14 @@ describe('Presentation Window - Player-Facing Display', () => {
         it('should expose openPresentationWindow, closePresentationWindow and onPresentationStatusUpdate in preload.cjs', () => {
             const preloadPath = path.join(rootDir, 'electron', 'preload.cjs');
             const content = fs.readFileSync(preloadPath, 'utf8');
-            assert.match(content, /openPresentationWindow:\s*\(params\)\s*=>\s*ipcRenderer\.invoke\('open-presentation-window'/);
-            assert.match(content, /closePresentationWindow:\s*\(\)\s*=>\s*ipcRenderer\.invoke\('close-presentation-window'\)/);
+            assert.match(
+                content,
+                /openPresentationWindow:\s*\(params\)\s*=>\s*ipcRenderer\.invoke\('open-presentation-window'/
+            );
+            assert.match(
+                content,
+                /closePresentationWindow:\s*\(\)\s*=>\s*ipcRenderer\.invoke\('close-presentation-window'\)/
+            );
             assert.match(content, /onPresentationStatusUpdate:\s*\(callback\)\s*=>/);
         });
 
@@ -81,8 +89,12 @@ describe('Presentation Window - Player-Facing Display', () => {
             let pannedTo = null;
             const fakeSocket = {
                 handlers: {},
-                on(ev, fn) { this.handlers[ev] = fn; },
-                emit(ev, data) { /* no-op */ }
+                on(ev, fn) {
+                    this.handlers[ev] = fn;
+                },
+                emit(ev, data) {
+                    /* no-op */
+                }
             };
             const fakeVtt = {
                 isPresentationMode: true,
@@ -91,7 +103,9 @@ describe('Presentation Window - Player-Facing Display', () => {
                     panTo(x, y, zoom, dur) {
                         pannedTo = { x, y, zoom, dur };
                     },
-                    getCurrentMapId() { return 'map-1'; }
+                    getCurrentMapId() {
+                        return 'map-1';
+                    }
                 }
             };
 
@@ -209,7 +223,7 @@ describe('Presentation Window - Player-Facing Display', () => {
             const socketFile = path.join(rootDir, 'server', 'socket.js');
             const content = fs.readFileSync(socketFile, 'utf8');
             assert.ok(content.includes("const isLocalPresentation = isLocal && username === 'Presentation Display';"));
-            assert.ok(content.includes("!allowed.includes(username) && !isLocalPresentation"));
+            assert.ok(content.includes('!allowed.includes(username) && !isLocalPresentation'));
 
             // Verify evaluation logic directly
             const allowedUsers = ['Alice', 'Bob', 'Charlie'];

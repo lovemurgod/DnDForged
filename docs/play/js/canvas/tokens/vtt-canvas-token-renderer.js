@@ -902,7 +902,15 @@ export function renderTokensLayer(context = {}) {
                             if (bStyle === 'frame' && bFrame && bFrame !== 'none') {
                                 frameNode.innerHTML = getThematicFrameSvg(bFrame, bColor, drawW, drawH, id);
                             } else {
-                                frameNode.innerHTML = getShapeBorderSvg(bShape, bStyle, bColor, bWidth, drawW, drawH, id);
+                                frameNode.innerHTML = getShapeBorderSvg(
+                                    bShape,
+                                    bStyle,
+                                    bColor,
+                                    bWidth,
+                                    drawW,
+                                    drawH,
+                                    id
+                                );
                             }
                         }
                     } else if (frameNode) {

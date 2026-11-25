@@ -264,10 +264,7 @@ export function evaluateDamageRolls(char, m, isSpell = false, isCrit = false, op
     typedToggles.forEach((t) => {
         let f = (t.formula || '').trim();
         if (isCrit) {
-            f = f.replace(
-                /(\d+)\s*[dD]\s*(\d+)/g,
-                (match, count, faces) => `${parseInt(count) * 2}d${faces}`
-            );
+            f = f.replace(/(\d+)\s*[dD]\s*(\d+)/g, (match, count, faces) => `${parseInt(count) * 2}d${faces}`);
         }
         results.push({
             type: t.dmgType,
@@ -373,7 +370,9 @@ export function resolveCharacterSheetSettings(char) {
 
     const hasCardNamed = (str) =>
         cards.some((c) => (c.name || '').toLowerCase().includes(str.toLowerCase())) ||
-        feats.some((f) => (f.name || typeof f === 'string' ? (f.name || f).toLowerCase() : '').includes(str.toLowerCase()));
+        feats.some((f) =>
+            (f.name || typeof f === 'string' ? (f.name || f).toLowerCase() : '').includes(str.toLowerCase())
+        );
 
     // 1. Elven Accuracy
     if (char.settings.elvenAccuracy === undefined) {

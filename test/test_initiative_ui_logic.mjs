@@ -149,7 +149,7 @@ test('Initiative Tracker Logic: Off-layer filtering and player privacy rules', (
     );
     assert.ok(
         tokenMenuJs.includes('window.VTT?.chatEngine?.updateCombatantLayer(id, targetLayer)') ||
-        tokenMenuJs.includes('window.VTT?.chatEngine?.updateCombatantLayer?.(id, targetLayer)'),
+            tokenMenuJs.includes('window.VTT?.chatEngine?.updateCombatantLayer?.(id, targetLayer)'),
         'Layer change must notify chatEngine.updateCombatantLayer'
     );
 
@@ -330,21 +330,13 @@ test('Fine-Tuning: Resize handle across all modes, horizontal ~720px sizing, tra
     );
 
     // 7. Resize handle removed: natural flexbox anchoring without bottom: auto clamps
-    assert.doesNotMatch(
-        indexHtml,
-        /id="init-resize-handle"/,
-        'init-resize-handle must be removed from index.html'
-    );
+    assert.doesNotMatch(indexHtml, /id="init-resize-handle"/, 'init-resize-handle must be removed from index.html');
     assert.doesNotMatch(
         cssContent,
         /\.init-resize-handle\s*\{/,
         'init-resize-handle styles must be removed from initiative.css'
     );
-    assert.doesNotMatch(
-        chatJs,
-        /btnResize\.setPointerCapture/,
-        'btnResize capture handler must be removed'
-    );
+    assert.doesNotMatch(chatJs, /btnResize\.setPointerCapture/, 'btnResize capture handler must be removed');
     assert.doesNotMatch(
         chatJs,
         /vtt_initiative_docked_height\s*,\s*Math\.round/,

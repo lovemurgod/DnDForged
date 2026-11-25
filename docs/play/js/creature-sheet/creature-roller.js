@@ -34,10 +34,18 @@ export function rollAndPostToChat(formula, label, ctx = {}) {
     let isAdvantage = false;
     let isDisadvantage = false;
     const curM = ctx.getMonster ? ctx.getMonster() : null;
-    let rollMode = (curM && curM.activeRollMode) || (typeof window !== 'undefined' && window.VTT ? window.VTT.currentRollMode : 'normal');
+    let rollMode =
+        (curM && curM.activeRollMode) ||
+        (typeof window !== 'undefined' && window.VTT ? window.VTT.currentRollMode : 'normal');
     const evt = typeof window !== 'undefined' ? window.event : null;
-    const isShift = (evt && evt.shiftKey) || (typeof window !== 'undefined' && typeof window.VTT_isShiftPressed === 'function' && window.VTT_isShiftPressed());
-    const isCtrl = (evt && (evt.ctrlKey || evt.altKey || evt.metaKey)) || (typeof window !== 'undefined' && typeof window.VTT_isCtrlPressed === 'function' && window.VTT_isCtrlPressed());
+    const isShift =
+        (evt && evt.shiftKey) ||
+        (typeof window !== 'undefined' &&
+            typeof window.VTT_isShiftPressed === 'function' &&
+            window.VTT_isShiftPressed());
+    const isCtrl =
+        (evt && (evt.ctrlKey || evt.altKey || evt.metaKey)) ||
+        (typeof window !== 'undefined' && typeof window.VTT_isCtrlPressed === 'function' && window.VTT_isCtrlPressed());
 
     if (count === 1 && faces === 20) {
         if (isShift) rollMode = 'adv';
@@ -139,9 +147,15 @@ export function parseActionMacro(
     rollModeOverride = null,
     m = null
 ) {
-    const isShift = typeof window !== 'undefined' && typeof window.VTT_isShiftPressed === 'function' && window.VTT_isShiftPressed();
-    const isCtrl = typeof window !== 'undefined' && typeof window.VTT_isCtrlPressed === 'function' && window.VTT_isCtrlPressed();
-    let effectiveRollMode = rollModeOverride || (typeof window !== 'undefined' && window.VTT ? window.VTT.currentRollMode : null) || m?.activeRollMode || null;
+    const isShift =
+        typeof window !== 'undefined' && typeof window.VTT_isShiftPressed === 'function' && window.VTT_isShiftPressed();
+    const isCtrl =
+        typeof window !== 'undefined' && typeof window.VTT_isCtrlPressed === 'function' && window.VTT_isCtrlPressed();
+    let effectiveRollMode =
+        rollModeOverride ||
+        (typeof window !== 'undefined' && window.VTT ? window.VTT.currentRollMode : null) ||
+        m?.activeRollMode ||
+        null;
     if (isShift) effectiveRollMode = 'adv';
     else if (isCtrl) effectiveRollMode = 'dis';
     const mc = {
@@ -685,12 +699,21 @@ export function wireInitiativeRoll(panel, m, ctx = {}) {
             const formula = `1d20${modStr}`;
 
             let rollData = null;
-            const curRollMode = (typeof window !== 'undefined' && window.VTT?.currentRollMode) || m?.activeRollMode || 'normal';
+            const curRollMode =
+                (typeof window !== 'undefined' && window.VTT?.currentRollMode) || m?.activeRollMode || 'normal';
             if (typeof window !== 'undefined' && window.vttPlayerSheetAPI && window.vttPlayerSheetAPI.simulateRoll) {
                 rollData = window.vttPlayerSheetAPI.simulateRoll(formula, 20, e, { rollMode: curRollMode });
             } else {
-                const isShift = (e && e.shiftKey) || (typeof window !== 'undefined' && typeof window.VTT_isShiftPressed === 'function' && window.VTT_isShiftPressed());
-                const isCtrl = (e && (e.ctrlKey || e.altKey || e.metaKey)) || (typeof window !== 'undefined' && typeof window.VTT_isCtrlPressed === 'function' && window.VTT_isCtrlPressed());
+                const isShift =
+                    (e && e.shiftKey) ||
+                    (typeof window !== 'undefined' &&
+                        typeof window.VTT_isShiftPressed === 'function' &&
+                        window.VTT_isShiftPressed());
+                const isCtrl =
+                    (e && (e.ctrlKey || e.altKey || e.metaKey)) ||
+                    (typeof window !== 'undefined' &&
+                        typeof window.VTT_isCtrlPressed === 'function' &&
+                        window.VTT_isCtrlPressed());
                 let effMode = curRollMode;
                 if (isShift) effMode = 'adv';
                 else if (isCtrl) effMode = 'dis';
@@ -699,12 +722,22 @@ export function wireInitiativeRoll(panel, m, ctx = {}) {
                     const r1 = Math.floor(Math.random() * 20) + 1;
                     const r2 = Math.floor(Math.random() * 20) + 1;
                     const kept = Math.max(r1, r2);
-                    rollData = { total: kept + initMod, rolls: [r1, r2], modifier: initMod, formula: `2d20kh1${modStr}` };
+                    rollData = {
+                        total: kept + initMod,
+                        rolls: [r1, r2],
+                        modifier: initMod,
+                        formula: `2d20kh1${modStr}`
+                    };
                 } else if (effMode === 'dis') {
                     const r1 = Math.floor(Math.random() * 20) + 1;
                     const r2 = Math.floor(Math.random() * 20) + 1;
                     const kept = Math.min(r1, r2);
-                    rollData = { total: kept + initMod, rolls: [r1, r2], modifier: initMod, formula: `2d20kl1${modStr}` };
+                    rollData = {
+                        total: kept + initMod,
+                        rolls: [r1, r2],
+                        modifier: initMod,
+                        formula: `2d20kl1${modStr}`
+                    };
                 } else {
                     const r = Math.floor(Math.random() * 20) + 1;
                     rollData = { total: r + initMod, rolls: [r], modifier: initMod, formula };

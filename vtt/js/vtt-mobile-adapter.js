@@ -2551,7 +2551,8 @@ export function initVttMobileAdapter(vtt) {
                 window.scrollTo(0, 1);
             } catch (_) {}
 
-            const msg = 'For borderless fullscreen on iOS, tap Share <i class="fa-solid fa-arrow-up-from-bracket"></i> then "Add to Home Screen".';
+            const msg =
+                'For borderless fullscreen on iOS, tap Share <i class="fa-solid fa-arrow-up-from-bracket"></i> then "Add to Home Screen".';
             if (window.showToast) {
                 window.showToast(msg, 'info');
             } else if (window.VTT?.chatEngine?.appendSystemMessage) {
@@ -2639,7 +2640,8 @@ export function initVttMobileAdapter(vtt) {
                     }
                     deferredInstallPrompt = null;
                 } else if (isIOS) {
-                    const msg = 'To install: Tap the Share button <i class="fa-solid fa-arrow-up-from-bracket"></i> in Safari, then choose "Add to Home Screen".';
+                    const msg =
+                        'To install: Tap the Share button <i class="fa-solid fa-arrow-up-from-bracket"></i> in Safari, then choose "Add to Home Screen".';
                     if (window.showToast) {
                         window.showToast(msg, 'info');
                     } else if (window.VTT?.chatEngine?.appendSystemMessage) {
@@ -2649,7 +2651,10 @@ export function initVttMobileAdapter(vtt) {
                     }
                 } else {
                     if (window.showToast) {
-                        window.showToast('Use your browser menu (⋮) and select "Install app" or "Add to Home Screen".', 'info');
+                        window.showToast(
+                            'Use your browser menu (⋮) and select "Install app" or "Add to Home Screen".',
+                            'info'
+                        );
                     }
                 }
             });

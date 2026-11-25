@@ -64,14 +64,31 @@ test('Round 5 Fix 2: Unified Warlock Short Rest slot recovery restores normal Wa
     const wLvl = parseInt(warlockClass.level) || 1;
     let slotLevelNum = 1;
     let slotCount = 1;
-    if (wLvl >= 17) { slotLevelNum = 5; slotCount = 4; }
-    else if (wLvl >= 11) { slotLevelNum = 5; slotCount = 3; }
-    else if (wLvl >= 9) { slotLevelNum = 5; slotCount = 2; }
-    else if (wLvl >= 7) { slotLevelNum = 4; slotCount = 2; }
-    else if (wLvl >= 5) { slotLevelNum = 3; slotCount = 2; }
-    else if (wLvl >= 3) { slotLevelNum = 2; slotCount = 2; }
-    else if (wLvl >= 2) { slotLevelNum = 1; slotCount = 2; }
-    else { slotLevelNum = 1; slotCount = 1; }
+    if (wLvl >= 17) {
+        slotLevelNum = 5;
+        slotCount = 4;
+    } else if (wLvl >= 11) {
+        slotLevelNum = 5;
+        slotCount = 3;
+    } else if (wLvl >= 9) {
+        slotLevelNum = 5;
+        slotCount = 2;
+    } else if (wLvl >= 7) {
+        slotLevelNum = 4;
+        slotCount = 2;
+    } else if (wLvl >= 5) {
+        slotLevelNum = 3;
+        slotCount = 2;
+    } else if (wLvl >= 3) {
+        slotLevelNum = 2;
+        slotCount = 2;
+    } else if (wLvl >= 2) {
+        slotLevelNum = 1;
+        slotCount = 2;
+    } else {
+        slotLevelNum = 1;
+        slotCount = 1;
+    }
 
     assert.equal(slotLevelNum, 3);
     assert.equal(slotCount, 2);
@@ -151,7 +168,10 @@ test('Round 5 Fix 5: Fighting Style subOptions include Defense and Defense grant
         { name: 'Archery', description: '+2 bonus to attack rolls with ranged weapons.' },
         { name: 'Blind Fighting', description: 'Blindsight with a range of 10 feet.' },
         { name: 'Defense', description: '+1 bonus to Armor Class while wearing armor.' },
-        { name: 'Dueling', description: '+2 bonus to damage rolls when wielding a melee weapon in one hand and no other weapons.' }
+        {
+            name: 'Dueling',
+            description: '+2 bonus to damage rolls when wielding a melee weapon in one hand and no other weapons.'
+        }
     ];
 
     const fName = 'Fighting Style';
@@ -209,19 +229,19 @@ test('Round 5 Fix 6: Roll20 Importer converts custom repeating resources into ab
     const char = await convertRoll20Character(mockRoll20Json, 'test_campaign');
     assert.ok(char.abilityCards);
 
-    const kiCard = char.abilityCards.find(c => c.name.toLowerCase().includes('ki'));
+    const kiCard = char.abilityCards.find((c) => c.name.toLowerCase().includes('ki'));
     assert.ok(kiCard, 'Ki Points ability card should be created');
     assert.equal(kiCard.hasCounter, true);
     assert.equal(kiCard.usesCurrent, 5);
     assert.equal(kiCard.usesMax, 6);
 
-    const supCard = char.abilityCards.find(c => c.name.toLowerCase().includes('superiority'));
+    const supCard = char.abilityCards.find((c) => c.name.toLowerCase().includes('superiority'));
     assert.ok(supCard, 'Superiority Dice ability card should be created');
     assert.equal(supCard.hasCounter, true);
     assert.equal(supCard.usesCurrent, 3);
     assert.equal(supCard.usesMax, 4);
 
-    const sorcCard = char.abilityCards.find(c => c.name.toLowerCase().includes('sorcery'));
+    const sorcCard = char.abilityCards.find((c) => c.name.toLowerCase().includes('sorcery'));
     assert.ok(sorcCard, 'Sorcery Points ability card should be created');
     assert.equal(sorcCard.hasCounter, true);
     assert.equal(sorcCard.usesCurrent, 2);

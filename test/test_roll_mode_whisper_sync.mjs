@@ -1,7 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 
-import { getVisibilitySetting, rollAndPostToChat, parseActionMacro, wireInitiativeRoll } from '../vtt/js/creature-sheet/creature-roller.js';
+import {
+    getVisibilitySetting,
+    rollAndPostToChat,
+    parseActionMacro,
+    wireInitiativeRoll
+} from '../vtt/js/creature-sheet/creature-roller.js';
 import { simulateRoll } from '../vtt/js/player-sheet/vtt-sheet-rolls.js';
 import { rollFromToken } from '../vtt/js/canvas/tokens/vtt-canvas-token-rollers.js';
 
@@ -36,7 +41,10 @@ test('Keyboard Modifiers - Shift+Click overrides normal or dis mode to Advantage
     const roll = simulateRoll('1d20 + 4', 20, shiftEvent);
     assert.equal(roll.rollMode, 'adv', 'Shift key should force advantage');
     assert.equal(roll.diceList.length, 2, 'Advantage should roll 2d20');
-    assert.ok(roll.diceList.some(d => d.discarded || d.isDropped), 'Dropped die should exist');
+    assert.ok(
+        roll.diceList.some((d) => d.discarded || d.isDropped),
+        'Dropped die should exist'
+    );
 
     delete globalThis.window;
 });
@@ -52,7 +60,10 @@ test('Keyboard Modifiers - Ctrl+Click overrides adv mode to Disadvantage in simu
     const roll = simulateRoll('1d20 + 4', 20, ctrlEvent);
     assert.equal(roll.rollMode, 'dis', 'Ctrl key should force disadvantage');
     assert.equal(roll.diceList.length, 2, 'Disadvantage should roll 2d20');
-    assert.ok(roll.diceList.some(d => d.discarded || d.isDropped), 'Dropped die should exist');
+    assert.ok(
+        roll.diceList.some((d) => d.discarded || d.isDropped),
+        'Dropped die should exist'
+    );
 
     delete globalThis.window;
 });
@@ -193,7 +204,11 @@ test('Canvas Token Roller - rollFromToken respects global GM whisper toggle', ()
 
     assert.equal(emittedEvent, 'chat:msg');
     assert.ok(emittedData);
-    assert.equal(emittedData.whisperToGM, true, 'rollFromToken should set whisperToGM: true when global whisper is active');
+    assert.equal(
+        emittedData.whisperToGM,
+        true,
+        'rollFromToken should set whisperToGM: true when global whisper is active'
+    );
 
     delete globalThis.window;
 });

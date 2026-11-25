@@ -263,7 +263,9 @@ test('Strict baseline vision override in vtt-data-bridge sets 5 ft when importSe
     // Center spawns
     assert.ok(
         bridgeCode.includes('const sightRange = dropConfig.importSenses === false\n            ? 5'),
-        bridgeCode.includes('dropConfig.importSenses !== false ? parseMonsterVision(monster.monsterData || monster) : 5'),
+        bridgeCode.includes(
+            'dropConfig.importSenses !== false ? parseMonsterVision(monster.monsterData || monster) : 5'
+        ),
         'spawnCustomNpcAtCenter must enforce 5 ft baseline when importSenses is false'
     );
     assert.ok(

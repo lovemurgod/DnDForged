@@ -218,7 +218,10 @@ export function resolveRoll20Expression(raw, ctx) {
             if (ch === '{') depth++;
             else if (ch === '}') {
                 depth--;
-                if (depth < 0) { balanced = false; break; }
+                if (depth < 0) {
+                    balanced = false;
+                    break;
+                }
             }
         }
         if (balanced && depth === 0) {
@@ -319,7 +322,7 @@ export async function convertRoll20Character(rawJson, campaignId, options = {}) 
         const repMatch = a.name.match(/^repeating_([a-zA-Z0-9-]+)_([a-zA-Z0-9-]+)_(.+)$/);
         if (repMatch) {
             const [, cat, rowId, field] = repMatch;
-            const normCat = (cat === 'resources' || cat === 'customresource') ? 'resource' : cat;
+            const normCat = cat === 'resources' || cat === 'customresource' ? 'resource' : cat;
             if (normCat.startsWith('spell-')) {
                 const lvl = normCat.replace('spell-', '');
                 if (!repeating.spells[lvl]) repeating.spells[lvl] = {};
@@ -557,14 +560,16 @@ export async function convertRoll20Character(rawJson, campaignId, options = {}) 
 
     // 10. Roleplaying Notes & Bio
     const rpParts = [];
-    if (attrMap['personality_traits']) rpParts.push(`### Personality Traits\n${sanitizeRoll20Html(attrMap['personality_traits'])}`);
+    if (attrMap['personality_traits'])
+        rpParts.push(`### Personality Traits\n${sanitizeRoll20Html(attrMap['personality_traits'])}`);
     if (attrMap['ideals']) rpParts.push(`### Ideals\n${sanitizeRoll20Html(attrMap['ideals'])}`);
     if (attrMap['bonds']) rpParts.push(`### Bonds\n${sanitizeRoll20Html(attrMap['bonds'])}`);
     if (attrMap['flaws']) rpParts.push(`### Flaws\n${sanitizeRoll20Html(attrMap['flaws'])}`);
     if (attrMap['backstory']) rpParts.push(`### Backstory\n${sanitizeRoll20Html(attrMap['backstory'])}`);
     if (attrMap['allies_and_organizations'])
         rpParts.push(`### Allies & Organizations\n${sanitizeRoll20Html(attrMap['allies_and_organizations'])}`);
-    if (attrMap['character_appearance']) rpParts.push(`### Appearance\n${sanitizeRoll20Html(attrMap['character_appearance'])}`);
+    if (attrMap['character_appearance'])
+        rpParts.push(`### Appearance\n${sanitizeRoll20Html(attrMap['character_appearance'])}`);
 
     let extraBio = '';
     if (typeof rawAttrs.bio === 'string' && rawAttrs.bio.trim()) {
@@ -944,7 +949,7 @@ export async function convertRoll20Character(rawJson, campaignId, options = {}) 
         if (!isNaN(r20Passive)) {
             const wisMod = statMods.wis;
             const percLvl = skills['perception'] || skills['Perception'] || 0;
-            const basePassive = 10 + wisMod + (percLvl * pb);
+            const basePassive = 10 + wisMod + percLvl * pb;
             const diff = r20Passive - basePassive;
             if (diff !== 0) {
                 skillToggles.push({
@@ -1260,10 +1265,7 @@ export async function convertRoll20Character(rawJson, campaignId, options = {}) 
     const rawDefaultToken = charRoot.blobDefaultToken || charRoot.defaulttoken || rawJson.defaulttoken;
     if (rawDefaultToken) {
         try {
-            defaultToken =
-                typeof rawDefaultToken === 'string'
-                    ? JSON.parse(rawDefaultToken)
-                    : rawDefaultToken;
+            defaultToken = typeof rawDefaultToken === 'string' ? JSON.parse(rawDefaultToken) : rawDefaultToken;
             if (defaultToken && defaultToken.width) {
                 tokenSize = Math.max(1, Math.round(defaultToken.width / 70));
             }
@@ -1281,16 +1283,23 @@ export async function convertRoll20Character(rawJson, campaignId, options = {}) 
 
     // Token night vision distance priority
     let tokenNightVision = 0;
-    if (defaultToken && defaultToken.night_vision_distance !== undefined && !isNaN(parseFloat(defaultToken.night_vision_distance))) {
+    if (
+        defaultToken &&
+        defaultToken.night_vision_distance !== undefined &&
+        !isNaN(parseFloat(defaultToken.night_vision_distance))
+    ) {
         tokenNightVision = parseFloat(defaultToken.night_vision_distance);
     }
 
     const finalDarkvision = tokenNightVision > 0 ? tokenNightVision : traitDarkvision;
     const tokenSight = finalDarkvision > 0 ? finalDarkvision : 60;
 
-    const blindMatch = allTraitsText.match(/blindsight\s*(?:of\s*)?(\d+)/i) || allTraitsText.match(/(\d+)\s*ft\.?\s*blindsight/i);
-    const trueMatch = allTraitsText.match(/truesight\s*(?:of\s*)?(\d+)/i) || allTraitsText.match(/(\d+)\s*ft\.?\s*truesight/i);
-    const tremorMatch = allTraitsText.match(/tremorsense\s*(?:of\s*)?(\d+)/i) || allTraitsText.match(/(\d+)\s*ft\.?\s*tremorsense/i);
+    const blindMatch =
+        allTraitsText.match(/blindsight\s*(?:of\s*)?(\d+)/i) || allTraitsText.match(/(\d+)\s*ft\.?\s*blindsight/i);
+    const trueMatch =
+        allTraitsText.match(/truesight\s*(?:of\s*)?(\d+)/i) || allTraitsText.match(/(\d+)\s*ft\.?\s*truesight/i);
+    const tremorMatch =
+        allTraitsText.match(/tremorsense\s*(?:of\s*)?(\d+)/i) || allTraitsText.match(/(\d+)\s*ft\.?\s*tremorsense/i);
     const hasDevilSight = allTraitsText.includes("devil's sight") || allTraitsText.includes('devils sight');
 
     const senses = {
@@ -1472,7 +1481,10 @@ export async function convertRoll20Character(rawJson, campaignId, options = {}) 
         settings: {
             carryWeightMultiplier: (function () {
                 const raceStr = ((attrMap['race'] || '') + ' ' + (attrMap['subrace'] || '')).toLowerCase();
-                const traitsStr = abilityCards.map((a) => (a.name || '') + ' ' + (a.description || '')).join(' ').toLowerCase();
+                const traitsStr = abilityCards
+                    .map((a) => (a.name || '') + ' ' + (a.description || ''))
+                    .join(' ')
+                    .toLowerCase();
                 if (
                     raceStr.includes('goliath') ||
                     raceStr.includes('orc') ||
@@ -1484,14 +1496,21 @@ export async function convertRoll20Character(rawJson, campaignId, options = {}) 
                 }
                 return 1;
             })(),
-            halflingLucky: ((attrMap['race'] || '') + ' ' + (attrMap['subrace'] || '')).toLowerCase().includes('halfling'),
+            halflingLucky: ((attrMap['race'] || '') + ' ' + (attrMap['subrace'] || ''))
+                .toLowerCase()
+                .includes('halfling'),
             elvenAccuracy: abilityCards.some((a) => (a.name || '').toLowerCase().includes('elven accuracy')),
             brutalCritical: (function () {
                 const barb = (classes || []).find((c) => (c.name || '').toLowerCase().includes('barbarian'));
                 const barbLvl = barb ? parseInt(barb.level) || 0 : 0;
-                const isHalfOrc = ((attrMap['race'] || '') + ' ' + (attrMap['subrace'] || '')).toLowerCase().includes('half-orc') ||
+                const isHalfOrc =
+                    ((attrMap['race'] || '') + ' ' + (attrMap['subrace'] || '')).toLowerCase().includes('half-orc') ||
                     abilityCards.some((a) => (a.name || '').toLowerCase().includes('savage attacks'));
-                return barbLvl >= 9 || isHalfOrc || abilityCards.some((a) => (a.name || '').toLowerCase().includes('brutal critical'));
+                return (
+                    barbLvl >= 9 ||
+                    isHalfOrc ||
+                    abilityCards.some((a) => (a.name || '').toLowerCase().includes('brutal critical'))
+                );
             })(),
             reliableTalent: (function () {
                 const rog = (classes || []).find((c) => (c.name || '').toLowerCase().includes('rogue'));

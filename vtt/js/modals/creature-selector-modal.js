@@ -209,7 +209,9 @@ export async function openCreatureSelectorModal(options = {}) {
                             <option value="">All Types</option>
                             ${Array.from(availableTypes)
                                 .sort()
-                                .map((t) => `<option value="${t}">${t.replace(/\b\w/g, (c) => c.toUpperCase())}</option>`)
+                                .map(
+                                    (t) => `<option value="${t}">${t.replace(/\b\w/g, (c) => c.toUpperCase())}</option>`
+                                )
                                 .join('')}
                         </select>
                     </div>
@@ -348,7 +350,8 @@ export async function openCreatureSelectorModal(options = {}) {
             // Text Search
             if (q) {
                 const nameMatch = m.name && m.name.toLowerCase().includes(q);
-                const typeMatch = (m.type || '').toLowerCase().includes(q) || (m.subtype || '').toLowerCase().includes(q);
+                const typeMatch =
+                    (m.type || '').toLowerCase().includes(q) || (m.subtype || '').toLowerCase().includes(q);
                 const srcMatch = (m.source || '').toLowerCase().includes(q);
                 const crStr = m.cr ? (typeof m.cr === 'object' ? String(m.cr.cr) : String(m.cr)).toLowerCase() : '0';
                 const crMatch = crStr === q || `cr ${crStr}`.includes(q);
@@ -450,7 +453,10 @@ export async function openCreatureSelectorModal(options = {}) {
 
         nextBatch.forEach((monster) => {
             const row = document.createElement('div');
-            const isSelected = state.selectedMonster && (state.selectedMonster.id === monster.id && state.selectedMonster.name === monster.name);
+            const isSelected =
+                state.selectedMonster &&
+                state.selectedMonster.id === monster.id &&
+                state.selectedMonster.name === monster.name;
             row.className = `csm-row ${isSelected ? 'active-row' : ''}`;
             row.dataset.id = monster.id || monster.name;
 
@@ -487,7 +493,11 @@ export async function openCreatureSelectorModal(options = {}) {
 
         // Auto-select first monster if current selection is no longer in filtered list
         if (state.filtered.length > 0) {
-            const stillPresent = state.selectedMonster && state.filtered.some((m) => m.name === state.selectedMonster.name && m.source === state.selectedMonster.source);
+            const stillPresent =
+                state.selectedMonster &&
+                state.filtered.some(
+                    (m) => m.name === state.selectedMonster.name && m.source === state.selectedMonster.source
+                );
             if (!stillPresent) {
                 selectMonster(state.filtered[0], false);
             }
@@ -589,7 +599,10 @@ export async function openCreatureSelectorModal(options = {}) {
         let acDisplay = '—';
         if (Array.isArray(m.ac) && m.ac.length > 0) {
             const firstAc = m.ac[0];
-            acDisplay = typeof firstAc === 'object' ? `${firstAc.ac}${firstAc.from ? ` (${firstAc.from.join(', ')})` : ''}` : String(firstAc);
+            acDisplay =
+                typeof firstAc === 'object'
+                    ? `${firstAc.ac}${firstAc.from ? ` (${firstAc.from.join(', ')})` : ''}`
+                    : String(firstAc);
         } else if (m.ac !== undefined) {
             acDisplay = String(m.ac);
         }
@@ -600,7 +613,9 @@ export async function openCreatureSelectorModal(options = {}) {
             speedDisplay = m.speed;
         } else if (typeof m.speed === 'object' && m.speed !== null) {
             speedDisplay = Object.entries(m.speed)
-                .map(([mode, val]) => (mode === 'walk' ? `${val} ft.` : `${mode} ${typeof val === 'object' ? val.number : val} ft.`))
+                .map(([mode, val]) =>
+                    mode === 'walk' ? `${val} ft.` : `${mode} ${typeof val === 'object' ? val.number : val} ft.`
+                )
                 .join(', ');
         }
 
@@ -622,9 +637,7 @@ export async function openCreatureSelectorModal(options = {}) {
                     const name = entry.name ? `<strong>${entry.name}.</strong> ` : '';
                     let text = '';
                     if (Array.isArray(entry.entries)) {
-                        text = entry.entries
-                            .map((e) => (typeof e === 'string' ? e : e.text || ''))
-                            .join(' ');
+                        text = entry.entries.map((e) => (typeof e === 'string' ? e : e.text || '')).join(' ');
                     } else if (typeof entry === 'string') {
                         text = entry;
                     }

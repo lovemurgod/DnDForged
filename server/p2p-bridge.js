@@ -8,9 +8,21 @@ import crypto from 'crypto';
 import EventEmitter from 'events';
 
 const WORD_LIST = [
-    'DRAGON', 'TAVERN', 'GOBLIN', 'WIZARD', 'DUNGEON',
-    'KNIGHT', 'SHADOW', 'ROD', 'SWORD', 'SHIELD',
-    'PORTAL', 'POTION', 'SPELL', 'BEAST', 'TEMPLE'
+    'DRAGON',
+    'TAVERN',
+    'GOBLIN',
+    'WIZARD',
+    'DUNGEON',
+    'KNIGHT',
+    'SHADOW',
+    'ROD',
+    'SWORD',
+    'SHIELD',
+    'PORTAL',
+    'POTION',
+    'SPELL',
+    'BEAST',
+    'TEMPLE'
 ];
 
 export const DEFAULT_STUN_SERVERS = [

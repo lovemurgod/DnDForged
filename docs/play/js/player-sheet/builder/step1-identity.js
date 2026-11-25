@@ -388,7 +388,10 @@ export function renderStep1(ctx) {
         const formData = new FormData();
         formData.append('file', file);
         try {
-            const headers = typeof window !== 'undefined' && typeof window.vttAuthHeaders === 'function' ? window.vttAuthHeaders() : {};
+            const headers =
+                typeof window !== 'undefined' && typeof window.vttAuthHeaders === 'function'
+                    ? window.vttAuthHeaders()
+                    : {};
             const res = await fetch('/api/assets/upload', { method: 'POST', headers, body: formData });
             if (res.ok) {
                 const data = await res.json();

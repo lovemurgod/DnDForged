@@ -157,7 +157,7 @@ export function startSocketConnection(campaignId, username, role, gmPassword = n
     if (window.VTT?.socket) {
         try {
             window.VTT.socket.disconnect();
-        } catch (e) { }
+        } catch (e) {}
     }
 
     let socket;
@@ -179,54 +179,63 @@ export function startSocketConnection(campaignId, username, role, gmPassword = n
 
         if (ctx.p2pMode === 'manual') {
             if (isHost) {
-                socket.createHostManualOffer().then((offerStr) => {
-                    const offerOut = document.getElementById('config-manual-offer-output');
-                    const manualCard = document.getElementById('config-manual-p2p-card');
-                    if (offerOut) offerOut.value = offerStr;
-                    if (manualCard) manualCard.classList.remove('vtt-hidden');
-                    const btnApplyAns = document.getElementById('btn-config-apply-answer');
-                    const ansInput = document.getElementById('config-manual-answer-input');
-                    if (btnApplyAns && ansInput) {
-                        btnApplyAns.onclick = async () => {
-                            const rawAns = ansInput.value.trim();
-                            if (!rawAns) return;
-                            try {
-                                await socket.applyHostManualAnswer(rawAns);
-                                ansInput.value = '';
-                                JqueryUtil?.doToast?.({ type: 'success', content: 'Peer Answer applied! Connecting player...' });
-                            } catch (err) {
-                                alert(`Invalid Player Answer: ${err.message}`);
-                            }
-                        };
-                    }
-                    navigator.clipboard?.writeText(offerStr).catch(() => { });
-                    if (typeof JqueryUtil !== 'undefined' && JqueryUtil.doToast) {
-                        JqueryUtil.doToast({
-                            type: 'info',
-                            content: 'P2P Host Invite ready! Share it from Settings -> Manual WebRTC Pair.'
-                        });
-                    }
-                }).catch((err) => {
-                    console.error('[P2P] Host offer generation failed:', err);
-                    showLoginError(`Failed to generate P2P Offer: ${err.message}`);
-                });
+                socket
+                    .createHostManualOffer()
+                    .then((offerStr) => {
+                        const offerOut = document.getElementById('config-manual-offer-output');
+                        const manualCard = document.getElementById('config-manual-p2p-card');
+                        if (offerOut) offerOut.value = offerStr;
+                        if (manualCard) manualCard.classList.remove('vtt-hidden');
+                        const btnApplyAns = document.getElementById('btn-config-apply-answer');
+                        const ansInput = document.getElementById('config-manual-answer-input');
+                        if (btnApplyAns && ansInput) {
+                            btnApplyAns.onclick = async () => {
+                                const rawAns = ansInput.value.trim();
+                                if (!rawAns) return;
+                                try {
+                                    await socket.applyHostManualAnswer(rawAns);
+                                    ansInput.value = '';
+                                    JqueryUtil?.doToast?.({
+                                        type: 'success',
+                                        content: 'Peer Answer applied! Connecting player...'
+                                    });
+                                } catch (err) {
+                                    alert(`Invalid Player Answer: ${err.message}`);
+                                }
+                            };
+                        }
+                        navigator.clipboard?.writeText(offerStr).catch(() => {});
+                        if (typeof JqueryUtil !== 'undefined' && JqueryUtil.doToast) {
+                            JqueryUtil.doToast({
+                                type: 'info',
+                                content: 'P2P Host Invite ready! Share it from Settings -> Manual WebRTC Pair.'
+                            });
+                        }
+                    })
+                    .catch((err) => {
+                        console.error('[P2P] Host offer generation failed:', err);
+                        showLoginError(`Failed to generate P2P Offer: ${err.message}`);
+                    });
             } else if (ctx.p2pData) {
-                socket.createPlayerManualAnswer(ctx.p2pData).then((answerStr) => {
-                    const ansGroup = document.getElementById('login-p2p-answer-group');
-                    const ansOut = document.getElementById('login-p2p-answer-output');
-                    if (ansOut) ansOut.value = answerStr;
-                    if (ansGroup) ansGroup.classList.remove('vtt-hidden');
-                    navigator.clipboard?.writeText(answerStr).catch(() => { });
-                    if (typeof JqueryUtil !== 'undefined' && JqueryUtil.doToast) {
-                        JqueryUtil.doToast({
-                            type: 'info',
-                            content: 'P2P Answer generated below! Copy and send it back to the GM.'
-                        });
-                    }
-                }).catch((err) => {
-                    console.error('[P2P] Manual answer failed:', err);
-                    showLoginError(`Invalid P2P Offer text: ${err.message}`);
-                });
+                socket
+                    .createPlayerManualAnswer(ctx.p2pData)
+                    .then((answerStr) => {
+                        const ansGroup = document.getElementById('login-p2p-answer-group');
+                        const ansOut = document.getElementById('login-p2p-answer-output');
+                        if (ansOut) ansOut.value = answerStr;
+                        if (ansGroup) ansGroup.classList.remove('vtt-hidden');
+                        navigator.clipboard?.writeText(answerStr).catch(() => {});
+                        if (typeof JqueryUtil !== 'undefined' && JqueryUtil.doToast) {
+                            JqueryUtil.doToast({
+                                type: 'info',
+                                content: 'P2P Answer generated below! Copy and send it back to the GM.'
+                            });
+                        }
+                    })
+                    .catch((err) => {
+                        console.error('[P2P] Manual answer failed:', err);
+                        showLoginError(`Invalid P2P Offer text: ${err.message}`);
+                    });
             }
         } else if (ctx.p2pCode) {
             socket.connectWithRoomCode(ctx.p2pCode).catch((err) => {
@@ -405,175 +414,178 @@ export function startSocketConnection(campaignId, username, role, gmPassword = n
         updateTabletopPauseUI?.(pauseState, true);
     });
 
-    socket.on('joined', async ({ role: serverRole, userRole, campaignState, chatHistory, gmSessionToken, playerSessionToken }) => {
-        if (isCancelled) return;
-        hasJoinedSession = true;
-        updateConnectionStatus('connected', 'Connected!');
-        clearTimeout(connTimeout);
-        resetBtnJoin();
-        if (modalGmPassword) modalGmPassword.classList.add('vtt-hidden');
-        window.VTT.campaignState = campaignState;
-        if (gmSessionToken) {
-            window.VTT.gmSessionToken = gmSessionToken;
-        }
-        if (playerSessionToken) {
-            window.VTT.playerSessionToken = playerSessionToken;
-            try {
-                sessionStorage.setItem('forgedvtt_player_token', playerSessionToken);
-                if (typeof document !== 'undefined') {
-                    document.cookie = `forgedvtt_player_token=${encodeURIComponent(playerSessionToken)}; path=/; SameSite=Lax`;
+    socket.on(
+        'joined',
+        async ({ role: serverRole, userRole, campaignState, chatHistory, gmSessionToken, playerSessionToken }) => {
+            if (isCancelled) return;
+            hasJoinedSession = true;
+            updateConnectionStatus('connected', 'Connected!');
+            clearTimeout(connTimeout);
+            resetBtnJoin();
+            if (modalGmPassword) modalGmPassword.classList.add('vtt-hidden');
+            window.VTT.campaignState = campaignState;
+            if (gmSessionToken) {
+                window.VTT.gmSessionToken = gmSessionToken;
+            }
+            if (playerSessionToken) {
+                window.VTT.playerSessionToken = playerSessionToken;
+                try {
+                    sessionStorage.setItem('forgedvtt_player_token', playerSessionToken);
+                    if (typeof document !== 'undefined') {
+                        document.cookie = `forgedvtt_player_token=${encodeURIComponent(playerSessionToken)}; path=/; SameSite=Lax`;
+                    }
+                } catch (_) {}
+            }
+
+            // Authoritative server-validated role
+            const authoritativeRole = userRole || serverRole || role || 'Player';
+            window.VTT.role = authoritativeRole;
+
+            const elUserRole2 = document.getElementById('display-user-role');
+            if (elUserRole2) {
+                elUserRole2.textContent = window.VTT.role;
+                elUserRole2.className = `user-role-badge ${window.VTT.role.toLowerCase()}-badge`;
+            }
+            const dmScreenLink2 = document.getElementById('btn-dmscreen-link');
+            if (window.VTT.role !== 'GM') {
+                document.querySelectorAll('.gm-only').forEach((el) => el.classList.add('vtt-hidden'));
+                document.querySelectorAll('.player-only').forEach((el) => el.classList.remove('vtt-hidden'));
+                if (dmScreenLink2) dmScreenLink2.classList.add('vtt-hidden');
+            } else {
+                document.querySelectorAll('.gm-only').forEach((el) => el.classList.remove('vtt-hidden'));
+                document.querySelectorAll('.player-only').forEach((el) => el.classList.add('vtt-hidden'));
+                if (dmScreenLink2) dmScreenLink2.classList.remove('vtt-hidden');
+            }
+
+            renderAllowlist(campaignState?.allowedUsers || []);
+
+            // Synchronize initial pause state on join
+            if (campaignState && (campaignState.isPaused !== undefined || campaignState.pauseState)) {
+                updateTabletopPauseUI?.(
+                    campaignState.pauseState || { isPaused: Boolean(campaignState.isPaused), source: 'gm' },
+                    false
+                );
+            }
+
+            if (
+                window.VTT._modulesInitializationState === 'initializing' ||
+                window.VTT._modulesInitializationState === 'failed'
+            ) {
+                return;
+            }
+
+            document.getElementById('login-overlay')?.classList.add('vtt-hidden');
+            document.getElementById('vtt-workspace')?.classList.remove('vtt-hidden');
+
+            // IDEMPOTENCY GUARD: If modules are already initialized, do NOT re-run init!
+            if (window.VTT._modulesInitialized || window.VTT._modulesInitializationState === 'initialized') {
+                console.log(
+                    '[vtt.html] Session re-joined. Synchronizing campaign state and UI without re-binding listeners.'
+                );
+                if (window.VTT.canvasEngine?.syncCampaignState) {
+                    window.VTT.canvasEngine.syncCampaignState(campaignState);
+                } else if (window.VTT.canvasEngine?.renderAll) {
+                    window.VTT.canvasEngine.renderAll();
                 }
-            } catch (_) {}
-        }
-
-        // Authoritative server-validated role
-        const authoritativeRole = userRole || serverRole || role || 'Player';
-        window.VTT.role = authoritativeRole;
-
-        const elUserRole2 = document.getElementById('display-user-role');
-        if (elUserRole2) {
-            elUserRole2.textContent = window.VTT.role;
-            elUserRole2.className = `user-role-badge ${window.VTT.role.toLowerCase()}-badge`;
-        }
-        const dmScreenLink2 = document.getElementById('btn-dmscreen-link');
-        if (window.VTT.role !== 'GM') {
-            document.querySelectorAll('.gm-only').forEach((el) => el.classList.add('vtt-hidden'));
-            document.querySelectorAll('.player-only').forEach((el) => el.classList.remove('vtt-hidden'));
-            if (dmScreenLink2) dmScreenLink2.classList.add('vtt-hidden');
-        } else {
-            document.querySelectorAll('.gm-only').forEach((el) => el.classList.remove('vtt-hidden'));
-            document.querySelectorAll('.player-only').forEach((el) => el.classList.add('vtt-hidden'));
-            if (dmScreenLink2) dmScreenLink2.classList.remove('vtt-hidden');
-        }
-
-        renderAllowlist(campaignState?.allowedUsers || []);
-
-        // Synchronize initial pause state on join
-        if (campaignState && (campaignState.isPaused !== undefined || campaignState.pauseState)) {
-            updateTabletopPauseUI?.(
-                campaignState.pauseState || { isPaused: Boolean(campaignState.isPaused), source: 'gm' },
-                false
-            );
-        }
-
-        if (
-            window.VTT._modulesInitializationState === 'initializing' ||
-            window.VTT._modulesInitializationState === 'failed'
-        ) {
-            return;
-        }
-
-        document.getElementById('login-overlay')?.classList.add('vtt-hidden');
-        document.getElementById('vtt-workspace')?.classList.remove('vtt-hidden');
-
-        // IDEMPOTENCY GUARD: If modules are already initialized, do NOT re-run init!
-        if (window.VTT._modulesInitialized || window.VTT._modulesInitializationState === 'initialized') {
-            console.log(
-                '[vtt.html] Session re-joined. Synchronizing campaign state and UI without re-binding listeners.'
-            );
-            if (window.VTT.canvasEngine?.syncCampaignState) {
-                window.VTT.canvasEngine.syncCampaignState(campaignState);
-            } else if (window.VTT.canvasEngine?.renderAll) {
-                window.VTT.canvasEngine.renderAll();
+                if (window.VTT.chatEngine?.syncChatHistory && chatHistory) {
+                    window.VTT.chatEngine.syncChatHistory(chatHistory);
+                } else if (window.VTT.chatEngine?.refreshInitiative) {
+                    window.VTT.chatEngine.refreshInitiative();
+                }
+                if (window.VTT.handoutsEngine?.syncHandouts && campaignState?.handouts) {
+                    window.VTT.handoutsEngine.syncHandouts(campaignState.handouts);
+                }
+                return;
             }
-            if (window.VTT.chatEngine?.syncChatHistory && chatHistory) {
-                window.VTT.chatEngine.syncChatHistory(chatHistory);
-            } else if (window.VTT.chatEngine?.refreshInitiative) {
-                window.VTT.chatEngine.refreshInitiative();
-            }
-            if (window.VTT.handoutsEngine?.syncHandouts && campaignState?.handouts) {
-                window.VTT.handoutsEngine.syncHandouts(campaignState.handouts);
-            }
-            return;
-        }
-        window.VTT._modulesInitializationState = 'initializing';
+            window.VTT._modulesInitializationState = 'initializing';
 
-        // Boot VTT Modules
-        try {
-            const mods = await moduleInitPromise;
-            if (mods.initVttWeather) {
-                window.VTT.weatherEngine = mods.initVttWeather(window.VTT);
-                const weatherQualityEl = document.getElementById('config-weather-quality-select');
-                if (weatherQualityEl) {
-                    weatherQualityEl.value = window.VTT.weatherEngine.getQuality();
-                    weatherQualityEl.addEventListener('change', (e) => {
-                        window.VTT.weatherEngine.setQuality(e.target.value);
+            // Boot VTT Modules
+            try {
+                const mods = await moduleInitPromise;
+                if (mods.initVttWeather) {
+                    window.VTT.weatherEngine = mods.initVttWeather(window.VTT);
+                    const weatherQualityEl = document.getElementById('config-weather-quality-select');
+                    if (weatherQualityEl) {
+                        weatherQualityEl.value = window.VTT.weatherEngine.getQuality();
+                        weatherQualityEl.addEventListener('change', (e) => {
+                            window.VTT.weatherEngine.setQuality(e.target.value);
+                        });
+                    }
+                }
+                if (mods.initVttCanvas) window.VTT.canvasEngine = mods.initVttCanvas(window.VTT);
+                if (mods.initVttChat) window.VTT.chatEngine = mods.initVttChat(window.VTT, chatHistory);
+                if (mods.initVttSpellManager) window.VTT.spellManager = mods.initVttSpellManager(window.VTT);
+                if (mods.initVttPlayerSheet) window.VTT.playerSheet = mods.initVttPlayerSheet(window.VTT);
+                if (mods.initVttCreatureSheet) window.VTT.creatureSheet = mods.initVttCreatureSheet(window.VTT);
+                if (mods.initVttHandouts) window.VTT.handoutsEngine = mods.initVttHandouts(window.VTT);
+                if (mods.initVttDataBridge) window.VTT.dataBridge = mods.initVttDataBridge(window.VTT);
+                if (mods.SheetWindowManager) window.VTT.sheetWindowManager = mods.SheetWindowManager;
+                if (mods.initVttMobileAdapter) window.VTT.mobileAdapter = mods.initVttMobileAdapter(window.VTT);
+                if (mods.initVttThemes) window.VTT.themesEngine = mods.initVttThemes(window.VTT);
+                if (mods.initVttSheetDock) window.VTT.sheetDock = mods.initVttSheetDock(window.VTT);
+                if (mods.initVttRollTables) window.VTT.rollTablesEngine = mods.initVttRollTables(window.VTT);
+                if (mods.initVttPresentation) window.VTT.presentationEngine = mods.initVttPresentation(window.VTT);
+
+                // Fail-safe initial sync of weather in case map was already loaded
+                if (window.VTT.weatherEngine && window.VTT.campaignState?.maps) {
+                    const curMapId =
+                        (window.VTT.canvasEngine?.getCurrentMapId && window.VTT.canvasEngine.getCurrentMapId()) ||
+                        (window.VTT.role === 'GM'
+                            ? window.VTT.campaignState.activeGMMapId || window.VTT.campaignState.activeMapId
+                            : getPlayerMapOverride(window.VTT.campaignState, window.VTT.username) ||
+                              window.VTT.campaignState.activeMapId);
+                    const curMap = window.VTT.campaignState.maps[curMapId];
+                    if (curMap?.weather) {
+                        window.VTT.weatherEngine.setWeather(curMap.weather);
+                    }
+                }
+
+                // Setup dock callback: when an external tab asks to dock back into tabletop
+                if (window.SheetWindowManager) {
+                    window.SheetWindowManager.onDock((sheetData) => {
+                        console.log('[vtt.html] Docking sheet into main VTT:', sheetData);
+                        if (!sheetData) return;
+                        if (window.VTT.sheetDock?.openSheet) {
+                            window.VTT.sheetDock.openSheet(sheetData);
+                        } else if (sheetData.type === 'player' && sheetData.id && window.VTT.playerSheet) {
+                            window.VTT.playerSheet.openSheet(sheetData.id);
+                        } else if (window.VTT.creatureSheet) {
+                            window.VTT.creatureSheet.openSheet(
+                                sheetData.monsterData,
+                                sheetData.tokenId,
+                                sheetData.characterId
+                            );
+                        }
                     });
                 }
-            }
-            if (mods.initVttCanvas) window.VTT.canvasEngine = mods.initVttCanvas(window.VTT);
-            if (mods.initVttChat) window.VTT.chatEngine = mods.initVttChat(window.VTT, chatHistory);
-            if (mods.initVttSpellManager) window.VTT.spellManager = mods.initVttSpellManager(window.VTT);
-            if (mods.initVttPlayerSheet) window.VTT.playerSheet = mods.initVttPlayerSheet(window.VTT);
-            if (mods.initVttCreatureSheet) window.VTT.creatureSheet = mods.initVttCreatureSheet(window.VTT);
-            if (mods.initVttHandouts) window.VTT.handoutsEngine = mods.initVttHandouts(window.VTT);
-            if (mods.initVttDataBridge) window.VTT.dataBridge = mods.initVttDataBridge(window.VTT);
-            if (mods.SheetWindowManager) window.VTT.sheetWindowManager = mods.SheetWindowManager;
-            if (mods.initVttMobileAdapter) window.VTT.mobileAdapter = mods.initVttMobileAdapter(window.VTT);
-            if (mods.initVttThemes) window.VTT.themesEngine = mods.initVttThemes(window.VTT);
-            if (mods.initVttSheetDock) window.VTT.sheetDock = mods.initVttSheetDock(window.VTT);
-            if (mods.initVttRollTables) window.VTT.rollTablesEngine = mods.initVttRollTables(window.VTT);
-            if (mods.initVttPresentation) window.VTT.presentationEngine = mods.initVttPresentation(window.VTT);
 
-            // Fail-safe initial sync of weather in case map was already loaded
-            if (window.VTT.weatherEngine && window.VTT.campaignState?.maps) {
-                const curMapId =
-                    (window.VTT.canvasEngine?.getCurrentMapId && window.VTT.canvasEngine.getCurrentMapId()) ||
-                    (window.VTT.role === 'GM'
-                        ? window.VTT.campaignState.activeGMMapId || window.VTT.campaignState.activeMapId
-                        : getPlayerMapOverride(window.VTT.campaignState, window.VTT.username) ||
-                        window.VTT.campaignState.activeMapId);
-                const curMap = window.VTT.campaignState.maps[curMapId];
-                if (curMap?.weather) {
-                    window.VTT.weatherEngine.setWeather(curMap.weather);
+                console.log('Joined and VTT loaded!');
+                const currentCampId = campaignState?.id || campaignId;
+                if (window.loadBestiaryData) window.loadBestiaryData(currentCampId);
+                if (window.VTTSpellManager?.invalidateSpellCache) {
+                    window.VTTSpellManager.invalidateSpellCache();
+                    window.VTTSpellManager.loadSpells?.(currentCampId);
+                }
+                window.VTT._modulesInitialized = true;
+                window.VTT._modulesInitializationState = 'initialized';
+            } catch (err) {
+                window.VTT._modulesInitialized = false;
+                window.VTT._modulesInitializationState = 'failed';
+                console.error('VTT initialization failed:', err);
+                const details = document.getElementById('vtt-init-error-details');
+                if (details) {
+                    details.textContent = err instanceof Error ? err.stack || err.message : String(err);
+                }
+                const errorOverlay = document.getElementById('vtt-init-error');
+                errorOverlay?.classList.remove('vtt-hidden');
+                const reloadButton = document.getElementById('btn-vtt-init-reload');
+                if (reloadButton) {
+                    reloadButton.onclick = () => window.location.reload();
+                    reloadButton.focus();
                 }
             }
-
-            // Setup dock callback: when an external tab asks to dock back into tabletop
-            if (window.SheetWindowManager) {
-                window.SheetWindowManager.onDock((sheetData) => {
-                    console.log('[vtt.html] Docking sheet into main VTT:', sheetData);
-                    if (!sheetData) return;
-                    if (window.VTT.sheetDock?.openSheet) {
-                        window.VTT.sheetDock.openSheet(sheetData);
-                    } else if (sheetData.type === 'player' && sheetData.id && window.VTT.playerSheet) {
-                        window.VTT.playerSheet.openSheet(sheetData.id);
-                    } else if (window.VTT.creatureSheet) {
-                        window.VTT.creatureSheet.openSheet(
-                            sheetData.monsterData,
-                            sheetData.tokenId,
-                            sheetData.characterId
-                        );
-                    }
-                });
-            }
-
-            console.log('Joined and VTT loaded!');
-            const currentCampId = campaignState?.id || campaignId;
-            if (window.loadBestiaryData) window.loadBestiaryData(currentCampId);
-            if (window.VTTSpellManager?.invalidateSpellCache) {
-                window.VTTSpellManager.invalidateSpellCache();
-                window.VTTSpellManager.loadSpells?.(currentCampId);
-            }
-            window.VTT._modulesInitialized = true;
-            window.VTT._modulesInitializationState = 'initialized';
-        } catch (err) {
-            window.VTT._modulesInitialized = false;
-            window.VTT._modulesInitializationState = 'failed';
-            console.error('VTT initialization failed:', err);
-            const details = document.getElementById('vtt-init-error-details');
-            if (details) {
-                details.textContent = err instanceof Error ? err.stack || err.message : String(err);
-            }
-            const errorOverlay = document.getElementById('vtt-init-error');
-            errorOverlay?.classList.remove('vtt-hidden');
-            const reloadButton = document.getElementById('btn-vtt-init-reload');
-            if (reloadButton) {
-                reloadButton.onclick = () => window.location.reload();
-                reloadButton.focus();
-            }
         }
-    });
+    );
 
     socket.on('sys_message', (msg) => {
         if (isCancelled) return;

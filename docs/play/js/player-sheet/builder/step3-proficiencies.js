@@ -30,12 +30,8 @@ export function renderStep3(ctx) {
     workingChar.selectedSpeciesSkills = Array.isArray(workingChar.selectedSpeciesSkills)
         ? workingChar.selectedSpeciesSkills
         : [];
-    workingChar.selectedLanguages = Array.isArray(workingChar.selectedLanguages)
-        ? workingChar.selectedLanguages
-        : [];
-    workingChar.selectedTools = Array.isArray(workingChar.selectedTools)
-        ? workingChar.selectedTools
-        : [];
+    workingChar.selectedLanguages = Array.isArray(workingChar.selectedLanguages) ? workingChar.selectedLanguages : [];
+    workingChar.selectedTools = Array.isArray(workingChar.selectedTools) ? workingChar.selectedTools : [];
 
     // Gather all proficient skills eligible for expertise
     const allProficientSkills = new Set();
@@ -200,9 +196,13 @@ export function renderStep3(ctx) {
                         <div style="display:flex; flex-wrap:wrap; gap:6px;">
                             ${speciesSkillChoiceDef.from
                                 .map((s) => {
-                                    const isGrantedElsewhere = candidateSpeciesSkills.includes(s) || candidateBgSkills.includes(s);
+                                    const isGrantedElsewhere =
+                                        candidateSpeciesSkills.includes(s) || candidateBgSkills.includes(s);
                                     const isChecked = workingChar.selectedSpeciesSkills.includes(s);
-                                    const isDisabled = isGrantedElsewhere || (!isChecked && workingChar.selectedSpeciesSkills.length >= speciesSkillChoiceDef.count);
+                                    const isDisabled =
+                                        isGrantedElsewhere ||
+                                        (!isChecked &&
+                                            workingChar.selectedSpeciesSkills.length >= speciesSkillChoiceDef.count);
                                     return `
                                     <label class="builder-badge-check ${isChecked || isGrantedElsewhere ? 'is-checked' : ''} ${isDisabled ? 'is-disabled' : ''}" style="margin:0; cursor:${isGrantedElsewhere ? 'default' : 'pointer'};">
                                         <input type="checkbox" class="pc-wiz-species-skill-chk" data-skill="${s}" ${isChecked ? 'checked' : ''} ${isDisabled ? 'disabled' : ''} style="accent-color:#81c784;">

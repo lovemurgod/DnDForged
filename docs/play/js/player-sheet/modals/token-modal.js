@@ -333,7 +333,11 @@ export function renderPlayerTokenGallery(options = {}) {
         cropBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             if (isAnimatedMedia(imgObj.url, imgObj.name)) {
-                if (!confirm('Cropping an animated token will freeze its animation into a static frame. Do you want to continue?')) {
+                if (
+                    !confirm(
+                        'Cropping an animated token will freeze its animation into a static frame. Do you want to continue?'
+                    )
+                ) {
                     return;
                 }
             }

@@ -50,9 +50,8 @@
     ]);
 
     function loadConfiguredIceServers(explicitServers) {
-        const servers = Array.isArray(explicitServers) && explicitServers.length
-            ? [...explicitServers]
-            : [...DEFAULT_ICE_SERVERS];
+        const servers =
+            Array.isArray(explicitServers) && explicitServers.length ? [...explicitServers] : [...DEFAULT_ICE_SERVERS];
         try {
             if (typeof window !== 'undefined' && window.location?.hash) {
                 const hashMatch = window.location.hash.match(/ice=([^&]+)/);
@@ -167,7 +166,10 @@
             }
 
             // Priority 1: Mid-session campaign state sanitization for player peers
-            if (this.isHost && (event === 'campaign:state-sync' || event === 'campaign:updated' || event === 'campaign:update')) {
+            if (
+                this.isHost &&
+                (event === 'campaign:state-sync' || event === 'campaign:updated' || event === 'campaign:update')
+            ) {
                 const rawCamp = args[0] || window.VTT?.campaignState;
                 for (const [peerId, peer] of this.peers.entries()) {
                     const sanitized = this._sanitizeCampaignStateForPlayer(rawCamp, peer.username || 'Player');
@@ -197,7 +199,9 @@
                 const tokensObj = args[0]?.tokens;
                 if (tokensObj && typeof tokensObj === 'object') {
                     if (Array.isArray(tokensObj)) {
-                        const safeTokens = tokensObj.filter(t => t && t.layer !== 'gm' && t.isVisible !== false && !t.hidden);
+                        const safeTokens = tokensObj.filter(
+                            (t) => t && t.layer !== 'gm' && t.isVisible !== false && !t.hidden
+                        );
                         if (safeTokens.length === 0) return this;
                         args[0].tokens = safeTokens;
                     } else {
@@ -217,7 +221,10 @@
             if (this.isHost && event === 'token:update_delta') {
                 const { mapId, tokenId, changes } = args[0] || {};
                 const currentToken = window.VTT?.campaignState?.maps?.[mapId]?.tokens?.[tokenId];
-                if (currentToken && (currentToken.layer === 'gm' || currentToken.isVisible === false || currentToken.hidden)) {
+                if (
+                    currentToken &&
+                    (currentToken.layer === 'gm' || currentToken.isVisible === false || currentToken.hidden)
+                ) {
                     return this;
                 }
             }
@@ -338,13 +345,18 @@
                     return false;
                 }
                 if ((event === 'token:update' || event === 'token:update_delta') && payload.mapId) {
-                    const existing = global.VTT?.campaignState?.maps?.[payload.mapId]?.tokens?.[
-                        payload.tokenId || payload.token?.id
-                    ];
+                    const existing =
+                        global.VTT?.campaignState?.maps?.[payload.mapId]?.tokens?.[
+                            payload.tokenId || payload.token?.id
+                        ];
                     if (existing) {
                         const senderLower = String(senderPeer.username || '').toLowerCase();
-                        const owner = String(existing.owner || existing.playerOwner || existing.ownerUsername || '').toLowerCase();
-                        const players = Array.isArray(existing.players) ? existing.players.map((p) => String(p).toLowerCase()) : [];
+                        const owner = String(
+                            existing.owner || existing.playerOwner || existing.ownerUsername || ''
+                        ).toLowerCase();
+                        const players = Array.isArray(existing.players)
+                            ? existing.players.map((p) => String(p).toLowerCase())
+                            : [];
                         if (owner !== senderLower && !players.includes(senderLower)) {
                             return false;
                         }
@@ -368,7 +380,8 @@
             switch (payload.type) {
                 case 'rpc-start': {
                     const { id, totalChunks } = payload;
-                    if (!id || !Number.isInteger(totalChunks) || totalChunks < 1 || totalChunks > MAX_ASSET_CHUNKS) return;
+                    if (!id || !Number.isInteger(totalChunks) || totalChunks < 1 || totalChunks > MAX_ASSET_CHUNKS)
+                        return;
                     const existing = this._rpcTransfers.get(id);
                     if (existing?.timeoutId) clearTimeout(existing.timeoutId);
                     const timeoutId = setTimeout(() => this._rpcTransfers.delete(id), 30000);
@@ -409,7 +422,9 @@
 
                         // Allowlist & reserved GM name verification
                         const campState = window.VTT?.campaignState;
-                        const gmName = String(campState?.gmUsername || this.username || '').trim().toLowerCase();
+                        const gmName = String(campState?.gmUsername || this.username || '')
+                            .trim()
+                            .toLowerCase();
                         const allowed = campState?.allowedUsers || [];
                         if (
                             joinData.role === 'GM' ||
@@ -445,12 +460,14 @@
                         const joinedPacket = JSON.stringify({
                             type: 'event',
                             event: 'joined',
-                            args: [{
-                                role: playerRole,
-                                userRole: playerRole,
-                                campaignState: sanitizedState,
-                                chatHistory: (window.VTT?.chatHistory || []).slice(-50)
-                            }]
+                            args: [
+                                {
+                                    role: playerRole,
+                                    userRole: playerRole,
+                                    campaignState: sanitizedState,
+                                    chatHistory: (window.VTT?.chatHistory || []).slice(-50)
+                                }
+                            ]
                         });
                         this._sendToPeer(senderPeer, joinedPacket);
 
@@ -466,11 +483,15 @@
                     // Host must reject events from peers that have not completed 'join' or emit GM-only events
                     if (this.isHost && senderPeer) {
                         if (!senderPeer.joined) {
-                            console.warn(`[P2P Security] Ignored unauthenticated event "${event}" from peer ${senderPeer.id}`);
+                            console.warn(
+                                `[P2P Security] Ignored unauthenticated event "${event}" from peer ${senderPeer.id}`
+                            );
                             return;
                         }
                         if (!this._isPlayerAllowedEvent(event, args, senderPeer)) {
-                            console.warn(`[P2P Security] Blocked unauthorized event "${event}" from P2P player "${senderPeer.username}"`);
+                            console.warn(
+                                `[P2P Security] Blocked unauthorized event "${event}" from P2P player "${senderPeer.username}"`
+                            );
                             return;
                         }
                     }
@@ -499,7 +520,10 @@
                 case 'asset-start': {
                     if (this.isHost && senderPeer && !senderPeer.joined) return;
                     const { id, totalChunks, totalBytes, mimeType, meta } = payload;
-                    const safeMime = String(mimeType || 'image/jpeg').toLowerCase().split(';')[0].trim();
+                    const safeMime = String(mimeType || 'image/jpeg')
+                        .toLowerCase()
+                        .split(';')[0]
+                        .trim();
                     if (
                         !id ||
                         !Number.isInteger(totalChunks) ||
@@ -508,7 +532,9 @@
                         (totalBytes && totalBytes > MAX_ASSET_BYTES) ||
                         !SAFE_P2P_ASSET_MIMES.has(safeMime)
                     ) {
-                        console.warn(`[P2P Security] Rejected invalid asset transfer header "${id}" (${safeMime}, ${totalChunks} chunks)`);
+                        console.warn(
+                            `[P2P Security] Rejected invalid asset transfer header "${id}" (${safeMime}, ${totalChunks} chunks)`
+                        );
                         return;
                     }
                     if (this._assetTransfers.has(id)) {
@@ -689,7 +715,7 @@
 
                 // Small pause every 10 chunks to avoid saturating RTCDataChannel buffer
                 if (i % 10 === 0) {
-                    await new Promise(r => setTimeout(r, 8));
+                    await new Promise((r) => setTimeout(r, 8));
                 }
             }
         }
@@ -977,5 +1003,4 @@
         window.VttP2PAdapter = VttP2PAdapter;
         window.DEFAULT_ICE_SERVERS = DEFAULT_ICE_SERVERS;
     }
-
 })(typeof window !== 'undefined' ? window : globalThis);

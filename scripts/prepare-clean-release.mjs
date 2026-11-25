@@ -99,12 +99,7 @@ for (const f of fs.readdirSync(path.join(rootDir, 'vtt', 'img'))) {
 
 // 6. Copy Root Application files
 console.log('\n📄 Step 4: Staging runtime code and legal documents...');
-const rootFilesToCopy = [
-    'server.js',
-    'launcher.js',
-    'utils.js',
-    'LEGAL.md'
-];
+const rootFilesToCopy = ['server.js', 'launcher.js', 'utils.js', 'LEGAL.md'];
 
 for (const rf of rootFilesToCopy) {
     const srcPath = path.join(rootDir, rf);
