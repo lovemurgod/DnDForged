@@ -23,13 +23,21 @@ function getTarBin() {
 
 function packZipArchive(sourceDir, zipFilePath) {
     if (fs.existsSync(zipFilePath)) fs.unlinkSync(zipFilePath);
-    execFileSync(getTarBin(), ['-a', '-c', '-f', zipFilePath, '-C', sourceDir, '.'], { stdio: 'ignore' });
+    if (process.platform === 'win32') {
+        execFileSync(getTarBin(), ['-a', '-c', '-f', zipFilePath, '-C', sourceDir, '.'], { stdio: 'ignore' });
+    } else {
+        execFileSync('zip', ['-r', '-q', zipFilePath, '.'], { cwd: sourceDir, stdio: 'ignore' });
+    }
     return true;
 }
 
 function unpackZipArchive(zipFilePath, targetDir) {
     if (!fs.existsSync(targetDir)) fs.mkdirSync(targetDir, { recursive: true });
-    execFileSync(getTarBin(), ['-xf', zipFilePath, '-C', targetDir], { stdio: 'ignore' });
+    if (process.platform === 'win32') {
+        execFileSync(getTarBin(), ['-xf', zipFilePath, '-C', targetDir], { stdio: 'ignore' });
+    } else {
+        execFileSync('unzip', ['-q', '-o', zipFilePath, '-d', targetDir], { stdio: 'ignore' });
+    }
     return true;
 }
 

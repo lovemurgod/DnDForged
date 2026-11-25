@@ -604,10 +604,20 @@ test('Roll20 Character Importer - Token Art & Avatar Image Fetching (CDN Rewrite
         'Encoded URI components must be decoded and rewritten'
     );
 
-    // 2. End-to-end import with live cache directory
+    // 2. End-to-end import with isolated cache directory & deterministic fetch stub
     const os = await import('os');
     const tmpUploadsDir = path.join(os.tmpdir(), `dndforged_test_tokens_${Date.now()}`);
     fs.mkdirSync(tmpUploadsDir, { recursive: true });
+    const originalFetch = globalThis.fetch;
+    globalThis.fetch = async (url) => {
+        const bytes = Buffer.from(`mock-image-payload:${String(url)}`, 'utf8');
+        return {
+            ok: true,
+            status: 200,
+            headers: new Headers({ 'content-type': 'image/png' }),
+            arrayBuffer: async () => bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength)
+        };
+    };
 
     try {
         const rawJson = JSON.parse(fs.readFileSync(path.join(samplesDir, 'Matt_Saiyan_lv_17_items.json'), 'utf8'));
@@ -657,6 +667,7 @@ test('Roll20 Character Importer - Token Art & Avatar Image Fetching (CDN Rewrite
             'All files on disk must have unique hash-based names'
         );
     } finally {
+        globalThis.fetch = originalFetch;
         fs.rmSync(tmpUploadsDir, { recursive: true, force: true });
     }
 });
