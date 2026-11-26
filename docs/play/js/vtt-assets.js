@@ -1371,7 +1371,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const isSel = localSelected.has(item);
                     return `
                     <div class="picker-asset-thumb" data-idx="${idx}" style="border: 2px solid ${isSel ? 'var(--color-gold-base)' : 'rgba(255,255,255,0.1)'}; border-radius: 6px; overflow: hidden; background: #0c0a14; cursor: pointer; display: flex; flex-direction: column; align-items: center; padding: 4px; box-shadow: ${isSel ? '0 0 8px rgba(212,175,55,0.4)' : 'none'};">
-                        <img src="${escapeHtml(getSafeVttUrl(item.url))}" data-raw-src="${escapeHtml(item.url)}" alt="${escapeHtml(item.name)}" style="width:100%; height:75px; object-fit:cover; border-radius:4px;" onerror="this.src='favicon.svg'">
+                        <img src="${escapeHtml(getSafeVttUrl(item.url))}" data-raw-src="${escapeHtml(item.url)}" alt="${escapeHtml(item.name)}" style="width:100%; height:75px; object-fit:cover; border-radius:4px;" data-fallback-src="favicon.svg">
                         <div style="font-size:0.65rem; color:#fff; text-align:center; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; width:100%; margin-top:2px;">
                             ${escapeHtml(item.name)}
                         </div>

@@ -17,7 +17,7 @@ import { test, expect } from '@playwright/test';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
-import { setupTwoPlayerSandbox } from './helpers/visual-fixture.mjs';
+import { setupTwoPlayerSandbox, ensureSidebarTabOpen } from './helpers/visual-fixture.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -81,7 +81,7 @@ test.describe('Character Builder & Level-Up Wizard E2E Suite', () => {
      */
     async function openBuilderForNewCharacter(page) {
         // Open Player Characters sidebar tab
-        await page.locator('[data-tab="tab-characters"]').click();
+        await ensureSidebarTabOpen(page, 'tab-characters');
         await expect(page.locator('#tab-characters')).toHaveClass(/active/);
 
         // Click New Character button
@@ -140,19 +140,19 @@ test.describe('Character Builder & Level-Up Wizard E2E Suite', () => {
         await nameInput.fill('Elidor the Magus');
 
         // Select Species: Elf
-        await gmPage.locator('#pc-wizard-race').selectOption('Elf');
+        await gmPage.locator('#pc-wizard-race').selectOption('Elf::PHB');
 
         // Wait for subrace dropdown to populate with matching subraces (High / Wood)
         await gmPage.waitForFunction(
             () => {
                 const sub = document.getElementById('pc-wizard-subrace');
-                return sub && Array.from(sub.options).some((o) => o.value === 'High');
+                return sub && Array.from(sub.options).some((o) => o.value.startsWith('High::'));
             },
             { timeout: 8000 }
         );
 
         // Select Subrace: High
-        await gmPage.locator('#pc-wizard-subrace').selectOption('High');
+        await gmPage.locator('#pc-wizard-subrace').selectOption('High::PHB');
 
         // Select Background: Sage::PHB
         await gmPage.locator('#pc-wizard-bg').selectOption('Sage::PHB');
@@ -230,7 +230,7 @@ test.describe('Character Builder & Level-Up Wizard E2E Suite', () => {
 
         // Step 1: Identity & Classes
         await gmPage.locator('#pc-wizard-char-name').fill('Malakor the Hexer');
-        await gmPage.locator('#pc-wizard-race').selectOption('Tiefling');
+        await gmPage.locator('#pc-wizard-race').selectOption('Tiefling::PHB');
         await gmPage.locator('#pc-wizard-bg').selectOption('Acolyte::PHB');
         await gmPage.locator('.pc-wiz-cls-sel[data-idx="0"]').selectOption('Warlock::PHB');
 
@@ -286,7 +286,7 @@ test.describe('Character Builder & Level-Up Wizard E2E Suite', () => {
 
         // Step 1: Identity & Classes
         await gmPage.locator('#pc-wizard-char-name').fill('Kragar Steelbrand');
-        await gmPage.locator('#pc-wizard-race').selectOption('Human');
+        await gmPage.locator('#pc-wizard-race').selectOption('Human::PHB');
         await gmPage.locator('#pc-wizard-bg').selectOption('Soldier::PHB');
         await gmPage.locator('.pc-wiz-cls-sel[data-idx="0"]').selectOption('Fighter::PHB');
 
@@ -335,17 +335,17 @@ test.describe('Character Builder & Level-Up Wizard E2E Suite', () => {
 
         // Step 1: Identity & Classes
         await gmPage.locator('#pc-wizard-char-name').fill('Sylas Swiftstride');
-        await gmPage.locator('#pc-wizard-race').selectOption('Elf');
+        await gmPage.locator('#pc-wizard-race').selectOption('Elf::PHB');
 
         // Wait for subraces
         await gmPage.waitForFunction(
             () => {
                 const sub = document.getElementById('pc-wizard-subrace');
-                return sub && Array.from(sub.options).some((o) => o.value === 'Wood');
+                return sub && Array.from(sub.options).some((o) => o.value.startsWith('Wood::'));
             },
             { timeout: 8000 }
         );
-        await gmPage.locator('#pc-wizard-subrace').selectOption('Wood');
+        await gmPage.locator('#pc-wizard-subrace').selectOption('Wood::PHB');
 
         await gmPage.locator('#pc-wizard-bg').selectOption('Outlander::PHB');
         await gmPage.locator('.pc-wiz-cls-sel[data-idx="0"]').selectOption('Ranger::PHB');
@@ -379,7 +379,7 @@ test.describe('Character Builder & Level-Up Wizard E2E Suite', () => {
 
         // 1. Initial creation as Level 1 Rogue
         await gmPage.locator('#pc-wizard-char-name').fill('Merry the Nimble');
-        await gmPage.locator('#pc-wizard-race').selectOption('Halfling');
+        await gmPage.locator('#pc-wizard-race').selectOption('Halfling::PHB');
         await gmPage.locator('.pc-wiz-cls-sel[data-idx="0"]').selectOption('Rogue::PHB');
         await goToStep(gmPage, 8);
         await gmPage.locator('#pc-builder-apply-btn').click();
@@ -453,7 +453,7 @@ test.describe('Character Builder & Level-Up Wizard E2E Suite', () => {
         // Create character on GM page
         const uniqueName = `Sync Hero ${Date.now()}`;
         await gmPage.locator('#pc-wizard-char-name').fill(uniqueName);
-        await gmPage.locator('#pc-wizard-race').selectOption('Dwarf');
+        await gmPage.locator('#pc-wizard-race').selectOption('Dwarf::PHB');
         await gmPage.locator('.pc-wiz-cls-sel[data-idx="0"]').selectOption('Cleric::PHB');
 
         // Apply build
@@ -480,7 +480,7 @@ test.describe('Character Builder & Level-Up Wizard E2E Suite', () => {
         const { gmPage } = sandbox;
 
         // Open Player Characters sidebar tab
-        await gmPage.locator('[data-tab="tab-characters"]').click();
+        await ensureSidebarTabOpen(gmPage, 'tab-characters');
         const firstChar = gmPage.locator('#character-list .char-row').first();
         await expect(firstChar).toBeVisible({ timeout: 5000 });
         await firstChar.click();

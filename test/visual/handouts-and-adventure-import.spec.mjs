@@ -16,7 +16,7 @@ import { test, expect } from '@playwright/test';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
-import { setupTwoPlayerSandbox } from './helpers/visual-fixture.mjs';
+import { setupTwoPlayerSandbox, ensureSidebarTabOpen } from './helpers/visual-fixture.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -60,10 +60,7 @@ test.describe('Handouts & 5e Adventure Import E2E Suite', () => {
 
     test.beforeEach(async () => {
         const { gmPage } = sandbox;
-        const tabBtn = gmPage.locator('button.tab-header[data-tab="tab-handouts"]');
-        if (await tabBtn.isVisible()) {
-            await tabBtn.click();
-        }
+        await ensureSidebarTabOpen(gmPage, 'tab-handouts');
     });
 
     test('1. Tab Navigation & Initial Render', async () => {
@@ -72,7 +69,7 @@ test.describe('Handouts & 5e Adventure Import E2E Suite', () => {
         // Switch GM to Handouts tab
         const gmTabBtn = gmPage.locator('button.tab-header[data-tab="tab-handouts"]');
         await expect(gmTabBtn).toBeVisible({ timeout: 10000 });
-        await gmTabBtn.click();
+        await ensureSidebarTabOpen(gmPage, 'tab-handouts');
 
         const gmPanel = gmPage.locator('#tab-handouts');
         await expect(gmPanel).toHaveClass(/active/);
@@ -220,6 +217,13 @@ test.describe('Handouts & 5e Adventure Import E2E Suite', () => {
         // Player closes the modal
         await playerPage.locator('#btn-view-handout-close').click();
         await expect(playerViewModal).toHaveClass(/vtt-hidden/);
+
+        // Close GM view modal if force-show broadcast opened it on GM client too
+        const gmViewModal = gmPage.locator('#modal-view-handout');
+        if (await gmViewModal.evaluate((el) => !el.classList.contains('vtt-hidden'))) {
+            await gmPage.locator('#btn-view-handout-close').click();
+            await expect(gmViewModal).toHaveClass(/vtt-hidden/);
+        }
     });
 
     test('5. In-Place Handout Editing & Updating', async () => {
@@ -295,7 +299,7 @@ test.describe('Handouts & 5e Adventure Import E2E Suite', () => {
         await tabBooks.click();
         await expect(tabBooks).toHaveClass(/active/);
         await gmPage.fill('#import-source-search', 'Player');
-        const phbCard = gmPage.locator('.import-source-card', { hasText: "Player's Handbook" });
+        const phbCard = gmPage.locator('.import-source-card', { hasText: "Player's Handbook" }).first();
         await expect(phbCard).toBeVisible({ timeout: 5000 });
 
         // Switch back to Adventures and search Strahd
@@ -313,7 +317,7 @@ test.describe('Handouts & 5e Adventure Import E2E Suite', () => {
 
         // Verify item tree populates
         const itemTree = gmPage.locator('#import-item-tree');
-        await expect(itemTree.locator('.import-tree-item')).not.toHaveCount(0, { timeout: 10000 });
+        await expect(itemTree.locator('.import-item-row')).not.toHaveCount(0, { timeout: 10000 });
 
         // Test Filter Bar: click Story filter
         const btnFilterStory = gmPage.locator('.import-filter-btn[data-filter="story"]');
@@ -322,7 +326,7 @@ test.describe('Handouts & 5e Adventure Import E2E Suite', () => {
 
         // Search within items
         await gmPage.fill('#import-item-search', 'Introduction');
-        const introItem = itemTree.locator('.import-tree-item', { hasText: 'Introduction' }).first();
+        const introItem = itemTree.locator('.import-item-row', { hasText: 'Introduction' }).first();
         await expect(introItem).toBeVisible();
 
         // Click item to trigger Live Preview pane
@@ -363,7 +367,7 @@ test.describe('Handouts & 5e Adventure Import E2E Suite', () => {
 
         // Select All visible items
         const itemTree = gmPage.locator('#import-item-tree');
-        await expect(itemTree.locator('.import-tree-item')).not.toHaveCount(0, { timeout: 10000 });
+        await expect(itemTree.locator('.import-item-row')).not.toHaveCount(0, { timeout: 10000 });
         await gmPage.locator('#btn-import-select-all').click();
 
         const countSpan = gmPage.locator('#import-selected-count');

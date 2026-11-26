@@ -377,9 +377,35 @@
             .join('');
     }
 
+    async function pbkdf2Hex(password, salt, iterations = 100000) {
+        if (!global.crypto || !global.crypto.subtle) {
+            throw new Error('Web Crypto API is unavailable for GM password verification.');
+        }
+        const keyMaterial = await global.crypto.subtle.importKey(
+            'raw',
+            new TextEncoder().encode(String(password || '')),
+            'PBKDF2',
+            false,
+            ['deriveBits']
+        );
+        const bits = await global.crypto.subtle.deriveBits(
+            {
+                name: 'PBKDF2',
+                salt: new TextEncoder().encode(String(salt || '')),
+                iterations,
+                hash: 'SHA-256'
+            },
+            keyMaterial,
+            256
+        );
+        return Array.from(new Uint8Array(bits))
+            .map((b) => b.toString(16).padStart(2, '0'))
+            .join('');
+    }
+
     global.__verifyStaticGmPassword = async function (username, password) {
         const creds = readStaticGmCreds();
-        if (!creds || !creds.hasPassword || !creds.sha256Hash) {
+        if (!creds || !creds.hasPassword || (!creds.pbkdf2Hash && !creds.sha256Hash)) {
             return { ok: true };
         }
         if (
@@ -391,6 +417,13 @@
         }
         if (!password) {
             return { ok: false, error: 'GM password is required.' };
+        }
+        if (creds.pbkdf2Hash) {
+            const computedPbkdf2 = await pbkdf2Hex(password, creds.salt || '', 100000);
+            if (computedPbkdf2 !== creds.pbkdf2Hash) {
+                return { ok: false, error: 'Invalid GM password.' };
+            }
+            return { ok: true };
         }
         const computed = await sha256Hex(`${creds.salt || ''}:${password}`);
         if (computed !== creds.sha256Hash) {
@@ -602,7 +635,7 @@
 
         if (pathname === '/api/gm-auth-required') {
             const creds = readStaticGmCreds();
-            const hasPassword = Boolean(creds && creds.hasPassword && creds.sha256Hash);
+            const hasPassword = Boolean(creds && creds.hasPassword && (creds.pbkdf2Hash || creds.sha256Hash));
             return jsonResponse({ required: hasPassword, hasPassword });
         }
 
@@ -754,11 +787,50 @@
                 originalUrl: rawTarget
             });
         }
-        if (pathname === '/api/tables/catalog' || pathname === '/api/decks/catalog') {
-            return jsonResponse([]);
+        if (pathname === '/api/tables/catalog') {
+            const rt = global.VTT?.campaignState?.rollTables || {};
+            const customTables = (Array.isArray(rt.tables) && rt.tables.length ? rt.tables : rt.customTables) || [];
+            const q = (parsedUrl.searchParams.get('q') || '').trim().toLowerCase();
+            const catalog = customTables
+                .filter((t) => !q || (t.name && t.name.toLowerCase().includes(q)))
+                .map((t) => ({
+                    id: t.id,
+                    name: t.name,
+                    source: t.source || 'CUSTOM',
+                    dice: t.dice || '1d20',
+                    rowCount: Array.isArray(t.rows) ? t.rows.length : 0
+                }));
+            return jsonResponse(catalog);
         }
-        if (pathname.startsWith('/api/tables/') || pathname.startsWith('/api/decks/')) {
-            return jsonResponse({ error: 'Not available in static web edition' }, 404);
+        if (pathname.startsWith('/api/tables/')) {
+            const targetId = decodeURIComponent(pathname.slice('/api/tables/'.length));
+            const rt = global.VTT?.campaignState?.rollTables || {};
+            const customTables = (Array.isArray(rt.tables) && rt.tables.length ? rt.tables : rt.customTables) || [];
+            const found = customTables.find((t) => t && t.id === targetId);
+            if (!found) return jsonResponse({ error: 'Table not found' }, 404);
+            return jsonResponse(found);
+        }
+        if (pathname === '/api/decks/catalog') {
+            const rt = global.VTT?.campaignState?.rollTables || {};
+            const customDecks = (Array.isArray(rt.decks) && rt.decks.length ? rt.decks : rt.cardDecks) || [];
+            return jsonResponse(
+                customDecks.map((d) => ({
+                    id: d.id,
+                    name: d.name,
+                    source: d.source || 'CUSTOM',
+                    cardCount: Array.isArray(d.cards) ? d.cards.length : d.cardCount || 0,
+                    description: d.description || '',
+                    theme: d.theme || 'standard'
+                }))
+            );
+        }
+        if (pathname.startsWith('/api/decks/')) {
+            const targetId = decodeURIComponent(pathname.slice('/api/decks/'.length));
+            const rt = global.VTT?.campaignState?.rollTables || {};
+            const customDecks = (Array.isArray(rt.decks) && rt.decks.length ? rt.decks : rt.cardDecks) || [];
+            const found = customDecks.find((d) => d && d.id === targetId);
+            if (!found) return jsonResponse({ error: 'Deck not found' }, 404);
+            return jsonResponse(found);
         }
 
         if (pathname === '/api/campaigns') {

@@ -6,6 +6,8 @@
  * Provides a drop-in replacement for window.Renderer.dice.lang.getTree3.
  */
 
+import { evaluateSafeMath } from './shared/math-eval.js';
+
 export class VTTDiceParser {
     /**
      * Parses and evaluates a dice expression formula string.
@@ -208,7 +210,8 @@ export class VTTDiceParser {
         try {
             const safeMath = evalExpression.replace(/[^0-9+\-*/().\s]/g, '');
             if (safeMath) {
-                total = Math.round(new Function(`"use strict"; return (${safeMath})`)());
+                const val = evaluateSafeMath(safeMath);
+                total = Number.isFinite(val) ? Math.round(val) : 0;
             }
         } catch (e) {
             total = 0;

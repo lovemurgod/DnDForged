@@ -188,15 +188,15 @@ export function renderEquipmentHtml(char, ctx) {
                         <div class="pc-bag-card glass-flat" data-container-id="${c.id}" data-container-idx="${cIdx}" draggable="true" style="border:1px solid var(--color-border-subtle); border-radius:8px; margin-bottom:4px; overflow:hidden; transition:border-color 0.15s, box-shadow 0.15s;">
                             <div class="pc-bag-header" data-container-id="${c.id}" style="padding:8px 12px; background:rgba(0,0,0,0.25); display:flex; justify-content:space-between; align-items:center; cursor:pointer; user-select:none;">
                                 <div style="display:flex; align-items:center; gap:8px; flex:1; min-width:0;">
-                                    <div class="pc-bag-drag-handle" data-container-idx="${cIdx}" title="Click and drag to reorder bag" style="cursor:grab; opacity:0.5; padding-right:4px;" onmouseover="this.style.opacity='1'; this.style.color='var(--color-gold-base)';" onmouseout="this.style.opacity='0.5'; this.style.color='inherit';" onclick="event.stopPropagation();">
+                                    <div class="pc-bag-drag-handle" data-container-idx="${cIdx}" title="Click and drag to reorder bag" style="cursor:grab; opacity:0.5; padding-right:4px;" data-stop-propagation="true">
                                         <i class="fa-solid fa-grip-vertical"></i>
                                     </div>
                                     <i class="fa-solid ${c.icon || 'fa-sack-xmark'} text-gradient-gold" style="font-size:0.95rem; flex-shrink:0;"></i>
                                     <i class="fa-solid fa-chevron-right text-gradient-gold pc-bag-chevron" data-container-id="${c.id}" style="font-size:0.75rem; flex-shrink:0; transition:transform 0.2s; transform:${c.collapsed ? 'rotate(0deg)' : 'rotate(90deg)'};"></i>
-                                    <span style="font-weight:700; font-size:0.875rem; color:var(--color-text-primary); text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">${c.name}</span>
+                                    <span style="font-weight:700; font-size:0.875rem; color:var(--color-text-primary); text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">${escapeHtml(c.name)}</span>
                                     <span style="font-size:0.75rem; color:var(--color-text-muted); background:rgba(255,255,255,0.08); padding:2px 8px; border-radius:12px;">${cItems.length} item${cItems.length !== 1 ? 's' : ''} • ${weightLabel}${overCapBadge}</span>
                                 </div>
-                                <div style="display:flex; gap:6px; align-items:center; flex-shrink:0;" onclick="event.stopPropagation();">
+                                <div style="display:flex; gap:6px; align-items:center; flex-shrink:0;" data-stop-propagation="true">
                                     <button class="btn btn-xxs btn-secondary pc-bag-edit" data-container-id="${c.id}" title="Edit Bag"><i class="fa-solid fa-pen"></i></button>
                                     <button class="btn btn-xxs btn-danger pc-bag-del" data-container-id="${c.id}" title="Delete Bag"><i class="fa-solid fa-trash"></i></button>
                                 </div>

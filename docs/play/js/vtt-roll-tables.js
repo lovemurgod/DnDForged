@@ -455,7 +455,7 @@ export function initVttRollTables(vtt) {
                     .map(
                         (e) => `
                 <div style="width: 38px; height: 38px; border-radius: 4px; overflow: hidden; border: 1px solid rgba(255,255,255,0.2); background: #000; flex-shrink: 0;" title="${escapeHtml(e.name || 'Side')}">
-                    <img src="${e.url}" alt="${escapeHtml(e.name)}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='favicon.svg'">
+                    <img src="${escapeHtml(e.url)}" alt="${escapeHtml(e.name)}" style="width: 100%; height: 100%; object-fit: cover;" data-fallback-src="favicon.svg">
                 </div>
             `
                     )
@@ -545,7 +545,7 @@ export function initVttRollTables(vtt) {
                 <div class="rolltable-card glassmorphism" data-id="${d.id}" style="padding: 10px; border-radius: 6px; border: 1px solid var(--color-border-subtle); background: rgba(0,0,0,0.25); display: flex; flex-direction: column; gap: 8px;">
                     <div class="flex-row" style="gap: 10px; align-items: center;">
                         <div style="width: 44px; height: 60px; border-radius: 4px; overflow: hidden; border: 1px solid rgba(255,255,255,0.2); background: #111; flex-shrink: 0;" title="Card Back">
-                            <img src="${d.backImg}" alt="Card Back" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='favicon.svg'">
+                            <img src="${escapeHtml(d.backImg)}" alt="Card Back" style="width: 100%; height: 100%; object-fit: cover;" data-fallback-src="favicon.svg">
                         </div>
                         <div style="flex: 1; min-width: 0;">
                             <div class="flex-row" style="justify-content: space-between; align-items: center;">
@@ -778,7 +778,7 @@ export function initVttRollTables(vtt) {
                             ${escapeHtml(deck.name)}
                         </div>
                         <div style="width: 140px; height: 200px; margin: 0 auto 8px auto; border-radius: 6px; overflow: hidden; border: 1px solid rgba(255,255,255,0.2); background: #000;">
-                            <img src="${card.frontImg}" alt="${escapeHtml(card.name)}" style="width: 100%; height: 100%; object-fit: contain;">
+                            <img src="${escapeHtml(card.frontImg)}" alt="${escapeHtml(card.name)}" style="width: 100%; height: 100%; object-fit: contain;">
                         </div>
                         <div style="font-weight: 600; font-size: 0.95rem; color: #fff;">${escapeHtml(card.name)}</div>
                         ${card.description ? `<div style="font-size: 0.8rem; color: var(--color-text-secondary); margin-top: 4px; line-height: 1.3;">${escapeHtml(card.description)}</div>` : ''}
@@ -932,7 +932,7 @@ export function initVttRollTables(vtt) {
                     .map(
                         (c) => `
                     <div class="deck-drawn-card-item" draggable="true" data-card-id="${c.id}" style="width:110px; cursor:grab; border-radius:6px; overflow:hidden; border:1px solid rgba(255,255,255,0.2); background:#18181b; padding:6px; display:flex; flex-direction:column; gap:4px; align-items:center;">
-                        <img src="${c.frontImg}" alt="${escapeHtml(c.name)}" style="width:100%; height:130px; object-fit:contain; border-radius:4px; background:#000;">
+                        <img src="${escapeHtml(c.frontImg)}" alt="${escapeHtml(c.name)}" style="width:100%; height:130px; object-fit:contain; border-radius:4px; background:#000;">
                         <div style="font-size:0.75rem; font-weight:600; text-align:center; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; width:100%;">${escapeHtml(c.name)}</div>
                         <div class="flex-row" style="gap:4px; width:100%;">
                             <button class="btn btn-xxs btn-danger btn-card-discard" data-deck="${deck.id}" data-card="${c.id}" style="flex:1;" title="Discard Card"><i class="fa-solid fa-trash-can"></i></button>
@@ -991,7 +991,7 @@ export function initVttRollTables(vtt) {
                     .map(
                         (c) => `
                     <div style="width:90px; border-radius:4px; overflow:hidden; border:1px solid rgba(255,255,255,0.15); background:#111; padding:4px; display:flex; flex-direction:column; align-items:center; opacity:0.75;">
-                        <img src="${c.frontImg}" alt="${escapeHtml(c.name)}" style="width:100%; height:100px; object-fit:contain;">
+                        <img src="${escapeHtml(c.frontImg)}" alt="${escapeHtml(c.name)}" style="width:100%; height:100px; object-fit:contain;">
                         <div style="font-size:0.7rem; color:var(--color-text-muted); text-align:center; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; width:100%;">${escapeHtml(c.name)}</div>
                     </div>
                 `
@@ -1182,7 +1182,7 @@ export function initVttRollTables(vtt) {
                         (e, idx) => `
                     <div class="asset-side-row flex-row" style="gap:6px; align-items:center; background:rgba(255,255,255,0.03); padding:4px 6px; border-radius:4px; border:1px solid rgba(255,255,255,0.08);" data-idx="${idx}">
                         <div style="width:32px; height:32px; border-radius:4px; overflow:hidden; background:#000; flex-shrink:0;">
-                            <img src="${e.url || 'favicon.svg'}" alt="Preview" style="width:100%; height:100%; object-fit:cover;" onerror="this.src='favicon.svg'">
+                            <img src="${escapeHtml(e.url || 'favicon.svg')}" alt="Preview" style="width:100%; height:100%; object-fit:cover;" data-fallback-src="favicon.svg">
                         </div>
                         <input type="text" class="side-name" value="${escapeHtml(e.name || '')}" placeholder="Label (e.g. Active, Broken)" style="width:120px; font-size:0.75rem; padding:4px 6px;">
                         <input type="text" class="side-url" value="${escapeHtml(e.url || '')}" placeholder="Artwork Image / Video URL" style="flex:1; font-size:0.75rem; padding:4px 6px;">
@@ -1390,7 +1390,7 @@ export function initVttRollTables(vtt) {
                         (c, idx) => `
                     <div class="deck-card-row flex-row" style="gap:6px; align-items:center; background:rgba(255,255,255,0.03); padding:4px 6px; border-radius:4px; border:1px solid rgba(255,255,255,0.08);" data-idx="${idx}">
                         <div style="width:30px; height:42px; border-radius:3px; overflow:hidden; background:#000; flex-shrink:0;">
-                            <img src="${c.frontImg || 'favicon.svg'}" alt="Card" style="width:100%; height:100%; object-fit:contain;" onerror="this.src='favicon.svg'">
+                            <img src="${escapeHtml(c.frontImg || 'favicon.svg')}" alt="Card" style="width:100%; height:100%; object-fit:contain;" data-fallback-src="favicon.svg">
                         </div>
                         <input type="text" class="card-name" value="${escapeHtml(c.name || '')}" placeholder="Card Name" style="width:110px; font-size:0.75rem; padding:4px 6px;">
                         <input type="text" class="card-url" value="${escapeHtml(c.frontImg || '')}" placeholder="Front Artwork URL" style="flex:1; font-size:0.75rem; padding:4px 6px;">
@@ -2025,7 +2025,7 @@ export function initVttRollTables(vtt) {
                     .map(
                         (c) => `
                     <div style="border-radius:4px; overflow:hidden; border:1px solid rgba(255,255,255,0.15); background:#0c0a14; display:flex; flex-direction:column; align-items:center; padding:4px;" title="${escapeHtml(c.name)}: ${escapeHtml(c.description || '')}">
-                        <img src="${c.frontImg}" alt="${escapeHtml(c.name)}" style="width:100%; height:90px; object-fit:contain; border-radius:2px;" onerror="this.src='favicon.svg'">
+                        <img src="${escapeHtml(c.frontImg)}" alt="${escapeHtml(c.name)}" style="width:100%; height:90px; object-fit:contain; border-radius:2px;" data-fallback-src="favicon.svg">
                         <div style="font-size:0.65rem; color:#fff; text-align:center; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; width:100%; margin-top:2px; font-weight:600;">
                             ${escapeHtml(c.cardTitle || c.name)}
                         </div>

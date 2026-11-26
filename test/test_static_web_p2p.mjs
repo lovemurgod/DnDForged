@@ -21,7 +21,13 @@ test('Static Web P2P Build: docs/play & docs/prep', async (t) => {
         assert.ok(fs.existsSync(playIndexPath), 'docs/play/index.html must exist');
         const html = fs.readFileSync(playIndexPath, 'utf8');
         assert.ok(!html.includes('<base href='), 'docs/play/index.html must use relative paths without <base>');
-        assert.ok(html.includes('window.__FORGEDVTT_STATIC_WEB__ = true'), 'Must set static web flag');
+        assert.ok(html.includes('static-flag.js'), 'Must load static-flag.js');
+        assert.ok(
+            fs
+                .readFileSync(path.join(rootDir, 'docs', 'play', 'static-flag.js'), 'utf8')
+                .includes('window.__FORGEDVTT_STATIC_WEB__ = true'),
+            'docs/play/static-flag.js must set static web flag'
+        );
         assert.ok(
             !html.includes('/socket.io/socket.io.js'),
             'Must not request /socket.io/socket.io.js in static build'
@@ -40,8 +46,11 @@ test('Static Web P2P Build: docs/play & docs/prep', async (t) => {
         assert.ok(fs.existsSync(prepIndexPath), 'docs/prep/index.html must exist');
         const html = fs.readFileSync(prepIndexPath, 'utf8');
         assert.ok(
-            html.includes('window.__FORGEDVTT_STATIC_WEB__ = true'),
-            'docs/prep/index.html must set static web flag'
+            html.includes('static-flag.js') &&
+                fs
+                    .readFileSync(path.join(rootDir, 'docs', 'prep', 'static-flag.js'), 'utf8')
+                    .includes('window.__FORGEDVTT_STATIC_WEB__ = true'),
+            'docs/prep must set static web flag via static-flag.js'
         );
         assert.ok(html.includes('static-storage-driver.js'), 'docs/prep/index.html must load static-storage-driver.js');
         assert.ok(html.includes('web-api-bridge.js'), 'docs/prep/index.html must load web-api-bridge.js');
@@ -119,7 +128,7 @@ test('Static Web P2P Build: docs/play & docs/prep', async (t) => {
         assert.ok(fs.existsSync(sheetPath), 'docs/play/sheet.html must exist');
         const sheetHtml = fs.readFileSync(sheetPath, 'utf8');
         assert.ok(!sheetHtml.includes('<base href='), 'docs/play/sheet.html must use relative paths without <base>');
-        assert.ok(sheetHtml.includes('window.__FORGEDVTT_STATIC_WEB__ = true'), 'sheet.html must set static flag');
+        assert.ok(sheetHtml.includes('static-flag.js'), 'sheet.html must load static-flag.js');
         for (const reqScript of [
             'js/network/vtt-static-shim.js',
             'lib/peerjs.min.js',

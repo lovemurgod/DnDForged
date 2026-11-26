@@ -9,6 +9,7 @@ import {
     getProfBonus,
     parse5eMarkup
 } from './creature-parser.js';
+import { escapeHtml } from '../vtt-utils.js';
 
 export function resolveSpellcastingType(sc, m = null) {
     if (!sc) return 'slot';
@@ -1323,10 +1324,14 @@ export function renderAndInjectSpell(spellName, containerEl, fallbackDesc, sp, l
 
     if (!rawBody && !metaHtml) {
         containerEl.innerHTML = fallbackDesc
-            ? `<div>${fallbackDesc.replace(/\n/g, '<br>')}</div>`
-            : `<em>Could not find full text for ${spellName}</em>`;
+            ? `<div>${escapeHtml(fallbackDesc).replace(/\n/g, '<br>')}</div>`
+            : `<em>Could not find full text for ${escapeHtml(spellName)}</em>`;
     } else {
-        containerEl.innerHTML = metaHtml + rawBody;
+        const combined = metaHtml + rawBody;
+        containerEl.innerHTML =
+            typeof window !== 'undefined' && typeof window.vttSanitizeHtml === 'function'
+                ? window.vttSanitizeHtml(combined)
+                : combined;
     }
 }
 

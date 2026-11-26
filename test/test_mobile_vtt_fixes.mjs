@@ -31,30 +31,24 @@ test('Mobile/Tablet UI and VTT Fixes Regression Suite', async (t) => {
         );
     });
 
-    await t.test('Issue 2: vtt/index.html inline bootstrap scripts parse with zero syntax errors', () => {
+    await t.test('Issue 2: vtt/index.html bootstrap script parses with zero syntax errors', () => {
         assert.ok(fs.existsSync(HTML_PATH), 'vtt/index.html must exist');
         const html = fs.readFileSync(HTML_PATH, 'utf8');
+        assert.ok(html.includes('js/bootstrap/vtt-preboot.js'), 'vtt/index.html must reference vtt-preboot.js');
 
-        const scriptRegex = /<script(?![^>]*src=)[^>]*>([\s\S]*?)<\/script>/gi;
-        const matches = [...html.matchAll(scriptRegex)];
+        const prebootPath = path.join(path.dirname(HTML_PATH), 'js', 'bootstrap', 'vtt-preboot.js');
+        assert.ok(fs.existsSync(prebootPath), 'vtt-preboot.js must exist');
+        const code = fs.readFileSync(prebootPath, 'utf8');
 
-        assert.ok(matches.length >= 2, 'Should find at least 2 inline bootstrap scripts in vtt/index.html');
+        // Ensure no split keywords
+        assert.ok(!code.includes('functio n'), "vtt-preboot.js must not contain 'functio n'");
+        assert.ok(!code.includes('functi on'), "vtt-preboot.js must not contain 'functi on'");
+        assert.ok(!code.includes('(func tion()'), "vtt-preboot.js must not contain '(func tion()'");
 
-        matches.forEach((match, idx) => {
-            const code = match[1];
-            // Ensure no split keywords
-            assert.ok(!code.includes('functio n'), `Script ${idx + 1} must not contain 'functio n'`);
-            assert.ok(!code.includes('functi on'), `Script ${idx + 1} must not contain 'functi on'`);
-            assert.ok(!code.includes('(func tion()'), `Script ${idx + 1} must not contain '(func tion()'`);
-
-            // Verify clean compilation
-            assert.doesNotThrow(
-                () => {
-                    new vm.Script(code);
-                },
-                `Script ${idx + 1} must compile cleanly without SyntaxError`
-            );
-        });
+        // Verify clean compilation
+        assert.doesNotThrow(() => {
+            new vm.Script(code);
+        }, 'vtt-preboot.js must compile cleanly without SyntaxError');
     });
 
     await t.test('Issue 3: vtt-mobile-adapter.js initializes paint drawer & map tools once and idempotently', () => {

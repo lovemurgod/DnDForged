@@ -1658,7 +1658,7 @@ export function showGMInterMapPortalToast(data, vtt, onSwitchMap = null) {
         'position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); background: rgba(20,10,35,0.92); border: 1px solid #a855f7; border-radius: 8px; padding: 12px 18px; z-index: 10002; display: flex; align-items: center; gap: 12px; box-shadow: 0 4px 20px rgba(168,85,247,0.4); color: #fff; font-size: 0.88rem;';
     toast.innerHTML = `
         <i class="fa-solid fa-door-open" style="color: #c084fc; font-size: 1.2rem;"></i>
-        <span><strong>${data.tokenName || 'Token'}</strong> walked through portal to <strong>${data.targetMapName || 'Another Map'}</strong>.</span>
+        <span><strong>${escapeHtml(data.tokenName || 'Token')}</strong> walked through portal to <strong>${escapeHtml(data.targetMapName || 'Another Map')}</strong>.</span>
         <button type="button" class="btn btn-primary btn-xs btn-switch-map" style="margin-left: 8px; background: #a855f7; border-color: #c084fc;">
             <i class="fa-solid fa-map"></i> Switch to Map
         </button>
@@ -1687,7 +1687,7 @@ export function showPlayerInterMapPortalToast(mapName) {
     toast.style.borderColor = '#818cf8';
     toast.innerHTML = `
         <i class="fa-solid fa-door-open" style="color: #a5b4fc; font-size: 1.2rem;"></i>
-        <span>Traveled through portal to <strong>${mapName || 'New Map'}</strong>.</span>
+        <span>Traveled through portal to <strong>${escapeHtml(mapName || 'New Map')}</strong>.</span>
         <button type="button" class="btn btn-secondary btn-xs btn-close-toast"><i class="fa-solid fa-xmark"></i></button>
     `;
     toast.querySelector('.btn-close-toast')?.addEventListener('click', () => toast.remove());

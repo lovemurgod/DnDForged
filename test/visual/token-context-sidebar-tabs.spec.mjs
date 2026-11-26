@@ -562,9 +562,15 @@ test.describe('Token Context Menu DOM Actions & Sidebar Tabs Suite', () => {
 
         // Dismiss any open menus or overlays
         await gmPage.keyboard.press('Escape');
+        await gmPage.evaluate(() => {
+            const menu = document.getElementById('vtt-token-context-menu');
+            if (menu) menu.classList.add('vtt-hidden');
+            const sidebar = document.getElementById('vtt-sidebar');
+            if (sidebar) sidebar.classList.add('collapsed');
+        });
         await gmPage.locator('#vtt-canvas-viewport').click({ position: { x: 50, y: 50 } });
 
-        // Center camera on tok_monster_1
+        // Center camera on tok_monster_1 and wait for HUD frame alignment
         await gmPage.evaluate(() => {
             const ce = window.VTT?.canvasEngine;
             const tok = ce?.getTokens?.()?.['tok_monster_1'];
@@ -572,6 +578,7 @@ test.describe('Token Context Menu DOM Actions & Sidebar Tabs Suite', () => {
                 ce.panTo(tok.x + 25, tok.y + 25, 1.0, 0);
             }
         });
+        await gmPage.waitForTimeout(100);
 
         const tokenUi = gmPage.locator('#token_ui_tok_monster_1');
         await expect(tokenUi).toBeVisible();
@@ -579,9 +586,14 @@ test.describe('Token Context Menu DOM Actions & Sidebar Tabs Suite', () => {
         const initialBox = await tokenUi.boundingBox();
         expect(initialBox).not.toBeNull();
 
-        // 1. Right-Click Drag In-Flight Mid-Drag Assertion
-        const startX = initialBox.x + 250;
-        const startY = initialBox.y + 250;
+        // 1. Right-Click Drag In-Flight Mid-Drag Assertion (start inside clear canvas viewport)
+        const vpCenter = await gmPage.evaluate(() => {
+            const vp = document.getElementById('vtt-canvas-viewport');
+            const r = vp.getBoundingClientRect();
+            return { x: r.left + r.width / 2 + 120, y: r.top + r.height / 2 + 80 };
+        });
+        const startX = vpCenter.x;
+        const startY = vpCenter.y;
 
         await gmPage.mouse.move(startX, startY);
         await gmPage.mouse.down({ button: 'right' });

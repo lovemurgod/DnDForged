@@ -237,5 +237,39 @@ export function setupUniversalModalDismissal() {
                 }
             }
         });
+
+        // Delegated CSP-safe click handlers for declarative modal/toggle/select attributes
+        document.addEventListener('click', (e) => {
+            const target = e.target;
+            if (!(target instanceof Element)) return;
+
+            const closeBtn = target.closest('[data-modal-close]');
+            if (closeBtn) {
+                const modalId = closeBtn.getAttribute('data-modal-close');
+                if (modalId) document.getElementById(modalId)?.classList.add('vtt-hidden');
+            }
+
+            const openBtn = target.closest('[data-modal-open]');
+            if (openBtn) {
+                const modalId = openBtn.getAttribute('data-modal-open');
+                if (modalId) document.getElementById(modalId)?.classList.remove('vtt-hidden');
+            }
+
+            const toggleBtn = target.closest('[data-toggle-target]');
+            if (toggleBtn) {
+                const targetId = toggleBtn.getAttribute('data-toggle-target');
+                if (targetId) document.getElementById(targetId)?.classList.toggle('vtt-hidden');
+            }
+
+            const selectEl = target.closest('[data-select-on-click="true"]');
+            if (selectEl && typeof selectEl.select === 'function') {
+                selectEl.select();
+            }
+
+            const actionBtn = target.closest('[data-action="add-allowlist-user"]');
+            if (actionBtn && typeof window.addAllowlistUser === 'function') {
+                window.addAllowlistUser();
+            }
+        });
     }
 }

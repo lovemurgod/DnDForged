@@ -91,8 +91,8 @@ export async function processMediaUrl(url) {
         return embedUrl;
     }
 
-    // Fast path: If it already looks like a direct media link, return it immediately
-    if (url.match(/\.(mp4|webm|ogg|jpg|jpeg|png|gif|webp|bmp|svg)(\?.*)?$/i)) {
+    // Fast path: If it already looks like a direct media link over HTTP(S), return it immediately
+    if (/^https?:\/\//i.test(url) && url.match(/\.(mp4|webm|ogg|jpg|jpeg|png|gif|webp|bmp|svg)(\?.*)?$/i)) {
         return url;
     }
 
@@ -166,7 +166,7 @@ mediaRouter.get('/proxy-discord', verifyPlayerOrGmSession, (req, res) => {
     }
 
     const MAX_PROXY_BYTES = 25 * 1024 * 1024;
-    https
+    const proxyReq = https
         .get(targetUrl, (response) => {
             if (response.statusCode === 200) {
                 const chunks = [];
@@ -182,11 +182,9 @@ mediaRouter.get('/proxy-discord', verifyPlayerOrGmSession, (req, res) => {
                 });
                 response.on('end', () => {
                     const buf = Buffer.concat(chunks);
-                    try {
-                        fs.writeFileSync(cachedFilePath, buf);
-                    } catch (err) {
+                    fs.promises.writeFile(cachedFilePath, buf).catch((err) => {
                         console.error('Error writing to discord cache:', err);
-                    }
+                    });
                     if (!res.headersSent) {
                         if (response.headers['content-type']) {
                             res.setHeader('Content-Type', response.headers['content-type']);
@@ -201,6 +199,9 @@ mediaRouter.get('/proxy-discord', verifyPlayerOrGmSession, (req, res) => {
         .on('error', (err) => {
             if (!res.headersSent) res.status(500).send('Proxy error: ' + err.message);
         });
+    proxyReq.setTimeout(8000, () => {
+        proxyReq.destroy(new Error('Upstream Discord CDN request timed out'));
+    });
 });
 
 // Resolve media URL (e.g. Pinterest pin.it shortlinks, pinterest.com pin pages, shortlinks)
@@ -552,8 +553,16 @@ imageRouter.get(['/img/*', '/vtt/img/*'], async (req, res, next) => {
         }
     }
 
+    // Prevent unauthenticated outbound fetch amplification: negative cache + cap mirror probes
+    const mirrorMissCache = (globalThis.__FORGEDVTT_IMG_MISS_CACHE__ ||= new Map());
+    const missExpiry = mirrorMissCache.get(cleanRel);
+    if (missExpiry && missExpiry > Date.now()) {
+        return res.status(404).end();
+    }
+
     const canPersistMirrorCache = isAuthorizedGmOrSecret(req) || isLoopbackRequest(req);
-    for (const mirrorUrl of candidates) {
+    const maxCandidates = canPersistMirrorCache ? 12 : 4;
+    for (const mirrorUrl of candidates.slice(0, maxCandidates)) {
         try {
             const response = await fetch(mirrorUrl, {
                 headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' },
@@ -611,6 +620,11 @@ imageRouter.get(['/img/*', '/vtt/img/*'], async (req, res, next) => {
 
     // Bestiary Token Fallback: If a specific source token was not found (e.g. FleeMortals/Specter.webp or OotA/Zhentarim Thug.webp),
     // check if MM or XMM has a matching token for this creature.
+    if (mirrorMissCache.size > 2000) {
+        const firstKey = mirrorMissCache.keys().next().value;
+        mirrorMissCache.delete(firstKey);
+    }
+    mirrorMissCache.set(cleanRel, Date.now() + 5 * 60 * 1000);
     const tokenMatch = cleanRel.match(/^bestiary\/tokens\/[^\/]+\/(.+)$/i);
     if (tokenMatch) {
         const rawFileName = tokenMatch[1];

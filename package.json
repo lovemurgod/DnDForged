@@ -16,6 +16,7 @@
         "test:coverage": "node scripts/run-tests.mjs --coverage",
         "test:e2e": "node test/run_canvas_interactions_e2e.cjs",
         "test:visual": "playwright test -c playwright.config.mjs",
+        "test:web:e2e": "playwright test -c playwright.static.config.mjs",
         "test:visual:update": "playwright test -c playwright.config.mjs --update-snapshots",
         "test:visual:report": "playwright show-report",
         "test:sync": "playwright test test/visual/live-sync.spec.mjs -c playwright.config.mjs",
@@ -94,8 +95,7 @@
             "server/**/*",
             "server.js",
             "launcher.js",
-            "utils.js",
-            "vtt/**/*"
+            "utils.js"
         ],
         "directories": {
             "output": "dist"
@@ -104,7 +104,6 @@
             "server.js",
             "launcher.js",
             "utils.js",
-            "matto.json",
             "LEGAL.md",
             "electron/**/*",
             "server/**/*",

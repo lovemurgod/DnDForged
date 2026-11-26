@@ -490,8 +490,10 @@ test('Comprehensive Audit Remediation Suite', async (t) => {
         );
 
         const playSheetHtml = fs.readFileSync(path.join(rootDir, 'docs', 'play', 'sheet.html'), 'utf8');
+        const playStaticFlag = fs.readFileSync(path.join(rootDir, 'docs', 'play', 'static-flag.js'), 'utf8');
         assert.equal(playSheetHtml.includes('<base href='), false);
-        assert.ok(playSheetHtml.includes('__FORGEDVTT_STATIC_WEB__'));
+        assert.ok(playSheetHtml.includes('static-flag.js'));
+        assert.ok(playStaticFlag.includes('__FORGEDVTT_STATIC_WEB__'));
         assert.ok(playSheetHtml.includes('js/network/vtt-static-shim.js'));
         assert.equal(playSheetHtml.includes('/socket.io/socket.io.js'), false);
 

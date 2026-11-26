@@ -6,27 +6,62 @@
  * @param {string} url - Target URL or relative path
  * @returns {string} Safe resolved URL
  */
+const SAFE_DATA_IMAGE_RE = /^data:image\/(png|jpeg|jpg|gif|webp|avif|svg\+xml);base64,[a-z0-9+/=\s]+$/i;
+const URL_SCHEME_RE = /^([a-zA-Z][a-zA-Z0-9+.-]*):/;
+
 export function getSafeVttUrl(url) {
     if (!url || typeof url !== 'string') return url;
+    const cleaned = Array.from(url)
+        .filter((ch) => {
+            const code = ch.charCodeAt(0);
+            return code >= 32 && code !== 127;
+        })
+        .join('')
+        .trim();
+    if (!cleaned) return '';
+
+    const schemeMatch = cleaned.match(URL_SCHEME_RE);
+    if (schemeMatch) {
+        const scheme = schemeMatch[1].toLowerCase();
+        if (scheme === 'data') {
+            if (!SAFE_DATA_IMAGE_RE.test(cleaned)) return '';
+        } else if (scheme !== 'http' && scheme !== 'https' && scheme !== 'blob' && scheme !== 'forgedvtt-asset') {
+            return '';
+        }
+    }
+
     const isStaticWeb = typeof window !== 'undefined' && Boolean(window.__FORGEDVTT_STATIC_WEB__);
-    if (url.includes('discordapp.com') || url.includes('discordapp.net')) {
-        if (isStaticWeb) return url;
-        return '/api/proxy-discord?url=' + encodeURIComponent(url);
+    if (schemeMatch && (schemeMatch[1].toLowerCase() === 'http' || schemeMatch[1].toLowerCase() === 'https')) {
+        try {
+            const parsed = new URL(cleaned);
+            const host = parsed.hostname.toLowerCase();
+            if (
+                host === 'discordapp.com' ||
+                host.endsWith('.discordapp.com') ||
+                host === 'discordapp.net' ||
+                host.endsWith('.discordapp.net')
+            ) {
+                if (isStaticWeb) return cleaned;
+                return '/api/proxy-discord?url=' + encodeURIComponent(cleaned);
+            }
+        } catch {
+            return '';
+        }
     }
     if (
         typeof window !== 'undefined' &&
         window.VTT?.socket &&
         typeof window.VTT.socket.resolveAssetUrl === 'function'
     ) {
-        const resolved = window.VTT.socket.resolveAssetUrl(url);
+        const resolved = window.VTT.socket.resolveAssetUrl(cleaned);
         if (resolved) return resolved;
     }
     if (typeof window !== 'undefined' && typeof window.__resolveStaticAssetUrl === 'function') {
-        const resolved = window.__resolveStaticAssetUrl(url);
+        const resolved = window.__resolveStaticAssetUrl(cleaned);
         if (resolved) return resolved;
     }
-    if (url.startsWith('img/bestiary/tokens/') || url.startsWith('/img/bestiary/tokens/')) {
-        let outUrl = url;
+    if (cleaned.startsWith('img/bestiary/tokens/') || cleaned.startsWith('/img/bestiary/tokens/')) {
+        let outUrl = cleaned;
         if (isStaticWeb && outUrl.toLowerCase().endsWith('.webp')) {
             outUrl = outUrl.slice(0, -5) + '.svg';
         }
@@ -34,7 +69,64 @@ export function getSafeVttUrl(url) {
         const version = (typeof window !== 'undefined' && window?.VTT?.buildVersion) || '1';
         return outUrl + sep + 'v=' + encodeURIComponent(version);
     }
-    return url;
+    return cleaned;
+}
+
+// Global CSP-safe fallback image & stopPropagation delegation for dynamic innerHTML templates
+if (
+    typeof document !== 'undefined' &&
+    typeof document.addEventListener === 'function' &&
+    !globalThis.__vttCspDelegationAttached
+) {
+    globalThis.__vttCspDelegationAttached = true;
+    document.addEventListener(
+        'error',
+        (e) => {
+            const el = e.target;
+            if (!(el instanceof HTMLImageElement)) return;
+            const fallback = el.getAttribute('data-fallback-src');
+            if (fallback && el.getAttribute('src') !== fallback) {
+                el.src = fallback;
+            } else if (el.hasAttribute('data-fallback-hide-parent')) {
+                if (el.parentElement) el.parentElement.style.display = 'none';
+            } else if (el.hasAttribute('data-fallback-hide-prev-show-next')) {
+                el.style.display = 'none';
+                if (el.previousElementSibling) el.previousElementSibling.style.display = 'none';
+                if (el.nextElementSibling) el.nextElementSibling.style.display = 'block';
+            } else if (el.hasAttribute('data-fallback-hide-show-next')) {
+                el.style.display = 'none';
+                if (el.nextElementSibling) el.nextElementSibling.style.display = 'flex';
+            } else if (el.hasAttribute('data-fallback-monogram-letters')) {
+                const div = document.createElement('div');
+                div.className = 'init-monogram-avatar';
+                div.style.background = el.getAttribute('data-fallback-monogram-bg') || '';
+                div.style.borderColor = el.getAttribute('data-fallback-monogram-border') || '';
+                div.style.color = el.getAttribute('data-fallback-monogram-color') || '';
+                div.textContent = el.getAttribute('data-fallback-monogram-letters') || '';
+                if (el.parentElement) {
+                    el.parentElement.innerHTML = '';
+                    el.parentElement.appendChild(div);
+                }
+            } else if (el.hasAttribute('data-fallback-hide')) {
+                el.style.display = 'none';
+            } else if (el.hasAttribute('data-fallback-arcane') && !el.dataset.arcaneApplied) {
+                el.dataset.arcaneApplied = '1';
+                const arcaneName = el.getAttribute('data-fallback-arcane') || 'Creature';
+                if (window.VTT?.generateArcaneToken) {
+                    el.src = window.VTT.generateArcaneToken(arcaneName, 'monster');
+                } else {
+                    el.src = 'favicon.svg';
+                }
+            }
+        },
+        true
+    );
+    document.addEventListener('click', (e) => {
+        const target = e.target;
+        if (target instanceof Element && target.closest('[data-stop-propagation="true"]')) {
+            e.stopPropagation();
+        }
+    });
 }
 
 /**

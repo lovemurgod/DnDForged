@@ -42,16 +42,18 @@ function initPresentationClient(vtt = {}) {
             presentationBc.unref?.();
             presentationBc.onmessage = (ev) => {
                 const msg = ev?.data;
-                if (!msg || !msg.type) return;
+                if (!msg || typeof msg !== 'object' || typeof msg.type !== 'string') return;
                 if (msg.type === 'camSync' && !isCameraLocked) {
+                    if (!msg.data || !Number.isFinite(msg.data.x) || !Number.isFinite(msg.data.y)) return;
                     const canvasEngine = vtt.canvasEngine || window.VTT?.canvasEngine;
                     const currentMapId = canvasEngine?.getCurrentMapId ? canvasEngine.getCurrentMapId() : null;
-                    if (!msg.data?.mapId || !currentMapId || msg.data.mapId === currentMapId) {
-                        canvasEngine?.panTo?.(msg.data.x, msg.data.y, msg.data.zoom || null, 120);
+                    if (!msg.data.mapId || !currentMapId || msg.data.mapId === currentMapId) {
+                        const zoom = Number.isFinite(msg.data.zoom) ? msg.data.zoom : null;
+                        canvasEngine?.panTo?.(msg.data.x, msg.data.y, zoom, 120);
                     }
                 } else if (msg.type === 'camLock' && typeof msg.locked === 'boolean') {
                     isCameraLocked = msg.locked;
-                } else if (msg.type === 'campaignSync' && msg.campaignState) {
+                } else if (msg.type === 'campaignSync' && msg.campaignState && typeof msg.campaignState === 'object') {
                     const canvasEngine = vtt.canvasEngine || window.VTT?.canvasEngine;
                     canvasEngine?.syncCampaignState?.(msg.campaignState);
                 }

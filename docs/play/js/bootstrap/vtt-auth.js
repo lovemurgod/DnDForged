@@ -256,6 +256,29 @@ export function setupLoginHandlers(callbacks = {}) {
         }
     };
 
+    const getOrCreateHostKey = (forceNew = false) => {
+        try {
+            if (!forceNew && typeof localStorage !== 'undefined') {
+                const existing = localStorage.getItem('forgedvtt_static_p2p_pk');
+                if (existing && existing.trim()) return existing.trim();
+            }
+            let pk = '';
+            if (typeof crypto !== 'undefined' && typeof crypto.getRandomValues === 'function') {
+                const bytes = new Uint8Array(12);
+                crypto.getRandomValues(bytes);
+                pk = Array.from(bytes, (b) => b.toString(16).padStart(2, '0')).join('');
+            } else {
+                pk = Math.random().toString(36).slice(2) + Date.now().toString(36);
+            }
+            if (typeof localStorage !== 'undefined') {
+                localStorage.setItem('forgedvtt_static_p2p_pk', pk);
+            }
+            return pk;
+        } catch (_) {
+            return Math.random().toString(36).slice(2);
+        }
+    };
+
     // P2P Connection Mode Setup
     const tabServer = document.getElementById('tab-login-server');
     const tabP2P = document.getElementById('tab-login-p2p');
@@ -350,12 +373,14 @@ export function setupLoginHandlers(callbacks = {}) {
     });
     btnP2pRegen?.addEventListener('click', () => {
         if (p2pCodeInput) p2pCodeInput.value = getOrCreateHostRoomCode(true);
+        getOrCreateHostKey(true);
     });
     btnP2pCopy?.addEventListener('click', () => {
         const code = (p2pCodeInput?.value || getOrCreateHostRoomCode(false)).trim().toUpperCase();
         if (p2pCodeInput && !p2pCodeInput.value.trim()) p2pCodeInput.value = code;
         const inviteUrl = new URL('./', window.location.href);
         inviteUrl.searchParams.set('p2p', code);
+        inviteUrl.searchParams.set('pk', getOrCreateHostKey(false));
         navigator.clipboard?.writeText(inviteUrl.href).catch(() => {});
         const origHtml = btnP2pCopy.innerHTML;
         btnP2pCopy.innerHTML = '<i class="fa-solid fa-check"></i>';
@@ -485,7 +510,9 @@ export function setupLoginHandlers(callbacks = {}) {
                   isP2P: true,
                   p2pCode: enteredCode,
                   p2pMode: useManual ? 'manual' : 'broker',
-                  p2pData: manualVal || null
+                  p2pData: manualVal || null,
+                  hostKey: role === 'GM' ? getOrCreateHostKey(false) : null,
+                  expectedHostKey: role !== 'GM' ? urlParams?.get('pk') || null : null
               }
             : { isP2P: false };
 

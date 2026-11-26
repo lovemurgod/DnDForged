@@ -15,7 +15,7 @@
  */
 
 import { test, expect } from '@playwright/test';
-import { setupTwoPlayerSandbox } from './helpers/visual-fixture.mjs';
+import { setupTwoPlayerSandbox, ensureSidebarTabOpen } from './helpers/visual-fixture.mjs';
 
 test.describe('Bestiary Compendium Spawning & Creature Rolls E2E Suite', () => {
     let sandbox = null;
@@ -294,10 +294,10 @@ test.describe('Bestiary Compendium Spawning & Creature Rolls E2E Suite', () => {
         await expect(content).toContainText('Goblin', { timeout: 8000 });
 
         // Ensure roll visibility toggle on creature sheet is set to Public
-        const visToggle = content.locator('#cs-roll-vis-toggle');
+        const visToggle = content.locator('#cs-btn-gm-whisper');
         if (await visToggle.isVisible()) {
-            const text = await visToggle.textContent();
-            if (text.includes('Secret')) {
+            const isActive = await visToggle.evaluate((el) => el.classList.contains('active'));
+            if (isActive) {
                 await visToggle.click();
             }
         }
@@ -308,6 +308,7 @@ test.describe('Bestiary Compendium Spawning & Creature Rolls E2E Suite', () => {
         await checkBtn.click();
 
         // 3. Player verifies public roll appears in their chat log
+        await ensureSidebarTabOpen(playerPage, 'tab-chat');
         const playerChat = playerPage.locator('#chat-messages');
         const playerMsgEl = playerChat.locator('.chat-message', { hasText: /Check/i }).last();
         await expect(playerMsgEl).toBeVisible({ timeout: 8000 });
@@ -317,11 +318,11 @@ test.describe('Bestiary Compendium Spawning & Creature Rolls E2E Suite', () => {
         // 4. Toggle visibility to GM Secret
         if (await visToggle.isVisible()) {
             await visToggle.click();
-            await expect(visToggle).toContainText('Secret');
+            await expect(visToggle).toHaveClass(/active/);
         } else {
             await gmPage.evaluate(() => {
                 const el = document.getElementById('config-roll-visibility');
-                if (el) el.value = 'gm_only';
+                if (el) el.value = 'private';
             });
         }
 

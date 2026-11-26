@@ -3,29 +3,11 @@
 
 <head>
     <meta charset="UTF-8">
-    <!-- Immediate ServiceWorker & Offline Cache Purge -->
-    <script>
-        (function () {
-            try {
-                if ('serviceWorker' in navigator) {
-                    navigator.serviceWorker.getRegistrations().then(function (registrations) {
-                        for (let reg of registrations) {
-                            reg.unregister();
-                        }
-                    });
-                }
-                if ('caches' in window) {
-                    caches.keys().then(function (names) {
-                        for (let name of names) {
-                            caches.delete(name);
-                        }
-                    });
-                }
-            } catch (e) { }
-        })();
-    </script>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.youtube.com https://s.ytimg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https: http:; media-src 'self' data: blob: https: http:; connect-src 'self' wss: https:; frame-src https://www.youtube.com https://www.youtube-nocookie.com;">
+    <!-- Immediate ServiceWorker, Cache Purge & Theme/A11y Bootstrap -->
+    <script src="js/bootstrap/vtt-preboot.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>ForgeD VTT - Self-Hosted Virtual Tabletop</title>
+    <title>ForgeD VTT - Online &amp; Offline Virtual Tabletop</title>
 
     <!-- Favicons -->
     <link rel="icon" type="image/x-icon" href="favicon.ico">
@@ -43,26 +25,7 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@400;600;700;800&family=Exo+2:wght@400;600;700;800&family=MedievalSharp&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Orbitron:wght@400;600;700;800&family=Outfit:wght@600;700;900&family=Rajdhani:wght@500;600;700&family=Rye&family=Syne:wght@500;600;700;800&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <!-- Instant Theme & Accessibility Bootstrap (Prevents FOUC) -->
-    <script>
-        (function () {
-            try {
-                const savedTheme = localStorage.getItem('vtt_theme') || 'classic';
-                const savedColorblind = localStorage.getItem('vtt_colorblind_mode') || 'none';
-                document.documentElement.setAttribute('data-theme', savedTheme);
-                document.documentElement.setAttribute('data-colorblind', savedColorblind);
-
-                const savedScale = localStorage.getItem('vtt_font_scale_v2');
-                const scaleNum = savedScale ? parseFloat(savedScale) : 1.0;
-                if (!isNaN(scaleNum) && scaleNum >= 0.5 && scaleNum <= 2.2) {
-                    document.documentElement.style.setProperty('--vtt-font-scale', scaleNum);
-                    document.documentElement.style.fontSize = 'calc(15px * ' + scaleNum + ')';
-                }
-            } catch (e) { }
-        })();
-    </script>
+    <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
 
     <!-- ForgeD VTT Custom Premium Stylesheet -->
     <link rel="stylesheet" href="css/vtt.css?v=11">
@@ -75,7 +38,7 @@
     <script src="https://www.youtube.com/iframe_api"></script>
 
     <!-- Socket.io & P2P WebRTC Adapter -->
-    <script>window.__FORGEDVTT_STATIC_WEB__ = true;</script>
+    <script src="static-flag.js"></script>
     <script src="js/network/vtt-static-shim.js"></script>
     <script src="lib/peerjs.min.js"></script>
     <script src="js/network/vtt-p2p-host-engine.js"></script>
@@ -111,7 +74,7 @@
                 <div class="login-card glassmorphism">
                     <div class="login-header">
                         <img src="img/TextLogo.png" alt="ForgeD VTT" class="login-title-logo">
-                        <p>Self-Hosted Virtual Tabletop System</p>
+                        <p>Online &amp; Offline Virtual Tabletop</p>
                     </div>
 
                     <div class="login-body">
@@ -124,19 +87,19 @@
                         <div class="login-connection-tabs" style="display: flex; gap: 8px; margin-bottom: 8px;">
                             <button type="button" class="btn btn-primary btn-sm active" id="tab-login-server"
                                 style="flex: 1;"
-                                title="Web Server: Connects through Cloudflare or local server. 100% reliable everywhere, even on mobile phones (4G/5G) and strict Wi-Fi firewalls."><i
-                                    class="fa-solid fa-server"></i> Web Server <i class="fa-solid fa-circle-info"
+                                title="Offline / Host Server: Connects through your local Windows app, LAN, or Cloudflare Tunnel. 100% reliable everywhere, even on mobile phones (4G/5G) and strict Wi-Fi firewalls."><i
+                                    class="fa-solid fa-server"></i> Offline / Host Server <i class="fa-solid fa-circle-info"
                                     style="font-size: 0.75rem; opacity: 0.7; margin-left: 4px;"></i></button>
                             <button type="button" class="btn btn-secondary btn-sm" id="tab-login-p2p" style="flex: 1;"
-                                title="Direct P2P: Connects directly computer-to-computer. Lowest possible lag, zero cloud bandwidth used, and completely free. Best for home Wi-Fi and desktop setups."><i
-                                    class="fa-solid fa-bolt"></i> Direct P2P <i class="fa-solid fa-circle-info"
+                                title="Online (Direct P2P): Instant browser-to-browser play with zero downloads or servers. Best for fast online sessions."><i
+                                    class="fa-solid fa-bolt"></i> Online (Direct P2P) <i class="fa-solid fa-circle-info"
                                     style="font-size: 0.75rem; opacity: 0.7; margin-left: 4px;"></i></button>
                         </div>
                         <div id="login-connection-hint"
                             style="margin-bottom: 14px; font-size: 0.78rem; color: var(--color-gold-light); line-height: 1.35; padding: 6px 10px; background: rgba(0,0,0,0.25); border-radius: 6px; border: 1px solid rgba(255,255,255,0.06);">
                             <span id="login-connection-hint-text"><i class="fa-solid fa-shield-halved"
-                                    style="margin-right: 4px; color: #38bdf8;"></i> <strong>Web Server:</strong>
-                                Standard host connection. Highly reliable across all networks, mobile data, and strict
+                                    style="margin-right: 4px; color: #38bdf8;"></i> <strong>Offline / Host Server:</strong>
+                                Connect via local desktop app, LAN, or Cloudflare Tunnel. Highly reliable across all networks and strict
                                 firewalls.</span>
                         </div>
 
@@ -174,7 +137,7 @@
                                     style="width: 100%; height: 60px; font-size: 0.75rem; font-family: monospace; margin-top: 4px;"></textarea>
                                 <div id="login-p2p-answer-group" class="vtt-hidden" style="margin-top: 8px;">
                                     <label for="login-p2p-answer-output" style="font-size: 0.75rem; color: #38bdf8;">Your P2P Answer (Send back to GM):</label>
-                                    <textarea id="login-p2p-answer-output" readonly onclick="this.select()"
+                                    <textarea id="login-p2p-answer-output" readonly data-select-on-click="true"
                                         style="width: 100%; height: 60px; font-size: 0.75rem; font-family: monospace; margin-top: 4px;"></textarea>
                                 </div>
                             </details>
@@ -2518,7 +2481,7 @@
                                             <i class="fa-solid fa-plus"></i> Generate New Offer
                                         </button>
                                     </div>
-                                    <textarea id="config-manual-offer-output" readonly onclick="this.select()"
+                                    <textarea id="config-manual-offer-output" readonly data-select-on-click="true"
                                         style="width: 100%; height: 54px; font-size: 0.72rem; font-family: monospace; margin-bottom: 6px;"></textarea>
                                     <textarea id="config-manual-answer-input" placeholder="Paste dndvtt://answer/... from player here"
                                         style="width: 100%; height: 54px; font-size: 0.72rem; font-family: monospace; margin-bottom: 6px;"></textarea>
@@ -2534,8 +2497,8 @@
                                     <div class="config-setting" style="display: flex; gap: 8px;">
                                         <input type="text" id="config-allowlist-input" placeholder="Enter username..."
                                             style="flex: 1; padding: 4px 8px; font-size: 0.8rem;">
-                                        <button id="btn-allowlist-add" class="btn btn-xs btn-primary"
-                                            onclick="addAllowlistUser()"><i class="fa-solid fa-plus"></i> Add</button>
+                                        <button id="btn-allowlist-add" type="button" class="btn btn-xs btn-primary"
+                                            data-action="add-allowlist-user"><i class="fa-solid fa-plus"></i> Add</button>
                                     </div>
 
                                     <div id="config-allowlist-users"
@@ -2602,7 +2565,7 @@
                                 <div class="config-card" style="margin-top: 10px;">
                                     <button type="button" id="btn-settings-legal-notices" class="btn btn-secondary"
                                         style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 8px 12px; font-size: 0.85rem;"
-                                        onclick="document.getElementById('modal-legal-notices').classList.remove('vtt-hidden')">
+                                        data-modal-open="modal-legal-notices">
                                         <i class="fa-solid fa-scale-balanced text-gradient-gold"></i>
                                         <span>Legal Notices &amp; Open Game Content</span>
                                     </button>
@@ -3042,7 +3005,7 @@
             <div id="edit-table-entries-container" style="margin-top: 12px;"></div>
             <div class="modal-buttons" style="margin-top: 16px; display: flex; justify-content: flex-end; gap: 8px;">
                 <button type="button" class="btn btn-secondary vtt-modal-close"
-                    onclick="document.getElementById('modal-edit-roll-table').classList.add('vtt-hidden')">Cancel</button>
+                    data-modal-close="modal-edit-roll-table">Cancel</button>
                 <button type="button" id="btn-save-roll-table" class="btn btn-primary">Save Table</button>
             </div>
         </div>
@@ -3072,7 +3035,7 @@
             <div id="edit-asset-table-entries-container" style="margin-top: 12px;"></div>
             <div class="modal-buttons" style="margin-top: 16px; display: flex; justify-content: flex-end; gap: 8px;">
                 <button type="button" class="btn btn-secondary vtt-modal-close"
-                    onclick="document.getElementById('modal-edit-asset-table').classList.add('vtt-hidden')">Cancel</button>
+                    data-modal-close="modal-edit-asset-table">Cancel</button>
                 <button type="button" id="btn-save-asset-table" class="btn btn-primary">Save Asset Table</button>
             </div>
         </div>
@@ -3093,7 +3056,7 @@
             <div id="edit-deck-cards-container" style="margin-top: 12px;"></div>
             <div class="modal-buttons" style="margin-top: 16px; display: flex; justify-content: flex-end; gap: 8px;">
                 <button type="button" class="btn btn-secondary vtt-modal-close"
-                    onclick="document.getElementById('modal-edit-card-deck').classList.add('vtt-hidden')">Cancel</button>
+                    data-modal-close="modal-edit-card-deck">Cancel</button>
                 <button type="button" id="btn-save-card-deck" class="btn btn-primary">Save Deck</button>
             </div>
         </div>
@@ -3108,7 +3071,7 @@
                 <h3 style="margin: 0; color: var(--color-gold-base);"><i class="fa-solid fa-layer-group"></i> <span
                         id="view-deck-title">Deck Cards</span></h3>
                 <button type="button" class="btn btn-xs btn-ghost vtt-modal-close"
-                    onclick="document.getElementById('modal-view-deck-cards').classList.add('vtt-hidden')"><i
+                    data-modal-close="modal-view-deck-cards"><i
                         class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="scroll-styled"
@@ -3130,7 +3093,7 @@
             </div>
             <div style="display: flex; justify-content: flex-end; margin-top: 12px;">
                 <button type="button" class="btn btn-secondary vtt-modal-close"
-                    onclick="document.getElementById('modal-view-deck-cards').classList.add('vtt-hidden')">Close</button>
+                    data-modal-close="modal-view-deck-cards">Close</button>
             </div>
         </div>
     </div>
@@ -3157,7 +3120,7 @@
                         <i class="fa-solid fa-file-export"></i> Export JSON
                     </button>
                     <button type="button" class="btn btn-xs btn-ghost vtt-modal-close"
-                        onclick="document.getElementById('modal-table-picker').classList.add('vtt-hidden')">
+                        data-modal-close="modal-table-picker">
                         <i class="fa-solid fa-xmark"></i>
                     </button>
                 </div>
@@ -3378,7 +3341,7 @@
             <div
                 style="display: flex; justify-content: flex-end; margin-top: 12px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.08); flex-shrink: 0;">
                 <button type="button" class="btn btn-secondary vtt-modal-close"
-                    onclick="document.getElementById('modal-table-picker').classList.add('vtt-hidden')">Close</button>
+                    data-modal-close="modal-table-picker">Close</button>
             </div>
         </div>
     </div>
@@ -4836,7 +4799,7 @@
                 <!-- General Section -->
                 <div class="filter-section-header"
                     style="cursor:pointer; display:flex; justify-content:space-between; border-bottom:1px solid var(--color-border-subtle); padding-bottom:4px; margin-top:8px;"
-                    onclick="document.getElementById('filter-section-general').classList.toggle('vtt-hidden')">
+                    data-toggle-target="filter-section-general">
                     <span style="font-weight:bold; color:var(--color-gold-light);">General</span>
                     <i class="fa-solid fa-chevron-down"></i>
                 </div>
@@ -4894,7 +4857,7 @@
                 <!-- Defenses Section -->
                 <div class="filter-section-header"
                     style="cursor:pointer; display:flex; justify-content:space-between; border-bottom:1px solid var(--color-border-subtle); padding-bottom:4px; margin-top:16px;"
-                    onclick="document.getElementById('filter-section-defenses').classList.toggle('vtt-hidden')">
+                    data-toggle-target="filter-section-defenses">
                     <span style="font-weight:bold; color:var(--color-gold-light);">Defenses</span>
                     <i class="fa-solid fa-chevron-down"></i>
                 </div>
@@ -4931,7 +4894,7 @@
                 <!-- Offense Section -->
                 <div class="filter-section-header"
                     style="cursor:pointer; display:flex; justify-content:space-between; border-bottom:1px solid var(--color-border-subtle); padding-bottom:4px; margin-top:16px;"
-                    onclick="document.getElementById('filter-section-offense').classList.toggle('vtt-hidden')">
+                    data-toggle-target="filter-section-offense">
                     <span style="font-weight:bold; color:var(--color-gold-light);">Offense</span>
                     <i class="fa-solid fa-chevron-down"></i>
                 </div>
@@ -4960,7 +4923,7 @@
                 <!-- Senses & Movement Section -->
                 <div class="filter-section-header"
                     style="cursor:pointer; display:flex; justify-content:space-between; border-bottom:1px solid var(--color-border-subtle); padding-bottom:4px; margin-top:16px;"
-                    onclick="document.getElementById('filter-section-senses').classList.toggle('vtt-hidden')">
+                    data-toggle-target="filter-section-senses">
                     <span style="font-weight:bold; color:var(--color-gold-light);">Senses, Languages & Movement</span>
                     <i class="fa-solid fa-chevron-down"></i>
                 </div>
@@ -5016,7 +4979,7 @@
                     <i class="fa-solid fa-scale-balanced"></i> Open Game Content & Legal Notices
                 </h3>
                 <button type="button" class="btn btn-secondary btn-xxs vtt-modal-close"
-                    onclick="document.getElementById('modal-legal-notices').classList.add('vtt-hidden')"
+                    data-modal-close="modal-legal-notices"
                     style="padding:4px 8px; cursor:pointer;" title="Close Legal Notices">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
@@ -5052,7 +5015,7 @@
             <div
                 style="display:flex; justify-content:flex-end; margin-top:16px; border-top:1px solid rgba(255,255,255,0.1); padding-top:12px;">
                 <button type="button" class="btn btn-primary vtt-modal-close"
-                    onclick="document.getElementById('modal-legal-notices').classList.add('vtt-hidden')"
+                    data-modal-close="modal-legal-notices"
                     style="padding:6px 16px;">
                     Close
                 </button>

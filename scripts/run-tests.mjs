@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 
@@ -15,15 +16,31 @@ if (testFiles.length === 0) {
     process.exit(1);
 }
 
+const tempDataDir = fs.mkdtempSync(path.join(os.tmpdir(), 'forgedvtt-unit-data-'));
+const tempConfigFile = path.join(tempDataDir, 'forge-config.json');
+
 const nodeArgs = ['--test', '--test-concurrency=4'];
 if (useCoverage) {
     nodeArgs.push('--experimental-test-coverage');
 }
 nodeArgs.push(...testFiles);
 
-const result = spawnSync(process.execPath, nodeArgs, { stdio: 'inherit' });
-if (result.error) {
-    console.error(result.error);
-    process.exit(1);
+try {
+    const result = spawnSync(process.execPath, nodeArgs, {
+        stdio: 'inherit',
+        env: {
+            ...process.env,
+            FORGEDVTT_DATA_DIR: tempDataDir,
+            FORGEDVTT_CONFIG_FILE: tempConfigFile
+        }
+    });
+    if (result.error) {
+        console.error(result.error);
+        process.exit(1);
+    }
+    process.exit(result.status ?? 1);
+} finally {
+    try {
+        fs.rmSync(tempDataDir, { recursive: true, force: true });
+    } catch {}
 }
-process.exit(result.status ?? 1);

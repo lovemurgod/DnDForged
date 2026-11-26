@@ -729,23 +729,44 @@
 
             let salt = this.gmCredentials?.salt || '';
             let sha256Hash = this.gmCredentials?.sha256Hash || '';
+            let pbkdf2Hash = this.gmCredentials?.pbkdf2Hash || '';
+            let hashAlgo = this.gmCredentials?.hashAlgo || '';
             let hasPassword = Boolean(this.gmCredentials?.hasPassword);
 
             if (clearPassword) {
                 salt = '';
                 sha256Hash = '';
+                pbkdf2Hash = '';
+                hashAlgo = '';
                 hasPassword = false;
             } else if (password && String(password).trim() !== '') {
                 const bytes = new Uint8Array(16);
                 global.crypto.getRandomValues(bytes);
                 salt = Array.from(bytes, (b) => b.toString(16).padStart(2, '0')).join('');
-                const enc = new TextEncoder().encode(`${salt}:${String(password)}`);
-                const digest = await global.crypto.subtle.digest('SHA-256', enc);
-                sha256Hash = Array.from(new Uint8Array(digest), (b) => b.toString(16).padStart(2, '0')).join('');
+                const keyMaterial = await global.crypto.subtle.importKey(
+                    'raw',
+                    new TextEncoder().encode(String(password)),
+                    'PBKDF2',
+                    false,
+                    ['deriveBits']
+                );
+                const bits = await global.crypto.subtle.deriveBits(
+                    {
+                        name: 'PBKDF2',
+                        salt: new TextEncoder().encode(salt),
+                        iterations: 100000,
+                        hash: 'SHA-256'
+                    },
+                    keyMaterial,
+                    256
+                );
+                pbkdf2Hash = Array.from(new Uint8Array(bits), (b) => b.toString(16).padStart(2, '0')).join('');
+                hashAlgo = 'pbkdf2-sha256-100k';
+                sha256Hash = '';
                 hasPassword = true;
             }
 
-            this.gmCredentials = { username: cleanUser, salt, sha256Hash, hasPassword };
+            this.gmCredentials = { username: cleanUser, salt, pbkdf2Hash, hashAlgo, sha256Hash, hasPassword };
             await idbSet('gmCredentials', this.gmCredentials);
             if (this.dirHandle) {
                 await this._writeJsonToDir('gm-credentials.json', this.gmCredentials);

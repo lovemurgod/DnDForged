@@ -5,6 +5,7 @@
  */
 
 import { CONDITION_ICONS } from './tokens/vtt-canvas-token-rollers.js';
+import { escapeHtml } from '../vtt-utils.js';
 
 // Inject tooltip CSS once into document
 export function injectGmTooltipStyles(doc = typeof document !== 'undefined' ? document : null) {
@@ -469,16 +470,16 @@ export function showGmTokenTooltip(tokenId, force = false, context = {}) {
     tooltip.innerHTML = `
         <div class="gm-tip-header">
             <i class="fa-solid ${tokenTypeIcon}"></i>
-            <span title="${token.name}">${token.name || 'Unknown'}</span>
+            <span title="${escapeHtml(token.name || 'Unknown')}">${escapeHtml(token.name || 'Unknown')}</span>
         </div>
         <div class="gm-tip-row-primary">
             <div class="gm-tip-stat">
                 <div class="gm-tip-stat-label"><i class="fa-solid fa-shield-halved"></i> AC</div>
-                <div class="gm-tip-stat-value ${acDisplay === null ? 'na' : ''}">${acDisplay !== null ? acDisplay : '—'}</div>
+                <div class="gm-tip-stat-value ${acDisplay === null ? 'na' : ''}">${acDisplay !== null ? escapeHtml(String(acDisplay)) : '—'}</div>
             </div>
             <div class="gm-tip-stat">
                 <div class="gm-tip-stat-label"><i class="fa-solid fa-person-running"></i> Speed</div>
-                <div class="gm-tip-stat-value sm ${speedDisplay === null ? 'na' : ''}" title="${speedDisplay || ''}">${speedDisplay !== null ? speedDisplay : '—'}</div>
+                <div class="gm-tip-stat-value sm ${speedDisplay === null ? 'na' : ''}" title="${escapeHtml(String(speedDisplay || ''))}">${speedDisplay !== null ? escapeHtml(String(speedDisplay)) : '—'}</div>
             </div>
         </div>
         <div class="gm-tip-row-passives">

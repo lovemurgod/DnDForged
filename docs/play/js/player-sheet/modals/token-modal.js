@@ -4,6 +4,7 @@
 
 import { openTokenCropper } from '../../canvas/tokens/vtt-token-cropper.js';
 import { isAnimatedMedia, promptAnimatedMediaChoice } from '../../canvas/tokens/vtt-canvas-token-borders.js';
+import { escapeHtml } from '../../vtt-utils.js';
 
 let tempPlayerAurasList = [];
 
@@ -124,7 +125,7 @@ export function renderPlayerAuraList() {
                         <input type="checkbox" class="aura-enable-toggle" ${isEnabled ? 'checked' : ''} style="cursor: pointer; width: 14px; height: 14px; accent-color: var(--color-gold-base);">
                     </label>
                     <span class="aura-title-text" style="font-size: 0.8rem; font-weight: bold; color: ${isEnabled ? 'var(--color-text-primary)' : 'var(--color-text-muted)'}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                        ${auraName ? `<strong>${auraName}</strong>` : `Aura ${idx + 1}`}: <span style="font-weight: normal; opacity: 0.85;">${range}ft ${shape.charAt(0).toUpperCase() + shape.slice(1)}</span>
+                        ${auraName ? `<strong>${escapeHtml(auraName)}</strong>` : `Aura ${idx + 1}`}: <span style="font-weight: normal; opacity: 0.85;">${range}ft ${shape.charAt(0).toUpperCase() + shape.slice(1)}</span>
                     </span>
                 </div>
                 <div style="display: flex; align-items: center; gap: 8px; margin-left: 8px;">
@@ -138,7 +139,7 @@ export function renderPlayerAuraList() {
             <div class="aura-item-details ${isExpanded ? '' : 'vtt-hidden'}" style="margin-top: 10px; border-top: 1px solid rgba(255,255,255,0.04); padding-top: 10px;">
                 <div class="form-group" style="margin-bottom: 8px;">
                     <label style="font-size: 0.72rem; color: var(--color-text-secondary); margin-bottom: 2px;">Aura Label / Name</label>
-                    <input type="text" class="aura-name-input" placeholder="e.g. Spirit Guardians, Aura of Courage" value="${auraName}" style="width: 100%; font-size: 0.8rem; padding: 4px 8px;">
+                    <input type="text" class="aura-name-input" placeholder="e.g. Spirit Guardians, Aura of Courage" value="${escapeHtml(auraName)}" style="width: 100%; font-size: 0.8rem; padding: 4px 8px;">
                 </div>
                 <div class="flex-row">
                     <div class="form-group w-50" style="margin-bottom: 0;">
@@ -212,7 +213,7 @@ export function renderPlayerAuraList() {
             const curName = tempPlayerAurasList[idx].name;
             const isEn = tempPlayerAurasList[idx].enabled !== false;
             titleText.innerHTML = `
-                ${curName ? `<strong>${curName}</strong>` : `Aura ${idx + 1}`}: <span style="font-weight: normal; opacity: 0.85;">${rng}ft ${shp.charAt(0).toUpperCase() + shp.slice(1)}</span>
+                ${curName ? `<strong>${escapeHtml(curName)}</strong>` : `Aura ${idx + 1}`}: <span style="font-weight: normal; opacity: 0.85;">${rng}ft ${shp.charAt(0).toUpperCase() + shp.slice(1)}</span>
             `;
             titleText.style.color = isEn ? 'var(--color-text-primary)' : 'var(--color-text-muted)';
         };

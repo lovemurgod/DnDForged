@@ -1624,6 +1624,8 @@ compendiumRouter.get('/api/decks/catalog', (req, res) => {
 
     const catalog = decks
         .filter((d) => {
+            const srcUpper = (d.source || '').toUpperCase();
+            if (srcUpper && disabledSet.has(srcUpper)) return false;
             if (req.query.source) return d.source.toLowerCase() === req.query.source.toLowerCase();
             return true;
         })

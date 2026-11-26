@@ -1,5 +1,6 @@
 // DnDForged Player Sheet - Roll Simulations, Formulas & Feature Parsers
 import { VTTDiceParser } from '../vtt-dice-parser.js';
+import { evaluateSafeMath } from '../shared/math-eval.js';
 export { normalizeSkill } from './vtt-sheet-importers.js';
 
 export function cleanId(str) {
@@ -263,7 +264,10 @@ export function simulateRoll(formula, critRange = 20, optEvent = null, rollConte
         let total = 0;
         try {
             const safeMath = parsedStr.replace(/[^0-9+\-*/().\s]/g, '');
-            if (safeMath) total = Math.round(new Function(`"use strict"; return (${safeMath})`)());
+            if (safeMath) {
+                const val = evaluateSafeMath(safeMath);
+                total = Number.isFinite(val) ? Math.round(val) : 0;
+            }
         } catch (e) {
             total = 0;
         }

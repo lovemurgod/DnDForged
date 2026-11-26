@@ -490,8 +490,28 @@
                 return { success: false, error: 'Invalid campaign JSON' };
             }
             if (isStatic()) {
-                const newId = (campaign.id || 'imported') + '_' + Date.now();
-                const cloned = { ...campaign, id: newId, updatedAt: Date.now() };
+                const reserved = new Set(['__proto__', 'constructor', 'prototype']);
+                const cleanObj = (val) => {
+                    if (Array.isArray(val)) return val.map(cleanObj);
+                    if (!val || typeof val !== 'object') return val;
+                    const out = {};
+                    for (const [k, v] of Object.entries(val)) {
+                        if (!reserved.has(k)) out[k] = cleanObj(v);
+                    }
+                    return out;
+                };
+                const rawBaseId = String(campaign.id || 'imported').replace(/[^a-z0-9_-]/gi, '_');
+                const newId = (reserved.has(rawBaseId) ? 'imported' : rawBaseId) + '_' + Date.now();
+                let campData = cleanObj(campaign);
+                if (campaign.id && campaign.id !== newId) {
+                    const escOld = String(campaign.id).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                    const rx = new RegExp(
+                        `(/assets/campaigns/|assets/campaigns/|/vtt-uploads/|vtt-uploads/)${escOld}([/\\\\])`,
+                        'g'
+                    );
+                    campData = JSON.parse(JSON.stringify(campData).replace(rx, `$1${newId}$2`));
+                }
+                const cloned = { ...campData, id: newId, updatedAt: Date.now() };
                 drv().campaigns[newId] = cloned;
                 await drv()._saveCampaigns();
                 return { success: true, campaign: cloned };

@@ -60,6 +60,7 @@ console.log('\n📁 Step 3: Syncing VTT client into docs/play...');
 copyDir(path.join(rootDir, 'vtt', 'js'), path.join(docsPlayDir, 'js'));
 copyDir(path.join(rootDir, 'vtt', 'css'), path.join(docsPlayDir, 'css'));
 copyDir(path.join(rootDir, 'vtt', 'lib'), path.join(docsPlayDir, 'lib'));
+copyDir(path.join(rootDir, 'vtt', 'vendor'), path.join(docsPlayDir, 'vendor'));
 if (fs.existsSync(path.join(rootDir, 'vtt', 'audio'))) {
     copyDir(path.join(rootDir, 'vtt', 'audio'), path.join(docsPlayDir, 'audio'));
 }
@@ -84,29 +85,20 @@ for (const file of fs.readdirSync(path.join(rootDir, 'vtt'))) {
 }
 
 // Helper to rewrite HTML files in docs/play for relative subpath-safe assets & P2P boot
+fs.writeFileSync(path.join(docsPlayDir, 'static-flag.js'), 'window.__FORGEDVTT_STATIC_WEB__ = true;\n', 'utf8');
 function transformPlayHtml(html, { isSheet = false } = {}) {
     let out = html;
     // Strip <base href="/vtt/"> so relative asset paths resolve cleanly under any mount (/play/ or /repo/play/) without speculative preload 404s
     out = out.replace(/<base href="\/vtt\/">\s*/i, '');
+    // Tighten static HTTPS deployment connect-src (no ws:/http: needed on GitHub Pages)
+    out = out.replace(/connect-src 'self' ws: wss: https: http:/i, "connect-src 'self' wss: https:");
     out = out.replace(/<script src="\/socket\.io\/socket\.io\.js"><\/script>/i, () => {
         if (!isSheet) {
-            return '<script>window.__FORGEDVTT_STATIC_WEB__ = true;</script>';
+            return '<script src="static-flag.js"></script>';
         }
-        const parts = ['<script>window.__FORGEDVTT_STATIC_WEB__ = true;</script>'];
+        const parts = ['<script src="static-flag.js"></script>'];
         if (!out.includes('js/network/vtt-static-shim.js')) {
             parts.push('    <script src="js/network/vtt-static-shim.js"></script>');
-        }
-        if (!out.includes('lib/peerjs.min.js')) {
-            parts.push('    <script src="lib/peerjs.min.js"></script>');
-        }
-        if (!out.includes('js/network/vtt-p2p-host-engine.js')) {
-            parts.push('    <script src="js/network/vtt-p2p-host-engine.js"></script>');
-        }
-        if (!out.includes('js/network/vtt-p2p-adapter.js')) {
-            parts.push('    <script src="js/network/vtt-p2p-adapter.js"></script>');
-        }
-        if (!out.includes('lib/purify.min.js')) {
-            parts.push('    <script src="lib/purify.min.js"></script>');
         }
         return parts.join('\n');
     });
@@ -148,12 +140,16 @@ if (fs.existsSync(prepSchemasPath)) {
 }
 
 const prepIndex = path.join(docsPrepDir, 'index.html');
+fs.writeFileSync(path.join(docsPrepDir, 'static-flag.js'), 'window.__FORGEDVTT_STATIC_WEB__ = true;\n', 'utf8');
 if (fs.existsSync(prepIndex)) {
     let prepHtml = fs.readFileSync(prepIndex, 'utf8');
     prepHtml = prepHtml.replace(
         '<script src="static-storage-driver.js"></script>',
-        '<script>window.__FORGEDVTT_STATIC_WEB__ = true;</script>\n  <script src="static-storage-driver.js"></script>'
+        '<script src="static-flag.js"></script>\n  <script src="static-storage-driver.js"></script>'
     );
+    if (!prepHtml.includes('static-flag.js')) {
+        throw new Error('Failed to inject static-flag.js into docs/prep/index.html');
+    }
     fs.writeFileSync(prepIndex, prepHtml, 'utf8');
 }
 

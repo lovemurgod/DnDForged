@@ -105,6 +105,12 @@ test.describe('Fog of War & Line of Sight Vision Suite', () => {
                     window.VTT.campaignState.characters['char_valeros_1'].assignedPlayers = [playerName];
                     window.VTT.campaignState.characters['char_valeros_1'].owner = playerName;
                 }
+                const mapId = ce.getCurrentMapId?.();
+                const map = window.VTT.campaignState?.maps?.[mapId];
+                if (map) {
+                    map.lightingSettings = { ...(map.lightingSettings || {}), fogOfWar: true };
+                }
+                if (hero && hero.sightRange === undefined) hero.sightRange = 60;
                 ce.renderAll();
             },
             { playerName }
@@ -337,6 +343,12 @@ test.describe('Fog of War & Line of Sight Vision Suite', () => {
 
     test('Test 6: Visual regression snapshot of open doorway line of sight', async () => {
         const { playerPage } = sandbox;
+        await playerPage.evaluate(() => {
+            const ce = window.VTT?.canvasEngine;
+            const tok = ce?.getTokens?.()?.['tok_hero_1'];
+            if (tok) tok.tokenLightAnimationType = 'none';
+            ce?.renderAll?.();
+        });
         await playerPage.waitForTimeout(400);
         await expect(playerPage).toHaveScreenshot('los-door-open-player.png');
     });

@@ -9,7 +9,7 @@ import { test, expect } from '@playwright/test';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
-import { setupTwoPlayerSandbox, freezeDynamicElements } from './helpers/visual-fixture.mjs';
+import { setupTwoPlayerSandbox, freezeDynamicElements, ensureSidebarTabOpen } from './helpers/visual-fixture.mjs';
 import { convertRoll20Character } from '../../electron/importers/roll20-importer.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -131,7 +131,7 @@ test.describe('Better20 JSON Character Importer E2E Suite', () => {
         const { gmPage } = sandbox;
 
         // Open Player Characters tab if not already open
-        await gmPage.locator('[data-tab="tab-characters"]').click();
+        await ensureSidebarTabOpen(gmPage, 'tab-characters');
 
         // Click LifeMoon card to open the sheet
         const card = gmPage.locator('#character-list .char-row:has-text("LifeMoon Matt LV 10")').first();
@@ -174,7 +174,7 @@ test.describe('Better20 JSON Character Importer E2E Suite', () => {
         const sheetPanel = gmPage.locator('#player-sheet-panel');
 
         // Ensure LifeMoon sheet is open
-        await gmPage.locator('button.tab-header[data-tab="tab-characters"]').click();
+        await ensureSidebarTabOpen(gmPage, 'tab-characters');
         await gmPage.locator('#character-list .char-row:has-text("LifeMoon")').first().click();
 
         // Switch to Spells tab
@@ -209,7 +209,7 @@ test.describe('Better20 JSON Character Importer E2E Suite', () => {
         const sheetPanel = gmPage.locator('#player-sheet-panel');
 
         // Ensure LifeMoon sheet is open
-        await gmPage.locator('button.tab-header[data-tab="tab-characters"]').click();
+        await ensureSidebarTabOpen(gmPage, 'tab-characters');
         await gmPage.locator('#character-list .char-row:has-text("LifeMoon")').first().click();
 
         // Switch back to Primary Tab
@@ -218,7 +218,7 @@ test.describe('Better20 JSON Character Importer E2E Suite', () => {
         await primaryTab.click();
 
         // Switch to Game Chat tab
-        await gmPage.locator('button.tab-header[data-tab="tab-chat"]').click();
+        await ensureSidebarTabOpen(gmPage, 'tab-chat');
         await expect(gmPage.locator('#tab-chat')).toHaveClass(/active/);
 
         // Click Wisdom Check roll button
@@ -236,7 +236,7 @@ test.describe('Better20 JSON Character Importer E2E Suite', () => {
         const { gmPage } = sandbox;
 
         // Switch to Player Characters tab
-        await gmPage.locator('[data-tab="tab-characters"]').click();
+        await ensureSidebarTabOpen(gmPage, 'tab-characters');
 
         // Click BS goblin card
         const card = gmPage.locator('#character-list .char-row:has-text("BS goblin Matt lv 15")').first();
@@ -262,7 +262,7 @@ test.describe('Better20 JSON Character Importer E2E Suite', () => {
         const { gmPage } = sandbox;
 
         // Switch to Player Characters tab
-        await gmPage.locator('button.tab-header[data-tab="tab-characters"]').click();
+        await ensureSidebarTabOpen(gmPage, 'tab-characters');
 
         // Click Matt Saiyan card
         const card = gmPage.locator('#character-list .char-row:has-text("Matt Saiyan lv 17 items")').first();
@@ -295,7 +295,7 @@ test.describe('Better20 JSON Character Importer E2E Suite', () => {
             await firstPingBtn.click();
 
             // Switch to chat and assert item card was broadcast
-            await gmPage.locator('button.tab-header[data-tab="tab-chat"]').click();
+            await ensureSidebarTabOpen(gmPage, 'tab-chat');
             const chatMessages = gmPage.locator('#chat-messages');
             await expect(chatMessages.locator('.chat-message').last()).toBeVisible({ timeout: 5000 });
         }
@@ -338,7 +338,7 @@ test.describe('Better20 JSON Character Importer E2E Suite', () => {
         await conSaveBtn.click();
 
         // 6. GM observes player's roll synchronized live in Game Chat
-        await gmPage.locator('button.tab-header[data-tab="tab-chat"]').click();
+        await ensureSidebarTabOpen(gmPage, 'tab-chat');
         const gmChat = gmPage.locator('#chat-messages');
         const syncedMsg = gmChat.locator('.chat-message:has-text("CON Save")').last();
         await expect(syncedMsg).toBeVisible({ timeout: 10000 });
@@ -353,7 +353,7 @@ test.describe('Better20 JSON Character Importer E2E Suite', () => {
         });
 
         // Open Characters tab
-        await gmPage.locator('button.tab-header[data-tab="tab-characters"]').click();
+        await ensureSidebarTabOpen(gmPage, 'tab-characters');
 
         // Both original and copy must exist in the sidebar list
         const charList = gmPage.locator('#character-list');
@@ -379,7 +379,7 @@ test.describe('Better20 JSON Character Importer E2E Suite', () => {
         const { gmPage } = sandbox;
 
         // Open Characters tab
-        await gmPage.locator('button.tab-header[data-tab="tab-characters"]').click();
+        await ensureSidebarTabOpen(gmPage, 'tab-characters');
 
         const card = gmPage.locator('#character-list .char-row:has-text("LifeMoon")').first();
         await expect(card).toBeVisible();

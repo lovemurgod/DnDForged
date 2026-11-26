@@ -2,6 +2,27 @@ import fs from 'fs';
 import path from 'path';
 import { execFileSync } from 'child_process';
 import { safeFetchPublicUrl } from '../server/url-safety.js';
+import { atomicWriteFileSync, isValidAssetPath, validateZipArchiveEntries } from '../utils.js';
+
+const VALID_SOURCE_CATEGORY_SET = new Set([
+    'bestiary',
+    'spells',
+    'items',
+    'classes',
+    'races',
+    'feats',
+    'backgrounds',
+    'adventures',
+    'tables'
+]);
+
+function assertSafeSourceCategory(category) {
+    const cat = String(category || '').trim();
+    if (!VALID_SOURCE_CATEGORY_SET.has(cat)) {
+        throw new Error(`Invalid source category: ${cat}`);
+    }
+    return cat;
+}
 
 /**
  * Category Definitions for DnDForged Databases
@@ -143,7 +164,7 @@ export class SourceManager {
 
     saveConfig() {
         try {
-            fs.writeFileSync(this.configFilePath, JSON.stringify(this.config, null, 2), 'utf8');
+            atomicWriteFileSync(this.configFilePath, JSON.stringify(this.config, null, 2));
         } catch (err) {
             console.error('[SourceManager] Error saving sources-config.json:', err);
         }
@@ -1266,13 +1287,17 @@ export class SourceManager {
             srcCode = String(srcCode).toUpperCase();
         }
 
+        const safeCategory = assertSafeSourceCategory(category);
         const srcName = parsed.name || this.formatTitle(srcCode);
-        const destFileName = `${srcCode.toLowerCase()}.json`;
-        const targetDir = path.join(this.campaignDataDir, 'sources', category);
+        const destFileName = path.basename(`${srcCode.toLowerCase()}.json`);
+        const targetDir = path.join(this.campaignDataDir, 'sources', safeCategory);
         if (!fs.existsSync(targetDir)) {
             fs.mkdirSync(targetDir, { recursive: true });
         }
-        const destPath = path.join(targetDir, destFileName);
+        const destPath = path.resolve(targetDir, destFileName);
+        if (!isValidAssetPath(destPath, targetDir)) {
+            return { success: false, error: 'Invalid destination path.' };
+        }
 
         try {
             fs.writeFileSync(destPath, JSON.stringify(parsed, null, 2), 'utf8');
@@ -1280,7 +1305,7 @@ export class SourceManager {
             return { success: false, error: `Failed to write database file: ${e.message}` };
         }
 
-        let meta = this.config.customSources.find((c) => c.fileName === destFileName && c.category === category);
+        let meta = this.config.customSources.find((c) => c.fileName === destFileName && c.category === safeCategory);
         if (!meta) {
             meta = {
                 id: srcCode,
@@ -1322,6 +1347,7 @@ export class SourceManager {
     }
 
     createCustomSource({ category, code, name, author, description }) {
+        const safeCategory = assertSafeSourceCategory(category);
         const cleanCode = (code || '')
             .trim()
             .replace(/[^a-zA-Z0-9_-]/g, '_')
@@ -1332,13 +1358,16 @@ export class SourceManager {
         const cleanAuthor = (author || 'Homebrew Creator').trim();
         const cleanDesc = (description || '').trim();
 
-        const targetDir = path.join(this.campaignDataDir, 'sources', category);
+        const targetDir = path.join(this.campaignDataDir, 'sources', safeCategory);
         if (!fs.existsSync(targetDir)) {
             fs.mkdirSync(targetDir, { recursive: true });
         }
 
-        const fileName = `${cleanCode.toLowerCase()}.json`;
-        const filePath = path.join(targetDir, fileName);
+        const fileName = path.basename(`${cleanCode.toLowerCase()}.json`);
+        const filePath = path.resolve(targetDir, fileName);
+        if (!isValidAssetPath(filePath, targetDir)) {
+            return { success: false, error: 'Invalid destination path.' };
+        }
 
         let scaffold = {
             source: cleanCode,
@@ -2183,6 +2212,7 @@ export class SourceManager {
                         fs.mkdirSync(extractDir, { recursive: true });
                         try {
                             const tarBin = process.platform === 'win32' ? 'tar.exe' : 'tar';
+                            validateZipArchiveEntries(targetPath, tarBin);
                             execFileSync(tarBin, ['-xf', targetPath, '-C', extractDir], { stdio: 'ignore' });
                             collectJsonFiles(extractDir);
                         } catch (err) {
@@ -2342,14 +2372,23 @@ export class SourceManager {
 
         for (const item of candidates) {
             try {
-                const cat = item.category || item.detectedCategory || 'bestiary';
+                const cat = assertSafeSourceCategory(item.category || item.detectedCategory || 'bestiary');
                 const targetDir = path.join(this.campaignDataDir, 'sources', cat);
                 if (!fs.existsSync(targetDir)) {
                     fs.mkdirSync(targetDir, { recursive: true });
                 }
 
-                let finalFileName = item.fileName;
-                let destPath = path.join(targetDir, finalFileName);
+                const rawBaseName = path.basename(String(item.fileName || '')).replace(/[^a-zA-Z0-9._-]/g, '_');
+                if (!rawBaseName || rawBaseName === '.' || rawBaseName === '..') {
+                    results.push({ fileName: item.fileName, status: 'error', error: 'Invalid file name' });
+                    continue;
+                }
+                let finalFileName = rawBaseName;
+                let destPath = path.resolve(targetDir, finalFileName);
+                if (!isValidAssetPath(destPath, targetDir)) {
+                    results.push({ fileName: item.fileName, status: 'error', error: 'Invalid destination path' });
+                    continue;
+                }
                 const srcPath = item.filePath || item.originalPath;
 
                 if (!srcPath || !fs.existsSync(srcPath)) {

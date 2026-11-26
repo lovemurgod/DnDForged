@@ -142,15 +142,17 @@
         const incoming = incomingDict || {};
         const uLower = String(username || '').toLowerCase();
         for (const id in existing) {
+            if (id === '__proto__' || id === 'constructor' || id === 'prototype') continue;
             const item = existing[id];
             if (item?.ownerUsername && item.ownerUsername.toLowerCase() === uLower && !incoming[id]) {
                 delete merged[id];
             }
         }
         for (const id in incoming) {
+            if (id === '__proto__' || id === 'constructor' || id === 'prototype') continue;
             const ex = existing[id];
             if (ex && (!ex.ownerUsername || ex.ownerUsername.toLowerCase() !== uLower)) continue;
-            merged[id] = { ...incoming[id], ownerUsername: username };
+            merged[id] = { ...sanitizeObject(incoming[id]), ownerUsername: username };
         }
         return merged;
     }
@@ -208,6 +210,22 @@
         return items;
     }
 
+    const RESERVED_KEYS = new Set(['__proto__', 'constructor', 'prototype']);
+    const peerRateWindows = new Map();
+
+    function checkPeerRateLimit(senderPeer) {
+        if (!senderPeer) return true;
+        const key = senderPeer.id || senderPeer.username || 'peer';
+        const now = Date.now();
+        let win = peerRateWindows.get(key);
+        if (!win || now - win.start > 2000) {
+            win = { start: now, count: 0 };
+            peerRateWindows.set(key, win);
+        }
+        win.count++;
+        return win.count <= 80;
+    }
+
     /**
      * Processes a Socket.IO-style event on an authoritative P2P Host adapter.
      * Returns true if the event was handled by the host engine.
@@ -216,6 +234,7 @@
         const senderRole = senderPeer ? senderPeer.role || 'Player' : 'GM';
         const senderName = senderPeer ? senderPeer.username || 'Player' : adapter.username || 'Game Master';
         const originId = senderPeer ? senderPeer.id : adapter.id;
+        if (senderRole !== 'GM' && !checkPeerRateLimit(senderPeer)) return true;
         const camp =
             global.VTT?.campaignState ||
             (global.VTT ? (global.VTT.campaignState = { id: adapter.campaignId, maps: {}, characters: {} }) : null);
@@ -230,7 +249,7 @@
                 username: senderName,
                 role: senderRole,
                 text: safeMsg.text !== undefined ? stripTags(safeMsg.text) : safeMsg.text,
-                html: safeMsg.html || null,
+                html: null,
                 roll: safeMsg.roll ? stripTagsDeep(safeMsg.roll) : null,
                 abilityCard: safeMsg.abilityCard ? stripTagsDeep(safeMsg.abilityCard) : null,
                 macroCard: safeMsg.macroCard ? stripTagsDeep(safeMsg.macroCard) : null,
@@ -272,17 +291,18 @@
         }
 
         if (event === 'chat:whisper') {
+            const safeMsg = data && typeof data === 'object' ? sanitizeObject(data) : {};
             const whisperMsg = {
                 username: senderName,
                 role: senderRole,
-                text: data?.text !== undefined ? stripTags(data.text) : data?.text,
-                roll: data?.roll || null,
-                macroCard: data?.macroCard || null,
-                spellCard: data?.spellCard || null,
-                abilityCard: data?.abilityCard || null,
-                itemCard: data?.itemCard || null,
-                saveResolveCard: data?.saveResolveCard || null,
-                massAttackCard: data?.massAttackCard || null,
+                text: safeMsg.text !== undefined ? stripTags(safeMsg.text) : safeMsg.text,
+                roll: safeMsg.roll ? stripTagsDeep(safeMsg.roll) : null,
+                macroCard: safeMsg.macroCard ? stripTagsDeep(safeMsg.macroCard) : null,
+                spellCard: safeMsg.spellCard ? stripTagsDeep(safeMsg.spellCard) : null,
+                abilityCard: safeMsg.abilityCard ? stripTagsDeep(safeMsg.abilityCard) : null,
+                itemCard: safeMsg.itemCard ? stripTagsDeep(safeMsg.itemCard) : null,
+                saveResolveCard: safeMsg.saveResolveCard ? stripTagsDeep(safeMsg.saveResolveCard) : null,
+                massAttackCard: safeMsg.massAttackCard ? stripTagsDeep(safeMsg.massAttackCard) : null,
                 timestamp: Date.now()
             };
             if (senderPeer) sendPacket(adapter, senderPeer, 'chat:whisper', [whisperMsg], senderName, senderRole);
@@ -294,6 +314,7 @@
             if (senderRole !== 'GM') return true;
             if (Array.isArray(global.VTT?.chatHistory)) {
                 global.VTT.chatHistory = global.VTT.chatHistory.filter((m) => m.id !== data);
+                persist();
             }
             emitToAll(adapter, 'chat:deleted', [{ id: data }], { senderName, senderRole });
             return true;
@@ -306,6 +327,7 @@
                 : null;
             if (msg) {
                 msg.hidden = !msg.hidden;
+                persist();
                 emitToAll(adapter, 'chat:hidden_toggled', [{ id: data, hidden: msg.hidden }], {
                     senderName,
                     senderRole
@@ -320,6 +342,22 @@
             event === 'chat:macro_resolved'
         ) {
             if (senderRole !== 'GM' || !data?.id) return true;
+            if (Array.isArray(global.VTT?.chatHistory)) {
+                const msg = global.VTT.chatHistory.find((m) => m.id === data.id);
+                if (msg) {
+                    if (event === 'chat:save_resolved' && msg.saveResolveCard) {
+                        msg.saveResolveCard.resolved = true;
+                        Object.assign(msg.saveResolveCard, stripTagsDeep(data));
+                    } else if (event === 'chat:mass_attack_resolved' && msg.massAttackCard) {
+                        msg.massAttackCard.resolved = true;
+                        Object.assign(msg.massAttackCard, stripTagsDeep(data));
+                    } else if (event === 'chat:macro_resolved' && msg.macroCard) {
+                        msg.macroCard.resolved = true;
+                        Object.assign(msg.macroCard, stripTagsDeep(data));
+                    }
+                    persist();
+                }
+            }
             emitToAll(adapter, event, [data], { senderName, senderRole });
             return true;
         }
@@ -399,15 +437,21 @@
             if (senderRole !== 'GM' && camp.isPaused) return true;
             const mapId = resolveTargetMapId(camp, data?.mapId, senderRole, senderName);
             const targetMap = camp.maps?.[mapId];
-            if (!targetMap || !data?.tokenId) return true;
+            if (!targetMap || !data?.tokenId || RESERVED_KEYS.has(data.tokenId)) return true;
             if (!targetMap.tokens) targetMap.tokens = {};
             if (senderRole !== 'GM') {
+                const allowedMapId = getPlayerMapOverride(camp, senderName) || camp.activeMapId;
+                if (allowedMapId && mapId !== allowedMapId) return true;
                 if (targetMap.tokens[data.tokenId]) return true;
                 if (
                     !isTokenVisibleToPlayers(data.token) ||
                     !isTokenControlled(data.token, camp, senderRole, senderName)
                 ) {
                     return true;
+                }
+                if (data.token?.characterId) {
+                    const ch = camp.characters?.[data.token.characterId];
+                    if (ch && !isCharacterControlled(ch, senderRole, senderName)) return true;
                 }
             }
             const cloned = sanitizeObject(JSON.parse(JSON.stringify(data.token || {})));
@@ -527,6 +571,7 @@
 
         if (event === 'token:update_delta' && camp) {
             if (senderRole !== 'GM' && camp.isPaused) return true;
+            if (!data?.tokenId || RESERVED_KEYS.has(data.tokenId)) return true;
             const mapId = resolveTargetMapId(camp, data?.mapId, senderRole, senderName);
             const targetMap = camp.maps?.[mapId];
             const existingToken = targetMap?.tokens?.[data?.tokenId];
@@ -757,20 +802,69 @@
             for (const tr of transitions) {
                 const tok = sMap.tokens[tr.tokenId];
                 if (!tok) continue;
-                if (senderRole !== 'GM' && !isTokenControlled(tok, camp, senderRole, senderName)) continue;
+                let destX = Number.isFinite(Number(tr.targetX)) ? Number(tr.targetX) : tok.x || 0;
+                let destY = Number.isFinite(Number(tr.targetY)) ? Number(tr.targetY) : tok.y || 0;
+                if (senderRole !== 'GM') {
+                    if (camp.isPaused) continue;
+                    if (!isTokenControlled(tok, camp, senderRole, senderName)) continue;
+                    if (!tr.sourcePortalId) continue;
+                    const sPortal = Array.isArray(sMap.portals)
+                        ? sMap.portals.find((p) => p && p.id === tr.sourcePortalId)
+                        : null;
+                    if (!sPortal || sPortal.isSecret || sPortal.isLocked) continue;
+                    if (!sPortal.targetMapId || sPortal.targetMapId !== targetMapId) continue;
+                    const cx = (tok.x || 0) + (tok.w || 0) / 2;
+                    const cy = (tok.y || 0) + (tok.h || 0) / 2;
+                    const g = sPortal.geom || sPortal;
+                    let dist = Infinity;
+                    if (g.x1 !== undefined && g.y1 !== undefined && g.x2 !== undefined && g.y2 !== undefined) {
+                        const dx = g.x2 - g.x1;
+                        const dy = g.y2 - g.y1;
+                        const lenSq = dx * dx + dy * dy;
+                        const t =
+                            lenSq > 0 ? Math.max(0, Math.min(1, ((cx - g.x1) * dx + (cy - g.y1) * dy) / lenSq)) : 0;
+                        dist = Math.hypot(cx - (g.x1 + t * dx), cy - (g.y1 + t * dy));
+                    } else if (g.x !== undefined && g.y !== undefined && g.w !== undefined && g.h !== undefined) {
+                        const nx = Math.max(g.x, Math.min(cx, g.x + g.w));
+                        const ny = Math.max(g.y, Math.min(cy, g.y + g.h));
+                        dist = Math.hypot(cx - nx, cy - ny);
+                    } else if (g.x !== undefined && g.y !== undefined && g.r !== undefined) {
+                        dist = Math.max(0, Math.hypot(cx - g.x, cy - g.y) - g.r);
+                    } else {
+                        const pX = g.x ?? g.x1 ?? tok.x ?? 0;
+                        const pY = g.y ?? g.y1 ?? tok.y ?? 0;
+                        dist = Math.hypot(cx - pX, cy - pY);
+                    }
+                    if (dist > 400) continue;
+                    const dPortalId = tr.targetPortalId || targetPortalId || sPortal.targetPortalId;
+                    const dPortal =
+                        dPortalId && Array.isArray(tMap.portals)
+                            ? tMap.portals.find((p) => p && p.id === dPortalId)
+                            : null;
+                    if (dPortal) {
+                        const dg = dPortal.geom || dPortal;
+                        const dpX = dg.x ?? dg.x1 ?? destX;
+                        const dpY = dg.y ?? dg.y1 ?? destY;
+                        if (Math.hypot(destX - dpX, destY - dpY) > 400) {
+                            destX = dpX;
+                            destY = dpY;
+                        }
+                    }
+                }
                 delete sMap.tokens[tr.tokenId];
-                tok.x = tr.targetX;
-                tok.y = tr.targetY;
+                tok.x = destX;
+                tok.y = destY;
                 tMap.tokens[tr.tokenId] = tok;
-                if (senderRole !== 'GM') camp.playerMapOverrides[senderName] = targetMapId;
+                if (senderRole !== 'GM' && !RESERVED_KEYS.has(senderName))
+                    camp.playerMapOverrides[senderName] = targetMapId;
                 else if (tok.owner || tr.username) camp.playerMapOverrides[tok.owner || tr.username] = targetMapId;
                 moved.push({
                     tokenId: tr.tokenId,
                     token: tok,
                     tokenName: tok.name || 'Token',
                     targetPortalId: tr.targetPortalId || targetPortalId || null,
-                    targetX: tr.targetX,
-                    targetY: tr.targetY,
+                    targetX: destX,
+                    targetY: destY,
                     username: tok.owner || tr.username || senderName
                 });
                 emitToAll(adapter, 'token:deleted', [{ mapId: sourceMapId, tokenId: tr.tokenId, origin: originId }], {
@@ -842,10 +936,21 @@
                     const charMatch = c.characterId ? camp.characters?.[c.characterId] : null;
                     if (!charMatch || !isCharacterControlled(charMatch, senderRole, senderName)) continue;
                     const idx = nextCombatants.findIndex(
-                        (ec) => ec && ((c.id && ec.id === c.id) || (c.characterId && ec.characterId === c.characterId))
+                        (ec) =>
+                            ec &&
+                            ((c.id && ec.id === c.id) ||
+                                (c.characterId && ec.characterId === c.characterId) ||
+                                (c.tokenId && ec.tokenId === c.tokenId) ||
+                                (c.name && ec.name && ec.name.toLowerCase() === String(c.name).toLowerCase()))
                     );
-                    if (idx !== -1) nextCombatants[idx] = { ...nextCombatants[idx], ...c };
-                    else nextCombatants.push(c);
+                    if (idx !== -1) {
+                        const existing = nextCombatants[idx];
+                        const existingChar = existing?.characterId ? camp.characters?.[existing.characterId] : null;
+                        if (existingChar && !isCharacterControlled(existingChar, senderRole, senderName)) continue;
+                        nextCombatants[idx] = { ...existing, ...c };
+                    } else {
+                        nextCombatants.push(c);
+                    }
                 }
                 nextCombatants.sort((a, b) => (parseFloat(b.score) || 0) - (parseFloat(a.score) || 0));
                 camp.initiative = { ...cur, combatants: nextCombatants };
@@ -866,20 +971,38 @@
             return true;
         }
 
-        if (event === 'character:update' && camp && data?.character?.id) {
+        if ((event === 'character:update' || event === 'character:create') && camp && data?.character?.id) {
             if (!camp.characters) camp.characters = {};
             const charId = data.character.id;
+            if (RESERVED_KEYS.has(charId)) return true;
             const existing = camp.characters[charId];
             if (senderRole !== 'GM') {
+                if (camp.isPaused) return true;
+                if (event === 'character:create' && existing) return true;
                 if (existing && !isCharacterControlled(existing, senderRole, senderName)) return true;
+                const sanitized = sanitizeObject(data.character);
                 if (!existing) {
-                    data.character.owner = senderName;
-                    data.character.ownerUsername = senderName;
-                    if (!data.character.assignedPlayers) data.character.assignedPlayers = [senderName];
-                    if (!data.character.players) data.character.players = [senderName];
+                    const ownedCount = Object.values(camp.characters).filter((ch) =>
+                        isCharacterControlled(ch, senderRole, senderName)
+                    ).length;
+                    if (ownedCount >= 10) return true;
+                    sanitized.owner = senderName;
+                    sanitized.ownerUsername = senderName;
+                    sanitized.assignedPlayers = [senderName];
+                    sanitized.players = [senderName];
+                    delete sanitized.monsterData;
+                } else {
+                    sanitized.owner = existing.owner;
+                    sanitized.ownerUsername = existing.ownerUsername;
+                    sanitized.assignedPlayers = existing.assignedPlayers;
+                    sanitized.players = existing.players;
+                    if (existing.monsterData !== undefined) sanitized.monsterData = existing.monsterData;
+                    else delete sanitized.monsterData;
                 }
+                camp.characters[charId] = sanitized;
+            } else {
+                camp.characters[charId] = sanitizeObject(data.character);
             }
-            camp.characters[charId] = sanitizeObject(data.character);
             persist();
             emitToAll(adapter, 'character:updated', [{ character: camp.characters[charId], origin: originId }], {
                 senderName,
@@ -1085,8 +1208,23 @@
             (event === 'map:switch-player' || event === 'player:map_override') &&
             camp &&
             data?.mapId &&
+            !RESERVED_KEYS.has(data.mapId) &&
+            !RESERVED_KEYS.has(senderName) &&
             camp.maps?.[data.mapId]
         ) {
+            if (senderRole !== 'GM') {
+                const targetMap = camp.maps[data.mapId];
+                const currentOverride = getPlayerMapOverride(camp, senderName);
+                const hasTokenOnTarget = Object.values(targetMap?.tokens || {}).some((t) =>
+                    isTokenControlled(t, camp, senderRole, senderName)
+                );
+                const isAllowedMap =
+                    data.mapId === camp.activeMapId ||
+                    data.mapId === currentOverride ||
+                    hasTokenOnTarget ||
+                    targetMap.isPublic === true;
+                if (!isAllowedMap) return true;
+            }
             if (!camp.playerMapOverrides) camp.playerMapOverrides = {};
             camp.playerMapOverrides[senderName] = data.mapId;
             persist();
@@ -1207,6 +1345,19 @@
             return true;
         }
         if (event === 'tokens:damage_fx' || event === 'tokens:heal_fx') {
+            if (senderRole !== 'GM') {
+                if (camp?.isPaused) return true;
+                const mapId = resolveTargetMapId(camp, data?.mapId, senderRole, senderName);
+                const tMap = camp?.maps?.[mapId];
+                const tokId = data?.tokenId;
+                if (
+                    !tokId ||
+                    !tMap?.tokens?.[tokId] ||
+                    !isTokenControlled(tMap.tokens[tokId], camp, senderRole, senderName)
+                ) {
+                    return true;
+                }
+            }
             const payload = { ...(data || {}), origin: data?.origin || originId };
             emitToAll(adapter, event, [payload], { senderName, senderRole });
             return true;

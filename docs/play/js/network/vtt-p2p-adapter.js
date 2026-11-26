@@ -77,6 +77,12 @@
         'deck:state_update'
     ]);
 
+    function isSafeIceEntry(s) {
+        if (!s || !s.urls) return false;
+        const urls = Array.isArray(s.urls) ? s.urls : [s.urls];
+        return urls.length > 0 && urls.every((u) => typeof u === 'string' && /^(stun|turns):/i.test(u.trim()));
+    }
+
     function loadConfiguredIceServers(explicitServers) {
         const servers =
             Array.isArray(explicitServers) && explicitServers.length ? [...explicitServers] : [...DEFAULT_ICE_SERVERS];
@@ -88,7 +94,7 @@
                     const parsed = JSON.parse(decoded);
                     if (Array.isArray(parsed)) {
                         for (const s of parsed) {
-                            if (s && s.urls) servers.push(s);
+                            if (isSafeIceEntry(s)) servers.push(s);
                         }
                     }
                 }
@@ -117,6 +123,8 @@
             this.username = options.username || '';
             this.campaignId = options.campaignId || 'default';
             this.gmPassword = options.gmPassword || null;
+            this.hostKey = options.hostKey || null;
+            this.expectedHostKey = options.expectedHostKey || null;
             this.iceServers = loadConfiguredIceServers(options.iceServers);
 
             this.id = 'p2p_' + Math.random().toString(36).substring(2, 10);
@@ -519,6 +527,41 @@
             return this.requestAsset(url);
         }
 
+        _isAssetVisibleToPeer(url, senderPeer) {
+            const campState = global.VTT?.campaignState;
+            if (!campState) return true;
+            const normUrl = url.split('?')[0];
+            const activeMapId = campState.activeMapId;
+            const peerOverride = campState.playerMapOverrides?.[senderPeer?.username];
+            const visibleMapIds = new Set([activeMapId, peerOverride].filter(Boolean));
+            const matchesUrl = (candidate) =>
+                typeof candidate === 'string' && (candidate === url || candidate.split('?')[0] === normUrl);
+
+            for (const mapId of visibleMapIds) {
+                const m = campState.maps?.[mapId];
+                if (!m) continue;
+                if (matchesUrl(m.mapImage)) return true;
+                for (const tok of Object.values(m.tokens || {})) {
+                    if (!tok || tok.layer === 'gm' || tok.hidden || tok.isVisible === false) continue;
+                    if (matchesUrl(tok.img)) return true;
+                }
+            }
+            for (const ch of Object.values(campState.characters || {})) {
+                if (!ch) continue;
+                if (matchesUrl(ch.avatar) || matchesUrl(ch.tokenImg)) return true;
+                if (
+                    Array.isArray(ch.tokenImages) &&
+                    ch.tokenImages.some((t) => matchesUrl(typeof t === 'string' ? t : t?.url))
+                ) {
+                    return true;
+                }
+            }
+            for (const ho of campState.handouts || []) {
+                if (ho && ho.isVisible && (matchesUrl(ho.img) || matchesUrl(ho.url))) return true;
+            }
+            return false;
+        }
+
         async _handlePeerAssetRequest(url, senderPeer) {
             if (!this.isHost || !senderPeer || !senderPeer.joined || typeof url !== 'string') return;
             const isSafeLocal =
@@ -528,6 +571,7 @@
                 url.startsWith('/assets/') ||
                 url.startsWith('assets/');
             if (!isSafeLocal || url.includes('..') || url.includes('\0')) return;
+            if (senderPeer.role !== 'GM' && !this._isAssetVisibleToPeer(url, senderPeer)) return;
 
             try {
                 let blob = null;
@@ -553,12 +597,15 @@
                 if (!blob) return;
                 const arrayBuf = await blob.arrayBuffer();
                 const bytes = new Uint8Array(arrayBuf);
-                let binary = '';
-                const step = 0x8000;
-                for (let i = 0; i < bytes.length; i += step) {
-                    binary += String.fromCharCode(...bytes.subarray(i, i + step));
+                const CHUNK_MULTI = 3 * 10240; // multiple of 3 so base64 chunks concatenate cleanly without padding issues
+                const b64Parts = [];
+                for (let i = 0; i < bytes.length; i += CHUNK_MULTI) {
+                    const slice = bytes.subarray(i, i + CHUNK_MULTI);
+                    let bin = '';
+                    for (let j = 0; j < slice.length; j++) bin += String.fromCharCode(slice[j]);
+                    b64Parts.push(btoa(bin));
                 }
-                const base64Data = btoa(binary);
+                const base64Data = b64Parts.join('');
                 const assetId = `p2p_asset_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
                 await this._streamAssetToPeer(senderPeer, assetId, base64Data, mimeType, { originalUrl: url });
             } catch (err) {
@@ -582,6 +629,14 @@
                     const { id, totalChunks } = payload;
                     if (!id || !Number.isInteger(totalChunks) || totalChunks < 1 || totalChunks > MAX_ASSET_CHUNKS)
                         return;
+                    const peerKey = senderPeer?.id || 'host';
+                    let peerRpcCount = 0;
+                    for (const t of this._rpcTransfers.values()) {
+                        if (t.peerKey === peerKey) peerRpcCount++;
+                    }
+                    if (!this._rpcTransfers.has(id) && (this._rpcTransfers.size >= 16 || peerRpcCount >= 4)) {
+                        return;
+                    }
                     const existing = this._rpcTransfers.get(id);
                     if (existing?.timeoutId) clearTimeout(existing.timeoutId);
                     const timeoutId = setTimeout(() => this._rpcTransfers.delete(id), 30000);
@@ -589,6 +644,7 @@
                         chunks: new Array(totalChunks),
                         receivedCount: 0,
                         totalChunks,
+                        peerKey,
                         timeoutId
                     });
                     break;
@@ -633,15 +689,36 @@
                             .trim()
                             .toLowerCase();
                         const allowed = campState?.allowedUsers || [];
+                        const pLower = playerName.toLowerCase();
+                        const isAllowed =
+                            allowed.length === 0 ||
+                            allowed.some(
+                                (u) =>
+                                    String(u || '')
+                                        .trim()
+                                        .toLowerCase() === pLower
+                            );
+                        const isDuplicateActive = Array.from(this.peers.values()).some(
+                            (p) =>
+                                p &&
+                                p !== senderPeer &&
+                                p.joined &&
+                                String(p.username || '')
+                                    .trim()
+                                    .toLowerCase() === pLower
+                        );
                         if (
                             joinData.role === 'GM' ||
-                            (gmName && playerName.toLowerCase() === gmName && joinData.role !== 'Player') ||
-                            (allowed.length > 0 && !allowed.includes(playerName))
+                            (gmName && pLower === gmName) ||
+                            !isAllowed ||
+                            isDuplicateActive
                         ) {
                             const reason =
-                                joinData.role === 'GM'
-                                    ? 'Only the host browser can join as GM in a Direct P2P room.'
-                                    : 'Username not on the allowed list';
+                                joinData.role === 'GM' || (gmName && pLower === gmName)
+                                    ? 'That username is reserved for the host GM in this Direct P2P room.'
+                                    : isDuplicateActive
+                                      ? 'Username is already connected in this Direct P2P room.'
+                                      : 'Username not on the allowed list';
                             const rejPacket = JSON.stringify({
                                 type: 'event',
                                 event: 'join_rejected',
@@ -663,8 +740,20 @@
                         senderPeer.role = playerRole;
                         this._syncPeersToBackendBridge();
 
-                        // Authoritative sanitization: GM secrets never sent to players
+                        // Authoritative sanitization: GM secrets and private whispers never sent to players
                         const sanitizedState = this._sanitizeCampaignStateForPlayer(campState, playerName);
+                        const filteredHistory = (global.VTT?.chatHistory || [])
+                            .filter((m) => {
+                                if (!m || m.hidden) return false;
+                                const senderL = String(m.username || '').toLowerCase();
+                                if (m.whisperToGM && senderL !== pLower) return false;
+                                if (m.whisperTo) {
+                                    const targetL = String(m.whisperTo).toLowerCase();
+                                    if (targetL !== pLower && senderL !== pLower) return false;
+                                }
+                                return true;
+                            })
+                            .slice(-50);
                         const joinedPacket = JSON.stringify({
                             type: 'event',
                             event: 'joined',
@@ -672,8 +761,9 @@
                                 {
                                     role: playerRole,
                                     userRole: playerRole,
+                                    hostKey: this.hostKey || null,
                                     campaignState: sanitizedState,
-                                    chatHistory: (global.VTT?.chatHistory || []).slice(-50)
+                                    chatHistory: filteredHistory
                                 }
                             ]
                         });
@@ -709,6 +799,18 @@
                         }
                     }
 
+                    // Client-side Host Identity Verification when invite link carries ?pk=
+                    if (!this.isHost && event === 'joined' && this.expectedHostKey) {
+                        const receivedKey = args?.[0]?.hostKey || null;
+                        if (receivedKey !== this.expectedHostKey) {
+                            this._dispatch('join_rejected', {
+                                reason: 'Host identity verification failed (invite key mismatch).'
+                            });
+                            this.disconnect();
+                            return;
+                        }
+                    }
+
                     // Dispatch to local listeners
                     this._dispatch(event, ...(args || []));
 
@@ -735,13 +837,21 @@
                         .toLowerCase()
                         .split(';')[0]
                         .trim();
+                    const peerKey = senderPeer?.id || 'host';
+                    let peerAssetCount = 0;
+                    for (const t of this._assetTransfers.values()) {
+                        if (t.peerKey === peerKey) peerAssetCount++;
+                    }
                     if (
                         !id ||
                         !Number.isInteger(totalChunks) ||
                         totalChunks < 1 ||
                         totalChunks > MAX_ASSET_CHUNKS ||
-                        (totalBytes && totalBytes > MAX_ASSET_BYTES) ||
-                        !SAFE_P2P_ASSET_MIMES.has(safeMime)
+                        !Number.isFinite(totalBytes) ||
+                        totalBytes <= 0 ||
+                        totalBytes > MAX_ASSET_BYTES ||
+                        !SAFE_P2P_ASSET_MIMES.has(safeMime) ||
+                        (!this._assetTransfers.has(id) && (this._assetTransfers.size >= 8 || peerAssetCount >= 2))
                     ) {
                         console.warn(
                             `[P2P Security] Rejected invalid asset transfer header "${id}" (${safeMime}, ${totalChunks} chunks)`
@@ -761,8 +871,10 @@
                     this._assetTransfers.set(id, {
                         chunks: new Array(totalChunks),
                         receivedCount: 0,
+                        receivedBytes: 0,
                         totalChunks,
                         totalBytes,
+                        peerKey,
                         mimeType: safeMime,
                         meta: meta || {},
                         createdAt: Date.now(),
@@ -782,6 +894,12 @@
                         !transfer.chunks[index] &&
                         typeof data === 'string'
                     ) {
+                        transfer.receivedBytes += data.length;
+                        if (transfer.receivedBytes > MAX_ASSET_BYTES * 1.4) {
+                            clearTimeout(transfer.timeoutId);
+                            this._assetTransfers.delete(id);
+                            return;
+                        }
                         transfer.chunks[index] = data;
                         transfer.receivedCount++;
 
@@ -808,8 +926,51 @@
             if (!clone.mapOrder && clone.maps) clone.mapOrder = Object.keys(clone.maps);
             const activeIds = new Set();
             if (clone.activeMapId) activeIds.add(clone.activeMapId);
-            const overrideId = clone.playerMapOverrides?.[username];
+            const uLower = String(username || '')
+                .trim()
+                .toLowerCase();
+            const overrideEntry = Object.entries(clone.playerMapOverrides || {}).find(
+                ([k]) =>
+                    String(k || '')
+                        .trim()
+                        .toLowerCase() === uLower
+            );
+            const overrideId = overrideEntry?.[1];
             if (overrideId) activeIds.add(overrideId);
+
+            if (clone.characters && typeof clone.characters === 'object') {
+                for (const charId in clone.characters) {
+                    const ch = clone.characters[charId];
+                    if (!ch) continue;
+                    const isOwned =
+                        String(ch.owner || '')
+                            .trim()
+                            .toLowerCase() === uLower ||
+                        String(ch.ownerUsername || '')
+                            .trim()
+                            .toLowerCase() === uLower ||
+                        (Array.isArray(ch.assignedPlayers) &&
+                            ch.assignedPlayers.some(
+                                (p) =>
+                                    String(p || '')
+                                        .trim()
+                                        .toLowerCase() === uLower
+                            )) ||
+                        (Array.isArray(ch.players) &&
+                            ch.players.some(
+                                (p) =>
+                                    String(p || '')
+                                        .trim()
+                                        .toLowerCase() === uLower
+                            )) ||
+                        ch.isPublic === true;
+                    if (!isOwned) {
+                        delete clone.characters[charId];
+                    } else {
+                        delete ch.gmNotes;
+                    }
+                }
+            }
 
             if (clone.maps) {
                 for (const mapId in clone.maps) {
@@ -850,7 +1011,19 @@
                 if (transfer?.timeoutId) {
                     clearTimeout(transfer.timeoutId);
                 }
-                const fullBase64 = transfer.chunks.join('');
+                let fullBase64 = transfer.chunks.join('');
+                if (transfer.mimeType === 'image/svg+xml' && typeof atob === 'function' && typeof btoa === 'function') {
+                    try {
+                        const rawSvg = atob(fullBase64);
+                        const cleanSvg = global.DOMPurify?.sanitize
+                            ? global.DOMPurify.sanitize(rawSvg, { USE_PROFILES: { svg: true } })
+                            : rawSvg
+                                  .replace(/<script[\s\S]*?<\/script>/gi, '')
+                                  .replace(/\son[a-z]+\s*=\s*(['"]).*?\1/gi, '')
+                                  .replace(/javascript:/gi, '');
+                        fullBase64 = btoa(cleanSvg);
+                    } catch (_) {}
+                }
                 const dataUrl = `data:${transfer.mimeType};base64,${fullBase64}`;
                 this._assetTransfers.delete(id);
 

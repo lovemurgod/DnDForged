@@ -26,12 +26,16 @@ test('Website Design & Feedback Page Verification Suite', async (t) => {
         }
     });
 
-    await t.test('2. Verify release download link points to valid release asset', () => {
+    await t.test('2. Verify header Play Online CTA and release download link on download pages', () => {
         for (const page of PAGES) {
             const content = fs.readFileSync(path.join(ROOT_DIR, page), 'utf8');
+            assert.ok(content.includes('href="play/"'), `Page ${page} must link to Play Online`);
+        }
+        for (const downloadPage of ['index.html', 'getting-started.html']) {
+            const content = fs.readFileSync(path.join(ROOT_DIR, downloadPage), 'utf8');
             assert.ok(
                 content.includes('1.5.0/ForgeDVTT-Setup-1.5.0.exe'),
-                `Page ${page} must link to working release installer (1.5.0 tag with ForgeDVTT-Setup-1.5.0.exe asset)`
+                `Page ${downloadPage} must link to working release installer (1.5.0 tag with ForgeDVTT-Setup-1.5.0.exe asset)`
             );
         }
     });

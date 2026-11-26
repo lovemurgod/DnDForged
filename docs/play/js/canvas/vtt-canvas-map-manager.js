@@ -158,7 +158,7 @@ export function buildMapThumbnailMarkup(map, safeThumb, isVideo, isGif, iconSize
                    playsinline 
                    loop 
                    style="width: 100%; height: 100%; object-fit: cover; pointer-events: none; display: none;"
-                   onerror="this.style.display='none';">
+                   data-fallback-hide="1">
             </video>
             <div class="map-thumb-video-placeholder" style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle, #0e111a 0%, #171b26 100%);">
                 <i class="fa-solid fa-film" style="font-size: ${iconSize}; color: rgba(212,175,55,0.45);"></i>
@@ -175,7 +175,7 @@ export function buildMapThumbnailMarkup(map, safeThumb, isVideo, isGif, iconSize
                  loading="lazy" 
                  alt="${escapeMapHtml(map.name)}" 
                  style="width: 100%; height: 100%; object-fit: cover; pointer-events: none; display: none;" 
-                 onerror="this.style.display='none'; if(this.previousElementSibling) this.previousElementSibling.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='block';">
+                 data-fallback-hide-prev-show-next="1">
             <i class="fa-solid fa-map" style="display: none; font-size: ${iconSize}; color: rgba(212,175,55,0.25);"></i>
         `;
     }
@@ -186,7 +186,7 @@ export function buildMapThumbnailMarkup(map, safeThumb, isVideo, isGif, iconSize
              loading="lazy" 
              alt="${escapeMapHtml(map.name)}" 
              style="width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 0.2s ease;" 
-             onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='flex';">
+             data-fallback-hide-show-next="1">
         <div class="map-thumb-img-placeholder" style="display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; position: absolute; inset: 0; pointer-events: none;">
             <i class="fa-solid fa-map" style="font-size: ${iconSize}; color: rgba(212,175,55,0.25);"></i>
         </div>

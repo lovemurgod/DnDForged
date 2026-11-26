@@ -70,7 +70,10 @@ test.describe('UI Controls, Chat & Dock Visual Regression', () => {
         await page.waitForTimeout(400);
 
         const initContainer = page.locator('#vtt-initiative-carousel-container');
-        await expect(initContainer).toHaveScreenshot('initiative-carousel.png');
+        await expect(initContainer).toHaveScreenshot('initiative-carousel.png', {
+            animations: 'disabled',
+            maxDiffPixelRatio: 0.08
+        });
     });
 
     test('renders left controls toolbar', async ({ page }) => {

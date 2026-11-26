@@ -4,44 +4,53 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ForgeDVTT Control Center</title>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; media-src 'self' data: blob: https:; connect-src 'self' https: wss:;">
+  <title>ForgeDVTT — Session Prep &amp; Control Center</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
     rel="stylesheet">
+  <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
   <link rel="icon" type="image/png" href="icon.png">
   <link rel="stylesheet" href="dashboard.css">
 </head>
 
 <body>
+  <div class="bg-tactical-grid" aria-hidden="true"></div>
+  <div class="bg-ambient-lights" aria-hidden="true"></div>
   <div class="app-container">
     <!-- Header / Brand Bar -->
     <header class="header-bar">
       <div class="brand">
         <div class="brand-text">
           <img src="TextLogo.png" alt="ForgeDVTT" class="electron-brand-logo">
-          <span class="sub-title">Tabletop Freedom • Control Center</span>
+          <span class="sub-title">Tabletop Freedom • Session Prep &amp; Control Center</span>
         </div>
       </div>
 
       <!-- Navigation Tabs -->
       <nav class="nav-tabs">
         <button class="nav-tab active" id="tab-btn-hosting" data-target="view-hosting">
-          <span class="tab-icon">🛡️</span> Hosting & Server
+          <span class="tab-icon"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i></span> Hosting &amp; Server
         </button>
         <button class="nav-tab" id="tab-btn-gm" data-target="view-gm">
-          <span class="tab-icon">👑</span> GM Dashboard
+          <span class="tab-icon"><i class="fa-solid fa-crown" aria-hidden="true"></i></span> GM Dashboard
         </button>
         <button class="nav-tab" id="tab-btn-sources" data-target="view-sources">
-          <span class="tab-icon">📚</span> Database Sources
+          <span class="tab-icon"><i class="fa-solid fa-book-open" aria-hidden="true"></i></span> Database Sources
         </button>
       </nav>
 
       <div class="header-status">
+        <nav class="prep-static-nav static-web-only" aria-label="Website navigation">
+          <a href="../" class="btn btn-sm btn-outline" title="Back to ForgeDVTT Home"><i class="fa-solid fa-house" aria-hidden="true"></i> Home</a>
+          <a href="../getting-started.html" class="btn btn-sm btn-outline" title="Getting Started Guide"><i class="fa-solid fa-compass" aria-hidden="true"></i> Guide</a>
+          <a href="../play/" class="btn btn-sm btn-gold" title="Launch Online Tabletop"><i class="fa-solid fa-dice-d20" aria-hidden="true"></i> Play Online</a>
+        </nav>
         <button type="button" class="btn-help-header" id="btn-open-app-guide"
-          title="Open Desktop App &amp; Homebrew Guide">
-          <span>📖</span> App Guide
+          title="Open App &amp; Homebrew Guide">
+          <i class="fa-solid fa-book" aria-hidden="true"></i> App Guide
         </button>
         <div class="status-badge" id="overall-status-badge">
           <span class="status-dot"></span>
@@ -49,7 +58,7 @@
         </div>
         <button type="button" class="btn btn-sm btn-outline prep-only vtt-hidden" id="btn-prep-logout"
           title="Sign out of Web Prep">
-          🔒 Log Out
+          <i class="fa-solid fa-lock" aria-hidden="true"></i> Log Out
         </button>
       </div>
     </header>
@@ -339,25 +348,60 @@
     <!-- VIEW 2: GM DASHBOARD -->
     <main class="dashboard-view" id="view-gm">
       <div class="gm-grid">
+        <!-- Online P2P & Storage Quick-Launch Bar (Static Web / Browser Prep) -->
+        <section class="card prep-p2p-launch-bar static-web-only" id="prep-static-launch-card">
+          <div class="prep-launch-group">
+            <div class="prep-launch-meta">
+              <span class="prep-launch-eyebrow"><i class="fa-solid fa-bolt" aria-hidden="true"></i> Online P2P Room</span>
+              <div class="prep-room-code-row">
+                <code id="prep-static-p2p-code" class="prep-room-code">----</code>
+                <button type="button" class="btn btn-xs btn-outline" id="btn-prep-copy-p2p-code" title="Copy Room Code">
+                  <i class="fa-solid fa-copy" aria-hidden="true"></i> Copy
+                </button>
+                <button type="button" class="btn btn-xs btn-outline" id="btn-prep-regen-p2p-code" title="Generate New Room Code">
+                  <i class="fa-solid fa-rotate" aria-hidden="true"></i> New
+                </button>
+              </div>
+            </div>
+            <div class="prep-launch-actions">
+              <button type="button" class="btn btn-sm btn-outline" id="btn-prep-copy-p2p-link" title="Copy 1-Click Player Invite Link">
+                <i class="fa-solid fa-link" aria-hidden="true"></i> Copy Invite Link
+              </button>
+              <button type="button" class="btn btn-sm btn-gold" id="btn-prep-open-play" title="Launch Tabletop in Browser (P2P)">
+                <i class="fa-solid fa-dice-d20" aria-hidden="true"></i> Open Table in Browser
+              </button>
+            </div>
+          </div>
+          <div class="prep-storage-group">
+            <div class="prep-storage-meta">
+              <span class="prep-launch-eyebrow"><i class="fa-solid fa-hard-drive" aria-hidden="true"></i> Local Storage</span>
+              <span id="prep-static-storage-label" class="prep-storage-label">Browser Storage (IndexedDB)</span>
+            </div>
+            <button type="button" class="btn btn-sm btn-outline" id="btn-prep-choose-folder" title="Sync campaigns directly with a local folder on your computer">
+              <i class="fa-solid fa-folder-open" aria-hidden="true"></i> Choose Folder
+            </button>
+          </div>
+        </section>
+
         <!-- Campaigns Management Card -->
         <section class="card gm-campaigns-card">
           <div class="card-header">
-            <h2>📖 Campaigns Management</h2>
+            <h2><i class="fa-solid fa-book-bookmark" aria-hidden="true"></i> Campaigns Management</h2>
             <div class="card-header-actions">
               <button class="btn btn-sm btn-outline web-prep-only" id="btn-gm-export-backup"
-                title="Export full server backup JSON">
-                💾 Backup
+                title="Export full campaign backup JSON">
+                <i class="fa-solid fa-floppy-disk" aria-hidden="true"></i> Backup
               </button>
               <button class="btn btn-sm btn-outline web-prep-only" id="btn-gm-restore-backup"
                 title="Restore campaigns and sources from a backup JSON">
-                📥 Restore
+                <i class="fa-solid fa-file-import" aria-hidden="true"></i> Restore
               </button>
               <button class="btn btn-sm btn-outline" id="btn-gm-import-campaign"
                 title="Import an exported campaign (.zip or .json)">
-                📥 Import Campaign
+                <i class="fa-solid fa-file-arrow-up" aria-hidden="true"></i> Import Campaign
               </button>
               <button class="btn btn-sm btn-primary" id="btn-gm-new-campaign">
-                ➕ Create Campaign
+                <i class="fa-solid fa-plus" aria-hidden="true"></i> Create Campaign
               </button>
             </div>
           </div>
@@ -366,7 +410,7 @@
             <div class="campaign-sidebar">
               <div class="sidebar-header">
                 <span>Select Campaign:</span>
-                <button class="btn btn-xs btn-outline" id="btn-refresh-campaigns">🔄</button>
+                <button class="btn btn-xs btn-outline" id="btn-refresh-campaigns" title="Refresh Campaigns"><i class="fa-solid fa-rotate" aria-hidden="true"></i></button>
               </div>
               <div class="campaign-list" id="gm-campaign-list">
                 <!-- Dynamically populated campaign items -->

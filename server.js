@@ -93,6 +93,7 @@ const io = new Server(httpServer, {
 // Global Process Error Handlers
 process.on('uncaughtException', (err) => {
   console.error('[Server Error] Uncaught Exception:', err);
+  flushAndExit('uncaughtException', 1);
 });
 process.on('unhandledRejection', (reason, promise) => {
   console.error('[Server Error] Unhandled Rejection at:', promise, 'reason:', reason);
@@ -255,6 +256,7 @@ app.use('/assets', (req, res, next) => {
       lastModified: true,
       setHeaders: (r) => {
         r.setHeader('X-Content-Type-Options', 'nosniff');
+        r.setHeader('Content-Security-Policy', "sandbox; default-src 'none'; img-src 'self'; media-src 'self'");
       }
     });
   }
@@ -410,7 +412,15 @@ app.post('/api/server/shutdown', (req, res) => {
   }
   res.json({ success: true, message: 'Server flushed and terminating' });
   setTimeout(() => {
-    process.exit(0);
+    try {
+      io.close();
+    } catch (_) {}
+    try {
+      httpServer.close(() => process.exit(0));
+    } catch (_) {
+      process.exit(0);
+    }
+    setTimeout(() => process.exit(0), 500).unref();
   }, 50);
 });
 
@@ -435,7 +445,7 @@ httpServer.listen(PORT, async () => {
 });
 
 // Graceful exit flush: ensure debounced campaign writes are committed before termination
-function flushAndExit(signal) {
+function flushAndExit(signal, exitCode = 0) {
   console.log(`[Server] Received ${signal}. Flushing pending campaign state to disk...`);
   try {
     saveCampaigns(true);
@@ -443,7 +453,15 @@ function flushAndExit(signal) {
   } catch (e) {
     console.error('[Server] Error during exit flush:', e);
   }
-  process.exit(0);
+  try {
+    io.close();
+  } catch (_) {}
+  try {
+    httpServer.close(() => process.exit(exitCode));
+  } catch (_) {
+    process.exit(exitCode);
+  }
+  setTimeout(() => process.exit(exitCode), 500).unref();
 }
 process.on('SIGTERM', () => flushAndExit('SIGTERM'));
 process.on('SIGINT', () => flushAndExit('SIGINT'));

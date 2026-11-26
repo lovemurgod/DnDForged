@@ -308,15 +308,15 @@ export function renderAbilityCardsHtml(char, ctx) {
                         <div class="pc-ability-cat-card glass-flat" data-category-id="${c.id}" data-category-idx="${cIdx}" draggable="true" style="border:1px solid var(--color-border-subtle); border-radius:8px; margin-bottom:4px; overflow:hidden; transition:border-color 0.15s, box-shadow 0.15s;">
                             <div class="pc-ability-cat-header" data-category-id="${c.id}" style="padding:8px 12px; background:rgba(0,0,0,0.25); display:flex; justify-content:space-between; align-items:center; cursor:pointer; user-select:none;">
                                 <div style="display:flex; align-items:center; gap:8px; flex:1; min-width:0;">
-                                    <div class="pc-ability-cat-drag-handle" data-category-idx="${cIdx}" title="Click and drag to reorder category" style="cursor:grab; opacity:0.5; padding-right:4px;" onmouseover="this.style.opacity='1'; this.style.color='var(--color-gold-base)';" onmouseout="this.style.opacity='0.5'; this.style.color='inherit';" onclick="event.stopPropagation();">
+                                    <div class="pc-ability-cat-drag-handle" data-category-idx="${cIdx}" title="Click and drag to reorder category" style="cursor:grab; opacity:0.5; padding-right:4px;" data-stop-propagation="true">
                                         <i class="fa-solid fa-grip-vertical"></i>
                                     </div>
                                     <i class="fa-solid fa-folder text-gradient-gold" style="font-size:0.95rem; flex-shrink:0;"></i>
                                     <i class="fa-solid fa-chevron-right text-gradient-gold pc-ability-cat-chevron" data-category-id="${c.id}" style="font-size:0.75rem; flex-shrink:0; transition:transform 0.2s; transform:${c.collapsed ? 'rotate(0deg)' : 'rotate(90deg)'};"></i>
-                                    <span style="font-weight:700; font-size:0.875rem; color:var(--color-text-primary); text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">${c.name}</span>
+                                    <span style="font-weight:700; font-size:0.875rem; color:var(--color-text-primary); text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">${escapeHtml(c.name)}</span>
                                     <span style="font-size:0.75rem; color:var(--color-text-muted); background:rgba(255,255,255,0.08); padding:2px 8px; border-radius:12px;">${cItems.length} item${cItems.length !== 1 ? 's' : ''}</span>
                                 </div>
-                                <div style="display:flex; gap:6px; align-items:center; flex-shrink:0;" onclick="event.stopPropagation();">
+                                <div style="display:flex; gap:6px; align-items:center; flex-shrink:0;" data-stop-propagation="true">
                                     <button class="btn btn-xxs btn-secondary pc-ability-cat-edit" data-category-id="${c.id}" title="Edit Category"><i class="fa-solid fa-pen"></i></button>
                                     <button class="btn btn-xxs btn-danger pc-ability-cat-del" data-category-id="${c.id}" title="Delete Category"><i class="fa-solid fa-trash"></i></button>
                                 </div>
@@ -392,8 +392,8 @@ export function renderAbilityFields(fields = []) {
         row.style.gap = '8px';
         row.className = 'modal-ability-field-row';
         row.innerHTML = `
-            <input type="text" class="ab-field-label" placeholder="Label" value="${f.label || ''}" style="flex:1; padding:4px; font-size:0.8rem;">
-            <input type="text" class="ab-field-entry" placeholder="Entry" value="${f.entry || ''}" style="flex:2; padding:4px; font-size:0.8rem;">
+            <input type="text" class="ab-field-label" placeholder="Label" value="${escapeHtml(f.label || '')}" style="flex:1; padding:4px; font-size:0.8rem;">
+            <input type="text" class="ab-field-entry" placeholder="Entry" value="${escapeHtml(f.entry || '')}" style="flex:2; padding:4px; font-size:0.8rem;">
             <button class="btn btn-xxs btn-danger btn-ab-field-remove"><i class="fa-solid fa-trash"></i></button>
         `;
         row.querySelector('.btn-ab-field-remove')?.addEventListener('click', () => row.remove());
@@ -482,7 +482,9 @@ export function wireAbilityCardsEvents(char, ctx) {
         if (catSel) {
             catSel.innerHTML =
                 '<option value="">Uncategorized</option>' +
-                (char.abilityCategories || []).map((c) => `<option value="${c.id}">📁 ${c.name}</option>`).join('');
+                (char.abilityCategories || [])
+                    .map((c) => `<option value="${escapeHtml(c.id)}">📁 ${escapeHtml(c.name)}</option>`)
+                    .join('');
             catSel.value = '';
         }
         const actSel = document.getElementById('modal-ability-action-type');
@@ -540,7 +542,9 @@ export function wireAbilityCardsEvents(char, ctx) {
             if (catSel) {
                 catSel.innerHTML =
                     '<option value="">Uncategorized</option>' +
-                    (char.abilityCategories || []).map((c) => `<option value="${c.id}">📁 ${c.name}</option>`).join('');
+                    (char.abilityCategories || [])
+                        .map((c) => `<option value="${escapeHtml(c.id)}">📁 ${escapeHtml(c.name)}</option>`)
+                        .join('');
                 catSel.value = ab.categoryId || '';
             }
             const actSel = document.getElementById('modal-ability-action-type');

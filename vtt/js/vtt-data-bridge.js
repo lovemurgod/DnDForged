@@ -8,7 +8,7 @@ import {
     DEFAULT_TOKEN_DROP_CONFIG
 } from './canvas/tokens/vtt-canvas-token-drop-config.js';
 import { openCreatureSelectorModal } from './modals/creature-selector-modal.js';
-import { resolveMonsterTokenUrl } from './vtt-utils.js';
+import { resolveMonsterTokenUrl, escapeHtml } from './vtt-utils.js';
 
 export function initVttDataBridge(vtt) {
     const listContainer = document.getElementById('library-monster-list');
@@ -585,14 +585,14 @@ export function initVttDataBridge(vtt) {
             const typeLabel = monster.type || monster.subtype || '—';
 
             item.innerHTML = `
-                <div class="bestiary-col-name" title="${monster.name}">
-                    <span class="bestiary-col-name-text">${monster.name}</span>
+                <div class="bestiary-col-name" title="${escapeHtml(monster.name)}">
+                    <span class="bestiary-col-name-text">${escapeHtml(monster.name)}</span>
                     ${spellBadge}
                 </div>
-                <div class="bestiary-col-cr" title="CR ${crStr}">${crStr}</div>
-                <div class="bestiary-col-type" title="${typeLabel}">${typeLabel}</div>
-                <div class="bestiary-col-source" title="${monster.source} (${monster.edition || '2014'})">
-                    <span class="bestiary-source-pill ${editionClass}">${monster.source}</span>
+                <div class="bestiary-col-cr" title="CR ${escapeHtml(crStr)}">${escapeHtml(crStr)}</div>
+                <div class="bestiary-col-type" title="${escapeHtml(typeLabel)}">${escapeHtml(typeLabel)}</div>
+                <div class="bestiary-col-source" title="${escapeHtml(monster.source)} (${escapeHtml(monster.edition || '2014')})">
+                    <span class="bestiary-source-pill ${editionClass}">${escapeHtml(monster.source)}</span>
                 </div>
             `;
 
@@ -2259,10 +2259,10 @@ export function initVttDataBridge(vtt) {
         modal.style.cssText = 'width: min(420px, 92vw); padding: 18px;';
 
         modal.innerHTML = `
-            <h4 style="margin-top:0; color:var(--color-gold-base);">Import ${monster.name}</h4>
+            <h4 style="margin-top:0; color:var(--color-gold-base);">Import ${escapeHtml(monster.name)}</h4>
             <div class="form-group">
                 <label>Custom Name (Optional)</label>
-                <input type="text" id="npc-nickname" placeholder="${monster.name}" style="width:100%;">
+                <input type="text" id="npc-nickname" placeholder="${escapeHtml(monster.name)}" style="width:100%;">
             </div>
             <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:16px;">
                 <button id="npc-import-cancel" class="btn btn-secondary btn-sm">Cancel</button>
@@ -2378,13 +2378,14 @@ export function initVttDataBridge(vtt) {
                 }
             }
 
+            const safeTokenImg = escapeHtml(tokenImg);
             const cleanUrl = tokenImg.split('?')[0].toLowerCase();
             const isVideo = cleanUrl.match(/\.(mp4|webm|ogg)$/i);
             const isYoutube = cleanUrl.includes('youtube.com') || cleanUrl.includes('youtu.be');
 
             let mediaHtml = '';
             if (isVideo) {
-                mediaHtml = `<video src="${tokenImg}" autoplay loop muted playsinline style="width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--color-gold-base); object-fit: cover;"></video>`;
+                mediaHtml = `<video src="${safeTokenImg}" autoplay loop muted playsinline style="width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--color-gold-base); object-fit: cover;"></video>`;
             } else if (isYoutube) {
                 let ytUrl = tokenImg;
                 const ytMatch = tokenImg.match(
@@ -2394,24 +2395,25 @@ export function initVttDataBridge(vtt) {
                     const videoId = ytMatch[1];
                     ytUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&controls=0&disablekb=1&fs=0&modestbranding=1&playsinline=1&playlist=${videoId}`;
                 }
-                mediaHtml = `<iframe src="${ytUrl}" frameborder="0" style="width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--color-gold-base); pointer-events:none;"></iframe>`;
+                mediaHtml = `<iframe src="${escapeHtml(ytUrl)}" frameborder="0" style="width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--color-gold-base); pointer-events:none;"></iframe>`;
             } else {
-                mediaHtml = `<img src="${tokenImg}" style="width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--color-gold-base); object-fit: cover;" onerror="this.src='favicon.svg'">`;
+                mediaHtml = `<img src="${safeTokenImg}" style="width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--color-gold-base); object-fit: cover;" data-fallback-src="favicon.svg">`;
             }
 
+            const safeNpcId = escapeHtml(npc.id);
             html += `
-                <div class="library-item custom-npc-row" data-id="${npc.id}" draggable="true" style="display:flex; justify-content:space-between; align-items:center; padding: 6px 8px;">
+                <div class="library-item custom-npc-row" data-id="${safeNpcId}" draggable="true" style="display:flex; justify-content:space-between; align-items:center; padding: 6px 8px;">
                     <div style="display: flex; align-items: center; gap: 12px; pointer-events: none;">
                         ${mediaHtml}
                         <div>
-                            <div class="lib-item-name" style="line-height: 1.2; font-weight: 600;">${npc.name}</div>
+                            <div class="lib-item-name" style="line-height: 1.2; font-weight: 600;">${escapeHtml(npc.name)}</div>
                             <div class="lib-item-cr" style="line-height: 1;">Custom NPC</div>
                         </div>
                     </div>
                     <div style="display:flex; gap:4px; align-items:center;" class="custom-npc-actions">
-                        <button class="btn-mobile-spawn-token btn-spawn-custom-npc" data-id="${npc.id}" title="Spawn on Map"><i class="fa-solid fa-plus pointer-events-none"></i></button>
-                        <button class="btn btn-icon btn-secondary btn-edit-custom-npc" data-id="${npc.id}" title="Edit NPC" style="width: 24px; height: 24px; font-size: 0.8rem; padding: 0;"><i class="fa-solid fa-pen pointer-events-none"></i></button>
-                        <button class="btn btn-icon btn-danger btn-del-custom-npc" data-id="${npc.id}" title="Delete NPC" style="width: 24px; height: 24px; font-size: 0.8rem; padding: 0;"><i class="fa-solid fa-trash pointer-events-none"></i></button>
+                        <button class="btn-mobile-spawn-token btn-spawn-custom-npc" data-id="${safeNpcId}" title="Spawn on Map"><i class="fa-solid fa-plus pointer-events-none"></i></button>
+                        <button class="btn btn-icon btn-secondary btn-edit-custom-npc" data-id="${safeNpcId}" title="Edit NPC" style="width: 24px; height: 24px; font-size: 0.8rem; padding: 0;"><i class="fa-solid fa-pen pointer-events-none"></i></button>
+                        <button class="btn btn-icon btn-danger btn-del-custom-npc" data-id="${safeNpcId}" title="Delete NPC" style="width: 24px; height: 24px; font-size: 0.8rem; padding: 0;"><i class="fa-solid fa-trash pointer-events-none"></i></button>
                     </div>
                 </div>
             `;

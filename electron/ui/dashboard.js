@@ -451,6 +451,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (p2pRoomCodeDisplay && status.p2p.roomCode) {
                 p2pRoomCodeDisplay.textContent = status.p2p.roomCode;
             }
+            const prepStaticP2pCode = document.getElementById('prep-static-p2p-code');
+            if (prepStaticP2pCode && status.p2p.roomCode) {
+                prepStaticP2pCode.textContent = status.p2p.roomCode;
+            }
             if (p2pPeerCount) {
                 const count = status.p2p.peerCount || 0;
                 p2pPeerCount.textContent = `${count} Peer${count === 1 ? '' : 's'} Connected`;
@@ -459,6 +463,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                 p2pStatusBadge.textContent = status.p2p.active ? 'P2P Active' : 'P2P Ready';
                 p2pStatusBadge.className = status.p2p.active ? 'badge badge-online' : 'badge badge-accent';
             }
+        }
+        const prepStaticStorageLabel = document.getElementById('prep-static-storage-label');
+        if (prepStaticStorageLabel && status.staticWebMode) {
+            prepStaticStorageLabel.textContent = status.dataDir || 'Browser Storage (IndexedDB)';
         }
 
         // Domain preferences
@@ -634,7 +642,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 }
             }
         } catch (err) {
-            gmCampaignList.innerHTML = `<div class="loading-placeholder" style="color:var(--danger)">Failed to load campaigns: ${err.message}</div>`;
+            gmCampaignList.innerHTML = `<div class="loading-placeholder" style="color:var(--danger)">Failed to load campaigns: ${escapeHtml(err.message)}</div>`;
         }
     }
 
@@ -650,8 +658,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             const item = document.createElement('div');
             item.className = 'campaign-item' + (selectedCampaign && selectedCampaign.id === c.id ? ' active' : '');
             item.innerHTML = `
-        <span class="camp-item-name">${c.name || 'Untitled Campaign'}</span>
-        <span class="camp-item-meta">ID: ${c.id} • ${mapsCount} map${mapsCount === 1 ? '' : 's'}</span>
+        <span class="camp-item-name">${escapeHtml(c.name || 'Untitled Campaign')}</span>
+        <span class="camp-item-meta">ID: ${escapeHtml(c.id)} • ${mapsCount} map${mapsCount === 1 ? '' : 's'}</span>
       `;
             item.addEventListener('click', () => selectCampaign(c));
             gmCampaignList.appendChild(item);
@@ -700,7 +708,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const pill = document.createElement('span');
             pill.className = 'allowlist-pill';
             pill.innerHTML = `
-        <span>${user}</span>
+        <span>${escapeHtml(user)}</span>
         <span class="allowlist-pill-remove" title="Remove">&times;</span>
       `;
             pill.querySelector('.allowlist-pill-remove').addEventListener('click', () => {
@@ -913,12 +921,14 @@ document.addEventListener('DOMContentLoaded', async () => {
                     const rawThumb = m.thumbnail || m.mapImage || '';
                     const thumb = resolveMediaUrl(rawThumb);
                     const tokenCount = Object.keys(m.tokens || {}).length;
+                    const safeThumb = thumb ? escapeHtml(thumb).replace(/'/g, '%27') : '';
+                    const safeMapName = escapeHtml(m.name || 'Untitled Map');
                     card.innerHTML = `
-            <div class="entity-card-thumb" style="${thumb ? `background-image: url('${thumb}')` : ''}">
-              ${!thumb ? '<span class="entity-thumb-icon">🗺️</span>' : ''}
+            <div class="entity-card-thumb" style="${safeThumb ? `background-image: url('${safeThumb}')` : ''}">
+              ${!safeThumb ? '<span class="entity-thumb-icon">🗺️</span>' : ''}
             </div>
             <div class="entity-card-info">
-              <h4 class="entity-card-title" title="${m.name || 'Untitled Map'}">${m.name || 'Untitled Map'}</h4>
+              <h4 class="entity-card-title" title="${safeMapName}">${safeMapName}</h4>
               <div class="entity-card-meta">
                 <span>${m.gridWidth || 40}x${m.gridHeight || 30} sq</span>
                 <span>•</span>
@@ -1004,16 +1014,18 @@ document.addEventListener('DOMContentLoaded', async () => {
                     (typeKey === 'player' ? 'Player Character' : typeKey === 'companion' ? 'Companion' : 'Custom NPC');
                 const iconFallback = typeKey === 'player' ? '👤' : typeKey === 'companion' ? '🐾' : '👾';
 
+                const safeImg = img ? escapeHtml(img).replace(/'/g, '%27') : '';
+                const safeCharName = escapeHtml(ch.name || 'Unnamed');
                 card.innerHTML = `
-          <div class="entity-card-thumb" style="${img ? `background-image: url('${img}')` : ''}">
-            ${!img ? `<span class="entity-thumb-icon">${iconFallback}</span>` : ''}
+          <div class="entity-card-thumb" style="${safeImg ? `background-image: url('${safeImg}')` : ''}">
+            ${!safeImg ? `<span class="entity-thumb-icon">${iconFallback}</span>` : ''}
           </div>
           <div class="entity-card-info">
-            <h4 class="entity-card-title" title="${ch.name || 'Unnamed'}">${ch.name || 'Unnamed'}</h4>
+            <h4 class="entity-card-title" title="${safeCharName}">${safeCharName}</h4>
             <div class="entity-card-meta">
-              <span>${subtitle}</span>
-              ${ch.level ? `<span>• Lv ${ch.level}</span>` : ''}
-              ${ch.monsterData?.cr ? `<span>• CR ${ch.monsterData.cr}</span>` : ''}
+              <span>${escapeHtml(subtitle)}</span>
+              ${ch.level ? `<span>• Lv ${escapeHtml(ch.level)}</span>` : ''}
+              ${ch.monsterData?.cr ? `<span>• CR ${escapeHtml(ch.monsterData.cr)}</span>` : ''}
             </div>
           </div>
           <div class="entity-card-actions">
@@ -1141,17 +1153,19 @@ document.addEventListener('DOMContentLoaded', async () => {
                     if (it.backImg) thumbImg = resolveMediaUrl(it.backImg);
                 }
 
+                const safeItemThumb = thumbImg ? escapeHtml(thumbImg).replace(/'/g, '%27') : '';
+                const safeItemName = escapeHtml(it.name || 'Untitled');
                 card.innerHTML = `
-                    <div class="entity-card-thumb" style="${thumbImg ? `background-image: url('${thumbImg}')` : ''}">
-                        ${!thumbImg ? `<span class="entity-thumb-icon">${icon}</span>` : ''}
+                    <div class="entity-card-thumb" style="${safeItemThumb ? `background-image: url('${safeItemThumb}')` : ''}">
+                        ${!safeItemThumb ? `<span class="entity-thumb-icon">${icon}</span>` : ''}
                     </div>
                     <div class="entity-card-info">
                         <div style="display:flex; align-items:center; gap:6px;">
-                            <span class="badge" style="font-size:0.65rem; padding:1px 5px;">${badgeLabel}</span>
+                            <span class="badge" style="font-size:0.65rem; padding:1px 5px;">${escapeHtml(badgeLabel)}</span>
                         </div>
-                        <h4 class="entity-card-title" title="${it.name || 'Untitled'}">${it.name || 'Untitled'}</h4>
+                        <h4 class="entity-card-title" title="${safeItemName}">${safeItemName}</h4>
                         <div class="entity-card-meta">
-                            <span>${metaText}</span>
+                            <span>${escapeHtml(metaText)}</span>
                         </div>
                     </div>
                     <div class="entity-card-actions">
@@ -1529,6 +1543,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             const gmTabBtn = document.getElementById('tab-btn-gm');
             if (gmTabBtn) gmTabBtn.click();
         } else if (initialStatus?.staticWebMode) {
+            const gmTabBtn = document.getElementById('tab-btn-gm');
+            if (gmTabBtn) gmTabBtn.click();
             await loadGmCredentials();
             await loadGmCampaigns();
             window.addEventListener('forgedvtt:campaigns-updated', () => {
@@ -1740,8 +1756,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (!currentStatus?.staticWebMode && !requireGmCredentialsForOnline('generating a P2P room code')) return;
             if (api && api.p2pRegenCode) {
                 const newStatus = await api.p2pRegenCode();
-                if (newStatus && newStatus.roomCode && p2pRoomCodeDisplay) {
-                    p2pRoomCodeDisplay.textContent = newStatus.roomCode;
+                if (newStatus && newStatus.roomCode) {
+                    if (p2pRoomCodeDisplay) p2pRoomCodeDisplay.textContent = newStatus.roomCode;
+                    const prepStaticP2pCode = document.getElementById('prep-static-p2p-code');
+                    if (prepStaticP2pCode) prepStaticP2pCode.textContent = newStatus.roomCode;
                 }
             }
         });
@@ -1812,6 +1830,21 @@ document.addEventListener('DOMContentLoaded', async () => {
             await api.openVttBrowser(targetUrl);
         });
     }
+
+    // Static Web GM Dashboard Quick-Launch Bar delegates to existing P2P & folder controls
+    const prepQuickBindings = [
+        ['btn-prep-copy-p2p-code', btnCopyP2pCode],
+        ['btn-prep-regen-p2p-code', btnRegenP2pCode],
+        ['btn-prep-copy-p2p-link', btnCopyP2pLink],
+        ['btn-prep-open-play', btnLaunchBrowserP2p],
+        ['btn-prep-choose-folder', btnChangeDataDir]
+    ];
+    prepQuickBindings.forEach(([quickId, targetBtn]) => {
+        const quickEl = document.getElementById(quickId);
+        if (quickEl && targetBtn) {
+            quickEl.addEventListener('click', () => targetBtn.click());
+        }
+    });
 
     // Folders handlers
     btnOpenDataDir.addEventListener('click', () => {
@@ -2229,7 +2262,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         } catch (err) {
             console.error('Error loading sources:', err);
             if (sourcesCategoriesAccordion)
-                sourcesCategoriesAccordion.innerHTML = `<div class="loading-placeholder text-danger">Error: ${err.message}</div>`;
+                sourcesCategoriesAccordion.innerHTML = `<div class="loading-placeholder text-danger">Error: ${escapeHtml(err.message)}</div>`;
         }
     }
 
@@ -2350,7 +2383,7 @@ document.addEventListener('DOMContentLoaded', async () => {
               </h3>
             </div>
           </div>
-          <div class="category-header-actions" onclick="event.stopPropagation();">
+          <div class="category-header-actions">
             <button class="btn-cat-action" data-action="enable-all" data-cat="${cat.id}" title="Enable all sources in ${cat.name}">Enable All</button>
             <button class="btn-cat-action" data-action="disable-all" data-cat="${cat.id}" title="Disable all sources in ${cat.name}">Disable All</button>
             <button class="btn-cat-action btn-cat-add" data-action="add-file" data-cat="${cat.id}" title="Import external JSON file into ${cat.name}">➕ Add File</button>
@@ -2396,6 +2429,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     card.classList.add('expanded');
                 }
             });
+            card.querySelector('.category-header-actions')?.addEventListener('click', (e) => e.stopPropagation());
 
             // Actions in header
             card.querySelectorAll('.btn-cat-action').forEach((btn) => {
@@ -2805,7 +2839,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             } catch (err) {
                 console.error('Failed to sync sources to VTT:', err);
                 showSystemToast(
-                    `<span style="font-size: 18px;">❌</span> <div><strong>Sync Failed</strong><div style="font-size: 12px; color: #fca5a5;">${err.message}</div></div>`,
+                    `<span style="font-size: 18px;">❌</span> <div><strong>Sync Failed</strong><div style="font-size: 12px; color: #fca5a5;">${escapeHtml(err.message)}</div></div>`,
                     4000
                 );
             } finally {
@@ -3596,7 +3630,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (tokenUrlInput) tokenUrlInput.value = entity.tokenUrl || '';
         if (tokenPreview) {
             if (entity.tokenUrl) {
-                tokenPreview.innerHTML = `<img src="${entity.tokenUrl}" alt="Token" onerror="this.parentElement.textContent='🐉'" />`;
+                setTokenPreviewImage(tokenPreview, entity.tokenUrl);
             } else {
                 tokenPreview.textContent = '🐉';
             }
@@ -4560,12 +4594,25 @@ document.addEventListener('DOMContentLoaded', async () => {
         textarea.focus();
     }
 
+    function setTokenPreviewImage(container, url) {
+        if (!container) return;
+        container.innerHTML = '';
+        const img = document.createElement('img');
+        img.src = url;
+        img.alt = 'Token';
+        img.addEventListener('error', () => {
+            container.textContent = '🐉';
+        });
+        container.appendChild(img);
+    }
+
     function escapeHtml(str) {
         return String(str || '')
             .replace(/&/g, '&amp;')
             .replace(/</g, '&lt;')
             .replace(/>/g, '&gt;')
-            .replace(/"/g, '&quot;');
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
     }
 
     function calcAbilityModifier(score) {
@@ -5165,7 +5212,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     if (input) input.value = chosenPath;
                     if (preview) {
                         const resolvedUrl = resolveMediaUrl(chosenPath);
-                        preview.innerHTML = `<img src="${resolvedUrl}" alt="Token" onerror="this.parentElement.textContent='🐉'" />`;
+                        setTokenPreviewImage(preview, resolvedUrl);
                     }
                 }
             } catch (err) {
@@ -5183,7 +5230,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (preview) {
                 if (val) {
                     const resolvedUrl = resolveMediaUrl(val);
-                    preview.innerHTML = `<img src="${resolvedUrl}" alt="Token" onerror="this.parentElement.textContent='🐉'" />`;
+                    setTokenPreviewImage(preview, resolvedUrl);
                 } else {
                     preview.textContent = '🐉';
                 }
@@ -6427,7 +6474,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             });
 
             if (!res || !res.success || !Array.isArray(res.results) || res.results.length === 0) {
-                cloneCompendiumResults.innerHTML = `<div class="loading-placeholder">No compendium entries found for "${query}".</div>`;
+                cloneCompendiumResults.innerHTML = `<div class="loading-placeholder">No compendium entries found for "${escapeHtml(query)}".</div>`;
                 return;
             }
 
@@ -6485,7 +6532,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 cloneCompendiumResults.appendChild(row);
             });
         } catch (err) {
-            cloneCompendiumResults.innerHTML = `<div class="loading-placeholder text-danger">Search error: ${err.message}</div>`;
+            cloneCompendiumResults.innerHTML = `<div class="loading-placeholder text-danger">Search error: ${escapeHtml(err.message)}</div>`;
         }
     }
 

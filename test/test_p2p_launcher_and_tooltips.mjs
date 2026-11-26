@@ -17,8 +17,12 @@ test('Electron UI has P2P launcher buttons and listeners', () => {
 
 test('VTT Login screen has connection tooltips and dynamic hint subtitle', () => {
     const html = fs.readFileSync(path.resolve('vtt/index.html'), 'utf-8');
-    assert.match(html, /id="tab-login-server"[^>]*title="Web Server:/, 'Server tab has informative tooltip');
-    assert.match(html, /id="tab-login-p2p"[^>]*title="Direct P2P:/, 'P2P tab has informative tooltip');
+    assert.match(
+        html,
+        /id="tab-login-server"[^>]*title="Offline \/ Host Server:/,
+        'Server tab has informative tooltip'
+    );
+    assert.match(html, /id="tab-login-p2p"[^>]*title="Online \(Direct P2P\):/, 'P2P tab has informative tooltip');
     assert.match(html, /id="login-connection-hint"/, 'Login screen has connection hint container');
     assert.match(html, /id="login-connection-hint-text"/, 'Login screen has dynamic connection hint text');
 

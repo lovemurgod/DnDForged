@@ -3,7 +3,13 @@ import fs from 'fs';
 import os from 'os';
 import crypto from 'crypto';
 import { fileURLToPath } from 'url';
-import { createCampaignTemplate, isValidAssetPath } from '../utils.js';
+import {
+    createCampaignTemplate,
+    isValidAssetPath,
+    atomicWriteFileSync,
+    RESERVED_OBJECT_KEYS,
+    sanitizeImportedObject
+} from '../utils.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -422,16 +428,7 @@ export async function atomicWriteFile(filePath, data) {
     await fs.promises.rename(tempPath, filePath);
 }
 
-export function atomicWriteFileSync(filePath, data) {
-    const tempPath = `${filePath}.${Date.now()}.${Math.random().toString(36).slice(2, 7)}.tmp`;
-    fs.writeFileSync(tempPath, data, 'utf8');
-    if (filePath.endsWith('campaigns.json') && fs.existsSync(filePath)) {
-        try {
-            fs.copyFileSync(filePath, `${filePath}.bak`);
-        } catch (bakErr) {}
-    }
-    fs.renameSync(tempPath, filePath);
-}
+export { atomicWriteFileSync, RESERVED_OBJECT_KEYS, sanitizeImportedObject };
 
 export function saveCampaigns(sync = false) {
     if (sync) {
@@ -621,23 +618,6 @@ export function loadDatabase() {
     }
 }
 loadDatabase();
-
-export const RESERVED_OBJECT_KEYS = new Set(['__proto__', 'constructor', 'prototype']);
-
-export function sanitizeImportedObject(value) {
-    if (Array.isArray(value)) {
-        return value.map((item) => sanitizeImportedObject(item));
-    }
-    if (!value || typeof value !== 'object') {
-        return value;
-    }
-    const clean = {};
-    for (const [k, v] of Object.entries(value)) {
-        if (RESERVED_OBJECT_KEYS.has(k)) continue;
-        clean[k] = sanitizeImportedObject(v);
-    }
-    return clean;
-}
 
 const dataDirChangeCallbacks = [];
 

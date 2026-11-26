@@ -1,4 +1,4 @@
-import { getSafeVttUrl, getPlayerMapOverride } from './vtt-utils.js';
+import { getSafeVttUrl, getPlayerMapOverride, escapeHtml } from './vtt-utils.js';
 import { vttEventBus } from './vtt-event-bus.js';
 import { WallSpatialIndex } from './canvas/vtt-spatial-quadtree.js';
 import { vttImageCache } from './canvas/vtt-canvas-cache.js';
@@ -2066,7 +2066,7 @@ export function initVttCanvas(vtt) {
                 'position: fixed; top: 70px; left: 50%; transform: translateX(-50%); background: rgba(15, 23, 42, 0.88); backdrop-filter: blur(8px); border: 1px solid var(--color-gold-base, #d4af37); border-radius: 20px; padding: 6px 18px; color: #fff; font-size: 0.82rem; font-weight: 500; display: flex; align-items: center; gap: 8px; z-index: 9999; box-shadow: 0 4px 16px rgba(0,0,0,0.4); pointer-events: none; transition: opacity 0.25s ease; opacity: 1;';
             document.body.appendChild(indicator);
         }
-        indicator.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-gradient-gold"></i> <span>Loading <strong>${mapName || 'Map'}</strong>...</span>`;
+        indicator.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-gradient-gold"></i> <span>Loading <strong>${escapeHtml(mapName || 'Map')}</strong>...</span>`;
         indicator.style.display = 'flex';
         indicator.style.opacity = '1';
 

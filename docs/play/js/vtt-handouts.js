@@ -770,7 +770,7 @@ export function initVttHandouts(vtt) {
 
             let coverHtml = '';
             if (src.cover) {
-                coverHtml = `<img src="${src.cover}" class="import-source-card-cover" onerror="this.style.display='none'">`;
+                coverHtml = `<img src="${escapeHtml(src.cover)}" class="import-source-card-cover" data-fallback-hide="1">`;
             } else {
                 coverHtml = `<div class="import-source-card-cover" style="display:flex;align-items:center;justify-content:center;"><i class="fa-solid fa-book text-muted" style="font-size:0.8rem;"></i></div>`;
             }
@@ -778,9 +778,9 @@ export function initVttHandouts(vtt) {
             card.innerHTML = `
                 ${coverHtml}
                 <div class="import-source-card-info">
-                    <div class="import-source-card-title" title="${src.name}">${src.name}</div>
+                    <div class="import-source-card-title" title="${escapeHtml(src.name)}">${escapeHtml(src.name)}</div>
                     <div class="import-source-card-meta">
-                        <span class="bestiary-source-pill edition-5e">${src.id || src.source}</span>
+                        <span class="bestiary-source-pill edition-5e">${escapeHtml(src.id || src.source)}</span>
                         ${src.handoutCount ? `<span>${src.handoutCount} items</span>` : ''}
                     </div>
                 </div>
@@ -820,7 +820,7 @@ export function initVttHandouts(vtt) {
             }
         } catch (err) {
             console.error('Error loading handout partition:', err);
-            itemTreeEl.innerHTML = `<div class="init-empty-state text-danger"><i class="fa-solid fa-triangle-exclamation"></i> Could not load handouts for ${src.name}.</div>`;
+            itemTreeEl.innerHTML = `<div class="init-empty-state text-danger"><i class="fa-solid fa-triangle-exclamation"></i> Could not load handouts for ${escapeHtml(src.name)}.</div>`;
             return;
         }
 
@@ -901,7 +901,7 @@ export function initVttHandouts(vtt) {
             chHeader.innerHTML = `
                 <div style="display:flex; align-items:center; gap:8px;">
                     <input type="checkbox" class="import-chapter-cb" ${allChSelected ? 'checked' : ''} style="cursor:pointer; accent-color:var(--color-gold-base);">
-                    <span>${chName}</span>
+                    <span>${escapeHtml(chName)}</span>
                 </div>
                 <span style="font-size:0.7rem; color:var(--color-text-muted); font-weight:normal;">${chItems.length} items</span>
             `;
@@ -943,7 +943,7 @@ export function initVttHandouts(vtt) {
                 row.innerHTML = `
                     <input type="checkbox" class="import-item-cb" ${isSelected ? 'checked' : ''}>
                     <i class="fa-solid ${iconClass} text-gradient-gold" style="font-size:0.78rem;"></i>
-                    <div class="import-item-label" title="${item.title}">${item.title}</div>
+                    <div class="import-item-label" title="${escapeHtml(item.title)}">${escapeHtml(item.title)}</div>
                     <span class="badge-item-type ${badgeClass}">${typeLabel}</span>
                 `;
 
@@ -1011,7 +1011,7 @@ export function initVttHandouts(vtt) {
             imgBox.className = 'import-preview-img-box';
             const resolvedPreview = escapeHtml(getSafeVttUrl(item.url));
             imgBox.innerHTML = `
-                <img src="${resolvedPreview}" data-raw-src="${escapeHtml(item.url)}" class="import-preview-img" alt="${escapeHtml(item.title)}" onerror="this.onerror=null; this.src='img/TextLogo.png';">
+                <img src="${resolvedPreview}" data-raw-src="${escapeHtml(item.url)}" class="import-preview-img" alt="${escapeHtml(item.title)}" data-fallback-src="img/TextLogo.png">
                 <div style="font-size:0.75rem; color:var(--color-text-muted); margin-top:6px;">${escapeHtml(item.url)}</div>
             `;
             previewContainerEl.appendChild(imgBox);
@@ -1049,7 +1049,7 @@ export function initVttHandouts(vtt) {
                 const folderName = currentSelectedSource
                     ? currentSelectedSource.name || currentSelectedSource.id
                     : 'Imported Handouts';
-                importWizardStatus.innerHTML = `<i class="fa-solid fa-check text-success"></i> Ready to import <strong>${count}</strong> item(s) into folder <em>"${folderName}"</em>.`;
+                importWizardStatus.innerHTML = `<i class="fa-solid fa-check text-success"></i> Ready to import <strong>${count}</strong> item(s) into folder <em>"${escapeHtml(folderName)}"</em>.`;
             }
         }
     }

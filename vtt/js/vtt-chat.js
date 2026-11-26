@@ -1,6 +1,7 @@
 // DnDForged Unified Chat, Roll Parser & 3D Dice Simulation
 import { VTTDiceParser } from './vtt-dice-parser.js';
 import { getSafeVttUrl } from './vtt-utils.js';
+import { evaluateSafeMath } from './shared/math-eval.js';
 
 function stripAllHtmlFallback(html) {
     return String(html || '').replace(/<[^>]*>/g, '');
@@ -905,7 +906,10 @@ export function initVttChat(vtt, chatHistory) {
             let total = 0;
             try {
                 const safeMath = parsedStr.replace(/[^0-9+\-*/().\s]/g, '');
-                if (safeMath) total = Math.round(new Function(`"use strict"; return (${safeMath})`)());
+                if (safeMath) {
+                    const val = evaluateSafeMath(safeMath);
+                    total = Number.isFinite(val) ? Math.round(val) : 0;
+                }
             } catch (e) {
                 total = 0;
             }
@@ -1893,7 +1897,7 @@ export function initVttChat(vtt, chatHistory) {
                 <div class="card-draw-chat" style="border: 1px solid var(--color-gold-base); border-radius: 8px; padding: 12px; background: rgba(18, 22, 33, 0.95); max-width: 260px; margin: 0 auto; text-align: center; box-shadow: 0 4px 16px rgba(0,0,0,0.5);">
                     <div style="font-size:0.75rem; text-transform:uppercase; letter-spacing:1px; color:var(--color-gold-light); margin-bottom:6px;">${escapeHtml(cdc.deckName || 'Card Deck')}</div>
                     <div style="width:140px; height:200px; margin:0 auto 10px auto; border-radius:6px; overflow:hidden; border:2px solid var(--color-gold-dark); background:#05070a; display:flex; align-items:center; justify-content:center;">
-                        <img src="${escapeHtml(getSafeVttUrl(cdc.cardImg || 'favicon.svg'))}" data-raw-src="${escapeHtml(cdc.cardImg || '')}" alt="${escapeHtml(cdc.cardName || 'Card')}" style="width:100%; height:100%; object-fit:contain;" onerror="this.src='favicon.svg'">
+                        <img src="${escapeHtml(getSafeVttUrl(cdc.cardImg || 'favicon.svg'))}" data-raw-src="${escapeHtml(cdc.cardImg || '')}" alt="${escapeHtml(cdc.cardName || 'Card')}" style="width:100%; height:100%; object-fit:contain;" data-fallback-src="favicon.svg">
                     </div>
                     <div style="font-weight:bold; color:#fff; font-size:1.1rem; margin-bottom:4px;">${escapeHtml(cdc.cardName || '')}</div>
                     ${cdc.description ? `<div style="font-size:0.85rem; color:#cbd5e1; line-height:1.4;">${escapeHtml(cdc.description)}</div>` : ''}
@@ -2770,10 +2774,14 @@ export function initVttChat(vtt, chatHistory) {
                     if (isTargetYt) {
                         initMinAvatar.innerHTML = '📺';
                     } else if (isTargetVideo) {
-                        initMinAvatar.innerHTML = `<video src="${safeActTargetImg}" autoplay muted loop playsinline preload="auto" onloadeddata="this.play().catch(()=>{})"></video>`;
+                        initMinAvatar.innerHTML = `<video src="${escapeHtml(safeActTargetImg)}" autoplay muted loop playsinline preload="auto"></video>`;
+                        initMinAvatar
+                            .querySelector('video')
+                            ?.play?.()
+                            .catch(() => {});
                     } else {
                         const safeActName = escapeHtml(actName);
-                        initMinAvatar.innerHTML = `<img src="${safeActTargetImg}" alt="${safeActName}" onerror="this.parentElement.innerHTML='<div class=\\'init-monogram-avatar\\' style=\\'background: ${actMonogram.bg}; border-color: ${actMonogram.border}; color: ${actMonogram.color};\\'>${actMonogram.letters}</div>';">`;
+                        initMinAvatar.innerHTML = `<img src="${escapeHtml(safeActTargetImg)}" alt="${safeActName}" data-fallback-monogram-bg="${escapeHtml(actMonogram.bg)}" data-fallback-monogram-border="${escapeHtml(actMonogram.border)}" data-fallback-monogram-color="${escapeHtml(actMonogram.color)}" data-fallback-monogram-letters="${escapeHtml(actMonogram.letters)}">`;
                     }
                 } else {
                     initMinAvatar.innerHTML = `<div class="init-monogram-avatar" style="background: ${actMonogram.bg}; border-color: ${actMonogram.border}; color: ${actMonogram.color};">${actMonogram.letters}</div>`;
@@ -2925,12 +2933,13 @@ export function initVttChat(vtt, chatHistory) {
                 const isTargetVideo = (token && token.isVideo) || !!cleanTarget.match(/\.(mp4|webm|ogg)$/i);
                 const isTargetYt = targetImg.includes('youtube.com') || targetImg.includes('youtu.be');
 
-                const safeTargetImg =
+                const safeTargetImg = escapeHtml(
                     typeof window.getSafeVttUrl === 'function'
                         ? window.getSafeVttUrl(targetImg)
                         : targetImg.includes('discordapp.com') || targetImg.includes('discordapp.net')
                           ? '/api/proxy-discord?url=' + encodeURIComponent(targetImg)
-                          : targetImg;
+                          : targetImg
+                );
 
                 if (isTargetYt) {
                     avatarHtml = `<div class="init-token-avatar init-avatar-yt" title="YouTube Token">📺</div>`;
@@ -2940,7 +2949,7 @@ export function initVttChat(vtt, chatHistory) {
                     if (posterSrc) {
                         avatarHtml = `
                             <div class="init-token-avatar-wrap">
-                                <img class="init-token-avatar" src="${posterSrc}" alt="${safeName}">
+                                <img class="init-token-avatar" src="${escapeHtml(getSafeVttUrl(posterSrc))}" alt="${safeName}">
                             </div>`;
                     } else {
                         avatarHtml = `
@@ -2951,7 +2960,7 @@ export function initVttChat(vtt, chatHistory) {
                 } else {
                     avatarHtml = `
                         <div class="init-token-avatar-wrap">
-                            <img class="init-token-avatar" src="${safeTargetImg}" alt="${safeName}" onerror="this.parentElement.innerHTML = '<div class=\\'init-monogram-avatar\\' style=\\'background: ${monogram.bg}; border-color: ${monogram.border}; color: ${monogram.color};\\'>${monogram.letters}</div>';">
+                            <img class="init-token-avatar" src="${safeTargetImg}" alt="${safeName}" data-fallback-monogram-bg="${escapeHtml(monogram.bg)}" data-fallback-monogram-border="${escapeHtml(monogram.border)}" data-fallback-monogram-color="${escapeHtml(monogram.color)}" data-fallback-monogram-letters="${escapeHtml(monogram.letters)}">
                         </div>`;
                 }
             }

@@ -2,6 +2,7 @@
 // Manages map tool state, creation, manipulation, hit testing, and controls for traps and portals
 
 import { isPointInsideGeometry, renderPlacedTrapsList } from './vtt-canvas-traps.js';
+import { escapeHtml } from '../vtt-utils.js';
 
 import {
     calcPortalCenter,
@@ -361,7 +362,8 @@ export function selectMapToolItem(type, id, state, callbacks = {}) {
         const title = document.getElementById('maptools-trap-edit-title');
         const actions = document.getElementById('maptools-trap-edit-actions');
         if (banner) banner.classList.remove('vtt-hidden');
-        if (title) title.innerHTML = `<i class="fa-solid fa-pen-to-square"></i> Editing: ${trap.name || 'Trap'}`;
+        if (title)
+            title.innerHTML = `<i class="fa-solid fa-pen-to-square"></i> Editing: ${escapeHtml(trap.name || 'Trap')}`;
         if (actions) actions.classList.remove('vtt-hidden');
 
         document.getElementById('maptools-portal-edit-banner')?.classList.add('vtt-hidden');
@@ -477,7 +479,7 @@ export function saveSelectedMapToolItem(type, state, callbacks = {}) {
         if (callbacks.onRenderTrapsList) callbacks.onRenderTrapsList();
 
         const title = document.getElementById('maptools-trap-edit-title');
-        if (title) title.innerHTML = `<i class="fa-solid fa-check text-success"></i> Updated: ${trap.name}`;
+        if (title) title.innerHTML = `<i class="fa-solid fa-check text-success"></i> Updated: ${escapeHtml(trap.name)}`;
     } else {
         const portal = portals.find((p) => p.id === id);
         if (!portal) return;
@@ -598,7 +600,8 @@ export function saveSelectedMapToolItem(type, state, callbacks = {}) {
         populateTargetPortalsDropdown(portals, currentMapId, campaignState, portal.id);
 
         const title = document.getElementById('maptools-portal-edit-title');
-        if (title) title.innerHTML = `<i class="fa-solid fa-check text-success"></i> Updated: ${portal.name}`;
+        if (title)
+            title.innerHTML = `<i class="fa-solid fa-check text-success"></i> Updated: ${escapeHtml(portal.name)}`;
     }
 
     if (renderAll) renderAll();

@@ -17,7 +17,12 @@ import {
     saveChat,
     verifyGmOrSecret
 } from '../state.js';
-import { createCampaignTemplate } from '../../utils.js';
+import {
+    atomicWriteFileSync,
+    createCampaignTemplate,
+    RESERVED_OBJECT_KEYS,
+    validateZipArchiveEntries
+} from '../../utils.js';
 import {
     isRoll20CharacterJson,
     convertRoll20Character,
@@ -74,8 +79,11 @@ campaignsRouter.get('/campaigns', (req, res) => {
 
 // Get detailed campaign state (GM or internal secret only)
 campaignsRouter.get('/campaigns/:id', verifyGmOrSecret, (req, res) => {
-    const campaign = getOrCreateCampaign(req.params.id);
-    res.json(campaign);
+    const campId = req.params.id;
+    if (!campId || RESERVED_OBJECT_KEYS.has(campId) || !campaigns[campId]) {
+        return res.status(404).json({ error: 'Campaign not found' });
+    }
+    res.json(campaigns[campId]);
 });
 
 // Create new campaign
@@ -146,7 +154,8 @@ campaignsRouter.post('/campaigns/:id/duplicate', verifyGmOrSecret, (req, res) =>
 
     // Deep clone campaign object and migrate internal asset paths to new ID
     let clonedStr = JSON.stringify(origCamp);
-    const oldPathRegex = new RegExp(`(/assets/campaigns/|assets/campaigns/)${origId}([/\\\\])`, 'g');
+    const escapedOrigId = String(origId).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const oldPathRegex = new RegExp(`(/assets/campaigns/|assets/campaigns/)${escapedOrigId}([/\\\\])`, 'g');
     clonedStr = clonedStr.replace(oldPathRegex, `$1${newId}$2`);
     const cloned = JSON.parse(clonedStr);
     cloned.id = newId;
@@ -217,7 +226,9 @@ function copyUploadsSafely(srcDir, dstDir) {
 function withExtractedZip(zipFilePath, fn) {
     const extractDir = fs.mkdtempSync(path.join(os.tmpdir(), 'forgedvtt-zip-ext-'));
     try {
-        execFileSync(getSystemTarBin(), ['-xf', zipFilePath, '-C', extractDir], { stdio: 'ignore' });
+        const tarBin = getSystemTarBin();
+        validateZipArchiveEntries(zipFilePath, tarBin);
+        execFileSync(tarBin, ['-xf', zipFilePath, '-C', extractDir], { stdio: 'ignore' });
         return fn(extractDir);
     } finally {
         try {
@@ -264,13 +275,13 @@ campaignsRouter.post('/campaigns/import', verifyGmOrSecret, maybeMultipartZip, (
     }
 
     let campId = campaign.id;
-    if (!campId || campaigns[campId]) {
+    if (!campId || RESERVED_OBJECT_KEYS.has(campId) || campaigns[campId]) {
         campId = (campaign.name || 'imported').toLowerCase().replace(/[^a-z0-9]/gi, '_') + '_' + Date.now();
     }
 
     if (stagedUploadsDir) {
         try {
-            copyUploadsSafely(stagedUploadsDir, path.join(DATA_DIR, 'assets', 'campaigns', campId, 'uploads'));
+            copyUploadsSafely(stagedUploadsDir, path.join(DATA_DIR, 'campaigns', campId, 'uploads'));
         } finally {
             fs.rmSync(stagedUploadsDir, { recursive: true, force: true });
         }
@@ -279,17 +290,21 @@ campaignsRouter.post('/campaigns/import', verifyGmOrSecret, maybeMultipartZip, (
     let campDataToImport = campaign;
     if (campaign.id && campId !== campaign.id) {
         let campStr = JSON.stringify(campaign);
-        const oldPathRegex = new RegExp(`(/assets/campaigns/|assets/campaigns/)${campaign.id}([/\\\\])`, 'g');
+        const escapedOldId = campaign.id.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const oldPathRegex = new RegExp(
+            `(/assets/campaigns/|assets/campaigns/|/vtt-uploads/|vtt-uploads/)${escapedOldId}([/\\\\])`,
+            'g'
+        );
         campStr = campStr.replace(oldPathRegex, `$1${campId}$2`);
         campDataToImport = JSON.parse(campStr);
     }
 
     const targetGm = (req.body.gmUsername || req.body.username || '').trim();
-    const importedCamp = {
+    const importedCamp = sanitizeImportedObject({
         ...createCampaignTemplate(campId, campaign.name || 'Imported Campaign'),
         ...campDataToImport,
         id: campId
-    };
+    });
 
     if (targetGm) {
         importedCamp.gmUsername = targetGm;
@@ -346,7 +361,7 @@ campaignsRouter.post('/campaigns/:id/import-entity', verifyGmOrSecret, maybeMult
                 }
                 const extUploads = path.join(extractDir, 'uploads');
                 if (fs.existsSync(extUploads)) {
-                    copyUploadsSafely(extUploads, path.join(DATA_DIR, 'assets', 'campaigns', campId, 'uploads'));
+                    copyUploadsSafely(extUploads, path.join(DATA_DIR, 'campaigns', campId, 'uploads'));
                 }
             });
         }
@@ -380,7 +395,7 @@ campaignsRouter.post('/campaigns/:id/import-entity', verifyGmOrSecret, maybeMult
             // It's a map
             let mapId = item.id;
             let mapName = item.name || 'Imported Map';
-            if (!mapId || campaign.maps[mapId]) {
+            if (!mapId || RESERVED_OBJECT_KEYS.has(mapId) || campaign.maps[mapId]) {
                 mapId = `map_${campId}_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
                 mapName = `${mapName} (Copy)`;
             }
@@ -462,7 +477,11 @@ campaignsRouter.post('/campaigns/:id/import-entity', verifyGmOrSecret, maybeMult
             const existingByName = Object.values(campaign.characters).find(
                 (c) => c && (c.name === charName || c.characterName === charName)
             );
-            if (!charId || (!isOverwrite && (campaign.characters[charId] || existingByName))) {
+            if (
+                !charId ||
+                RESERVED_OBJECT_KEYS.has(charId) ||
+                (!isOverwrite && (campaign.characters[charId] || existingByName))
+            ) {
                 charId = `char_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
                 charName = `${charName} (Copy)`;
             } else if (isOverwrite && existingByName && !campaign.characters[charId]) {
@@ -708,8 +727,6 @@ campaignsRouter.get('/server/backup', verifyGmOrSecret, (req, res) => {
     });
 });
 
-const RESERVED_OBJECT_KEYS = new Set(['__proto__', 'constructor', 'prototype']);
-
 // Full Server Backup Restore (from uploaded JSON)
 campaignsRouter.post('/server/restore', verifyGmOrSecret, (req, res) => {
     const raw = req.body?.backupData || req.body;
@@ -720,21 +737,20 @@ campaignsRouter.post('/server/restore', verifyGmOrSecret, (req, res) => {
     let restoredCount = 0;
     for (const [id, camp] of Object.entries(raw.campaigns)) {
         if (RESERVED_OBJECT_KEYS.has(id) || !camp || typeof camp !== 'object') continue;
-        campaigns[id] = camp;
+        campaigns[id] = sanitizeImportedObject(camp);
         restoredCount++;
     }
     if (raw.chatLogs && typeof raw.chatLogs === 'object') {
         for (const [id, log] of Object.entries(raw.chatLogs)) {
             if (RESERVED_OBJECT_KEYS.has(id) || !Array.isArray(log)) continue;
-            chatLogs[id] = log;
+            chatLogs[id] = sanitizeImportedObject(log);
         }
     }
     if (raw.sourcesConfig && typeof raw.sourcesConfig === 'object') {
         try {
-            fs.writeFileSync(
+            atomicWriteFileSync(
                 path.join(DATA_DIR, 'sources-config.json'),
-                JSON.stringify(raw.sourcesConfig, null, 2),
-                'utf8'
+                JSON.stringify(sanitizeImportedObject(raw.sourcesConfig), null, 2)
             );
         } catch (_) {}
     }

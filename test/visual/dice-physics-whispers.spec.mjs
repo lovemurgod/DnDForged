@@ -9,7 +9,12 @@
 import { test, expect } from '@playwright/test';
 import fs from 'fs';
 import path from 'path';
-import { setupTwoPlayerSandbox, joinAsPlayer, freezeDynamicElements } from './helpers/visual-fixture.mjs';
+import {
+    setupTwoPlayerSandbox,
+    joinAsPlayer,
+    freezeDynamicElements,
+    ensureSidebarTabOpen
+} from './helpers/visual-fixture.mjs';
 
 function resetSandboxFixtures() {
     try {
@@ -66,6 +71,7 @@ test.describe('3D Dice Physics, Crit Bursts & Secret GM Whisper Rolls Suite', ()
 
     test('Test 1: Public Roll vs Secret GM Whisper Roll Comparison', async () => {
         const { gmPage, playerPage } = sandbox;
+        await ensureSidebarTabOpen(gmPage, 'tab-chat');
 
         // Count initial messages
         const initialPlayerMsgCount = await playerPage.evaluate(() => {

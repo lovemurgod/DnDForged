@@ -18,7 +18,7 @@ import { test, expect } from '@playwright/test';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
-import { setupTwoPlayerSandbox } from './helpers/visual-fixture.mjs';
+import { setupTwoPlayerSandbox, ensureSidebarTabOpen } from './helpers/visual-fixture.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -82,7 +82,7 @@ test.describe('Custom Item & Spell Creation Wizard E2E Suite', () => {
      * Helper to open the Player Sheet for Valeros (or default character) on a given page.
      */
     async function openSheet(page) {
-        await page.locator('[data-tab="tab-characters"]').click();
+        await ensureSidebarTabOpen(page, 'tab-characters');
         await expect(page.locator('#tab-characters')).toHaveClass(/active/);
 
         const charItem = page.locator('#character-list .char-row').first();

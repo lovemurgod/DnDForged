@@ -3,6 +3,8 @@
  * Prompts user for attack macros, AC upgrades, and spell additions when items are added.
  */
 
+import { escapeHtml } from '../../vtt-utils.js';
+
 export async function runItemAutomationWizard(queue, options = {}) {
     const {
         getCurrentChar = () => null,
@@ -121,7 +123,7 @@ export async function runItemAutomationWizard(queue, options = {}) {
 
             bodyEl.innerHTML = `
                 <div style="margin-bottom:12px;">
-                    Would you like to generate an attack macro for <strong style="color:var(--color-gold-light); font-size:1rem;">${step.name}</strong> in the <strong>Attacks & Macros</strong> section?
+                    Would you like to generate an attack macro for <strong style="color:var(--color-gold-light); font-size:1rem;">${escapeHtml(step.name)}</strong> in the <strong>Attacks & Macros</strong> section?
                 </div>
                 <div style="background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); border-radius:6px; padding:12px; display:flex; flex-direction:column; gap:6px; font-size:0.82rem;">
                     <div style="display:flex; justify-content:space-between;">
@@ -268,7 +270,7 @@ export async function runItemAutomationWizard(queue, options = {}) {
 
             bodyEl.innerHTML = `
                 <div style="margin-bottom:12px;">
-                    <strong style="color:var(--color-gold-light); font-size:1rem;">${step.name}</strong> modifies Armor Class. How would you like to update your AC?
+                    <strong style="color:var(--color-gold-light); font-size:1rem;">${escapeHtml(step.name)}</strong> modifies Armor Class. How would you like to update your AC?
                 </div>
                 <div style="background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); border-radius:6px; padding:12px; margin-bottom:12px; font-size:0.85rem;">
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
@@ -318,11 +320,11 @@ export async function runItemAutomationWizard(queue, options = {}) {
 
             bodyEl.innerHTML = `
                 <div style="margin-bottom:12px;">
-                    <strong style="color:var(--color-gold-light); font-size:1rem;">${step.name}</strong> grants the following spell(s):
+                    <strong style="color:var(--color-gold-light); font-size:1rem;">${escapeHtml(step.name)}</strong> grants the following spell(s):
                 </div>
                 <div style="background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); border-radius:6px; padding:12px; margin-bottom:12px;">
                     <ul style="margin:0 0 0 16px; padding:0; font-size:0.85rem; color:var(--color-text-primary);">
-                        ${spellNamesFormatted.map((s) => `<li style="margin-bottom:2px; font-weight:600;">${s}</li>`).join('')}
+                        ${spellNamesFormatted.map((s) => `<li style="margin-bottom:2px; font-weight:600;">${escapeHtml(s)}</li>`).join('')}
                     </ul>
                     <div style="margin-top:8px; padding-top:8px; border-top:1px solid rgba(255,255,255,0.08); font-size:0.75rem; color:var(--color-text-muted); display:flex; justify-content:space-between;">
                         <span>Spell Save DC:</span>

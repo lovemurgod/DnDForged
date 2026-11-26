@@ -5,9 +5,6 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const sandboxDataDir = path.resolve(__dirname, 'test', 'fixtures', 'visual-sandbox-data');
-const sandboxConfigFile = path.resolve(__dirname, 'test', 'fixtures', 'visual-sandbox-config.json');
-
 export default defineConfig({
   testDir: './test/visual',
   snapshotDir: './test/visual/__snapshots__',
@@ -24,7 +21,6 @@ export default defineConfig({
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     video: 'off',
-    bypassCSP: true,
     actionTimeout: 10000,
     navigationTimeout: 15000,
   },
@@ -56,14 +52,12 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: 'node server.js',
+    command: 'node test/visual/helpers/start-sandbox-server.mjs',
     url: 'http://localhost:5051/vtt.html',
     reuseExistingServer: false,
     timeout: 30000,
     env: {
       PORT: '5051',
-      FORGEDVTT_DATA_DIR: sandboxDataDir,
-      FORGEDVTT_CONFIG_FILE: sandboxConfigFile,
       NODE_ENV: 'test',
     },
   },

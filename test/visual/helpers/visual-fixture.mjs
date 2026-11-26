@@ -185,3 +185,24 @@ export async function setupTwoPlayerSandbox(browser, options = {}) {
         }
     };
 }
+
+/**
+ * Ensures the VTT sidebar is expanded and the requested tab panel is active
+ * without accidentally toggling the sidebar closed if the tab is already active.
+ */
+export async function ensureSidebarTabOpen(page, tabId) {
+    await page.evaluate((targetTabId) => {
+        const sidebar = document.getElementById('vtt-sidebar');
+        if (sidebar && sidebar.classList.contains('collapsed')) {
+            sidebar.classList.remove('collapsed');
+        }
+        const btn = document.querySelector(`button.tab-header[data-tab="${targetTabId}"]`);
+        const panel = document.getElementById(targetTabId);
+        if (btn && panel && (!btn.classList.contains('active') || !panel.classList.contains('active'))) {
+            btn.click();
+            if (sidebar && sidebar.classList.contains('collapsed')) {
+                sidebar.classList.remove('collapsed');
+            }
+        }
+    }, tabId);
+}

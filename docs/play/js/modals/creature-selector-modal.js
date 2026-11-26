@@ -4,7 +4,7 @@
  * and previewing Bestiary creatures for Companion creation, Custom NPC import, and more.
  */
 
-import { resolveMonsterTokenUrl } from '../vtt-utils.js';
+import { escapeHtml, getSafeVttUrl, resolveMonsterTokenUrl } from '../vtt-utils.js';
 
 // Helper to calculate or fallback token image URL
 export function getCreatureTokenUrl(monster) {
@@ -559,15 +559,16 @@ export async function openCreatureSelectorModal(options = {}) {
     }
 
     function renderLoadingPreview(monster) {
-        const tokenUrl = getCreatureTokenUrl(monster);
+        const tokenUrl = escapeHtml(getSafeVttUrl(getCreatureTokenUrl(monster)));
+        const safeName = escapeHtml(monster.name);
         previewBody.innerHTML = `
             <div class="csm-preview-card">
                 <div class="csm-preview-top">
-                    <img src="${tokenUrl}" class="csm-preview-avatar" onerror="this.src='favicon.svg'">
+                    <img src="${tokenUrl}" class="csm-preview-avatar" data-fallback-src="favicon.svg">
                     <div>
-                        <h4 style="margin:0; font-size:1.15rem; color:var(--color-gold-base); font-family:var(--font-heading);">${monster.name}</h4>
+                        <h4 style="margin:0; font-size:1.15rem; color:var(--color-gold-base); font-family:var(--font-heading);">${safeName}</h4>
                         <div style="font-size:0.8rem; color:var(--color-text-muted); margin-top:2px;">
-                            ${monster.size || ''} ${monster.type || ''} • CR ${formatCrDisplay(monster.cr)} [${monster.source || ''}]
+                            ${escapeHtml(monster.size || '')} ${escapeHtml(monster.type || '')} • CR ${escapeHtml(formatCrDisplay(monster.cr))} [${escapeHtml(monster.source || '')}]
                         </div>
                     </div>
                 </div>
@@ -578,7 +579,7 @@ export async function openCreatureSelectorModal(options = {}) {
             </div>
         `;
         previewFooter.style.display = 'flex';
-        previewFooterName.innerHTML = `<strong>${monster.name}</strong> <span style="color:var(--color-text-muted); font-size:0.8em;">(CR ${formatCrDisplay(monster.cr)})</span>`;
+        previewFooterName.innerHTML = `<strong>${safeName}</strong> <span style="color:var(--color-text-muted); font-size:0.8em;">(CR ${escapeHtml(formatCrDisplay(monster.cr))})</span>`;
     }
 
     function renderStatblockPreview(m) {
@@ -654,14 +655,14 @@ export async function openCreatureSelectorModal(options = {}) {
             <div class="csm-preview-card">
                 <!-- Header -->
                 <div class="csm-preview-top">
-                    <img src="${tokenUrl}" class="csm-preview-avatar" onerror="this.src='favicon.svg'">
+                    <img src="${escapeHtml(getSafeVttUrl(tokenUrl))}" class="csm-preview-avatar" data-fallback-src="favicon.svg">
                     <div style="flex:1;">
                         <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-                            <h4 style="margin:0; font-size:1.25rem; color:var(--color-gold-base); font-family:var(--font-heading);">${m.name}</h4>
-                            <span class="csm-source-badge">${m.source || 'SRD'} ${m.edition || ''}</span>
+                            <h4 style="margin:0; font-size:1.25rem; color:var(--color-gold-base); font-family:var(--font-heading);">${escapeHtml(m.name)}</h4>
+                            <span class="csm-source-badge">${escapeHtml(m.source || 'SRD')} ${escapeHtml(m.edition || '')}</span>
                         </div>
                         <div style="font-size:0.8rem; color:var(--color-text-muted); font-style:italic; margin-top:2px;">
-                            ${m.size ? translateSizeName(m.size) : 'Medium'} ${m.type || 'creature'}${m.subtype ? ` (${m.subtype})` : ''}, ${m.alignment || 'unaligned'}
+                            ${m.size ? escapeHtml(translateSizeName(m.size)) : 'Medium'} ${escapeHtml(m.type || 'creature')}${m.subtype ? ` (${escapeHtml(m.subtype)})` : ''}, ${escapeHtml(m.alignment || 'unaligned')}
                         </div>
                     </div>
                 </div>
@@ -730,7 +731,7 @@ export async function openCreatureSelectorModal(options = {}) {
         `;
 
         previewFooter.style.display = 'flex';
-        previewFooterName.innerHTML = `<strong>${m.name}</strong> <span style="color:var(--color-text-muted); font-size:0.8em;">(CR ${crStr})</span>`;
+        previewFooterName.innerHTML = `<strong>${escapeHtml(m.name)}</strong> <span style="color:var(--color-text-muted); font-size:0.8em;">(CR ${escapeHtml(crStr)})</span>`;
     }
 
     function translateSizeName(sizeChar) {

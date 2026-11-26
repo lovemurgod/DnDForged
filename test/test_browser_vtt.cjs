@@ -1,3 +1,16 @@
+if (!process.versions.electron) {
+    const { spawnSync } = require('child_process');
+    const path = require('path');
+    const electronBin = require('electron');
+    const env = { ...process.env };
+    delete env.ELECTRON_RUN_AS_NODE;
+    const res = spawnSync(electronBin, [__filename, ...process.argv.slice(2)], {
+        stdio: 'inherit',
+        env
+    });
+    process.exit(res.status ?? 1);
+}
+
 const { app, BrowserWindow } = require('electron');
 
 app.whenReady().then(async () => {

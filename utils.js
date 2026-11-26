@@ -118,6 +118,8 @@ export function updateMapProperty(campaigns, campaignId, mapId, propertyKey, val
 }
 
 import path from 'path';
+import fs from 'fs';
+import { execFileSync } from 'child_process';
 
 /**
  * Validates that a target path starts with the allowed assets directory.
@@ -130,5 +132,89 @@ export function isValidAssetPath(targetPath, assetsDir) {
   const resolvedTarget = path.resolve(targetPath);
   const resolvedAssets = path.resolve(assetsDir);
   return resolvedTarget === resolvedAssets || resolvedTarget.startsWith(resolvedAssets + path.sep);
+}
+
+export const RESERVED_OBJECT_KEYS = new Set(['__proto__', 'constructor', 'prototype']);
+
+/**
+ * Recursively strips reserved prototype-pollution keys from imported JSON objects.
+ * @param {any} value
+ * @returns {any}
+ */
+export function sanitizeImportedObject(value) {
+  if (Array.isArray(value)) {
+    return value.map((item) => sanitizeImportedObject(item));
+  }
+  if (!value || typeof value !== 'object') {
+    return value;
+  }
+  const clean = {};
+  for (const [k, v] of Object.entries(value)) {
+    if (RESERVED_OBJECT_KEYS.has(k)) continue;
+    clean[k] = sanitizeImportedObject(v);
+  }
+  return clean;
+}
+
+/**
+ * Atomically writes data to filePath via a temp file + rename.
+ * Preserves a .bak copy when overwriting campaigns.json.
+ * @param {string} filePath
+ * @param {string|Buffer} data
+ */
+export function atomicWriteFileSync(filePath, data) {
+  const tempPath = `${filePath}.${Date.now()}.${Math.random().toString(36).slice(2, 7)}.tmp`;
+  fs.writeFileSync(tempPath, data, 'utf8');
+  if (filePath.endsWith('campaigns.json') && fs.existsSync(filePath)) {
+    try {
+      fs.copyFileSync(filePath, `${filePath}.bak`);
+    } catch {}
+  }
+  fs.renameSync(tempPath, filePath);
+}
+
+/**
+ * Lists and validates archive entries with `tar -tf` before extraction to prevent Zip Slip / path traversal.
+ * @param {string} archivePath
+ * @param {string} [tarBin]
+ * @returns {string[]} Validated relative entry names
+ */
+export function validateZipArchiveEntries(archivePath, tarBin = process.platform === 'win32' ? 'tar.exe' : 'tar') {
+  const rawVerbose = execFileSync(tarBin, ['-tvf', archivePath], {
+    encoding: 'utf8',
+    maxBuffer: 20 * 1024 * 1024
+  });
+  for (const vLine of rawVerbose.split(/\r?\n/)) {
+    const trimmed = vLine.trim();
+    if (!trimmed) continue;
+    if (/^[lh]/.test(trimmed) || trimmed.includes(' -> ')) {
+      throw new Error(`Archive contains unsafe link entry: ${trimmed}`);
+    }
+  }
+  const raw = execFileSync(tarBin, ['-tf', archivePath], {
+    encoding: 'utf8',
+    maxBuffer: 20 * 1024 * 1024
+  });
+  const entries = raw
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter(Boolean);
+  if (entries.length === 0) {
+    throw new Error('Archive is empty.');
+  }
+  for (const entry of entries) {
+    if (entry.includes('\0')) {
+      throw new Error('Archive contains invalid null-byte path.');
+    }
+    const normalized = entry.replace(/\\/g, '/');
+    if (normalized.startsWith('/') || /^[a-zA-Z]:/.test(normalized)) {
+      throw new Error(`Archive contains absolute path entry: ${entry}`);
+    }
+    const parts = normalized.split('/');
+    if (parts.some((p) => p === '..')) {
+      throw new Error(`Archive contains path traversal entry: ${entry}`);
+    }
+  }
+  return entries;
 }
 

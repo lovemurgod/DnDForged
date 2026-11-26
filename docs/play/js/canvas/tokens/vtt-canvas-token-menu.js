@@ -9,7 +9,7 @@ import {
 } from './vtt-canvas-token-rollers.js';
 import { showApplyDamageModal } from './vtt-canvas-mass-actions.js';
 import { applyTokenLightingPreset } from '../vtt-canvas-lighting.js';
-import { resolveMonsterTokenUrl } from '../../vtt-utils.js';
+import { escapeHtml, getSafeVttUrl, resolveMonsterTokenUrl } from '../../vtt-utils.js';
 
 export function changeTokenZOrder(tokenId, action, options = {}) {
     const { tokens = {}, renderAll = () => {} } = options;
@@ -412,23 +412,24 @@ export function showTokenContextMenu(tokenId, clientX, clientY, options = {}) {
             const isYt = tData.url.includes('youtube.com') || tData.url.includes('youtu.be');
 
             const borderStyle = `border: 2px solid ${isActive ? 'var(--color-success-base)' : 'rgba(255,255,255,0.2)'};`;
-            const titleAttr = `${tData.label || (tData.isDefault ? 'Default Token' : 'Custom Token')}`;
+            const titleAttr = escapeHtml(tData.label || (tData.isDefault ? 'Default Token' : 'Custom Token'));
+            const safeUrl = escapeHtml(getSafeVttUrl(tData.url));
 
             if (isVideo) {
                 galleryHtml += `
-                    <div class="menu-token-selector-item" data-idx="${tData.idx}" data-url="${tData.url}" title="${titleAttr}" style="width: 48px; height: 48px; position: relative; border-radius: 4px; overflow: hidden; cursor: pointer; ${borderStyle} background: #000; flex-shrink: 0;">
-                        <video src="${tData.url}" autoplay muted loop playsinline preload="metadata" onloadeddata="this.play().catch(()=>{})" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;"></video>
+                    <div class="menu-token-selector-item" data-idx="${tData.idx}" data-url="${safeUrl}" title="${titleAttr}" style="width: 48px; height: 48px; position: relative; border-radius: 4px; overflow: hidden; cursor: pointer; ${borderStyle} background: #000; flex-shrink: 0;">
+                        <video src="${safeUrl}" autoplay muted loop playsinline preload="metadata" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;"></video>
                         <span style="position: absolute; bottom: 1px; right: 2px; font-size: 9px; pointer-events: none; opacity: 0.85;">▶</span>
                     </div>`;
             } else if (isYt) {
                 galleryHtml += `
-                    <div class="menu-token-selector-item" data-idx="${tData.idx}" data-url="${tData.url}" title="${titleAttr}" style="width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; border-radius: 4px; cursor: pointer; ${borderStyle} background: #222; flex-shrink: 0;">
+                    <div class="menu-token-selector-item" data-idx="${tData.idx}" data-url="${safeUrl}" title="${titleAttr}" style="width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; border-radius: 4px; cursor: pointer; ${borderStyle} background: #222; flex-shrink: 0;">
                         <span style="font-size: 20px; pointer-events: none;">📺</span>
                     </div>`;
             } else {
                 galleryHtml += `
-                    <div class="menu-token-selector-item" data-idx="${tData.idx}" data-url="${tData.url}" title="${titleAttr}" style="width: 48px; height: 48px; position: relative; border-radius: 4px; overflow: hidden; cursor: pointer; ${borderStyle} flex-shrink: 0;">
-                        <img src="${tData.url}" alt="${titleAttr}" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="this.parentElement.style.display='none'">
+                    <div class="menu-token-selector-item" data-idx="${tData.idx}" data-url="${safeUrl}" title="${titleAttr}" style="width: 48px; height: 48px; position: relative; border-radius: 4px; overflow: hidden; cursor: pointer; ${borderStyle} flex-shrink: 0;">
+                        <img src="${safeUrl}" alt="${titleAttr}" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" data-fallback-hide-parent="1">
                     </div>`;
             }
         });

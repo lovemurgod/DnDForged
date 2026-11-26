@@ -11,6 +11,7 @@ import {
     onDatabaseDirectoryChanged
 } from '../state.js';
 import { processMediaUrl } from './media.js';
+import { atomicWriteFileSync } from '../../utils.js';
 
 export const assetsRouter = express.Router();
 
@@ -56,18 +57,33 @@ const assetStorage = multer.diskStorage({
     }
 });
 const ALLOWED_ASSET_MEDIA_EXTS = new Set(['.png', '.jpg', '.jpeg', '.webp', '.gif', '.webm', '.mp4']);
+const ALLOWED_GM_ASSET_MEDIA_EXTS = new Set([...ALLOWED_ASSET_MEDIA_EXTS, '.svg']);
 const PLAYER_UPLOAD_MAX_BYTES = 15 * 1024 * 1024; // 15 MB cap for players
 const GM_UPLOAD_MAX_BYTES = 250 * 1024 * 1024; // 250 MB cap for GMs
+
+function isSafeAssetMediaUrl(rawUrl) {
+    if (typeof rawUrl !== 'string') return false;
+    const trimmed = rawUrl.trim();
+    if (!trimmed) return false;
+    if (trimmed.startsWith('/assets/') || trimmed.startsWith('/vtt-uploads/') || trimmed.startsWith('/img/')) {
+        return true;
+    }
+    try {
+        const parsed = new URL(trimmed);
+        return parsed.protocol === 'http:' || parsed.protocol === 'https:';
+    } catch {
+        return false;
+    }
+}
 
 const assetUpload = multer({
     storage: assetStorage,
     limits: { fileSize: GM_UPLOAD_MAX_BYTES },
     fileFilter: (req, file, cb) => {
-        if (isAuthorizedGmOrSecret(req)) {
-            return cb(null, true);
-        }
+        const isGm = isAuthorizedGmOrSecret(req);
         const ext = path.extname(file.originalname || '').toLowerCase();
         const mime = String(file.mimetype || '').toLowerCase();
+        const allowedExts = isGm ? ALLOWED_GM_ASSET_MEDIA_EXTS : ALLOWED_ASSET_MEDIA_EXTS;
         const isSafeMime =
             !mime ||
             mime === 'application/octet-stream' ||
@@ -76,9 +92,10 @@ const assetUpload = multer({
             mime === 'image/webp' ||
             mime === 'image/gif' ||
             mime === 'video/webm' ||
-            mime === 'video/mp4';
-        if (!ALLOWED_ASSET_MEDIA_EXTS.has(ext) || !isSafeMime) {
-            return cb(new Error('Invalid file type: players may only upload PNG, JPG, WebP, GIF, WebM, or MP4 media'));
+            mime === 'video/mp4' ||
+            (isGm && mime === 'image/svg+xml');
+        if (!allowedExts.has(ext) || !isSafeMime) {
+            return cb(new Error('Invalid file type: only supported image/video media files are allowed'));
         }
         cb(null, true);
     }
@@ -230,7 +247,7 @@ assetsRouter.post('/assets/url', verifyGmOrSecret, async (req, res) => {
         path: folderPath ? `${folderPath}/${name || 'External URL'}` : name || 'External URL'
     };
     urls.push(newAsset);
-    fs.writeFileSync(urlsFile, JSON.stringify(urls, null, 2));
+    atomicWriteFileSync(urlsFile, JSON.stringify(urls, null, 2));
 
     invalidateAssetTree();
     res.json(newAsset);
@@ -250,7 +267,7 @@ assetsRouter.post('/assets/delete', verifyGmOrSecret, (req, res) => {
                 if (fs.existsSync(urlsFile)) {
                     let urls = JSON.parse(fs.readFileSync(urlsFile, 'utf8'));
                     urls = urls.filter((u) => u.name !== item.name && u.url !== item.url);
-                    fs.writeFileSync(urlsFile, JSON.stringify(urls, null, 2));
+                    atomicWriteFileSync(urlsFile, JSON.stringify(urls, null, 2));
                 }
             } else if (item.path) {
                 const targetPath = path.join(ASSETS_DIR, item.path);
@@ -285,10 +302,13 @@ assetsRouter.post('/assets/edit', verifyGmOrSecret, (req, res) => {
                 let urls = JSON.parse(fs.readFileSync(urlsFile, 'utf8'));
                 const idx = urls.findIndex((u) => u.name === oldName);
                 if (idx !== -1) {
+                    if (newUrl !== undefined && newUrl !== '' && !isSafeAssetMediaUrl(newUrl)) {
+                        return res.status(400).json({ error: 'Invalid asset URL scheme' });
+                    }
                     urls[idx].name = newName;
-                    if (newUrl) urls[idx].url = newUrl;
+                    if (newUrl) urls[idx].url = newUrl.trim();
                     urls[idx].path = folderPath ? `${folderPath}/${newName}` : newName;
-                    fs.writeFileSync(urlsFile, JSON.stringify(urls, null, 2));
+                    atomicWriteFileSync(urlsFile, JSON.stringify(urls, null, 2));
                 }
             }
             invalidateAssetTree();
@@ -334,7 +354,7 @@ assetsRouter.post('/assets/move', verifyGmOrSecret, (req, res) => {
                     if (fs.existsSync(srcUrlsFile)) {
                         let urls = JSON.parse(fs.readFileSync(srcUrlsFile, 'utf8'));
                         urls = urls.filter((u) => u.name !== item.name && u.url !== item.url);
-                        fs.writeFileSync(srcUrlsFile, JSON.stringify(urls, null, 2));
+                        atomicWriteFileSync(srcUrlsFile, JSON.stringify(urls, null, 2));
                     }
                 }
                 // Add to destDir _urls.json
@@ -349,7 +369,7 @@ assetsRouter.post('/assets/move', verifyGmOrSecret, (req, res) => {
                     type: 'url',
                     path: targetFolder && targetFolder !== 'Root' ? `${targetFolder}/${item.name}` : item.name
                 });
-                fs.writeFileSync(destUrlsFile, JSON.stringify(destUrls, null, 2));
+                atomicWriteFileSync(destUrlsFile, JSON.stringify(destUrls, null, 2));
             } else if (item.path) {
                 const oldPath = path.join(ASSETS_DIR, item.path);
                 if (!isValidAssetPath(oldPath, ASSETS_DIR) || !fs.existsSync(oldPath)) continue;

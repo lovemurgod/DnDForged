@@ -1,6 +1,8 @@
 // DnDForged Token Configuration, Modal & Preferences Subsystem
 // Manages token properties, multi-aura editing, HP/name visibility preferences, and splash showcase
 
+import { escapeHtml } from '../../vtt-utils.js';
+
 export const DEFAULT_PLAYER_TOKEN_PREFS = {
     monsterHpBarVisible: 'default',
     monsterHpNumVisible: 'default',
@@ -247,7 +249,7 @@ export function renderAuraList(tempAurasList, options = {}) {
             const r = aura.range !== undefined ? aura.range : 10;
             const s = aura.shape || 'circle';
             const n = aura.name || '';
-            titleText.innerHTML = `${n ? `<strong>${n}</strong>` : `Aura ${idx + 1}`}: <span style="font-weight: normal; opacity: 0.85;">${r}ft ${s.charAt(0).toUpperCase() + s.slice(1)}</span>`;
+            titleText.innerHTML = `${n ? `<strong>${escapeHtml(n)}</strong>` : `Aura ${idx + 1}`}: <span style="font-weight: normal; opacity: 0.85;">${escapeHtml(String(r))}ft ${escapeHtml(s.charAt(0).toUpperCase() + s.slice(1))}</span>`;
         };
 
         nameInput.addEventListener('input', () => {

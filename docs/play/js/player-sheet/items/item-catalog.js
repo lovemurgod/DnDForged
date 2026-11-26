@@ -4,6 +4,7 @@
 
 import { getItemFullDescription, renderItemPreview } from './item-description.js';
 import { runItemAutomationWizard } from './item-wizard.js';
+import { escapeHtml } from '../../vtt-utils.js';
 
 export const RARITY_ORDER = {
     none: 0,
@@ -1205,7 +1206,7 @@ export function openItemModal(options = {}) {
                     .catch((err) => {
                         const tbodyErr = document.getElementById('pc-item-tbody');
                         if (tbodyErr)
-                            tbodyErr.innerHTML = `<tr><td colspan="2" style="color:var(--color-danger); text-align:center; padding:20px;">Error loading items: ${err.message}</td></tr>`;
+                            tbodyErr.innerHTML = `<tr><td colspan="2" style="color:var(--color-danger); text-align:center; padding:20px;">Error loading items: ${escapeHtml(err.message)}</td></tr>`;
                     });
             });
     }

@@ -15,12 +15,19 @@ import {
     isRoll20TableJson,
     convertRoll20TableToVTT
 } from './importers/roll20-importer.js';
-import { createCampaignTemplate, hashPassword } from '../utils.js';
-import { p2pBridge } from '../server/p2p-bridge.js';
+import {
+    createCampaignTemplate,
+    hashPassword,
+    atomicWriteFileSync,
+    RESERVED_OBJECT_KEYS,
+    sanitizeImportedObject,
+    validateZipArchiveEntries
+} from '../utils.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const rootDir = path.join(__dirname, '..');
+const consoleLogs = [];
 
 // Single-instance lock: prevent multiple competing ForgeDVTT instances
 const gotTheLock = app.requestSingleInstanceLock();
@@ -50,8 +57,8 @@ function getServerPort() {
     return activePort || appConfig.serverPort || DEFAULT_PORT;
 }
 
-// Configuration persistence
-const configFilePath = path.join(app.getPath('userData'), 'forge-config.json');
+// Configuration persistence (deferred until app.whenReady() so userData is always available and duplicate locks don't touch disk)
+let configFilePath = '';
 
 // Ephemeral internal secret shared with child server process
 const SERVER_INTERNAL_SECRET = crypto.randomBytes(32).toString('hex');
@@ -65,8 +72,8 @@ function internalHeaders(extra = {}) {
 let appConfig = {
     serverPort: 5050,
     autoAssignPort: true,
-    campaignDataDir: path.join(app.getPath('userData'), '.dndforged-data'),
-    backupsDir: path.join(app.getPath('documents'), 'ForgeDVTT-Backups'),
+    campaignDataDir: process.env.FORGEDVTT_DATA_DIR || '',
+    backupsDir: '',
     hostingMode: 'forgedvtt', // 'forgedvtt' | 'custom'
     subdomain: 'mygame',
     customDomain: '',
@@ -79,6 +86,7 @@ let appConfig = {
 };
 
 function loadConfig() {
+    if (!configFilePath) return;
     try {
         if (fs.existsSync(configFilePath)) {
             const parsed = JSON.parse(fs.readFileSync(configFilePath, 'utf8'));
@@ -102,47 +110,57 @@ function loadConfig() {
 }
 
 function saveConfig() {
+    if (!configFilePath) return;
     try {
-        fs.writeFileSync(configFilePath, JSON.stringify(appConfig, null, 2), 'utf8');
+        atomicWriteFileSync(configFilePath, JSON.stringify(appConfig, null, 2));
     } catch (err) {
         console.error('Error saving config:', err);
     }
 }
 
-loadConfig();
+let sourceManager = null;
 
-// Ensure folders exist
-if (!fs.existsSync(appConfig.campaignDataDir)) {
-    fs.mkdirSync(appConfig.campaignDataDir, { recursive: true });
-}
-if (!fs.existsSync(appConfig.backupsDir)) {
-    fs.mkdirSync(appConfig.backupsDir, { recursive: true });
-}
+function initAppState() {
+    const userDataDir = app.getPath('userData');
+    configFilePath = process.env.FORGEDVTT_CONFIG_FILE || path.join(userDataDir, 'forge-config.json');
+    appConfig.campaignDataDir = process.env.FORGEDVTT_DATA_DIR || path.join(userDataDir, '.dndforged-data');
+    appConfig.backupsDir = path.join(app.getPath('documents'), 'ForgeDVTT-Backups');
 
-// Initialize Source Manager
-const sourceManager = new SourceManager({
-    rootDir,
-    campaignDataDir: appConfig.campaignDataDir
-});
+    loadConfig();
+    currentSubdomain = appConfig.subdomain || 'mygame';
+    currentTunnelToken = appConfig.tunnelToken || '';
 
-// Auto-migrate legacy data from root .dndforged-data if present (clean install only, never overwrite)
-const legacyDataDir = path.join(rootDir, '.dndforged-data');
-const targetCampFile = path.join(appConfig.campaignDataDir, 'campaigns.json');
-const legacyCampFile = path.join(legacyDataDir, 'campaigns.json');
-const migrationDoneMarker = path.join(appConfig.campaignDataDir, '.migration_done');
-
-if (fs.existsSync(legacyCampFile) && !fs.existsSync(targetCampFile) && !fs.existsSync(migrationDoneMarker)) {
-    try {
-        fs.cpSync(legacyDataDir, appConfig.campaignDataDir, { recursive: true });
-        fs.writeFileSync(migrationDoneMarker, new Date().toISOString(), 'utf8');
-        console.log('[Migration] Migrated campaign data from workspace to active data dir.');
-    } catch (e) {
-        console.error('Migration notice:', e.message);
+    if (!fs.existsSync(appConfig.campaignDataDir)) {
+        fs.mkdirSync(appConfig.campaignDataDir, { recursive: true });
     }
-}
+    if (!fs.existsSync(appConfig.backupsDir)) {
+        fs.mkdirSync(appConfig.backupsDir, { recursive: true });
+    }
 
-process.env.FORGEDVTT_DATA_DIR = appConfig.campaignDataDir;
-process.env.FORGEDVTT_CONFIG_FILE = configFilePath;
+    sourceManager = new SourceManager({
+        rootDir,
+        campaignDataDir: appConfig.campaignDataDir
+    });
+
+    // Auto-migrate legacy data from root .dndforged-data if present (clean install only, never overwrite)
+    const legacyDataDir = path.join(rootDir, '.dndforged-data');
+    const targetCampFile = path.join(appConfig.campaignDataDir, 'campaigns.json');
+    const legacyCampFile = path.join(legacyDataDir, 'campaigns.json');
+    const migrationDoneMarker = path.join(appConfig.campaignDataDir, '.migration_done');
+
+    if (fs.existsSync(legacyCampFile) && !fs.existsSync(targetCampFile) && !fs.existsSync(migrationDoneMarker)) {
+        try {
+            fs.cpSync(legacyDataDir, appConfig.campaignDataDir, { recursive: true });
+            fs.writeFileSync(migrationDoneMarker, new Date().toISOString(), 'utf8');
+            console.log('[Migration] Migrated campaign data from workspace to active data dir.');
+        } catch (e) {
+            console.error('Migration notice:', e.message);
+        }
+    }
+
+    process.env.FORGEDVTT_DATA_DIR = appConfig.campaignDataDir;
+    process.env.FORGEDVTT_CONFIG_FILE = configFilePath;
+}
 
 // Configured data and config file paths
 
@@ -215,10 +233,50 @@ let isServerStopping = false;
 let cancelStartupRequested = false;
 let isServerManaged = false;
 let isTunnelRunning = false;
-let currentSubdomain = appConfig.subdomain || 'mygame';
-let currentTunnelToken = appConfig.tunnelToken || '';
+let currentSubdomain = 'mygame';
+let currentTunnelToken = '';
 let registeredUrl = 'http://localhost:5050';
-let consoleLogs = [];
+let cachedP2pStatus = { active: false, roomCode: null, createdAt: null, peerCount: 0, peers: [] };
+let p2pPollTimer = null;
+
+function startP2pStatusPolling() {
+    if (p2pPollTimer) return;
+    p2pPollTimer = setInterval(async () => {
+        if (!isServerRunning || !mainWindow || mainWindow.isDestroyed() || !mainWindow.isVisible()) return;
+        const prev = JSON.stringify(cachedP2pStatus);
+        await callServerP2p('GET', 'status');
+        if (JSON.stringify(cachedP2pStatus) !== prev) {
+            notifyStatusChange();
+        }
+    }, 3000);
+}
+
+function stopP2pStatusPolling() {
+    if (p2pPollTimer) {
+        clearInterval(p2pPollTimer);
+        p2pPollTimer = null;
+    }
+}
+
+async function callServerP2p(method, endpoint, body = null) {
+    if (!isServerRunning) return cachedP2pStatus;
+    try {
+        const opts = {
+            method,
+            headers: internalHeaders(body ? { 'Content-Type': 'application/json' } : {})
+        };
+        if (body) opts.body = JSON.stringify(body);
+        const res = await fetch(`http://127.0.0.1:${getServerPort()}/api/p2p/${endpoint}`, opts);
+        if (res.ok) {
+            const data = await res.json();
+            if (data && typeof data === 'object') {
+                cachedP2pStatus = data.status || data;
+            }
+            return data;
+        }
+    } catch {}
+    return cachedP2pStatus;
+}
 
 function appendLog(msg) {
     const timestamp = new Date().toLocaleTimeString();
@@ -490,6 +548,7 @@ async function startServer() {
         isServerRunning = false;
         isServerManaged = false;
         serverProcess = null;
+        stopP2pStatusPolling();
         notifyStatusChange();
     });
 
@@ -497,11 +556,13 @@ async function startServer() {
     isServerRunning = true;
     isServerManaged = true;
     await syncConfigToServer();
+    startP2pStatusPolling();
     notifyStatusChange();
     return true;
 }
 
 async function stopServer() {
+    stopP2pStatusPolling();
     if (serverProcess) {
         appendLog('Stopping local server process gracefully...');
         const proc = serverProcess;
@@ -762,7 +823,7 @@ function getStatusPayload() {
         cloudflaredAvailable: !!getCloudflaredPath(),
         gmUsername: appConfig.gmCredentials?.username || '',
         hasGmPassword: !!appConfig.gmCredentials?.hash,
-        p2p: p2pBridge.getStatus()
+        p2p: cachedP2pStatus
     };
 }
 
@@ -770,7 +831,15 @@ function attachWindowSecurityGuards(win, { allowLocalPopouts = false } = {}) {
     if (!win || !win.webContents) return;
     const isPermittedAppUrl = (rawUrl) => {
         if (!rawUrl || rawUrl === 'about:blank') return true;
-        if (rawUrl.startsWith('file://')) return true;
+        if (rawUrl.startsWith('file://')) {
+            try {
+                const filePath = path.resolve(fileURLToPath(rawUrl));
+                const allowedDirs = [path.resolve(rootDir, 'electron', 'ui'), path.resolve(rootDir, 'vtt')];
+                return allowedDirs.some((dir) => filePath === dir || filePath.startsWith(dir + path.sep));
+            } catch {
+                return false;
+            }
+        }
         try {
             const parsed = new URL(rawUrl);
             const h = parsed.hostname.toLowerCase();
@@ -802,7 +871,8 @@ function attachWindowSecurityGuards(win, { allowLocalPopouts = false } = {}) {
                     webPreferences: {
                         preload: path.join(__dirname, 'vtt-preload.cjs'),
                         nodeIntegration: false,
-                        contextIsolation: true
+                        contextIsolation: true,
+                        sandbox: true
                     }
                 }
             };
@@ -827,12 +897,21 @@ function createWindow() {
             preload: path.join(__dirname, 'preload.cjs'),
             nodeIntegration: false,
             contextIsolation: true,
+            sandbox: true,
             backgroundThrottling: false
         }
     });
 
     attachWindowSecurityGuards(mainWindow);
     mainWindow.loadFile(path.join(__dirname, 'ui', 'index.html'));
+
+    mainWindow.on('show', () => {
+        if (isServerRunning) startP2pStatusPolling();
+    });
+
+    mainWindow.on('hide', () => {
+        stopP2pStatusPolling();
+    });
 
     mainWindow.on('close', (event) => {
         if (!app.isQuitting) {
@@ -843,6 +922,7 @@ function createWindow() {
     });
 
     mainWindow.on('closed', () => {
+        stopP2pStatusPolling();
         mainWindow = null;
     });
 }
@@ -963,6 +1043,7 @@ function openPresentationWindow(campaignId = 'default') {
             preload: path.join(__dirname, 'vtt-preload.cjs'),
             nodeIntegration: false,
             contextIsolation: true,
+            sandbox: true,
             backgroundThrottling: false
         }
     });
@@ -1005,6 +1086,7 @@ function openVTTWindow(targetUrl) {
             preload: path.join(__dirname, 'vtt-preload.cjs'),
             nodeIntegration: false,
             contextIsolation: true,
+            sandbox: true,
             backgroundThrottling: false
         }
     });
@@ -1071,26 +1153,28 @@ function hasConfiguredGmCredentials() {
     return Boolean(appConfig.gmCredentials?.username && appConfig.gmCredentials?.hash);
 }
 
-ipcMain.handle('p2p-get-status', () => p2pBridge.getStatus());
-ipcMain.handle('p2p-start-room', (_, options = {}) => {
+ipcMain.handle('p2p-get-status', async () => {
+    const status = await callServerP2p('GET', 'status');
+    return status;
+});
+ipcMain.handle('p2p-start-room', async (_, options = {}) => {
     if (!hasConfiguredGmCredentials()) {
         return { success: false, error: 'Set a GM Username and Password before starting an online P2P room.' };
     }
-    const status = p2pBridge.startRoom(options);
+    const status = await callServerP2p('POST', 'start', options);
     notifyStatusChange();
     return status;
 });
-ipcMain.handle('p2p-stop-room', () => {
-    const result = p2pBridge.stopRoom();
+ipcMain.handle('p2p-stop-room', async () => {
+    const result = await callServerP2p('POST', 'stop');
     notifyStatusChange();
     return result;
 });
-ipcMain.handle('p2p-regen-code', () => {
+ipcMain.handle('p2p-regen-code', async () => {
     if (!hasConfiguredGmCredentials()) {
         return { success: false, error: 'Set a GM Username and Password before regenerating a P2P room code.' };
     }
-    const newCode = p2pBridge.generateRoomCode();
-    const status = p2pBridge.startRoom({ roomCode: newCode });
+    const status = await callServerP2p('POST', 'regen');
     notifyStatusChange();
     return status;
 });
@@ -1356,7 +1440,8 @@ async function restoreBackupFromFile(targetFile) {
 
             let campStr = JSON.stringify(campData);
             if (origId && targetId !== origId) {
-                const oldPathRegex = new RegExp(`(/assets/campaigns/|assets/campaigns/)${origId}([/\\\\])`, 'g');
+                const escapedOrigId = String(origId).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                const oldPathRegex = new RegExp(`(/assets/campaigns/|assets/campaigns/)${escapedOrigId}([/\\\\])`, 'g');
                 campStr = campStr.replace(oldPathRegex, `$1${targetId}$2`);
             }
 
@@ -1413,7 +1498,7 @@ async function restoreBackupFromFile(targetFile) {
         }
 
         // Save updated campaigns.json
-        fs.writeFileSync(campFile, JSON.stringify(existingCampaigns, null, 2), 'utf8');
+        atomicWriteFileSync(campFile, JSON.stringify(existingCampaigns, null, 2));
 
         // Reload sources in manager and sync to server if restored
         if (restoredSources) {
@@ -1730,7 +1815,7 @@ ipcMain.handle('gm-save-campaign', async (_, campaignData) => {
                 if (campaignData.name && campaignData.name.trim()) target.name = campaignData.name.trim();
                 if (campaignData.description !== undefined) target.description = campaignData.description;
                 if (Array.isArray(campaignData.allowedUsers)) target.allowedUsers = campaignData.allowedUsers;
-                fs.writeFileSync(campFile, JSON.stringify(all, null, 2), 'utf8');
+                atomicWriteFileSync(campFile, JSON.stringify(all, null, 2));
                 return { success: true, campaign: target };
             }
         }
@@ -1777,7 +1862,7 @@ ipcMain.handle('gm-create-campaign', async (_, newCampData) => {
         if (description) newCamp.description = description;
         if (Array.isArray(allowedUsers)) newCamp.allowedUsers = allowedUsers;
         all[id] = newCamp;
-        fs.writeFileSync(campFile, JSON.stringify(all, null, 2), 'utf8');
+        atomicWriteFileSync(campFile, JSON.stringify(all, null, 2));
         return { success: true, campaign: newCamp };
     } catch (err) {
         return { success: false, error: err.message };
@@ -1808,7 +1893,7 @@ ipcMain.handle('gm-delete-campaign', async (_, campId) => {
             }
             if (!all[campId]) return { success: false, error: 'Campaign not found' };
             delete all[campId];
-            fs.writeFileSync(campFile, JSON.stringify(all, null, 2), 'utf8');
+            atomicWriteFileSync(campFile, JSON.stringify(all, null, 2));
             return { success: true, deletedId: campId };
         }
     } catch (err) {
@@ -1901,7 +1986,7 @@ ipcMain.handle('gm-delete-entity', async (_, { campaignId, entityType, entityId 
 
             if (!deleted) return { success: false, error: 'Entity not found in campaign' };
 
-            fs.writeFileSync(campFile, JSON.stringify(all, null, 2), 'utf8');
+            atomicWriteFileSync(campFile, JSON.stringify(all, null, 2));
             return { success: true, deletedId: entityId, entityType };
         }
     } catch (err) {
@@ -1929,7 +2014,9 @@ function packZipArchive(sourceDir, zipFilePath) {
 function unpackZipArchive(zipFilePath, targetDir) {
     try {
         if (!fs.existsSync(targetDir)) fs.mkdirSync(targetDir, { recursive: true });
-        execFileSync(getTarBin(), ['-xf', zipFilePath, '-C', targetDir], { stdio: 'ignore' });
+        const tarBin = getTarBin();
+        validateZipArchiveEntries(zipFilePath, tarBin);
+        execFileSync(tarBin, ['-xf', zipFilePath, '-C', targetDir], { stdio: 'ignore' });
         return true;
     } catch (err) {
         console.error('Failed to extract ZIP with tar:', err);
@@ -2047,7 +2134,8 @@ ipcMain.handle('gm-duplicate-campaign', async (_, campId) => {
             const newId = safeName.toLowerCase().replace(/[^a-z0-9]/gi, '_') + '_copy_' + Date.now();
             // Deep clone campaign object and migrate internal asset paths to new ID
             let clonedStr = JSON.stringify(orig);
-            const oldPathRegex = new RegExp(`(/assets/campaigns/|assets/campaigns/)${campId}([/\\\\])`, 'g');
+            const escapedCampId = String(campId).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            const oldPathRegex = new RegExp(`(/assets/campaigns/|assets/campaigns/)${escapedCampId}([/\\\\])`, 'g');
             clonedStr = clonedStr.replace(oldPathRegex, `$1${newId}$2`);
             const cloned = JSON.parse(clonedStr);
             cloned.id = newId;
@@ -2067,7 +2155,7 @@ ipcMain.handle('gm-duplicate-campaign', async (_, campId) => {
             }
 
             all[newId] = cloned;
-            fs.writeFileSync(campFile, JSON.stringify(all, null, 2), 'utf8');
+            atomicWriteFileSync(campFile, JSON.stringify(all, null, 2));
             appendLog(`[Campaigns] (File) Duplicated campaign ${campId} -> ${newName} (${newId})`);
             return { success: true, campaign: cloned };
         }
@@ -2231,7 +2319,8 @@ ipcMain.handle('gm-import-campaign', async (_, explicitFilePath) => {
         const newCampId = `${safeBaseId}_imported_${Date.now()}`;
         let campStr = JSON.stringify(campData);
         if (origCampId) {
-            const oldPathRegex = new RegExp(`(/assets/campaigns/|assets/campaigns/)${origCampId}([/\\\\])`, 'g');
+            const escapedOrigCampId = String(origCampId).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            const oldPathRegex = new RegExp(`(/assets/campaigns/|assets/campaigns/)${escapedOrigCampId}([/\\\\])`, 'g');
             campStr = campStr.replace(oldPathRegex, `$1${newCampId}$2`);
         }
         const newCamp = {
@@ -2260,8 +2349,10 @@ ipcMain.handle('gm-import-campaign', async (_, explicitFilePath) => {
             if (fs.existsSync(campFile)) {
                 all = JSON.parse(fs.readFileSync(campFile, 'utf8'));
             }
-            all[newCampId] = newCamp;
-            fs.writeFileSync(campFile, JSON.stringify(all, null, 2), 'utf8');
+            if (!RESERVED_OBJECT_KEYS.has(newCampId)) {
+                all[newCampId] = sanitizeImportedObject(newCamp);
+            }
+            atomicWriteFileSync(campFile, JSON.stringify(all, null, 2));
         }
 
         appendLog(`[Campaigns] Successfully imported campaign "${newCamp.name}" (${newCampId})`);
@@ -2542,7 +2633,7 @@ ipcMain.handle('gm-import-granular', async (_, { campaignId, explicitFilePath })
                 }
             }
 
-            fs.writeFileSync(campFile, JSON.stringify(allCamps, null, 2), 'utf8');
+            atomicWriteFileSync(campFile, JSON.stringify(allCamps, null, 2));
             appendLog(
                 `[Roll20 Import] Converted and imported ${tableCount} Roll20 table(s) into campaign ${campaignId}`
             );
@@ -2649,7 +2740,7 @@ ipcMain.handle('gm-import-granular', async (_, { campaignId, explicitFilePath })
                     delete cleanChar.overwrite;
                     currentCamp.characters[cleanChar.id] = cleanChar;
                 }
-                fs.writeFileSync(campFile, JSON.stringify(allCamps, null, 2), 'utf8');
+                atomicWriteFileSync(campFile, JSON.stringify(allCamps, null, 2));
                 resData = {
                     success: true,
                     count: convertedChars.length,
@@ -2758,7 +2849,9 @@ ipcMain.handle('gm-import-granular', async (_, { campaignId, explicitFilePath })
                             mId = `map_${campaignId}_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
                             mName = `${mName} (Copy)`;
                         }
-                        camp.maps[mId] = { ...item, id: mId, name: mName };
+                        if (!RESERVED_OBJECT_KEYS.has(mId)) {
+                            camp.maps[mId] = sanitizeImportedObject({ ...item, id: mId, name: mName });
+                        }
                         if (!camp.mapOrder) camp.mapOrder = Object.keys(camp.maps).filter((id) => id !== mId);
                         if (!camp.mapOrder.includes(mId)) camp.mapOrder.push(mId);
                         importedIds.push(mId);
@@ -2828,11 +2921,13 @@ ipcMain.handle('gm-import-granular', async (_, { campaignId, explicitFilePath })
                             cId = `char_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
                             cName = `${cName} (Copy)`;
                         }
-                        camp.characters[cId] = { ...item, id: cId, name: cName };
+                        if (!RESERVED_OBJECT_KEYS.has(cId)) {
+                            camp.characters[cId] = sanitizeImportedObject({ ...item, id: cId, name: cName });
+                        }
                         importedIds.push(cId);
                     }
                 }
-                fs.writeFileSync(campFile, JSON.stringify(all, null, 2), 'utf8');
+                atomicWriteFileSync(campFile, JSON.stringify(all, null, 2));
                 resData = { success: true, count: importedIds.length, importedIds, campaign: camp };
             }
         }
@@ -3098,6 +3193,8 @@ app.on('second-instance', () => {
 });
 
 app.whenReady().then(async () => {
+    if (!gotTheLock) return;
+    initAppState();
     try {
         if (session.defaultSession) {
             await session.defaultSession.clearCache();
@@ -3108,15 +3205,14 @@ app.whenReady().then(async () => {
     createWindow();
     createTray();
 
-    // Start default STUN P2P room session only once GM credentials are configured, and wire status updates
-    if (hasConfiguredGmCredentials()) {
-        p2pBridge.startRoom();
-    }
-    p2pBridge.on('peer:connected', () => notifyStatusChange());
-    p2pBridge.on('peer:disconnected', () => notifyStatusChange());
-
     // Auto-start server on app boot
     await startServer();
+
+    // Start default STUN P2P room session inside embedded server once GM credentials are configured
+    if (hasConfiguredGmCredentials()) {
+        await callServerP2p('POST', 'start', {});
+        notifyStatusChange();
+    }
 
     app.on('activate', () => {
         if (BrowserWindow.getAllWindows().length === 0) createWindow();
@@ -3128,10 +3224,15 @@ app.on('before-quit', async (e) => {
     if (isGracefulQuitDone) return;
     e.preventDefault();
     app.isQuitting = true;
-    stopTunnel();
-    await stopServer();
-    isGracefulQuitDone = true;
-    app.quit();
+    try {
+        stopTunnel();
+        await stopServer();
+    } catch (err) {
+        appendLog(`[Quit Warning] ${err?.message || err}`);
+    } finally {
+        isGracefulQuitDone = true;
+        app.quit();
+    }
 });
 
 app.on('window-all-closed', (e) => {

@@ -5,7 +5,7 @@
  */
 
 import { resetBtnJoin, showLoginError, clearLoginError } from './vtt-auth.js';
-import { getPlayerMapOverride } from '../vtt-utils.js';
+import { getPlayerMapOverride, escapeHtml } from '../vtt-utils.js';
 
 export function preloadVttModules() {
     return (async () => {
@@ -111,8 +111,16 @@ export function renderAllowlist(users) {
         row.style.background = 'rgba(255,255,255,0.05)';
         row.style.padding = '4px 8px';
         row.style.borderRadius = '4px';
-        row.innerHTML = `<span style="font-size: 0.85rem;">${u}</span>
-            <button class="btn btn-xxs btn-danger btn-remove-allowlist" onclick="removeAllowlistUser(${idx})"><i class="fa-solid fa-times"></i></button>`;
+        row.innerHTML = `<span style="font-size: 0.85rem;">${escapeHtml(u)}</span>
+            <button type="button" class="btn btn-xxs btn-danger btn-remove-allowlist"><i class="fa-solid fa-times"></i></button>`;
+        const rmBtn = row.querySelector('.btn-remove-allowlist');
+        if (rmBtn) {
+            rmBtn.addEventListener('click', () => {
+                if (typeof window.removeAllowlistUser === 'function') {
+                    window.removeAllowlistUser(idx);
+                }
+            });
+        }
         container.appendChild(row);
     });
 }

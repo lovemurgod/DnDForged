@@ -14,7 +14,7 @@ import {
     setActiveIo,
     isLoopbackRequest
 } from './state.js';
-import { verifyPassword, updateMapProperty } from '../utils.js';
+import { verifyPassword, updateMapProperty, RESERVED_OBJECT_KEYS } from '../utils.js';
 import { checkAndRecordGmAuthFailure, clearGmAuthFailures, isGmAuthRateLimited } from './routes/admin.js';
 import { registerCampaignBroadcaster } from './routes/campaigns.js';
 
@@ -222,6 +222,26 @@ function isTokenControlledBySocket(token, socket, campaign) {
     }
 
     return false;
+}
+
+function stripTags(val) {
+    if (val === undefined || val === null) return val;
+    return String(val).replace(/<[^>]*>/g, '');
+}
+
+function stripTagsDeep(val) {
+    if (val === undefined || val === null || typeof val === 'number' || typeof val === 'boolean') return val;
+    if (typeof val === 'string') return stripTags(val);
+    if (Array.isArray(val)) return val.map((item) => stripTagsDeep(item));
+    if (typeof val === 'object') {
+        const out = {};
+        for (const [k, v] of Object.entries(val)) {
+            if (k === '__proto__' || k === 'constructor' || k === 'prototype') continue;
+            out[k] = stripTagsDeep(v);
+        }
+        return out;
+    }
+    return val;
 }
 
 // WebSocket Synchronizer
@@ -1752,6 +1772,7 @@ export function initSocketServer(io) {
             const { campaignId, role, username } = socket;
             if (!campaignId || !campaigns[campaignId]) return;
             const camp = campaigns[campaignId];
+            if (role !== 'GM' && camp.isPaused) return;
             const targetMapId = data.mapId || camp.activeMapId;
             const currentMap = camp.maps?.[targetMapId];
             if (!currentMap) return;
@@ -1763,6 +1784,7 @@ export function initSocketServer(io) {
                 const newShapes = data.shapes || {};
 
                 for (const id in existingShapes) {
+                    if (RESERVED_OBJECT_KEYS.has(id)) continue;
                     const s = existingShapes[id];
                     if (s && s.ownerUsername && s.ownerUsername.toLowerCase() === (username || '').toLowerCase()) {
                         if (!newShapes[id]) {
@@ -1772,6 +1794,7 @@ export function initSocketServer(io) {
                 }
 
                 for (const id in newShapes) {
+                    if (RESERVED_OBJECT_KEYS.has(id)) continue;
                     const s = newShapes[id];
                     const existing = existingShapes[id];
                     if (
@@ -1782,7 +1805,7 @@ export function initSocketServer(io) {
                         continue;
                     }
                     mergedShapes[id] = {
-                        ...s,
+                        ...sanitizeImportedObject(s),
                         ownerUsername: username
                     };
                 }
@@ -1804,6 +1827,7 @@ export function initSocketServer(io) {
             const { campaignId, role, username } = socket;
             if (!campaignId || !campaigns[campaignId]) return;
             const camp = campaigns[campaignId];
+            if (role !== 'GM' && camp.isPaused) return;
             const targetMapId = data.mapId || camp.activeMapId;
             const currentMap = camp.maps?.[targetMapId];
             if (!currentMap) return;
@@ -1815,6 +1839,7 @@ export function initSocketServer(io) {
                 const newDrawings = data.drawings || {};
 
                 for (const id in existingDrawings) {
+                    if (RESERVED_OBJECT_KEYS.has(id)) continue;
                     const d = existingDrawings[id];
                     if (d && d.ownerUsername && d.ownerUsername.toLowerCase() === (username || '').toLowerCase()) {
                         if (!newDrawings[id]) {
@@ -1824,6 +1849,7 @@ export function initSocketServer(io) {
                 }
 
                 for (const id in newDrawings) {
+                    if (RESERVED_OBJECT_KEYS.has(id)) continue;
                     const d = newDrawings[id];
                     const existing = existingDrawings[id];
                     if (
@@ -1834,7 +1860,7 @@ export function initSocketServer(io) {
                         continue;
                     }
                     mergedDrawings[id] = {
-                        ...d,
+                        ...sanitizeImportedObject(d),
                         ownerUsername: username
                     };
                 }
@@ -2349,28 +2375,6 @@ export function initSocketServer(io) {
             const { campaignId } = socket;
             if (!campaignId) return;
 
-            const stripTags = (val) => {
-                if (val === undefined || val === null) return val;
-                if (typeof val === 'number' || typeof val === 'boolean') return val;
-                return String(val).replace(/<[^>]*>/g, '');
-            };
-
-            const stripTagsDeep = (val) => {
-                if (val === undefined || val === null || typeof val === 'number' || typeof val === 'boolean')
-                    return val;
-                if (typeof val === 'string') return stripTags(val);
-                if (Array.isArray(val)) return val.map((item) => stripTagsDeep(item));
-                if (typeof val === 'object') {
-                    const out = {};
-                    for (const [k, v] of Object.entries(val)) {
-                        if (k === '__proto__' || k === 'constructor' || k === 'prototype') continue;
-                        out[k] = stripTagsDeep(v);
-                    }
-                    return out;
-                }
-                return val;
-            };
-
             const safeMsg = msg && typeof msg === 'object' ? sanitizeImportedObject(msg) : {};
             let cleanRoll = safeMsg.roll;
             if (cleanRoll && typeof cleanRoll === 'object') {
@@ -2549,18 +2553,18 @@ export function initSocketServer(io) {
         // Private whisper (GM-only creature sheet rolls) — sent only back to the sender
         socket.on('chat:whisper', (msg) => {
             if (!socket.campaignId) return;
-            const stripTags = (val) => (typeof val === 'string' ? val.replace(/<[^>]*>/g, '') : val);
+            const safeMsg = msg && typeof msg === 'object' ? sanitizeImportedObject(msg) : {};
             const whisperMsg = {
                 username: socket.username,
                 role: socket.role,
-                text: msg?.text !== undefined ? stripTags(msg.text) : msg?.text,
-                roll: msg?.roll || null,
-                macroCard: msg?.macroCard || null,
-                spellCard: msg?.spellCard || null,
-                abilityCard: msg?.abilityCard || null,
-                itemCard: msg?.itemCard || null,
-                saveResolveCard: msg?.saveResolveCard || null,
-                massAttackCard: msg?.massAttackCard || null,
+                text: safeMsg.text !== undefined ? stripTags(safeMsg.text) : safeMsg.text,
+                roll: safeMsg.roll ? stripTagsDeep(safeMsg.roll) : null,
+                macroCard: safeMsg.macroCard ? stripTagsDeep(safeMsg.macroCard) : null,
+                spellCard: safeMsg.spellCard ? stripTagsDeep(safeMsg.spellCard) : null,
+                abilityCard: safeMsg.abilityCard ? stripTagsDeep(safeMsg.abilityCard) : null,
+                itemCard: safeMsg.itemCard ? stripTagsDeep(safeMsg.itemCard) : null,
+                saveResolveCard: safeMsg.saveResolveCard ? stripTagsDeep(safeMsg.saveResolveCard) : null,
+                massAttackCard: safeMsg.massAttackCard ? stripTagsDeep(safeMsg.massAttackCard) : null,
                 timestamp: Date.now()
             };
             // Send only to the requesting socket (GM sees it privately)
@@ -2655,6 +2659,18 @@ export function initSocketServer(io) {
         socket.on('tokens:damage_fx', (data) => {
             const { campaignId } = socket;
             if (!campaignId || !data) return;
+            const targetIds = Array.isArray(data.tokenIds) ? data.tokenIds : data.tokenId ? [data.tokenId] : [];
+            if (targetIds.length === 0) return;
+            const camp = campaigns[campaignId];
+            if (camp?.isPaused && socket.role !== 'GM') return;
+            if (socket.role !== 'GM') {
+                const mapId = data.mapId || camp?.activeMapId;
+                const mapTokens = camp?.maps?.[mapId]?.tokens || {};
+                const allOwned = targetIds.every(
+                    (id) => mapTokens[id] && isTokenControlledBySocket(mapTokens[id], socket, camp)
+                );
+                if (!allOwned) return;
+            }
             data.origin = data.origin || socket.id;
             io.to(campaignId).emit('tokens:damage_fx', data);
         });
@@ -2663,6 +2679,18 @@ export function initSocketServer(io) {
         socket.on('tokens:heal_fx', (data) => {
             const { campaignId } = socket;
             if (!campaignId || !data) return;
+            const targetIds = Array.isArray(data.tokenIds) ? data.tokenIds : data.tokenId ? [data.tokenId] : [];
+            if (targetIds.length === 0) return;
+            const camp = campaigns[campaignId];
+            if (camp?.isPaused && socket.role !== 'GM') return;
+            if (socket.role !== 'GM') {
+                const mapId = data.mapId || camp?.activeMapId;
+                const mapTokens = camp?.maps?.[mapId]?.tokens || {};
+                const allOwned = targetIds.every(
+                    (id) => mapTokens[id] && isTokenControlledBySocket(mapTokens[id], socket, camp)
+                );
+                if (!allOwned) return;
+            }
             data.origin = data.origin || socket.id;
             io.to(campaignId).emit('tokens:heal_fx', data);
         });

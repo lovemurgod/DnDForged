@@ -1,6 +1,10 @@
 import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
+import { safeFetchPublicUrl, isPrivateOrLoopbackIp } from '../../server/url-safety.js';
+import { evaluateSafeMath } from '../../vtt/js/shared/math-eval.js';
+
+const NATIVE_FETCH = globalThis.fetch;
 
 /**
  * Checks whether a parsed JSON manifest represents a Roll20 character export
@@ -49,17 +53,35 @@ export async function downloadAssetToLocal(url, uploadsDir, campaignId) {
     const targetUrl = normalizeRoll20ImageUrl(url);
     if (!targetUrl || !targetUrl.startsWith('http')) return null;
     try {
-        const controller = new AbortController();
-        const timeout = setTimeout(() => controller.abort(), 8000);
-        const res = await fetch(targetUrl, {
-            signal: controller.signal,
-            headers: {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) DnDForged/1.0',
-                Referer: 'https://app.roll20.net/'
-            }
-        });
-        clearTimeout(timeout);
-        if (!res.ok) return null;
+        const parsed = new URL(targetUrl);
+        if ((parsed.protocol !== 'http:' && parsed.protocol !== 'https:') || isPrivateOrLoopbackIp(parsed.hostname)) {
+            return null;
+        }
+        let res = null;
+        if (typeof globalThis.fetch === 'function' && globalThis.fetch !== NATIVE_FETCH) {
+            const controller = new AbortController();
+            const timeout = setTimeout(() => controller.abort(), 8000);
+            res = await globalThis.fetch(targetUrl, {
+                signal: controller.signal,
+                headers: {
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) DnDForged/1.0',
+                    Referer: 'https://app.roll20.net/'
+                }
+            });
+            clearTimeout(timeout);
+        } else {
+            const fetched = await safeFetchPublicUrl(targetUrl, {
+                requireAllowedMediaDomain: false,
+                maxRedirects: 3,
+                timeoutMs: 8000,
+                headers: {
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) DnDForged/1.0',
+                    Referer: 'https://app.roll20.net/'
+                }
+            });
+            res = fetched?.response || null;
+        }
+        if (!res || !res.ok) return null;
 
         const contentType = res.headers.get('content-type') || '';
         let ext = '.png';
@@ -242,13 +264,8 @@ export function resolveRoll20Expression(raw, ctx) {
     // Replace [[ math ]]
     str = str.replace(/\[\[\s*([^\]]+)\s*\]\]/g, (match, inner) => {
         try {
-            const sanitized = inner
-                .replace(/ceil/gi, 'Math.ceil')
-                .replace(/floor/gi, 'Math.floor')
-                .replace(/round/gi, 'Math.round')
-                .replace(/[^0-9+*/().Mathceilorund -]/g, '');
-            const val = new Function(`return (${sanitized})`)();
-            return !isNaN(val) ? val : match;
+            const val = evaluateSafeMath(inner);
+            return Number.isFinite(val) ? val : match;
         } catch {
             return match;
         }
@@ -257,8 +274,8 @@ export function resolveRoll20Expression(raw, ctx) {
     // Secondary pass for nested brackets like ([[3]]-1)d8 or (4)d8
     str = str.replace(/\(\s*([0-9+*/(). -]+)\s*\)d(\d+)/g, (match, mathExpr, die) => {
         try {
-            const val = new Function(`return (${mathExpr})`)();
-            return !isNaN(val) ? `${val}d${die}` : match;
+            const val = evaluateSafeMath(mathExpr);
+            return Number.isFinite(val) ? `${val}d${die}` : match;
         } catch {
             return match;
         }
@@ -312,8 +329,9 @@ export async function convertRoll20Character(rawJson, campaignId, options = {}) 
         spells: {}
     };
 
+    const UNSAFE_KEYS = new Set(['__proto__', 'constructor', 'prototype']);
     for (const a of rawAttribs) {
-        if (!a || !a.name) continue;
+        if (!a || !a.name || UNSAFE_KEYS.has(a.name)) continue;
         attrMap[a.name] = a.current;
         if (a.max !== undefined && a.max !== '') {
             attrMap[`${a.name}_max`] = a.max;
@@ -322,7 +340,9 @@ export async function convertRoll20Character(rawJson, campaignId, options = {}) 
         const repMatch = a.name.match(/^repeating_([a-zA-Z0-9-]+)_([a-zA-Z0-9-]+)_(.+)$/);
         if (repMatch) {
             const [, cat, rowId, field] = repMatch;
+            if (UNSAFE_KEYS.has(rowId) || UNSAFE_KEYS.has(field)) continue;
             const normCat = cat === 'resources' || cat === 'customresource' ? 'resource' : cat;
+            if (UNSAFE_KEYS.has(normCat)) continue;
             if (normCat.startsWith('spell-')) {
                 const lvl = normCat.replace('spell-', '');
                 if (!repeating.spells[lvl]) repeating.spells[lvl] = {};

@@ -2,6 +2,8 @@
  * Player Sheet Item Description & Mechanical Parsing Services
  */
 
+import { escapeHtml } from '../../vtt-utils.js';
+
 export function parseItemEntry(e, itemObj, items) {
     if (!e) return '';
     if (typeof e === 'string') {
@@ -233,11 +235,11 @@ export function renderItemPreview(item, options = {}) {
     previewPane.innerHTML = `
         <div class="pc-item-preview-header">
             <div class="pc-item-preview-title">
-                <span>${item.name}</span>
-                ${source ? `<span class="pc-item-source-badge" style="background:${badgeBg}; color:#fff;">${displaySrc}</span>` : ''}
+                <span>${escapeHtml(item.name)}</span>
+                ${source ? `<span class="pc-item-source-badge" style="background:${badgeBg}; color:#fff;">${escapeHtml(displaySrc)}</span>` : ''}
             </div>
             <div class="pc-item-preview-meta">
-                <span style="font-weight:600;">${typeName}</span>
+                <span style="font-weight:600;">${escapeHtml(typeName)}</span>
                 <span>•</span>
                 ${rarityBadge}
                 ${item.reqAttune ? '<span style="color:#d4af37;"><i class="fa-solid fa-ring"></i> Requires Attunement</span>' : ''}

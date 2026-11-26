@@ -1231,12 +1231,12 @@ export function renderStatBlock(m, panel = null, ctx = {}) {
         }
         portraitMediaHtml = `<iframe src="${ytUrl}" frameborder="0" allow="autoplay; encrypted-media" style="width:100%; height:100%; pointer-events:none; border:none;"></iframe>`;
     } else {
-        const safeName = (m.name || 'Creature').replace(/'/g, "\\'");
+        const safeName = escapeHtml(m.name || 'Creature');
         const safeTokenUrl =
             typeof window !== 'undefined' && typeof window.getSafeVttUrl === 'function'
                 ? window.getSafeVttUrl(tokenUrl)
                 : tokenUrl;
-        portraitMediaHtml = `<img src="${safeTokenUrl}" alt="${m.name}" onerror="if (window.VTT?.generateArcaneToken) { this.src = window.VTT.generateArcaneToken('${safeName}', 'monster'); } else { this.src = 'favicon.svg'; }" style="width:100%; height:100%; object-fit:cover; display:block;">`;
+        portraitMediaHtml = `<img src="${escapeHtml(safeTokenUrl)}" alt="${safeName}" data-fallback-arcane="${safeName}" style="width:100%; height:100%; object-fit:cover; display:block;">`;
     }
 
     contentEl.innerHTML = `
@@ -1260,8 +1260,8 @@ export function renderStatBlock(m, panel = null, ctx = {}) {
                 ${portraitMediaHtml}
             </div>
             <div class="cs-header-info">
-                <h2 class="cs-creature-name">${m.name}</h2>
-                <p class="cs-creature-type">${typeStr}</p>
+                <h2 class="cs-creature-name">${escapeHtml(m.name)}</h2>
+                <p class="cs-creature-type">${escapeHtml(typeStr)}</p>
                 <div class="cs-header-meta">
                     <div class="cs-cr-badge">CR ${crStr}</div>
                 </div>

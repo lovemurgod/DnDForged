@@ -105,7 +105,7 @@ export function rollAndPostToChat(formula, label, ctx = {}) {
         modifier: finalModifier,
         total
     };
-    const visibility = ctx.getVisibilitySetting ? ctx.getVisibilitySetting() : getVisibilitySetting();
+    const visibility = ctx.getVisibilitySetting ? ctx.getVisibilitySetting(ctx) : getVisibilitySetting(ctx);
     const modeText = isAdvantage ? ' (Advantage)' : isDisadvantage ? ' (Disadvantage)' : '';
 
     if (visibility === 'private' || visibility === 'gm') {

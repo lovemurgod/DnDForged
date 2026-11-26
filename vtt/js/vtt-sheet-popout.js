@@ -37,19 +37,29 @@ class SheetWindowManagerClass {
     }
 
     handleBroadcastMessage(data) {
-        if (!data || !data.action) return;
+        if (!data || typeof data !== 'object' || typeof data.action !== 'string') return;
+        const ALLOWED_RELAY_EVENTS = new Set([
+            'character:update',
+            'character:sync',
+            'chat:msg',
+            'chat:whisper',
+            'initiative:update',
+            'token:update_delta',
+            'tokens:damage_fx',
+            'tokens:heal_fx'
+        ]);
 
         switch (data.action) {
             case 'SHEET_OPENED':
             case 'HEARTBEAT_PULSE':
             case 'HEARTBEAT_PONG':
-                if (data.sheetKey) {
+                if (typeof data.sheetKey === 'string' && data.sheetKey) {
                     this.remoteActiveSheets.set(data.sheetKey, Date.now());
                 }
                 break;
 
             case 'SHEET_CLOSED':
-                if (data.sheetKey) {
+                if (typeof data.sheetKey === 'string' && data.sheetKey) {
                     this.remoteActiveSheets.delete(data.sheetKey);
                     this.openWindows.delete(data.sheetKey);
                 }
@@ -72,7 +82,7 @@ class SheetWindowManagerClass {
                 break;
 
             case 'DOCK_SHEET':
-                if (!this.isStandalone && data.sheetData) {
+                if (!this.isStandalone && data.sheetData && typeof data.sheetData === 'object') {
                     this.remoteActiveSheets.delete(data.sheetKey);
                     this.openWindows.delete(data.sheetKey);
                     this.dockCallbacks.forEach((cb) => cb(data.sheetData));
@@ -80,13 +90,18 @@ class SheetWindowManagerClass {
                 break;
 
             case 'SHEET_SOCKET_EMIT':
-                if (!this.isStandalone && data.event) {
+                if (
+                    !this.isStandalone &&
+                    typeof data.event === 'string' &&
+                    ALLOWED_RELAY_EVENTS.has(data.event) &&
+                    Array.isArray(data.args)
+                ) {
                     this.socketRelayCallbacks.forEach((cb) => cb({ event: data.event, args: data.args }));
                 }
                 break;
 
             case 'SHEET_SOCKET_EVENT':
-                if (this.isStandalone && data.event) {
+                if (this.isStandalone && typeof data.event === 'string' && Array.isArray(data.args)) {
                     this.socketEventCallbacks.forEach((cb) => cb({ event: data.event, args: data.args }));
                 }
                 break;

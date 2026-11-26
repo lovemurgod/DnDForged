@@ -66,7 +66,11 @@ adminRouter.post('/server/sync-config', verifyGmOrSecret, (req, res) => {
     }
     if (campaignDataDir && campaignDataDir !== DATA_DIR) {
         console.log(`[Server] Switching database directory to: ${campaignDataDir}`);
-        setDatabaseDirectory(campaignDataDir);
+        try {
+            setDatabaseDirectory(campaignDataDir);
+        } catch (err) {
+            return res.status(500).json({ error: err.message });
+        }
     }
     res.json({ success: true, activeDataDir: DATA_DIR });
 });
@@ -117,8 +121,9 @@ export function getClientIpKey(req) {
     const cleanSocket = socketAddr.replace(/^::ffff:/, '');
     const isBehindLocalProxy = cleanSocket === '127.0.0.1' || cleanSocket === '::1' || cleanSocket === 'localhost';
     if (isBehindLocalProxy) {
+        const cfRay = req.headers?.['cf-ray'];
         const cf = req.headers?.['cf-connecting-ip'];
-        const cfIp = (Array.isArray(cf) ? cf[0] : cf ? String(cf) : '').trim().slice(0, 64);
+        const cfIp = cfRay ? (Array.isArray(cf) ? cf[0] : cf ? String(cf) : '').trim().slice(0, 64) : '';
         if (cfIp) {
             return cfIp.replace(/^::ffff:/, '');
         }

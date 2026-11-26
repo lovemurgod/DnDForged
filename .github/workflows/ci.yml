@@ -39,8 +39,18 @@ jobs:
       - name: Check Types (TypeScript JSDoc)
         run: npm run typecheck
 
+      - name: Check TDZ References
+        run: node scripts/check_tdz_references.mjs
+
       - name: Execute Test Suites (npm test)
         run: npm test
 
-      - name: Report Test Coverage (npm run test:coverage)
+      - name: Execute Standalone Lifecycle Suites
+        run: |
+          npm run test:e2e
+          npm run test:builder:lifecycle
+          npm run test:custom:lifecycle
+          npm run test:tables:lifecycle
+
+      - name: Execute Test Suites & Coverage (npm run test:coverage)
         run: npm run test:coverage

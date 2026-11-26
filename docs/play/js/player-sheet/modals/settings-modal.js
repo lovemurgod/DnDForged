@@ -7,6 +7,7 @@
 
 import { ALL_SKILLS, STANDARD_TOOLS } from '../vtt-sheet-modals.js';
 import { calculateEffectiveHp, calculateEffectiveAc, resolveCharacterSheetSettings } from '../calc/stats.js';
+import { escapeHtml } from '../../vtt-utils.js';
 
 // ─── 1. STAT & SAVE SETTINGS ──────────────────────────────────────────────────
 
@@ -21,9 +22,9 @@ export function renderSaveTogglesList(char, options = {}) {
             <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.3); padding:6px 8px; border-radius:4px; border:1px solid var(--color-border-subtle);">
                 <div style="display:flex; align-items:center; gap:8px;">
                     <input type="checkbox" class="save-toggle-enable-cb" data-idx="${i}" ${t.enabled ? 'checked' : ''}>
-                    <span style="font-weight:bold; font-size:0.85rem;">${t.name}</span>
-                    <span style="background:var(--color-surface-hover); padding:2px 4px; border-radius:4px; font-size:0.7rem;">${(t.target || 'ALL').toUpperCase()}</span>
-                    <span style="color:var(--color-gold-base); font-size:0.8rem;">${t.formula}</span>
+                    <span style="font-weight:bold; font-size:0.85rem;">${escapeHtml(t.name)}</span>
+                    <span style="background:var(--color-surface-hover); padding:2px 4px; border-radius:4px; font-size:0.7rem;">${escapeHtml((t.target || 'ALL').toUpperCase())}</span>
+                    <span style="color:var(--color-gold-base); font-size:0.8rem;">${escapeHtml(t.formula)}</span>
                 </div>
                 <div style="display:flex; gap:4px;">
                     <button class="btn btn-xxs btn-secondary save-toggle-edit-btn" data-idx="${i}"><i class="fa-solid fa-pen"></i></button>
@@ -284,9 +285,9 @@ export function renderSkillTogglesList(char, options = {}) {
             <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.3); padding:6px 8px; border-radius:4px; border:1px solid var(--color-border-subtle);">
                 <div style="display:flex; align-items:center; gap:8px;">
                     <input type="checkbox" class="skill-toggle-enable-cb" data-idx="${i}" ${t.enabled ? 'checked' : ''}>
-                    <span style="font-weight:bold; font-size:0.85rem;">${t.name}</span>
-                    <span style="background:var(--color-surface-hover); padding:2px 4px; border-radius:4px; font-size:0.7rem;">${(t.target || 'ALL').toUpperCase()}</span>
-                    <span style="color:var(--color-gold-base); font-size:0.8rem;">${t.formula}</span>
+                    <span style="font-weight:bold; font-size:0.85rem;">${escapeHtml(t.name)}</span>
+                    <span style="background:var(--color-surface-hover); padding:2px 4px; border-radius:4px; font-size:0.7rem;">${escapeHtml((t.target || 'ALL').toUpperCase())}</span>
+                    <span style="color:var(--color-gold-base); font-size:0.8rem;">${escapeHtml(t.formula)}</span>
                 </div>
                 <div style="display:flex; gap:4px;">
                     <button class="btn btn-xxs btn-secondary skill-toggle-edit-btn" data-idx="${i}"><i class="fa-solid fa-pen"></i></button>
