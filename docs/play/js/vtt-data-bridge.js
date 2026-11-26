@@ -119,9 +119,13 @@ export function initVttDataBridge(vtt) {
                 '';
             const qs = campId ? `?campaignId=${encodeURIComponent(campId)}&_t=${Date.now()}` : `?_t=${Date.now()}`;
 
-            let catalogRes = await fetch(`/api/bestiary/catalog${qs}`);
+            const origin =
+                typeof window !== 'undefined' && /^https?:/i.test(window.location?.origin || '')
+                    ? window.location.origin
+                    : '';
+            let catalogRes = await fetch(`${origin}/api/bestiary/catalog${qs}`);
             if (!catalogRes.ok) {
-                catalogRes = await fetch(`/data/bestiary-catalog.json${qs}`);
+                catalogRes = await fetch(`${origin}/data/bestiary-catalog.json${qs}`);
             }
             if (!catalogRes.ok) throw new Error('Could not load bestiary catalog');
 

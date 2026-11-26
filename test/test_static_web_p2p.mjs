@@ -347,8 +347,22 @@ test('Static Web P2P Build: docs/play & docs/prep', async (t) => {
                     headers: { 'x-server-secret': secret }
                 });
             } catch (_) {}
-            if (child.exitCode === null) child.kill();
-            fs.rmSync(tmpDataDir, { recursive: true, force: true });
+            await new Promise((resolve) => {
+                if (child.exitCode !== null) return resolve();
+                const timer = setTimeout(() => {
+                    if (child.exitCode === null) {
+                        try {
+                            child.kill('SIGKILL');
+                        } catch (_) {}
+                    }
+                    resolve();
+                }, 1500);
+                child.once('exit', () => {
+                    clearTimeout(timer);
+                    resolve();
+                });
+            });
+            fs.rmSync(tmpDataDir, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 });
         }
     });
 });
