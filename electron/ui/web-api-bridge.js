@@ -372,6 +372,10 @@
         gmCreateCampaign: async (payload) => {
             if (isStatic()) {
                 await drv().init();
+                const folderState =
+                    typeof drv().ensureFolderConnectionForImport === 'function'
+                        ? await drv().ensureFolderConnectionForImport()
+                        : null;
                 const name = (payload?.name || 'New Campaign').trim();
                 const id = name.toLowerCase().replace(/[^a-z0-9]/gi, '_') + '_' + Date.now();
                 const defaultMapId = `map_${id}_default_${Date.now()}`;
@@ -405,7 +409,10 @@
                 };
                 drv().campaigns[id] = created;
                 await drv()._saveCampaigns();
-                return { success: true, campaign: created };
+                const storageLabel =
+                    folderState?.storageLabel ||
+                    (typeof drv().getDataPathLabel === 'function' ? drv().getDataPathLabel() : '');
+                return { success: true, campaign: created, storageLabel };
             }
             const created = await apiFetch('/api/campaigns', {
                 method: 'POST',
@@ -461,11 +468,15 @@
         gmImportCampaign: async (fileInput) => {
             let fileObj = null;
             let parsed = null;
+            let folderState = null;
             if (fileInput && typeof fileInput.text === 'function') {
                 fileObj = fileInput;
             } else if (fileInput && typeof fileInput === 'object' && typeof fileInput.content === 'string') {
                 parsed = JSON.parse(fileInput.content);
             } else {
+                if (isStatic() && typeof drv().ensureFolderConnectionForImport === 'function') {
+                    folderState = await drv().ensureFolderConnectionForImport();
+                }
                 const files = await pickFiles({ accept: '.json,.zip' });
                 if (!files.length) return { canceled: true };
                 fileObj = files[0];
@@ -490,6 +501,9 @@
                 return { success: false, error: 'Invalid campaign JSON' };
             }
             if (isStatic()) {
+                if (!folderState && typeof drv().ensureFolderConnectionForImport === 'function') {
+                    folderState = await drv().ensureFolderConnectionForImport();
+                }
                 const reserved = new Set(['__proto__', 'constructor', 'prototype']);
                 const cleanObj = (val) => {
                     if (Array.isArray(val)) return val.map(cleanObj);
@@ -514,7 +528,10 @@
                 const cloned = { ...campData, id: newId, updatedAt: Date.now() };
                 drv().campaigns[newId] = cloned;
                 await drv()._saveCampaigns();
-                return { success: true, campaign: cloned };
+                const storageLabel =
+                    folderState?.storageLabel ||
+                    (typeof drv().getDataPathLabel === 'function' ? drv().getDataPathLabel() : '');
+                return { success: true, campaign: cloned, storageLabel };
             }
             return await apiFetch('/api/campaigns/import', {
                 method: 'POST',
@@ -542,11 +559,15 @@
         gmImportGranular: async ({ campaignId, explicitFile, entityType: hintEntityType }) => {
             let fileObj = null;
             let parsed = null;
+            let folderState = null;
             if (explicitFile && typeof explicitFile.text === 'function') {
                 fileObj = explicitFile;
             } else if (explicitFile && typeof explicitFile === 'object' && typeof explicitFile.content === 'string') {
                 parsed = JSON.parse(explicitFile.content);
             } else {
+                if (isStatic() && typeof drv().ensureFolderConnectionForImport === 'function') {
+                    folderState = await drv().ensureFolderConnectionForImport();
+                }
                 const files = await pickFiles({ accept: '.json,.zip' });
                 if (!files.length) return { canceled: true };
                 fileObj = files[0];
@@ -573,7 +594,14 @@
             const entities = Array.isArray(parsed?.items) ? parsed.items : Array.isArray(parsed) ? parsed : null;
             const entity = parsed?.entity || parsed;
             if (isStatic()) {
-                return await drv().importGranular({ campaignId, entityType, entity, entities });
+                if (!folderState && typeof drv().ensureFolderConnectionForImport === 'function') {
+                    folderState = await drv().ensureFolderConnectionForImport();
+                }
+                const res = await drv().importGranular({ campaignId, entityType, entity, entities });
+                const storageLabel =
+                    folderState?.storageLabel ||
+                    (typeof drv().getDataPathLabel === 'function' ? drv().getDataPathLabel() : '');
+                return res && typeof res === 'object' ? { ...res, storageLabel } : res;
             }
             if (entities) {
                 let importedCount = 0;

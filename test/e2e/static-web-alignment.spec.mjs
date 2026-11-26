@@ -113,6 +113,33 @@ test.describe('Static Web Alignment: Website, Prep & Play', () => {
         await page.click('#tab-btn-gm');
         await expect(page.locator('#view-gm')).toHaveClass(/active/);
 
+        // Verify Import Campaign prompts for folder link (dismissed -> IndexedDB fallback) and imports JSON
+        const dialogs = [];
+        const onDialog = async (dialog) => {
+            dialogs.push(dialog.message());
+            await dialog.dismiss();
+        };
+        page.on('dialog', onDialog);
+        const [fileChooser] = await Promise.all([
+            page.waitForEvent('filechooser'),
+            page.click('#btn-gm-import-campaign')
+        ]);
+        await fileChooser.setFiles({
+            name: 'playwright-imported.json',
+            mimeType: 'application/json',
+            buffer: Buffer.from(
+                JSON.stringify({
+                    format: 'forgedvtt-campaign-v1',
+                    campaign: { id: 'pw_imp', name: 'Playwright Imported Campaign', maps: {} }
+                })
+            )
+        });
+        await expect(page.locator('#gm-campaign-list')).toContainText('Playwright Imported Campaign', {
+            timeout: 10000
+        });
+        page.off('dialog', onDialog);
+        expect(dialogs.some((m) => m.includes('Campaign Data Folder'))).toBe(true);
+
         await assertNoHorizontalOverflow(page, '/prep/');
 
         expect(errors.consoleErrors, 'Console errors on /prep/').toEqual([]);

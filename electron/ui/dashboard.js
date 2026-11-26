@@ -1288,6 +1288,18 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
+    function updateStoragePathDisplay(storageLabel) {
+        if (!storageLabel) return;
+        if (dataPathPreview) {
+            dataPathPreview.textContent = storageLabel;
+            dataPathPreview.title = storageLabel;
+        }
+        const prepStorageEl = document.getElementById('prep-static-storage-label');
+        if (prepStorageEl) {
+            prepStorageEl.textContent = storageLabel;
+        }
+    }
+
     btnGmImportCampaign?.addEventListener('click', async () => {
         btnGmImportCampaign.disabled = true;
         btnGmImportCampaign.textContent = 'Importing...';
@@ -1295,7 +1307,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         try {
             const res = await api.gmImportCampaign(null);
             if (res && res.success && res.campaign) {
-                appendLogLine(`[Campaigns] Imported campaign "${res.campaign.name}" (${res.campaign.id})`);
+                updateStoragePathDisplay(res.storageLabel);
+                appendLogLine(
+                    `[Campaigns] Imported campaign "${res.campaign.name}" (${res.campaign.id})${res.storageLabel ? ` -> ${res.storageLabel}` : ''}`
+                );
                 await loadGmCampaigns();
                 const imported = currentCampaigns.find((c) => c.id === res.campaign.id);
                 if (imported) selectCampaign(imported);
@@ -1339,6 +1354,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 entityType
             });
             if (res && res.success) {
+                updateStoragePathDisplay(res.storageLabel);
                 alert(`Successfully imported ${res.count} ${label} into "${selectedCampaign.name}"!`);
                 await refreshSelectedCampaignEntities();
             } else if (!res?.canceled) {
@@ -1426,7 +1442,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                     const importPayload = isWebMode ? file : filePath;
                     const res = await api.gmImportCampaign(importPayload);
                     if (res && res.success && res.campaign) {
-                        appendLogLine(`[Drop Import] Imported campaign "${res.campaign.name}" from ${file.name}`);
+                        updateStoragePathDisplay(res.storageLabel);
+                        appendLogLine(
+                            `[Drop Import] Imported campaign "${res.campaign.name}" from ${file.name}${res.storageLabel ? ` -> ${res.storageLabel}` : ''}`
+                        );
                         await loadGmCampaigns();
                         const imported = currentCampaigns.find((c) => c.id === res.campaign.id);
                         if (imported) selectCampaign(imported);
@@ -1445,8 +1464,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                         explicitFile: isWebMode ? file : null
                     });
                     if (res && res.success) {
+                        updateStoragePathDisplay(res.storageLabel);
                         appendLogLine(
-                            `[Drop Import] Imported ${res.count} item(s) into campaign "${selectedCampaign.name}"`
+                            `[Drop Import] Imported ${res.count} item(s) into campaign "${selectedCampaign.name}"${res.storageLabel ? ` -> ${res.storageLabel}` : ''}`
                         );
                         await refreshSelectedCampaignEntities();
                         alert(`Successfully imported ${res.count} item(s) into "${selectedCampaign.name}"!`);
@@ -1517,8 +1537,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             });
 
             if (res.success && res.campaign) {
+                updateStoragePathDisplay(res.storageLabel);
                 modalCreateCampaign.classList.add('vtt-hidden');
-                appendLogLine(`[Campaigns] Created new campaign: "${name}" (${res.campaign.id})`);
+                appendLogLine(
+                    `[Campaigns] Created new campaign: "${name}" (${res.campaign.id})${res.storageLabel ? ` -> ${res.storageLabel}` : ''}`
+                );
                 await loadGmCampaigns();
                 // Select the newly created campaign
                 const created = currentCampaigns.find((c) => c.id === res.campaign.id);

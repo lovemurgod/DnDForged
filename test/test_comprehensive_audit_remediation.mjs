@@ -136,7 +136,7 @@ test('Comprehensive Audit Remediation Suite', async (t) => {
 
     await t.test(
         'Socket.IO enforces token ownership, map_sync sanitization, remote Presentation allowlist, and GM rate limit',
-        () => {
+        async () => {
             resetGmLoginRateLimits();
             const { hash, salt } = hashPassword('SocketGuard99!');
             serverConfig.gmCredentials = { username: 'GameMaster', salt, hash };
@@ -217,14 +217,15 @@ test('Comprehensive Audit Remediation Suite', async (t) => {
                 s.handshake = { address: '127.0.0.1', headers: { 'cf-connecting-ip': '203.0.113.99' } };
                 s.join = () => {};
                 s.disconnect = () => {};
-                let rej = null;
-                s.on('join_rejected', (d) => (rej = d));
-                onConnection(s);
-                s.emit('join', {
-                    campaignId: 'test_sec_camp',
-                    username: 'GameMaster',
-                    role: 'GM',
-                    gmPassword: 'Wrong'
+                const rej = await new Promise((resolve) => {
+                    s.on('join_rejected', resolve);
+                    onConnection(s);
+                    s.emit('join', {
+                        campaignId: 'test_sec_camp',
+                        username: 'GameMaster',
+                        role: 'GM',
+                        gmPassword: 'Wrong'
+                    });
                 });
                 if (i === 5) {
                     assert.equal(rej?.code, 'RATE_LIMITED', '6th failed Socket.IO GM login must be RATE_LIMITED');

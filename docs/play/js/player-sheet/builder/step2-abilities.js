@@ -1,76 +1,4 @@
-/**
- * Character Builder Wizard - Step 2: Ability Scores & Racial ASI
- * Standard Array, Point Buy, 4d6 Roll, Manual Entry, and Racial ASI breakdown.
- */
-
-export function renderStep2(ctx) {
-    const {
-        bodyEl,
-        workingChar,
-        getEffectiveStats,
-        getEffectiveRacialBonuses,
-        getFeatAndAsiBonuses,
-        getPointBuySpent,
-        POINT_BUY_COSTS,
-        racialChoiceDefs,
-        recomputeCandidates,
-        getMod
-    } = ctx;
-
-    const stats = getEffectiveStats();
-    const racialBonuses = getEffectiveRacialBonuses();
-    const asiBonuses = getFeatAndAsiBonuses();
-    const spentPts = getPointBuySpent(workingChar);
-    const remainingPts = 27 - spentPts;
-
-    const statNames = {
-        str: 'Strength',
-        dex: 'Dexterity',
-        con: 'Constitution',
-        int: 'Intelligence',
-        wis: 'Wisdom',
-        cha: 'Charisma'
-    };
-    const statList = ['str', 'dex', 'con', 'int', 'wis', 'cha'];
-
-    // Extract Background Recommended Abilities (2024 / XPHB)
-    const matchedBg = ctx.matchedBg;
-    const bgRecStats = new Set();
-    if (matchedBg && matchedBg.ability) {
-        const abList = Array.isArray(matchedBg.ability) ? matchedBg.ability : [matchedBg.ability];
-        abList.forEach((entry) => {
-            if (!entry) return;
-            if (entry.choose && Array.isArray(entry.choose.from)) {
-                entry.choose.from.forEach((s) => bgRecStats.add(s.toLowerCase()));
-            } else if (typeof entry === 'object') {
-                Object.keys(entry).forEach((k) => {
-                    if (['str', 'dex', 'con', 'int', 'wis', 'cha'].includes(k.toLowerCase())) {
-                        bgRecStats.add(k.toLowerCase());
-                    }
-                });
-            }
-        });
-    }
-
-    const sortedStatList = [...statList].sort((a, b) => {
-        const aRec = bgRecStats.has(a);
-        const bRec = bgRecStats.has(b);
-        if (aRec && !bRec) return -1;
-        if (!aRec && bRec) return 1;
-        return 0;
-    });
-
-    const renderBgAsiOptions = (selectedStat, bonusText) => {
-        return sortedStatList
-            .map((s) => {
-                const isRec = bgRecStats.has(s);
-                const isSel = selectedStat === s;
-                return `<option value="${s}" ${isSel ? 'selected' : ''}>${statNames[s]} (${bonusText})${isRec ? ' ★ Background Recommended' : ''}</option>`;
-            })
-            .join('');
-    };
-
-    bodyEl.innerHTML = `
+export function renderStep2(r){const{bodyEl:$,workingChar:e,getEffectiveStats:w,getEffectiveRacialBonuses:A,getFeatAndAsiBonuses:z,getPointBuySpent:S,POINT_BUY_COSTS:v,racialChoiceDefs:f,recomputeCandidates:i,getMod:P}=r,M=w(),E=A(),B=z(),h=27-S(e),g={str:"Strength",dex:"Dexterity",con:"Constitution",int:"Intelligence",wis:"Wisdom",cha:"Charisma"},n=["str","dex","con","int","wis","cha"],u=r.matchedBg,m=new Set;u&&u.ability&&(Array.isArray(u.ability)?u.ability:[u.ability]).forEach(a=>{a&&(a.choose&&Array.isArray(a.choose.from)?a.choose.from.forEach(o=>m.add(o.toLowerCase())):typeof a=="object"&&Object.keys(a).forEach(o=>{["str","dex","con","int","wis","cha"].includes(o.toLowerCase())&&m.add(o.toLowerCase())}))});const k=[...n].sort((t,a)=>{const o=m.has(t),s=m.has(a);return o&&!s?-1:!o&&s?1:0}),x=(t,a)=>k.map(o=>{const s=m.has(o);return`<option value="${o}" ${t===o?"selected":""}>${g[o]} (${a})${s?" \u2605 Background Recommended":""}</option>`}).join("");$.innerHTML=`
         <!-- Generation Method Selector -->
         <div class="builder-section-box">
             <div class="builder-section-header">
@@ -80,16 +8,16 @@ export function renderStep2(ctx) {
                 </div>
             </div>
             <div style="display:flex; gap:10px; flex-wrap:wrap;">
-                <button type="button" class="btn ${workingChar.statMethod === 'standard' ? 'btn-primary' : 'btn-secondary'} pc-method-btn" data-method="standard" style="flex:1; min-width:130px; font-weight:600;">
+                <button type="button" class="btn ${e.statMethod==="standard"?"btn-primary":"btn-secondary"} pc-method-btn" data-method="standard" style="flex:1; min-width:130px; font-weight:600;">
                     Standard Array
                 </button>
-                <button type="button" class="btn ${workingChar.statMethod === 'pointbuy' ? 'btn-primary' : 'btn-secondary'} pc-method-btn" data-method="pointbuy" style="flex:1; min-width:130px; font-weight:600;">
+                <button type="button" class="btn ${e.statMethod==="pointbuy"?"btn-primary":"btn-secondary"} pc-method-btn" data-method="pointbuy" style="flex:1; min-width:130px; font-weight:600;">
                     Point Buy (27 Pts)
                 </button>
-                <button type="button" class="btn ${workingChar.statMethod === 'roll' ? 'btn-primary' : 'btn-secondary'} pc-method-btn" data-method="roll" style="flex:1; min-width:130px; font-weight:600;">
+                <button type="button" class="btn ${e.statMethod==="roll"?"btn-primary":"btn-secondary"} pc-method-btn" data-method="roll" style="flex:1; min-width:130px; font-weight:600;">
                     Roll 4d6 (Drop Lowest)
                 </button>
-                <button type="button" class="btn ${workingChar.statMethod === 'manual' ? 'btn-primary' : 'btn-secondary'} pc-method-btn" data-method="manual" style="flex:1; min-width:130px; font-weight:600;">
+                <button type="button" class="btn ${e.statMethod==="manual"?"btn-primary":"btn-secondary"} pc-method-btn" data-method="manual" style="flex:1; min-width:130px; font-weight:600;">
                     Manual Entry
                 </button>
             </div>
@@ -97,9 +25,7 @@ export function renderStep2(ctx) {
 
         <!-- Active Method Configuration -->
         <div class="builder-section-box">
-            ${
-                workingChar.statMethod === 'standard'
-                    ? `
+            ${e.statMethod==="standard"?`
                 <div style="margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
                     <div>
                         <strong style="color:var(--color-gold-light);">Standard Array: [15, 14, 13, 12, 10, 8]</strong>
@@ -107,67 +33,45 @@ export function renderStep2(ctx) {
                     </div>
                 </div>
                 <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(130px, 1fr)); gap:10px;">
-                    ${statList
-                        .map(
-                            (s) => `
+                    ${n.map(t=>`
                         <div class="glass-flat" style="padding:10px; border-radius:6px; text-align:center; border:1px solid var(--color-border-subtle);">
-                            <label style="font-weight:700; color:var(--color-gold-base); font-size:0.85rem; text-transform:uppercase;">${s}</label>
-                            <select class="pc-std-arr-sel" data-stat="${s}" style="width:100%; margin-top:6px; padding:6px; text-align:center; font-weight:bold; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); border-radius:4px;">
-                                ${[15, 14, 13, 12, 10, 8]
-                                    .map(
-                                        (val) => `
-                                    <option value="${val}" ${workingChar.standardArrayAssignments[s] === val ? 'selected' : ''}>${val}</option>
-                                `
-                                    )
-                                    .join('')}
+                            <label style="font-weight:700; color:var(--color-gold-base); font-size:0.85rem; text-transform:uppercase;">${t}</label>
+                            <select class="pc-std-arr-sel" data-stat="${t}" style="width:100%; margin-top:6px; padding:6px; text-align:center; font-weight:bold; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); border-radius:4px;">
+                                ${[15,14,13,12,10,8].map(a=>`
+                                    <option value="${a}" ${e.standardArrayAssignments[t]===a?"selected":""}>${a}</option>
+                                `).join("")}
                             </select>
                         </div>
-                    `
-                        )
-                        .join('')}
+                    `).join("")}
                 </div>
-            `
-                    : ''
-            }
+            `:""}
 
-            ${
-                workingChar.statMethod === 'pointbuy'
-                    ? `
+            ${e.statMethod==="pointbuy"?`
                 <div style="margin-bottom:14px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
                     <div>
                         <strong style="color:var(--color-gold-light); font-size:1rem;">Point Buy Budget (Scores 8 to 15)</strong>
                         <div style="font-size:0.8rem; color:var(--color-text-secondary);">Cost: 8:0 &bull; 9:1 &bull; 10:2 &bull; 11:3 &bull; 12:4 &bull; 13:5 &bull; 14:7 &bull; 15:9</div>
                     </div>
-                    <div style="font-size:1.05rem; font-weight:bold; padding:4px 14px; border-radius:20px; background:rgba(0,0,0,0.4); border:1px solid ${remainingPts >= 0 ? '#4caf50' : '#f44336'}; color:${remainingPts >= 0 ? '#81c784' : '#ef5350'};">
-                        Points Remaining: ${remainingPts} / 27
+                    <div style="font-size:1.05rem; font-weight:bold; padding:4px 14px; border-radius:20px; background:rgba(0,0,0,0.4); border:1px solid ${h>=0?"#4caf50":"#f44336"}; color:${h>=0?"#81c784":"#ef5350"};">
+                        Points Remaining: ${h} / 27
                     </div>
                 </div>
                 <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(130px, 1fr)); gap:10px;">
-                    ${statList
-                        .map((s) => {
-                            const val = workingChar.pointBuyScores[s] || 8;
-                            const cost = POINT_BUY_COSTS[val] || 0;
-                            return `
+                    ${n.map(t=>{const a=e.pointBuyScores[t]||8,o=v[a]||0;return`
                             <div class="glass-flat" style="padding:10px; border-radius:6px; text-align:center; border:1px solid var(--color-border-subtle);">
-                                <div style="font-weight:700; color:var(--color-gold-base); font-size:0.85rem; text-transform:uppercase;">${s}</div>
-                                <div style="font-size:1.35rem; font-weight:bold; color:var(--color-text-primary); margin:4px 0;">${val}</div>
-                                <div style="font-size:0.75rem; color:var(--color-text-muted); margin-bottom:8px;">Cost: ${cost} pts</div>
+                                <div style="font-weight:700; color:var(--color-gold-base); font-size:0.85rem; text-transform:uppercase;">${t}</div>
+                                <div style="font-size:1.35rem; font-weight:bold; color:var(--color-text-primary); margin:4px 0;">${a}</div>
+                                <div style="font-size:0.75rem; color:var(--color-text-muted); margin-bottom:8px;">Cost: ${o} pts</div>
                                 <div style="display:flex; justify-content:center; gap:6px;">
-                                    <button type="button" class="btn btn-secondary btn-xs pc-pb-btn" data-stat="${s}" data-dir="-1" ${val <= 8 ? 'disabled' : ''} style="width:30px; height:28px;">-</button>
-                                    <button type="button" class="btn btn-secondary btn-xs pc-pb-btn" data-stat="${s}" data-dir="1" ${val >= 15 || remainingPts < (POINT_BUY_COSTS[val + 1] || 9) - cost ? 'disabled' : ''} style="width:30px; height:28px;">+</button>
+                                    <button type="button" class="btn btn-secondary btn-xs pc-pb-btn" data-stat="${t}" data-dir="-1" ${a<=8?"disabled":""} style="width:30px; height:28px;">-</button>
+                                    <button type="button" class="btn btn-secondary btn-xs pc-pb-btn" data-stat="${t}" data-dir="1" ${a>=15||h<(v[a+1]||9)-o?"disabled":""} style="width:30px; height:28px;">+</button>
                                 </div>
                             </div>
-                        `;
-                        })
-                        .join('')}
+                        `}).join("")}
                 </div>
-            `
-                    : ''
-            }
+            `:""}
 
-            ${
-                workingChar.statMethod === 'roll'
-                    ? `
+            ${e.statMethod==="roll"?`
                 <div style="margin-bottom:14px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
                     <div>
                         <strong style="color:var(--color-gold-light); font-size:1rem;">Roll 4d6 Drop Lowest</strong>
@@ -178,50 +82,36 @@ export function renderStep2(ctx) {
                     </button>
                 </div>
                 <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr)); gap:10px;">
-                    ${workingChar.rolledScores
-                        .map(
-                            (r, rIdx) => `
+                    ${e.rolledScores.map((t,a)=>`
                         <div class="glass-flat" style="padding:10px; border-radius:6px; text-align:center; border:1px solid var(--color-border-subtle);">
                             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
-                                <span style="font-size:0.75rem; color:var(--color-text-muted);">Pool ${rIdx + 1}</span>
-                                <button type="button" class="btn btn-xxs btn-secondary pc-reroll-single" data-idx="${rIdx}" title="Re-roll this stat"><i class="fa-solid fa-rotate-right"></i></button>
+                                <span style="font-size:0.75rem; color:var(--color-text-muted);">Pool ${a+1}</span>
+                                <button type="button" class="btn btn-xxs btn-secondary pc-reroll-single" data-idx="${a}" title="Re-roll this stat"><i class="fa-solid fa-rotate-right"></i></button>
                             </div>
-                            <div style="font-size:1.35rem; font-weight:bold; color:var(--color-gold-light);">${r.val}</div>
-                            <div style="font-size:0.7rem; color:var(--color-text-muted); margin-bottom:6px;">[${r.rolls.join(', ')}]</div>
-                            <select class="pc-roll-assign-sel" data-idx="${rIdx}" style="width:100%; padding:4px 6px; font-size:0.8rem; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); border-radius:4px;">
-                                ${statList.map((s) => `<option value="${s}" ${r.assignedStat === s ? 'selected' : ''}>${s.toUpperCase()}</option>`).join('')}
+                            <div style="font-size:1.35rem; font-weight:bold; color:var(--color-gold-light);">${t.val}</div>
+                            <div style="font-size:0.7rem; color:var(--color-text-muted); margin-bottom:6px;">[${t.rolls.join(", ")}]</div>
+                            <select class="pc-roll-assign-sel" data-idx="${a}" style="width:100%; padding:4px 6px; font-size:0.8rem; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); border-radius:4px;">
+                                ${n.map(o=>`<option value="${o}" ${t.assignedStat===o?"selected":""}>${o.toUpperCase()}</option>`).join("")}
                             </select>
                         </div>
-                    `
-                        )
-                        .join('')}
+                    `).join("")}
                 </div>
-            `
-                    : ''
-            }
+            `:""}
 
-            ${
-                workingChar.statMethod === 'manual'
-                    ? `
+            ${e.statMethod==="manual"?`
                 <div style="margin-bottom:12px;">
                     <strong style="color:var(--color-gold-light);">Manual Score Entry (1 to 30)</strong>
                     <div style="font-size:0.8rem; color:var(--color-text-secondary);">Directly input your character base ability scores.</div>
                 </div>
                 <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(120px, 1fr)); gap:10px;">
-                    ${statList
-                        .map(
-                            (s) => `
+                    ${n.map(t=>`
                         <div class="glass-flat" style="padding:10px; border-radius:6px; text-align:center; border:1px solid var(--color-border-subtle);">
-                            <label style="font-weight:700; color:var(--color-gold-base); font-size:0.85rem; text-transform:uppercase;">${s}</label>
-                            <input type="number" id="pc-man-stat-${s}" min="1" max="30" value="${workingChar.manualScores[s]}" style="width:100%; margin-top:6px; padding:6px; text-align:center; font-weight:bold; font-size:1.1rem; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); color:var(--color-gold-light); border-radius:4px;">
+                            <label style="font-weight:700; color:var(--color-gold-base); font-size:0.85rem; text-transform:uppercase;">${t}</label>
+                            <input type="number" id="pc-man-stat-${t}" min="1" max="30" value="${e.manualScores[t]}" style="width:100%; margin-top:6px; padding:6px; text-align:center; font-weight:bold; font-size:1.1rem; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); color:var(--color-gold-light); border-radius:4px;">
                         </div>
-                    `
-                        )
-                        .join('')}
+                    `).join("")}
                 </div>
-            `
-                    : ''
-            }
+            `:""}
         </div>
 
         <!-- Racial ASI & Total Scores Breakdown -->
@@ -232,164 +122,136 @@ export function renderStep2(ctx) {
                     <strong style="font-size:0.95rem; color:var(--color-gold-base);">Racial ASI & Live Scores Breakdown</strong>
                 </div>
                 <div style="display:flex; gap:6px; flex-wrap:wrap;">
-                    <button type="button" class="btn ${workingChar.racialAsiMode === 'catalog' ? 'btn-primary' : 'btn-secondary'} btn-xxs pc-asi-mode-btn" data-asimode="catalog">Standard Species</button>
-                    <button type="button" class="btn ${workingChar.racialAsiMode === 'tashas' ? 'btn-primary' : 'btn-secondary'} btn-xxs pc-asi-mode-btn" data-asimode="tashas">Tasha's Rules</button>
-                    <button type="button" class="btn ${workingChar.racialAsiMode === 'background' ? 'btn-primary' : 'btn-secondary'} btn-xxs pc-asi-mode-btn" data-asimode="background">Background ASI (2024)</button>
-                    <button type="button" class="btn ${workingChar.racialAsiMode === 'custom' ? 'btn-primary' : 'btn-secondary'} btn-xxs pc-asi-mode-btn" data-asimode="custom">Custom ASI</button>
+                    <button type="button" class="btn ${e.racialAsiMode==="catalog"?"btn-primary":"btn-secondary"} btn-xxs pc-asi-mode-btn" data-asimode="catalog">Standard Species</button>
+                    <button type="button" class="btn ${e.racialAsiMode==="tashas"?"btn-primary":"btn-secondary"} btn-xxs pc-asi-mode-btn" data-asimode="tashas">Tasha's Rules</button>
+                    <button type="button" class="btn ${e.racialAsiMode==="background"?"btn-primary":"btn-secondary"} btn-xxs pc-asi-mode-btn" data-asimode="background">Background ASI (2024)</button>
+                    <button type="button" class="btn ${e.racialAsiMode==="custom"?"btn-primary":"btn-secondary"} btn-xxs pc-asi-mode-btn" data-asimode="custom">Custom ASI</button>
                 </div>
             </div>
 
-            ${
-                workingChar.racialAsiMode === 'catalog' && racialChoiceDefs.length > 0
-                    ? `
+            ${e.racialAsiMode==="catalog"&&f.length>0?`
                 <div style="display:flex; gap:12px; margin-bottom:12px; flex-wrap:wrap; background:rgba(0,0,0,0.25); padding:8px 12px; border-radius:6px; border:1px solid var(--color-border-subtle);">
-                    ${racialChoiceDefs
-                        .map(
-                            (cd) => `
+                    ${f.map(t=>`
                         <div style="display:flex; align-items:center; gap:6px;">
-                            <span style="font-size:0.8rem; font-weight:600; color:var(--color-gold-light);">${cd.label}:</span>
-                            <select class="pc-wiz-racial-choice-sel" data-cid="${cd.id}" style="padding:4px 8px; font-size:0.8rem; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); border-radius:4px;">
-                                <option value="">-- Choose Ability (+${cd.amount}) --</option>
-                                ${cd.from.map((st) => `<option value="${st}" ${workingChar.racialChoices[cd.id] === st ? 'selected' : ''}>${statNames[st]} (+${cd.amount})</option>`).join('')}
+                            <span style="font-size:0.8rem; font-weight:600; color:var(--color-gold-light);">${t.label}:</span>
+                            <select class="pc-wiz-racial-choice-sel" data-cid="${t.id}" style="padding:4px 8px; font-size:0.8rem; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); border-radius:4px;">
+                                <option value="">-- Choose Ability (+${t.amount}) --</option>
+                                ${t.from.map(a=>`<option value="${a}" ${e.racialChoices[t.id]===a?"selected":""}>${g[a]} (+${t.amount})</option>`).join("")}
                             </select>
                         </div>
-                    `
-                        )
-                        .join('')}
+                    `).join("")}
                 </div>
-            `
-                    : ''
-            }
+            `:""}
 
-            ${
-                workingChar.racialAsiMode === 'tashas'
-                    ? `
+            ${e.racialAsiMode==="tashas"?`
                 <div style="background:rgba(0,0,0,0.25); padding:10px 12px; border-radius:6px; border:1px solid var(--color-border-subtle); margin-bottom:12px;">
                     <div style="display:flex; gap:16px; align-items:center; margin-bottom:8px;">
                         <label style="display:flex; align-items:center; gap:6px; cursor:pointer; font-size:0.8rem; color:var(--color-gold-light);">
-                            <input type="radio" name="pc-tashas-mode-radio" value="plus2plus1" ${workingChar.tashasMode !== 'threePlus1' ? 'checked' : ''} style="accent-color:var(--color-gold-base);">
+                            <input type="radio" name="pc-tashas-mode-radio" value="plus2plus1" ${e.tashasMode!=="threePlus1"?"checked":""} style="accent-color:var(--color-gold-base);">
                             <span>+2 to One, +1 to Another</span>
                         </label>
                         <label style="display:flex; align-items:center; gap:6px; cursor:pointer; font-size:0.8rem; color:var(--color-gold-light);">
-                            <input type="radio" name="pc-tashas-mode-radio" value="threePlus1" ${workingChar.tashasMode === 'threePlus1' ? 'checked' : ''} style="accent-color:var(--color-gold-base);">
+                            <input type="radio" name="pc-tashas-mode-radio" value="threePlus1" ${e.tashasMode==="threePlus1"?"checked":""} style="accent-color:var(--color-gold-base);">
                             <span>+1 to Three Distinct Scores</span>
                         </label>
                     </div>
-                    ${
-                        workingChar.tashasMode === 'threePlus1'
-                            ? `
+                    ${e.tashasMode==="threePlus1"?`
                         <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
                             <div style="display:flex; align-items:center; gap:6px;">
                                 <span style="font-size:0.8rem; font-weight:600; color:var(--color-gold-light);">+1 Stat 1:</span>
                                 <select id="pc-wiz-tashas-1-1" style="padding:4px 8px; font-size:0.8rem; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); border-radius:4px;">
-                                    ${statList.map((s) => `<option value="${s}" ${workingChar.tashasPlus1_1 === s ? 'selected' : ''}>${statNames[s]} (+1)</option>`).join('')}
+                                    ${n.map(t=>`<option value="${t}" ${e.tashasPlus1_1===t?"selected":""}>${g[t]} (+1)</option>`).join("")}
                                 </select>
                             </div>
                             <div style="display:flex; align-items:center; gap:6px;">
                                 <span style="font-size:0.8rem; font-weight:600; color:var(--color-gold-light);">+1 Stat 2:</span>
                                 <select id="pc-wiz-tashas-1-2" style="padding:4px 8px; font-size:0.8rem; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); border-radius:4px;">
-                                    ${statList.map((s) => `<option value="${s}" ${workingChar.tashasPlus1_2 === s ? 'selected' : ''}>${statNames[s]} (+1)</option>`).join('')}
+                                    ${n.map(t=>`<option value="${t}" ${e.tashasPlus1_2===t?"selected":""}>${g[t]} (+1)</option>`).join("")}
                                 </select>
                             </div>
                             <div style="display:flex; align-items:center; gap:6px;">
                                 <span style="font-size:0.8rem; font-weight:600; color:var(--color-gold-light);">+1 Stat 3:</span>
                                 <select id="pc-wiz-tashas-1-3" style="padding:4px 8px; font-size:0.8rem; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); border-radius:4px;">
-                                    ${statList.map((s) => `<option value="${s}" ${workingChar.tashasPlus1_3 === s ? 'selected' : ''}>${statNames[s]} (+1)</option>`).join('')}
+                                    ${n.map(t=>`<option value="${t}" ${e.tashasPlus1_3===t?"selected":""}>${g[t]} (+1)</option>`).join("")}
                                 </select>
                             </div>
                         </div>
-                    `
-                            : `
+                    `:`
                         <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
                             <div style="display:flex; align-items:center; gap:6px;">
                                 <span style="font-size:0.8rem; font-weight:600; color:var(--color-gold-light);">+2 Bonus:</span>
                                 <select id="pc-wiz-tashas-2" style="padding:4px 8px; font-size:0.8rem; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); border-radius:4px;">
-                                    ${statList.map((s) => `<option value="${s}" ${workingChar.tashasPlus2 === s ? 'selected' : ''}>${statNames[s]} (+2)</option>`).join('')}
+                                    ${n.map(t=>`<option value="${t}" ${e.tashasPlus2===t?"selected":""}>${g[t]} (+2)</option>`).join("")}
                                 </select>
                             </div>
                             <div style="display:flex; align-items:center; gap:6px;">
                                 <span style="font-size:0.8rem; font-weight:600; color:var(--color-gold-light);">+1 Bonus:</span>
                                 <select id="pc-wiz-tashas-1" style="padding:4px 8px; font-size:0.8rem; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); border-radius:4px;">
-                                    ${statList.map((s) => `<option value="${s}" ${workingChar.tashasPlus1 === s ? 'selected' : ''}>${statNames[s]} (+1)</option>`).join('')}
+                                    ${n.map(t=>`<option value="${t}" ${e.tashasPlus1===t?"selected":""}>${g[t]} (+1)</option>`).join("")}
                                 </select>
                             </div>
                         </div>
-                    `
-                    }
+                    `}
                 </div>
-            `
-                    : ''
-            }
+            `:""}
 
-            ${
-                workingChar.racialAsiMode === 'background'
-                    ? `
+            ${e.racialAsiMode==="background"?`
                 <div style="background:rgba(0,0,0,0.25); padding:10px 12px; border-radius:6px; border:1px solid var(--color-border-subtle); margin-bottom:12px;">
                     <div style="display:flex; gap:16px; align-items:center; margin-bottom:8px;">
                         <label style="display:flex; align-items:center; gap:6px; cursor:pointer; font-size:0.8rem; color:var(--color-gold-light);">
-                            <input type="radio" name="pc-bgasi-mode-radio" value="plus2plus1" ${workingChar.bgAsiMode !== 'threePlus1' ? 'checked' : ''} style="accent-color:var(--color-gold-base);">
+                            <input type="radio" name="pc-bgasi-mode-radio" value="plus2plus1" ${e.bgAsiMode!=="threePlus1"?"checked":""} style="accent-color:var(--color-gold-base);">
                             <span>+2 to One, +1 to Another</span>
                         </label>
                         <label style="display:flex; align-items:center; gap:6px; cursor:pointer; font-size:0.8rem; color:var(--color-gold-light);">
-                            <input type="radio" name="pc-bgasi-mode-radio" value="threePlus1" ${workingChar.bgAsiMode === 'threePlus1' ? 'checked' : ''} style="accent-color:var(--color-gold-base);">
+                            <input type="radio" name="pc-bgasi-mode-radio" value="threePlus1" ${e.bgAsiMode==="threePlus1"?"checked":""} style="accent-color:var(--color-gold-base);">
                             <span>+1 to Three Distinct Scores</span>
                         </label>
                     </div>
-                    ${
-                        workingChar.bgAsiMode === 'threePlus1'
-                            ? `
+                    ${e.bgAsiMode==="threePlus1"?`
                         <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
                             <div style="display:flex; align-items:center; gap:6px;">
                                 <span style="font-size:0.8rem; font-weight:600; color:var(--color-gold-light);">+1 Stat 1:</span>
                                 <select id="pc-wiz-bgasi-1-1" style="padding:4px 8px; font-size:0.8rem; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); border-radius:4px;">
-                                    ${renderBgAsiOptions(workingChar.bgAsiPlus1_1, '+1')}
+                                    ${x(e.bgAsiPlus1_1,"+1")}
                                 </select>
                             </div>
                             <div style="display:flex; align-items:center; gap:6px;">
                                 <span style="font-size:0.8rem; font-weight:600; color:var(--color-gold-light);">+1 Stat 2:</span>
                                 <select id="pc-wiz-bgasi-1-2" style="padding:4px 8px; font-size:0.8rem; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); border-radius:4px;">
-                                    ${renderBgAsiOptions(workingChar.bgAsiPlus1_2, '+1')}
+                                    ${x(e.bgAsiPlus1_2,"+1")}
                                 </select>
                             </div>
                             <div style="display:flex; align-items:center; gap:6px;">
                                 <span style="font-size:0.8rem; font-weight:600; color:var(--color-gold-light);">+1 Stat 3:</span>
                                 <select id="pc-wiz-bgasi-1-3" style="padding:4px 8px; font-size:0.8rem; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); border-radius:4px;">
-                                    ${renderBgAsiOptions(workingChar.bgAsiPlus1_3, '+1')}
+                                    ${x(e.bgAsiPlus1_3,"+1")}
                                 </select>
                             </div>
                         </div>
-                    `
-                            : `
+                    `:`
                         <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
                             <div style="display:flex; align-items:center; gap:6px;">
                                 <span style="font-size:0.8rem; font-weight:600; color:var(--color-gold-light);">+2 Bonus:</span>
                                 <select id="pc-wiz-bgasi-2" style="padding:4px 8px; font-size:0.8rem; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); border-radius:4px;">
-                                    ${renderBgAsiOptions(workingChar.bgAsiPlus2, '+2')}
+                                    ${x(e.bgAsiPlus2,"+2")}
                                 </select>
                             </div>
                             <div style="display:flex; align-items:center; gap:6px;">
                                 <span style="font-size:0.8rem; font-weight:600; color:var(--color-gold-light);">+1 Bonus:</span>
                                 <select id="pc-wiz-bgasi-1" style="padding:4px 8px; font-size:0.8rem; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); border-radius:4px;">
-                                    ${renderBgAsiOptions(workingChar.bgAsiPlus1, '+1')}
+                                    ${x(e.bgAsiPlus1,"+1")}
                                 </select>
                             </div>
                         </div>
-                    `
-                    }
+                    `}
                 </div>
-            `
-                    : ''
-            }
+            `:""}
 
-            ${
-                (ctx.asiTiers || []).some((t) => t.choice === 'unselected')
-                    ? `
+            ${(r.asiTiers||[]).some(t=>t.choice==="unselected")?`
                 <div style="margin-bottom:10px; font-size:0.8rem; color:var(--color-gold-light); display:flex; align-items:center; gap:6px; background:rgba(212,175,55,0.1); padding:6px 12px; border-radius:4px; border:1px solid rgba(212,175,55,0.25);">
                     <i class="fa-solid fa-circle-info"></i> <span>You have pending Level Milestone ASIs or Feats to assign in <strong>Step 6 (Feats & ASIs)</strong>.</span>
                 </div>
-            `
-                    : ''
-            }
+            `:""}
             <div style="overflow-x:auto;">
                 <table style="width:100%; border-collapse:collapse; font-size:0.85rem; text-align:center;">
                     <thead>
@@ -403,247 +265,27 @@ export function renderStep2(ctx) {
                         </tr>
                     </thead>
                     <tbody>
-                        ${statList
-                            .map((s) => {
-                                let baseVal = 10;
-                                if (workingChar.statMethod === 'standard')
-                                    baseVal = parseInt(workingChar.standardArrayAssignments[s]) || 10;
-                                else if (workingChar.statMethod === 'pointbuy')
-                                    baseVal = parseInt(workingChar.pointBuyScores[s]) || 8;
-                                else if (workingChar.statMethod === 'roll') {
-                                    const r = workingChar.rolledScores.find((x) => x.assignedStat === s);
-                                    baseVal = r ? r.val : 10;
-                                } else if (workingChar.statMethod === 'manual')
-                                    baseVal = parseInt(workingChar.manualScores[s]) || 10;
-
-                                const rBonus = racialBonuses[s] || 0;
-                                const aBonus = asiBonuses[s] || 0;
-                                const tot = stats[s] || 10;
-                                const mod = getMod(tot);
-                                const isOverCap = tot > 20;
-
-                                return `
+                        ${n.map(t=>{let a=10;if(e.statMethod==="standard")a=parseInt(e.standardArrayAssignments[t])||10;else if(e.statMethod==="pointbuy")a=parseInt(e.pointBuyScores[t])||8;else if(e.statMethod==="roll"){const p=e.rolledScores.find(y=>y.assignedStat===t);a=p?p.val:10}else e.statMethod==="manual"&&(a=parseInt(e.manualScores[t])||10);const o=E[t]||0,s=B[t]||0,d=M[t]||10,l=P(d),c=d>20;return`
                                 <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
-                                     <td style="padding:8px 6px; text-align:left; font-weight:bold; color:var(--color-text-primary);">${statNames[s]} (${s.toUpperCase()})</td>
-                                     <td style="padding:8px 6px; color:var(--color-text-secondary);">${baseVal}</td>
+                                     <td style="padding:8px 6px; text-align:left; font-weight:bold; color:var(--color-text-primary);">${g[t]} (${t.toUpperCase()})</td>
+                                     <td style="padding:8px 6px; color:var(--color-text-secondary);">${a}</td>
                                      <td style="padding:8px 6px;">
-                                         ${
-                                             workingChar.racialAsiMode === 'custom'
-                                                 ? `
-                                             <input type="number" class="pc-custom-asi-input" data-stat="${s}" value="${workingChar.customRacialBonuses[s] || 0}" min="-5" max="10" style="width:48px; text-align:center; padding:2px; font-size:0.85rem; font-weight:bold; background:rgba(0,0,0,0.5); border:1px solid var(--color-gold-base); color:var(--color-gold-light); border-radius:4px;">
-                                         `
-                                                 : `
-                                             <span style="color:${rBonus > 0 ? '#81c784' : 'var(--color-text-muted)'}; font-weight:600;">${rBonus > 0 ? '+' + rBonus : '+0'}</span>
-                                         `
-                                         }
+                                         ${e.racialAsiMode==="custom"?`
+                                             <input type="number" class="pc-custom-asi-input" data-stat="${t}" value="${e.customRacialBonuses[t]||0}" min="-5" max="10" style="width:48px; text-align:center; padding:2px; font-size:0.85rem; font-weight:bold; background:rgba(0,0,0,0.5); border:1px solid var(--color-gold-base); color:var(--color-gold-light); border-radius:4px;">
+                                         `:`
+                                             <span style="color:${o>0?"#81c784":"var(--color-text-muted)"}; font-weight:600;">${o>0?"+"+o:"+0"}</span>
+                                         `}
                                      </td>
-                                     <td style="padding:8px 6px; color:${aBonus > 0 ? '#4fc3f7' : 'var(--color-text-muted)'};">${aBonus > 0 ? '+' + aBonus : '+0'}</td>
-                                     <td style="padding:8px 6px; font-weight:bold; font-size:1.05rem; color:${isOverCap ? '#ff9800' : 'var(--color-gold-light)'};">
-                                         ${tot}
-                                         ${isOverCap ? '<span class="badge" style="background:rgba(255,152,0,0.2); color:#ffb74d; border:1px solid #ff9800; font-size:0.65rem; margin-left:4px; padding:1px 4px; border-radius:3px;" title="Standard 5e ability cap is 20 without magic items or epic boons.">>20 Cap</span>' : ''}
+                                     <td style="padding:8px 6px; color:${s>0?"#4fc3f7":"var(--color-text-muted)"};">${s>0?"+"+s:"+0"}</td>
+                                     <td style="padding:8px 6px; font-weight:bold; font-size:1.05rem; color:${c?"#ff9800":"var(--color-gold-light)"};">
+                                         ${d}
+                                         ${c?'<span class="badge" style="background:rgba(255,152,0,0.2); color:#ffb74d; border:1px solid #ff9800; font-size:0.65rem; margin-left:4px; padding:1px 4px; border-radius:3px;" title="Standard 5e ability cap is 20 without magic items or epic boons.">>20 Cap</span>':""}
                                      </td>
-                                     <td style="padding:8px 6px; font-weight:bold; font-size:1.05rem; color:${mod >= 0 ? 'var(--color-gold-base)' : '#e57373'};">${mod >= 0 ? '+' : ''}${mod}</td>
+                                     <td style="padding:8px 6px; font-weight:bold; font-size:1.05rem; color:${l>=0?"var(--color-gold-base)":"#e57373"};">${l>=0?"+":""}${l}</td>
                                  </tr>
-                             `;
-                            })
-                            .join('')}
+                             `}).join("")}
                     </tbody>
                 </table>
             </div>
         </div>
-    `;
-
-    // Step 2 Event Listeners
-    document.querySelectorAll('.pc-method-btn').forEach((btn) => {
-        btn.addEventListener('click', () => {
-            workingChar.statMethod = btn.dataset.method;
-            recomputeCandidates().then(() => renderStep2(ctx));
-        });
-    });
-
-    document.querySelectorAll('.pc-std-arr-sel').forEach((sel) => {
-        sel.addEventListener('change', (e) => {
-            const st = e.target.dataset.stat;
-            const newVal = parseInt(e.target.value) || 10;
-            const oldVal = workingChar.standardArrayAssignments[st];
-            const duplicateStat = statList.find(
-                (other) => other !== st && workingChar.standardArrayAssignments[other] === newVal
-            );
-            if (duplicateStat) {
-                workingChar.standardArrayAssignments[duplicateStat] = oldVal;
-            }
-            workingChar.standardArrayAssignments[st] = newVal;
-            recomputeCandidates().then(() => renderStep2(ctx));
-        });
-    });
-
-    document.querySelectorAll('.pc-pb-btn').forEach((btn) => {
-        btn.addEventListener('click', (e) => {
-            const st = e.currentTarget.dataset.stat;
-            const dir = parseInt(e.currentTarget.dataset.dir);
-            const cur = workingChar.pointBuyScores[st] || 8;
-            const nextVal = cur + dir;
-            if (nextVal >= 8 && nextVal <= 15) {
-                workingChar.pointBuyScores[st] = nextVal;
-                recomputeCandidates().then(() => renderStep2(ctx));
-            }
-        });
-    });
-
-    document.getElementById('pc-wiz-roll-all-btn')?.addEventListener('click', () => {
-        workingChar.rolledScores.forEach((r) => {
-            const d1 = Math.floor(Math.random() * 6) + 1;
-            const d2 = Math.floor(Math.random() * 6) + 1;
-            const d3 = Math.floor(Math.random() * 6) + 1;
-            const d4 = Math.floor(Math.random() * 6) + 1;
-            const rolls = [d1, d2, d3, d4].sort((a, b) => b - a);
-            r.rolls = rolls;
-            r.val = rolls[0] + rolls[1] + rolls[2];
-        });
-        recomputeCandidates().then(() => renderStep2(ctx));
-    });
-
-    document.querySelectorAll('.pc-reroll-single').forEach((btn) => {
-        btn.addEventListener('click', (e) => {
-            const idx = parseInt(e.currentTarget.dataset.idx);
-            const d1 = Math.floor(Math.random() * 6) + 1;
-            const d2 = Math.floor(Math.random() * 6) + 1;
-            const d3 = Math.floor(Math.random() * 6) + 1;
-            const d4 = Math.floor(Math.random() * 6) + 1;
-            const rolls = [d1, d2, d3, d4].sort((a, b) => b - a);
-            workingChar.rolledScores[idx].rolls = rolls;
-            workingChar.rolledScores[idx].val = rolls[0] + rolls[1] + rolls[2];
-            recomputeCandidates().then(() => renderStep2(ctx));
-        });
-    });
-
-    document.querySelectorAll('.pc-roll-assign-sel').forEach((sel) => {
-        sel.addEventListener('change', (e) => {
-            const idx = parseInt(e.target.dataset.idx);
-            const newStat = e.target.value;
-            const oldStat = workingChar.rolledScores[idx].assignedStat;
-            const duplicatePool = workingChar.rolledScores.find(
-                (r, rIdx) => rIdx !== idx && r.assignedStat === newStat
-            );
-            if (duplicatePool) {
-                duplicatePool.assignedStat = oldStat;
-            }
-            workingChar.rolledScores[idx].assignedStat = newStat;
-            recomputeCandidates().then(() => renderStep2(ctx));
-        });
-    });
-
-    document.querySelectorAll('.pc-asi-mode-btn').forEach((btn) => {
-        btn.addEventListener('click', () => {
-            workingChar.racialAsiMode = btn.dataset.asimode;
-            recomputeCandidates().then(() => renderStep2(ctx));
-        });
-    });
-
-    document.querySelectorAll('input[name="pc-tashas-mode-radio"]').forEach((r) => {
-        r.addEventListener('change', (e) => {
-            workingChar.tashasMode = e.target.value;
-            recomputeCandidates().then(() => renderStep2(ctx));
-        });
-    });
-
-    function ensureDistinctThree(p1Key, p2Key, p3Key) {
-        const used = new Set();
-        [p1Key, p2Key, p3Key].forEach((key) => {
-            if (used.has(workingChar[key])) {
-                const nextAvail = statList.find((s) => !used.has(s)) || 'str';
-                workingChar[key] = nextAvail;
-                used.add(nextAvail);
-            } else {
-                used.add(workingChar[key]);
-            }
-        });
-    }
-
-    document.getElementById('pc-wiz-tashas-2')?.addEventListener('change', (e) => {
-        workingChar.tashasPlus2 = e.target.value;
-        if (workingChar.tashasPlus1 === workingChar.tashasPlus2) {
-            workingChar.tashasPlus1 = statList.find((s) => s !== workingChar.tashasPlus2) || 'con';
-        }
-        recomputeCandidates().then(() => renderStep2(ctx));
-    });
-    document.getElementById('pc-wiz-tashas-1')?.addEventListener('change', (e) => {
-        workingChar.tashasPlus1 = e.target.value;
-        if (workingChar.tashasPlus2 === workingChar.tashasPlus1) {
-            workingChar.tashasPlus2 = statList.find((s) => s !== workingChar.tashasPlus1) || 'str';
-        }
-        recomputeCandidates().then(() => renderStep2(ctx));
-    });
-    document.getElementById('pc-wiz-tashas-1-1')?.addEventListener('change', (e) => {
-        workingChar.tashasPlus1_1 = e.target.value;
-        ensureDistinctThree('tashasPlus1_1', 'tashasPlus1_2', 'tashasPlus1_3');
-        recomputeCandidates().then(() => renderStep2(ctx));
-    });
-    document.getElementById('pc-wiz-tashas-1-2')?.addEventListener('change', (e) => {
-        workingChar.tashasPlus1_2 = e.target.value;
-        ensureDistinctThree('tashasPlus1_2', 'tashasPlus1_1', 'tashasPlus1_3');
-        recomputeCandidates().then(() => renderStep2(ctx));
-    });
-    document.getElementById('pc-wiz-tashas-1-3')?.addEventListener('change', (e) => {
-        workingChar.tashasPlus1_3 = e.target.value;
-        ensureDistinctThree('tashasPlus1_3', 'tashasPlus1_1', 'tashasPlus1_2');
-        recomputeCandidates().then(() => renderStep2(ctx));
-    });
-
-    document.querySelectorAll('input[name="pc-bgasi-mode-radio"]').forEach((r) => {
-        r.addEventListener('change', (e) => {
-            workingChar.bgAsiMode = e.target.value;
-            recomputeCandidates().then(() => renderStep2(ctx));
-        });
-    });
-
-    document.getElementById('pc-wiz-bgasi-2')?.addEventListener('change', (e) => {
-        workingChar.bgAsiPlus2 = e.target.value;
-        if (workingChar.bgAsiPlus1 === workingChar.bgAsiPlus2) {
-            workingChar.bgAsiPlus1 = statList.find((s) => s !== workingChar.bgAsiPlus2) || 'con';
-        }
-        recomputeCandidates().then(() => renderStep2(ctx));
-    });
-    document.getElementById('pc-wiz-bgasi-1')?.addEventListener('change', (e) => {
-        workingChar.bgAsiPlus1 = e.target.value;
-        if (workingChar.bgAsiPlus2 === workingChar.bgAsiPlus1) {
-            workingChar.bgAsiPlus2 = statList.find((s) => s !== workingChar.bgAsiPlus1) || 'str';
-        }
-        recomputeCandidates().then(() => renderStep2(ctx));
-    });
-    document.getElementById('pc-wiz-bgasi-1-1')?.addEventListener('change', (e) => {
-        workingChar.bgAsiPlus1_1 = e.target.value;
-        ensureDistinctThree('bgAsiPlus1_1', 'bgAsiPlus1_2', 'bgAsiPlus1_3');
-        recomputeCandidates().then(() => renderStep2(ctx));
-    });
-    document.getElementById('pc-wiz-bgasi-1-2')?.addEventListener('change', (e) => {
-        workingChar.bgAsiPlus1_2 = e.target.value;
-        ensureDistinctThree('bgAsiPlus1_2', 'bgAsiPlus1_1', 'bgAsiPlus1_3');
-        recomputeCandidates().then(() => renderStep2(ctx));
-    });
-    document.getElementById('pc-wiz-bgasi-1-3')?.addEventListener('change', (e) => {
-        workingChar.bgAsiPlus1_3 = e.target.value;
-        ensureDistinctThree('bgAsiPlus1_3', 'bgAsiPlus1_1', 'bgAsiPlus1_2');
-        recomputeCandidates().then(() => renderStep2(ctx));
-    });
-
-    document.querySelectorAll('.pc-custom-asi-input').forEach((inp) => {
-        inp.addEventListener('input', (e) => {
-            const st = e.target.dataset.stat;
-            if (st) workingChar.customRacialBonuses[st] = parseInt(e.target.value) || 0;
-        });
-        inp.addEventListener('change', (e) => {
-            const st = e.target.dataset.stat;
-            if (st) workingChar.customRacialBonuses[st] = parseInt(e.target.value) || 0;
-            recomputeCandidates().then(() => renderStep2(ctx));
-        });
-    });
-
-    document.querySelectorAll('.pc-wiz-racial-choice-sel').forEach((sel) => {
-        sel.addEventListener('change', (e) => {
-            const cId = e.target.dataset.cid;
-            if (cId) workingChar.racialChoices[cId] = e.target.value;
-            recomputeCandidates().then(() => renderStep2(ctx));
-        });
-    });
-}
+    `,document.querySelectorAll(".pc-method-btn").forEach(t=>{t.addEventListener("click",()=>{e.statMethod=t.dataset.method,i().then(()=>renderStep2(r))})}),document.querySelectorAll(".pc-std-arr-sel").forEach(t=>{t.addEventListener("change",a=>{const o=a.target.dataset.stat,s=parseInt(a.target.value)||10,d=e.standardArrayAssignments[o],l=n.find(c=>c!==o&&e.standardArrayAssignments[c]===s);l&&(e.standardArrayAssignments[l]=d),e.standardArrayAssignments[o]=s,i().then(()=>renderStep2(r))})}),document.querySelectorAll(".pc-pb-btn").forEach(t=>{t.addEventListener("click",a=>{const o=a.currentTarget.dataset.stat,s=parseInt(a.currentTarget.dataset.dir),l=(e.pointBuyScores[o]||8)+s;l>=8&&l<=15&&(e.pointBuyScores[o]=l,i().then(()=>renderStep2(r)))})}),document.getElementById("pc-wiz-roll-all-btn")?.addEventListener("click",()=>{e.rolledScores.forEach(t=>{const a=Math.floor(Math.random()*6)+1,o=Math.floor(Math.random()*6)+1,s=Math.floor(Math.random()*6)+1,d=Math.floor(Math.random()*6)+1,l=[a,o,s,d].sort((c,p)=>p-c);t.rolls=l,t.val=l[0]+l[1]+l[2]}),i().then(()=>renderStep2(r))}),document.querySelectorAll(".pc-reroll-single").forEach(t=>{t.addEventListener("click",a=>{const o=parseInt(a.currentTarget.dataset.idx),s=Math.floor(Math.random()*6)+1,d=Math.floor(Math.random()*6)+1,l=Math.floor(Math.random()*6)+1,c=Math.floor(Math.random()*6)+1,p=[s,d,l,c].sort((y,L)=>L-y);e.rolledScores[o].rolls=p,e.rolledScores[o].val=p[0]+p[1]+p[2],i().then(()=>renderStep2(r))})}),document.querySelectorAll(".pc-roll-assign-sel").forEach(t=>{t.addEventListener("change",a=>{const o=parseInt(a.target.dataset.idx),s=a.target.value,d=e.rolledScores[o].assignedStat,l=e.rolledScores.find((c,p)=>p!==o&&c.assignedStat===s);l&&(l.assignedStat=d),e.rolledScores[o].assignedStat=s,i().then(()=>renderStep2(r))})}),document.querySelectorAll(".pc-asi-mode-btn").forEach(t=>{t.addEventListener("click",()=>{e.racialAsiMode=t.dataset.asimode,i().then(()=>renderStep2(r))})}),document.querySelectorAll('input[name="pc-tashas-mode-radio"]').forEach(t=>{t.addEventListener("change",a=>{e.tashasMode=a.target.value,i().then(()=>renderStep2(r))})});function b(t,a,o){const s=new Set;[t,a,o].forEach(d=>{if(s.has(e[d])){const l=n.find(c=>!s.has(c))||"str";e[d]=l,s.add(l)}else s.add(e[d])})}document.getElementById("pc-wiz-tashas-2")?.addEventListener("change",t=>{e.tashasPlus2=t.target.value,e.tashasPlus1===e.tashasPlus2&&(e.tashasPlus1=n.find(a=>a!==e.tashasPlus2)||"con"),i().then(()=>renderStep2(r))}),document.getElementById("pc-wiz-tashas-1")?.addEventListener("change",t=>{e.tashasPlus1=t.target.value,e.tashasPlus2===e.tashasPlus1&&(e.tashasPlus2=n.find(a=>a!==e.tashasPlus1)||"str"),i().then(()=>renderStep2(r))}),document.getElementById("pc-wiz-tashas-1-1")?.addEventListener("change",t=>{e.tashasPlus1_1=t.target.value,b("tashasPlus1_1","tashasPlus1_2","tashasPlus1_3"),i().then(()=>renderStep2(r))}),document.getElementById("pc-wiz-tashas-1-2")?.addEventListener("change",t=>{e.tashasPlus1_2=t.target.value,b("tashasPlus1_2","tashasPlus1_1","tashasPlus1_3"),i().then(()=>renderStep2(r))}),document.getElementById("pc-wiz-tashas-1-3")?.addEventListener("change",t=>{e.tashasPlus1_3=t.target.value,b("tashasPlus1_3","tashasPlus1_1","tashasPlus1_2"),i().then(()=>renderStep2(r))}),document.querySelectorAll('input[name="pc-bgasi-mode-radio"]').forEach(t=>{t.addEventListener("change",a=>{e.bgAsiMode=a.target.value,i().then(()=>renderStep2(r))})}),document.getElementById("pc-wiz-bgasi-2")?.addEventListener("change",t=>{e.bgAsiPlus2=t.target.value,e.bgAsiPlus1===e.bgAsiPlus2&&(e.bgAsiPlus1=n.find(a=>a!==e.bgAsiPlus2)||"con"),i().then(()=>renderStep2(r))}),document.getElementById("pc-wiz-bgasi-1")?.addEventListener("change",t=>{e.bgAsiPlus1=t.target.value,e.bgAsiPlus2===e.bgAsiPlus1&&(e.bgAsiPlus2=n.find(a=>a!==e.bgAsiPlus1)||"str"),i().then(()=>renderStep2(r))}),document.getElementById("pc-wiz-bgasi-1-1")?.addEventListener("change",t=>{e.bgAsiPlus1_1=t.target.value,b("bgAsiPlus1_1","bgAsiPlus1_2","bgAsiPlus1_3"),i().then(()=>renderStep2(r))}),document.getElementById("pc-wiz-bgasi-1-2")?.addEventListener("change",t=>{e.bgAsiPlus1_2=t.target.value,b("bgAsiPlus1_2","bgAsiPlus1_1","bgAsiPlus1_3"),i().then(()=>renderStep2(r))}),document.getElementById("pc-wiz-bgasi-1-3")?.addEventListener("change",t=>{e.bgAsiPlus1_3=t.target.value,b("bgAsiPlus1_3","bgAsiPlus1_1","bgAsiPlus1_2"),i().then(()=>renderStep2(r))}),document.querySelectorAll(".pc-custom-asi-input").forEach(t=>{t.addEventListener("input",a=>{const o=a.target.dataset.stat;o&&(e.customRacialBonuses[o]=parseInt(a.target.value)||0)}),t.addEventListener("change",a=>{const o=a.target.dataset.stat;o&&(e.customRacialBonuses[o]=parseInt(a.target.value)||0),i().then(()=>renderStep2(r))})}),document.querySelectorAll(".pc-wiz-racial-choice-sel").forEach(t=>{t.addEventListener("change",a=>{const o=a.target.dataset.cid;o&&(e.racialChoices[o]=a.target.value),i().then(()=>renderStep2(r))})})}

@@ -53,7 +53,7 @@
         </button>
         <div class="nav-dropdown-menu">
           <a href="portal-dungeons.html"><i class="fa-solid fa-dungeon" aria-hidden="true"></i> Portal Dungeons</a>
-          <a href="self-hosted-vtt.html"><i class="fa-solid fa-network-wired" aria-hidden="true"></i> Self-Hosted &amp;
+          <a href="self-hosted-vtt.html"><i class="fa-solid fa-network-wired" aria-hidden="true"></i> Offline &amp;
             Tunnels</a>
           <a href="tv-gaming-table.html"><i class="fa-solid fa-tv" aria-hidden="true"></i> TV Gaming Table</a>
         </div>
@@ -69,7 +69,6 @@
             Guide</a>
         </div>
       </div>
-      <a href="play/">Play Online</a>
       <a href="prep/">Session Prep</a>
       <a href="feedback.html">Feedback</a>
     </nav>
@@ -111,6 +110,8 @@
             <div class="manual-toc-title">Control Center Operations</div>
             <a href="#app-hosting-server" class="manual-toc-link active"><i class="fa-solid fa-network-wired"></i>
               Server &amp; Cloudflare Tunnels</a>
+            <a href="#app-mobile-hosting" class="manual-toc-link"><i class="fa-solid fa-mobile-screen-button"></i>
+              Mobile &amp; Tablet Hosting Tips</a>
             <a href="#app-campaign-backup" class="manual-toc-link"><i class="fa-solid fa-database"></i> Campaign Data
               &amp; Backups</a>
           </div>
@@ -200,6 +201,31 @@
                     for
                     a permanent session URL (e.g. <code>https://dnd.yourdomain.com</code>).
                   </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="doc-section-subtitle" id="app-mobile-hosting">
+            <i class="fa-solid fa-mobile-screen-button"></i> Mobile &amp; Tablet Hosting Guide (Browser P2P)
+          </div>
+
+          <div class="doc-feature-group">
+            <div class="doc-feature-card"
+              data-keywords="mobile phone tablet p2p hosting safari chrome screen timeout autolock battery eco mode indexeddb">
+              <div class="doc-feature-card-header">
+                <div class="doc-feature-title">
+                  <i class="fa-solid fa-mobile-screen-button gold"></i> Hosting from Mobile Browsers (Zero-Install)
+                </div>
+                <span class="btn-inspector-action"><i class="fa-solid fa-bolt"></i> Browser P2P Host</span>
+              </div>
+              <div class="doc-feature-body">
+                <p>ForgeDVTT allows Game Masters to host multiplayer sessions directly from mobile Safari (iOS) or mobile Chrome (Android) via <a href="prep/">Session Prep</a> and <a href="play/">Play Online</a>. The phone acts as the authoritative WebRTC P2P host with zero desktop software required. To ensure a smooth, uninterrupted session, follow these platform guidelines:</p>
+                <ul>
+                  <li><i class="fa-solid fa-sun gold"></i> <strong>Keep the Screen Awake (Crucial):</strong> Mobile operating systems (iOS and Android) aggressively freeze background tabs and WebRTC connections when the device locks or when switching apps. If your screen locks, <strong>all connected player peers will freeze or disconnect</strong>. Before hosting, set <em>Auto-Lock</em> (iOS: <em>Settings &rarr; Display &amp; Brightness &rarr; Auto-Lock</em>) or <em>Screen Timeout</em> (Android: <em>Settings &rarr; Display &rarr; Screen timeout</em>) to &ldquo;Never&rdquo; or 30 minutes, and keep the ForgeDVTT browser tab in the foreground.</li>
+                  <li><i class="fa-solid fa-shield-halved blue"></i> <strong>Avoid Private / Incognito Browsing:</strong> In standard tabs, mobile browsers save your campaigns, character sheets, and bestiary tokens locally into <strong>IndexedDB</strong>. Private browsing wipes IndexedDB the moment the tab closes. Always use regular tabs, and use <strong>Export Campaign</strong> in Session Prep to keep <code>.json</code> backup files saved to your cloud drive (iCloud, Google Drive, OneDrive).</li>
+                  <li><i class="fa-solid fa-leaf" style="color: #4ade80;"></i> <strong>Enable Battery / Eco Mode:</strong> Running multiplayer WebRTC data channels while rendering tactical canvas maps and 3D dice uses notable battery power. Tap <strong>More (☰) &rarr; Battery / Eco Mode</strong> in the VTT bottom menu to disable heavy WebGL atmospheric particle effects and 3D dice simulations, keeping your phone cool throughout the game.</li>
+                  <li><i class="fa-solid fa-gamepad" style="color: #a855f7;"></i> <strong>Touch GM Ergonomics:</strong> The mobile tabletop interface features a dedicated GM 5-tab bottom navigation bar (<code>Map</code>, <code>Chat/Dice</code>, <code>Combat</code>, <code>Bestiary</code>, <code>More</code>), a floating initiative turn-advancement pill, and a <em>Tap-to-Place</em> monster spawning system. While live combat, attack rolls, and token movement are seamless on a phone, heavy world-building tasks (drawing polygon walls, dynamic lighting lines, and fog polygons) are fastest with a mouse on desktop or an iPad/tablet.</li>
                 </ul>
               </div>
             </div>
@@ -638,7 +664,7 @@
         <ul>
           <li><a href="portal-dungeons.html"><i class="fa-solid fa-dungeon" aria-hidden="true"></i> Portal Dungeons</a>
           </li>
-          <li><a href="self-hosted-vtt.html"><i class="fa-solid fa-network-wired" aria-hidden="true"></i> Self-Hosted
+          <li><a href="self-hosted-vtt.html"><i class="fa-solid fa-network-wired" aria-hidden="true"></i> Offline
               &amp; Tunnels</a></li>
           <li><a href="tv-gaming-table.html"><i class="fa-solid fa-tv" aria-hidden="true"></i> TV Gaming Table</a></li>
         </ul>

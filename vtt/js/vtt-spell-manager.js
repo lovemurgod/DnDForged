@@ -82,23 +82,33 @@ export function toSpellTitleCase(str) {
     return title + tag;
 }
 
+const _dupSpellNameWeakMap = new WeakMap();
+function getDuplicateSpellNameSet(effectiveCache) {
+    if (!Array.isArray(effectiveCache)) return null;
+    let cached = _dupSpellNameWeakMap.get(effectiveCache);
+    if (cached && cached.len === effectiveCache.length) return cached.dups;
+    const seen = new Map();
+    const dups = new Set();
+    for (const s of effectiveCache) {
+        if (!s || !s.name) continue;
+        const key = String(s.name).toLowerCase().replace(/\s*\[.*?\]$/, '').trim();
+        const src = String(s.source || '').toUpperCase();
+        const prev = seen.get(key);
+        if (prev === undefined) seen.set(key, src);
+        else if (prev !== src) dups.add(key);
+    }
+    _dupSpellNameWeakMap.set(effectiveCache, { len: effectiveCache.length, dups });
+    return dups;
+}
+
 export function getDisambiguatedSpellName(sp, cache) {
     if (!sp || !sp.name) return '';
     const rawName = toSpellTitleCase(sp.name.replace(/\s*\[.*?\]$/, ''));
     const nameLower = rawName.toLowerCase().trim();
     const effectiveCache =
         cache || sharedSpellCache || (typeof window !== 'undefined' && window.VTTSpellManager?.getSpellCache?.());
-    const hasDuplicate =
-        effectiveCache &&
-        effectiveCache.some(
-            (s) =>
-                s.id !== sp.id &&
-                (s.name || '')
-                    .toLowerCase()
-                    .replace(/\s*\[.*?\]$/, '')
-                    .trim() === nameLower &&
-                (s.source || '').toUpperCase() !== (sp.source || '').toUpperCase()
-        );
+    const dupSet = getDuplicateSpellNameSet(effectiveCache);
+    const hasDuplicate = dupSet ? dupSet.has(nameLower) : false;
     if (hasDuplicate && sp.source) {
         const srcTag = (sp.source || '').toUpperCase();
         return `${rawName} [${srcTag}]`;
@@ -3238,6 +3248,11 @@ export function initVttSpellManager(vtt) {
         });
 
         // Quick, Sort & Advanced Filter listeners
+        let spellSearchTimer = null;
+        const debouncedRenderSpellSearch = () => {
+            if (spellSearchTimer) clearTimeout(spellSearchTimer);
+            spellSearchTimer = setTimeout(renderSpellSearchList, 120);
+        };
         [
             'modal-spell-quick-level',
             'modal-spell-quick-school',
@@ -3251,8 +3266,14 @@ export function initVttSpellManager(vtt) {
             'modal-spell-filter-condition',
             'modal-spell-filter-area'
         ].forEach((id) => {
-            document.getElementById(id)?.addEventListener('input', renderSpellSearchList);
-            document.getElementById(id)?.addEventListener('change', renderSpellSearchList);
+            const el = document.getElementById(id);
+            if (!el) return;
+            if (id === 'modal-spell-search-input') {
+                el.addEventListener('input', debouncedRenderSpellSearch);
+            } else {
+                el.addEventListener('input', renderSpellSearchList);
+            }
+            el.addEventListener('change', renderSpellSearchList);
         });
 
         // Filter Drawer Toggle Button

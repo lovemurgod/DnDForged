@@ -53,6 +53,13 @@ export const DISPOSITION_COLORS = {
     none: 'transparent'
 };
 
+export const COLORBLIND_DISPOSITION_COLORS = {
+    protanopia: { hostile: '#d55e00', neutral: '#f0e442', friendly: '#0072b2' },
+    deuteranopia: { hostile: '#d55e00', neutral: '#e69f00', friendly: '#56b4e9' },
+    tritanopia: { hostile: '#cc79a7', neutral: '#e69f00', friendly: '#009e73' },
+    achromatopsia: { hostile: '#333333', neutral: '#9e9e9e', friendly: '#ffffff' }
+};
+
 const STORAGE_KEY = 'vtt_token_drop_settings';
 
 /**
@@ -297,4 +304,25 @@ export function resolveDispositionColor(disposition, customColor = null) {
     if (!disposition || disposition === 'none') return null;
     if (disposition === 'custom') return customColor || '#ef4444';
     return DISPOSITION_COLORS[disposition] || null;
+}
+
+const DISPOSITION_HEX_TO_KEY = {
+    '#ef4444': 'hostile',
+    '#eab308': 'neutral',
+    '#22c55e': 'friendly'
+};
+
+/**
+ * Adapts a canonical disposition ring color to the local user's active colorblind mode at render time.
+ */
+export function resolveRenderDispositionColor(color) {
+    if (!color || typeof color !== 'string') return color;
+    const key = DISPOSITION_HEX_TO_KEY[color.trim().toLowerCase()];
+    if (!key) return color;
+    const cbMode =
+        typeof document !== 'undefined' ? document.documentElement?.getAttribute('data-colorblind') || 'none' : 'none';
+    if (cbMode !== 'none' && COLORBLIND_DISPOSITION_COLORS[cbMode]?.[key]) {
+        return COLORBLIND_DISPOSITION_COLORS[cbMode][key];
+    }
+    return color;
 }

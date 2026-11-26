@@ -1,163 +1,17 @@
-/**
- * Player Sheet Settings Modals:
- * 1. Stat & Save Settings & Toggles
- * 2. Skill Proficiencies, Modifiers & Toggles
- * 3. Tool Proficiencies & Custom Tools
- */
-
-import { ALL_SKILLS, STANDARD_TOOLS } from '../vtt-sheet-modals.js';
-import { calculateEffectiveHp, calculateEffectiveAc, resolveCharacterSheetSettings } from '../calc/stats.js';
-import { escapeHtml } from '../../vtt-utils.js';
-
-// ─── 1. STAT & SAVE SETTINGS ──────────────────────────────────────────────────
-
-export function renderSaveTogglesList(char, options = {}) {
-    const list = document.getElementById('modal-save-toggles-list');
-    if (!list) return;
-    if (!char || !char.saveToggles) return;
-
-    let html = '';
-    char.saveToggles.forEach((t, i) => {
-        html += `
+import{ALL_SKILLS as f,STANDARD_TOOLS as S}from"../vtt-sheet-modals.js";import{calculateEffectiveHp as h,calculateEffectiveAc as E,resolveCharacterSheetSettings as T}from"../calc/stats.js";import{escapeHtml as b}from"../../vtt-utils.js";export function renderSaveTogglesList(t,s={}){const d=document.getElementById("modal-save-toggles-list");if(!d||!t||!t.saveToggles)return;let r="";t.saveToggles.forEach((a,e)=>{r+=`
             <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.3); padding:6px 8px; border-radius:4px; border:1px solid var(--color-border-subtle);">
                 <div style="display:flex; align-items:center; gap:8px;">
-                    <input type="checkbox" class="save-toggle-enable-cb" data-idx="${i}" ${t.enabled ? 'checked' : ''}>
-                    <span style="font-weight:bold; font-size:0.85rem;">${escapeHtml(t.name)}</span>
-                    <span style="background:var(--color-surface-hover); padding:2px 4px; border-radius:4px; font-size:0.7rem;">${escapeHtml((t.target || 'ALL').toUpperCase())}</span>
-                    <span style="color:var(--color-gold-base); font-size:0.8rem;">${escapeHtml(t.formula)}</span>
+                    <input type="checkbox" class="save-toggle-enable-cb" data-idx="${e}" ${a.enabled?"checked":""}>
+                    <span style="font-weight:bold; font-size:0.85rem;">${b(a.name)}</span>
+                    <span style="background:var(--color-surface-hover); padding:2px 4px; border-radius:4px; font-size:0.7rem;">${b((a.target||"ALL").toUpperCase())}</span>
+                    <span style="color:var(--color-gold-base); font-size:0.8rem;">${b(a.formula)}</span>
                 </div>
                 <div style="display:flex; gap:4px;">
-                    <button class="btn btn-xxs btn-secondary save-toggle-edit-btn" data-idx="${i}"><i class="fa-solid fa-pen"></i></button>
-                    <button class="btn btn-xxs btn-secondary save-toggle-del-btn" data-idx="${i}"><i class="fa-solid fa-trash"></i></button>
+                    <button class="btn btn-xxs btn-secondary save-toggle-edit-btn" data-idx="${e}"><i class="fa-solid fa-pen"></i></button>
+                    <button class="btn btn-xxs btn-secondary save-toggle-del-btn" data-idx="${e}"><i class="fa-solid fa-trash"></i></button>
                 </div>
             </div>
-        `;
-    });
-    list.innerHTML = html;
-
-    list.querySelectorAll('.save-toggle-enable-cb').forEach((cb) =>
-        cb.addEventListener('change', (e) => {
-            const idx = e.currentTarget.dataset.idx;
-            char.saveToggles[idx].enabled = e.currentTarget.checked;
-        })
-    );
-
-    list.querySelectorAll('.save-toggle-edit-btn').forEach((btn) =>
-        btn.addEventListener('click', (e) => {
-            const idx = e.currentTarget.dataset.idx;
-            const t = char.saveToggles[idx];
-            const idxEl = document.getElementById('modal-save-toggle-idx');
-            const nameEl = document.getElementById('modal-save-toggle-name');
-            const formulaEl = document.getElementById('modal-save-toggle-formula');
-            const targetEl = document.getElementById('modal-save-toggle-target');
-            if (idxEl) idxEl.value = idx;
-            if (nameEl) nameEl.value = t.name;
-            if (formulaEl) formulaEl.value = t.formula;
-            if (targetEl) targetEl.value = t.target;
-            document.getElementById('modal-save-toggle-form')?.classList.remove('vtt-hidden');
-            document.getElementById('btn-add-save-toggle')?.classList.add('vtt-hidden');
-        })
-    );
-
-    list.querySelectorAll('.save-toggle-del-btn').forEach((btn) =>
-        btn.addEventListener('click', (e) => {
-            if (confirm('Delete this toggle?')) {
-                const idx = e.currentTarget.dataset.idx;
-                char.saveToggles.splice(idx, 1);
-                renderSaveTogglesList(char, options);
-            }
-        })
-    );
-}
-
-export function setupSaveSettingsListeners(options = {}) {
-    const {
-        getCurrentChar = () => window.currentChar,
-        saveAndEmit = (c) => window.saveAndEmit?.(c),
-        renderSheetData = (c) => window.renderSheetData?.(c)
-    } = options;
-
-    const closeSaveSettings = () => {
-        document.getElementById('pc-save-settings-modal')?.classList.add('vtt-hidden');
-        document.getElementById('pc-save-settings-overlay')?.classList.add('vtt-hidden');
-    };
-
-    document.getElementById('modal-save-settings-close')?.addEventListener('click', closeSaveSettings);
-    document.getElementById('pc-save-settings-overlay')?.addEventListener('click', closeSaveSettings);
-
-    document.getElementById('btn-add-save-toggle')?.addEventListener('click', () => {
-        const idxEl = document.getElementById('modal-save-toggle-idx');
-        const nameEl = document.getElementById('modal-save-toggle-name');
-        const formulaEl = document.getElementById('modal-save-toggle-formula');
-        const targetEl = document.getElementById('modal-save-toggle-target');
-        if (idxEl) idxEl.value = '-1';
-        if (nameEl) nameEl.value = '';
-        if (formulaEl) formulaEl.value = '';
-        if (targetEl) targetEl.value = 'all';
-        document.getElementById('modal-save-toggle-form')?.classList.remove('vtt-hidden');
-        document.getElementById('btn-add-save-toggle')?.classList.add('vtt-hidden');
-    });
-
-    document.getElementById('modal-save-toggle-cancel')?.addEventListener('click', () => {
-        document.getElementById('modal-save-toggle-form')?.classList.add('vtt-hidden');
-        document.getElementById('btn-add-save-toggle')?.classList.remove('vtt-hidden');
-    });
-
-    document.getElementById('modal-save-toggle-save')?.addEventListener('click', () => {
-        const currentChar = getCurrentChar();
-        if (!currentChar) return;
-        if (!currentChar.saveToggles) currentChar.saveToggles = [];
-
-        const idx = parseInt(document.getElementById('modal-save-toggle-idx')?.value || '-1');
-        const name = document.getElementById('modal-save-toggle-name')?.value.trim();
-        const formula = document.getElementById('modal-save-toggle-formula')?.value.trim();
-        const target = document.getElementById('modal-save-toggle-target')?.value || 'all';
-        if (!name || !formula) return alert('Name and Formula are required.');
-
-        const t = { id: 'stgl_' + Date.now(), name, formula, target, enabled: true };
-        if (idx >= 0) {
-            currentChar.saveToggles[idx] = t;
-        } else {
-            currentChar.saveToggles.push(t);
-        }
-        document.getElementById('modal-save-toggle-form')?.classList.add('vtt-hidden');
-        document.getElementById('btn-add-save-toggle')?.classList.remove('vtt-hidden');
-        renderSaveTogglesList(currentChar, options);
-    });
-
-    document.getElementById('modal-save-settings-save')?.addEventListener('click', () => {
-        const currentChar = getCurrentChar();
-        if (!currentChar) return;
-
-        currentChar.globalSaveMod = parseInt(document.getElementById('modal-save-global-mod')?.value) || 0;
-        currentChar.saves = currentChar.saves || {};
-        currentChar.saveMods = currentChar.saveMods || {};
-        currentChar.stats = currentChar.stats || {};
-        currentChar.statMods = currentChar.statMods || {};
-
-        ['str', 'dex', 'con', 'int', 'wis', 'cha'].forEach((ab) => {
-            const cb = document.getElementById(`modal-save-prof-${ab}`);
-            const inp = document.getElementById(`modal-save-mod-${ab}`);
-            if (cb) currentChar.saves[ab] = cb.checked;
-            if (inp) currentChar.saveMods[ab] = parseInt(inp.value) || 0;
-
-            const baseInp = document.getElementById(`modal-stat-base-${ab}`);
-            const tempInp = document.getElementById(`modal-stat-mod-${ab}`);
-            if (baseInp) currentChar.stats[ab] = parseInt(baseInp.value) || 10;
-            if (tempInp) currentChar.statMods[ab] = parseInt(tempInp.value) || 0;
-        });
-
-        saveAndEmit(currentChar);
-        renderSheetData(currentChar);
-        closeSaveSettings();
-    });
-}
-
-export function ensureSaveSettingsModalExists(options = {}) {
-    if (document.getElementById('pc-save-settings-modal')) return;
-
-    const container = document.createElement('div');
-    container.innerHTML = `
+        `}),d.innerHTML=r,d.querySelectorAll(".save-toggle-enable-cb").forEach(a=>a.addEventListener("change",e=>{const l=e.currentTarget.dataset.idx;t.saveToggles[l].enabled=e.currentTarget.checked})),d.querySelectorAll(".save-toggle-edit-btn").forEach(a=>a.addEventListener("click",e=>{const l=e.currentTarget.dataset.idx,o=t.saveToggles[l],n=document.getElementById("modal-save-toggle-idx"),i=document.getElementById("modal-save-toggle-name"),c=document.getElementById("modal-save-toggle-formula"),m=document.getElementById("modal-save-toggle-target");n&&(n.value=l),i&&(i.value=o.name),c&&(c.value=o.formula),m&&(m.value=o.target),document.getElementById("modal-save-toggle-form")?.classList.remove("vtt-hidden"),document.getElementById("btn-add-save-toggle")?.classList.add("vtt-hidden")})),d.querySelectorAll(".save-toggle-del-btn").forEach(a=>a.addEventListener("click",e=>{if(confirm("Delete this toggle?")){const l=e.currentTarget.dataset.idx;t.saveToggles.splice(l,1),renderSaveTogglesList(t,s)}}))}export function setupSaveSettingsListeners(t={}){const{getCurrentChar:s=()=>window.currentChar,saveAndEmit:d=e=>window.saveAndEmit?.(e),renderSheetData:r=e=>window.renderSheetData?.(e)}=t,a=()=>{document.getElementById("pc-save-settings-modal")?.classList.add("vtt-hidden"),document.getElementById("pc-save-settings-overlay")?.classList.add("vtt-hidden")};document.getElementById("modal-save-settings-close")?.addEventListener("click",a),document.getElementById("pc-save-settings-overlay")?.addEventListener("click",a),document.getElementById("btn-add-save-toggle")?.addEventListener("click",()=>{const e=document.getElementById("modal-save-toggle-idx"),l=document.getElementById("modal-save-toggle-name"),o=document.getElementById("modal-save-toggle-formula"),n=document.getElementById("modal-save-toggle-target");e&&(e.value="-1"),l&&(l.value=""),o&&(o.value=""),n&&(n.value="all"),document.getElementById("modal-save-toggle-form")?.classList.remove("vtt-hidden"),document.getElementById("btn-add-save-toggle")?.classList.add("vtt-hidden")}),document.getElementById("modal-save-toggle-cancel")?.addEventListener("click",()=>{document.getElementById("modal-save-toggle-form")?.classList.add("vtt-hidden"),document.getElementById("btn-add-save-toggle")?.classList.remove("vtt-hidden")}),document.getElementById("modal-save-toggle-save")?.addEventListener("click",()=>{const e=s();if(!e)return;e.saveToggles||(e.saveToggles=[]);const l=parseInt(document.getElementById("modal-save-toggle-idx")?.value||"-1"),o=document.getElementById("modal-save-toggle-name")?.value.trim(),n=document.getElementById("modal-save-toggle-formula")?.value.trim(),i=document.getElementById("modal-save-toggle-target")?.value||"all";if(!o||!n)return alert("Name and Formula are required.");const c={id:"stgl_"+Date.now(),name:o,formula:n,target:i,enabled:!0};l>=0?e.saveToggles[l]=c:e.saveToggles.push(c),document.getElementById("modal-save-toggle-form")?.classList.add("vtt-hidden"),document.getElementById("btn-add-save-toggle")?.classList.remove("vtt-hidden"),renderSaveTogglesList(e,t)}),document.getElementById("modal-save-settings-save")?.addEventListener("click",()=>{const e=s();e&&(e.globalSaveMod=parseInt(document.getElementById("modal-save-global-mod")?.value)||0,e.saves=e.saves||{},e.saveMods=e.saveMods||{},e.stats=e.stats||{},e.statMods=e.statMods||{},["str","dex","con","int","wis","cha"].forEach(l=>{const o=document.getElementById(`modal-save-prof-${l}`),n=document.getElementById(`modal-save-mod-${l}`);o&&(e.saves[l]=o.checked),n&&(e.saveMods[l]=parseInt(n.value)||0);const i=document.getElementById(`modal-stat-base-${l}`),c=document.getElementById(`modal-stat-mod-${l}`);i&&(e.stats[l]=parseInt(i.value)||10),c&&(e.statMods[l]=parseInt(c.value)||0)}),d(e),r(e),a())})}export function ensureSaveSettingsModalExists(t={}){if(document.getElementById("pc-save-settings-modal"))return;const s=document.createElement("div");s.innerHTML=`
         <div id="pc-save-settings-overlay" class="vtt-sheet-submodal-overlay vtt-hidden"></div>
         <div id="pc-save-settings-modal" class="vtt-sheet-submodal vtt-hidden" style="width:500px;">
             <div style="padding:16px; border-bottom:1px solid var(--color-border-subtle); display:flex; justify-content:space-between; align-items:center;">
@@ -173,39 +27,31 @@ export function ensureSaveSettingsModalExists(options = {}) {
                 <div>
                     <h4 style="margin:0 0 8px 0; color:var(--color-text-primary);">Ability Scores & Temp Mods</h4>
                     <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px;">
-                        ${['str', 'dex', 'con', 'int', 'wis', 'cha']
-                            .map(
-                                (ab) => `
+                        ${["str","dex","con","int","wis","cha"].map(d=>`
                             <div style="display:flex; align-items:center; justify-content:space-between; background:rgba(0,0,0,0.2); padding:6px; border-radius:4px; border:1px solid var(--color-border-subtle);">
-                                <div style="font-weight:600; font-size:0.85rem;">${ab.toUpperCase()}</div>
+                                <div style="font-weight:600; font-size:0.85rem;">${d.toUpperCase()}</div>
                                 <div style="display:flex; gap:4px; align-items:center;">
-                                    <input type="text" inputmode="numeric" id="modal-stat-base-${ab}" value="10" style="width:48px; padding:2px; box-sizing:border-box; text-align:center; font-size:0.85rem; background:transparent; border:none; border-bottom:1px solid var(--color-border-subtle); color:var(--color-text-primary);" title="Base Stat">
+                                    <input type="text" inputmode="numeric" id="modal-stat-base-${d}" value="10" style="width:48px; padding:2px; box-sizing:border-box; text-align:center; font-size:0.85rem; background:transparent; border:none; border-bottom:1px solid var(--color-border-subtle); color:var(--color-text-primary);" title="Base Stat">
                                     <span style="color:var(--color-text-muted); font-size:0.8rem;">+</span>
-                                    <input type="text" inputmode="numeric" id="modal-stat-mod-${ab}" value="0" style="width:48px; padding:2px; box-sizing:border-box; text-align:center; font-size:0.85rem; background:transparent; border:none; border-bottom:1px solid var(--color-border-subtle); color:var(--color-text-primary);" title="Temp Mod">
+                                    <input type="text" inputmode="numeric" id="modal-stat-mod-${d}" value="0" style="width:48px; padding:2px; box-sizing:border-box; text-align:center; font-size:0.85rem; background:transparent; border:none; border-bottom:1px solid var(--color-border-subtle); color:var(--color-text-primary);" title="Temp Mod">
                                 </div>
                             </div>
-                        `
-                            )
-                            .join('')}
+                        `).join("")}
                     </div>
                 </div>
 
                 <div>
                     <h4 style="margin:0 0 8px 0; color:var(--color-text-primary);">Ability Save Proficiencies & Mods</h4>
                     <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
-                        ${['str', 'dex', 'con', 'int', 'wis', 'cha']
-                            .map(
-                                (ab) => `
+                        ${["str","dex","con","int","wis","cha"].map(d=>`
                             <div style="display:flex; align-items:center; justify-content:space-between; background:rgba(0,0,0,0.2); padding:6px; border-radius:4px; border:1px solid var(--color-border-subtle);">
                                 <div style="display:flex; align-items:center; gap:8px;">
-                                    <input type="checkbox" id="modal-save-prof-${ab}" style="cursor:pointer;">
-                                    <label style="margin:0; font-weight:600; font-size:0.85rem;" for="modal-save-prof-${ab}">${ab.toUpperCase()} Save</label>
+                                    <input type="checkbox" id="modal-save-prof-${d}" style="cursor:pointer;">
+                                    <label style="margin:0; font-weight:600; font-size:0.85rem;" for="modal-save-prof-${d}">${d.toUpperCase()} Save</label>
                                 </div>
-                                <input type="number" id="modal-save-mod-${ab}" value="0" style="width:40px; text-align:center; font-size:0.85rem; background:transparent; border:none; border-bottom:1px solid var(--color-border-subtle); color:var(--color-text-primary);" placeholder="Mod">
+                                <input type="number" id="modal-save-mod-${d}" value="0" style="width:40px; text-align:center; font-size:0.85rem; background:transparent; border:none; border-bottom:1px solid var(--color-border-subtle); color:var(--color-text-primary);" placeholder="Mod">
                             </div>
-                        `
-                            )
-                            .join('')}
+                        `).join("")}
                     </div>
                 </div>
 
@@ -243,185 +89,20 @@ export function ensureSaveSettingsModalExists(options = {}) {
                 <button id="modal-save-settings-save" class="btn btn-primary">Save Changes</button>
             </div>
         </div>
-    `;
-    document.body.appendChild(container);
-    setupSaveSettingsListeners(options);
-}
-
-export function openSaveSettingsModal(char, options = {}) {
-    ensureSaveSettingsModalExists(options);
-    if (!char) return;
-
-    const globalModEl = document.getElementById('modal-save-global-mod');
-    if (globalModEl) globalModEl.value = char.globalSaveMod || 0;
-
-    ['str', 'dex', 'con', 'int', 'wis', 'cha'].forEach((ab) => {
-        const cb = document.getElementById(`modal-save-prof-${ab}`);
-        const inp = document.getElementById(`modal-save-mod-${ab}`);
-        if (cb) cb.checked = !!(char.saves && char.saves[ab]);
-        if (inp) inp.value = (char.saveMods && char.saveMods[ab]) || 0;
-
-        const baseInp = document.getElementById(`modal-stat-base-${ab}`);
-        const tempInp = document.getElementById(`modal-stat-mod-${ab}`);
-        if (baseInp) baseInp.value = (char.stats && char.stats[ab]) || 10;
-        if (tempInp) tempInp.value = (char.statMods && char.statMods[ab]) || 0;
-    });
-
-    renderSaveTogglesList(char, options);
-    document.getElementById('pc-save-settings-modal')?.classList.remove('vtt-hidden');
-    document.getElementById('pc-save-settings-overlay')?.classList.remove('vtt-hidden');
-}
-
-// ─── 2. SKILL SETTINGS ────────────────────────────────────────────────────────
-
-export function renderSkillTogglesList(char, options = {}) {
-    const list = document.getElementById('modal-skill-toggles-list');
-    if (!list) return;
-    if (!char || !char.skillToggles) return;
-
-    let html = '';
-    char.skillToggles.forEach((t, i) => {
-        html += `
+    `,document.body.appendChild(s),setupSaveSettingsListeners(t)}export function openSaveSettingsModal(t,s={}){if(ensureSaveSettingsModalExists(s),!t)return;const d=document.getElementById("modal-save-global-mod");d&&(d.value=t.globalSaveMod||0),["str","dex","con","int","wis","cha"].forEach(r=>{const a=document.getElementById(`modal-save-prof-${r}`),e=document.getElementById(`modal-save-mod-${r}`);a&&(a.checked=!!(t.saves&&t.saves[r])),e&&(e.value=t.saveMods&&t.saveMods[r]||0);const l=document.getElementById(`modal-stat-base-${r}`),o=document.getElementById(`modal-stat-mod-${r}`);l&&(l.value=t.stats&&t.stats[r]||10),o&&(o.value=t.statMods&&t.statMods[r]||0)}),renderSaveTogglesList(t,s),document.getElementById("pc-save-settings-modal")?.classList.remove("vtt-hidden"),document.getElementById("pc-save-settings-overlay")?.classList.remove("vtt-hidden")}export function renderSkillTogglesList(t,s={}){const d=document.getElementById("modal-skill-toggles-list");if(!d||!t||!t.skillToggles)return;let r="";t.skillToggles.forEach((a,e)=>{r+=`
             <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.3); padding:6px 8px; border-radius:4px; border:1px solid var(--color-border-subtle);">
                 <div style="display:flex; align-items:center; gap:8px;">
-                    <input type="checkbox" class="skill-toggle-enable-cb" data-idx="${i}" ${t.enabled ? 'checked' : ''}>
-                    <span style="font-weight:bold; font-size:0.85rem;">${escapeHtml(t.name)}</span>
-                    <span style="background:var(--color-surface-hover); padding:2px 4px; border-radius:4px; font-size:0.7rem;">${escapeHtml((t.target || 'ALL').toUpperCase())}</span>
-                    <span style="color:var(--color-gold-base); font-size:0.8rem;">${escapeHtml(t.formula)}</span>
+                    <input type="checkbox" class="skill-toggle-enable-cb" data-idx="${e}" ${a.enabled?"checked":""}>
+                    <span style="font-weight:bold; font-size:0.85rem;">${b(a.name)}</span>
+                    <span style="background:var(--color-surface-hover); padding:2px 4px; border-radius:4px; font-size:0.7rem;">${b((a.target||"ALL").toUpperCase())}</span>
+                    <span style="color:var(--color-gold-base); font-size:0.8rem;">${b(a.formula)}</span>
                 </div>
                 <div style="display:flex; gap:4px;">
-                    <button class="btn btn-xxs btn-secondary skill-toggle-edit-btn" data-idx="${i}"><i class="fa-solid fa-pen"></i></button>
-                    <button class="btn btn-xxs btn-secondary skill-toggle-del-btn" data-idx="${i}"><i class="fa-solid fa-trash"></i></button>
+                    <button class="btn btn-xxs btn-secondary skill-toggle-edit-btn" data-idx="${e}"><i class="fa-solid fa-pen"></i></button>
+                    <button class="btn btn-xxs btn-secondary skill-toggle-del-btn" data-idx="${e}"><i class="fa-solid fa-trash"></i></button>
                 </div>
             </div>
-        `;
-    });
-    list.innerHTML = html;
-
-    list.querySelectorAll('.skill-toggle-enable-cb').forEach((cb) =>
-        cb.addEventListener('change', (e) => {
-            const idx = e.currentTarget.dataset.idx;
-            char.skillToggles[idx].enabled = e.currentTarget.checked;
-        })
-    );
-
-    list.querySelectorAll('.skill-toggle-edit-btn').forEach((btn) =>
-        btn.addEventListener('click', (e) => {
-            const idx = e.currentTarget.dataset.idx;
-            const t = char.skillToggles[idx];
-            const idxEl = document.getElementById('modal-skill-toggle-idx');
-            const nameEl = document.getElementById('modal-skill-toggle-name');
-            const formulaEl = document.getElementById('modal-skill-toggle-formula');
-            const targetEl = document.getElementById('modal-skill-toggle-target');
-            if (idxEl) idxEl.value = idx;
-            if (nameEl) nameEl.value = t.name;
-            if (formulaEl) formulaEl.value = t.formula;
-            if (targetEl) targetEl.value = t.target;
-            document.getElementById('modal-skill-toggle-form')?.classList.remove('vtt-hidden');
-            document.getElementById('btn-add-skill-toggle')?.classList.add('vtt-hidden');
-        })
-    );
-
-    list.querySelectorAll('.skill-toggle-del-btn').forEach((btn) =>
-        btn.addEventListener('click', (e) => {
-            if (confirm('Delete this toggle?')) {
-                const idx = e.currentTarget.dataset.idx;
-                char.skillToggles.splice(idx, 1);
-                renderSkillTogglesList(char, options);
-            }
-        })
-    );
-}
-
-export function setupSkillSettingsListeners(options = {}) {
-    const {
-        getCurrentChar = () => window.currentChar,
-        saveAndEmit = (c) => window.saveAndEmit?.(c),
-        renderSheetData = (c) => window.renderSheetData?.(c)
-    } = options;
-
-    const closeSkillSettings = () => {
-        document.getElementById('pc-skill-settings-modal')?.classList.add('vtt-hidden');
-        document.getElementById('pc-skill-settings-overlay')?.classList.add('vtt-hidden');
-    };
-
-    document.getElementById('modal-skill-settings-close')?.addEventListener('click', closeSkillSettings);
-    document.getElementById('pc-skill-settings-overlay')?.addEventListener('click', closeSkillSettings);
-
-    document.getElementById('btn-add-skill-toggle')?.addEventListener('click', () => {
-        const idxEl = document.getElementById('modal-skill-toggle-idx');
-        const nameEl = document.getElementById('modal-skill-toggle-name');
-        const formulaEl = document.getElementById('modal-skill-toggle-formula');
-        const targetEl = document.getElementById('modal-skill-toggle-target');
-        if (idxEl) idxEl.value = '-1';
-        if (nameEl) nameEl.value = '';
-        if (formulaEl) formulaEl.value = '';
-        if (targetEl) targetEl.value = 'all';
-        document.getElementById('modal-skill-toggle-form')?.classList.remove('vtt-hidden');
-        document.getElementById('btn-add-skill-toggle')?.classList.add('vtt-hidden');
-    });
-
-    document.getElementById('modal-skill-toggle-cancel')?.addEventListener('click', () => {
-        document.getElementById('modal-skill-toggle-form')?.classList.add('vtt-hidden');
-        document.getElementById('btn-add-skill-toggle')?.classList.remove('vtt-hidden');
-    });
-
-    document.getElementById('modal-skill-toggle-save')?.addEventListener('click', () => {
-        const currentChar = getCurrentChar();
-        if (!currentChar) return;
-        if (!currentChar.skillToggles) currentChar.skillToggles = [];
-
-        const idx = parseInt(document.getElementById('modal-skill-toggle-idx')?.value || '-1');
-        const name = document.getElementById('modal-skill-toggle-name')?.value.trim();
-        const formula = document.getElementById('modal-skill-toggle-formula')?.value.trim();
-        const target = document.getElementById('modal-skill-toggle-target')?.value || 'all';
-        if (!name || !formula) return alert('Name and Formula are required.');
-
-        const t = { id: 'sktgl_' + Date.now(), name, formula, target, enabled: true };
-        if (idx >= 0) {
-            currentChar.skillToggles[idx] = t;
-        } else {
-            currentChar.skillToggles.push(t);
-        }
-        document.getElementById('modal-skill-toggle-form')?.classList.add('vtt-hidden');
-        document.getElementById('btn-add-skill-toggle')?.classList.remove('vtt-hidden');
-        renderSkillTogglesList(currentChar, options);
-    });
-
-    document.getElementById('modal-skill-settings-save')?.addEventListener('click', () => {
-        const currentChar = getCurrentChar();
-        if (!currentChar) return;
-
-        currentChar.globalAbilityMod = document.getElementById('modal-skill-global-mod')?.value.trim() || '0';
-        currentChar.skills = currentChar.skills || {};
-        currentChar.expertise = currentChar.expertise || {};
-        currentChar.skillMods = currentChar.skillMods || {};
-        currentChar.passiveSkillMods = currentChar.passiveSkillMods || {};
-
-        ALL_SKILLS.forEach((skill) => {
-            const sName = skill.name;
-            const idSafe = sName.replace(/ /g, '_');
-            const pCb = document.getElementById(`modal-skill-prof-${idSafe}`);
-            const eCb = document.getElementById(`modal-skill-exp-${idSafe}`);
-            const inp = document.getElementById(`modal-skill-mod-${idSafe}`);
-            const passInp = document.getElementById(`modal-skill-passive-${idSafe}`);
-            if (pCb) currentChar.skills[sName] = pCb.checked;
-            if (eCb) currentChar.expertise[sName] = eCb.checked;
-            if (inp) currentChar.skillMods[sName] = inp.value.trim() || '0';
-            if (passInp) currentChar.passiveSkillMods[sName] = passInp.value.trim() || '0';
-        });
-
-        saveAndEmit(currentChar);
-        renderSheetData(currentChar);
-        closeSkillSettings();
-    });
-}
-
-export function ensureSkillSettingsModalExists(options = {}) {
-    if (document.getElementById('pc-skill-settings-modal')) return;
-
-    const container = document.createElement('div');
-    container.innerHTML = `
+        `}),d.innerHTML=r,d.querySelectorAll(".skill-toggle-enable-cb").forEach(a=>a.addEventListener("change",e=>{const l=e.currentTarget.dataset.idx;t.skillToggles[l].enabled=e.currentTarget.checked})),d.querySelectorAll(".skill-toggle-edit-btn").forEach(a=>a.addEventListener("click",e=>{const l=e.currentTarget.dataset.idx,o=t.skillToggles[l],n=document.getElementById("modal-skill-toggle-idx"),i=document.getElementById("modal-skill-toggle-name"),c=document.getElementById("modal-skill-toggle-formula"),m=document.getElementById("modal-skill-toggle-target");n&&(n.value=l),i&&(i.value=o.name),c&&(c.value=o.formula),m&&(m.value=o.target),document.getElementById("modal-skill-toggle-form")?.classList.remove("vtt-hidden"),document.getElementById("btn-add-skill-toggle")?.classList.add("vtt-hidden")})),d.querySelectorAll(".skill-toggle-del-btn").forEach(a=>a.addEventListener("click",e=>{if(confirm("Delete this toggle?")){const l=e.currentTarget.dataset.idx;t.skillToggles.splice(l,1),renderSkillTogglesList(t,s)}}))}export function setupSkillSettingsListeners(t={}){const{getCurrentChar:s=()=>window.currentChar,saveAndEmit:d=e=>window.saveAndEmit?.(e),renderSheetData:r=e=>window.renderSheetData?.(e)}=t,a=()=>{document.getElementById("pc-skill-settings-modal")?.classList.add("vtt-hidden"),document.getElementById("pc-skill-settings-overlay")?.classList.add("vtt-hidden")};document.getElementById("modal-skill-settings-close")?.addEventListener("click",a),document.getElementById("pc-skill-settings-overlay")?.addEventListener("click",a),document.getElementById("btn-add-skill-toggle")?.addEventListener("click",()=>{const e=document.getElementById("modal-skill-toggle-idx"),l=document.getElementById("modal-skill-toggle-name"),o=document.getElementById("modal-skill-toggle-formula"),n=document.getElementById("modal-skill-toggle-target");e&&(e.value="-1"),l&&(l.value=""),o&&(o.value=""),n&&(n.value="all"),document.getElementById("modal-skill-toggle-form")?.classList.remove("vtt-hidden"),document.getElementById("btn-add-skill-toggle")?.classList.add("vtt-hidden")}),document.getElementById("modal-skill-toggle-cancel")?.addEventListener("click",()=>{document.getElementById("modal-skill-toggle-form")?.classList.add("vtt-hidden"),document.getElementById("btn-add-skill-toggle")?.classList.remove("vtt-hidden")}),document.getElementById("modal-skill-toggle-save")?.addEventListener("click",()=>{const e=s();if(!e)return;e.skillToggles||(e.skillToggles=[]);const l=parseInt(document.getElementById("modal-skill-toggle-idx")?.value||"-1"),o=document.getElementById("modal-skill-toggle-name")?.value.trim(),n=document.getElementById("modal-skill-toggle-formula")?.value.trim(),i=document.getElementById("modal-skill-toggle-target")?.value||"all";if(!o||!n)return alert("Name and Formula are required.");const c={id:"sktgl_"+Date.now(),name:o,formula:n,target:i,enabled:!0};l>=0?e.skillToggles[l]=c:e.skillToggles.push(c),document.getElementById("modal-skill-toggle-form")?.classList.add("vtt-hidden"),document.getElementById("btn-add-skill-toggle")?.classList.remove("vtt-hidden"),renderSkillTogglesList(e,t)}),document.getElementById("modal-skill-settings-save")?.addEventListener("click",()=>{const e=s();e&&(e.globalAbilityMod=document.getElementById("modal-skill-global-mod")?.value.trim()||"0",e.skills=e.skills||{},e.expertise=e.expertise||{},e.skillMods=e.skillMods||{},e.passiveSkillMods=e.passiveSkillMods||{},f.forEach(l=>{const o=l.name,n=o.replace(/ /g,"_"),i=document.getElementById(`modal-skill-prof-${n}`),c=document.getElementById(`modal-skill-exp-${n}`),m=document.getElementById(`modal-skill-mod-${n}`),v=document.getElementById(`modal-skill-passive-${n}`);i&&(e.skills[o]=i.checked),c&&(e.expertise[o]=c.checked),m&&(e.skillMods[o]=m.value.trim()||"0"),v&&(e.passiveSkillMods[o]=v.value.trim()||"0")}),d(e),r(e),a())})}export function ensureSkillSettingsModalExists(t={}){if(document.getElementById("pc-skill-settings-modal"))return;const s=document.createElement("div");s.innerHTML=`
         <div id="pc-skill-settings-overlay" class="vtt-sheet-submodal-overlay vtt-hidden"></div>
         <div id="pc-skill-settings-modal" class="vtt-sheet-submodal vtt-hidden" style="width:640px;">
             <div style="padding:16px; border-bottom:1px solid var(--color-border-subtle); display:flex; justify-content:space-between; align-items:center;">
@@ -443,22 +124,19 @@ export function ensureSkillSettingsModalExists(options = {}) {
                         </div>
                     </div>
                     <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
-                        ${ALL_SKILLS.map((skill) => {
-                            const idSafe = skill.name.replace(/ /g, '_');
-                            return `
+                        ${f.map(d=>{const r=d.name.replace(/ /g,"_");return`
                                 <div style="display:flex; align-items:center; justify-content:space-between; background:rgba(0,0,0,0.25); padding:6px 8px; border-radius:4px; border:1px solid var(--color-border-subtle); gap:6px;">
                                     <div style="display:flex; align-items:center; gap:6px; flex:1; min-width:0; overflow:hidden;">
-                                        <input type="checkbox" id="modal-skill-prof-${idSafe}" title="Proficient" style="cursor:pointer; accent-color:var(--color-gold-base);">
-                                        <input type="checkbox" id="modal-skill-exp-${idSafe}" title="Expertise" style="cursor:pointer; accent-color:var(--color-gold-light); border-radius:50%;">
-                                        <label style="margin:0; font-weight:600; font-size:0.8rem; white-space:nowrap; text-overflow:ellipsis; overflow:hidden;" for="modal-skill-prof-${idSafe}">${skill.name}</label>
+                                        <input type="checkbox" id="modal-skill-prof-${r}" title="Proficient" style="cursor:pointer; accent-color:var(--color-gold-base);">
+                                        <input type="checkbox" id="modal-skill-exp-${r}" title="Expertise" style="cursor:pointer; accent-color:var(--color-gold-light); border-radius:50%;">
+                                        <label style="margin:0; font-weight:600; font-size:0.8rem; white-space:nowrap; text-overflow:ellipsis; overflow:hidden;" for="modal-skill-prof-${r}">${d.name}</label>
                                     </div>
                                     <div style="display:flex; align-items:center; gap:4px;">
-                                        <input type="text" id="modal-skill-mod-${idSafe}" value="0" style="width:36px; text-align:center; font-size:0.8rem; background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); border-radius:3px; color:var(--color-text-primary);" placeholder="Mod" title="Active Roll Modifier">
-                                        <input type="text" id="modal-skill-passive-${idSafe}" value="0" style="width:36px; text-align:center; font-size:0.8rem; background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); border-radius:3px; color:var(--color-gold-light);" placeholder="Pass" title="Passive Score Modifier (e.g. +5 Observant)">
+                                        <input type="text" id="modal-skill-mod-${r}" value="0" style="width:36px; text-align:center; font-size:0.8rem; background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); border-radius:3px; color:var(--color-text-primary);" placeholder="Mod" title="Active Roll Modifier">
+                                        <input type="text" id="modal-skill-passive-${r}" value="0" style="width:36px; text-align:center; font-size:0.8rem; background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); border-radius:3px; color:var(--color-gold-light);" placeholder="Pass" title="Passive Score Modifier (e.g. +5 Observant)">
                                     </div>
                                 </div>
-                            `;
-                        }).join('')}
+                            `}).join("")}
                     </div>
                 </div>
 
@@ -481,7 +159,7 @@ export function ensureSkillSettingsModalExists(options = {}) {
                                 <option value="passive_investigation">Passive Investigation</option>
                                 <option value="passive_insight">Passive Insight</option>
                                 <option value="passive_all">All Passive Scores</option>
-                                ${ALL_SKILLS.map((s) => `<option value="${s.name}">${s.name}</option>`).join('')}
+                                ${f.map(d=>`<option value="${d.name}">${d.name}</option>`).join("")}
                             </select>
                         </div>
                         <div style="display:flex; justify-content:flex-end; gap:8px;">
@@ -498,49 +176,7 @@ export function ensureSkillSettingsModalExists(options = {}) {
                 <button id="modal-skill-settings-save" class="btn btn-primary">Save Changes</button>
             </div>
         </div>
-    `;
-    document.body.appendChild(container);
-    setupSkillSettingsListeners(options);
-}
-
-export function openSkillSettingsModal(char, options = {}) {
-    ensureSkillSettingsModalExists(options);
-    if (!char) return;
-
-    const globalModEl = document.getElementById('modal-skill-global-mod');
-    if (globalModEl) globalModEl.value = char.globalAbilityMod || '0';
-
-    ALL_SKILLS.forEach((skill) => {
-        const sName = skill.name;
-        const idSafe = sName.replace(/ /g, '_');
-        const pCb = document.getElementById(`modal-skill-prof-${idSafe}`);
-        const eCb = document.getElementById(`modal-skill-exp-${idSafe}`);
-        const inp = document.getElementById(`modal-skill-mod-${idSafe}`);
-        const passInp = document.getElementById(`modal-skill-passive-${idSafe}`);
-        if (pCb) pCb.checked = !!(char.skills && char.skills[sName]);
-        if (eCb) eCb.checked = !!(char.expertise && char.expertise[sName]);
-        if (inp) inp.value = (char.skillMods && char.skillMods[sName]) || '0';
-        if (passInp) passInp.value = (char.passiveSkillMods && char.passiveSkillMods[sName]) || '0';
-    });
-
-    renderSkillTogglesList(char, options);
-    document.getElementById('pc-skill-settings-modal')?.classList.remove('vtt-hidden');
-    document.getElementById('pc-skill-settings-overlay')?.classList.remove('vtt-hidden');
-}
-
-// ─── 3. TOOL SETTINGS ─────────────────────────────────────────────────────────
-
-export function ensureToolSettingsModalExists(options = {}) {
-    if (document.getElementById('pc-tool-settings-modal')) return;
-
-    const {
-        getCurrentChar = () => window.currentChar,
-        saveAndEmit = (c) => window.saveAndEmit?.(c),
-        renderSheetData = (c) => window.renderSheetData?.(c)
-    } = options;
-
-    const container = document.createElement('div');
-    container.innerHTML = `
+    `,document.body.appendChild(s),setupSkillSettingsListeners(t)}export function openSkillSettingsModal(t,s={}){if(ensureSkillSettingsModalExists(s),!t)return;const d=document.getElementById("modal-skill-global-mod");d&&(d.value=t.globalAbilityMod||"0"),f.forEach(r=>{const a=r.name,e=a.replace(/ /g,"_"),l=document.getElementById(`modal-skill-prof-${e}`),o=document.getElementById(`modal-skill-exp-${e}`),n=document.getElementById(`modal-skill-mod-${e}`),i=document.getElementById(`modal-skill-passive-${e}`);l&&(l.checked=!!(t.skills&&t.skills[a])),o&&(o.checked=!!(t.expertise&&t.expertise[a])),n&&(n.value=t.skillMods&&t.skillMods[a]||"0"),i&&(i.value=t.passiveSkillMods&&t.passiveSkillMods[a]||"0")}),renderSkillTogglesList(t,s),document.getElementById("pc-skill-settings-modal")?.classList.remove("vtt-hidden"),document.getElementById("pc-skill-settings-overlay")?.classList.remove("vtt-hidden")}export function ensureToolSettingsModalExists(t={}){if(document.getElementById("pc-tool-settings-modal"))return;const{getCurrentChar:s=()=>window.currentChar,saveAndEmit:d=l=>window.saveAndEmit?.(l),renderSheetData:r=l=>window.renderSheetData?.(l)}=t,a=document.createElement("div");a.innerHTML=`
         <div id="pc-tool-settings-overlay" class="vtt-sheet-submodal-overlay vtt-hidden"></div>
         <div id="pc-tool-settings-modal" class="vtt-sheet-submodal vtt-hidden" style="width:650px;">
             <div style="padding:16px; border-bottom:1px solid var(--color-border-subtle); display:flex; justify-content:space-between; align-items:center;">
@@ -563,33 +199,7 @@ export function ensureToolSettingsModalExists(options = {}) {
                 <button id="modal-tool-settings-save" class="btn btn-primary">Save Changes</button>
             </div>
         </div>
-    `;
-    document.body.appendChild(container);
-
-    const closeToolSettings = () => {
-        document.getElementById('pc-tool-settings-modal')?.classList.add('vtt-hidden');
-        document.getElementById('pc-tool-settings-overlay')?.classList.add('vtt-hidden');
-    };
-
-    document.getElementById('modal-tool-settings-close')?.addEventListener('click', closeToolSettings);
-    document.getElementById('pc-tool-settings-overlay')?.addEventListener('click', closeToolSettings);
-
-    document.getElementById('btn-add-custom-tool')?.addEventListener('click', () => {
-        const list = document.getElementById('modal-tool-toggles-list');
-        if (!list) return;
-        const idSafe = 'custom_tool_' + Date.now();
-        const div = document.createElement('div');
-        div.className = 'tool-settings-row';
-        div.dataset.key = idSafe;
-        div.dataset.custom = 'true';
-        div.style.display = 'flex';
-        div.style.alignItems = 'center';
-        div.style.justifyContent = 'space-between';
-        div.style.background = 'rgba(0,0,0,0.2)';
-        div.style.padding = '6px';
-        div.style.borderRadius = '4px';
-        div.style.border = '1px solid var(--color-border-subtle)';
-        div.innerHTML = `
+    `,document.body.appendChild(a);const e=()=>{document.getElementById("pc-tool-settings-modal")?.classList.add("vtt-hidden"),document.getElementById("pc-tool-settings-overlay")?.classList.add("vtt-hidden")};document.getElementById("modal-tool-settings-close")?.addEventListener("click",e),document.getElementById("pc-tool-settings-overlay")?.addEventListener("click",e),document.getElementById("btn-add-custom-tool")?.addEventListener("click",()=>{const l=document.getElementById("modal-tool-toggles-list");if(!l)return;const o="custom_tool_"+Date.now(),n=document.createElement("div");n.className="tool-settings-row",n.dataset.key=o,n.dataset.custom="true",n.style.display="flex",n.style.alignItems="center",n.style.justifyContent="space-between",n.style.background="rgba(0,0,0,0.2)",n.style.padding="6px",n.style.borderRadius="4px",n.style.border="1px solid var(--color-border-subtle)",n.innerHTML=`
             <div style="display:flex; align-items:center; gap:8px; flex:1;">
                 <input type="checkbox" class="tool-show" title="Show on Sheet" checked style="cursor:pointer; accent-color: var(--color-gold-base);">
                 <input type="checkbox" class="tool-prof" title="Proficient" style="cursor:pointer;">
@@ -608,279 +218,38 @@ export function ensureToolSettingsModalExists(options = {}) {
                 <input type="text" class="tool-mod" value="0" style="width:40px; text-align:center; font-size:0.85rem; background:transparent; border:none; border-bottom:1px solid var(--color-border-subtle); color:var(--color-text-primary);" placeholder="Mod">
                 <button class="btn btn-danger btn-xxs tool-delete" style="padding:2px 6px;"><i class="fa-solid fa-trash"></i></button>
             </div>
-        `;
-        list.appendChild(div);
-
-        div.querySelector('.tool-delete')?.addEventListener('click', () => {
-            div.remove();
-        });
-    });
-
-    document.getElementById('modal-tool-settings-save')?.addEventListener('click', () => {
-        const currentChar = getCurrentChar();
-        if (!currentChar) return;
-        const newTools = {};
-        document.querySelectorAll('.tool-settings-row').forEach((row) => {
-            let name = '';
-            if (row.dataset.custom === 'true') {
-                name = row.querySelector('.tool-name')?.value.trim();
-            } else {
-                name = row.dataset.key;
-            }
-
-            if (!name) return;
-
-            newTools[name] = {
-                ability: row.querySelector('.tool-ability')?.value || 'dex',
-                show: !!row.querySelector('.tool-show')?.checked,
-                prof: !!row.querySelector('.tool-prof')?.checked,
-                exp: !!row.querySelector('.tool-exp')?.checked,
-                mod: row.querySelector('.tool-mod')?.value || '0',
-                custom: row.dataset.custom === 'true'
-            };
-        });
-        currentChar.tools = newTools;
-        currentChar.proficiencies = currentChar.proficiencies || { languages: '', weapons: '', armor: '', tools: '' };
-        const profToolNames = Object.keys(newTools).filter((k) => newTools[k].prof);
-        currentChar.proficiencies.tools = profToolNames.join(', ');
-        saveAndEmit(currentChar);
-        renderSheetData(currentChar);
-
-        closeToolSettings();
-    });
-}
-
-export function openToolSettingsModal(char, options = {}) {
-    ensureToolSettingsModalExists(options);
-    if (!char) return;
-
-    const list = document.getElementById('modal-tool-toggles-list');
-    if (!list) return;
-    list.innerHTML = '';
-
-    const currentTools = char.tools || {};
-    const allTools = new Set([...STANDARD_TOOLS.map((t) => t.name), ...Object.keys(currentTools)]);
-
-    Array.from(allTools)
-        .sort()
-        .forEach((toolName) => {
-            const isStandard = STANDARD_TOOLS.some((t) => t.name === toolName);
-            const defTool = STANDARD_TOOLS.find((t) => t.name === toolName);
-            const tData = currentTools[toolName] || {
-                ability: defTool ? defTool.ability : 'dex',
-                show: false,
-                prof: false,
-                exp: false,
-                mod: 0,
-                custom: !isStandard
-            };
-            const isCustom = tData.custom !== undefined ? Boolean(tData.custom) : !isStandard;
-            const isProf = Boolean(tData.prof || tData.proficient);
-            const isExp = Boolean(tData.exp);
-            const isShow = Boolean(tData.show !== undefined ? tData.show : isProf);
-
-            const div = document.createElement('div');
-            div.className = 'tool-settings-row';
-            div.dataset.key = toolName;
-            div.dataset.custom = String(isCustom);
-            div.style.display = 'flex';
-            div.style.alignItems = 'center';
-            div.style.justifyContent = 'space-between';
-            div.style.background = 'rgba(0,0,0,0.2)';
-            div.style.padding = '6px';
-            div.style.borderRadius = '4px';
-            div.style.border = '1px solid var(--color-border-subtle)';
-
-            const selAb = (ab) => (tData.ability === ab ? 'selected' : '');
-
-            div.innerHTML = `
+        `,l.appendChild(n),n.querySelector(".tool-delete")?.addEventListener("click",()=>{n.remove()})}),document.getElementById("modal-tool-settings-save")?.addEventListener("click",()=>{const l=s();if(!l)return;const o={};document.querySelectorAll(".tool-settings-row").forEach(i=>{let c="";i.dataset.custom==="true"?c=i.querySelector(".tool-name")?.value.trim():c=i.dataset.key,c&&(o[c]={ability:i.querySelector(".tool-ability")?.value||"dex",show:!!i.querySelector(".tool-show")?.checked,prof:!!i.querySelector(".tool-prof")?.checked,exp:!!i.querySelector(".tool-exp")?.checked,mod:i.querySelector(".tool-mod")?.value||"0",custom:i.dataset.custom==="true"})}),l.tools=o,l.proficiencies=l.proficiencies||{languages:"",weapons:"",armor:"",tools:""};const n=Object.keys(o).filter(i=>o[i].prof);l.proficiencies.tools=n.join(", "),d(l),r(l),e()})}export function openToolSettingsModal(t,s={}){if(ensureToolSettingsModalExists(s),!t)return;const d=document.getElementById("modal-tool-toggles-list");if(!d)return;d.innerHTML="";const r=t.tools||{},a=new Set([...S.map(e=>e.name),...Object.keys(r)]);Array.from(a).sort().forEach(e=>{const l=S.some(u=>u.name===e),o=S.find(u=>u.name===e),n=r[e]||{ability:o?o.ability:"dex",show:!1,prof:!1,exp:!1,mod:0,custom:!l},i=n.custom!==void 0?!!n.custom:!l,c=!!(n.prof||n.proficient),m=!!n.exp,v=!!(n.show!==void 0?n.show:c),g=document.createElement("div");g.className="tool-settings-row",g.dataset.key=e,g.dataset.custom=String(i),g.style.display="flex",g.style.alignItems="center",g.style.justifyContent="space-between",g.style.background="rgba(0,0,0,0.2)",g.style.padding="6px",g.style.borderRadius="4px",g.style.border="1px solid var(--color-border-subtle)";const p=u=>n.ability===u?"selected":"";g.innerHTML=`
             <div style="display:flex; align-items:center; gap:8px; flex:1;">
-                <input type="checkbox" class="tool-show" title="Show on Sheet" ${isShow ? 'checked' : ''} style="cursor:pointer; accent-color: var(--color-gold-base);">
-                <input type="checkbox" class="tool-prof" title="Proficient" ${isProf ? 'checked' : ''} style="cursor:pointer;">
-                <input type="checkbox" class="tool-exp" title="Expertise" ${isExp ? 'checked' : ''} style="cursor:pointer; border-radius:50%;">
-                ${
-                    isCustom
-                        ? `<input type="text" class="tool-name" value="${toolName}" style="width:140px; background:transparent; border:none; border-bottom:1px solid var(--color-border-subtle); color:var(--color-text-primary);">`
-                        : `<span class="tool-name-static" style="width:140px; font-size:0.85rem; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="${toolName}">${toolName}</span>`
-                }
+                <input type="checkbox" class="tool-show" title="Show on Sheet" ${v?"checked":""} style="cursor:pointer; accent-color: var(--color-gold-base);">
+                <input type="checkbox" class="tool-prof" title="Proficient" ${c?"checked":""} style="cursor:pointer;">
+                <input type="checkbox" class="tool-exp" title="Expertise" ${m?"checked":""} style="cursor:pointer; border-radius:50%;">
+                ${i?`<input type="text" class="tool-name" value="${e}" style="width:140px; background:transparent; border:none; border-bottom:1px solid var(--color-border-subtle); color:var(--color-text-primary);">`:`<span class="tool-name-static" style="width:140px; font-size:0.85rem; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="${e}">${e}</span>`}
                 <select class="tool-ability" style="background:#222; color:#fff; border:1px solid var(--color-border-subtle); border-radius:4px; padding:2px;">
-                    <option value="str" ${selAb('str')}>STR</option>
-                    <option value="dex" ${selAb('dex')}>DEX</option>
-                    <option value="con" ${selAb('con')}>CON</option>
-                    <option value="int" ${selAb('int')}>INT</option>
-                    <option value="wis" ${selAb('wis')}>WIS</option>
-                    <option value="cha" ${selAb('cha')}>CHA</option>
+                    <option value="str" ${p("str")}>STR</option>
+                    <option value="dex" ${p("dex")}>DEX</option>
+                    <option value="con" ${p("con")}>CON</option>
+                    <option value="int" ${p("int")}>INT</option>
+                    <option value="wis" ${p("wis")}>WIS</option>
+                    <option value="cha" ${p("cha")}>CHA</option>
                 </select>
             </div>
             <div style="display:flex; gap:6px;">
-                <input type="text" class="tool-mod" value="${tData.mod || '0'}" style="width:40px; text-align:center; font-size:0.85rem; background:transparent; border:none; border-bottom:1px solid var(--color-border-subtle); color:var(--color-text-primary);" placeholder="Mod">
-                ${isCustom ? `<button class="btn btn-danger btn-xxs tool-delete" style="padding:2px 6px;"><i class="fa-solid fa-trash"></i></button>` : '<div style="width:24px;"></div>'}
+                <input type="text" class="tool-mod" value="${n.mod||"0"}" style="width:40px; text-align:center; font-size:0.85rem; background:transparent; border:none; border-bottom:1px solid var(--color-border-subtle); color:var(--color-text-primary);" placeholder="Mod">
+                ${i?'<button class="btn btn-danger btn-xxs tool-delete" style="padding:2px 6px;"><i class="fa-solid fa-trash"></i></button>':'<div style="width:24px;"></div>'}
             </div>
-        `;
-            list.appendChild(div);
-
-            if (isCustom) {
-                div.querySelector('.tool-delete')?.addEventListener('click', () => {
-                    div.remove();
-                });
-            }
-        });
-
-    document.getElementById('pc-tool-settings-modal')?.classList.remove('vtt-hidden');
-    document.getElementById('pc-tool-settings-overlay')?.classList.remove('vtt-hidden');
-}
-
-// ─── 4. HP SETTINGS & TOGGLES ─────────────────────────────────────────────────
-
-function updateHpModalPreview(char) {
-    const el = document.getElementById('modal-hp-effective-preview');
-    if (el && char) {
-        el.textContent = `${char.hpCurrent || 0} / ${char.hpMax || 0}`;
-    }
-}
-
-export function renderHpTogglesList(char, options = {}) {
-    const list = document.getElementById('modal-hp-toggles-list');
-    if (!list) return;
-    if (!char || !char.hpToggles) return;
-
-    let html = '';
-    char.hpToggles.forEach((t, i) => {
-        const cleanF = (t.formula || '').toString().trim();
-        const displayF = cleanF.startsWith('+') || cleanF.startsWith('-') ? cleanF : `+${cleanF}`;
-        html += `
+        `,d.appendChild(g),i&&g.querySelector(".tool-delete")?.addEventListener("click",()=>{g.remove()})}),document.getElementById("pc-tool-settings-modal")?.classList.remove("vtt-hidden"),document.getElementById("pc-tool-settings-overlay")?.classList.remove("vtt-hidden")}function k(t){const s=document.getElementById("modal-hp-effective-preview");s&&t&&(s.textContent=`${t.hpCurrent||0} / ${t.hpMax||0}`)}export function renderHpTogglesList(t,s={}){const d=document.getElementById("modal-hp-toggles-list");if(!d||!t||!t.hpToggles)return;let r="";t.hpToggles.forEach((a,e)=>{const l=(a.formula||"").toString().trim(),o=l.startsWith("+")||l.startsWith("-")?l:`+${l}`;r+=`
             <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.3); padding:6px 8px; border-radius:4px; border:1px solid var(--color-border-subtle);">
                 <div style="display:flex; align-items:center; gap:8px;">
-                    <input type="checkbox" class="hp-toggle-enable-cb" data-idx="${i}" ${t.enabled ? 'checked' : ''}>
-                    <span style="font-weight:bold; font-size:0.85rem;">${t.name}</span>
-                    <span style="color:var(--color-gold-base); font-size:0.8rem;">${displayF} Max HP</span>
+                    <input type="checkbox" class="hp-toggle-enable-cb" data-idx="${e}" ${a.enabled?"checked":""}>
+                    <span style="font-weight:bold; font-size:0.85rem;">${a.name}</span>
+                    <span style="color:var(--color-gold-base); font-size:0.8rem;">${o} Max HP</span>
                 </div>
                 <div style="display:flex; gap:4px;">
-                    <button class="btn btn-xxs btn-secondary hp-toggle-edit-btn" data-idx="${i}"><i class="fa-solid fa-pen"></i></button>
-                    <button class="btn btn-xxs btn-secondary hp-toggle-del-btn" data-idx="${i}"><i class="fa-solid fa-trash"></i></button>
+                    <button class="btn btn-xxs btn-secondary hp-toggle-edit-btn" data-idx="${e}"><i class="fa-solid fa-pen"></i></button>
+                    <button class="btn btn-xxs btn-secondary hp-toggle-del-btn" data-idx="${e}"><i class="fa-solid fa-trash"></i></button>
                 </div>
             </div>
-        `;
-    });
-    list.innerHTML = html;
-
-    list.querySelectorAll('.hp-toggle-enable-cb').forEach((cb) =>
-        cb.addEventListener('change', (e) => {
-            const idx = e.currentTarget.dataset.idx;
-            char.hpToggles[idx].enabled = e.currentTarget.checked;
-            calculateEffectiveHp(char);
-            options.saveAndEmit?.(char);
-            options.renderSheetData?.(char);
-            updateHpModalPreview(char);
-        })
-    );
-
-    list.querySelectorAll('.hp-toggle-edit-btn').forEach((btn) =>
-        btn.addEventListener('click', (e) => {
-            const idx = e.currentTarget.dataset.idx;
-            const t = char.hpToggles[idx];
-            const idxEl = document.getElementById('modal-hp-toggle-idx');
-            const nameEl = document.getElementById('modal-hp-toggle-name');
-            const formulaEl = document.getElementById('modal-hp-toggle-formula');
-            if (idxEl) idxEl.value = idx;
-            if (nameEl) nameEl.value = t.name;
-            if (formulaEl) formulaEl.value = t.formula;
-            document.getElementById('modal-hp-toggle-form')?.classList.remove('vtt-hidden');
-            document.getElementById('btn-add-hp-toggle')?.classList.add('vtt-hidden');
-        })
-    );
-
-    list.querySelectorAll('.hp-toggle-del-btn').forEach((btn) =>
-        btn.addEventListener('click', (e) => {
-            if (confirm('Delete this toggle?')) {
-                const idx = e.currentTarget.dataset.idx;
-                char.hpToggles.splice(idx, 1);
-                calculateEffectiveHp(char);
-                options.saveAndEmit?.(char);
-                options.renderSheetData?.(char);
-                updateHpModalPreview(char);
-                renderHpTogglesList(char, options);
-            }
-        })
-    );
-}
-
-export function setupHpSettingsListeners(options = {}) {
-    const {
-        getCurrentChar = () => window.currentChar,
-        saveAndEmit = (c) => window.saveAndEmit?.(c),
-        renderSheetData = (c) => window.renderSheetData?.(c)
-    } = options;
-
-    const closeHpSettings = () => {
-        document.getElementById('pc-hp-settings-modal')?.classList.add('vtt-hidden');
-        document.getElementById('pc-hp-settings-overlay')?.classList.add('vtt-hidden');
-    };
-
-    document.getElementById('modal-hp-settings-close')?.addEventListener('click', closeHpSettings);
-    document.getElementById('pc-hp-settings-overlay')?.addEventListener('click', closeHpSettings);
-
-    document.getElementById('btn-add-hp-toggle')?.addEventListener('click', () => {
-        const idxEl = document.getElementById('modal-hp-toggle-idx');
-        const nameEl = document.getElementById('modal-hp-toggle-name');
-        const formulaEl = document.getElementById('modal-hp-toggle-formula');
-        if (idxEl) idxEl.value = '-1';
-        if (nameEl) nameEl.value = '';
-        if (formulaEl) formulaEl.value = '';
-        document.getElementById('modal-hp-toggle-form')?.classList.remove('vtt-hidden');
-        document.getElementById('btn-add-hp-toggle')?.classList.add('vtt-hidden');
-    });
-
-    document.getElementById('modal-hp-toggle-cancel')?.addEventListener('click', () => {
-        document.getElementById('modal-hp-toggle-form')?.classList.add('vtt-hidden');
-        document.getElementById('btn-add-hp-toggle')?.classList.remove('vtt-hidden');
-    });
-
-    document.getElementById('modal-hp-toggle-save')?.addEventListener('click', () => {
-        const currentChar = getCurrentChar();
-        if (!currentChar) return;
-        if (!currentChar.hpToggles) currentChar.hpToggles = [];
-
-        const idx = parseInt(document.getElementById('modal-hp-toggle-idx')?.value || '-1');
-        const name = document.getElementById('modal-hp-toggle-name')?.value.trim();
-        const formula = document.getElementById('modal-hp-toggle-formula')?.value.trim();
-        if (!name || !formula) return alert('Name and Formula are required.');
-
-        const t = { id: 'hptgl_' + Date.now(), name, formula, enabled: true };
-        if (idx >= 0) {
-            currentChar.hpToggles[idx] = t;
-        } else {
-            currentChar.hpToggles.push(t);
-        }
-        document.getElementById('modal-hp-toggle-form')?.classList.add('vtt-hidden');
-        document.getElementById('btn-add-hp-toggle')?.classList.remove('vtt-hidden');
-        calculateEffectiveHp(currentChar);
-        saveAndEmit(currentChar);
-        renderSheetData(currentChar);
-        updateHpModalPreview(currentChar);
-        renderHpTogglesList(currentChar, options);
-    });
-
-    document.getElementById('modal-hp-settings-save')?.addEventListener('click', () => {
-        const currentChar = getCurrentChar();
-        if (!currentChar) return;
-
-        const baseVal = parseInt(document.getElementById('modal-hp-base-max')?.value);
-        if (!isNaN(baseVal)) {
-            currentChar.baseHpMax = Math.max(1, baseVal);
-        }
-        calculateEffectiveHp(currentChar);
-        saveAndEmit(currentChar);
-        renderSheetData(currentChar);
-        closeHpSettings();
-    });
-}
-
-export function ensureHpSettingsModalExists(options = {}) {
-    if (document.getElementById('pc-hp-settings-modal')) return;
-
-    const container = document.createElement('div');
-    container.innerHTML = `
+        `}),d.innerHTML=r,d.querySelectorAll(".hp-toggle-enable-cb").forEach(a=>a.addEventListener("change",e=>{const l=e.currentTarget.dataset.idx;t.hpToggles[l].enabled=e.currentTarget.checked,h(t),s.saveAndEmit?.(t),s.renderSheetData?.(t),k(t)})),d.querySelectorAll(".hp-toggle-edit-btn").forEach(a=>a.addEventListener("click",e=>{const l=e.currentTarget.dataset.idx,o=t.hpToggles[l],n=document.getElementById("modal-hp-toggle-idx"),i=document.getElementById("modal-hp-toggle-name"),c=document.getElementById("modal-hp-toggle-formula");n&&(n.value=l),i&&(i.value=o.name),c&&(c.value=o.formula),document.getElementById("modal-hp-toggle-form")?.classList.remove("vtt-hidden"),document.getElementById("btn-add-hp-toggle")?.classList.add("vtt-hidden")})),d.querySelectorAll(".hp-toggle-del-btn").forEach(a=>a.addEventListener("click",e=>{if(confirm("Delete this toggle?")){const l=e.currentTarget.dataset.idx;t.hpToggles.splice(l,1),h(t),s.saveAndEmit?.(t),s.renderSheetData?.(t),k(t),renderHpTogglesList(t,s)}}))}export function setupHpSettingsListeners(t={}){const{getCurrentChar:s=()=>window.currentChar,saveAndEmit:d=e=>window.saveAndEmit?.(e),renderSheetData:r=e=>window.renderSheetData?.(e)}=t,a=()=>{document.getElementById("pc-hp-settings-modal")?.classList.add("vtt-hidden"),document.getElementById("pc-hp-settings-overlay")?.classList.add("vtt-hidden")};document.getElementById("modal-hp-settings-close")?.addEventListener("click",a),document.getElementById("pc-hp-settings-overlay")?.addEventListener("click",a),document.getElementById("btn-add-hp-toggle")?.addEventListener("click",()=>{const e=document.getElementById("modal-hp-toggle-idx"),l=document.getElementById("modal-hp-toggle-name"),o=document.getElementById("modal-hp-toggle-formula");e&&(e.value="-1"),l&&(l.value=""),o&&(o.value=""),document.getElementById("modal-hp-toggle-form")?.classList.remove("vtt-hidden"),document.getElementById("btn-add-hp-toggle")?.classList.add("vtt-hidden")}),document.getElementById("modal-hp-toggle-cancel")?.addEventListener("click",()=>{document.getElementById("modal-hp-toggle-form")?.classList.add("vtt-hidden"),document.getElementById("btn-add-hp-toggle")?.classList.remove("vtt-hidden")}),document.getElementById("modal-hp-toggle-save")?.addEventListener("click",()=>{const e=s();if(!e)return;e.hpToggles||(e.hpToggles=[]);const l=parseInt(document.getElementById("modal-hp-toggle-idx")?.value||"-1"),o=document.getElementById("modal-hp-toggle-name")?.value.trim(),n=document.getElementById("modal-hp-toggle-formula")?.value.trim();if(!o||!n)return alert("Name and Formula are required.");const i={id:"hptgl_"+Date.now(),name:o,formula:n,enabled:!0};l>=0?e.hpToggles[l]=i:e.hpToggles.push(i),document.getElementById("modal-hp-toggle-form")?.classList.add("vtt-hidden"),document.getElementById("btn-add-hp-toggle")?.classList.remove("vtt-hidden"),h(e),d(e),r(e),k(e),renderHpTogglesList(e,t)}),document.getElementById("modal-hp-settings-save")?.addEventListener("click",()=>{const e=s();if(!e)return;const l=parseInt(document.getElementById("modal-hp-base-max")?.value);isNaN(l)||(e.baseHpMax=Math.max(1,l)),h(e),d(e),r(e),a()})}export function ensureHpSettingsModalExists(t={}){if(document.getElementById("pc-hp-settings-modal"))return;const s=document.createElement("div");s.innerHTML=`
         <div id="pc-hp-settings-overlay" class="vtt-sheet-submodal-overlay vtt-hidden"></div>
         <div id="pc-hp-settings-modal" class="vtt-sheet-submodal vtt-hidden" style="width:480px;">
             <div style="padding:16px; border-bottom:1px solid var(--color-border-subtle); display:flex; justify-content:space-between; align-items:center;">
@@ -921,182 +290,19 @@ export function ensureHpSettingsModalExists(options = {}) {
                 <button id="modal-hp-settings-save" class="btn btn-primary">Save Changes</button>
             </div>
         </div>
-    `;
-    document.body.appendChild(container);
-    setupHpSettingsListeners(options);
-}
-
-export function openHpSettingsModal(char, options = {}) {
-    ensureHpSettingsModalExists(options);
-    if (!char) return;
-
-    if (char.baseHpMax === undefined || char.baseHpMax === null) {
-        char.baseHpMax = parseInt(char.hpMax) || 10;
-    }
-    const baseInput = document.getElementById('modal-hp-base-max');
-    if (baseInput) baseInput.value = char.baseHpMax;
-
-    updateHpModalPreview(char);
-    renderHpTogglesList(char, options);
-
-    document.getElementById('pc-hp-settings-modal')?.classList.remove('vtt-hidden');
-    document.getElementById('pc-hp-settings-overlay')?.classList.remove('vtt-hidden');
-}
-
-// ─── 5. AC SETTINGS & TOGGLES ─────────────────────────────────────────────────
-
-function updateAcModalPreview(char) {
-    const el = document.getElementById('modal-ac-effective-preview');
-    if (el && char) {
-        el.textContent = `${char.ac || 10}`;
-    }
-}
-
-export function renderAcTogglesList(char, options = {}) {
-    const list = document.getElementById('modal-ac-toggles-list');
-    if (!list) return;
-    if (!char || !char.acToggles) return;
-
-    let html = '';
-    char.acToggles.forEach((t, i) => {
-        const cleanF = (t.formula || '').toString().trim();
-        const displayF = cleanF.startsWith('+') || cleanF.startsWith('-') ? cleanF : `+${cleanF}`;
-        html += `
+    `,document.body.appendChild(s),setupHpSettingsListeners(t)}export function openHpSettingsModal(t,s={}){if(ensureHpSettingsModalExists(s),!t)return;(t.baseHpMax===void 0||t.baseHpMax===null)&&(t.baseHpMax=parseInt(t.hpMax)||10);const d=document.getElementById("modal-hp-base-max");d&&(d.value=t.baseHpMax),k(t),renderHpTogglesList(t,s),document.getElementById("pc-hp-settings-modal")?.classList.remove("vtt-hidden"),document.getElementById("pc-hp-settings-overlay")?.classList.remove("vtt-hidden")}function I(t){const s=document.getElementById("modal-ac-effective-preview");s&&t&&(s.textContent=`${t.ac||10}`)}export function renderAcTogglesList(t,s={}){const d=document.getElementById("modal-ac-toggles-list");if(!d||!t||!t.acToggles)return;let r="";t.acToggles.forEach((a,e)=>{const l=(a.formula||"").toString().trim(),o=l.startsWith("+")||l.startsWith("-")?l:`+${l}`;r+=`
             <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.3); padding:6px 8px; border-radius:4px; border:1px solid var(--color-border-subtle);">
                 <div style="display:flex; align-items:center; gap:8px;">
-                    <input type="checkbox" class="ac-toggle-enable-cb" data-idx="${i}" ${t.enabled ? 'checked' : ''}>
-                    <span style="font-weight:bold; font-size:0.85rem;">${t.name}</span>
-                    <span style="color:var(--color-gold-base); font-size:0.8rem;">${displayF} AC</span>
+                    <input type="checkbox" class="ac-toggle-enable-cb" data-idx="${e}" ${a.enabled?"checked":""}>
+                    <span style="font-weight:bold; font-size:0.85rem;">${a.name}</span>
+                    <span style="color:var(--color-gold-base); font-size:0.8rem;">${o} AC</span>
                 </div>
                 <div style="display:flex; gap:4px;">
-                    <button class="btn btn-xxs btn-secondary ac-toggle-edit-btn" data-idx="${i}"><i class="fa-solid fa-pen"></i></button>
-                    <button class="btn btn-xxs btn-secondary ac-toggle-del-btn" data-idx="${i}"><i class="fa-solid fa-trash"></i></button>
+                    <button class="btn btn-xxs btn-secondary ac-toggle-edit-btn" data-idx="${e}"><i class="fa-solid fa-pen"></i></button>
+                    <button class="btn btn-xxs btn-secondary ac-toggle-del-btn" data-idx="${e}"><i class="fa-solid fa-trash"></i></button>
                 </div>
             </div>
-        `;
-    });
-    list.innerHTML = html;
-
-    list.querySelectorAll('.ac-toggle-enable-cb').forEach((cb) =>
-        cb.addEventListener('change', (e) => {
-            const idx = e.currentTarget.dataset.idx;
-            char.acToggles[idx].enabled = e.currentTarget.checked;
-            calculateEffectiveAc(char);
-            options.saveAndEmit?.(char);
-            options.renderSheetData?.(char);
-            updateAcModalPreview(char);
-        })
-    );
-
-    list.querySelectorAll('.ac-toggle-edit-btn').forEach((btn) =>
-        btn.addEventListener('click', (e) => {
-            const idx = e.currentTarget.dataset.idx;
-            const t = char.acToggles[idx];
-            const idxEl = document.getElementById('modal-ac-toggle-idx');
-            const nameEl = document.getElementById('modal-ac-toggle-name');
-            const formulaEl = document.getElementById('modal-ac-toggle-formula');
-            if (idxEl) idxEl.value = idx;
-            if (nameEl) nameEl.value = t.name;
-            if (formulaEl) formulaEl.value = t.formula;
-            document.getElementById('modal-ac-toggle-form')?.classList.remove('vtt-hidden');
-            document.getElementById('btn-add-ac-toggle')?.classList.add('vtt-hidden');
-        })
-    );
-
-    list.querySelectorAll('.ac-toggle-del-btn').forEach((btn) =>
-        btn.addEventListener('click', (e) => {
-            if (confirm('Delete this toggle?')) {
-                const idx = e.currentTarget.dataset.idx;
-                char.acToggles.splice(idx, 1);
-                calculateEffectiveAc(char);
-                options.saveAndEmit?.(char);
-                options.renderSheetData?.(char);
-                updateAcModalPreview(char);
-                renderAcTogglesList(char, options);
-            }
-        })
-    );
-}
-
-export function setupAcSettingsListeners(options = {}) {
-    const {
-        getCurrentChar = () => window.currentChar,
-        saveAndEmit = (c) => window.saveAndEmit?.(c),
-        renderSheetData = (c) => window.renderSheetData?.(c)
-    } = options;
-
-    const closeAcSettings = () => {
-        document.getElementById('pc-ac-settings-modal')?.classList.add('vtt-hidden');
-        document.getElementById('pc-ac-settings-overlay')?.classList.add('vtt-hidden');
-    };
-
-    document.getElementById('modal-ac-settings-close')?.addEventListener('click', closeAcSettings);
-    document.getElementById('pc-ac-settings-overlay')?.addEventListener('click', closeAcSettings);
-
-    document.getElementById('btn-add-ac-toggle')?.addEventListener('click', () => {
-        const idxEl = document.getElementById('modal-ac-toggle-idx');
-        const nameEl = document.getElementById('modal-ac-toggle-name');
-        const formulaEl = document.getElementById('modal-ac-toggle-formula');
-        if (idxEl) idxEl.value = '-1';
-        if (nameEl) nameEl.value = '';
-        if (formulaEl) formulaEl.value = '';
-        document.getElementById('modal-ac-toggle-form')?.classList.remove('vtt-hidden');
-        document.getElementById('btn-add-ac-toggle')?.classList.add('vtt-hidden');
-    });
-
-    document.getElementById('modal-ac-toggle-cancel')?.addEventListener('click', () => {
-        document.getElementById('modal-ac-toggle-form')?.classList.add('vtt-hidden');
-        document.getElementById('btn-add-ac-toggle')?.classList.remove('vtt-hidden');
-    });
-
-    document.getElementById('modal-ac-toggle-save')?.addEventListener('click', () => {
-        const currentChar = getCurrentChar();
-        if (!currentChar) return;
-        if (!currentChar.acToggles) currentChar.acToggles = [];
-
-        const idx = parseInt(document.getElementById('modal-ac-toggle-idx')?.value || '-1');
-        const name = document.getElementById('modal-ac-toggle-name')?.value.trim();
-        const formula = document.getElementById('modal-ac-toggle-formula')?.value.trim();
-        if (!name || !formula) return alert('Name and Formula are required.');
-
-        const t = { id: 'actgl_' + Date.now(), name, formula, enabled: true };
-        if (idx >= 0) {
-            currentChar.acToggles[idx] = t;
-        } else {
-            currentChar.acToggles.push(t);
-        }
-        document.getElementById('modal-ac-toggle-form')?.classList.add('vtt-hidden');
-        document.getElementById('btn-add-ac-toggle')?.classList.remove('vtt-hidden');
-        calculateEffectiveAc(currentChar);
-        saveAndEmit(currentChar);
-        renderSheetData(currentChar);
-        updateAcModalPreview(currentChar);
-        renderAcTogglesList(currentChar, options);
-    });
-
-    document.getElementById('modal-ac-settings-save')?.addEventListener('click', () => {
-        const currentChar = getCurrentChar();
-        if (!currentChar) return;
-
-        const baseVal = parseInt(document.getElementById('modal-ac-base')?.value);
-        if (!isNaN(baseVal)) {
-            currentChar.baseAc = Math.max(1, baseVal);
-        }
-        const modVal = parseInt(document.getElementById('modal-ac-mod')?.value);
-        currentChar.acMod = isNaN(modVal) ? 0 : modVal;
-
-        calculateEffectiveAc(currentChar);
-        saveAndEmit(currentChar);
-        renderSheetData(currentChar);
-        closeAcSettings();
-    });
-}
-
-export function ensureAcSettingsModalExists(options = {}) {
-    if (document.getElementById('pc-ac-settings-modal')) return;
-
-    const container = document.createElement('div');
-    container.innerHTML = `
+        `}),d.innerHTML=r,d.querySelectorAll(".ac-toggle-enable-cb").forEach(a=>a.addEventListener("change",e=>{const l=e.currentTarget.dataset.idx;t.acToggles[l].enabled=e.currentTarget.checked,E(t),s.saveAndEmit?.(t),s.renderSheetData?.(t),I(t)})),d.querySelectorAll(".ac-toggle-edit-btn").forEach(a=>a.addEventListener("click",e=>{const l=e.currentTarget.dataset.idx,o=t.acToggles[l],n=document.getElementById("modal-ac-toggle-idx"),i=document.getElementById("modal-ac-toggle-name"),c=document.getElementById("modal-ac-toggle-formula");n&&(n.value=l),i&&(i.value=o.name),c&&(c.value=o.formula),document.getElementById("modal-ac-toggle-form")?.classList.remove("vtt-hidden"),document.getElementById("btn-add-ac-toggle")?.classList.add("vtt-hidden")})),d.querySelectorAll(".ac-toggle-del-btn").forEach(a=>a.addEventListener("click",e=>{if(confirm("Delete this toggle?")){const l=e.currentTarget.dataset.idx;t.acToggles.splice(l,1),E(t),s.saveAndEmit?.(t),s.renderSheetData?.(t),I(t),renderAcTogglesList(t,s)}}))}export function setupAcSettingsListeners(t={}){const{getCurrentChar:s=()=>window.currentChar,saveAndEmit:d=e=>window.saveAndEmit?.(e),renderSheetData:r=e=>window.renderSheetData?.(e)}=t,a=()=>{document.getElementById("pc-ac-settings-modal")?.classList.add("vtt-hidden"),document.getElementById("pc-ac-settings-overlay")?.classList.add("vtt-hidden")};document.getElementById("modal-ac-settings-close")?.addEventListener("click",a),document.getElementById("pc-ac-settings-overlay")?.addEventListener("click",a),document.getElementById("btn-add-ac-toggle")?.addEventListener("click",()=>{const e=document.getElementById("modal-ac-toggle-idx"),l=document.getElementById("modal-ac-toggle-name"),o=document.getElementById("modal-ac-toggle-formula");e&&(e.value="-1"),l&&(l.value=""),o&&(o.value=""),document.getElementById("modal-ac-toggle-form")?.classList.remove("vtt-hidden"),document.getElementById("btn-add-ac-toggle")?.classList.add("vtt-hidden")}),document.getElementById("modal-ac-toggle-cancel")?.addEventListener("click",()=>{document.getElementById("modal-ac-toggle-form")?.classList.add("vtt-hidden"),document.getElementById("btn-add-ac-toggle")?.classList.remove("vtt-hidden")}),document.getElementById("modal-ac-toggle-save")?.addEventListener("click",()=>{const e=s();if(!e)return;e.acToggles||(e.acToggles=[]);const l=parseInt(document.getElementById("modal-ac-toggle-idx")?.value||"-1"),o=document.getElementById("modal-ac-toggle-name")?.value.trim(),n=document.getElementById("modal-ac-toggle-formula")?.value.trim();if(!o||!n)return alert("Name and Formula are required.");const i={id:"actgl_"+Date.now(),name:o,formula:n,enabled:!0};l>=0?e.acToggles[l]=i:e.acToggles.push(i),document.getElementById("modal-ac-toggle-form")?.classList.add("vtt-hidden"),document.getElementById("btn-add-ac-toggle")?.classList.remove("vtt-hidden"),E(e),d(e),r(e),I(e),renderAcTogglesList(e,t)}),document.getElementById("modal-ac-settings-save")?.addEventListener("click",()=>{const e=s();if(!e)return;const l=parseInt(document.getElementById("modal-ac-base")?.value);isNaN(l)||(e.baseAc=Math.max(1,l));const o=parseInt(document.getElementById("modal-ac-mod")?.value);e.acMod=isNaN(o)?0:o,E(e),d(e),r(e),a()})}export function ensureAcSettingsModalExists(t={}){if(document.getElementById("pc-ac-settings-modal"))return;const s=document.createElement("div");s.innerHTML=`
         <div id="pc-ac-settings-overlay" class="vtt-sheet-submodal-overlay vtt-hidden"></div>
         <div id="pc-ac-settings-modal" class="vtt-sheet-submodal vtt-hidden" style="width:480px;">
             <div style="padding:16px; border-bottom:1px solid var(--color-border-subtle); display:flex; justify-content:space-between; align-items:center;">
@@ -1143,114 +349,7 @@ export function ensureAcSettingsModalExists(options = {}) {
                 <button id="modal-ac-settings-save" class="btn btn-primary">Save Changes</button>
             </div>
         </div>
-    `;
-    document.body.appendChild(container);
-    setupAcSettingsListeners(options);
-}
-
-export function openAcSettingsModal(char, options = {}) {
-    ensureAcSettingsModalExists(options);
-    if (!char) return;
-
-    if (char.baseAc === undefined || char.baseAc === null) {
-        char.baseAc = parseInt(char.ac) || 10;
-    }
-    const baseInput = document.getElementById('modal-ac-base');
-    if (baseInput) baseInput.value = char.baseAc;
-    const modInput = document.getElementById('modal-ac-mod');
-    if (modInput) modInput.value = char.acMod || 0;
-
-    updateAcModalPreview(char);
-    renderAcTogglesList(char, options);
-
-    document.getElementById('pc-ac-settings-modal')?.classList.remove('vtt-hidden');
-    document.getElementById('pc-ac-settings-overlay')?.classList.remove('vtt-hidden');
-}
-
-/**
- * Character Sheet General Settings Modal (Elven Accuracy, Carry Weight, Halfling Lucky, Crit Threshold)
- */
-let currentSheetSettingsChar = null;
-let currentSheetSettingsOptions = {};
-
-function closeSheetSettings() {
-    document.getElementById('pc-sheet-settings-modal')?.classList.add('vtt-hidden');
-    document.getElementById('pc-sheet-settings-overlay')?.classList.add('vtt-hidden');
-    currentSheetSettingsChar = null;
-}
-
-function setupSheetSettingsListeners(options = {}) {
-    const overlay = document.getElementById('pc-sheet-settings-overlay');
-    const closeBtn = document.getElementById('modal-sheet-settings-close');
-    const cancelBtn = document.getElementById('modal-sheet-settings-cancel');
-    const saveBtn = document.getElementById('modal-sheet-settings-save');
-
-    overlay?.addEventListener('click', closeSheetSettings);
-    closeBtn?.addEventListener('click', closeSheetSettings);
-    cancelBtn?.addEventListener('click', closeSheetSettings);
-
-    document.querySelectorAll('.pc-carry-mult-pill').forEach((pill) => {
-        pill.addEventListener('click', (e) => {
-            const val = e.currentTarget.dataset.mult;
-            const input = document.getElementById('modal-sheet-setting-carry-mult');
-            if (input && val) input.value = val;
-        });
-    });
-
-    document.querySelectorAll('.pc-crit-range-pill').forEach((pill) => {
-        pill.addEventListener('click', (e) => {
-            const val = e.currentTarget.dataset.crit;
-            const input = document.getElementById('modal-sheet-setting-crit-range');
-            if (input && val) input.value = val;
-        });
-    });
-
-    saveBtn?.addEventListener('click', () => {
-        if (!currentSheetSettingsChar) return;
-        const char = currentSheetSettingsChar;
-        char.settings = char.settings || {};
-
-        const elvenAccuracy = Boolean(document.getElementById('modal-sheet-setting-elven-accuracy')?.checked);
-        const carryMultRaw = parseFloat(document.getElementById('modal-sheet-setting-carry-mult')?.value);
-        const carryWeightMultiplier = Math.max(0.1, isNaN(carryMultRaw) ? 1 : carryMultRaw);
-        const halflingLucky = Boolean(document.getElementById('modal-sheet-setting-halfling-lucky')?.checked);
-        const critRangeRaw = parseInt(document.getElementById('modal-sheet-setting-crit-range')?.value, 10);
-        const critRange = Math.max(1, Math.min(20, isNaN(critRangeRaw) ? 20 : critRangeRaw));
-        const brutalCritical = Boolean(document.getElementById('modal-sheet-setting-brutal-critical')?.checked);
-        const brutalDiceRaw = parseInt(document.getElementById('modal-sheet-setting-brutal-crit-dice')?.value, 10);
-        const brutalCritDice = Math.max(1, Math.min(10, isNaN(brutalDiceRaw) ? 1 : brutalDiceRaw));
-        const reliableTalent = Boolean(document.getElementById('modal-sheet-setting-reliable-talent')?.checked);
-        const jackOfAllTrades = Boolean(document.getElementById('modal-sheet-setting-jack-of-all-trades')?.checked);
-
-        char.settings.elvenAccuracy = elvenAccuracy;
-        char.settings.carryWeightMultiplier = carryWeightMultiplier;
-        char.settings.halflingLucky = halflingLucky;
-        char.settings.critRange = critRange;
-        char.settings.brutalCritical = brutalCritical;
-        char.settings.brutalCritDice = brutalCritDice;
-        char.settings.reliableTalent = reliableTalent;
-        char.settings.jackOfAllTrades = jackOfAllTrades;
-
-        // Sync with root properties for compatibility
-        char.carryWeightMultiplier = carryWeightMultiplier;
-        char.attackSettings = char.attackSettings || {};
-        char.attackSettings.critRange = critRange;
-        char.spellSettings = char.spellSettings || {};
-        char.spellSettings.critRange = critRange;
-
-        const { saveAndEmit, renderSheetData } = currentSheetSettingsOptions;
-        if (typeof saveAndEmit === 'function') saveAndEmit(char);
-        if (typeof renderSheetData === 'function') renderSheetData(char);
-
-        closeSheetSettings();
-    });
-}
-
-export function ensureSheetSettingsModalExists(options = {}) {
-    if (document.getElementById('pc-sheet-settings-modal')) return;
-
-    const container = document.createElement('div');
-    container.innerHTML = `
+    `,document.body.appendChild(s),setupAcSettingsListeners(t)}export function openAcSettingsModal(t,s={}){if(ensureAcSettingsModalExists(s),!t)return;(t.baseAc===void 0||t.baseAc===null)&&(t.baseAc=parseInt(t.ac)||10);const d=document.getElementById("modal-ac-base");d&&(d.value=t.baseAc);const r=document.getElementById("modal-ac-mod");r&&(r.value=t.acMod||0),I(t),renderAcTogglesList(t,s),document.getElementById("pc-ac-settings-modal")?.classList.remove("vtt-hidden"),document.getElementById("pc-ac-settings-overlay")?.classList.remove("vtt-hidden")}let B=null,M={};function w(){document.getElementById("pc-sheet-settings-modal")?.classList.add("vtt-hidden"),document.getElementById("pc-sheet-settings-overlay")?.classList.add("vtt-hidden"),B=null}function C(t={}){const s=document.getElementById("pc-sheet-settings-overlay"),d=document.getElementById("modal-sheet-settings-close"),r=document.getElementById("modal-sheet-settings-cancel"),a=document.getElementById("modal-sheet-settings-save");s?.addEventListener("click",w),d?.addEventListener("click",w),r?.addEventListener("click",w),document.querySelectorAll(".pc-carry-mult-pill").forEach(e=>{e.addEventListener("click",l=>{const o=l.currentTarget.dataset.mult,n=document.getElementById("modal-sheet-setting-carry-mult");n&&o&&(n.value=o)})}),document.querySelectorAll(".pc-crit-range-pill").forEach(e=>{e.addEventListener("click",l=>{const o=l.currentTarget.dataset.crit,n=document.getElementById("modal-sheet-setting-crit-range");n&&o&&(n.value=o)})}),a?.addEventListener("click",()=>{if(!B)return;const e=B;e.settings=e.settings||{};const l=!!document.getElementById("modal-sheet-setting-elven-accuracy")?.checked,o=parseFloat(document.getElementById("modal-sheet-setting-carry-mult")?.value),n=Math.max(.1,isNaN(o)?1:o),i=!!document.getElementById("modal-sheet-setting-halfling-lucky")?.checked,c=parseInt(document.getElementById("modal-sheet-setting-crit-range")?.value,10),m=Math.max(1,Math.min(20,isNaN(c)?20:c)),v=!!document.getElementById("modal-sheet-setting-brutal-critical")?.checked,g=parseInt(document.getElementById("modal-sheet-setting-brutal-crit-dice")?.value,10),p=Math.max(1,Math.min(10,isNaN(g)?1:g)),u=!!document.getElementById("modal-sheet-setting-reliable-talent")?.checked,x=!!document.getElementById("modal-sheet-setting-jack-of-all-trades")?.checked;e.settings.elvenAccuracy=l,e.settings.carryWeightMultiplier=n,e.settings.halflingLucky=i,e.settings.critRange=m,e.settings.brutalCritical=v,e.settings.brutalCritDice=p,e.settings.reliableTalent=u,e.settings.jackOfAllTrades=x,e.carryWeightMultiplier=n,e.attackSettings=e.attackSettings||{},e.attackSettings.critRange=m,e.spellSettings=e.spellSettings||{},e.spellSettings.critRange=m;const{saveAndEmit:y,renderSheetData:L}=M;typeof y=="function"&&y(e),typeof L=="function"&&L(e),w()})}export function ensureSheetSettingsModalExists(t={}){if(document.getElementById("pc-sheet-settings-modal"))return;const s=document.createElement("div");s.innerHTML=`
         <div id="pc-sheet-settings-overlay" class="vtt-sheet-submodal-overlay vtt-hidden"></div>
         <div id="pc-sheet-settings-modal" class="vtt-sheet-submodal vtt-hidden" style="width:520px; max-width:95vw;">
             <div style="padding:16px; border-bottom:1px solid var(--color-border-subtle); display:flex; justify-content:space-between; align-items:center;">
@@ -1365,56 +464,4 @@ export function ensureSheetSettingsModalExists(options = {}) {
                 <button type="button" id="modal-sheet-settings-save" class="btn btn-primary">Save Settings</button>
             </div>
         </div>
-    `;
-    document.body.appendChild(container);
-    setupSheetSettingsListeners(options);
-}
-
-export function openSheetSettingsModal(char, options = {}) {
-    ensureSheetSettingsModalExists(options);
-    if (!char) return;
-
-    currentSheetSettingsChar = char;
-    currentSheetSettingsOptions = options;
-
-    if (typeof resolveCharacterSheetSettings === 'function') {
-        resolveCharacterSheetSettings(char);
-    }
-
-    char.settings = char.settings || {};
-    const elvenAccuracy = Boolean(char.settings.elvenAccuracy);
-    const carryMult = char.settings.carryWeightMultiplier || char.carryWeightMultiplier || 1;
-    const halflingLucky = Boolean(char.settings.halflingLucky);
-    const critRange = char.settings.critRange || char.attackSettings?.critRange || 20;
-    const brutalCritical = Boolean(char.settings.brutalCritical);
-    const brutalCritDice = parseInt(char.settings.brutalCritDice) || 1;
-    const reliableTalent = Boolean(char.settings.reliableTalent);
-    const jackOfAllTrades = Boolean(char.settings.jackOfAllTrades);
-
-    const elvenInput = document.getElementById('modal-sheet-setting-elven-accuracy');
-    if (elvenInput) elvenInput.checked = elvenAccuracy;
-
-    const carryInput = document.getElementById('modal-sheet-setting-carry-mult');
-    if (carryInput) carryInput.value = carryMult;
-
-    const luckyInput = document.getElementById('modal-sheet-setting-halfling-lucky');
-    if (luckyInput) luckyInput.checked = halflingLucky;
-
-    const critInput = document.getElementById('modal-sheet-setting-crit-range');
-    if (critInput) critInput.value = critRange;
-
-    const brutalInput = document.getElementById('modal-sheet-setting-brutal-critical');
-    if (brutalInput) brutalInput.checked = brutalCritical;
-
-    const brutalDiceInput = document.getElementById('modal-sheet-setting-brutal-crit-dice');
-    if (brutalDiceInput) brutalDiceInput.value = brutalCritDice;
-
-    const reliableInput = document.getElementById('modal-sheet-setting-reliable-talent');
-    if (reliableInput) reliableInput.checked = reliableTalent;
-
-    const jackInput = document.getElementById('modal-sheet-setting-jack-of-all-trades');
-    if (jackInput) jackInput.checked = jackOfAllTrades;
-
-    document.getElementById('pc-sheet-settings-modal')?.classList.remove('vtt-hidden');
-    document.getElementById('pc-sheet-settings-overlay')?.classList.remove('vtt-hidden');
-}
+    `,document.body.appendChild(s),C(t)}export function openSheetSettingsModal(t,s={}){if(ensureSheetSettingsModalExists(s),!t)return;B=t,M=s,typeof T=="function"&&T(t),t.settings=t.settings||{};const d=!!t.settings.elvenAccuracy,r=t.settings.carryWeightMultiplier||t.carryWeightMultiplier||1,a=!!t.settings.halflingLucky,e=t.settings.critRange||t.attackSettings?.critRange||20,l=!!t.settings.brutalCritical,o=parseInt(t.settings.brutalCritDice)||1,n=!!t.settings.reliableTalent,i=!!t.settings.jackOfAllTrades,c=document.getElementById("modal-sheet-setting-elven-accuracy");c&&(c.checked=d);const m=document.getElementById("modal-sheet-setting-carry-mult");m&&(m.value=r);const v=document.getElementById("modal-sheet-setting-halfling-lucky");v&&(v.checked=a);const g=document.getElementById("modal-sheet-setting-crit-range");g&&(g.value=e);const p=document.getElementById("modal-sheet-setting-brutal-critical");p&&(p.checked=l);const u=document.getElementById("modal-sheet-setting-brutal-crit-dice");u&&(u.value=o);const x=document.getElementById("modal-sheet-setting-reliable-talent");x&&(x.checked=n);const y=document.getElementById("modal-sheet-setting-jack-of-all-trades");y&&(y.checked=i),document.getElementById("pc-sheet-settings-modal")?.classList.remove("vtt-hidden"),document.getElementById("pc-sheet-settings-overlay")?.classList.remove("vtt-hidden")}

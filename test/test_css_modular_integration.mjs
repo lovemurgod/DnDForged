@@ -73,6 +73,8 @@ test('CSS Decomposition: Theme, Tokens & Colorblind Accessibility', async (t) =>
             '--color-bg-base',
             '--color-gold-base',
             '--color-gold-light',
+            '--color-warning-base',
+            '--color-warning-glow',
             '--color-border-subtle',
             '--font-primary',
             '--font-heading'
@@ -104,12 +106,22 @@ test('CSS Decomposition: Theme, Tokens & Colorblind Accessibility', async (t) =>
         });
     });
 
-    await t.test('All 4 accessibility & colorblind filter selectors are present', () => {
+    await t.test('All 4 accessibility & colorblind filter selectors are present and decoupled from gold accent', () => {
         const expectedFilters = ['protanopia', 'deuteranopia', 'tritanopia', 'achromatopsia'];
         expectedFilters.forEach((filter) => {
+            const selector = `[data-colorblind="${filter}"]`;
+            assert.ok(themeContent.includes(selector), `theme.css must define colorblind selector ${selector}`);
+            const blockMatch = themeContent.match(
+                new RegExp(`\\[data-colorblind="${filter}"\\]\\s*\\{([^}]+)\\}`)
+            );
+            assert.ok(blockMatch, `theme.css must have a CSS rule block for ${selector}`);
             assert.ok(
-                themeContent.includes(`[data-colorblind="${filter}"]`),
-                `theme.css must define colorblind selector [data-colorblind="${filter}"]`
+                blockMatch[1].includes('--color-warning-base'),
+                `${selector} must override --color-warning-base`
+            );
+            assert.ok(
+                !blockMatch[1].includes('--color-gold-base'),
+                `${selector} must not override --color-gold-base`
             );
         });
     });

@@ -203,9 +203,29 @@ export function initVttChat(vtt, chatHistory) {
     // Setup Context Menu for Fast Dice
     setupFastDiceContextMenu();
 
-    // 3D Animated Dice overlay system
+    // 3D Animated Dice overlay system (lazy-loaded unless explicitly disabled)
+    const initDice3D = (dice3d) => {
+        if (!dice3d) return;
+        dice3d.init({ containerId: 'dice-box-canvas-container' });
+        const cfg3dEnable = document.getElementById('config-3d-dice-enable');
+        const cfg3dSkin = document.getElementById('config-3d-dice-skin');
+        const cfg3dSfx = document.getElementById('config-3d-dice-sfx');
+        const cfg3dVol = document.getElementById('config-3d-dice-volume');
+        if (cfg3dEnable) cfg3dEnable.checked = dice3d.isEnabled();
+        if (cfg3dSkin) cfg3dSkin.value = localStorage.getItem('vtt_3d_dice_skin') || 'obsidian_gold';
+        if (cfg3dSfx) {
+            const savedSfx = localStorage.getItem('vtt_3d_dice_sfx');
+            cfg3dSfx.checked = savedSfx === null ? true : savedSfx === 'true';
+        }
+        if (cfg3dVol) {
+            const savedVol = localStorage.getItem('vtt_3d_dice_volume');
+            cfg3dVol.value = savedVol !== null ? Math.round(parseFloat(savedVol) * 100) : 60;
+        }
+    };
     if (window.Dice3D) {
-        window.Dice3D.init({ containerId: 'dice-box-canvas-container' });
+        initDice3D(window.Dice3D);
+    } else if (localStorage.getItem('vtt_3d_dice_enabled') !== 'false' && window.VTT?.utils?.ensureDice3DLoaded) {
+        window.VTT.utils.ensureDice3DLoaded().then(initDice3D);
     }
 
     function parseFormulaToDiceList(formula) {
@@ -478,34 +498,50 @@ export function initVttChat(vtt, chatHistory) {
         const cfg3dSfx = document.getElementById('config-3d-dice-sfx');
         const cfg3dVol = document.getElementById('config-3d-dice-volume');
 
-        if (cfg3dEnable && window.Dice3D) {
-            cfg3dEnable.checked = window.Dice3D.isEnabled();
+        if (cfg3dEnable) {
+            cfg3dEnable.checked = window.Dice3D ? window.Dice3D.isEnabled() : localStorage.getItem('vtt_3d_dice_enabled') !== 'false';
             cfg3dEnable.addEventListener('change', (e) => {
-                window.Dice3D.setEnabled(e.target.checked);
+                const enabled = e.target.checked;
+                if (window.Dice3D) {
+                    window.Dice3D.setEnabled(enabled);
+                } else if (enabled && window.VTT?.utils?.ensureDice3DLoaded) {
+                    window.VTT.utils.ensureDice3DLoaded().then((d) => {
+                        if (d) {
+                            d.init({ containerId: 'dice-box-canvas-container' });
+                            d.setEnabled(true);
+                        }
+                    });
+                } else {
+                    localStorage.setItem('vtt_3d_dice_enabled', String(enabled));
+                }
             });
         }
 
-        if (cfg3dSkin && window.Dice3D) {
+        if (cfg3dSkin) {
             const savedSkin = localStorage.getItem('vtt_3d_dice_skin') || 'obsidian_gold';
             cfg3dSkin.value = savedSkin;
             cfg3dSkin.addEventListener('change', (e) => {
-                window.Dice3D.setSkin(e.target.value);
+                if (window.Dice3D) window.Dice3D.setSkin(e.target.value);
+                else localStorage.setItem('vtt_3d_dice_skin', e.target.value);
             });
         }
 
-        if (cfg3dSfx && window.Dice3D) {
+        if (cfg3dSfx) {
             const savedSfx = localStorage.getItem('vtt_3d_dice_sfx');
             cfg3dSfx.checked = savedSfx === null ? true : savedSfx === 'true';
             cfg3dSfx.addEventListener('change', (e) => {
-                window.Dice3D.setSfxEnabled(e.target.checked);
+                if (window.Dice3D) window.Dice3D.setSfxEnabled(e.target.checked);
+                else localStorage.setItem('vtt_3d_dice_sfx', String(e.target.checked));
             });
         }
 
-        if (cfg3dVol && window.Dice3D) {
+        if (cfg3dVol) {
             const savedVol = localStorage.getItem('vtt_3d_dice_volume');
             cfg3dVol.value = savedVol !== null ? Math.round(parseFloat(savedVol) * 100) : 60;
             cfg3dVol.addEventListener('input', (e) => {
-                window.Dice3D.setVolume(parseFloat(e.target.value) / 100);
+                const vol = parseFloat(e.target.value) / 100;
+                if (window.Dice3D) window.Dice3D.setVolume(vol);
+                else localStorage.setItem('vtt_3d_dice_volume', String(vol));
             });
         }
 
@@ -1189,10 +1225,10 @@ export function initVttChat(vtt, chatHistory) {
             let critLabel = '';
             if (mc.atkRoll.isCritSuccess) {
                 critClass = 'roll-crit-success';
-                critLabel = `<div style="font-size:0.9rem; color:#81c784; font-weight:bold; margin-top:2px;"><i class="fa-regular fa-star"></i> CRITICAL HIT!</div>`;
+                critLabel = `<div style="font-size:0.9rem; color:var(--color-success-base, #81c784); font-weight:bold; margin-top:2px;"><i class="fa-regular fa-star"></i> CRITICAL HIT!</div>`;
             } else if (mc.atkRoll.isCritFail) {
                 critClass = 'roll-crit-fail';
-                critLabel = `<div style="font-size:0.9rem; color:#e57373; font-weight:bold; margin-top:2px;"><i class="fa-solid fa-triangle-exclamation"></i> CRITICAL MISS!</div>`;
+                critLabel = `<div style="font-size:0.9rem; color:var(--color-danger-base, #e57373); font-weight:bold; margin-top:2px;"><i class="fa-solid fa-triangle-exclamation"></i> CRITICAL MISS!</div>`;
             }
 
             atkSection = `
@@ -1524,10 +1560,10 @@ export function initVttChat(vtt, chatHistory) {
                     let critTag = '';
                     if (atk.atkRoll.isCritSuccess) {
                         critClass = 'roll-crit-success';
-                        critTag = `<span style="font-size:0.75rem; color:#81c784; font-weight:bold; margin-left:4px;">(Crit!)</span>`;
+                        critTag = `<span style="font-size:0.75rem; color:var(--color-success-base, #81c784); font-weight:bold; margin-left:4px;">(Crit!)</span>`;
                     } else if (atk.atkRoll.isCritFail) {
                         critClass = 'roll-crit-fail';
-                        critTag = `<span style="font-size:0.75rem; color:#e57373; font-weight:bold; margin-left:4px;">(Miss!)</span>`;
+                        critTag = `<span style="font-size:0.75rem; color:var(--color-danger-base, #e57373); font-weight:bold; margin-left:4px;">(Miss!)</span>`;
                     }
 
                     const tooltip = atk.atkRoll.breakdownStr
@@ -1836,10 +1872,10 @@ export function initVttChat(vtt, chatHistory) {
             let critLabel = '';
             if (msg.roll.isCritSuccess) {
                 critClass = 'roll-crit-success';
-                critLabel = `<div style="font-size:0.96rem; color:#81c784; font-weight:bold; text-align:center; margin-top:4px;"><i class="fa-regular fa-star"></i> CRITICAL SUCCESS!</div>`;
+                critLabel = `<div style="font-size:0.96rem; color:var(--color-success-base, #81c784); font-weight:bold; text-align:center; margin-top:4px;"><i class="fa-regular fa-star"></i> CRITICAL SUCCESS!</div>`;
             } else if (msg.roll.isCritFail) {
                 critClass = 'roll-crit-fail';
-                critLabel = `<div style="font-size:0.96rem; color:#e57373; font-weight:bold; text-align:center; margin-top:4px;"><i class="fa-solid fa-triangle-exclamation"></i> CRITICAL FAILURE!</div>`;
+                critLabel = `<div style="font-size:0.96rem; color:var(--color-danger-base, #e57373); font-weight:bold; text-align:center; margin-top:4px;"><i class="fa-solid fa-triangle-exclamation"></i> CRITICAL FAILURE!</div>`;
             }
 
             bodyText = `

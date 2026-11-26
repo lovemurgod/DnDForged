@@ -7,6 +7,7 @@
 import { CONDITION_ICONS } from './vtt-canvas-token-rollers.js';
 import { getSafeVttUrl } from '../../vtt-utils.js';
 import { loadPlayerTokenPrefs } from './vtt-canvas-token-config.js';
+import { resolveRenderDispositionColor } from './vtt-canvas-token-drop-config.js';
 import {
     TOKEN_SHAPES,
     TOKEN_BORDER_STYLES,
@@ -870,10 +871,11 @@ export function renderTokensLayer(context = {}) {
                               : token.ringColor
                                 ? 3
                                 : 2;
-                    const bColor =
+                    const rawBColor =
                         token.border?.color ||
                         token.ringColor ||
                         (token.isPlayer ? 'rgba(0, 123, 255, 0.8)' : 'rgba(220, 53, 69, 0.8)');
+                    const bColor = resolveRenderDispositionColor(rawBColor);
                     const bFrame = token.border?.framePreset || token.framePreset || 'none';
 
                     const shapeDef = TOKEN_SHAPES[bShape] || TOKEN_SHAPES.circle;
@@ -1075,10 +1077,11 @@ export function renderTokensLayer(context = {}) {
                     }
                     if (!token.isAsset && !token.isBorderless) {
                         const bShape = token.border?.shape || token.borderShape || 'circle';
-                        const bColor =
+                        const rawBColor =
                             token.border?.color ||
                             token.ringColor ||
                             (token.isPlayer ? 'rgba(0, 123, 255, 0.8)' : 'rgba(220, 53, 69, 0.8)');
+                        const bColor = resolveRenderDispositionColor(rawBColor);
                         const bWidth =
                             token.border?.width !== undefined
                                 ? token.border.width
@@ -1515,7 +1518,7 @@ export function renderTokensLayer(context = {}) {
                                 hpColor = 'var(--color-danger-base)';
                                 hpFill.classList.add('danger');
                             } else if (rawHpPct < 0.5) {
-                                hpColor = 'var(--color-gold-base)';
+                                hpColor = 'var(--color-warning-base)';
                                 hpFill.classList.add('injured');
                             }
                             hpFill.style.backgroundColor = hpColor;

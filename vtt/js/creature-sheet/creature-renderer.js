@@ -1274,9 +1274,13 @@ export function renderStatBlock(m, panel = null, ctx = {}) {
             <!-- HP Row -->
             <div class="cs-hp-row">
                 <div style="display: flex; gap: 4px; margin-bottom: 8px; align-items: center; width: 100%;">
-                    <div class="cs-hp-bar-wrap" style="flex: 1;">
-                        <div class="cs-hp-bar-fill" id="cs-hp-bar" style="width: ${hpMax > 0 ? Math.round((hpCurrent / hpMax) * 100) : 100}%"></div>
-                    </div>
+                    ${(() => {
+                        const csHpPct = hpMax > 0 ? Math.max(0, Math.min(100, Math.round((hpCurrent / hpMax) * 100))) : 100;
+                        const csHpStateClass = csHpPct <= 25 ? ' danger' : csHpPct <= 50 ? ' injured' : '';
+                        return `<div class="cs-hp-bar-wrap" style="flex: 1;">
+                        <div class="cs-hp-bar-fill${csHpStateClass}" id="cs-hp-bar" style="width: ${csHpPct}%"></div>
+                    </div>`;
+                    })()}
                     <div class="cs-hp-bar-wrap cs-temp-hp-bar-wrap" id="cs-temp-hp-bar-wrap" style="flex: 0 0 20%; display: ${hpTemp > 0 ? 'block' : 'none'};" title="Temp HP">
                         <div class="cs-hp-bar-fill cs-temp-hp-bar-fill" id="cs-temp-hp-bar" style="width: 100%;"></div>
                     </div>
@@ -1284,7 +1288,7 @@ export function renderStatBlock(m, panel = null, ctx = {}) {
                 <div class="cs-hp-controls-row">
                     <div class="cs-hp-group">
                         <div class="cs-hp-label">
-                            <i class="fa-solid fa-heart" style="color: #e53935; font-size: 0.85rem;"></i> HP
+                            <i class="fa-solid fa-heart" style="color: var(--color-danger-base, #e53935); font-size: 0.85rem;"></i> HP
                         </div>
                         <div class="cs-hp-controls">
                             <button class="cs-hp-btn" id="cs-hp-minus" title="Damage">−</button>

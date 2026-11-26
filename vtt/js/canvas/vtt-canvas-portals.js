@@ -535,7 +535,7 @@ export function drawTargetRoomContent(
         const getImage = (u) => (typeof imageCache?.get === 'function' ? imageCache.get(u) : imageCache?.[u]);
         const setImage = (u, val) => {
             if (typeof imageCache?.set === 'function') imageCache.set(u, val);
-            if (imageCache) imageCache[u] = val;
+            else if (imageCache) imageCache[u] = val;
         };
 
         let img = getImage(safeUrl) || getImage(mapImgSrc);

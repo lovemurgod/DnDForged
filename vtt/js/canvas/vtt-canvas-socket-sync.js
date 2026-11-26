@@ -13,6 +13,15 @@ export function setupSocketSync(ctx = {}) {
         return;
     }
 
+    socket.on('players:presence', (data) => {
+        if (data && Array.isArray(data.onlinePlayers) && vtt.campaignState) {
+            vtt.campaignState.onlinePlayers = data.onlinePlayers;
+            if (typeof ctx.renderMapPlayersList === 'function') {
+                ctx.renderMapPlayersList();
+            }
+        }
+    });
+
     socket.on('campaign:state-sync', (camp) => {
         console.log(
             '[campaign:state-sync] received, maps count:',

@@ -25,13 +25,19 @@
     --color-gold-light: HSL(43, 85%, 65%);
     --color-gold-base: HSL(43, 65%, 52%);
     --color-gold-dark: HSL(36, 65%, 40%);
+    --color-on-gold: #111111;
 
-    --color-danger-base: HSL(354, 70%, 54%);
+    --color-danger-base: HSL(354, 70%, 52%);
     --color-danger-glow: rgba(220, 53, 69, 0.25);
+    --color-on-danger: #ffffff;
+    --color-warning-base: HSL(43, 65%, 52%);
+    --color-warning-glow: rgba(212, 175, 55, 0.25);
     --color-success-base: HSL(145, 63%, 42%);
     --color-success-glow: rgba(40, 167, 69, 0.25);
+    --color-on-success: #ffffff;
     --color-temphp-base: HSL(215, 90%, 55%);
     --color-temphp-glow: rgba(33, 150, 243, 0.3);
+    --color-on-temphp: #ffffff;
 
     --vtt-font-scale: 1;
 
@@ -73,8 +79,8 @@ html {
     --color-gold-light: HSL(43, 85%, 65%);
     --color-gold-base: HSL(43, 65%, 52%);
     --color-gold-dark: HSL(36, 65%, 40%);
+    --color-on-gold: #111111;
     --font-heading: 'Open Sans', 'Segoe UI', Roboto, sans-serif;
-    --theme-ambient-glow: radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.08) 0%, transparent 70%);
 }
 
 /* 2. Jungle Canopy */
@@ -91,15 +97,17 @@ html {
     --color-gold-light: HSL(148, 80%, 65%);
     --color-gold-base: HSL(150, 85%, 45%);
     --color-gold-dark: HSL(152, 90%, 30%);
+    --color-on-gold: #ffffff;
     --font-heading: 'MedievalSharp', cursive, serif;
-    --theme-ambient-glow: radial-gradient(circle at 50% 0%, rgba(0, 230, 118, 0.1) 0%, transparent 70%);
 }
 
 /* Jungle theme font-weight normalization to prevent faux-bolding on single-weight MedievalSharp */
 [data-theme="jungle"] h1, [data-theme="jungle"] h2, [data-theme="jungle"] h3,
 [data-theme="jungle"] h4, [data-theme="jungle"] h5, [data-theme="jungle"] h6,
 [data-theme="jungle"] .btn, [data-theme="jungle"] .modal-header h2,
-[data-theme="jungle"] .chat-card-title, [data-theme="jungle"] .init-name {
+[data-theme="jungle"] .chat-card-title, [data-theme="jungle"] .init-name,
+[data-theme="jungle"] .cs-name, [data-theme="jungle"] .pc-tab-btn,
+[data-theme="jungle"] .dice-chip {
     font-weight: 400 !important;
 }
 
@@ -117,9 +125,14 @@ html {
     --color-gold-light: HSL(355, 85%, 65%);
     --color-gold-base: HSL(354, 75%, 52%);
     --color-gold-dark: HSL(350, 80%, 35%);
+    --color-on-gold: #ffffff;
     --font-heading: 'Cinzel Decorative', 'Cinzel', serif;
+}
+[data-theme="gothic"] h1, [data-theme="gothic"] h2, [data-theme="gothic"] h3,
+[data-theme="gothic"] h4, [data-theme="gothic"] h5, [data-theme="gothic"] h6,
+[data-theme="gothic"] .modal-header h2, [data-theme="gothic"] .chat-card-title,
+[data-theme="gothic"] .init-name {
     letter-spacing: 0.02em;
-    --theme-ambient-glow: radial-gradient(circle at 50% 0%, rgba(229, 57, 53, 0.12) 0%, transparent 70%);
 }
 
 /* 4. Celestial Astral */
@@ -136,8 +149,8 @@ html {
     --color-gold-light: HSL(188, 95%, 70%);
     --color-gold-base: HSL(188, 95%, 55%);
     --color-gold-dark: HSL(192, 100%, 38%);
+    --color-on-gold: #111111;
     --font-heading: 'Orbitron', 'Cinzel', sans-serif;
-    --theme-ambient-glow: radial-gradient(circle at 50% 0%, rgba(0, 229, 255, 0.12) 0%, transparent 70%);
 }
 
 /* 5. Hellscape Brimstone */
@@ -154,15 +167,17 @@ html {
     --color-gold-light: HSL(25, 95%, 62%);
     --color-gold-base: HSL(14, 95%, 52%);
     --color-gold-dark: HSL(8, 90%, 36%);
+    --color-on-gold: #ffffff;
     --font-heading: 'Rye', cursive, serif;
-    --theme-ambient-glow: radial-gradient(circle at 50% 0%, rgba(255, 87, 34, 0.15) 0%, transparent 70%);
 }
 
 /* Hellscape theme font-weight normalization to prevent faux-bolding on single-weight Rye */
 [data-theme="hellscape"] h1, [data-theme="hellscape"] h2, [data-theme="hellscape"] h3,
 [data-theme="hellscape"] h4, [data-theme="hellscape"] h5, [data-theme="hellscape"] h6,
 [data-theme="hellscape"] .btn, [data-theme="hellscape"] .modal-header h2,
-[data-theme="hellscape"] .chat-card-title, [data-theme="hellscape"] .init-name {
+[data-theme="hellscape"] .chat-card-title, [data-theme="hellscape"] .init-name,
+[data-theme="hellscape"] .cs-name, [data-theme="hellscape"] .pc-tab-btn,
+[data-theme="hellscape"] .dice-chip {
     font-weight: 400 !important;
 }
 
@@ -180,8 +195,8 @@ html {
     --color-gold-light: HSL(330, 100%, 68%);
     --color-gold-base: HSL(330, 100%, 55%);
     --color-gold-dark: HSL(330, 100%, 38%);
+    --color-on-gold: #ffffff;
     --font-heading: 'Rajdhani', sans-serif;
-    --theme-ambient-glow: radial-gradient(circle at 50% 0%, rgba(255, 0, 127, 0.15) 0%, transparent 70%);
 }
 
 /* 7. Vintage Tome / Parchment */
@@ -198,8 +213,8 @@ html {
     --color-gold-light: HSL(40, 65%, 62%);
     --color-gold-base: HSL(38, 55%, 50%);
     --color-gold-dark: HSL(32, 55%, 34%);
+    --color-on-gold: #ffffff;
     --font-heading: 'Alegreya', 'Cinzel', serif;
-    --theme-ambient-glow: radial-gradient(circle at 50% 0%, rgba(180, 140, 80, 0.1) 0%, transparent 70%);
 }
 
 /* 8. Abyssal Depths */
@@ -216,8 +231,8 @@ html {
     --color-gold-light: HSL(190, 85%, 65%);
     --color-gold-base: HSL(190, 85%, 48%);
     --color-gold-dark: HSL(194, 90%, 32%);
+    --color-on-gold: #ffffff;
     --font-heading: 'Syne', 'Cinzel', sans-serif;
-    --theme-ambient-glow: radial-gradient(circle at 50% 0%, rgba(0, 180, 216, 0.12) 0%, transparent 70%);
 }
 
 /* 9. Feywild Enclave */
@@ -234,8 +249,8 @@ html {
     --color-gold-light: HSL(335, 85%, 72%);
     --color-gold-base: HSL(335, 80%, 62%);
     --color-gold-dark: HSL(330, 75%, 42%);
+    --color-on-gold: #111111;
     --font-heading: 'Cinzel', serif;
-    --theme-ambient-glow: radial-gradient(circle at 50% 0%, rgba(240, 98, 146, 0.12) 0%, transparent 70%);
 }
 
 /* 10. Frostpeak Tundra */
@@ -252,8 +267,8 @@ html {
     --color-gold-light: HSL(192, 85%, 68%);
     --color-gold-base: HSL(192, 80%, 54%);
     --color-gold-dark: HSL(196, 85%, 36%);
+    --color-on-gold: #111111;
     --font-heading: 'Exo 2', sans-serif;
-    --theme-ambient-glow: radial-gradient(circle at 50% 0%, rgba(72, 202, 228, 0.12) 0%, transparent 70%);
 }
 
 /* 11. Solaris Citadel */
@@ -270,8 +285,8 @@ html {
     --color-gold-light: HSL(46, 95%, 64%);
     --color-gold-base: HSL(42, 95%, 50%);
     --color-gold-dark: HSL(36, 90%, 35%);
+    --color-on-gold: #111111;
     --font-heading: 'Cinzel', serif;
-    --theme-ambient-glow: radial-gradient(circle at 50% 0%, rgba(255, 183, 3, 0.15) 0%, transparent 70%);
 }
 
 /* ==========================================================================
@@ -282,23 +297,24 @@ html {
 [data-colorblind="protanopia"] {
     --color-success-base: #0072b2;
     --color-success-glow: rgba(0, 114, 178, 0.3);
+    --color-on-success: #ffffff;
     --color-temphp-base: #009e73;
     --color-temphp-glow: rgba(0, 158, 115, 0.3);
-    --color-gold-base: #f0e442;
-    --color-gold-light: #fdf67a;
+    --color-on-temphp: #111111;
+    --color-warning-base: #f0e442;
+    --color-warning-glow: rgba(240, 228, 66, 0.3);
     --color-danger-base: #d55e00;
     --color-danger-glow: rgba(213, 94, 0, 0.3);
+    --color-on-danger: #111111;
 }
 [data-colorblind="protanopia"] .init-hp-fill,
 [data-colorblind="protanopia"] .cs-hp-bar-fill:not(.cs-temp-hp-bar-fill),
-[data-colorblind="protanopia"] .hp-bar-fill,
 [data-colorblind="protanopia"] .token-hp-bar-fill {
     background-image: repeating-linear-gradient(45deg, transparent, transparent 4px, rgba(255, 255, 255, 0.22) 4px, rgba(255, 255, 255, 0.22) 8px) !important;
 }
 [data-colorblind="protanopia"] .token-temp-hp-fill,
 [data-colorblind="protanopia"] #pc-temp-hp-bar,
-[data-colorblind="protanopia"] .cs-temp-hp-bar-fill,
-[data-colorblind="protanopia"] .temp-hp-bar-fill {
+[data-colorblind="protanopia"] .cs-temp-hp-bar-fill {
     background-color: var(--color-temphp-base, #009e73) !important;
     background-image: repeating-linear-gradient(-45deg, transparent, transparent 4px, rgba(255, 255, 255, 0.35) 4px, rgba(255, 255, 255, 0.35) 8px) !important;
 }
@@ -307,23 +323,24 @@ html {
 [data-colorblind="deuteranopia"] {
     --color-success-base: #56b4e9;
     --color-success-glow: rgba(86, 180, 233, 0.3);
+    --color-on-success: #111111;
     --color-temphp-base: #0072b2;
     --color-temphp-glow: rgba(0, 114, 178, 0.3);
-    --color-gold-base: #e69f00;
-    --color-gold-light: #f5b938;
+    --color-on-temphp: #ffffff;
+    --color-warning-base: #e69f00;
+    --color-warning-glow: rgba(230, 159, 0, 0.3);
     --color-danger-base: #d55e00;
     --color-danger-glow: rgba(213, 94, 0, 0.3);
+    --color-on-danger: #111111;
 }
 [data-colorblind="deuteranopia"] .init-hp-fill,
 [data-colorblind="deuteranopia"] .cs-hp-bar-fill:not(.cs-temp-hp-bar-fill),
-[data-colorblind="deuteranopia"] .hp-bar-fill,
 [data-colorblind="deuteranopia"] .token-hp-bar-fill {
     background-image: repeating-linear-gradient(-45deg, transparent, transparent 5px, rgba(0, 0, 0, 0.25) 5px, rgba(0, 0, 0, 0.25) 10px) !important;
 }
 [data-colorblind="deuteranopia"] .token-temp-hp-fill,
 [data-colorblind="deuteranopia"] #pc-temp-hp-bar,
-[data-colorblind="deuteranopia"] .cs-temp-hp-bar-fill,
-[data-colorblind="deuteranopia"] .temp-hp-bar-fill {
+[data-colorblind="deuteranopia"] .cs-temp-hp-bar-fill {
     background-color: var(--color-temphp-base, #0072b2) !important;
     background-image: repeating-linear-gradient(45deg, transparent, transparent 4px, rgba(255, 255, 255, 0.35) 4px, rgba(255, 255, 255, 0.35) 8px) !important;
 }
@@ -332,23 +349,24 @@ html {
 [data-colorblind="tritanopia"] {
     --color-success-base: #009e73;
     --color-success-glow: rgba(0, 158, 115, 0.3);
+    --color-on-success: #111111;
     --color-temphp-base: #0072b2;
     --color-temphp-glow: rgba(0, 114, 178, 0.3);
-    --color-gold-base: #e69f00;
-    --color-gold-light: #f5b938;
+    --color-on-temphp: #ffffff;
+    --color-warning-base: #e69f00;
+    --color-warning-glow: rgba(230, 159, 0, 0.3);
     --color-danger-base: #cc79a7;
     --color-danger-glow: rgba(204, 121, 167, 0.3);
+    --color-on-danger: #111111;
 }
 [data-colorblind="tritanopia"] .init-hp-fill,
 [data-colorblind="tritanopia"] .cs-hp-bar-fill:not(.cs-temp-hp-bar-fill),
-[data-colorblind="tritanopia"] .hp-bar-fill,
 [data-colorblind="tritanopia"] .token-hp-bar-fill {
     background-image: repeating-linear-gradient(90deg, transparent, transparent 4px, rgba(255, 255, 255, 0.2) 4px, rgba(255, 255, 255, 0.2) 8px) !important;
 }
 [data-colorblind="tritanopia"] .token-temp-hp-fill,
 [data-colorblind="tritanopia"] #pc-temp-hp-bar,
-[data-colorblind="tritanopia"] .cs-temp-hp-bar-fill,
-[data-colorblind="tritanopia"] .temp-hp-bar-fill {
+[data-colorblind="tritanopia"] .cs-temp-hp-bar-fill {
     background-color: var(--color-temphp-base, #0072b2) !important;
     background-image: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(255, 255, 255, 0.35) 3px, rgba(255, 255, 255, 0.35) 6px) !important;
 }
@@ -357,24 +375,25 @@ html {
 [data-colorblind="achromatopsia"] {
     --color-success-base: #ffffff;
     --color-success-glow: rgba(255, 255, 255, 0.4);
+    --color-on-success: #111111;
     --color-temphp-base: #78909c;
     --color-temphp-glow: rgba(120, 144, 156, 0.4);
-    --color-gold-base: #9e9e9e;
-    --color-gold-light: #d0d0d0;
+    --color-on-temphp: #111111;
+    --color-warning-base: #9e9e9e;
+    --color-warning-glow: rgba(158, 158, 158, 0.4);
     --color-danger-base: #333333;
     --color-danger-glow: rgba(0, 0, 0, 0.6);
+    --color-on-danger: #ffffff;
 }
 [data-colorblind="achromatopsia"] .init-hp-fill,
 [data-colorblind="achromatopsia"] .cs-hp-bar-fill:not(.cs-temp-hp-bar-fill),
-[data-colorblind="achromatopsia"] .hp-bar-fill,
 [data-colorblind="achromatopsia"] .token-hp-bar-fill {
     border: 1px solid #ffffff !important;
     background-image: repeating-linear-gradient(45deg, transparent, transparent 3px, rgba(255, 255, 255, 0.35) 3px, rgba(255, 255, 255, 0.35) 6px) !important;
 }
 [data-colorblind="achromatopsia"] .token-temp-hp-fill,
 [data-colorblind="achromatopsia"] #pc-temp-hp-bar,
-[data-colorblind="achromatopsia"] .cs-temp-hp-bar-fill,
-[data-colorblind="achromatopsia"] .temp-hp-bar-fill {
+[data-colorblind="achromatopsia"] .cs-temp-hp-bar-fill {
     border: 1px dashed #ffffff !important;
     background-color: var(--color-temphp-base, #78909c) !important;
     background-image: repeating-linear-gradient(-45deg, transparent, transparent 3px, rgba(255, 255, 255, 0.45) 3px, rgba(255, 255, 255, 0.45) 6px) !important;

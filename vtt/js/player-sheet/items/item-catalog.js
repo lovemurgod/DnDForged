@@ -1079,13 +1079,26 @@ export function openItemModal(options = {}) {
     if (itemCache) {
         populateItemFilterDropdowns(itemCache.items);
         renderItemSearchList(options);
+    } else if (typeof window !== 'undefined' && Array.isArray(window.VTT?.sharedItemCatalog) && window.VTT.sharedItemCatalog.length > 0) {
+        itemCache = {
+            items: window.VTT.sharedItemCatalog,
+            fluffDict: {},
+            ruleDict: { property: {}, mastery: {} },
+            isCatalog: true
+        };
+        populateItemFilterDropdowns(itemCache.items);
+        renderItemSearchList(options);
     } else {
-        fetch('/data/items-catalog.json?v=' + Date.now())
+        fetch('/data/items-catalog.json')
             .then((r) => {
                 if (!r.ok) throw new Error(`HTTP ${r.status}`);
                 return r.json();
             })
             .then((catalogItems) => {
+                if (typeof window !== 'undefined') {
+                    window.VTT = window.VTT || {};
+                    window.VTT.sharedItemCatalog = catalogItems;
+                }
                 itemCache = {
                     items: catalogItems,
                     fluffDict: {},

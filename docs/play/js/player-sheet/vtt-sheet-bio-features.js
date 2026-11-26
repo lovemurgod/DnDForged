@@ -1,56 +1,4 @@
-// DnDForged Player Sheet - Bio, Proficiencies & Features Subsystem
-// Handles Character Bio, Notes, Other Proficiencies, and Ability Cards/Traits with counters & categories
-
-import { evaluateAbilityFormula, extractTextFromEntries, simulateRoll } from './vtt-sheet-rolls.js';
-import { switchModalTab } from './vtt-sheet-importers.js';
-import { escapeHtml } from '../vtt-utils.js';
-
-/**
- * Clean a proficiency entry string
- */
-export function cleanProficiencyString(raw, isWeapon = false) {
-    if (!raw) return '';
-    let str = String(raw).trim();
-    str = str
-        .replace(/\{@([a-z]+)\s+([^}]+)\}/gi, (match, tag, content) => {
-            const parts = content.split('|');
-            if (parts.length >= 3 && parts[2]) return parts[2];
-            return parts[0];
-        })
-        .trim();
-    if (!str) return '';
-    const lower = str.toLowerCase();
-    if (isWeapon) {
-        if (lower === 'simple' || lower === 'martial') {
-            return (lower === 'simple' ? 'Simple' : 'Martial') + ' Weapons';
-        }
-        if (lower.endsWith(' weapons') && !lower.startsWith('simple') && !lower.startsWith('martial')) {
-            str = str.replace(/\s+weapons$/i, '').trim();
-        }
-        return str.replace(/\b[a-z]/g, (c) => c.toUpperCase());
-    }
-    return str.replace(/\b[a-z]/g, (c) => c.toUpperCase());
-}
-
-/**
- * Sanitize comma-separated proficiencies text
- */
-export function sanitizeProficienciesText(text, isWeapon = false) {
-    if (!text) return '';
-    const cleaned = extractTextFromEntries(String(text));
-    const parts = cleaned
-        .split(',')
-        .map((p) => cleanProficiencyString(p, isWeapon))
-        .filter(Boolean);
-    return Array.from(new Set(parts)).join(', ');
-}
-
-/**
- * Render collapsible Bio & Notes Card for Primary Tab
- */
-export function renderPrimaryBioCardHtml(char) {
-    char.bio = char.bio || {};
-    return `
+import{evaluateAbilityFormula as C,extractTextFromEntries as L,simulateRoll as $}from"./vtt-sheet-rolls.js";import{switchModalTab as B}from"./vtt-sheet-importers.js";import{escapeHtml as h}from"../vtt-utils.js";export function cleanProficiencyString(e,o=!1){if(!e)return"";let n=String(e).trim();if(n=n.replace(/\{@([a-z]+)\s+([^}]+)\}/gi,(r,y,m)=>{const d=m.split("|");return d.length>=3&&d[2]?d[2]:d[0]}).trim(),!n)return"";const s=n.toLowerCase();return o?s==="simple"||s==="martial"?(s==="simple"?"Simple":"Martial")+" Weapons":(s.endsWith(" weapons")&&!s.startsWith("simple")&&!s.startsWith("martial")&&(n=n.replace(/\s+weapons$/i,"").trim()),n.replace(/\b[a-z]/g,r=>r.toUpperCase())):n.replace(/\b[a-z]/g,r=>r.toUpperCase())}export function sanitizeProficienciesText(e,o=!1){if(!e)return"";const s=L(String(e)).split(",").map(r=>cleanProficiencyString(r,o)).filter(Boolean);return Array.from(new Set(s)).join(", ")}export function renderPrimaryBioCardHtml(e){return e.bio=e.bio||{},`
         <!-- Collapsible Bio & Character Notes Card -->
         <div class="ps-collapsible-card" style="margin-top:16px; margin-bottom:12px;">
             <div class="ps-card-header pc-bio-toggle" id="pc-bio-toggle" style="cursor:pointer; display:flex; justify-content:space-between; align-items:center;">
@@ -61,232 +9,106 @@ export function renderPrimaryBioCardHtml(char) {
                 <div style="display:flex; gap:10px; flex-wrap:wrap;">
                     <div class="form-group" style="flex:1; min-width:70px; margin:0;">
                         <label style="font-size:0.75rem; color:var(--color-text-muted);">Age</label>
-                        <input type="text" id="pc-primary-bio-age" value="${char.bio.age || ''}" style="width:100%; font-size:0.85rem; padding:4px 8px; background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); border-radius:4px; color:var(--color-text-primary);">
+                        <input type="text" id="pc-primary-bio-age" value="${e.bio.age||""}" style="width:100%; font-size:0.85rem; padding:4px 8px; background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); border-radius:4px; color:var(--color-text-primary);">
                     </div>
                     <div class="form-group" style="flex:1; min-width:70px; margin:0;">
                         <label style="font-size:0.75rem; color:var(--color-text-muted);">Height</label>
-                        <input type="text" id="pc-primary-bio-height" value="${char.bio.height || ''}" style="width:100%; font-size:0.85rem; padding:4px 8px; background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); border-radius:4px; color:var(--color-text-primary);">
+                        <input type="text" id="pc-primary-bio-height" value="${e.bio.height||""}" style="width:100%; font-size:0.85rem; padding:4px 8px; background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); border-radius:4px; color:var(--color-text-primary);">
                     </div>
                     <div class="form-group" style="flex:1; min-width:70px; margin:0;">
                         <label style="font-size:0.75rem; color:var(--color-text-muted);">Weight</label>
-                        <input type="text" id="pc-primary-bio-weight" value="${char.bio.weight || ''}" style="width:100%; font-size:0.85rem; padding:4px 8px; background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); border-radius:4px; color:var(--color-text-primary);">
+                        <input type="text" id="pc-primary-bio-weight" value="${e.bio.weight||""}" style="width:100%; font-size:0.85rem; padding:4px 8px; background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); border-radius:4px; color:var(--color-text-primary);">
                     </div>
                 </div>
                 <div class="form-group" style="margin:0;">
                     <label style="font-size:0.75rem; color:var(--color-text-muted);">Backstory</label>
-                    <textarea id="pc-primary-bio-backstory" class="scroll-styled" style="height:80px; width:100%; resize:vertical; background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); border-radius:4px; color:var(--color-text-primary); font-size:0.85rem; padding:6px 8px; line-height:1.4;">${char.bio.backstory || ''}</textarea>
+                    <textarea id="pc-primary-bio-backstory" class="scroll-styled" style="height:80px; width:100%; resize:vertical; background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); border-radius:4px; color:var(--color-text-primary); font-size:0.85rem; padding:6px 8px; line-height:1.4;">${e.bio.backstory||""}</textarea>
                 </div>
                 <div class="form-group" style="margin:0;">
                     <label style="font-size:0.75rem; color:var(--color-text-muted);">Other Notes</label>
-                    <textarea id="pc-primary-bio-notes" class="scroll-styled" style="height:80px; width:100%; resize:vertical; background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); border-radius:4px; color:var(--color-text-primary); font-size:0.85rem; padding:6px 8px; line-height:1.4;">${char.bio.notes || ''}</textarea>
+                    <textarea id="pc-primary-bio-notes" class="scroll-styled" style="height:80px; width:100%; resize:vertical; background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); border-radius:4px; color:var(--color-text-primary); font-size:0.85rem; padding:6px 8px; line-height:1.4;">${e.bio.notes||""}</textarea>
                 </div>
             </div>
         </div>
-    `;
-}
-
-/**
- * Render Other Proficiencies card for Primary Tab
- */
-export function renderOtherProficienciesHtml(char) {
-    char.proficiencies = char.proficiencies || { languages: '', weapons: '', armor: '', tools: '' };
-    return `
+    `}export function renderOtherProficienciesHtml(e){return e.proficiencies=e.proficiencies||{languages:"",weapons:"",armor:"",tools:""},`
         <div style="margin-top:12px; margin-bottom:12px; background:rgba(0,0,0,0.2); padding:12px; border-radius:8px; border:1px solid var(--color-border-subtle);">
             <h4 style="margin:0 0 8px 0; color:var(--color-gold-base); font-family:var(--font-heading);">Other Proficiencies</h4>
             <div style="display:flex; flex-direction:column; gap:8px;">
                 <div style="display:flex; align-items:center; gap:8px;">
                     <label style="width:80px; font-size:0.8rem; color:var(--color-text-muted);">Languages</label>
-                    <input type="text" id="pc-prof-languages" value="${char.proficiencies.languages || ''}" style="flex:1; padding:4px; font-size:0.8rem; background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); border-radius:4px;">
+                    <input type="text" id="pc-prof-languages" value="${e.proficiencies.languages||""}" style="flex:1; padding:4px; font-size:0.8rem; background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); border-radius:4px;">
                     <button class="btn btn-secondary btn-xxs pc-prof-ping" data-type="languages" data-name="Languages" title="Ping Languages to Chat"><i class="fa-solid fa-comment-dots"></i></button>
                 </div>
                 <div style="display:flex; align-items:center; gap:8px;">
                     <label style="width:80px; font-size:0.8rem; color:var(--color-text-muted);">Weapons</label>
-                    <input type="text" id="pc-prof-weapons" value="${char.proficiencies.weapons || ''}" style="flex:1; padding:4px; font-size:0.8rem; background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); border-radius:4px;">
+                    <input type="text" id="pc-prof-weapons" value="${e.proficiencies.weapons||""}" style="flex:1; padding:4px; font-size:0.8rem; background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); border-radius:4px;">
                     <button class="btn btn-secondary btn-xxs pc-prof-ping" data-type="weapons" data-name="Weapon Proficiencies" title="Ping Weapons to Chat"><i class="fa-solid fa-comment-dots"></i></button>
                 </div>
                 <div style="display:flex; align-items:center; gap:8px;">
                     <label style="width:80px; font-size:0.8rem; color:var(--color-text-muted);">Armor</label>
-                    <input type="text" id="pc-prof-armor" value="${char.proficiencies.armor || ''}" style="flex:1; padding:4px; font-size:0.8rem; background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); border-radius:4px;">
+                    <input type="text" id="pc-prof-armor" value="${e.proficiencies.armor||""}" style="flex:1; padding:4px; font-size:0.8rem; background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); border-radius:4px;">
                     <button class="btn btn-secondary btn-xxs pc-prof-ping" data-type="armor" data-name="Armor Proficiencies" title="Ping Armor to Chat"><i class="fa-solid fa-comment-dots"></i></button>
                 </div>
                 <div style="display:flex; align-items:center; gap:8px;">
                     <label style="width:80px; font-size:0.8rem; color:var(--color-text-muted);">Tools</label>
-                    <input type="text" id="pc-prof-tools" value="${char.proficiencies.tools || ''}" style="flex:1; padding:4px; font-size:0.8rem; background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); border-radius:4px;">
+                    <input type="text" id="pc-prof-tools" value="${e.proficiencies.tools||""}" style="flex:1; padding:4px; font-size:0.8rem; background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); border-radius:4px;">
                     <button class="btn btn-secondary btn-xxs pc-prof-ping" data-type="tools" data-name="Tool Proficiencies" title="Ping Tools to Chat"><i class="fa-solid fa-comment-dots"></i></button>
                 </div>
             </div>
         </div>
-    `;
-}
-
-/**
- * Format markdown and custom fields in an ability card description
- */
-export function formatAbilityCardDescription(card) {
-    if (!card) return '';
-    let raw = (card.description || '').trim();
-    if (!raw && (!card.customFields || card.customFields.length === 0)) {
-        return '<i style="opacity:0.6;">No description provided.</i>';
-    }
-
-    let safe = raw.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-    safe = safe.replace(
-        /\*\*(.+?)\*\*/g,
-        '<strong style="color:var(--color-gold-light); font-weight:600;">$1</strong>'
-    );
-    safe = safe.replace(/(^|[^*])\*(?!\*)([^*]+)\*/g, '$1<em>$2</em>');
-    safe = safe.replace(/\r\n/g, '\n');
-    safe = safe.replace(/^[ \t]*[-*][ \t]+(.+)$/gm, '&bull; $1');
-    safe = safe.replace(/\n\n+/g, '<br><br>').replace(/\n/g, '<br>');
-
-    if (Array.isArray(card.customFields) && card.customFields.length > 0) {
-        const fieldsHtml = card.customFields
-            .map((f) => {
-                const l = (f.label || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-                const e = (f.entry || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-                return `<strong style="color:var(--color-gold-light); font-weight:600;">${l}:</strong> ${e}`;
-            })
-            .join('<br>');
-
-        if (safe) {
-            safe += `<br><br>${fieldsHtml}`;
-        } else {
-            safe = fieldsHtml;
-        }
-    }
-
-    return safe;
-}
-
-export function getEffectiveLinkedTable(card) {
-    if (!card) return null;
-    if (card.linkedTable && card.linkedTable !== 'auto' && card.linkedTable !== 'none') {
-        return typeof card.linkedTable === 'object' ? card.linkedTable.id : card.linkedTable;
-    }
-    if (card.linkedTable === 'none') {
-        return null;
-    }
-    const name = (card.name || '').toLowerCase();
-    const desc = (card.desc || card.description || '').toLowerCase();
-
-    if (
-        name.includes('wild magic') &&
-        (name.includes('barbarian') ||
-            name.includes('rage') ||
-            name.includes('raging') ||
-            name.includes('tce') ||
-            desc.includes('barbarian') ||
-            desc.includes('rage'))
-    ) {
-        return 'compendium:wild_magic_barbarian';
-    }
-    if (
-        name.includes('wild magic surge') ||
-        name.includes('tides of chaos') ||
-        desc.includes('wild magic surge') ||
-        name === 'wild magic' ||
-        name === 'wild magic table'
-    ) {
-        return 'compendium:wild_magic_sorcerer';
-    }
-    return null;
-}
-
-/**
- * Render single ability row HTML
- */
-export function renderAbilityRowHtml(card, i, char) {
-    const actionPill =
-        card.actionType && card.actionType !== 'passive'
-            ? card.actionType === 'bonus'
-                ? `<span class="badge" style="background:#d97706; color:#fff; font-size:0.65rem; padding:1px 5px; border-radius:3px; font-weight:600; text-transform:uppercase;">Bonus</span>`
-                : card.actionType === 'reaction'
-                  ? `<span class="badge" style="background:#2563eb; color:#fff; font-size:0.65rem; padding:1px 5px; border-radius:3px; font-weight:600; text-transform:uppercase;">Reaction</span>`
-                  : card.actionType === 'action'
-                    ? `<span class="badge" style="background:#16a34a; color:#fff; font-size:0.65rem; padding:1px 5px; border-radius:3px; font-weight:600; text-transform:uppercase;">Action</span>`
-                    : `<span class="badge" style="background:#9333ea; color:#fff; font-size:0.65rem; padding:1px 5px; border-radius:3px; font-weight:600; text-transform:uppercase;">${card.actionType}</span>`
-            : '';
-
-    const evalFormula = evaluateAbilityFormula(card.formula, card.formulaConfig, char);
-    const rollChipHtml = evalFormula
-        ? `
-        <button class="btn btn-xxs btn-secondary pc-ability-roll-chip" data-idx="${i}" data-formula="${evalFormula}" data-name="${card.name}" title="Click to Roll: ${evalFormula}" style="font-family:monospace; border-color:var(--color-gold-base); font-size:0.75rem; padding:2px 6px; display:inline-flex; align-items:center; gap:4px;">
-            <i class="fa-solid fa-dice-d20 text-gradient-gold"></i> ${evalFormula}
+    `}export function formatAbilityCardDescription(e){if(!e)return"";let o=(e.description||"").trim();if(!o&&(!e.customFields||e.customFields.length===0))return'<i style="opacity:0.6;">No description provided.</i>';let n=o.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");if(n=n.replace(/\*\*(.+?)\*\*/g,'<strong style="color:var(--color-gold-light); font-weight:600;">$1</strong>'),n=n.replace(/(^|[^*])\*(?!\*)([^*]+)\*/g,"$1<em>$2</em>"),n=n.replace(/\r\n/g,`
+`),n=n.replace(/^[ \t]*[-*][ \t]+(.+)$/gm,"&bull; $1"),n=n.replace(/\n\n+/g,"<br><br>").replace(/\n/g,"<br>"),Array.isArray(e.customFields)&&e.customFields.length>0){const s=e.customFields.map(r=>{const y=(r.label||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"),m=(r.entry||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");return`<strong style="color:var(--color-gold-light); font-weight:600;">${y}:</strong> ${m}`}).join("<br>");n?n+=`<br><br>${s}`:n=s}return n}export function getEffectiveLinkedTable(e){if(!e)return null;if(e.linkedTable&&e.linkedTable!=="auto"&&e.linkedTable!=="none")return typeof e.linkedTable=="object"?e.linkedTable.id:e.linkedTable;if(e.linkedTable==="none")return null;const o=(e.name||"").toLowerCase(),n=(e.desc||e.description||"").toLowerCase();return o.includes("wild magic")&&(o.includes("barbarian")||o.includes("rage")||o.includes("raging")||o.includes("tce")||n.includes("barbarian")||n.includes("rage"))?"compendium:wild_magic_barbarian":o.includes("wild magic surge")||o.includes("tides of chaos")||n.includes("wild magic surge")||o==="wild magic"||o==="wild magic table"?"compendium:wild_magic_sorcerer":null}export function renderAbilityRowHtml(e,o,n){const s=e.actionType&&e.actionType!=="passive"?e.actionType==="bonus"?'<span class="badge" style="background:#d97706; color:#fff; font-size:0.65rem; padding:1px 5px; border-radius:3px; font-weight:600; text-transform:uppercase;">Bonus</span>':e.actionType==="reaction"?'<span class="badge" style="background:#2563eb; color:#fff; font-size:0.65rem; padding:1px 5px; border-radius:3px; font-weight:600; text-transform:uppercase;">Reaction</span>':e.actionType==="action"?'<span class="badge" style="background:#16a34a; color:#fff; font-size:0.65rem; padding:1px 5px; border-radius:3px; font-weight:600; text-transform:uppercase;">Action</span>':`<span class="badge" style="background:#9333ea; color:#fff; font-size:0.65rem; padding:1px 5px; border-radius:3px; font-weight:600; text-transform:uppercase;">${e.actionType}</span>`:"",r=C(e.formula,e.formulaConfig,n),y=r?`
+        <button class="btn btn-xxs btn-secondary pc-ability-roll-chip" data-idx="${o}" data-formula="${r}" data-name="${e.name}" title="Click to Roll: ${r}" style="font-family:monospace; border-color:var(--color-gold-base); font-size:0.75rem; padding:2px 6px; display:inline-flex; align-items:center; gap:4px;">
+            <i class="fa-solid fa-dice-d20 text-gradient-gold"></i> ${r}
         </button>
-    `
-        : '';
-
-    const effectiveTable = getEffectiveLinkedTable(card);
-    const tableChipHtml = effectiveTable
-        ? `
-        <button type="button" class="btn btn-xxs btn-secondary pc-ability-table-chip" data-idx="${i}" data-table="${effectiveTable}" title="Click to Roll Table" style="border-color:var(--color-gold-base); font-size:0.75rem; padding:2px 6px; display:inline-flex; align-items:center; gap:4px; font-weight:600; color:var(--color-gold-light);">
+    `:"",m=getEffectiveLinkedTable(e),d=m?`
+        <button type="button" class="btn btn-xxs btn-secondary pc-ability-table-chip" data-idx="${o}" data-table="${m}" title="Click to Roll Table" style="border-color:var(--color-gold-base); font-size:0.75rem; padding:2px 6px; display:inline-flex; align-items:center; gap:4px; font-weight:600; color:var(--color-gold-light);">
             <i class="fa-solid fa-dice-d20 text-gradient-gold"></i> Roll Table
         </button>
-    `
-        : '';
-
-    return `
-    <div class="ability-row glass-flat" data-idx="${i}" data-category-id="${card.categoryId || ''}" draggable="true" style="padding:8px; display:flex; flex-direction:column; gap:4px; transition: border-color 0.15s, box-shadow 0.15s, opacity 0.15s;">
+    `:"";return`
+    <div class="ability-row glass-flat" data-idx="${o}" data-category-id="${e.categoryId||""}" draggable="true" style="padding:8px; display:flex; flex-direction:column; gap:4px; transition: border-color 0.15s, box-shadow 0.15s, opacity 0.15s;">
         <div style="display:flex; justify-content:space-between; align-items:center;">
             <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
-                <div class="pc-ability-drag-handle" data-idx="${i}" title="Click and drag to move/reorder ability card" style="cursor:grab; opacity:0.6; padding-right:4px; display:flex; align-items:center; user-select:none; transition:opacity 0.15s, color 0.15s;" onmouseover="this.style.opacity='1'; this.style.color='var(--color-gold-base)';" onmouseout="this.style.opacity='0.6'; this.style.color='inherit';">
+                <div class="pc-ability-drag-handle" data-idx="${o}" title="Click and drag to move/reorder ability card" style="cursor:grab; opacity:0.6; padding-right:4px; display:flex; align-items:center; user-select:none; transition:opacity 0.15s, color 0.15s;" onmouseover="this.style.opacity='1'; this.style.color='var(--color-gold-base)';" onmouseout="this.style.opacity='0.6'; this.style.color='inherit';">
                     <i class="fa-solid fa-grip-vertical" style="font-size:0.9rem;"></i>
                 </div>
-                <i class="fa-solid fa-chevron-right pc-ability-expand" data-idx="${i}" style="transition:transform 0.2s; cursor:pointer; font-size:0.7rem; color:var(--color-text-muted);"></i>
-                <div class="pc-ability-ping" data-idx="${i}" title="Ping description to chat" style="cursor:pointer; font-weight:600; color:var(--color-text-primary); display:flex; align-items:center; gap:6px;">
-                    <i class="fa-solid fa-comment-dots text-gradient-gold"></i> ${card.name}
-                    ${actionPill}
+                <i class="fa-solid fa-chevron-right pc-ability-expand" data-idx="${o}" style="transition:transform 0.2s; cursor:pointer; font-size:0.7rem; color:var(--color-text-muted);"></i>
+                <div class="pc-ability-ping" data-idx="${o}" title="Ping description to chat" style="cursor:pointer; font-weight:600; color:var(--color-text-primary); display:flex; align-items:center; gap:6px;">
+                    <i class="fa-solid fa-comment-dots text-gradient-gold"></i> ${e.name}
+                    ${s}
                 </div>
             </div>
             <div style="display:flex; gap:6px; align-items:center;">
-                ${tableChipHtml}
-                ${rollChipHtml}
-                ${
-                    card.hasCounter
-                        ? `
+                ${d}
+                ${y}
+                ${e.hasCounter?`
                 <div style="display:flex; align-items:center; gap:4px;">
-                    <button class="btn btn-xxs btn-secondary pc-ability-uses-minus" data-idx="${i}">-</button>
-                    <span style="font-size:0.8rem; font-family:monospace; min-width:24px; text-align:center;">${card.usesCurrent || 0} / ${card.usesMax || 0}</span>
-                    <button class="btn btn-xxs btn-secondary pc-ability-uses-plus" data-idx="${i}">+</button>
-                    <span style="font-size:0.65rem; color:var(--color-text-muted); opacity:0.8; margin-left:2px;" title="Resets on ${card.resetType === 'short' ? 'Short Rest' : card.resetType === 'none' ? 'Manual' : 'Long Rest'}">[${card.resetType === 'short' ? 'SR' : card.resetType === 'none' ? 'Man' : 'LR'}]</span>
+                    <button class="btn btn-xxs btn-secondary pc-ability-uses-minus" data-idx="${o}">-</button>
+                    <span style="font-size:0.8rem; font-family:monospace; min-width:24px; text-align:center;">${e.usesCurrent||0} / ${e.usesMax||0}</span>
+                    <button class="btn btn-xxs btn-secondary pc-ability-uses-plus" data-idx="${o}">+</button>
+                    <span style="font-size:0.65rem; color:var(--color-text-muted); opacity:0.8; margin-left:2px;" title="Resets on ${e.resetType==="short"?"Short Rest":e.resetType==="none"?"Manual":"Long Rest"}">[${e.resetType==="short"?"SR":e.resetType==="none"?"Man":"LR"}]</span>
                 </div>
-                `
-                        : ''
-                }
-                <button class="btn btn-xxs btn-secondary pc-ability-edit" data-idx="${i}"><i class="fa-solid fa-pen"></i></button>
-                <button class="btn btn-xxs btn-danger pc-ability-del" data-idx="${i}"><i class="fa-solid fa-trash"></i></button>
+                `:""}
+                <button class="btn btn-xxs btn-secondary pc-ability-edit" data-idx="${o}"><i class="fa-solid fa-pen"></i></button>
+                <button class="btn btn-xxs btn-danger pc-ability-del" data-idx="${o}"><i class="fa-solid fa-trash"></i></button>
             </div>
         </div>
-        <div class="pc-ability-details" id="pc-ability-details-${i}" style="display:none; font-size:0.85rem; margin-top:6px; border-top:1px solid rgba(255,255,255,0.08); padding:8px 10px; background:rgba(0,0,0,0.2); border-radius:4px; line-height:1.5; color:var(--color-text-secondary); word-break:break-word;">
-            <div class="pc-ability-desc-content" style="white-space:normal;">${formatAbilityCardDescription(card)}</div>
+        <div class="pc-ability-details" id="pc-ability-details-${o}" style="display:none; font-size:0.85rem; margin-top:6px; border-top:1px solid rgba(255,255,255,0.08); padding:8px 10px; background:rgba(0,0,0,0.2); border-radius:4px; line-height:1.5; color:var(--color-text-secondary); word-break:break-word;">
+            <div class="pc-ability-desc-content" style="white-space:normal;">${formatAbilityCardDescription(e)}</div>
             <div style="display:flex; justify-content:flex-end; align-items:center; margin-top:8px; padding-top:6px; border-top:1px solid rgba(255,255,255,0.06);">
                 <div style="display:flex; align-items:center; gap:6px;">
                     <span style="font-size:0.72rem; color:var(--color-text-muted);"><i class="fa-solid fa-folder" style="color:var(--color-gold-base);"></i> Category:</span>
-                    <select class="pc-ability-cat-select" data-idx="${i}" title="Move to Category" style="background:rgba(0,0,0,0.5); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); font-size:0.75rem; border-radius:4px; padding:2px 6px; max-width:140px;">
-                        <option value="" ${!card.categoryId ? 'selected' : ''}>Uncategorized</option>
-                        ${(char.abilityCategories || [])
-                            .map(
-                                (c) => `
-                            <option value="${c.id}" ${card.categoryId === c.id ? 'selected' : ''}>📁 ${c.name}</option>
-                        `
-                            )
-                            .join('')}
+                    <select class="pc-ability-cat-select" data-idx="${o}" title="Move to Category" style="background:rgba(0,0,0,0.5); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); font-size:0.75rem; border-radius:4px; padding:2px 6px; max-width:140px;">
+                        <option value="" ${e.categoryId?"":"selected"}>Uncategorized</option>
+                        ${(n.abilityCategories||[]).map(p=>`
+                            <option value="${p.id}" ${e.categoryId===p.id?"selected":""}>\u{1F4C1} ${p.name}</option>
+                        `).join("")}
                     </select>
                 </div>
             </div>
         </div>
     </div>
-    `;
-}
-
-/**
- * Render Ability Cards section for ps-info
- */
-export function renderAbilityCardsHtml(char, ctx) {
-    char.abilityCategories = char.abilityCategories || [];
-    char.abilityCards = char.abilityCards || [];
-
-    return `
+    `}export function renderAbilityCardsHtml(e,o){return e.abilityCategories=e.abilityCategories||[],e.abilityCards=e.abilityCards||[],`
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
             <h4 style="margin:0; color:var(--color-gold-base); font-family:var(--font-heading);"><i class="fa-solid fa-address-card"></i> Ability Cards</h4>
             <div style="display:flex; align-items:center; gap:8px;">
@@ -298,748 +120,48 @@ export function renderAbilityCardsHtml(char, ctx) {
             <input type="text" id="pc-ability-search" placeholder="Search ability cards by name or details..." style="flex:1; padding:4px 8px; font-size:0.8rem; background:rgba(0,0,0,0.3); color:var(--color-text-primary); border:1px solid var(--color-border-subtle); border-radius:4px;">
         </div>
         <div id="pc-ability-list" style="display:flex; flex-direction:column; gap:8px;">
-            ${(function () {
-                let html = '';
-                (char.abilityCategories || []).forEach((c, cIdx) => {
-                    const cItems = char.abilityCards
-                        .map((card, i) => ({ card, i }))
-                        .filter(({ card }) => card.categoryId === c.id);
-                    html += `
-                        <div class="pc-ability-cat-card glass-flat" data-category-id="${c.id}" data-category-idx="${cIdx}" draggable="true" style="border:1px solid var(--color-border-subtle); border-radius:8px; margin-bottom:4px; overflow:hidden; transition:border-color 0.15s, box-shadow 0.15s;">
-                            <div class="pc-ability-cat-header" data-category-id="${c.id}" style="padding:8px 12px; background:rgba(0,0,0,0.25); display:flex; justify-content:space-between; align-items:center; cursor:pointer; user-select:none;">
+            ${(function(){let n="";(e.abilityCategories||[]).forEach((r,y)=>{const m=e.abilityCards.map((d,p)=>({card:d,i:p})).filter(({card:d})=>d.categoryId===r.id);n+=`
+                        <div class="pc-ability-cat-card glass-flat" data-category-id="${r.id}" data-category-idx="${y}" draggable="true" style="border:1px solid var(--color-border-subtle); border-radius:8px; margin-bottom:4px; overflow:hidden; transition:border-color 0.15s, box-shadow 0.15s;">
+                            <div class="pc-ability-cat-header" data-category-id="${r.id}" style="padding:8px 12px; background:rgba(0,0,0,0.25); display:flex; justify-content:space-between; align-items:center; cursor:pointer; user-select:none;">
                                 <div style="display:flex; align-items:center; gap:8px; flex:1; min-width:0;">
-                                    <div class="pc-ability-cat-drag-handle" data-category-idx="${cIdx}" title="Click and drag to reorder category" style="cursor:grab; opacity:0.5; padding-right:4px;" data-stop-propagation="true">
+                                    <div class="pc-ability-cat-drag-handle" data-category-idx="${y}" title="Click and drag to reorder category" style="cursor:grab; opacity:0.5; padding-right:4px;" data-stop-propagation="true">
                                         <i class="fa-solid fa-grip-vertical"></i>
                                     </div>
                                     <i class="fa-solid fa-folder text-gradient-gold" style="font-size:0.95rem; flex-shrink:0;"></i>
-                                    <i class="fa-solid fa-chevron-right text-gradient-gold pc-ability-cat-chevron" data-category-id="${c.id}" style="font-size:0.75rem; flex-shrink:0; transition:transform 0.2s; transform:${c.collapsed ? 'rotate(0deg)' : 'rotate(90deg)'};"></i>
-                                    <span style="font-weight:700; font-size:0.875rem; color:var(--color-text-primary); text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">${escapeHtml(c.name)}</span>
-                                    <span style="font-size:0.75rem; color:var(--color-text-muted); background:rgba(255,255,255,0.08); padding:2px 8px; border-radius:12px;">${cItems.length} item${cItems.length !== 1 ? 's' : ''}</span>
+                                    <i class="fa-solid fa-chevron-right text-gradient-gold pc-ability-cat-chevron" data-category-id="${r.id}" style="font-size:0.75rem; flex-shrink:0; transition:transform 0.2s; transform:${r.collapsed?"rotate(0deg)":"rotate(90deg)"};"></i>
+                                    <span style="font-weight:700; font-size:0.875rem; color:var(--color-text-primary); text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">${h(r.name)}</span>
+                                    <span style="font-size:0.75rem; color:var(--color-text-muted); background:rgba(255,255,255,0.08); padding:2px 8px; border-radius:12px;">${m.length} item${m.length!==1?"s":""}</span>
                                 </div>
                                 <div style="display:flex; gap:6px; align-items:center; flex-shrink:0;" data-stop-propagation="true">
-                                    <button class="btn btn-xxs btn-secondary pc-ability-cat-edit" data-category-id="${c.id}" title="Edit Category"><i class="fa-solid fa-pen"></i></button>
-                                    <button class="btn btn-xxs btn-danger pc-ability-cat-del" data-category-id="${c.id}" title="Delete Category"><i class="fa-solid fa-trash"></i></button>
+                                    <button class="btn btn-xxs btn-secondary pc-ability-cat-edit" data-category-id="${r.id}" title="Edit Category"><i class="fa-solid fa-pen"></i></button>
+                                    <button class="btn btn-xxs btn-danger pc-ability-cat-del" data-category-id="${r.id}" title="Delete Category"><i class="fa-solid fa-trash"></i></button>
                                 </div>
                             </div>
-                            <div class="pc-ability-cat-contents ${c.collapsed ? 'vtt-hidden' : ''}" data-category-id="${c.id}" style="padding:8px; border-top:1px solid rgba(255,255,255,0.05); display:flex; flex-direction:column; gap:8px; border-left:3px solid var(--color-gold-base); background:rgba(0,0,0,0.15);">
-                                ${cItems.map(({ card, i }) => renderAbilityRowHtml(card, i, char)).join('')}
-                                ${cItems.length === 0 ? `<div style="font-size:0.8rem; color:var(--color-text-muted); padding:8px; text-align:center; font-style:italic;">Drag items here or drop onto header to move into this category.</div>` : ''}
+                            <div class="pc-ability-cat-contents ${r.collapsed?"vtt-hidden":""}" data-category-id="${r.id}" style="padding:8px; border-top:1px solid rgba(255,255,255,0.05); display:flex; flex-direction:column; gap:8px; border-left:3px solid var(--color-gold-base); background:rgba(0,0,0,0.15);">
+                                ${m.map(({card:d,i:p})=>renderAbilityRowHtml(d,p,e)).join("")}
+                                ${m.length===0?'<div style="font-size:0.8rem; color:var(--color-text-muted); padding:8px; text-align:center; font-style:italic;">Drag items here or drop onto header to move into this category.</div>':""}
                             </div>
                         </div>
-                    `;
-                });
-
-                const uncatAbilities = char.abilityCards
-                    .map((card, i) => ({ card, i }))
-                    .filter(({ card }) => !card.categoryId);
-                html += `
+                    `});const s=e.abilityCards.map((r,y)=>({card:r,i:y})).filter(({card:r})=>!r.categoryId);return n+=`
                     <div class="pc-ability-cat-card glass-flat" data-category-id="" style="border:1px solid var(--color-border-subtle); border-radius:8px; margin-bottom:4px; overflow:hidden;">
                         <div class="pc-ability-cat-header pc-main-ability-header" data-category-id="" style="padding:8px 12px; background:rgba(0,0,0,0.2); display:flex; justify-content:space-between; align-items:center; cursor:pointer; user-select:none;">
                             <div style="display:flex; align-items:center; gap:8px; flex:1; min-width:0;">
                                 <i class="fa-solid fa-address-card text-gradient-gold" style="font-size:0.95rem; flex-shrink:0;"></i>
                                 <span style="font-weight:700; font-size:0.875rem; color:var(--color-gold-light);">Uncategorized Abilities</span>
-                                <span style="font-size:0.75rem; color:var(--color-text-muted); background:rgba(255,255,255,0.08); padding:2px 8px; border-radius:12px;">${uncatAbilities.length} item${uncatAbilities.length !== 1 ? 's' : ''}</span>
+                                <span style="font-size:0.75rem; color:var(--color-text-muted); background:rgba(255,255,255,0.08); padding:2px 8px; border-radius:12px;">${s.length} item${s.length!==1?"s":""}</span>
                             </div>
                         </div>
                         <div class="pc-ability-cat-contents" data-category-id="" style="padding:8px; border-top:1px solid rgba(255,255,255,0.05); display:flex; flex-direction:column; gap:8px;">
-                            ${uncatAbilities.map(({ card, i }) => renderAbilityRowHtml(card, i, char)).join('')}
-                            ${uncatAbilities.length === 0 && (char.abilityCategories || []).length > 0 ? `<div style="font-size:0.8rem; color:var(--color-text-muted); padding:8px; text-align:center; font-style:italic;">All abilities are organized into categories.</div>` : ''}
-                            ${char.abilityCards.length === 0 ? `<div style="font-size:0.8rem; color:var(--color-text-muted); padding:8px; text-align:center;">No ability cards added yet.</div>` : ''}
+                            ${s.map(({card:r,i:y})=>renderAbilityRowHtml(r,y,e)).join("")}
+                            ${s.length===0&&(e.abilityCategories||[]).length>0?'<div style="font-size:0.8rem; color:var(--color-text-muted); padding:8px; text-align:center; font-style:italic;">All abilities are organized into categories.</div>':""}
+                            ${e.abilityCards.length===0?'<div style="font-size:0.8rem; color:var(--color-text-muted); padding:8px; text-align:center;">No ability cards added yet.</div>':""}
                         </div>
                     </div>
-                `;
-                return html;
-            })()}
+                `,n})()}
         </div>
-    `;
-}
-
-/**
- * Harvest bio fields from DOM into character object
- */
-export function harvestBioData(char) {
-    if (typeof document === 'undefined') return;
-    char.bio = char.bio || {};
-
-    const ageInp = document.getElementById('pc-primary-bio-age') || document.getElementById('pc-bio-age');
-    if (ageInp) char.bio.age = ageInp.value;
-
-    const heightInp = document.getElementById('pc-primary-bio-height') || document.getElementById('pc-bio-height');
-    if (heightInp) char.bio.height = heightInp.value;
-
-    const weightInp = document.getElementById('pc-primary-bio-weight') || document.getElementById('pc-bio-weight');
-    if (weightInp) char.bio.weight = weightInp.value;
-
-    const backstoryInp =
-        document.getElementById('pc-primary-bio-backstory') || document.getElementById('pc-bio-backstory');
-    if (backstoryInp) char.bio.backstory = backstoryInp.value;
-
-    const notesInp = document.getElementById('pc-primary-bio-notes') || document.getElementById('pc-bio-notes');
-    if (notesInp) char.bio.notes = notesInp.value;
-}
-
-/**
- * Render dynamic custom fields inside the ability modal
- */
-export function renderAbilityFields(fields = []) {
-    if (typeof document === 'undefined') return;
-    const list = document.getElementById('modal-ability-fields-list');
-    if (!list) return;
-    list.innerHTML = '';
-    fields.forEach((f) => {
-        const row = document.createElement('div');
-        row.style.display = 'flex';
-        row.style.gap = '8px';
-        row.className = 'modal-ability-field-row';
-        row.innerHTML = `
-            <input type="text" class="ab-field-label" placeholder="Label" value="${escapeHtml(f.label || '')}" style="flex:1; padding:4px; font-size:0.8rem;">
-            <input type="text" class="ab-field-entry" placeholder="Entry" value="${escapeHtml(f.entry || '')}" style="flex:2; padding:4px; font-size:0.8rem;">
+    `}export function harvestBioData(e){if(typeof document>"u")return;e.bio=e.bio||{};const o=document.getElementById("pc-primary-bio-age")||document.getElementById("pc-bio-age");o&&(e.bio.age=o.value);const n=document.getElementById("pc-primary-bio-height")||document.getElementById("pc-bio-height");n&&(e.bio.height=n.value);const s=document.getElementById("pc-primary-bio-weight")||document.getElementById("pc-bio-weight");s&&(e.bio.weight=s.value);const r=document.getElementById("pc-primary-bio-backstory")||document.getElementById("pc-bio-backstory");r&&(e.bio.backstory=r.value);const y=document.getElementById("pc-primary-bio-notes")||document.getElementById("pc-bio-notes");y&&(e.bio.notes=y.value)}export function renderAbilityFields(e=[]){if(typeof document>"u")return;const o=document.getElementById("modal-ability-fields-list");o&&(o.innerHTML="",e.forEach(n=>{const s=document.createElement("div");s.style.display="flex",s.style.gap="8px",s.className="modal-ability-field-row",s.innerHTML=`
+            <input type="text" class="ab-field-label" placeholder="Label" value="${h(n.label||"")}" style="flex:1; padding:4px; font-size:0.8rem;">
+            <input type="text" class="ab-field-entry" placeholder="Entry" value="${h(n.entry||"")}" style="flex:2; padding:4px; font-size:0.8rem;">
             <button class="btn btn-xxs btn-danger btn-ab-field-remove"><i class="fa-solid fa-trash"></i></button>
-        `;
-        row.querySelector('.btn-ab-field-remove')?.addEventListener('click', () => row.remove());
-        list.appendChild(row);
-    });
-}
-
-/**
- * Attach listeners for Bio & Proficiencies
- */
-export function wireBioEvents(char, ctx) {
-    const { saveAndEmit, vtt } = ctx;
-
-    // Bio collapsible card toggle
-    const bioToggle = document.getElementById('pc-bio-toggle');
-    const bioContent = document.getElementById('pc-bio-content');
-    const bioChevron = document.getElementById('pc-bio-chevron');
-    if (bioToggle && bioContent) {
-        bioToggle.addEventListener('click', () => {
-            const isHidden = bioContent.classList.toggle('vtt-hidden');
-            if (bioChevron) {
-                bioChevron.style.transform = isHidden ? 'rotate(0deg)' : 'rotate(180deg)';
-            }
-        });
-    }
-
-    // Primary bio input change listeners
-    ['age', 'height', 'weight', 'backstory', 'notes'].forEach((field) => {
-        const input = document.getElementById(`pc-primary-bio-${field}`);
-        if (input) {
-            input.addEventListener('change', () => {
-                char.bio = char.bio || {};
-                char.bio[field] = input.value;
-                saveAndEmit(char);
-            });
-        }
-    });
-
-    // Other proficiencies input change listeners
-    ['languages', 'weapons', 'armor', 'tools'].forEach((type) => {
-        document.getElementById(`pc-prof-${type}`)?.addEventListener('change', (e) => {
-            char.proficiencies = char.proficiencies || { languages: '', weapons: '', armor: '', tools: '' };
-            char.proficiencies[type] = e.target.value;
-            if (type === 'tools' && char.tools) {
-                const parsed = e.target.value
-                    .split(',')
-                    .map((s) => s.trim().toLowerCase())
-                    .filter(Boolean);
-                Object.keys(char.tools).forEach((k) => {
-                    char.tools[k].prof = parsed.includes(k.toLowerCase());
-                });
-            }
-            saveAndEmit(char);
-        });
-    });
-
-    // Proficiencies ping buttons
-    document.querySelectorAll('.pc-prof-ping').forEach((btn) => {
-        btn.addEventListener('click', (e) => {
-            const type = e.currentTarget.dataset.type;
-            const name = e.currentTarget.dataset.name;
-            const rawVal = char.proficiencies?.[type] || 'None';
-            const val = sanitizeProficienciesText(rawVal, type === 'weapons') || 'None';
-            const isWhisper = Boolean(
-                char?.whisperToGM || (typeof window !== 'undefined' && window.vttPlayerSheetAPI?.isWhisperToGM?.())
-            );
-            vtt.socket.emit('chat:msg', {
-                whisperToGM: isWhisper,
-                text: `[${char.name || 'Player'}: ${name}]\n**Proficiencies:** ${val}`
-            });
-        });
-    });
-}
-
-/**
- * Attach listeners and drag-and-drop for Ability Cards
- */
-export function wireAbilityCardsEvents(char, ctx) {
-    const { saveAndEmit, renderSheetData, vtt } = ctx;
-
-    // Add ability button
-    document.getElementById('btn-add-ability')?.addEventListener('click', () => {
-        document.getElementById('modal-ability-idx').value = '-1';
-        document.getElementById('modal-ability-name').value = '';
-        const catSel = document.getElementById('modal-ability-category');
-        if (catSel) {
-            catSel.innerHTML =
-                '<option value="">Uncategorized</option>' +
-                (char.abilityCategories || [])
-                    .map((c) => `<option value="${escapeHtml(c.id)}">📁 ${escapeHtml(c.name)}</option>`)
-                    .join('');
-            catSel.value = '';
-        }
-        const actSel = document.getElementById('modal-ability-action-type');
-        if (actSel) actSel.value = 'passive';
-        document.getElementById('modal-ability-desc').value = '';
-
-        if (ctx.populateScalingModDropdown) ctx.populateScalingModDropdown(char);
-        if (document.getElementById('modal-ability-base-dice'))
-            document.getElementById('modal-ability-base-dice').value = '';
-        if (document.getElementById('modal-ability-scaling-mod'))
-            document.getElementById('modal-ability-scaling-mod').value = 'none';
-        if (document.getElementById('modal-ability-extra-bonus'))
-            document.getElementById('modal-ability-extra-bonus').value = 0;
-        if (document.getElementById('modal-ability-formula'))
-            document.getElementById('modal-ability-formula').value = '';
-        if (document.getElementById('modal-ability-formula-preview'))
-            document.getElementById('modal-ability-formula-preview').innerText = 'None';
-
-        document.getElementById('modal-ability-has-counter').checked = false;
-        document.getElementById('modal-ability-uses-container').style.display = 'none';
-        document.getElementById('modal-ability-uses-current').value = 0;
-        document.getElementById('modal-ability-uses-max').value = 0;
-        if (document.getElementById('modal-ability-reset-type'))
-            document.getElementById('modal-ability-reset-type').value = 'long';
-
-        if (ctx.renderAbilityFields) ctx.renderAbilityFields([]);
-
-        const tableSel = document.getElementById('modal-ability-linked-table');
-        if (tableSel) {
-            const optgroupCamp = document.getElementById('optgroup-campaign-tables');
-            if (optgroupCamp) {
-                const tables = vtt?.campaignState?.rollTables?.tables || [];
-                optgroupCamp.innerHTML = tables
-                    .map((t) => `<option value="${t.id}">${escapeHtml(t.name)}</option>`)
-                    .join('');
-            }
-            tableSel.value = '';
-        }
-
-        switchModalTab('manual');
-        if (ctx.initializeImportTab) ctx.initializeImportTab();
-        document.getElementById('pc-ability-modal')?.classList.remove('vtt-hidden');
-        document.getElementById('pc-ability-overlay')?.classList.remove('vtt-hidden');
-    });
-
-    // Edit ability button
-    document.querySelectorAll('.pc-ability-edit').forEach((btn) =>
-        btn.addEventListener('click', (e) => {
-            const idx = e.currentTarget.dataset.idx;
-            const ab = char.abilityCards[idx];
-            if (!ab) return;
-            document.getElementById('modal-ability-idx').value = idx;
-            document.getElementById('modal-ability-name').value = ab.name || '';
-            const catSel = document.getElementById('modal-ability-category');
-            if (catSel) {
-                catSel.innerHTML =
-                    '<option value="">Uncategorized</option>' +
-                    (char.abilityCategories || [])
-                        .map((c) => `<option value="${escapeHtml(c.id)}">📁 ${escapeHtml(c.name)}</option>`)
-                        .join('');
-                catSel.value = ab.categoryId || '';
-            }
-            const actSel = document.getElementById('modal-ability-action-type');
-            if (actSel) actSel.value = ab.actionType || 'passive';
-            document.getElementById('modal-ability-desc').value = ab.description || '';
-
-            let baseDice = '';
-            let scalingMod = 'none';
-            let extraBonus = 0;
-            if (ab.formulaConfig) {
-                baseDice = ab.formulaConfig.baseDice || '';
-                scalingMod = ab.formulaConfig.modClass
-                    ? `classLevel:${ab.formulaConfig.modClass}`
-                    : ab.formulaConfig.scalingMod || 'none';
-                extraBonus = ab.formulaConfig.extraBonus || 0;
-            }
-            if (ctx.populateScalingModDropdown) ctx.populateScalingModDropdown(char, scalingMod);
-            if (document.getElementById('modal-ability-base-dice'))
-                document.getElementById('modal-ability-base-dice').value = baseDice;
-            if (document.getElementById('modal-ability-extra-bonus'))
-                document.getElementById('modal-ability-extra-bonus').value = extraBonus;
-            if (document.getElementById('modal-ability-formula'))
-                document.getElementById('modal-ability-formula').value = ab.formula || '';
-
-            const evalFormula = evaluateAbilityFormula(ab.formula, ab.formulaConfig, char);
-            if (document.getElementById('modal-ability-formula-preview')) {
-                document.getElementById('modal-ability-formula-preview').innerText = evalFormula || 'None';
-            }
-
-            document.getElementById('modal-ability-has-counter').checked = !!ab.hasCounter;
-            document.getElementById('modal-ability-uses-container').style.display = ab.hasCounter ? 'flex' : 'none';
-            document.getElementById('modal-ability-uses-current').value = ab.usesCurrent || 0;
-            document.getElementById('modal-ability-uses-max').value = ab.usesMax || 0;
-            if (document.getElementById('modal-ability-reset-type'))
-                document.getElementById('modal-ability-reset-type').value = ab.resetType || 'long';
-
-            if (ctx.renderAbilityFields) ctx.renderAbilityFields(ab.customFields || []);
-
-            const tableSel = document.getElementById('modal-ability-linked-table');
-            if (tableSel) {
-                const optgroupCamp = document.getElementById('optgroup-campaign-tables');
-                if (optgroupCamp) {
-                    const tables = vtt?.campaignState?.rollTables?.tables || [];
-                    optgroupCamp.innerHTML = tables
-                        .map((t) => `<option value="${t.id}">${escapeHtml(t.name)}</option>`)
-                        .join('');
-                }
-                tableSel.value = ab.linkedTable || '';
-            }
-
-            switchModalTab('manual');
-            if (ctx.initializeImportTab) ctx.initializeImportTab();
-            document.getElementById('pc-ability-modal')?.classList.remove('vtt-hidden');
-            document.getElementById('pc-ability-overlay')?.classList.remove('vtt-hidden');
-        })
-    );
-
-    // Counter minus / plus
-    document.querySelectorAll('.pc-ability-uses-minus').forEach((btn) =>
-        btn.addEventListener('click', (e) => {
-            const idx = e.currentTarget.dataset.idx;
-            const ab = char.abilityCards[idx];
-            if (ab) {
-                ab.usesCurrent = Math.max(0, (ab.usesCurrent || 0) - 1);
-                saveAndEmit(char);
-                renderSheetData(char);
-            }
-        })
-    );
-
-    document.querySelectorAll('.pc-ability-uses-plus').forEach((btn) =>
-        btn.addEventListener('click', (e) => {
-            const idx = e.currentTarget.dataset.idx;
-            const ab = char.abilityCards[idx];
-            if (ab) {
-                const current = ab.usesCurrent || 0;
-                const max = ab.usesMax || 0;
-                if (max > 0) {
-                    ab.usesCurrent = Math.min(max, current + 1);
-                } else {
-                    ab.usesCurrent = current + 1;
-                }
-                saveAndEmit(char);
-                renderSheetData(char);
-            }
-        })
-    );
-
-    // Ability category management
-    document.getElementById('btn-create-ability-cat')?.addEventListener('click', () => {
-        if (ctx.openCategoryModal) ctx.openCategoryModal('ability');
-    });
-
-    document.querySelectorAll('.pc-ability-cat-edit').forEach((btn) =>
-        btn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            if (ctx.openCategoryModal) ctx.openCategoryModal('ability', e.currentTarget.dataset.categoryId);
-        })
-    );
-
-    document.querySelectorAll('.pc-ability-cat-del').forEach((btn) =>
-        btn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            if (ctx.openCategoryDeleteModal) ctx.openCategoryDeleteModal('ability', e.currentTarget.dataset.categoryId);
-        })
-    );
-
-    document.querySelectorAll('.pc-ability-cat-header').forEach((hdr) =>
-        hdr.addEventListener('click', (e) => {
-            const cId = e.currentTarget.dataset.categoryId;
-            if (!cId) return;
-            const cat = (char.abilityCategories || []).find((c) => c.id === cId);
-            if (cat) {
-                cat.collapsed = !cat.collapsed;
-                saveAndEmit(char);
-                renderSheetData(char);
-            }
-        })
-    );
-
-    document.querySelectorAll('.pc-ability-cat-select').forEach((sel) =>
-        sel.addEventListener('change', (e) => {
-            const idx = parseInt(e.currentTarget.dataset.idx);
-            const newCatId = e.currentTarget.value || null;
-            if (char.abilityCards && char.abilityCards[idx]) {
-                char.abilityCards[idx].categoryId = newCatId;
-                saveAndEmit(char);
-                renderSheetData(char);
-            }
-        })
-    );
-
-    // Delete ability card
-    document.querySelectorAll('.pc-ability-del').forEach((btn) =>
-        btn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const idx = parseInt(e.currentTarget.dataset.idx);
-            if (!isNaN(idx) && char.abilityCards[idx]) {
-                if (confirm('Delete this ability card?')) {
-                    char.abilityCards.splice(idx, 1);
-                    saveAndEmit(char);
-                    renderSheetData(char);
-                }
-            }
-        })
-    );
-
-    // Expand details
-    document.querySelectorAll('.pc-ability-expand').forEach((btn) =>
-        btn.addEventListener('click', (e) => {
-            const idx = e.currentTarget.dataset.idx;
-            const details = document.getElementById(`pc-ability-details-${idx}`);
-            if (details) {
-                if (details.style.display === 'none') {
-                    details.style.display = 'block';
-                    e.currentTarget.style.transform = 'rotate(90deg)';
-                } else {
-                    details.style.display = 'none';
-                    e.currentTarget.style.transform = 'rotate(0deg)';
-                }
-            }
-        })
-    );
-
-    // Ping description to chat
-    document.querySelectorAll('.pc-ability-ping').forEach((btn) =>
-        btn.addEventListener('click', (e) => {
-            const idx = e.currentTarget.dataset.idx;
-            const ab = char.abilityCards[idx];
-            if (!ab) return;
-
-            let descHtml = ab.description ? ab.description.replace(/\n/g, '<br>') : '';
-            if (ab.customFields && ab.customFields.length > 0) {
-                if (descHtml) descHtml += '<br><br>';
-                ab.customFields.forEach((f) => {
-                    descHtml += `<b>${f.label}:</b> ${f.entry}<br>`;
-                });
-            }
-
-            const mc = {
-                charName: char.name,
-                macroName: ab.name,
-                description: descHtml
-            };
-
-            if (ab.formula) {
-                const evalFormula = evaluateAbilityFormula(ab.formula, ab.formulaConfig, char);
-                mc.dmgRolls = [
-                    {
-                        type: 'Roll',
-                        formula: evalFormula || ab.formula,
-                        roll: simulateRoll(evalFormula || ab.formula)
-                    }
-                ];
-            }
-
-            const effectiveTable = getEffectiveLinkedTable(ab);
-            if (effectiveTable) {
-                const campTables = vtt?.campaignState?.rollTables?.tables || [];
-                const campMatch = campTables.find((t) => t.id === effectiveTable);
-                let tableName = 'Table';
-                if (effectiveTable === 'compendium:wild_magic_sorcerer') tableName = 'Wild Magic Surge';
-                else if (effectiveTable === 'compendium:wild_magic_barbarian') tableName = 'Wild Magic';
-                else if (campMatch) tableName = campMatch.name;
-
-                mc.linkedTable = {
-                    id: effectiveTable,
-                    name: tableName
-                };
-            }
-
-            const isWhisper = Boolean(
-                char?.whisperToGM || (typeof window !== 'undefined' && window.vttPlayerSheetAPI?.isWhisperToGM?.())
-            );
-            vtt.socket.emit('chat:msg', {
-                whisperToGM: isWhisper,
-                macroCard: mc
-            });
-        })
-    );
-
-    // 1-Click Table Roll Chip
-    document.querySelectorAll('.pc-ability-table-chip').forEach((chip) =>
-        chip.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const idx = e.currentTarget.dataset.idx;
-            const ab = char.abilityCards[idx];
-            const tableId = e.currentTarget.dataset.table || getEffectiveLinkedTable(ab);
-            if (tableId && window.VTT?.rollTablesEngine?.rollLinkedTable) {
-                window.VTT.rollTablesEngine.rollLinkedTable(tableId, {
-                    charName: char.name,
-                    abilityName: ab?.name
-                });
-            }
-        })
-    );
-
-    // 1-Click Roll Chip
-    document.querySelectorAll('.pc-ability-roll-chip').forEach((chip) =>
-        chip.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const idx = e.currentTarget.dataset.idx;
-            const ab = char.abilityCards[idx];
-            if (!ab || !ab.formula) return;
-            const evalFormula = evaluateAbilityFormula(ab.formula, ab.formulaConfig, char);
-            const rollVal = simulateRoll(evalFormula || ab.formula);
-
-            const mc = {
-                charName: char.name,
-                macroName: ab.name,
-                description: ab.description ? ab.description.replace(/\n/g, '<br>') : '',
-                dmgRolls: [
-                    {
-                        type: 'Roll',
-                        formula: evalFormula || ab.formula,
-                        roll: rollVal
-                    }
-                ]
-            };
-            const isWhisper = Boolean(
-                char?.whisperToGM || (typeof window !== 'undefined' && window.vttPlayerSheetAPI?.isWhisperToGM?.())
-            );
-            vtt.socket.emit('chat:msg', { whisperToGM: isWhisper, macroCard: mc });
-        })
-    );
-
-    // Search filter
-    const abilitySearch = document.getElementById('pc-ability-search');
-    if (abilitySearch) {
-        abilitySearch.oninput = (e) => {
-            const query = e.target.value.toLowerCase().trim();
-            document.querySelectorAll('#pc-ability-list .ability-row').forEach((row) => {
-                const txt = row.innerText.toLowerCase();
-                row.style.display = !query || txt.includes(query) ? 'flex' : 'none';
-            });
-            document.querySelectorAll('#pc-ability-list .pc-ability-cat-card').forEach((card) => {
-                const visibleRows = card.querySelectorAll('.ability-row:not([style*="display: none"])');
-                card.style.display = visibleRows.length > 0 ? 'block' : 'none';
-            });
-        };
-    }
-
-    // Drag-and-drop
-    let abilityDragHandlePressed = false;
-    let abilityDraggedIdx = null;
-    let abilityCatDragHandlePressed = false;
-    let abilityCatDraggedIdx = null;
-
-    const clearAbilityDropIndicators = () => {
-        document.querySelectorAll('#pc-ability-list .ability-row').forEach((row) => {
-            row.style.borderTop = '';
-            row.style.borderBottom = '';
-            row.style.boxShadow = '';
-            row.style.opacity = '';
-        });
-        document.querySelectorAll('#pc-ability-list .pc-ability-cat-header').forEach((hdr) => {
-            hdr.style.outline = '';
-            hdr.style.background = '';
-        });
-        document.querySelectorAll('#pc-ability-list .pc-ability-cat-card').forEach((card) => {
-            card.style.borderTop = '';
-            card.style.borderBottom = '';
-            card.style.opacity = '';
-        });
-    };
-
-    document.querySelectorAll('.pc-ability-drag-handle').forEach((handle) => {
-        handle.addEventListener('mousedown', () => {
-            abilityDragHandlePressed = true;
-        });
-    });
-    document.querySelectorAll('.pc-ability-cat-drag-handle').forEach((handle) => {
-        handle.addEventListener('mousedown', () => {
-            abilityCatDragHandlePressed = true;
-        });
-    });
-
-    window.addEventListener('mouseup', () => {
-        abilityDragHandlePressed = false;
-        abilityCatDragHandlePressed = false;
-    });
-
-    // Drag ability rows
-    document.querySelectorAll('#pc-ability-list .ability-row').forEach((row) => {
-        row.addEventListener('dragstart', (e) => {
-            if (!abilityDragHandlePressed) {
-                e.preventDefault();
-                return;
-            }
-            abilityDraggedIdx = parseInt(row.dataset.idx);
-            e.dataTransfer.setData('text/plain', `ability_${abilityDraggedIdx}`);
-            e.dataTransfer.effectAllowed = 'move';
-            setTimeout(() => {
-                row.style.opacity = '0.4';
-            }, 0);
-        });
-
-        row.addEventListener('dragover', (e) => {
-            if (abilityDraggedIdx === null || abilityDraggedIdx === undefined) return;
-            e.preventDefault();
-            e.stopPropagation();
-            e.dataTransfer.dropEffect = 'move';
-
-            const rect = row.getBoundingClientRect();
-            const midY = rect.top + rect.height / 2;
-            clearAbilityDropIndicators();
-            const draggedRow = document.querySelector(`#pc-ability-list .ability-row[data-idx="${abilityDraggedIdx}"]`);
-            if (draggedRow) draggedRow.style.opacity = '0.4';
-
-            if (e.clientY < midY) {
-                row.style.borderTop = '2px solid var(--color-gold-base)';
-                row.style.boxShadow = '0 -4px 8px -2px rgba(212, 175, 55, 0.6)';
-            } else {
-                row.style.borderBottom = '2px solid var(--color-gold-base)';
-                row.style.boxShadow = '0 4px 8px -2px rgba(212, 175, 55, 0.6)';
-            }
-        });
-
-        row.addEventListener('drop', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            clearAbilityDropIndicators();
-
-            const fromIdx = abilityDraggedIdx;
-            const targetIdx = parseInt(row.dataset.idx);
-            const targetCategoryId = row.dataset.categoryId || null;
-            abilityDraggedIdx = null;
-            abilityDragHandlePressed = false;
-
-            if (isNaN(fromIdx) || isNaN(targetIdx) || fromIdx === targetIdx) return;
-
-            const rect = row.getBoundingClientRect();
-            const midY = rect.top + rect.height / 2;
-            let insertAt = targetIdx;
-            if (e.clientY >= midY) {
-                insertAt = targetIdx + 1;
-            }
-            if (fromIdx < insertAt) {
-                insertAt--;
-            }
-
-            const [movedItem] = char.abilityCards.splice(fromIdx, 1);
-            movedItem.categoryId = targetCategoryId;
-            char.abilityCards.splice(insertAt, 0, movedItem);
-            saveAndEmit(char);
-            renderSheetData(char);
-        });
-
-        row.addEventListener('dragend', () => {
-            abilityDraggedIdx = null;
-            abilityDragHandlePressed = false;
-            clearAbilityDropIndicators();
-        });
-    });
-
-    // Drop on category header
-    document.querySelectorAll('#pc-ability-list .pc-ability-cat-header').forEach((hdr) => {
-        hdr.addEventListener('dragover', (e) => {
-            if (abilityDraggedIdx === null || abilityDraggedIdx === undefined) return;
-            e.preventDefault();
-            e.stopPropagation();
-            e.dataTransfer.dropEffect = 'move';
-            clearAbilityDropIndicators();
-            const draggedRow = document.querySelector(`#pc-ability-list .ability-row[data-idx="${abilityDraggedIdx}"]`);
-            if (draggedRow) draggedRow.style.opacity = '0.4';
-
-            hdr.style.outline = '2px dashed var(--color-gold-base)';
-            hdr.style.background = 'rgba(212, 175, 55, 0.15)';
-        });
-
-        hdr.addEventListener('drop', (e) => {
-            if (abilityDraggedIdx === null || abilityDraggedIdx === undefined) return;
-            e.preventDefault();
-            e.stopPropagation();
-            clearAbilityDropIndicators();
-
-            const fromIdx = abilityDraggedIdx;
-            const targetCategoryId = hdr.dataset.categoryId || null;
-            abilityDraggedIdx = null;
-            abilityDragHandlePressed = false;
-
-            if (!isNaN(fromIdx) && char.abilityCards[fromIdx]) {
-                char.abilityCards[fromIdx].categoryId = targetCategoryId;
-                saveAndEmit(char);
-                renderSheetData(char);
-            }
-        });
-    });
-
-    // Reorder categories
-    document.querySelectorAll('#pc-ability-list .pc-ability-cat-card[data-category-idx]').forEach((card) => {
-        card.addEventListener('dragstart', (e) => {
-            if (!abilityCatDragHandlePressed) return;
-            abilityCatDraggedIdx = parseInt(card.dataset.categoryIdx);
-            e.dataTransfer.setData('text/plain', 'acat_' + abilityCatDraggedIdx);
-            e.dataTransfer.effectAllowed = 'move';
-            setTimeout(() => {
-                card.style.opacity = '0.4';
-            }, 0);
-        });
-
-        card.addEventListener('dragover', (e) => {
-            if (abilityCatDraggedIdx === null || abilityCatDraggedIdx === undefined) return;
-            e.preventDefault();
-            e.stopPropagation();
-            e.dataTransfer.dropEffect = 'move';
-
-            const rect = card.getBoundingClientRect();
-            const midY = rect.top + rect.height / 2;
-            clearAbilityDropIndicators();
-            const draggedCard = document.querySelector(
-                `#pc-ability-list .pc-ability-cat-card[data-category-idx="${abilityCatDraggedIdx}"]`
-            );
-            if (draggedCard) draggedCard.style.opacity = '0.4';
-
-            if (e.clientY < midY) {
-                card.style.borderTop = '2px solid var(--color-gold-base)';
-            } else {
-                card.style.borderBottom = '2px solid var(--color-gold-base)';
-            }
-        });
-
-        card.addEventListener('drop', (e) => {
-            if (abilityCatDraggedIdx === null || abilityCatDraggedIdx === undefined) return;
-            e.preventDefault();
-            e.stopPropagation();
-            clearAbilityDropIndicators();
-
-            const fromIdx = abilityCatDraggedIdx;
-            const targetIdx = parseInt(card.dataset.categoryIdx);
-            abilityCatDraggedIdx = null;
-            abilityCatDragHandlePressed = false;
-
-            if (isNaN(fromIdx) || isNaN(targetIdx) || fromIdx === targetIdx) return;
-
-            const rect = card.getBoundingClientRect();
-            const midY = rect.top + rect.height / 2;
-            let insertAt = targetIdx;
-            if (e.clientY >= midY) {
-                insertAt = targetIdx + 1;
-            }
-            if (fromIdx < insertAt) {
-                insertAt--;
-            }
-
-            const [movedContainer] = char.abilityCategories.splice(fromIdx, 1);
-            char.abilityCategories.splice(insertAt, 0, movedContainer);
-            saveAndEmit(char);
-            renderSheetData(char);
-        });
-
-        card.addEventListener('dragend', () => {
-            abilityCatDraggedIdx = null;
-            abilityCatDragHandlePressed = false;
-            clearAbilityDropIndicators();
-        });
-    });
-}
+        `,s.querySelector(".btn-ab-field-remove")?.addEventListener("click",()=>s.remove()),o.appendChild(s)}))}export function wireBioEvents(e,o){const{saveAndEmit:n,vtt:s}=o,r=document.getElementById("pc-bio-toggle"),y=document.getElementById("pc-bio-content"),m=document.getElementById("pc-bio-chevron");r&&y&&r.addEventListener("click",()=>{const d=y.classList.toggle("vtt-hidden");m&&(m.style.transform=d?"rotate(0deg)":"rotate(180deg)")}),["age","height","weight","backstory","notes"].forEach(d=>{const p=document.getElementById(`pc-primary-bio-${d}`);p&&p.addEventListener("change",()=>{e.bio=e.bio||{},e.bio[d]=p.value,n(e)})}),["languages","weapons","armor","tools"].forEach(d=>{document.getElementById(`pc-prof-${d}`)?.addEventListener("change",p=>{if(e.proficiencies=e.proficiencies||{languages:"",weapons:"",armor:"",tools:""},e.proficiencies[d]=p.target.value,d==="tools"&&e.tools){const u=p.target.value.split(",").map(f=>f.trim().toLowerCase()).filter(Boolean);Object.keys(e.tools).forEach(f=>{e.tools[f].prof=u.includes(f.toLowerCase())})}n(e)})}),document.querySelectorAll(".pc-prof-ping").forEach(d=>{d.addEventListener("click",p=>{const u=p.currentTarget.dataset.type,f=p.currentTarget.dataset.name,i=e.proficiencies?.[u]||"None",a=sanitizeProficienciesText(i,u==="weapons")||"None",l=!!(e?.whisperToGM||typeof window<"u"&&window.vttPlayerSheetAPI?.isWhisperToGM?.());s.socket.emit("chat:msg",{whisperToGM:l,text:`[${e.name||"Player"}: ${f}]
+**Proficiencies:** ${a}`})})})}export function wireAbilityCardsEvents(e,o){const{saveAndEmit:n,renderSheetData:s,vtt:r}=o;document.getElementById("btn-add-ability")?.addEventListener("click",()=>{document.getElementById("modal-ability-idx").value="-1",document.getElementById("modal-ability-name").value="";const i=document.getElementById("modal-ability-category");i&&(i.innerHTML='<option value="">Uncategorized</option>'+(e.abilityCategories||[]).map(t=>`<option value="${h(t.id)}">\u{1F4C1} ${h(t.name)}</option>`).join(""),i.value="");const a=document.getElementById("modal-ability-action-type");a&&(a.value="passive"),document.getElementById("modal-ability-desc").value="",o.populateScalingModDropdown&&o.populateScalingModDropdown(e),document.getElementById("modal-ability-base-dice")&&(document.getElementById("modal-ability-base-dice").value=""),document.getElementById("modal-ability-scaling-mod")&&(document.getElementById("modal-ability-scaling-mod").value="none"),document.getElementById("modal-ability-extra-bonus")&&(document.getElementById("modal-ability-extra-bonus").value=0),document.getElementById("modal-ability-formula")&&(document.getElementById("modal-ability-formula").value=""),document.getElementById("modal-ability-formula-preview")&&(document.getElementById("modal-ability-formula-preview").innerText="None"),document.getElementById("modal-ability-has-counter").checked=!1,document.getElementById("modal-ability-uses-container").style.display="none",document.getElementById("modal-ability-uses-current").value=0,document.getElementById("modal-ability-uses-max").value=0,document.getElementById("modal-ability-reset-type")&&(document.getElementById("modal-ability-reset-type").value="long"),o.renderAbilityFields&&o.renderAbilityFields([]);const l=document.getElementById("modal-ability-linked-table");if(l){const t=document.getElementById("optgroup-campaign-tables");if(t){const c=r?.campaignState?.rollTables?.tables||[];t.innerHTML=c.map(g=>`<option value="${g.id}">${h(g.name)}</option>`).join("")}l.value=""}B("manual"),o.initializeImportTab&&o.initializeImportTab(),document.getElementById("pc-ability-modal")?.classList.remove("vtt-hidden"),document.getElementById("pc-ability-overlay")?.classList.remove("vtt-hidden")}),document.querySelectorAll(".pc-ability-edit").forEach(i=>i.addEventListener("click",a=>{const l=a.currentTarget.dataset.idx,t=e.abilityCards[l];if(!t)return;document.getElementById("modal-ability-idx").value=l,document.getElementById("modal-ability-name").value=t.name||"";const c=document.getElementById("modal-ability-category");c&&(c.innerHTML='<option value="">Uncategorized</option>'+(e.abilityCategories||[]).map(w=>`<option value="${h(w.id)}">\u{1F4C1} ${h(w.name)}</option>`).join(""),c.value=t.categoryId||"");const g=document.getElementById("modal-ability-action-type");g&&(g.value=t.actionType||"passive"),document.getElementById("modal-ability-desc").value=t.description||"";let b="",x="none",v=0;t.formulaConfig&&(b=t.formulaConfig.baseDice||"",x=t.formulaConfig.modClass?`classLevel:${t.formulaConfig.modClass}`:t.formulaConfig.scalingMod||"none",v=t.formulaConfig.extraBonus||0),o.populateScalingModDropdown&&o.populateScalingModDropdown(e,x),document.getElementById("modal-ability-base-dice")&&(document.getElementById("modal-ability-base-dice").value=b),document.getElementById("modal-ability-extra-bonus")&&(document.getElementById("modal-ability-extra-bonus").value=v),document.getElementById("modal-ability-formula")&&(document.getElementById("modal-ability-formula").value=t.formula||"");const I=C(t.formula,t.formulaConfig,e);document.getElementById("modal-ability-formula-preview")&&(document.getElementById("modal-ability-formula-preview").innerText=I||"None"),document.getElementById("modal-ability-has-counter").checked=!!t.hasCounter,document.getElementById("modal-ability-uses-container").style.display=t.hasCounter?"flex":"none",document.getElementById("modal-ability-uses-current").value=t.usesCurrent||0,document.getElementById("modal-ability-uses-max").value=t.usesMax||0,document.getElementById("modal-ability-reset-type")&&(document.getElementById("modal-ability-reset-type").value=t.resetType||"long"),o.renderAbilityFields&&o.renderAbilityFields(t.customFields||[]);const E=document.getElementById("modal-ability-linked-table");if(E){const w=document.getElementById("optgroup-campaign-tables");if(w){const k=r?.campaignState?.rollTables?.tables||[];w.innerHTML=k.map(T=>`<option value="${T.id}">${h(T.name)}</option>`).join("")}E.value=t.linkedTable||""}B("manual"),o.initializeImportTab&&o.initializeImportTab(),document.getElementById("pc-ability-modal")?.classList.remove("vtt-hidden"),document.getElementById("pc-ability-overlay")?.classList.remove("vtt-hidden")})),document.querySelectorAll(".pc-ability-uses-minus").forEach(i=>i.addEventListener("click",a=>{const l=a.currentTarget.dataset.idx,t=e.abilityCards[l];t&&(t.usesCurrent=Math.max(0,(t.usesCurrent||0)-1),n(e),s(e))})),document.querySelectorAll(".pc-ability-uses-plus").forEach(i=>i.addEventListener("click",a=>{const l=a.currentTarget.dataset.idx,t=e.abilityCards[l];if(t){const c=t.usesCurrent||0,g=t.usesMax||0;g>0?t.usesCurrent=Math.min(g,c+1):t.usesCurrent=c+1,n(e),s(e)}})),document.getElementById("btn-create-ability-cat")?.addEventListener("click",()=>{o.openCategoryModal&&o.openCategoryModal("ability")}),document.querySelectorAll(".pc-ability-cat-edit").forEach(i=>i.addEventListener("click",a=>{a.stopPropagation(),o.openCategoryModal&&o.openCategoryModal("ability",a.currentTarget.dataset.categoryId)})),document.querySelectorAll(".pc-ability-cat-del").forEach(i=>i.addEventListener("click",a=>{a.stopPropagation(),o.openCategoryDeleteModal&&o.openCategoryDeleteModal("ability",a.currentTarget.dataset.categoryId)})),document.querySelectorAll(".pc-ability-cat-header").forEach(i=>i.addEventListener("click",a=>{const l=a.currentTarget.dataset.categoryId;if(!l)return;const t=(e.abilityCategories||[]).find(c=>c.id===l);t&&(t.collapsed=!t.collapsed,n(e),s(e))})),document.querySelectorAll(".pc-ability-cat-select").forEach(i=>i.addEventListener("change",a=>{const l=parseInt(a.currentTarget.dataset.idx),t=a.currentTarget.value||null;e.abilityCards&&e.abilityCards[l]&&(e.abilityCards[l].categoryId=t,n(e),s(e))})),document.querySelectorAll(".pc-ability-del").forEach(i=>i.addEventListener("click",a=>{a.stopPropagation();const l=parseInt(a.currentTarget.dataset.idx);!isNaN(l)&&e.abilityCards[l]&&confirm("Delete this ability card?")&&(e.abilityCards.splice(l,1),n(e),s(e))})),document.querySelectorAll(".pc-ability-expand").forEach(i=>i.addEventListener("click",a=>{const l=a.currentTarget.dataset.idx,t=document.getElementById(`pc-ability-details-${l}`);t&&(t.style.display==="none"?(t.style.display="block",a.currentTarget.style.transform="rotate(90deg)"):(t.style.display="none",a.currentTarget.style.transform="rotate(0deg)"))})),document.querySelectorAll(".pc-ability-ping").forEach(i=>i.addEventListener("click",a=>{const l=a.currentTarget.dataset.idx,t=e.abilityCards[l];if(!t)return;let c=t.description?t.description.replace(/\n/g,"<br>"):"";t.customFields&&t.customFields.length>0&&(c&&(c+="<br><br>"),t.customFields.forEach(v=>{c+=`<b>${v.label}:</b> ${v.entry}<br>`}));const g={charName:e.name,macroName:t.name,description:c};if(t.formula){const v=C(t.formula,t.formulaConfig,e);g.dmgRolls=[{type:"Roll",formula:v||t.formula,roll:$(v||t.formula)}]}const b=getEffectiveLinkedTable(t);if(b){const I=(r?.campaignState?.rollTables?.tables||[]).find(w=>w.id===b);let E="Table";b==="compendium:wild_magic_sorcerer"?E="Wild Magic Surge":b==="compendium:wild_magic_barbarian"?E="Wild Magic":I&&(E=I.name),g.linkedTable={id:b,name:E}}const x=!!(e?.whisperToGM||typeof window<"u"&&window.vttPlayerSheetAPI?.isWhisperToGM?.());r.socket.emit("chat:msg",{whisperToGM:x,macroCard:g})})),document.querySelectorAll(".pc-ability-table-chip").forEach(i=>i.addEventListener("click",a=>{a.stopPropagation();const l=a.currentTarget.dataset.idx,t=e.abilityCards[l],c=a.currentTarget.dataset.table||getEffectiveLinkedTable(t);c&&window.VTT?.rollTablesEngine?.rollLinkedTable&&window.VTT.rollTablesEngine.rollLinkedTable(c,{charName:e.name,abilityName:t?.name})})),document.querySelectorAll(".pc-ability-roll-chip").forEach(i=>i.addEventListener("click",a=>{a.stopPropagation();const l=a.currentTarget.dataset.idx,t=e.abilityCards[l];if(!t||!t.formula)return;const c=C(t.formula,t.formulaConfig,e),g=$(c||t.formula),b={charName:e.name,macroName:t.name,description:t.description?t.description.replace(/\n/g,"<br>"):"",dmgRolls:[{type:"Roll",formula:c||t.formula,roll:g}]},x=!!(e?.whisperToGM||typeof window<"u"&&window.vttPlayerSheetAPI?.isWhisperToGM?.());r.socket.emit("chat:msg",{whisperToGM:x,macroCard:b})}));const y=document.getElementById("pc-ability-search");y&&(y.oninput=i=>{const a=i.target.value.toLowerCase().trim();document.querySelectorAll("#pc-ability-list .ability-row").forEach(l=>{const t=l.innerText.toLowerCase();l.style.display=!a||t.includes(a)?"flex":"none"}),document.querySelectorAll("#pc-ability-list .pc-ability-cat-card").forEach(l=>{const t=l.querySelectorAll('.ability-row:not([style*="display: none"])');l.style.display=t.length>0?"block":"none"})});let m=!1,d=null,p=!1,u=null;const f=()=>{document.querySelectorAll("#pc-ability-list .ability-row").forEach(i=>{i.style.borderTop="",i.style.borderBottom="",i.style.boxShadow="",i.style.opacity=""}),document.querySelectorAll("#pc-ability-list .pc-ability-cat-header").forEach(i=>{i.style.outline="",i.style.background=""}),document.querySelectorAll("#pc-ability-list .pc-ability-cat-card").forEach(i=>{i.style.borderTop="",i.style.borderBottom="",i.style.opacity=""})};document.querySelectorAll(".pc-ability-drag-handle").forEach(i=>{i.addEventListener("mousedown",()=>{m=!0})}),document.querySelectorAll(".pc-ability-cat-drag-handle").forEach(i=>{i.addEventListener("mousedown",()=>{p=!0})}),window.addEventListener("mouseup",()=>{m=!1,p=!1}),document.querySelectorAll("#pc-ability-list .ability-row").forEach(i=>{i.addEventListener("dragstart",a=>{if(!m){a.preventDefault();return}d=parseInt(i.dataset.idx),a.dataTransfer.setData("text/plain",`ability_${d}`),a.dataTransfer.effectAllowed="move",setTimeout(()=>{i.style.opacity="0.4"},0)}),i.addEventListener("dragover",a=>{if(d==null)return;a.preventDefault(),a.stopPropagation(),a.dataTransfer.dropEffect="move";const l=i.getBoundingClientRect(),t=l.top+l.height/2;f();const c=document.querySelector(`#pc-ability-list .ability-row[data-idx="${d}"]`);c&&(c.style.opacity="0.4"),a.clientY<t?(i.style.borderTop="2px solid var(--color-gold-base)",i.style.boxShadow="0 -4px 8px -2px rgba(212, 175, 55, 0.6)"):(i.style.borderBottom="2px solid var(--color-gold-base)",i.style.boxShadow="0 4px 8px -2px rgba(212, 175, 55, 0.6)")}),i.addEventListener("drop",a=>{a.preventDefault(),a.stopPropagation(),f();const l=d,t=parseInt(i.dataset.idx),c=i.dataset.categoryId||null;if(d=null,m=!1,isNaN(l)||isNaN(t)||l===t)return;const g=i.getBoundingClientRect(),b=g.top+g.height/2;let x=t;a.clientY>=b&&(x=t+1),l<x&&x--;const[v]=e.abilityCards.splice(l,1);v.categoryId=c,e.abilityCards.splice(x,0,v),n(e),s(e)}),i.addEventListener("dragend",()=>{d=null,m=!1,f()})}),document.querySelectorAll("#pc-ability-list .pc-ability-cat-header").forEach(i=>{i.addEventListener("dragover",a=>{if(d==null)return;a.preventDefault(),a.stopPropagation(),a.dataTransfer.dropEffect="move",f();const l=document.querySelector(`#pc-ability-list .ability-row[data-idx="${d}"]`);l&&(l.style.opacity="0.4"),i.style.outline="2px dashed var(--color-gold-base)",i.style.background="rgba(212, 175, 55, 0.15)"}),i.addEventListener("drop",a=>{if(d==null)return;a.preventDefault(),a.stopPropagation(),f();const l=d,t=i.dataset.categoryId||null;d=null,m=!1,!isNaN(l)&&e.abilityCards[l]&&(e.abilityCards[l].categoryId=t,n(e),s(e))})}),document.querySelectorAll("#pc-ability-list .pc-ability-cat-card[data-category-idx]").forEach(i=>{i.addEventListener("dragstart",a=>{p&&(u=parseInt(i.dataset.categoryIdx),a.dataTransfer.setData("text/plain","acat_"+u),a.dataTransfer.effectAllowed="move",setTimeout(()=>{i.style.opacity="0.4"},0))}),i.addEventListener("dragover",a=>{if(u==null)return;a.preventDefault(),a.stopPropagation(),a.dataTransfer.dropEffect="move";const l=i.getBoundingClientRect(),t=l.top+l.height/2;f();const c=document.querySelector(`#pc-ability-list .pc-ability-cat-card[data-category-idx="${u}"]`);c&&(c.style.opacity="0.4"),a.clientY<t?i.style.borderTop="2px solid var(--color-gold-base)":i.style.borderBottom="2px solid var(--color-gold-base)"}),i.addEventListener("drop",a=>{if(u==null)return;a.preventDefault(),a.stopPropagation(),f();const l=u,t=parseInt(i.dataset.categoryIdx);if(u=null,p=!1,isNaN(l)||isNaN(t)||l===t)return;const c=i.getBoundingClientRect(),g=c.top+c.height/2;let b=t;a.clientY>=g&&(b=t+1),l<b&&b--;const[x]=e.abilityCategories.splice(l,1);e.abilityCategories.splice(b,0,x),n(e),s(e)}),i.addEventListener("dragend",()=>{u=null,p=!1,f()})})}

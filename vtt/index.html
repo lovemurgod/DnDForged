@@ -30,28 +30,26 @@
 
     <!-- ForgeD VTT Custom Premium Stylesheet -->
     <link rel="stylesheet" href="css/vtt.css?v=11">
-    <link rel="stylesheet" href="css/vtt-mobile.css?v=1">
+    <link rel="stylesheet" href="css/vtt-mobile.css?v=1" media="(max-width: 1024px), (pointer: coarse)">
 
     <!-- 3D WebGL Dice Engine Stylesheet -->
     <link rel="stylesheet" href="css/dice-3d.css">
 
-    <!-- YouTube IFrame API -->
-    <script src="https://www.youtube.com/iframe_api"></script>
+    <!-- YouTube IFrame API (non-blocking) -->
+    <script async src="https://www.youtube.com/iframe_api"></script>
 
-    <!-- Socket.io & P2P WebRTC Adapter -->
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="js/network/vtt-static-shim.js"></script>
-    <script src="lib/peerjs.min.js"></script>
-    <script src="js/network/vtt-p2p-host-engine.js"></script>
-    <script src="js/network/vtt-p2p-adapter.js"></script>
-
-    <!-- Three.js, Cannon.js & 3D WebGL Dice Engine -->
-    <script src="lib/three.min.js"></script>
-    <script src="lib/cannon.min.js"></script>
-    <script src="js/dice-3d.js"></script>
+    <!-- Socket.io & P2P WebRTC Adapter (deferred to avoid blocking first paint) -->
+    <script defer src="/socket.io/socket.io.js"></script>
+    <script defer src="js/network/vtt-static-shim.js"></script>
+    <script defer src="lib/peerjs.min.js"></script>
+    <script defer src="js/network/vtt-p2p-host-engine.js"></script>
+    <script defer src="js/network/vtt-p2p-adapter.js"></script>
 
     <!-- DOMPurify Standalone Sanitizer (XSS Protection) -->
-    <script src="lib/purify.min.js"></script>
+    <script defer src="lib/purify.min.js"></script>
+
+    <!-- Preload main VTT module entrypoint -->
+    <link rel="modulepreload" href="js/bootstrap/vtt-boot.js?v=1.0.6">
 
     <!-- ForgeDVTT Standalone Parsers & Utilities -->
     <script type="module" src="js/vtt-dice-parser.js"></script>

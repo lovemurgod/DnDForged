@@ -204,7 +204,7 @@ i[class*="fa-regular"] {
 }
 .btn-primary {
     background: linear-gradient(135deg, var(--color-gold-base), var(--color-gold-dark));
-    color: #111;
+    color: var(--color-on-gold, #111);
     border-color: rgba(255, 255, 255, 0.1);
 }
 .btn-primary:hover {
@@ -279,14 +279,14 @@ i[class*="fa-regular"] {
     border-color: var(--color-text-secondary);
 }
 .roll-mode-btn.active.adv {
-    background: linear-gradient(135deg, var(--color-success-base), #2e7d32);
-    color: white;
+    background: var(--color-success-base);
+    color: var(--color-on-success, #fff);
     border-color: transparent;
     box-shadow: 0 2px 8px var(--color-success-glow);
 }
 .roll-mode-btn.active.dis {
-    background: linear-gradient(135deg, var(--color-danger-base), #b71c1c);
-    color: white;
+    background: var(--color-danger-base);
+    color: var(--color-on-danger, #fff);
     border-color: transparent;
     box-shadow: 0 2px 8px var(--color-danger-glow);
 }
@@ -303,7 +303,7 @@ i[class*="fa-regular"] {
     justify-content: space-between;
     align-items: center;
     padding: 6px 14px;
-    background: rgba(14, 18, 27, 0.96);
+    background: var(--color-bg-glass);
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
     border-bottom: 1px solid var(--color-border-subtle);

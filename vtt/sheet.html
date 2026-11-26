@@ -29,21 +29,19 @@
     <!-- 3D WebGL Dice Engine Stylesheet -->
     <link rel="stylesheet" href="css/dice-3d.css">
     
-    <!-- Socket.io & Static/P2P Shim -->
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="js/network/vtt-static-shim.js"></script>
-    <script src="lib/peerjs.min.js"></script>
-    <script src="js/network/vtt-p2p-host-engine.js"></script>
-    <script src="js/network/vtt-p2p-adapter.js"></script>
-
-    <!-- Three.js, Cannon.js & 3D WebGL Dice Engine -->
-    <script src="lib/three.min.js"></script>
-    <script src="lib/cannon.min.js"></script>
-    <script src="js/dice-3d.js"></script>
+    <!-- Socket.io & Static/P2P Shim (deferred) -->
+    <script defer src="/socket.io/socket.io.js"></script>
+    <script defer src="js/network/vtt-static-shim.js"></script>
+    <script defer src="lib/peerjs.min.js"></script>
+    <script defer src="js/network/vtt-p2p-host-engine.js"></script>
+    <script defer src="js/network/vtt-p2p-adapter.js"></script>
 
     <!-- DOMPurify Standalone Sanitizer (XSS Protection) -->
-    <script src="lib/purify.min.js"></script>
-    
+    <script defer src="lib/purify.min.js"></script>
+
+    <!-- Preload standalone sheet entrypoint -->
+    <link rel="modulepreload" href="js/bootstrap/sheet-boot.js">
+
     <!-- ForgeDVTT Standalone Parsers & Utilities -->
     <script type="module" src="js/vtt-dice-parser.js"></script>
     <script type="module" src="js/vtt-entry-resolver.js"></script>

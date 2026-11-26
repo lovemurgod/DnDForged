@@ -89,7 +89,7 @@ test('Static Web P2P Build: docs/play & docs/prep', async (t) => {
             assert.ok(fs.existsSync(resolverPath), 'docs/prep/vtt-entry-resolver.js must exist');
             const schemasJs = fs.readFileSync(path.join(rootDir, 'docs', 'prep', 'builder-schemas.js'), 'utf8');
             assert.ok(
-                schemasJs.includes("'./vtt-entry-resolver.js'"),
+                schemasJs.includes('./vtt-entry-resolver.js'),
                 'docs/prep/builder-schemas.js must import local resolver'
             );
             assert.equal(
@@ -365,4 +365,211 @@ test('Static Web P2P Build: docs/play & docs/prep', async (t) => {
             fs.rmSync(tmpDataDir, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 });
         }
     });
+
+    await t.test('static-storage-driver.js prompts to reconnect/link folder before import', async () => {
+        const driverSrc = fs.readFileSync(path.join(rootDir, 'electron', 'ui', 'static-storage-driver.js'), 'utf8');
+        let confirmCalls = 0;
+        let confirmResponse = false;
+        const alertMessages = [];
+        const sandbox = {
+            confirm: () => {
+                confirmCalls += 1;
+                return confirmResponse;
+            },
+            alert: (msg) => {
+                alertMessages.push(msg);
+            },
+            showDirectoryPicker: () => {},
+            localStorage: { getItem: () => null, setItem: () => {}, removeItem: () => {} },
+            crypto: { getRandomValues: (arr) => arr.fill(1) },
+            console
+        };
+        sandbox.window = sandbox;
+        sandbox.globalThis = sandbox;
+        vm.runInNewContext(driverSrc, sandbox);
+        const drv = sandbox.__staticStorageDriver;
+        assert.ok(typeof drv.ensureFolderConnectionForImport === 'function');
+
+        // 1. Paused folder: user accepts reconnect
+        drv.hasFsAccess = true;
+        drv.dirHandle = null;
+        drv.needsFolderReconnect = true;
+        drv.rememberedFolderName = 'MyCampaigns';
+        let reconnectCalled = 0;
+        drv.reconnectRememberedFolder = async () => {
+            reconnectCalled += 1;
+            drv.dirHandle = { name: 'MyCampaigns' };
+            drv.needsFolderReconnect = false;
+            return true;
+        };
+        confirmResponse = true;
+        const reconnected = await drv.ensureFolderConnectionForImport();
+        assert.equal(confirmCalls, 1);
+        assert.equal(reconnectCalled, 1);
+        assert.equal(reconnected.connected, true);
+        assert.equal(reconnected.failedToConnect, false);
+        assert.equal(alertMessages.length, 0);
+
+        // 2. Paused folder: user accepts reconnect, but permission is denied -> alerts user
+        drv.dirHandle = null;
+        drv.needsFolderReconnect = true;
+        drv.reconnectRememberedFolder = async () => false;
+        confirmResponse = true;
+        const failed = await drv.ensureFolderConnectionForImport();
+        assert.equal(confirmCalls, 2);
+        assert.equal(failed.connected, false);
+        assert.equal(failed.failedToConnect, true);
+        assert.equal(alertMessages.length, 1);
+        assert.ok(alertMessages[0].includes('IndexedDB'));
+
+        // 3. Unlinked folder: user declines and falls back to IndexedDB without alert
+        drv.dirHandle = null;
+        drv.needsFolderReconnect = false;
+        let pickCalled = 0;
+        drv.pickCampaignFolder = async () => {
+            pickCalled += 1;
+            return { canceled: true };
+        };
+        confirmResponse = false;
+        const declined = await drv.ensureFolderConnectionForImport();
+        assert.equal(confirmCalls, 3);
+        assert.equal(pickCalled, 0);
+        assert.equal(declined.connected, false);
+        assert.equal(declined.failedToConnect, false);
+        assert.equal(alertMessages.length, 1);
+    });
+
+    await t.test(
+        'web-api-bridge.js checks folder connection before file picker and on create in static mode',
+        async () => {
+            const bridgeSrc = fs.readFileSync(path.join(rootDir, 'electron', 'ui', 'web-api-bridge.js'), 'utf8');
+            const callOrder = [];
+            const fakeFile = {
+                name: 'camp.json',
+                text: async () => JSON.stringify({ id: 'c1', name: 'Test Camp', maps: {} })
+            };
+            const sandbox = {
+                __FORGEDVTT_STATIC_WEB__: true,
+                __staticStorageDriver: {
+                    campaigns: {},
+                    init: async () => {},
+                    ensureFolderConnectionForImport: async () => {
+                        callOrder.push('ensureFolder');
+                        return { connected: true, storageLabel: 'Local Folder: Campaigns' };
+                    },
+                    getDataPathLabel: () => 'Local Folder: Campaigns',
+                    _saveCampaigns: async () => {
+                        callOrder.push('saveCampaigns');
+                    }
+                },
+                document: {
+                    createElement: () => {
+                        const el = {
+                            type: '',
+                            accept: '',
+                            multiple: false,
+                            files: [fakeFile],
+                            onchange: null,
+                            click: () => {
+                                callOrder.push('pickFiles');
+                                setTimeout(() => el.onchange && el.onchange(), 0);
+                            }
+                        };
+                        return el;
+                    }
+                },
+                localStorage: { getItem: () => null, setItem: () => {}, removeItem: () => {} },
+                setTimeout,
+                clearTimeout,
+                console
+            };
+            sandbox.window = sandbox;
+            sandbox.globalThis = sandbox;
+            vm.runInNewContext(bridgeSrc, sandbox);
+            const api = sandbox.window.electronAPI;
+
+            const importRes = await api.gmImportCampaign(null);
+            assert.equal(importRes.success, true);
+            assert.equal(importRes.storageLabel, 'Local Folder: Campaigns');
+            assert.deepEqual(callOrder, ['ensureFolder', 'pickFiles', 'saveCampaigns']);
+
+            callOrder.length = 0;
+            const createRes = await api.gmCreateCampaign({ name: 'Created Camp' });
+            assert.equal(createRes.success, true);
+            assert.equal(createRes.storageLabel, 'Local Folder: Campaigns');
+            assert.deepEqual(callOrder, ['ensureFolder', 'saveCampaigns']);
+        }
+    );
+
+    await t.test(
+        'launcher.js resolveActiveDataDir respects CLI, env, config, legacy, and userData precedence',
+        async () => {
+            const { resolveActiveDataDir } = await import('../launcher.js');
+            const repoDir = path.join(rootDir, '__fake_repo__');
+            const userDataDir = path.join(rootDir, '__fake_userdata__');
+
+            assert.equal(
+                resolveActiveDataDir(
+                    { campaignDataDir: '/cfg/data' },
+                    {
+                        argv: ['--data-dir', '/cli/data'],
+                        env: { FORGEDVTT_DATA_DIR: '/env/data' },
+                        repoDir,
+                        userDataDir,
+                        existsSync: () => false
+                    }
+                ),
+                path.resolve('/cli/data')
+            );
+
+            assert.equal(
+                resolveActiveDataDir(null, {
+                    argv: ['--data-dir=/cli/equals'],
+                    env: {},
+                    repoDir,
+                    userDataDir,
+                    existsSync: () => false
+                }),
+                path.resolve('/cli/equals')
+            );
+
+            assert.equal(
+                resolveActiveDataDir(
+                    { campaignDataDir: '/cfg/data' },
+                    {
+                        argv: [],
+                        env: { FORGEDVTT_DATA_DIR: '/env/data' },
+                        repoDir,
+                        userDataDir,
+                        existsSync: () => false
+                    }
+                ),
+                path.resolve('/env/data')
+            );
+
+            assert.equal(
+                resolveActiveDataDir(
+                    { campaignDataDir: '/cfg/data' },
+                    { argv: [], env: {}, repoDir, userDataDir, existsSync: () => false }
+                ),
+                path.resolve('/cfg/data')
+            );
+
+            assert.equal(
+                resolveActiveDataDir(null, {
+                    argv: [],
+                    env: {},
+                    repoDir,
+                    userDataDir,
+                    existsSync: (p) => p === path.join(repoDir, '.dndforged-data', 'campaigns.json')
+                }),
+                path.join(repoDir, '.dndforged-data')
+            );
+
+            assert.equal(
+                resolveActiveDataDir(null, { argv: [], env: {}, repoDir, userDataDir, existsSync: () => false }),
+                path.join(userDataDir, '.dndforged-data')
+            );
+        }
+    );
 });

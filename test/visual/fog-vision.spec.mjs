@@ -153,41 +153,31 @@ test.describe('Fog of War & Line of Sight Vision Suite', () => {
     test('Test 1: Closed door blocks line of sight and shrouds the Right Chamber', async () => {
         const { playerPage } = sandbox;
 
-        // Ensure LoS polygon cache has completed its render pass
+        // Ensure LoS render pass has completed with Left Room visible and Right Chamber blocked
         await playerPage.waitForFunction(
             () => {
                 const ce = window.VTT.canvasEngine;
                 ce?.renderAll?.();
-                const hero = ce?.getTokens?.()?.['tok_hero_1'];
-                return (hero?._losPolyCache?.polygon?.length || 0) > 5;
+                return ce?.isPointVisible?.(350, 400) === true && ce?.isPointVisible?.(650, 400) === false;
             },
             { timeout: 10000 }
         );
 
-        // Player's hero vision polygon must be contained strictly to Left Room (x <= 505)
         const losInfo = await playerPage.evaluate(() => {
             const ce = window.VTT.canvasEngine;
             ce.renderAll();
-            const hero = ce.getTokens()['tok_hero_1'];
             const map = window.VTT.campaignState.maps[ce.getCurrentMapId()];
             const door = map.walls.find((w) => w.id === 'door_crypt_main');
-
-            const poly = hero._losPolyCache?.polygon || [];
-            const maxPolyX = poly.length > 0 ? Math.max(...poly.map((p) => p.x)) : 0;
             return {
                 doorIsOpen: door?.isOpen,
-                heroX: hero.x,
-                heroY: hero.y,
-                maxPolyX,
-                polyVertexCount: poly.length
+                leftVisible: ce.isPointVisible(350, 400),
+                rightVisible: ce.isPointVisible(650, 400)
             };
         });
 
         expect(losInfo.doorIsOpen).toBe(false);
-        // The dividing wall and closed door are at x = 500. Vision reaches dividing wall but cannot exceed 505px in X.
-        expect(losInfo.polyVertexCount).toBeGreaterThan(5);
-        expect(losInfo.maxPolyX).toBeGreaterThan(450);
-        expect(losInfo.maxPolyX).toBeLessThanOrEqual(505);
+        expect(losInfo.leftVisible).toBe(true);
+        expect(losInfo.rightVisible).toBe(false);
     });
 
     test('Test 2: GM opens door and dynamic line of sight cuts through doorway', async () => {
@@ -211,25 +201,21 @@ test.describe('Fog of War & Line of Sight Vision Suite', () => {
             { timeout: 10000 }
         );
 
-        // Wait for hero vision to recalculate through open door into Right Chamber (x > 600)
+        // Wait for hero vision to recalculate through open door into Right Chamber (650, 400)
         await playerPage.waitForFunction(
             () => {
                 const ce = window.VTT.canvasEngine;
                 ce.renderAll();
-                const hero = ce.getTokens()['tok_hero_1'];
-                const poly = hero._losPolyCache?.polygon || [];
-                return poly.some((p) => p.x > 600);
+                return ce.isPointVisible(650, 400) === true;
             },
             { timeout: 10000 }
         );
 
-        const maxPolyX = await playerPage.evaluate(() => {
+        const rightVisible = await playerPage.evaluate(() => {
             const ce = window.VTT.canvasEngine;
-            const hero = ce.getTokens()['tok_hero_1'];
-            const poly = hero._losPolyCache?.polygon || [];
-            return Math.max(...poly.map((p) => p.x));
+            return ce.isPointVisible(650, 400);
         });
-        expect(maxPolyX).toBeGreaterThan(600);
+        expect(rightVisible).toBe(true);
     });
 
     test('Test 3: GM closes door and line of sight collapses back behind the barrier', async () => {
@@ -253,25 +239,21 @@ test.describe('Fog of War & Line of Sight Vision Suite', () => {
             { timeout: 10000 }
         );
 
-        // Verify vision polygon collapses back to <= 505
+        // Verify Right Chamber (650, 400) collapses back behind the barrier
         await playerPage.waitForFunction(
             () => {
                 const ce = window.VTT.canvasEngine;
                 ce.renderAll();
-                const hero = ce.getTokens()['tok_hero_1'];
-                const poly = hero._losPolyCache?.polygon || [];
-                return poly.length > 0 && Math.max(...poly.map((p) => p.x)) <= 505;
+                return ce.isPointVisible(650, 400) === false;
             },
             { timeout: 10000 }
         );
 
-        const maxPolyX = await playerPage.evaluate(() => {
+        const rightVisible = await playerPage.evaluate(() => {
             const ce = window.VTT.canvasEngine;
-            const hero = ce.getTokens()['tok_hero_1'];
-            const poly = hero._losPolyCache?.polygon || [];
-            return Math.max(...poly.map((p) => p.x));
+            return ce.isPointVisible(650, 400);
         });
-        expect(maxPolyX).toBeLessThanOrEqual(505);
+        expect(rightVisible).toBe(false);
     });
 
     test('Test 4: Player opens unlocked door and broadcasts reveal to GM', async () => {

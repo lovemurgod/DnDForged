@@ -93,7 +93,7 @@
         </button>
         <div class="nav-dropdown-menu">
           <a href="portal-dungeons.html"><i class="fa-solid fa-dungeon" aria-hidden="true"></i> Portal Dungeons</a>
-          <a href="self-hosted-vtt.html"><i class="fa-solid fa-network-wired" aria-hidden="true"></i> Self-Hosted &amp;
+          <a href="self-hosted-vtt.html"><i class="fa-solid fa-network-wired" aria-hidden="true"></i> Offline &amp;
             Tunnels</a>
           <a href="tv-gaming-table.html"><i class="fa-solid fa-tv" aria-hidden="true"></i> TV Gaming Table</a>
         </div>
@@ -109,7 +109,6 @@
           <a href="app-guide.html"><i class="fa-solid fa-sliders" aria-hidden="true"></i> App Guide</a>
         </div>
       </div>
-      <a href="play/">Play Online</a>
       <a href="prep/">Session Prep</a>
       <a href="feedback.html">Feedback</a>
     </nav>
@@ -151,6 +150,39 @@
             </div>
           </li>
         </ol>
+
+        <!-- Mobile Hosting Callout Card -->
+        <div class="mobile-hosting-card" id="mobile-hosting-tips" style="margin-top: 1.5rem; background: rgba(245, 158, 11, 0.05); border: 1px solid rgba(245, 158, 11, 0.35); border-radius: 12px; padding: 1.25rem 1.5rem; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);">
+          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 0.75rem;">
+            <span style="font-size: 1.4rem; color: #f59e0b;"><i class="fa-solid fa-mobile-screen-button" aria-hidden="true"></i></span>
+            <h3 style="margin: 0; font-size: 1.15rem; font-family: Cinzel, serif; color: #fef08a; letter-spacing: 0.5px;">Hosting from a Phone or Tablet? 3 Crucial Tips</h3>
+          </div>
+          <p style="margin: 0 0 1rem 0; font-size: 0.9rem; color: #cbd5e1; line-height: 1.5;">You can host directly from mobile Safari or Chrome with zero desktop downloads. Because mobile operating systems aggressively suspend background tasks to save power, keep these three rules in mind:</p>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1rem; margin-bottom: 1rem;">
+            <div style="background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; padding: 0.85rem;">
+              <div style="font-weight: 700; color: #f59e0b; margin-bottom: 0.35rem; display: flex; align-items: center; gap: 6px;">
+                <i class="fa-solid fa-sun" aria-hidden="true"></i> 1. Keep Screen Awake
+              </div>
+              <p style="margin: 0; font-size: 0.82rem; color: #94a3b8; line-height: 1.45;">If your screen locks or you switch apps, mobile browsers suspend WebRTC and <strong>disconnect your players</strong>. Set <em>Auto-Lock</em> (iOS Safari) or <em>Screen Timeout</em> (Android Chrome) to &ldquo;Never&rdquo; or 30m during sessions.</p>
+            </div>
+            <div style="background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; padding: 0.85rem;">
+              <div style="font-weight: 700; color: #38bdf8; margin-bottom: 0.35rem; display: flex; align-items: center; gap: 6px;">
+                <i class="fa-solid fa-shield-halved" aria-hidden="true"></i> 2. Avoid Private Tabs
+              </div>
+              <p style="margin: 0; font-size: 0.82rem; color: #94a3b8; line-height: 1.45;">Private/Incognito mode wipes local IndexedDB campaign storage when closed. Use regular tabs, and tap <em>Export Campaign</em> in Session Prep to save quick JSON backups to iCloud or Google Drive.</p>
+            </div>
+            <div style="background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; padding: 0.85rem;">
+              <div style="font-weight: 700; color: #4ade80; margin-bottom: 0.35rem; display: flex; align-items: center; gap: 6px;">
+                <i class="fa-solid fa-leaf" aria-hidden="true"></i> 3. Turn on Eco Mode
+              </div>
+              <p style="margin: 0; font-size: 0.82rem; color: #94a3b8; line-height: 1.45;">Inside the tabletop, tap <em>More (☰) &rarr; Battery / Eco Mode</em> to pause heavy WebGL weather particles and 3D dice physics, keeping your phone cool and saving battery throughout the game.</p>
+            </div>
+          </div>
+          <div style="font-size: 0.82rem; color: #94a3b8; border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 0.65rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+            <span><i class="fa-solid fa-circle-info" style="color: #f59e0b; margin-right: 4px;" aria-hidden="true"></i> <strong>GM Workflow:</strong> Mobile is great for running live combat, rolling attacks, and moving tokens with tap-to-place. Detailed map &amp; wall setup is easiest on desktop or iPad.</span>
+            <a href="app-guide.html#app-mobile-hosting" style="color: #f59e0b; text-decoration: none; font-weight: 600;">Full Mobile Guide <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+          </div>
+        </div>
       </div>
       <aside class="start-note"><span class="note-icon" aria-hidden="true"><i class="fa-solid fa-bolt"></i></span>
         <h2>Browser P2P vs. Offline App</h2>
@@ -271,7 +303,7 @@
         <ul>
           <li><a href="portal-dungeons.html"><i class="fa-solid fa-dungeon" aria-hidden="true"></i> Portal Dungeons</a>
           </li>
-          <li><a href="self-hosted-vtt.html"><i class="fa-solid fa-network-wired" aria-hidden="true"></i> Self-Hosted
+          <li><a href="self-hosted-vtt.html"><i class="fa-solid fa-network-wired" aria-hidden="true"></i> Offline
               &amp; Tunnels</a></li>
           <li><a href="tv-gaming-table.html"><i class="fa-solid fa-tv" aria-hidden="true"></i> TV Gaming Table</a></li>
         </ul>

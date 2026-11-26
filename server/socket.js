@@ -14,7 +14,7 @@ import {
     setActiveIo,
     isLoopbackRequest
 } from './state.js';
-import { verifyPassword, updateMapProperty, RESERVED_OBJECT_KEYS } from '../utils.js';
+import { verifyPasswordAsync, updateMapProperty, RESERVED_OBJECT_KEYS } from '../utils.js';
 import { checkAndRecordGmAuthFailure, clearGmAuthFailures, isGmAuthRateLimited } from './routes/admin.js';
 import { registerCampaignBroadcaster } from './routes/campaigns.js';
 
@@ -32,6 +32,27 @@ export function broadcastCampaignSync(campaignId) {
             s.emit('campaign:state-sync', getSanitizedCampaignSync(camp, s.role, s.username, campaignId));
         }
     }
+}
+
+function getOnlinePlayersList(campaignId) {
+    if (!activeIo) return [];
+    const room = activeIo.sockets.adapter.rooms.get(campaignId);
+    if (!room) return [];
+    const names = new Set();
+    for (const socketId of room) {
+        const s = activeIo.sockets.sockets.get(socketId);
+        if (s?.username && !s.isSubWindow && s.role !== 'GM') {
+            names.add(s.username);
+        }
+    }
+    return Array.from(names);
+}
+
+function broadcastPresence(campaignId) {
+    if (!activeIo) return;
+    activeIo.to(campaignId).emit('players:presence', {
+        onlinePlayers: getOnlinePlayersList(campaignId)
+    });
 }
 
 function sanitizeMapForPlayer(mapObj, username) {
@@ -259,7 +280,7 @@ export function initSocketServer(io) {
         // Handle player/GM registration to a campaign room
         socket.on(
             'join',
-            ({ campaignId, username, role, isSubWindow, gmPassword, gmSessionToken: providedGmSessionToken } = {}) => {
+            async ({ campaignId, username, role, isSubWindow, gmPassword, gmSessionToken: providedGmSessionToken } = {}) => {
                 const isLocal = isLoopbackRequest(socket.handshake);
                 let targetCampaignId = campaignId || socketSubdomain || 'default';
 
@@ -319,11 +340,11 @@ export function initSocketServer(io) {
                         }
                         const isValid =
                             hasValidSubToken ||
-                            verifyPassword(
+                            (await verifyPasswordAsync(
                                 gmPassword || '',
                                 serverConfig.gmCredentials.salt,
                                 serverConfig.gmCredentials.hash
-                            );
+                            ));
                         if (!isValid) {
                             checkAndRecordGmAuthFailure(socket.handshake);
                             socket.emit('join_rejected', {
@@ -357,11 +378,11 @@ export function initSocketServer(io) {
                             if (hasPasswordHash) {
                                 const isValid =
                                     hasValidSubToken ||
-                                    verifyPassword(
+                                    (await verifyPasswordAsync(
                                         gmPassword || '',
                                         serverConfig.gmCredentials.salt,
                                         serverConfig.gmCredentials.hash
-                                    );
+                                    ));
                                 if (!isValid) {
                                     checkAndRecordGmAuthFailure(socket.handshake);
                                     socket.emit('join_rejected', {
@@ -493,7 +514,7 @@ export function initSocketServer(io) {
                         text: `${username} has joined the game.`,
                         timestamp: Date.now()
                     });
-                    broadcastCampaignSync(activeCampId);
+                    broadcastPresence(activeCampId);
                 }
             }
         );
@@ -2709,7 +2730,7 @@ export function initSocketServer(io) {
                     text: `${socket.username} has left the game.`,
                     timestamp: Date.now()
                 });
-                broadcastCampaignSync(socket.campaignId);
+                broadcastPresence(socket.campaignId);
             }
         });
     });

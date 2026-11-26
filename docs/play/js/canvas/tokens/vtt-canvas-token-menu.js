@@ -1,136 +1,6 @@
-// DnDForged Canvas Token Context Menu Subsystem
-// Handles right-click token action menus, Z-ordering, stat-based rolls, conditions, token selector art, and lighting presets
-
-import {
-    CONDITION_ICONS,
-    getPcRollFormula,
-    rollFromToken,
-    showAddCustomConditionModal
-} from './vtt-canvas-token-rollers.js';
-import { showApplyDamageModal } from './vtt-canvas-mass-actions.js';
-import { applyTokenLightingPreset } from '../vtt-canvas-lighting.js';
-import { escapeHtml, getSafeVttUrl, resolveMonsterTokenUrl } from '../../vtt-utils.js';
-
-export function changeTokenZOrder(tokenId, action, options = {}) {
-    const { tokens = {}, renderAll = () => {} } = options;
-
-    const tokenList = Object.values(tokens);
-    if (tokenList.length <= 1) return;
-
-    const selectedToken = tokens[tokenId];
-    if (!selectedToken) return;
-
-    const otherZIndexes = tokenList.filter((t) => t.id !== tokenId).map((t) => t.zIndex || 0);
-
-    const maxZ = otherZIndexes.length > 0 ? Math.max(...otherZIndexes) : 0;
-    const minZ = otherZIndexes.length > 0 ? Math.min(...otherZIndexes) : 0;
-
-    if (action === 'front') {
-        selectedToken.zIndex = maxZ + 1;
-    } else if (action === 'back') {
-        selectedToken.zIndex = minZ - 1;
-    } else if (action === 'front-one' || action === 'back-one') {
-        const sortedTokens = [...tokenList].sort((a, b) => (a.zIndex || 0) - (b.zIndex || 0));
-        const curIdx = sortedTokens.findIndex((t) => t.id === tokenId);
-        if (action === 'front-one') {
-            if (curIdx < sortedTokens.length - 1) {
-                const targetToken = sortedTokens[curIdx + 1];
-                const temp = selectedToken.zIndex || 0;
-                selectedToken.zIndex = targetToken.zIndex || 0;
-                targetToken.zIndex = temp;
-                if (selectedToken.zIndex === targetToken.zIndex) {
-                    selectedToken.zIndex += 1;
-                }
-            }
-        } else {
-            if (curIdx > 0) {
-                const targetToken = sortedTokens[curIdx - 1];
-                const temp = selectedToken.zIndex || 0;
-                selectedToken.zIndex = targetToken.zIndex || 0;
-                targetToken.zIndex = temp;
-                if (selectedToken.zIndex === targetToken.zIndex) {
-                    selectedToken.zIndex -= 1;
-                }
-            }
-        }
-    }
-
-    if (typeof window !== 'undefined' && typeof window.emitTokenUpdates === 'function') {
-        window.emitTokenUpdates(tokens);
-    }
-    renderAll();
-}
-
-export function showTokenContextMenu(tokenId, clientX, clientY, options = {}) {
-    if (typeof document === 'undefined') return;
-    const {
-        vtt = (typeof window !== 'undefined' ? window.VTT : null) || {},
-        tokens = {},
-        selectedTokenIds = new Set(),
-        campaignSettings = {},
-        isMobileViewport = () => false,
-        triggerSplashForSelection = () => {},
-        getTokenDrawDimensions = () => ({ drawW: 50, drawH: 50 }),
-        snapToGrid = (x, y) => ({ x, y }),
-        renderAll = () => {},
-        changeTokenZOrderFn = changeTokenZOrder,
-        applyLightingPresetFn = applyTokenLightingPreset,
-        deleteMapBackgroundAsset = null
-    } = options;
-
-    const oldMenu = document.getElementById('vtt-token-context-menu');
-    if (oldMenu) oldMenu.remove();
-
-    const token = tokens[tokenId];
-    if (!token) return;
-
-    let monsterData = token.monsterData;
-    if (!monsterData && token.characterId && vtt.campaignState?.characters?.[token.characterId]) {
-        const char = vtt.campaignState.characters[token.characterId];
-        if ((char.isCompanion || char.isCustomNpc || char.monsterData) && char.monsterData) {
-            monsterData = char.monsterData;
-        }
-    }
-
-    const menu = document.createElement('div');
-    menu.id = 'vtt-token-context-menu';
-    menu.className = 'vtt-token-context-menu';
-    menu.style.left = `${clientX}px`;
-    menu.style.top = `${clientY}px`;
-
-    const abilities = [
-        { key: 'str', label: 'Strength' },
-        { key: 'dex', label: 'Dexterity' },
-        { key: 'con', label: 'Constitution' },
-        { key: 'int', label: 'Intelligence' },
-        { key: 'wis', label: 'Wisdom' },
-        { key: 'cha', label: 'Charisma' }
-    ];
-
-    const skills = [
-        { key: 'acrobatics', label: 'Acrobatics', ability: 'dex' },
-        { key: 'animalHandling', label: 'Animal Handling', ability: 'wis' },
-        { key: 'arcana', label: 'Arcana', ability: 'int' },
-        { key: 'athletics', label: 'Athletics', ability: 'str' },
-        { key: 'deception', label: 'Deception', ability: 'cha' },
-        { key: 'history', label: 'History', ability: 'int' },
-        { key: 'insight', label: 'Insight', ability: 'wis' },
-        { key: 'intimidation', label: 'Intimidation', ability: 'cha' },
-        { key: 'investigation', label: 'Investigation', ability: 'int' },
-        { key: 'medicine', label: 'Medicine', ability: 'wis' },
-        { key: 'nature', label: 'Nature', ability: 'int' },
-        { key: 'perception', label: 'Perception', ability: 'wis' },
-        { key: 'performance', label: 'Performance', ability: 'cha' },
-        { key: 'persuasion', label: 'Persuasion', ability: 'cha' },
-        { key: 'religion', label: 'Religion', ability: 'int' },
-        { key: 'sleightOfHand', label: 'Sleight of Hand', ability: 'dex' },
-        { key: 'stealth', label: 'Stealth', ability: 'dex' },
-        { key: 'survival', label: 'Survival', ability: 'wis' }
-    ];
-
-    let html = `
+import{CONDITION_ICONS as le,getPcRollFormula as P,rollFromToken as z,showAddCustomConditionModal as ve}from"./vtt-canvas-token-rollers.js";import{showApplyDamageModal as he}from"./vtt-canvas-mass-actions.js";import{applyTokenLightingPreset as ge}from"../vtt-canvas-lighting.js";import{escapeHtml as re,getSafeVttUrl as ye,resolveMonsterTokenUrl as ke}from"../../vtt-utils.js";export function changeTokenZOrder(f,S,q={}){const{tokens:b={},renderAll:d=()=>{}}=q,c=Object.values(b);if(c.length<=1)return;const y=b[f];if(!y)return;const U=c.filter(w=>w.id!==f).map(w=>w.zIndex||0),V=U.length>0?Math.max(...U):0,H=U.length>0?Math.min(...U):0;if(S==="front")y.zIndex=V+1;else if(S==="back")y.zIndex=H-1;else if(S==="front-one"||S==="back-one"){const w=[...c].sort((p,T)=>(p.zIndex||0)-(T.zIndex||0)),L=w.findIndex(p=>p.id===f);if(S==="front-one"){if(L<w.length-1){const p=w[L+1],T=y.zIndex||0;y.zIndex=p.zIndex||0,p.zIndex=T,y.zIndex===p.zIndex&&(y.zIndex+=1)}}else if(L>0){const p=w[L-1],T=y.zIndex||0;y.zIndex=p.zIndex||0,p.zIndex=T,y.zIndex===p.zIndex&&(y.zIndex-=1)}}typeof window<"u"&&typeof window.emitTokenUpdates=="function"&&window.emitTokenUpdates(b),d()}export function showTokenContextMenu(f,S,q,b={}){if(typeof document>"u")return;const{vtt:d=(typeof window<"u"?window.VTT:null)||{},tokens:c={},selectedTokenIds:y=new Set,campaignSettings:U={},isMobileViewport:V=()=>!1,triggerSplashForSelection:H=()=>{},getTokenDrawDimensions:w=()=>({drawW:50,drawH:50}),snapToGrid:L=(e,i)=>({x:e,y:i}),renderAll:p=()=>{},changeTokenZOrderFn:T=changeTokenZOrder,applyLightingPresetFn:de=ge,deleteMapBackgroundAsset:F=null}=b,O=document.getElementById("vtt-token-context-menu");O&&O.remove();const a=c[f];if(!a)return;let u=a.monsterData;if(!u&&a.characterId&&d.campaignState?.characters?.[a.characterId]){const e=d.campaignState.characters[a.characterId];(e.isCompanion||e.isCustomNpc||e.monsterData)&&e.monsterData&&(u=e.monsterData)}const n=document.createElement("div");n.id="vtt-token-context-menu",n.className="vtt-token-context-menu",n.style.left=`${S}px`,n.style.top=`${q}px`;const W=[{key:"str",label:"Strength"},{key:"dex",label:"Dexterity"},{key:"con",label:"Constitution"},{key:"int",label:"Intelligence"},{key:"wis",label:"Wisdom"},{key:"cha",label:"Charisma"}],Z=[{key:"acrobatics",label:"Acrobatics",ability:"dex"},{key:"animalHandling",label:"Animal Handling",ability:"wis"},{key:"arcana",label:"Arcana",ability:"int"},{key:"athletics",label:"Athletics",ability:"str"},{key:"deception",label:"Deception",ability:"cha"},{key:"history",label:"History",ability:"int"},{key:"insight",label:"Insight",ability:"wis"},{key:"intimidation",label:"Intimidation",ability:"cha"},{key:"investigation",label:"Investigation",ability:"int"},{key:"medicine",label:"Medicine",ability:"wis"},{key:"nature",label:"Nature",ability:"int"},{key:"perception",label:"Perception",ability:"wis"},{key:"performance",label:"Performance",ability:"cha"},{key:"persuasion",label:"Persuasion",ability:"cha"},{key:"religion",label:"Religion",ability:"int"},{key:"sleightOfHand",label:"Sleight of Hand",ability:"dex"},{key:"stealth",label:"Stealth",ability:"dex"},{key:"survival",label:"Survival",ability:"wis"}];let h=`
         <div class="vtt-token-menu-header">
-            <i class="fa-solid fa-dice-d20"></i> ${token.name}
+            <i class="fa-solid fa-dice-d20"></i> ${a.name}
         </div>
         <div class="vtt-token-menu-item" id="menu-ctx-splash-art">
             <span><i class="fa-solid fa-expand item-icon"></i> Splash Art</span>
@@ -143,136 +13,72 @@ export function showTokenContextMenu(tokenId, clientX, clientY, options = {}) {
             <span><i class="fa-solid fa-swords item-icon"></i> Roll Initiative</span>
         </div>
         <div class="vtt-token-menu-divider"></div>
-    `;
-
-    // 1. Ability Checks Submenu
-    html += `
+    `;h+=`
         <div class="vtt-token-menu-item">
             <span><i class="fa-solid fa-arrows-to-eye item-icon"></i> Ability Checks</span>
             <i class="fa-solid fa-chevron-right chevron-icon"></i>
             <div class="vtt-token-submenu">
                 <div class="vtt-token-submenu-list scroll-styled">
-    `;
-    abilities.forEach((ab) => {
-        const score = monsterData ? monsterData[ab.key] || 10 : 10;
-        const mod = Math.floor((score - 10) / 2);
-        const modStr = mod >= 0 ? `+${mod}` : `${mod}`;
-        const badgeStr = monsterData ? `<span class="modifier-badge">${modStr}</span>` : '';
-        html += `
-            <div class="vtt-submenu-item menu-roll-ability" data-ability="${ab.key}" data-label="${ab.label}">
-                <span>${ab.label}</span>
-                ${badgeStr}
+    `,W.forEach(e=>{const i=u&&u[e.key]||10,t=Math.floor((i-10)/2),o=t>=0?`+${t}`:`${t}`,s=u?`<span class="modifier-badge">${o}</span>`:"";h+=`
+            <div class="vtt-submenu-item menu-roll-ability" data-ability="${e.key}" data-label="${e.label}">
+                <span>${e.label}</span>
+                ${s}
             </div>
-        `;
-    });
-    html += `
+        `}),h+=`
                 </div>
             </div>
         </div>
-    `;
-
-    // 2. Saving Throws Submenu
-    html += `
+    `,h+=`
         <div class="vtt-token-menu-item">
             <span><i class="fa-solid fa-shield-halved item-icon"></i> Saving Throws</span>
             <i class="fa-solid fa-chevron-right chevron-icon"></i>
             <div class="vtt-token-submenu">
                 <div class="vtt-token-submenu-list scroll-styled">
-    `;
-    abilities.forEach((ab) => {
-        let mod = 0;
-        if (monsterData) {
-            const score = monsterData[ab.key] || 10;
-            mod = Math.floor((score - 10) / 2);
-            if (monsterData.save && monsterData.save[ab.key] !== undefined) {
-                mod = parseInt(monsterData.save[ab.key]);
-            }
-        }
-        const modStr = mod >= 0 ? `+${mod}` : `${mod}`;
-        const badgeStr = monsterData ? `<span class="modifier-badge">${modStr}</span>` : '';
-        html += `
-            <div class="vtt-submenu-item menu-roll-save" data-ability="${ab.key}" data-label="${ab.label}">
-                <span>${ab.label}</span>
-                ${badgeStr}
+    `,W.forEach(e=>{let i=0;if(u){const s=u[e.key]||10;i=Math.floor((s-10)/2),u.save&&u.save[e.key]!==void 0&&(i=parseInt(u.save[e.key]))}const t=i>=0?`+${i}`:`${i}`,o=u?`<span class="modifier-badge">${t}</span>`:"";h+=`
+            <div class="vtt-submenu-item menu-roll-save" data-ability="${e.key}" data-label="${e.label}">
+                <span>${e.label}</span>
+                ${o}
             </div>
-        `;
-    });
-    html += `
+        `}),h+=`
                 </div>
             </div>
         </div>
-    `;
-
-    // 3. Skill Checks Submenu
-    html += `
+    `,h+=`
         <div class="vtt-token-menu-item">
             <span><i class="fa-solid fa-wand-magic-sparkles item-icon"></i> Skill Checks</span>
             <i class="fa-solid fa-chevron-right chevron-icon"></i>
             <div class="vtt-token-submenu">
                 <div class="vtt-token-submenu-list scroll-styled">
-    `;
-    skills.forEach((sk) => {
-        let mod = 0;
-        if (monsterData) {
-            const score = monsterData[sk.ability] || 10;
-            mod = Math.floor((score - 10) / 2);
-            if (monsterData.skill && monsterData.skill[sk.key] !== undefined) {
-                mod = parseInt(monsterData.skill[sk.key]);
-            }
-        }
-        const modStr = mod >= 0 ? `+${mod}` : `${mod}`;
-        const badgeStr = monsterData ? `<span class="modifier-badge">${modStr}</span>` : '';
-        html += `
-            <div class="vtt-submenu-item menu-roll-skill" data-skill="${sk.key}" data-label="${sk.label}">
-                <span>${sk.label}</span>
-                ${badgeStr}
+    `,Z.forEach(e=>{let i=0;if(u){const s=u[e.ability]||10;i=Math.floor((s-10)/2),u.skill&&u.skill[e.key]!==void 0&&(i=parseInt(u.skill[e.key]))}const t=i>=0?`+${i}`:`${i}`,o=u?`<span class="modifier-badge">${t}</span>`:"";h+=`
+            <div class="vtt-submenu-item menu-roll-skill" data-skill="${e.key}" data-label="${e.label}">
+                <span>${e.label}</span>
+                ${o}
             </div>
-        `;
-    });
-    html += `
+        `}),h+=`
                 </div>
             </div>
         </div>
-    `;
-
-    // 3.4 Elevation
-    const elevation = token.flightHeight || 0;
-    html += `
+    `;const ce=a.flightHeight||0;h+=`
         <div class="vtt-token-menu-item" style="cursor: default; display: flex; justify-content: space-between; align-items: center; padding-right: 8px;">
             <span><i class="fa-solid fa-arrows-up-down item-icon"></i> Elevation</span>
             <div style="display: flex; align-items: center; gap: 4px;">
                 <button class="menu-btn-flight-dec" style="background: rgba(255,255,255,0.1); border: none; color: white; width: 20px; height: 20px; border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center;">-</button>
-                <input type="number" class="menu-input-flight" value="${elevation}" step="5" style="width: 40px; background: transparent; border: 1px solid rgba(255,255,255,0.2); color: white; text-align: center; border-radius: 4px; font-size: 12px; height: 20px; padding: 0;">
+                <input type="number" class="menu-input-flight" value="${ce}" step="5" style="width: 40px; background: transparent; border: 1px solid rgba(255,255,255,0.2); color: white; text-align: center; border-radius: 4px; font-size: 12px; height: 20px; padding: 0;">
                 <button class="menu-btn-flight-inc" style="background: rgba(255,255,255,0.1); border: none; color: white; width: 20px; height: 20px; border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center;">+</button>
             </div>
         </div>
-    `;
-
-    // 3.5 Conditions Submenu
-    html += `
+    `,h+=`
         <div class="vtt-token-menu-item">
             <span><i class="fa-solid fa-heart-pulse item-icon"></i> Conditions</span>
             <i class="fa-solid fa-chevron-right chevron-icon"></i>
             <div class="vtt-token-submenu">
                 <div class="vtt-condition-gallery-container">
                     <div class="vtt-condition-gallery">
-    `;
-
-    const sortedConditions = Object.keys(CONDITION_ICONS).sort();
-    const activeConditionsSet = new Set((token.conditions || []).map((c) => c.name));
-
-    sortedConditions.forEach((condName) => {
-        const iconClass = CONDITION_ICONS[condName];
-        const isActive = activeConditionsSet.has(condName);
-
-        html += `
-            <button type="button" class="vtt-cond-tile menu-toggle-condition${isActive ? ' is-active' : ''}" data-cond="${condName}" title="${condName}">
-                <i class="fa-solid ${iconClass}"></i>
+    `;const fe=Object.keys(le).sort(),ue=new Set((a.conditions||[]).map(e=>e.name));fe.forEach(e=>{const i=le[e],t=ue.has(e);h+=`
+            <button type="button" class="vtt-cond-tile menu-toggle-condition${t?" is-active":""}" data-cond="${e}" title="${e}">
+                <i class="fa-solid ${i}"></i>
             </button>
-        `;
-    });
-
-    html += `
+        `}),h+=`
                     </div>
                     <div class="vtt-cond-footer-actions">
                         <button type="button" class="vtt-cond-action-btn btn-add-custom menu-add-custom-condition">
@@ -282,220 +88,75 @@ export function showTokenContextMenu(tokenId, clientX, clientY, options = {}) {
                             <i class="fa-solid fa-trash-can"></i> Clear All Conditions
                         </button>
                     </div>
-    `;
-
-    if (token.conditions && token.conditions.some((c) => c.isCustom)) {
-        html += `<div class="vtt-cond-custom-list">`;
-        token.conditions.forEach((c, idx) => {
-            if (c.isCustom) {
-                html += `
-                    <div class="vtt-cond-custom-chip menu-toggle-custom-condition" data-custom-idx="${idx}" title="Click to remove custom condition '${c.name}'">
+    `,a.conditions&&a.conditions.some(e=>e.isCustom)&&(h+='<div class="vtt-cond-custom-list">',a.conditions.forEach((e,i)=>{e.isCustom&&(h+=`
+                    <div class="vtt-cond-custom-chip menu-toggle-custom-condition" data-custom-idx="${i}" title="Click to remove custom condition '${e.name}'">
                         <span style="display: flex; align-items: center; gap: 6px;">
-                            <span style="width: 8px; height: 8px; border-radius: 50%; background: ${c.color || 'var(--color-gold-base)'}; display: inline-block;"></span>
-                            <span>${c.name}</span>
+                            <span style="width: 8px; height: 8px; border-radius: 50%; background: ${e.color||"var(--color-gold-base)"}; display: inline-block;"></span>
+                            <span>${e.name}</span>
                         </span>
                         <i class="fa-solid fa-xmark" style="font-size: 10px;"></i>
                     </div>
-                `;
-            }
-        });
-        html += `</div>`;
-    }
-
-    html += `
+                `)}),h+="</div>"),h+=`
                 </div>
             </div>
         </div>
-    `;
-
-    // 3.6 Token Selector
-    const charId = token.characterId || token.sourceCharacterId;
-    const charSheet = charId && vtt.campaignState?.characters ? vtt.campaignState.characters[charId] : null;
-
-    const availableTokens = [];
-    const seenUrls = new Set();
-
-    const addAvailableToken = (url, idx, isDefault = false, label = '') => {
-        if (!url || typeof url !== 'string') return;
-        const trimmed = url.trim();
-        if (!trimmed || seenUrls.has(trimmed)) return;
-        seenUrls.add(trimmed);
-        availableTokens.push({
-            url: trimmed,
-            idx: idx,
-            isDefault: isDefault,
-            label: label
-        });
-    };
-
-    const getMonsterTokenUrl = (monster) => {
-        if (!monster) return null;
-        if (monster.tokenImg) return monster.tokenImg;
-        if (monster.tokenUrl) return monster.tokenUrl;
-        if (monster.imgUrl) return monster.imgUrl;
-        if (typeof window !== 'undefined' && window.Renderer?.monster?.getTokenUrl) {
-            try {
-                const rUrl = window.Renderer.monster.getTokenUrl(monster);
-                if (rUrl) return rUrl;
-            } catch (e) {}
-        }
-        if (monster.hasToken || monster.source || monster.name) {
-            return resolveMonsterTokenUrl(monster);
-        }
-        return vtt.generateArcaneToken ? vtt.generateArcaneToken(monster?.name || 'Creature', 'monster') : null;
-    };
-
-    let defaultTokenUrl = null;
-    if (charSheet && (charSheet.isCompanion || charSheet.isCustomNpc || charSheet.monsterData)) {
-        defaultTokenUrl = getMonsterTokenUrl(charSheet.monsterData || {});
-    } else if (token.monsterData) {
-        defaultTokenUrl = getMonsterTokenUrl(token.monsterData);
-    } else if (charSheet && !charSheet.isPlayer && charSheet.monster) {
-        defaultTokenUrl = getMonsterTokenUrl(charSheet.monster);
-    }
-
-    if (defaultTokenUrl) {
-        addAvailableToken(defaultTokenUrl, -1, true, 'Default Token');
-    }
-
-    if (charSheet && charSheet.tokenImages && Array.isArray(charSheet.tokenImages)) {
-        charSheet.tokenImages.forEach((imgObj, idx) => {
-            const url = typeof imgObj === 'string' ? imgObj : imgObj?.url || '';
-            addAvailableToken(
-                url,
-                idx,
-                false,
-                typeof imgObj === 'object' && imgObj?.name ? imgObj.name : 'Gallery Token'
-            );
-        });
-    }
-
-    if (token.tokenImages && Array.isArray(token.tokenImages)) {
-        token.tokenImages.forEach((imgObj, idx) => {
-            const url = typeof imgObj === 'string' ? imgObj : imgObj?.url || '';
-            addAvailableToken(
-                url,
-                idx,
-                false,
-                typeof imgObj === 'object' && imgObj?.name ? imgObj.name : 'Token Gallery'
-            );
-        });
-    }
-
-    if (charSheet) {
-        if (charSheet.tokenImage) addAvailableToken(charSheet.tokenImage, -2, false, 'Sheet Token');
-        if (charSheet.avatar) addAvailableToken(charSheet.avatar, -3, false, 'Avatar');
-        if (charSheet.avatarUrl) addAvailableToken(charSheet.avatarUrl, -4, false, 'Avatar');
-        if (charSheet.img) addAvailableToken(charSheet.img, -5, false, 'Sheet Image');
-    }
-
-    if (token.img) addAvailableToken(token.img, -6, false, 'Current Canvas Art');
-    if (token.url) addAvailableToken(token.url, -7, false, 'Current URL');
-
-    if (availableTokens.length > 0) {
-        let galleryHtml = '';
-        availableTokens.forEach((tData) => {
-            let isActive = false;
-            if (
-                charSheet &&
-                charSheet.activeTokenIndex !== undefined &&
-                charSheet.activeTokenIndex !== null &&
-                charSheet.activeTokenIndex >= 0
-            ) {
-                isActive = charSheet.activeTokenIndex === tData.idx || token.img === tData.url;
-            } else {
-                isActive = token.img === tData.url;
-            }
-
-            const cleanUrl = (tData.url || '').split('?')[0].toLowerCase();
-            const isVideo = cleanUrl.match(/\.(mp4|webm|ogg)$/i) || tData.url.includes('pinimg.com/videos');
-            const isYt = tData.url.includes('youtube.com') || tData.url.includes('youtu.be');
-
-            const borderStyle = `border: 2px solid ${isActive ? 'var(--color-success-base)' : 'rgba(255,255,255,0.2)'};`;
-            const titleAttr = escapeHtml(tData.label || (tData.isDefault ? 'Default Token' : 'Custom Token'));
-            const safeUrl = escapeHtml(getSafeVttUrl(tData.url));
-
-            if (isVideo) {
-                galleryHtml += `
-                    <div class="menu-token-selector-item" data-idx="${tData.idx}" data-url="${safeUrl}" title="${titleAttr}" style="width: 48px; height: 48px; position: relative; border-radius: 4px; overflow: hidden; cursor: pointer; ${borderStyle} background: #000; flex-shrink: 0;">
-                        <video src="${safeUrl}" autoplay muted loop playsinline preload="metadata" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;"></video>
-                        <span style="position: absolute; bottom: 1px; right: 2px; font-size: 9px; pointer-events: none; opacity: 0.85;">▶</span>
-                    </div>`;
-            } else if (isYt) {
-                galleryHtml += `
-                    <div class="menu-token-selector-item" data-idx="${tData.idx}" data-url="${safeUrl}" title="${titleAttr}" style="width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; border-radius: 4px; cursor: pointer; ${borderStyle} background: #222; flex-shrink: 0;">
-                        <span style="font-size: 20px; pointer-events: none;">📺</span>
-                    </div>`;
-            } else {
-                galleryHtml += `
-                    <div class="menu-token-selector-item" data-idx="${tData.idx}" data-url="${safeUrl}" title="${titleAttr}" style="width: 48px; height: 48px; position: relative; border-radius: 4px; overflow: hidden; cursor: pointer; ${borderStyle} flex-shrink: 0;">
-                        <img src="${safeUrl}" alt="${titleAttr}" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" data-fallback-hide-parent="1">
-                    </div>`;
-            }
-        });
-
-        const isMultiSide = token.isAssetTable || token.isCardToken;
-        const selectorLabel = isMultiSide ? 'Side Selector' : 'Token Selector';
-        const selectorIcon = isMultiSide ? 'fa-table-cells-large' : 'fa-images';
-
-        html += `
+    `;const _=a.characterId||a.sourceCharacterId,v=_&&d.campaignState?.characters?d.campaignState.characters[_]:null,k=[],j=new Set,I=(e,i,t=!1,o="")=>{if(!e||typeof e!="string")return;const s=e.trim();!s||j.has(s)||(j.add(s),k.push({url:s,idx:i,isDefault:t,label:o}))},R=e=>{if(!e)return null;if(e.tokenImg)return e.tokenImg;if(e.tokenUrl)return e.tokenUrl;if(e.imgUrl)return e.imgUrl;if(typeof window<"u"&&window.Renderer?.monster?.getTokenUrl)try{const i=window.Renderer.monster.getTokenUrl(e);if(i)return i}catch{}return e.hasToken||e.source||e.name?ke(e):d.generateArcaneToken?d.generateArcaneToken(e?.name||"Creature","monster"):null};let D=null;if(v&&(v.isCompanion||v.isCustomNpc||v.monsterData)?D=R(v.monsterData||{}):a.monsterData?D=R(a.monsterData):v&&!v.isPlayer&&v.monster&&(D=R(v.monster)),D&&I(D,-1,!0,"Default Token"),v&&v.tokenImages&&Array.isArray(v.tokenImages)&&v.tokenImages.forEach((e,i)=>{const t=typeof e=="string"?e:e?.url||"";I(t,i,!1,typeof e=="object"&&e?.name?e.name:"Gallery Token")}),a.tokenImages&&Array.isArray(a.tokenImages)&&a.tokenImages.forEach((e,i)=>{const t=typeof e=="string"?e:e?.url||"";I(t,i,!1,typeof e=="object"&&e?.name?e.name:"Token Gallery")}),v&&(v.tokenImage&&I(v.tokenImage,-2,!1,"Sheet Token"),v.avatar&&I(v.avatar,-3,!1,"Avatar"),v.avatarUrl&&I(v.avatarUrl,-4,!1,"Avatar"),v.img&&I(v.img,-5,!1,"Sheet Image")),a.img&&I(a.img,-6,!1,"Current Canvas Art"),a.url&&I(a.url,-7,!1,"Current URL"),k.length>0){let e="";k.forEach(s=>{let g=!1;v&&v.activeTokenIndex!==void 0&&v.activeTokenIndex!==null&&v.activeTokenIndex>=0?g=v.activeTokenIndex===s.idx||a.img===s.url:g=a.img===s.url;const r=(s.url||"").split("?")[0].toLowerCase().match(/\.(mp4|webm|ogg)$/i)||s.url.includes("pinimg.com/videos"),m=s.url.includes("youtube.com")||s.url.includes("youtu.be"),x=`border: 2px solid ${g?"var(--color-success-base)":"rgba(255,255,255,0.2)"};`,C=re(s.label||(s.isDefault?"Default Token":"Custom Token")),A=re(ye(s.url));r?e+=`
+                    <div class="menu-token-selector-item" data-idx="${s.idx}" data-url="${A}" title="${C}" style="width: 48px; height: 48px; position: relative; border-radius: 4px; overflow: hidden; cursor: pointer; ${x} background: #000; flex-shrink: 0;">
+                        <video src="${A}" autoplay muted loop playsinline preload="metadata" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;"></video>
+                        <span style="position: absolute; bottom: 1px; right: 2px; font-size: 9px; pointer-events: none; opacity: 0.85;">\u25B6</span>
+                    </div>`:m?e+=`
+                    <div class="menu-token-selector-item" data-idx="${s.idx}" data-url="${A}" title="${C}" style="width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; border-radius: 4px; cursor: pointer; ${x} background: #222; flex-shrink: 0;">
+                        <span style="font-size: 20px; pointer-events: none;">\u{1F4FA}</span>
+                    </div>`:e+=`
+                    <div class="menu-token-selector-item" data-idx="${s.idx}" data-url="${A}" title="${C}" style="width: 48px; height: 48px; position: relative; border-radius: 4px; overflow: hidden; cursor: pointer; ${x} flex-shrink: 0;">
+                        <img src="${A}" alt="${C}" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" data-fallback-hide-parent="1">
+                    </div>`});const i=a.isAssetTable||a.isCardToken;h+=`
             <div class="vtt-token-menu-item">
-                <span><i class="fa-solid ${selectorIcon} item-icon"></i> ${selectorLabel}</span>
+                <span><i class="fa-solid ${i?"fa-table-cells-large":"fa-images"} item-icon"></i> ${i?"Side Selector":"Token Selector"}</span>
                 <i class="fa-solid fa-chevron-right chevron-icon"></i>
                 <div class="vtt-token-submenu">
                     <div class="vtt-token-submenu-list scroll-styled" style="width: 250px; padding: 12px; cursor: default; max-height: 400px; display: flex; gap: 8px; flex-wrap: wrap;">
-                        ${galleryHtml}
+                        ${e}
                     </div>
                 </div>
             </div>
-        `;
-
-        if (availableTokens.length > 1) {
-            if (token.isCardToken) {
-                html += `
+        `,k.length>1&&(a.isCardToken&&(h+=`
                     <div class="vtt-token-menu-item" id="menu-flip-card">
                         <span><i class="fa-solid fa-repeat item-icon text-gradient-gold"></i> Flip Card</span>
                     </div>
-                `;
-            }
-            html += `
+                `),h+=`
                 <div class="vtt-token-menu-item" id="menu-next-side">
                     <span><i class="fa-solid fa-forward-step item-icon"></i> Next Side</span>
                 </div>
                 <div class="vtt-token-menu-item" id="menu-random-side">
                     <span><i class="fa-solid fa-dice item-icon text-gradient-gold"></i> Random Side</span>
                 </div>
-            `;
-        }
-    }
-
-    // Equip Light Submenu
-    html += `
+            `)}h+=`
         <div class="vtt-token-menu-item">
             <span><i class="fa-solid fa-fire item-icon" style="color: #ff9d3b;"></i> Equip Light</span>
             <i class="fa-solid fa-chevron-right chevron-icon"></i>
             <div class="vtt-token-submenu" style="min-width: 220px;">
                 <div class="vtt-token-submenu-list scroll-styled">
                     <div class="vtt-submenu-item menu-ctx-equip-light" data-preset="torch">
-                        <span>🔥 Torch (20/40 ft)</span>
+                        <span>\u{1F525} Torch (20/40 ft)</span>
                     </div>
                     <div class="vtt-submenu-item menu-ctx-equip-light" data-preset="lantern_hooded">
-                        <span>🏮 Hooded Lantern (30/60 ft)</span>
+                        <span>\u{1F3EE} Hooded Lantern (30/60 ft)</span>
                     </div>
                     <div class="vtt-submenu-item menu-ctx-equip-light" data-preset="lantern_bullseye">
-                        <span>🔦 Bullseye Lantern (60/120 ft)</span>
+                        <span>\u{1F526} Bullseye Lantern (60/120 ft)</span>
                     </div>
                     <div class="vtt-submenu-item menu-ctx-equip-light" data-preset="candle">
-                        <span>🕯️ Candle (5/10 ft)</span>
+                        <span>\u{1F56F}\uFE0F Candle (5/10 ft)</span>
                     </div>
                     <div class="vtt-submenu-item menu-ctx-equip-light" data-preset="spell_light">
-                        <span>✨ Light Spell (20/40 ft)</span>
+                        <span>\u2728 Light Spell (20/40 ft)</span>
                     </div>
                     <div class="vtt-submenu-item menu-ctx-equip-light" data-preset="campfire">
-                        <span>🏕️ Campfire (30/60 ft)</span>
+                        <span>\u{1F3D5}\uFE0F Campfire (30/60 ft)</span>
                     </div>
                     <div class="vtt-submenu-item menu-ctx-equip-light" data-preset="darkvision">
-                        <span>👁️ Darkvision (60 ft)</span>
+                        <span>\u{1F441}\uFE0F Darkvision (60 ft)</span>
                     </div>
                     <div class="vtt-token-menu-divider"></div>
                     <div class="vtt-submenu-item menu-ctx-equip-light" data-preset="extinguish">
@@ -504,10 +165,7 @@ export function showTokenContextMenu(tokenId, clientX, clientY, options = {}) {
                 </div>
             </div>
         </div>
-    `;
-
-    // 4. Transform options (All Users - grouped cascading submenu)
-    html += `
+    `,h+=`
         <div class="vtt-token-menu-divider"></div>
         <div class="vtt-token-menu-item" id="menu-ctx-transform">
             <span><i class="fa-solid fa-arrows-rotate item-icon"></i> Transform</span>
@@ -526,11 +184,7 @@ export function showTokenContextMenu(tokenId, clientX, clientY, options = {}) {
                 </div>
             </div>
         </div>
-    `;
-
-    // 5. Z-ordering & Layers (GM Only - grouped cascading submenu)
-    if (vtt.role === 'GM') {
-        html += `
+    `,d.role==="GM"&&(h+=`
             <div class="vtt-token-menu-divider"></div>
             <div class="vtt-token-menu-item" id="menu-ctx-arrange">
                 <span><i class="fa-solid fa-layer-group item-icon"></i> Arrange & Layer</span>
@@ -583,689 +237,4 @@ export function showTokenContextMenu(tokenId, clientX, clientY, options = {}) {
             <div class="vtt-token-menu-item text-danger" id="menu-ctx-delete" style="color: var(--color-danger);">
                 <span><i class="fa-solid fa-trash item-icon"></i> Delete</span>
             </div>
-        `;
-    }
-
-    menu.innerHTML = html;
-    document.body.appendChild(menu);
-
-    const isMobile = isMobileViewport();
-    const mobileBackdrop = document.getElementById('vtt-mobile-backdrop');
-
-    if (isMobile) {
-        menu.classList.add('mobile-modal-mode');
-        if (mobileBackdrop) {
-            mobileBackdrop.classList.add('active');
-        }
-    }
-
-    const cleanupContextMenu = () => {
-        if (mobileBackdrop) {
-            mobileBackdrop.classList.remove('active');
-            mobileBackdrop.removeEventListener('click', cleanupContextMenu);
-            mobileBackdrop.removeEventListener('touchend', cleanupContextMenu);
-        }
-    };
-
-    if (isMobile && mobileBackdrop) {
-        mobileBackdrop.addEventListener('click', cleanupContextMenu);
-        mobileBackdrop.addEventListener('touchend', cleanupContextMenu);
-    }
-
-    const originalMenuRemove = menu.remove.bind(menu);
-    menu.remove = function () {
-        cleanupContextMenu();
-        originalMenuRemove();
-    };
-
-    if (isMobile) {
-        menu.style.left = '50%';
-        menu.style.top = '50%';
-        menu.style.transform = 'translate(-50%, -50%)';
-    } else {
-        const PADDING = 12;
-        const screenW = window.innerWidth;
-        const screenH = window.innerHeight;
-
-        // Measure unscaled layout dimensions to avoid CSS entrance animation scaling distortion (scale(0.96))
-        const menuWidth = menu.offsetWidth || menu.getBoundingClientRect().width || 200;
-        const menuHeight = menu.offsetHeight || menu.getBoundingClientRect().height || 350;
-
-        // Safety max-height for ultra-short viewports (< 500px)
-        const maxAllowedHeight = Math.max(160, screenH - PADDING * 2);
-        menu.style.maxHeight = `${maxAllowedHeight}px`;
-        if (menu.scrollHeight > maxAllowedHeight || menuHeight > maxAllowedHeight) {
-            menu.style.overflowY = 'auto';
-            menu.style.overflowX = 'hidden';
-        }
-
-        let adjustedX = clientX;
-        let adjustedY = clientY;
-
-        // Clamp horizontally
-        if (clientX + menuWidth > screenW - PADDING) {
-            adjustedX = Math.max(PADDING, screenW - menuWidth - PADDING);
-        }
-
-        // Clamp vertically: flip up or shift up with safety margin if overflowing screen bottom
-        if (clientY + menuHeight > screenH - PADDING) {
-            adjustedY = Math.max(PADDING, screenH - menuHeight - PADDING);
-        }
-
-        adjustedX = Math.max(PADDING, adjustedX);
-        adjustedY = Math.max(PADDING, adjustedY);
-
-        menu.style.left = `${adjustedX}px`;
-        menu.style.top = `${adjustedY}px`;
-
-        // Viewport-aware submenu flip (left/up) on hover
-        menu.querySelectorAll('.vtt-token-menu-item').forEach((item) => {
-            const submenu = item.querySelector('.vtt-token-submenu');
-            if (!submenu) return;
-            item.addEventListener('mouseenter', () => {
-                const itemRect = item.getBoundingClientRect();
-                const subWidth = submenu.offsetWidth || 200;
-                const subHeight = submenu.offsetHeight || 220;
-
-                // Flip left if overflowing right edge
-                if (itemRect.right + subWidth > window.innerWidth - 8) {
-                    submenu.classList.add('flip-left');
-                } else {
-                    submenu.classList.remove('flip-left');
-                }
-
-                // Flip upwards if overflowing bottom edge
-                if (itemRect.top + subHeight > window.innerHeight - 8) {
-                    submenu.classList.add('flip-up');
-                } else {
-                    submenu.classList.remove('flip-up');
-                }
-            });
-        });
-    }
-
-    // Splash Art
-    const btnSplash = menu.querySelector('#menu-ctx-splash-art');
-    if (btnSplash) {
-        btnSplash.addEventListener('click', () => {
-            triggerSplashForSelection(tokenId);
-            menu.remove();
-        });
-    }
-
-    // Apply Damage
-    const btnApplyDamage = menu.querySelector('#menu-apply-damage');
-    if (btnApplyDamage) {
-        btnApplyDamage.addEventListener('click', () => {
-            showApplyDamageModal([tokenId], options);
-            menu.remove();
-        });
-    }
-
-    // Initiative
-    menu.querySelector('#menu-roll-init').addEventListener('click', (e) => {
-        let formula = '';
-        let dexScore = 10;
-        if (monsterData) {
-            dexScore = monsterData.dex || 10;
-            let mod = Math.floor((dexScore - 10) / 2);
-            if (monsterData.initiative !== undefined) {
-                if (typeof monsterData.initiative === 'number') mod = monsterData.initiative;
-                else if (typeof monsterData.initiative?.bonus === 'number') mod = monsterData.initiative.bonus;
-            }
-            formula = `1d20${mod >= 0 ? '+' : ''}${mod}`;
-        } else if (token.isPlayer && token.characterId && vtt.campaignState?.characters?.[token.characterId]) {
-            const char = vtt.campaignState.characters[token.characterId];
-            if (char.isCustomNpc || char.monsterData) {
-                dexScore = char.monsterData?.dex || 10;
-                let mod = Math.floor((dexScore - 10) / 2);
-                if (char.monsterData?.initiative !== undefined) {
-                    if (typeof char.monsterData.initiative === 'number') mod = char.monsterData.initiative;
-                    else if (typeof char.monsterData.initiative?.bonus === 'number')
-                        mod = char.monsterData.initiative.bonus;
-                }
-                formula = `1d20${mod >= 0 ? '+' : ''}${mod}`;
-            } else {
-                dexScore = char.stats?.dex || 10;
-                formula = getPcRollFormula(char, 'initiative');
-            }
-        } else {
-            const input =
-                typeof prompt === 'function' ? prompt(`Enter Initiative Modifier for ${token.name}:`, '0') : '0';
-            if (input === null) {
-                menu.remove();
-                return;
-            }
-            let mod = parseInt(input) || 0;
-            formula = `1d20${mod >= 0 ? '+' : ''}${mod}`;
-        }
-
-        let dexTiebreaker = 0;
-        if (campaignSettings.initDexTiebreaker !== false) {
-            dexTiebreaker = Math.round(dexScore) / 100;
-        }
-
-        const label = `${token.name}: Initiative`;
-        const resultTotal = rollFromToken(formula, label, tokenId, dexTiebreaker, { vtt, optEvent: e });
-
-        if (typeof window !== 'undefined' && window.VTT?.chatEngine) {
-            window.VTT.chatEngine.addToInitiative(token.name, resultTotal, tokenId);
-        }
-        menu.remove();
-    });
-
-    // Abilities
-    menu.querySelectorAll('.menu-roll-ability').forEach((item) => {
-        item.addEventListener('click', (e) => {
-            const abKey = item.dataset.ability;
-            const abLabel = item.dataset.label;
-            let formula = '';
-            if (monsterData) {
-                const score = monsterData[abKey] || 10;
-                let mod = Math.floor((score - 10) / 2);
-                formula = `1d20${mod >= 0 ? '+' : ''}${mod}`;
-            } else if (token.isPlayer && token.characterId && vtt.campaignState?.characters?.[token.characterId]) {
-                const char = vtt.campaignState.characters[token.characterId];
-                formula = getPcRollFormula(char, 'ability', abKey);
-            } else {
-                const input = typeof prompt === 'function' ? prompt(`Enter modifier for ${abLabel} Check:`, '0') : '0';
-                if (input === null) {
-                    menu.remove();
-                    return;
-                }
-                let mod = parseInt(input) || 0;
-                formula = `1d20${mod >= 0 ? '+' : ''}${mod}`;
-            }
-            const label = `${token.name}: ${abLabel.toUpperCase()} Check`;
-            rollFromToken(formula, label, tokenId, 0, { vtt, optEvent: e });
-            menu.remove();
-        });
-    });
-
-    // Saves
-    menu.querySelectorAll('.menu-roll-save').forEach((item) => {
-        item.addEventListener('click', (e) => {
-            const abKey = item.dataset.ability;
-            const abLabel = item.dataset.label;
-            let formula = '';
-            if (monsterData) {
-                const score = monsterData[abKey] || 10;
-                let mod = Math.floor((score - 10) / 2);
-                if (monsterData.save && monsterData.save[abKey] !== undefined) {
-                    mod = parseInt(monsterData.save[abKey]);
-                }
-                formula = `1d20${mod >= 0 ? '+' : ''}${mod}`;
-            } else if (token.isPlayer && token.characterId && vtt.campaignState?.characters?.[token.characterId]) {
-                const char = vtt.campaignState.characters[token.characterId];
-                formula = getPcRollFormula(char, 'save', abKey);
-            } else {
-                const input = typeof prompt === 'function' ? prompt(`Enter modifier for ${abLabel} Save:`, '0') : '0';
-                if (input === null) {
-                    menu.remove();
-                    return;
-                }
-                let mod = parseInt(input) || 0;
-                formula = `1d20${mod >= 0 ? '+' : ''}${mod}`;
-            }
-            const label = `${token.name}: ${abLabel.toUpperCase()} Saving Throw`;
-            rollFromToken(formula, label, tokenId, 0, { vtt, optEvent: e });
-            menu.remove();
-        });
-    });
-
-    // Skills
-    menu.querySelectorAll('.menu-roll-skill').forEach((item) => {
-        item.addEventListener('click', (e) => {
-            const skKey = item.dataset.skill;
-            const skLabel = item.dataset.label;
-            let formula = '';
-            if (monsterData) {
-                const skillObj = skills.find((s) => s.key === skKey);
-                const score = monsterData[skillObj.ability] || 10;
-                let mod = Math.floor((score - 10) / 2);
-                if (monsterData.skill && monsterData.skill[skKey] !== undefined) {
-                    mod = parseInt(monsterData.skill[skKey]);
-                }
-                formula = `1d20${mod >= 0 ? '+' : ''}${mod}`;
-            } else if (token.isPlayer && token.characterId && vtt.campaignState?.characters?.[token.characterId]) {
-                const char = vtt.campaignState.characters[token.characterId];
-                formula = getPcRollFormula(char, 'skill', skKey);
-            } else {
-                const input = typeof prompt === 'function' ? prompt(`Enter modifier for ${skLabel} Check:`, '0') : '0';
-                if (input === null) {
-                    menu.remove();
-                    return;
-                }
-                let mod = parseInt(input) || 0;
-                formula = `1d20${mod >= 0 ? '+' : ''}${mod}`;
-            }
-            const label = `${token.name}: ${skLabel} Check`;
-            rollFromToken(formula, label, tokenId, 0, { vtt, optEvent: e });
-            menu.remove();
-        });
-    });
-
-    // Elevation events
-    const updateFlight = (newHeight) => {
-        const activeToken = tokens[tokenId];
-        if (!activeToken) return;
-        activeToken.flightHeight = newHeight;
-        if (typeof options.emitTokenUpdates === 'function') {
-            options.emitTokenUpdates(tokens);
-        } else if (typeof window !== 'undefined' && typeof window.emitTokenUpdates === 'function') {
-            window.emitTokenUpdates(tokens);
-        } else if (vtt.socket) {
-            vtt.socket.emit('tokens:update', { tokens });
-        }
-        renderAll();
-    };
-
-    const btnFlightDec = menu.querySelector('.menu-btn-flight-dec');
-    const btnFlightInc = menu.querySelector('.menu-btn-flight-inc');
-    const inputFlight = menu.querySelector('.menu-input-flight');
-    if (btnFlightDec && btnFlightInc && inputFlight) {
-        btnFlightDec.addEventListener('click', (e) => {
-            e.stopPropagation();
-            let val = parseInt(inputFlight.value) || 0;
-            val -= 5;
-            inputFlight.value = val;
-            updateFlight(val);
-        });
-        btnFlightInc.addEventListener('click', (e) => {
-            e.stopPropagation();
-            let val = parseInt(inputFlight.value) || 0;
-            val += 5;
-            inputFlight.value = val;
-            updateFlight(val);
-        });
-        inputFlight.addEventListener('change', (e) => {
-            e.stopPropagation();
-            updateFlight(parseInt(inputFlight.value) || 0);
-        });
-        inputFlight.addEventListener('click', (e) => e.stopPropagation());
-    }
-
-    menu.querySelectorAll('.menu-toggle-condition').forEach((item) => {
-        item.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const activeToken = tokens[tokenId];
-            if (!activeToken) return;
-
-            const condName = item.dataset.cond;
-            if (!activeToken.conditions) activeToken.conditions = [];
-            const existingIdx = activeToken.conditions.findIndex((c) => c.name === condName);
-
-            if (existingIdx !== -1) {
-                activeToken.conditions.splice(existingIdx, 1);
-                item.classList.remove('is-active');
-            } else {
-                activeToken.conditions.push({ name: condName });
-                item.classList.add('is-active');
-            }
-
-            if (typeof window !== 'undefined' && typeof window.emitTokenUpdates === 'function') {
-                window.emitTokenUpdates(tokens);
-            }
-            renderAll();
-        });
-    });
-
-    const btnClearAll = menu.querySelector('.menu-clear-all-conditions');
-    if (btnClearAll) {
-        btnClearAll.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const activeToken = tokens[tokenId];
-            if (!activeToken) return;
-            activeToken.conditions = [];
-            menu.querySelectorAll('.menu-toggle-condition').forEach((t) => t.classList.remove('is-active'));
-            const customList = menu.querySelector('.vtt-cond-custom-list');
-            if (customList) customList.remove();
-            if (typeof window !== 'undefined' && typeof window.emitTokenUpdates === 'function') {
-                window.emitTokenUpdates(tokens);
-            }
-            renderAll();
-        });
-    }
-
-    const btnAddCustom = menu.querySelector('.menu-add-custom-condition');
-    if (btnAddCustom) {
-        btnAddCustom.addEventListener('click', (e) => {
-            e.stopPropagation();
-            menu.remove();
-            showAddCustomConditionModal(tokenId, { tokens, renderAll });
-        });
-    }
-
-    menu.querySelectorAll('.menu-toggle-custom-condition').forEach((item) => {
-        item.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const activeToken = tokens[tokenId];
-            if (!activeToken || !activeToken.conditions) return;
-            const idx = parseInt(item.dataset.customIdx);
-            activeToken.conditions.splice(idx, 1);
-            item.remove();
-            if (typeof window !== 'undefined' && typeof window.emitTokenUpdates === 'function') {
-                window.emitTokenUpdates(tokens);
-            }
-            renderAll();
-        });
-    });
-
-    menu.querySelectorAll('.menu-token-selector-item, .menu-token-selector-img').forEach((itemEl) => {
-        itemEl.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const url = itemEl.dataset.url || itemEl.getAttribute('data-url');
-            const idx = parseInt(itemEl.dataset.idx || itemEl.getAttribute('data-idx') || '-1', 10);
-
-            const t = tokens[tokenId];
-            if (!t || !url) return;
-
-            t.url = url;
-            t.img = url;
-
-            const cleanUrl = url.split('?')[0].toLowerCase();
-            const isGif = cleanUrl.endsWith('.gif') || url.includes('.gif');
-            t.isGif = isGif;
-            t.isVideo =
-                !isGif &&
-                (!!cleanUrl.match(/\.(mp4|webm|ogg)$/i) ||
-                    url.includes('youtube.com') ||
-                    url.includes('pinimg.com/videos'));
-
-            const targetCharId = t.characterId || t.sourceCharacterId;
-            if (targetCharId && vtt.campaignState?.characters) {
-                const char = vtt.campaignState.characters[targetCharId];
-                if (char) {
-                    if (idx >= 0 && Array.isArray(char.tokenImages) && idx < char.tokenImages.length) {
-                        char.activeTokenIndex = idx;
-                    }
-                    char.tokenSize = t.size;
-                    char.tokenSight = t.sightRange;
-                    char.tokenAuras = t.auras;
-                    char.fxOverlayEnabled = t.fxOverlayEnabled;
-                    char.fxOverlayOpacity = t.fxOverlayOpacity;
-                    char.fxOverlayColor = t.fxOverlayColor;
-                    char.fxVignetteEnabled = t.fxVignetteEnabled;
-                    char.fxVignetteOpacity = t.fxVignetteOpacity;
-                    char.fxVignetteColor = t.fxVignetteColor;
-                    char.fxShadowEnabled = t.fxShadowEnabled;
-                    char.fxShadowBlur = t.fxShadowBlur;
-                    char.fxShadowOffset = t.fxShadowOffset;
-                    char.fxShadowColor = t.fxShadowColor;
-                    char.fxShadowOpacity = t.fxShadowOpacity;
-                    char.tokenLightEnabled = t.lightEnabled;
-                    char.tokenLightBright = t.lightBright;
-                    char.tokenLightDim = t.lightDim;
-                    char.tokenLightColor = t.lightColor;
-
-                    if (vtt.socket) {
-                        vtt.socket.emit('character:update', { id: targetCharId, character: char });
-                    }
-                }
-            }
-
-            if (typeof window !== 'undefined' && window.VTT?.chatEngine?.updateCombatantTokenArt) {
-                window.VTT.chatEngine.updateCombatantTokenArt(tokenId, url, targetCharId);
-            } else if (typeof window !== 'undefined' && window.VTT?.chatEngine?.refreshInitiative) {
-                window.VTT.chatEngine.refreshInitiative();
-            }
-
-            if (vtt.socket && typeof window !== 'undefined' && typeof window.emitTokenUpdates === 'function') {
-                window.emitTokenUpdates(tokens);
-            }
-            renderAll();
-            menu.remove();
-        });
-    });
-
-    const applySideByIndex = (targetSideIdx) => {
-        if (!availableTokens || availableTokens.length === 0) return;
-        const validIdx = Math.max(0, Math.min(availableTokens.length - 1, targetSideIdx));
-        const sideData = availableTokens[validIdx];
-        if (!sideData || !sideData.url) return;
-
-        const t = tokens[tokenId];
-        if (!t) return;
-
-        t.url = sideData.url;
-        t.img = sideData.url;
-        t.activeTokenIndex = sideData.idx;
-
-        const cleanUrl = sideData.url.split('?')[0].toLowerCase();
-        const isGif = cleanUrl.endsWith('.gif') || sideData.url.includes('.gif');
-        t.isGif = isGif;
-        t.isVideo =
-            !isGif &&
-            (!!cleanUrl.match(/\.(mp4|webm|ogg)$/i) ||
-                sideData.url.includes('youtube.com') ||
-                sideData.url.includes('pinimg.com/videos'));
-
-        const targetCharId = t.characterId || t.sourceCharacterId;
-        if (targetCharId && vtt.campaignState?.characters) {
-            const char = vtt.campaignState.characters[targetCharId];
-            if (
-                char &&
-                sideData.idx >= 0 &&
-                Array.isArray(char.tokenImages) &&
-                sideData.idx < char.tokenImages.length
-            ) {
-                char.activeTokenIndex = sideData.idx;
-                if (vtt.socket) {
-                    vtt.socket.emit('character:update', { id: targetCharId, character: char });
-                }
-            }
-        }
-
-        if (typeof window !== 'undefined' && window.VTT?.chatEngine?.updateCombatantTokenArt) {
-            window.VTT.chatEngine.updateCombatantTokenArt(tokenId, sideData.url, targetCharId);
-        } else if (typeof window !== 'undefined' && window.VTT?.chatEngine?.refreshInitiative) {
-            window.VTT.chatEngine.refreshInitiative();
-        }
-
-        if (vtt.socket && typeof window !== 'undefined' && typeof window.emitTokenUpdates === 'function') {
-            window.emitTokenUpdates(tokens);
-        }
-        renderAll();
-        if (typeof window !== 'undefined' && window.VTT?.toast) {
-            const sideName = sideData.label || `Side ${validIdx + 1}`;
-            window.VTT.toast(`Token art: ${sideName}`);
-        }
-    };
-
-    const btnNextSide = menu.querySelector('#menu-next-side');
-    if (btnNextSide) {
-        btnNextSide.addEventListener('click', () => {
-            const t = tokens[tokenId];
-            if (!t || availableTokens.length < 2) return;
-            let cur = availableTokens.findIndex((item) => item.url === t.img || item.idx === t.activeTokenIndex);
-            if (cur < 0) cur = 0;
-            const next = (cur + 1) % availableTokens.length;
-            applySideByIndex(next);
-            menu.remove();
-        });
-    }
-
-    const btnRandomSide = menu.querySelector('#menu-random-side');
-    if (btnRandomSide) {
-        btnRandomSide.addEventListener('click', () => {
-            const t = tokens[tokenId];
-            if (!t || availableTokens.length < 2) return;
-            const rand = Math.floor(Math.random() * availableTokens.length);
-            applySideByIndex(rand);
-            menu.remove();
-        });
-    }
-
-    const btnFlipCard = menu.querySelector('#menu-flip-card');
-    if (btnFlipCard) {
-        btnFlipCard.addEventListener('click', () => {
-            const t = tokens[tokenId];
-            if (!t || availableTokens.length < 2) return;
-            let cur = availableTokens.findIndex((item) => item.url === t.img || item.idx === t.activeTokenIndex);
-            const flip = cur === 0 ? 1 : 0;
-            applySideByIndex(flip);
-            menu.remove();
-        });
-    }
-
-    menu.querySelectorAll('.menu-ctx-equip-light').forEach((item) => {
-        item.addEventListener('click', () => {
-            const targetToken = tokens[tokenId];
-            if (!targetToken) return;
-            const preset = item.dataset.preset;
-            if (preset === 'extinguish') {
-                targetToken.lightEnabled = false;
-            } else {
-                applyLightingPresetFn(targetToken, preset);
-            }
-            if (vtt.socket && typeof window !== 'undefined' && typeof window.emitTokenUpdates === 'function') {
-                window.emitTokenUpdates(tokens);
-            }
-            renderAll();
-            menu.remove();
-        });
-    });
-
-    const btnFlipH = menu.querySelector('#menu-flip-h');
-    if (btnFlipH) {
-        btnFlipH.addEventListener('click', () => {
-            const t = tokens[tokenId];
-            if (t) {
-                t.flipX = !t.flipX;
-                if (vtt.socket && typeof window !== 'undefined' && typeof window.emitTokenUpdates === 'function') {
-                    window.emitTokenUpdates(tokens);
-                }
-                renderAll();
-            }
-            menu.remove();
-        });
-    }
-
-    const btnFlipV = menu.querySelector('#menu-flip-v');
-    if (btnFlipV) {
-        btnFlipV.addEventListener('click', () => {
-            const t = tokens[tokenId];
-            if (t) {
-                t.flipY = !t.flipY;
-                if (vtt.socket && typeof window !== 'undefined' && typeof window.emitTokenUpdates === 'function') {
-                    window.emitTokenUpdates(tokens);
-                }
-                renderAll();
-            }
-            menu.remove();
-        });
-    }
-
-    const btnResetRot = menu.querySelector('#menu-reset-rotation');
-    if (btnResetRot) {
-        btnResetRot.addEventListener('click', () => {
-            const targetIds = selectedTokenIds.has(tokenId) ? Array.from(selectedTokenIds) : [tokenId];
-            targetIds.forEach((id) => {
-                const t = tokens[id];
-                if (t) t.rotation = 0;
-            });
-            if (vtt.socket && typeof window !== 'undefined' && typeof window.emitTokenUpdates === 'function') {
-                window.emitTokenUpdates(tokens);
-            }
-            renderAll();
-            menu.remove();
-        });
-    }
-
-    if (vtt.role === 'GM') {
-        menu.querySelector('#menu-move-front').addEventListener('click', () => {
-            changeTokenZOrderFn(tokenId, 'front', options);
-            menu.remove();
-        });
-        menu.querySelector('#menu-move-back').addEventListener('click', () => {
-            changeTokenZOrderFn(tokenId, 'back', options);
-            menu.remove();
-        });
-        menu.querySelector('#menu-move-front-one').addEventListener('click', () => {
-            changeTokenZOrderFn(tokenId, 'front-one', options);
-            menu.remove();
-        });
-        menu.querySelector('#menu-move-back-one').addEventListener('click', () => {
-            changeTokenZOrderFn(tokenId, 'back-one', options);
-            menu.remove();
-        });
-        menu.querySelectorAll('.menu-ctx-move-layer').forEach((item) => {
-            item.addEventListener('click', () => {
-                const targetLayer = item.dataset.layer;
-                const targetIds = selectedTokenIds.has(tokenId) ? Array.from(selectedTokenIds) : [tokenId];
-                targetIds.forEach((id) => {
-                    if (tokens[id]) {
-                        tokens[id].layer = targetLayer;
-                        selectedTokenIds.delete(id);
-                        if (window.VTT?.chatEngine?.updateCombatantLayer) {
-                            window.VTT?.chatEngine?.updateCombatantLayer?.(id, targetLayer);
-                        }
-                    }
-                });
-                if (vtt.socket && typeof window !== 'undefined' && typeof window.emitTokenUpdates === 'function') {
-                    window.emitTokenUpdates(tokens);
-                }
-                renderAll();
-                menu.remove();
-            });
-        });
-        menu.querySelector('#menu-ctx-convert-freeform').addEventListener('click', () => {
-            const { drawW, drawH } = getTokenDrawDimensions(token);
-            token.isAsset = true;
-            token.isBorderless = false;
-            token.pixelWidth = drawW;
-            token.pixelHeight = drawH;
-            token.imgRadius = '0';
-            if (typeof window !== 'undefined' && typeof window.emitTokenUpdates === 'function') {
-                window.emitTokenUpdates(tokens);
-            }
-            renderAll();
-            menu.remove();
-        });
-        menu.querySelector('#menu-ctx-convert-borderless').addEventListener('click', () => {
-            token.isAsset = false;
-            token.isBorderless = true;
-            const snap = snapToGrid(token.x, token.y, true);
-            token.x = snap.x;
-            token.y = snap.y;
-            token.size = 1;
-            if (token.assetType === 'video' || (token.url && token.url.split('?')[0].toLowerCase().endsWith('.gif'))) {
-                token.imgRadius = '50%';
-            }
-            if (typeof window !== 'undefined' && typeof window.emitTokenUpdates === 'function') {
-                window.emitTokenUpdates(tokens);
-            }
-            renderAll();
-            menu.remove();
-        });
-        menu.querySelector('#menu-ctx-convert-bordered').addEventListener('click', () => {
-            token.isAsset = false;
-            token.isBorderless = false;
-            const snap = snapToGrid(token.x, token.y, true);
-            token.x = snap.x;
-            token.y = snap.y;
-            token.size = 1;
-            if (token.assetType === 'video' || (token.url && token.url.split('?')[0].toLowerCase().endsWith('.gif'))) {
-                token.imgRadius = '50%';
-            }
-            if (typeof window !== 'undefined' && typeof window.emitTokenUpdates === 'function') {
-                window.emitTokenUpdates(tokens);
-            }
-            renderAll();
-            menu.remove();
-        });
-        menu.querySelector('#menu-ctx-delete').addEventListener('click', () => {
-            if (typeof deleteMapBackgroundAsset === 'function' && deleteMapBackgroundAsset(tokenId)) {
-                renderAll();
-                menu.remove();
-                return;
-            }
-            delete tokens[tokenId];
-            if (typeof window !== 'undefined' && typeof window.emitTokenUpdates === 'function') {
-                window.emitTokenUpdates(tokens);
-            }
-            renderAll();
-            menu.remove();
-        });
-    }
-}
+        `),n.innerHTML=h,document.body.appendChild(n);const B=V(),$=document.getElementById("vtt-mobile-backdrop");B&&(n.classList.add("mobile-modal-mode"),$&&$.classList.add("active"));const M=()=>{$&&($.classList.remove("active"),$.removeEventListener("click",M),$.removeEventListener("touchend",M))};B&&$&&($.addEventListener("click",M),$.addEventListener("touchend",M));const me=n.remove.bind(n);if(n.remove=function(){M(),me()},B)n.style.left="50%",n.style.top="50%",n.style.transform="translate(-50%, -50%)";else{const i=window.innerWidth,t=window.innerHeight,o=n.offsetWidth||n.getBoundingClientRect().width||200,s=n.offsetHeight||n.getBoundingClientRect().height||350,g=Math.max(160,t-24);n.style.maxHeight=`${g}px`,(n.scrollHeight>g||s>g)&&(n.style.overflowY="auto",n.style.overflowX="hidden");let l=S,r=q;S+o>i-12&&(l=Math.max(12,i-o-12)),q+s>t-12&&(r=Math.max(12,t-s-12)),l=Math.max(12,l),r=Math.max(12,r),n.style.left=`${l}px`,n.style.top=`${r}px`,n.querySelectorAll(".vtt-token-menu-item").forEach(m=>{const x=m.querySelector(".vtt-token-submenu");x&&m.addEventListener("mouseenter",()=>{const C=m.getBoundingClientRect(),A=x.offsetWidth||200,pe=x.offsetHeight||220;C.right+A>window.innerWidth-8?x.classList.add("flip-left"):x.classList.remove("flip-left"),C.top+pe>window.innerHeight-8?x.classList.add("flip-up"):x.classList.remove("flip-up")})})}const K=n.querySelector("#menu-ctx-splash-art");K&&K.addEventListener("click",()=>{H(f),n.remove()});const X=n.querySelector("#menu-apply-damage");X&&X.addEventListener("click",()=>{he([f],b),n.remove()}),n.querySelector("#menu-roll-init").addEventListener("click",e=>{let i="",t=10;if(u){t=u.dex||10;let l=Math.floor((t-10)/2);u.initiative!==void 0&&(typeof u.initiative=="number"?l=u.initiative:typeof u.initiative?.bonus=="number"&&(l=u.initiative.bonus)),i=`1d20${l>=0?"+":""}${l}`}else if(a.isPlayer&&a.characterId&&d.campaignState?.characters?.[a.characterId]){const l=d.campaignState.characters[a.characterId];if(l.isCustomNpc||l.monsterData){t=l.monsterData?.dex||10;let r=Math.floor((t-10)/2);l.monsterData?.initiative!==void 0&&(typeof l.monsterData.initiative=="number"?r=l.monsterData.initiative:typeof l.monsterData.initiative?.bonus=="number"&&(r=l.monsterData.initiative.bonus)),i=`1d20${r>=0?"+":""}${r}`}else t=l.stats?.dex||10,i=P(l,"initiative")}else{const l=typeof prompt=="function"?prompt(`Enter Initiative Modifier for ${a.name}:`,"0"):"0";if(l===null){n.remove();return}let r=parseInt(l)||0;i=`1d20${r>=0?"+":""}${r}`}let o=0;U.initDexTiebreaker!==!1&&(o=Math.round(t)/100);const s=`${a.name}: Initiative`,g=z(i,s,f,o,{vtt:d,optEvent:e});typeof window<"u"&&window.VTT?.chatEngine&&window.VTT.chatEngine.addToInitiative(a.name,g,f),n.remove()}),n.querySelectorAll(".menu-roll-ability").forEach(e=>{e.addEventListener("click",i=>{const t=e.dataset.ability,o=e.dataset.label;let s="";if(u){const l=u[t]||10;let r=Math.floor((l-10)/2);s=`1d20${r>=0?"+":""}${r}`}else if(a.isPlayer&&a.characterId&&d.campaignState?.characters?.[a.characterId]){const l=d.campaignState.characters[a.characterId];s=P(l,"ability",t)}else{const l=typeof prompt=="function"?prompt(`Enter modifier for ${o} Check:`,"0"):"0";if(l===null){n.remove();return}let r=parseInt(l)||0;s=`1d20${r>=0?"+":""}${r}`}const g=`${a.name}: ${o.toUpperCase()} Check`;z(s,g,f,0,{vtt:d,optEvent:i}),n.remove()})}),n.querySelectorAll(".menu-roll-save").forEach(e=>{e.addEventListener("click",i=>{const t=e.dataset.ability,o=e.dataset.label;let s="";if(u){const l=u[t]||10;let r=Math.floor((l-10)/2);u.save&&u.save[t]!==void 0&&(r=parseInt(u.save[t])),s=`1d20${r>=0?"+":""}${r}`}else if(a.isPlayer&&a.characterId&&d.campaignState?.characters?.[a.characterId]){const l=d.campaignState.characters[a.characterId];s=P(l,"save",t)}else{const l=typeof prompt=="function"?prompt(`Enter modifier for ${o} Save:`,"0"):"0";if(l===null){n.remove();return}let r=parseInt(l)||0;s=`1d20${r>=0?"+":""}${r}`}const g=`${a.name}: ${o.toUpperCase()} Saving Throw`;z(s,g,f,0,{vtt:d,optEvent:i}),n.remove()})}),n.querySelectorAll(".menu-roll-skill").forEach(e=>{e.addEventListener("click",i=>{const t=e.dataset.skill,o=e.dataset.label;let s="";if(u){const l=Z.find(x=>x.key===t),r=u[l.ability]||10;let m=Math.floor((r-10)/2);u.skill&&u.skill[t]!==void 0&&(m=parseInt(u.skill[t])),s=`1d20${m>=0?"+":""}${m}`}else if(a.isPlayer&&a.characterId&&d.campaignState?.characters?.[a.characterId]){const l=d.campaignState.characters[a.characterId];s=P(l,"skill",t)}else{const l=typeof prompt=="function"?prompt(`Enter modifier for ${o} Check:`,"0"):"0";if(l===null){n.remove();return}let r=parseInt(l)||0;s=`1d20${r>=0?"+":""}${r}`}const g=`${a.name}: ${o} Check`;z(s,g,f,0,{vtt:d,optEvent:i}),n.remove()})});const G=e=>{const i=c[f];i&&(i.flightHeight=e,typeof b.emitTokenUpdates=="function"?b.emitTokenUpdates(c):typeof window<"u"&&typeof window.emitTokenUpdates=="function"?window.emitTokenUpdates(c):d.socket&&d.socket.emit("tokens:update",{tokens:c}),p())},Y=n.querySelector(".menu-btn-flight-dec"),J=n.querySelector(".menu-btn-flight-inc"),E=n.querySelector(".menu-input-flight");Y&&J&&E&&(Y.addEventListener("click",e=>{e.stopPropagation();let i=parseInt(E.value)||0;i-=5,E.value=i,G(i)}),J.addEventListener("click",e=>{e.stopPropagation();let i=parseInt(E.value)||0;i+=5,E.value=i,G(i)}),E.addEventListener("change",e=>{e.stopPropagation(),G(parseInt(E.value)||0)}),E.addEventListener("click",e=>e.stopPropagation())),n.querySelectorAll(".menu-toggle-condition").forEach(e=>{e.addEventListener("click",i=>{i.stopPropagation();const t=c[f];if(!t)return;const o=e.dataset.cond;t.conditions||(t.conditions=[]);const s=t.conditions.findIndex(g=>g.name===o);s!==-1?(t.conditions.splice(s,1),e.classList.remove("is-active")):(t.conditions.push({name:o}),e.classList.add("is-active")),typeof window<"u"&&typeof window.emitTokenUpdates=="function"&&window.emitTokenUpdates(c),p()})});const Q=n.querySelector(".menu-clear-all-conditions");Q&&Q.addEventListener("click",e=>{e.stopPropagation();const i=c[f];if(!i)return;i.conditions=[],n.querySelectorAll(".menu-toggle-condition").forEach(o=>o.classList.remove("is-active"));const t=n.querySelector(".vtt-cond-custom-list");t&&t.remove(),typeof window<"u"&&typeof window.emitTokenUpdates=="function"&&window.emitTokenUpdates(c),p()});const ee=n.querySelector(".menu-add-custom-condition");ee&&ee.addEventListener("click",e=>{e.stopPropagation(),n.remove(),ve(f,{tokens:c,renderAll:p})}),n.querySelectorAll(".menu-toggle-custom-condition").forEach(e=>{e.addEventListener("click",i=>{i.stopPropagation();const t=c[f];if(!t||!t.conditions)return;const o=parseInt(e.dataset.customIdx);t.conditions.splice(o,1),e.remove(),typeof window<"u"&&typeof window.emitTokenUpdates=="function"&&window.emitTokenUpdates(c),p()})}),n.querySelectorAll(".menu-token-selector-item, .menu-token-selector-img").forEach(e=>{e.addEventListener("click",i=>{i.stopPropagation();const t=e.dataset.url||e.getAttribute("data-url"),o=parseInt(e.dataset.idx||e.getAttribute("data-idx")||"-1",10),s=c[f];if(!s||!t)return;s.url=t,s.img=t;const g=t.split("?")[0].toLowerCase(),l=g.endsWith(".gif")||t.includes(".gif");s.isGif=l,s.isVideo=!l&&(!!g.match(/\.(mp4|webm|ogg)$/i)||t.includes("youtube.com")||t.includes("pinimg.com/videos"));const r=s.characterId||s.sourceCharacterId;if(r&&d.campaignState?.characters){const m=d.campaignState.characters[r];m&&(o>=0&&Array.isArray(m.tokenImages)&&o<m.tokenImages.length&&(m.activeTokenIndex=o),m.tokenSize=s.size,m.tokenSight=s.sightRange,m.tokenAuras=s.auras,m.fxOverlayEnabled=s.fxOverlayEnabled,m.fxOverlayOpacity=s.fxOverlayOpacity,m.fxOverlayColor=s.fxOverlayColor,m.fxVignetteEnabled=s.fxVignetteEnabled,m.fxVignetteOpacity=s.fxVignetteOpacity,m.fxVignetteColor=s.fxVignetteColor,m.fxShadowEnabled=s.fxShadowEnabled,m.fxShadowBlur=s.fxShadowBlur,m.fxShadowOffset=s.fxShadowOffset,m.fxShadowColor=s.fxShadowColor,m.fxShadowOpacity=s.fxShadowOpacity,m.tokenLightEnabled=s.lightEnabled,m.tokenLightBright=s.lightBright,m.tokenLightDim=s.lightDim,m.tokenLightColor=s.lightColor,d.socket&&d.socket.emit("character:update",{id:r,character:m}))}typeof window<"u"&&window.VTT?.chatEngine?.updateCombatantTokenArt?window.VTT.chatEngine.updateCombatantTokenArt(f,t,r):typeof window<"u"&&window.VTT?.chatEngine?.refreshInitiative&&window.VTT.chatEngine.refreshInitiative(),d.socket&&typeof window<"u"&&typeof window.emitTokenUpdates=="function"&&window.emitTokenUpdates(c),p(),n.remove()})});const N=e=>{if(!k||k.length===0)return;const i=Math.max(0,Math.min(k.length-1,e)),t=k[i];if(!t||!t.url)return;const o=c[f];if(!o)return;o.url=t.url,o.img=t.url,o.activeTokenIndex=t.idx;const s=t.url.split("?")[0].toLowerCase(),g=s.endsWith(".gif")||t.url.includes(".gif");o.isGif=g,o.isVideo=!g&&(!!s.match(/\.(mp4|webm|ogg)$/i)||t.url.includes("youtube.com")||t.url.includes("pinimg.com/videos"));const l=o.characterId||o.sourceCharacterId;if(l&&d.campaignState?.characters){const r=d.campaignState.characters[l];r&&t.idx>=0&&Array.isArray(r.tokenImages)&&t.idx<r.tokenImages.length&&(r.activeTokenIndex=t.idx,d.socket&&d.socket.emit("character:update",{id:l,character:r}))}if(typeof window<"u"&&window.VTT?.chatEngine?.updateCombatantTokenArt?window.VTT.chatEngine.updateCombatantTokenArt(f,t.url,l):typeof window<"u"&&window.VTT?.chatEngine?.refreshInitiative&&window.VTT.chatEngine.refreshInitiative(),d.socket&&typeof window<"u"&&typeof window.emitTokenUpdates=="function"&&window.emitTokenUpdates(c),p(),typeof window<"u"&&window.VTT?.toast){const r=t.label||`Side ${i+1}`;window.VTT.toast(`Token art: ${r}`)}},te=n.querySelector("#menu-next-side");te&&te.addEventListener("click",()=>{const e=c[f];if(!e||k.length<2)return;let i=k.findIndex(o=>o.url===e.img||o.idx===e.activeTokenIndex);i<0&&(i=0);const t=(i+1)%k.length;N(t),n.remove()});const ie=n.querySelector("#menu-random-side");ie&&ie.addEventListener("click",()=>{if(!c[f]||k.length<2)return;const i=Math.floor(Math.random()*k.length);N(i),n.remove()});const ne=n.querySelector("#menu-flip-card");ne&&ne.addEventListener("click",()=>{const e=c[f];if(!e||k.length<2)return;const t=k.findIndex(o=>o.url===e.img||o.idx===e.activeTokenIndex)===0?1:0;N(t),n.remove()}),n.querySelectorAll(".menu-ctx-equip-light").forEach(e=>{e.addEventListener("click",()=>{const i=c[f];if(!i)return;const t=e.dataset.preset;t==="extinguish"?i.lightEnabled=!1:de(i,t),d.socket&&typeof window<"u"&&typeof window.emitTokenUpdates=="function"&&window.emitTokenUpdates(c),p(),n.remove()})});const ae=n.querySelector("#menu-flip-h");ae&&ae.addEventListener("click",()=>{const e=c[f];e&&(e.flipX=!e.flipX,d.socket&&typeof window<"u"&&typeof window.emitTokenUpdates=="function"&&window.emitTokenUpdates(c),p()),n.remove()});const se=n.querySelector("#menu-flip-v");se&&se.addEventListener("click",()=>{const e=c[f];e&&(e.flipY=!e.flipY,d.socket&&typeof window<"u"&&typeof window.emitTokenUpdates=="function"&&window.emitTokenUpdates(c),p()),n.remove()});const oe=n.querySelector("#menu-reset-rotation");oe&&oe.addEventListener("click",()=>{(y.has(f)?Array.from(y):[f]).forEach(i=>{const t=c[i];t&&(t.rotation=0)}),d.socket&&typeof window<"u"&&typeof window.emitTokenUpdates=="function"&&window.emitTokenUpdates(c),p(),n.remove()}),d.role==="GM"&&(n.querySelector("#menu-move-front").addEventListener("click",()=>{T(f,"front",b),n.remove()}),n.querySelector("#menu-move-back").addEventListener("click",()=>{T(f,"back",b),n.remove()}),n.querySelector("#menu-move-front-one").addEventListener("click",()=>{T(f,"front-one",b),n.remove()}),n.querySelector("#menu-move-back-one").addEventListener("click",()=>{T(f,"back-one",b),n.remove()}),n.querySelectorAll(".menu-ctx-move-layer").forEach(e=>{e.addEventListener("click",()=>{const i=e.dataset.layer;(y.has(f)?Array.from(y):[f]).forEach(o=>{c[o]&&(c[o].layer=i,y.delete(o),window.VTT?.chatEngine?.updateCombatantLayer&&window.VTT?.chatEngine?.updateCombatantLayer?.(o,i))}),d.socket&&typeof window<"u"&&typeof window.emitTokenUpdates=="function"&&window.emitTokenUpdates(c),p(),n.remove()})}),n.querySelector("#menu-ctx-convert-freeform").addEventListener("click",()=>{const{drawW:e,drawH:i}=w(a);a.isAsset=!0,a.isBorderless=!1,a.pixelWidth=e,a.pixelHeight=i,a.imgRadius="0",typeof window<"u"&&typeof window.emitTokenUpdates=="function"&&window.emitTokenUpdates(c),p(),n.remove()}),n.querySelector("#menu-ctx-convert-borderless").addEventListener("click",()=>{a.isAsset=!1,a.isBorderless=!0;const e=L(a.x,a.y,!0);a.x=e.x,a.y=e.y,a.size=1,(a.assetType==="video"||a.url&&a.url.split("?")[0].toLowerCase().endsWith(".gif"))&&(a.imgRadius="50%"),typeof window<"u"&&typeof window.emitTokenUpdates=="function"&&window.emitTokenUpdates(c),p(),n.remove()}),n.querySelector("#menu-ctx-convert-bordered").addEventListener("click",()=>{a.isAsset=!1,a.isBorderless=!1;const e=L(a.x,a.y,!0);a.x=e.x,a.y=e.y,a.size=1,(a.assetType==="video"||a.url&&a.url.split("?")[0].toLowerCase().endsWith(".gif"))&&(a.imgRadius="50%"),typeof window<"u"&&typeof window.emitTokenUpdates=="function"&&window.emitTokenUpdates(c),p(),n.remove()}),n.querySelector("#menu-ctx-delete").addEventListener("click",()=>{if(typeof F=="function"&&F(f)){p(),n.remove();return}delete c[f],typeof window<"u"&&typeof window.emitTokenUpdates=="function"&&window.emitTokenUpdates(c),p(),n.remove()}))}

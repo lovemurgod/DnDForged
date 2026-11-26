@@ -179,13 +179,13 @@ export function setupViewportControls(context = {}) {
                 context.panY = mouseY - targetY * context.zoom;
 
                 context.updateContainerTransform?.();
-                context.renderAll?.();
+                (context.renderInteractionOnly || context.renderAll)?.();
             } else {
                 // Two-finger trackpad panning (Modern CAD / Figma / Roll20 style)
                 context.panX -= e.deltaX;
                 context.panY -= e.deltaY;
                 context.updateContainerTransform?.();
-                context.renderAll?.();
+                (context.renderInteractionOnly || context.renderAll)?.();
             }
         },
         { passive: false }

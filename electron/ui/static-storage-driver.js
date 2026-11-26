@@ -97,9 +97,11 @@
         }
     ];
 
+    let _idbPromise = null;
     function openIdb() {
-        return new Promise((resolve, reject) => {
-            if (typeof indexedDB === 'undefined') return resolve(null);
+        if (typeof indexedDB === 'undefined') return Promise.resolve(null);
+        if (_idbPromise) return _idbPromise;
+        _idbPromise = new Promise((resolve, reject) => {
             const req = indexedDB.open(IDB_NAME, 2);
             req.onupgradeneeded = () => {
                 const db = req.result;
@@ -110,9 +112,23 @@
                     db.createObjectStore('assets', { keyPath: 'id' });
                 }
             };
-            req.onsuccess = () => resolve(req.result);
-            req.onerror = () => reject(req.error);
+            req.onsuccess = () => {
+                const db = req.result;
+                db.onclose = () => {
+                    _idbPromise = null;
+                };
+                db.onversionchange = () => {
+                    db.close();
+                    _idbPromise = null;
+                };
+                resolve(db);
+            };
+            req.onerror = () => {
+                _idbPromise = null;
+                reject(req.error);
+            };
         });
+        return _idbPromise;
     }
 
     async function idbGet(key) {
@@ -326,6 +342,48 @@
                 }
             } catch (_) {}
             return false;
+        }
+
+        async ensureFolderConnectionForImport() {
+            if (this.dirHandle || !this.hasFsAccess) {
+                return {
+                    connected: Boolean(this.dirHandle),
+                    storageLabel: this.getDataPathLabel(),
+                    promptAccepted: false,
+                    failedToConnect: false
+                };
+            }
+            let promptAccepted = false;
+            if (this.needsFolderReconnect) {
+                const msg =
+                    `Your linked Campaign Data Folder ("${this.rememberedFolderName || 'Local Folder'}") is paused for this browser session.\n\n` +
+                    'Click OK to reconnect it so the imported campaign is saved to disk, or Cancel to save in Browser Storage (IndexedDB) only.';
+                if (typeof global.confirm === 'function' && global.confirm(msg)) {
+                    promptAccepted = true;
+                    await this.reconnectRememberedFolder();
+                }
+            } else {
+                const msg =
+                    'No local Campaign Data Folder is currently linked.\n\n' +
+                    'Click OK to choose a Campaign Data Folder on your PC, or Cancel to save in Browser Storage (IndexedDB) only.';
+                if (typeof global.confirm === 'function' && global.confirm(msg)) {
+                    promptAccepted = true;
+                    await this.pickCampaignFolder();
+                }
+            }
+            const failedToConnect = promptAccepted && !this.dirHandle;
+            if (failedToConnect && typeof global.alert === 'function') {
+                global.alert(
+                    'Could not connect your local Campaign Data Folder (permission denied, expired browser gesture, or canceled).\n\n' +
+                        'Your data will be saved to Browser Storage (IndexedDB) only. You can link your folder anytime via "Change Folder...".'
+                );
+            }
+            return {
+                connected: Boolean(this.dirHandle),
+                storageLabel: this.getDataPathLabel(),
+                promptAccepted,
+                failedToConnect
+            };
         }
 
         async _readJsonFromDir(fileName) {
@@ -1200,14 +1258,19 @@
             const url = catMap[category];
             const items = [];
             if (url) {
-                try {
-                    const res = await fetch(url);
-                    if (res.ok) {
-                        const data = await res.json();
-                        const parsed = Array.isArray(data) ? data : data?.entries || data?.items || [];
-                        items.push(...parsed);
-                    }
-                } catch (_) {}
+                this._compendiumCatalogCache = this._compendiumCatalogCache || new Map();
+                let cached = this._compendiumCatalogCache.get(url);
+                if (!cached) {
+                    try {
+                        const res = await fetch(url);
+                        if (res.ok) {
+                            const data = await res.json();
+                            cached = Array.isArray(data) ? data : data?.entries || data?.items || [];
+                            this._compendiumCatalogCache.set(url, cached);
+                        }
+                    } catch (_) {}
+                }
+                if (cached) items.push(...cached);
             }
             for (const custom of this.sourcesConfig.customSources || []) {
                 if (custom.category !== category) continue;

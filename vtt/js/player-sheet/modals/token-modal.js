@@ -318,7 +318,7 @@ export function renderPlayerTokenGallery(options = {}) {
         if (isActive) {
             const badge = document.createElement('div');
             badge.style.cssText =
-                'position:absolute; top:2px; right:2px; background:var(--color-success-base); color:#fff; border-radius:50%; width:16px; height:16px; font-size:0.6rem; display:flex; align-items:center; justify-content:center;';
+                'position:absolute; top:2px; right:2px; background:var(--color-success-base); color:var(--color-on-success, #fff); border-radius:50%; width:16px; height:16px; font-size:0.6rem; display:flex; align-items:center; justify-content:center;';
             badge.innerHTML = '<i class="fa-solid fa-check"></i>';
             wrapper.appendChild(badge);
         }

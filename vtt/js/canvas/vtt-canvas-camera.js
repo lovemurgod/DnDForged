@@ -36,7 +36,8 @@ export function panTo(targetX, targetY, targetZoom = null, duration = 350, conte
         context.panY = endPanY;
         context.zoom = finalZoom;
         if (context.updateContainerTransform) context.updateContainerTransform();
-        if (context.renderAll) context.renderAll();
+        if (context.renderInteractionOnly) context.renderInteractionOnly();
+        else if (context.renderAll) context.renderAll();
         return;
     }
 
@@ -55,7 +56,8 @@ export function panTo(targetX, targetY, targetZoom = null, duration = 350, conte
         context.zoom = startZoom + (finalZoom - startZoom) * ease;
 
         if (context.updateContainerTransform) context.updateContainerTransform();
-        if (context.renderAll) context.renderAll();
+        if (context.renderInteractionOnly) context.renderInteractionOnly();
+        else if (context.renderAll) context.renderAll();
 
         if (progress < 1.0) {
             cameraAnimFrame = requestAnimationFrame(step);
@@ -87,7 +89,8 @@ export function setZoom(targetZoom, anchorX = null, anchorY = null, animate = fa
         context.panX = mouseX - canvasTargetX * context.zoom;
         context.panY = mouseY - canvasTargetY * context.zoom;
         if (context.updateContainerTransform) context.updateContainerTransform();
-        if (context.renderAll) context.renderAll();
+        if (context.renderInteractionOnly) context.renderInteractionOnly();
+        else if (context.renderAll) context.renderAll();
     }
 }
 

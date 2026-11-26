@@ -305,6 +305,55 @@ export function getPlayerMapOverride(campaign, username) {
     return null;
 }
 
+let _dice3dLoadPromise = null;
+
+/**
+ * Lazily loads Three.js, Cannon.js, and Dice3D once on demand.
+ * @returns {Promise<object|null>}
+ */
+export function ensureDice3DLoaded() {
+    if (typeof window === 'undefined' || typeof document === 'undefined') {
+        return Promise.resolve(null);
+    }
+    if (window.Dice3D) return Promise.resolve(window.Dice3D);
+    if (_dice3dLoadPromise) return _dice3dLoadPromise;
+
+    const loadScript = (src) =>
+        new Promise((resolve, reject) => {
+            const existing = document.querySelector(`script[src="${src}"]`);
+            if (existing) {
+                if (existing.dataset.loaded === '1') return resolve();
+                existing.addEventListener('load', () => resolve(), { once: true });
+                existing.addEventListener('error', reject, { once: true });
+                return;
+            }
+            const s = document.createElement('script');
+            s.src = src;
+            s.async = false;
+            s.onload = () => {
+                s.dataset.loaded = '1';
+                resolve();
+            };
+            s.onerror = (err) => reject(err);
+            document.head.appendChild(s);
+        });
+
+    _dice3dLoadPromise = (async () => {
+        try {
+            if (!window.THREE) await loadScript('lib/three.min.js');
+            if (!window.CANNON) await loadScript('lib/cannon.min.js');
+            if (!window.Dice3D) await loadScript('js/dice-3d.js');
+            return window.Dice3D || null;
+        } catch (err) {
+            console.warn('[Dice3D] Lazy load failed:', err);
+            _dice3dLoadPromise = null;
+            return null;
+        }
+    })();
+
+    return _dice3dLoadPromise;
+}
+
 // Global browser registration for backward compatibility
 if (typeof window !== 'undefined') {
     window.VTT = window.VTT || {};
@@ -319,7 +368,8 @@ if (typeof window !== 'undefined') {
         normalizeAngleRad,
         debounce,
         throttle,
-        getPlayerMapOverride
+        getPlayerMapOverride,
+        ensureDice3DLoaded
     };
     if (!window.getSafeVttUrl) {
         window.getSafeVttUrl = getSafeVttUrl;

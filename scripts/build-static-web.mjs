@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { execFileSync } from 'child_process';
+import * as esbuild from 'esbuild';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -70,6 +71,7 @@ const playImgDir = path.join(docsPlayDir, 'img');
 if (fs.existsSync(vttImgDir)) {
     fs.mkdirSync(playImgDir, { recursive: true });
     for (const f of fs.readdirSync(vttImgDir)) {
+        if (f === 'logo-full.png') continue; // Duplicate of logo.png
         const srcF = path.join(vttImgDir, f);
         if (fs.statSync(srcF).isFile() && /\.(png|svg|ico|webp|jpg)$/i.test(f)) {
             fs.copyFileSync(srcF, path.join(playImgDir, f));
@@ -92,13 +94,13 @@ function transformPlayHtml(html, { isSheet = false } = {}) {
     out = out.replace(/<base href="\/vtt\/">\s*/i, '');
     // Tighten static HTTPS deployment connect-src (no ws:/http: needed on GitHub Pages)
     out = out.replace(/connect-src 'self' ws: wss: https: http:/i, "connect-src 'self' wss: https:");
-    out = out.replace(/<script src="\/socket\.io\/socket\.io\.js"><\/script>/i, () => {
+    out = out.replace(/<script(?:\s+defer)?\s+src="\/socket\.io\/socket\.io\.js"><\/script>/i, () => {
         if (!isSheet) {
-            return '<script src="static-flag.js"></script>';
+            return '<script defer src="static-flag.js"></script>';
         }
-        const parts = ['<script src="static-flag.js"></script>'];
+        const parts = ['<script defer src="static-flag.js"></script>'];
         if (!out.includes('js/network/vtt-static-shim.js')) {
-            parts.push('    <script src="js/network/vtt-static-shim.js"></script>');
+            parts.push('    <script defer src="js/network/vtt-static-shim.js"></script>');
         }
         return parts.join('\n');
     });
@@ -153,4 +155,55 @@ if (fs.existsSync(prepIndex)) {
     fs.writeFileSync(prepIndex, prepHtml, 'utf8');
 }
 
+console.log('🗜️ Step 5: Bundling CSS & minifying JS/CSS for static web...');
+
+function collectFiles(dir, ext, out = []) {
+    if (!fs.existsSync(dir)) return out;
+    for (const item of fs.readdirSync(dir, { withFileTypes: true })) {
+        const full = path.join(dir, item.name);
+        if (item.isDirectory()) collectFiles(full, ext, out);
+        else if (item.isFile() && item.name.endsWith(ext)) out.push(full);
+    }
+    return out;
+}
+
+// Flatten & minify vtt.css (@imports -> single CSS file) + remove redundant components dir
+const playVttCss = path.join(docsPlayDir, 'css', 'vtt.css');
+if (fs.existsSync(playVttCss)) {
+    await esbuild.build({
+        entryPoints: [playVttCss],
+        outfile: playVttCss,
+        bundle: true,
+        minify: true,
+        allowOverwrite: true,
+        logLevel: 'silent'
+    });
+    fs.rmSync(path.join(docsPlayDir, 'css', 'components'), { recursive: true, force: true });
+}
+
+for (const cssFile of [
+    path.join(docsPlayDir, 'css', 'vtt-mobile.css'),
+    path.join(docsPlayDir, 'css', 'dice-3d.css'),
+    path.join(docsPrepDir, 'dashboard.css')
+]) {
+    if (fs.existsSync(cssFile)) {
+        const res = await esbuild.transform(fs.readFileSync(cssFile, 'utf8'), { loader: 'css', minify: true });
+        fs.writeFileSync(cssFile, res.code, 'utf8');
+    }
+}
+
+const jsFilesToMinify = [
+    ...collectFiles(path.join(docsPlayDir, 'js'), '.js'),
+    ...collectFiles(docsPrepDir, '.js')
+];
+let minifiedCount = 0;
+for (const jsFile of jsFilesToMinify) {
+    if (path.basename(jsFile) === 'static-flag.js') continue;
+    const src = fs.readFileSync(jsFile, 'utf8');
+    const res = await esbuild.transform(src, { loader: 'js', minify: true });
+    fs.writeFileSync(jsFile, res.code, 'utf8');
+    minifiedCount++;
+}
+
+console.log(`✅ Minified ${minifiedCount} JS files & bundled/minified CSS for docs/play/ and docs/prep/.`);
 console.log('\n✅ Static Web build complete: docs/play/ & docs/prep/ are ready!\n');

@@ -66,9 +66,11 @@
         return Boolean(global.__FORGEDVTT_STATIC_WEB__);
     }
 
+    let _staticIdbPromise = null;
     function openStaticIdb() {
-        return new Promise((resolve, reject) => {
-            if (typeof indexedDB === 'undefined') return resolve(null);
+        if (typeof indexedDB === 'undefined') return Promise.resolve(null);
+        if (_staticIdbPromise) return _staticIdbPromise;
+        _staticIdbPromise = new Promise((resolve, reject) => {
             const req = indexedDB.open(STATIC_DB_NAME, STATIC_DB_VERSION);
             req.onupgradeneeded = () => {
                 const db = req.result;
@@ -79,9 +81,23 @@
                     db.createObjectStore(ASSET_STORE, { keyPath: 'id' });
                 }
             };
-            req.onsuccess = () => resolve(req.result);
-            req.onerror = () => reject(req.error);
+            req.onsuccess = () => {
+                const db = req.result;
+                db.onclose = () => {
+                    _staticIdbPromise = null;
+                };
+                db.onversionchange = () => {
+                    db.close();
+                    _staticIdbPromise = null;
+                };
+                resolve(db);
+            };
+            req.onerror = () => {
+                _staticIdbPromise = null;
+                reject(req.error);
+            };
         });
+        return _staticIdbPromise;
     }
 
     async function idbGet(key, storeName = STATIC_STORE) {
@@ -335,7 +351,7 @@
         _persistTimer = setTimeout(async () => {
             try {
                 const existing = (await idbGet('campaigns')) || {};
-                existing[campaignObj.id] = JSON.parse(JSON.stringify(campaignObj));
+                existing[campaignObj.id] = campaignObj;
                 await idbSet('campaigns', existing);
                 staticSyncChannel?.postMessage({
                     type: 'campaigns-updated',
@@ -561,20 +577,27 @@
         );
     }
 
+    const _staticCatalogCache = new Map();
     async function serveFilteredCatalog(cType, campaignId, init) {
         const staticPath = CATALOG_FILE_MAP[cType];
         if (!staticPath) return jsonResponse([]);
         const disabled = new Set(getDisabledSourcesForCampaign(campaignId));
 
-        let baseEntries = [];
-        try {
-            const res = await originalFetch(staticPath, init);
-            if (res.ok) {
-                const parsed = await res.json();
-                baseEntries = Array.isArray(parsed) ? parsed : parsed?.entries || parsed?.items || [];
-            }
-        } catch (_) {
+        let baseEntries = _staticCatalogCache.get(staticPath);
+        if (!baseEntries) {
             baseEntries = [];
+            try {
+                const res = await originalFetch(staticPath, init);
+                if (res.ok) {
+                    const parsed = await res.json();
+                    baseEntries = Array.isArray(parsed) ? parsed : parsed?.entries || parsed?.items || [];
+                    if (baseEntries.length > 0) {
+                        _staticCatalogCache.set(staticPath, baseEntries);
+                    }
+                }
+            } catch (_) {
+                baseEntries = [];
+            }
         }
 
         const customEntries = await getEnabledCustomEntries(cType, disabled);

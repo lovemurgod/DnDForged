@@ -2136,6 +2136,8 @@ export function initVttCanvas(vtt) {
                 }
             }
         });
+        if (typeof drawingImageCache?.clear === 'function') drawingImageCache.clear();
+        if (typeof processedAnimKeys?.clear === 'function') processedAnimKeys.clear();
         if (typeof cleanupAllYouTubePingPong === 'function') cleanupAllYouTubePingPong();
 
         // 1. Ensure Freeform Asset on the map layer exists from mapImage or artwork token
@@ -2430,7 +2432,8 @@ export function initVttCanvas(vtt) {
         getTokenDrawDimensions: (t) => getTokenDrawDimensions(t),
         isTokenControlledByPlayer: (t) => isTokenControlledByPlayer(t),
         updateContainerTransform: () => updateContainerTransform(),
-        renderAll: () => renderAll()
+        renderAll: () => renderAll(),
+        renderInteractionOnly: () => renderInteractionOnly()
     };
 
     function cancelCameraAnimation() {
@@ -2569,6 +2572,11 @@ export function initVttCanvas(vtt) {
         renderInteractionLayer();
 
         // 3. Update Visual FX overlays (initiative outline, offscreen indicator, hover glow)
+        requestVisualFxUpdate();
+    }
+
+    function renderInteractionOnly() {
+        renderInteractionLayer();
         requestVisualFxUpdate();
     }
 
@@ -2818,6 +2826,7 @@ export function initVttCanvas(vtt) {
         // 2. Draw Tokens Layer
         renderTokensLayerExt({
             tokens,
+            imageCache: vttImageCache,
             tokenAnimations,
             getTokenDrawDimensions,
             selectedTokenIds,
@@ -3607,6 +3616,8 @@ export function initVttCanvas(vtt) {
         isDraggingToken: () => !!dragTargetId,
         openTokenEditModal,
         renderAll,
+        isPointVisible: (...args) => isPointVisible(...args),
+        getVisionPolygons: () => visionPolygons,
         refreshAssetUrl: (rawUrl) => {
             if (!rawUrl) {
                 renderAll();
@@ -4235,10 +4246,26 @@ export function initVttCanvas(vtt) {
         updateGmTokenPreviewMockupExt(tokenPrefsState);
     }
 
+    let _cachedViewportRect = null;
+    let _viewportRectDirty = true;
+    if (typeof ResizeObserver !== 'undefined' && viewport) {
+        new ResizeObserver(() => {
+            _viewportRectDirty = true;
+        }).observe(viewport);
+    }
+    if (typeof window !== 'undefined') {
+        window.addEventListener('resize', () => {
+            _viewportRectDirty = true;
+        });
+    }
+
     function getCanvasMouseCoords(e) {
-        // Use viewport rect + explicit pan/zoom math so there's no ambiguity.
-        // Support MouseEvent, Touch, or plain { clientX, clientY } objects safely.
-        const vr = viewport.getBoundingClientRect();
+        // Use cached viewport rect + explicit pan/zoom math to avoid forced reflows on every mousemove.
+        if (_viewportRectDirty || !_cachedViewportRect) {
+            _cachedViewportRect = viewport.getBoundingClientRect();
+            _viewportRectDirty = false;
+        }
+        const vr = _cachedViewportRect;
         const clientX =
             e?.clientX !== undefined ? e.clientX : (e?.touches?.[0]?.clientX ?? e?.changedTouches?.[0]?.clientX ?? 0);
         const clientY =
@@ -4456,7 +4483,8 @@ export function initVttCanvas(vtt) {
         setupMapToolsControls: () => setupMapToolsControls(),
         clearAllSelections: () => clearAllSelections(),
         getTokenDrawDimensions: (tok) => getTokenDrawDimensions(tok),
-        isPointVisible: (x, y) => isPointVisible(x, y)
+        isPointVisible: (x, y) => isPointVisible(x, y),
+        renderInteractionOnly: () => renderInteractionOnly()
     };
 
     function isTokenControlledByPlayer(t, ignorePause = false) {

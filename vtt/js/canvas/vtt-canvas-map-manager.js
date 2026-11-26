@@ -516,7 +516,7 @@ export function renderMapSidebar(allMaps, allFolders, activeFolder, managerState
         itemEl.innerHTML = `
             <div class="folder-label" style="display: flex; align-items: center; gap: 8px; min-width: 0; overflow: hidden; flex: 1;">${labelHtml}</div>
             <div style="display: flex; align-items: center; gap: 4px; flex-shrink: 0;">
-                ${isLive ? '<span style="font-size: 0.6rem; background: var(--color-success-base); color: #fff; padding: 1px 5px; border-radius: 8px; font-weight: bold;"><i class="fa-solid fa-users"></i></span>' : ''}
+                ${isLive ? '<span style="font-size: 0.6rem; background: var(--color-success-base); color: var(--color-on-success, #fff); padding: 1px 5px; border-radius: 8px; font-weight: bold;"><i class="fa-solid fa-users"></i></span>' : ''}
                 <span class="folder-count">${count}</span>
                 ${deleteBtnHtml}
             </div>

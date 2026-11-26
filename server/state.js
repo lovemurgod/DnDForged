@@ -412,18 +412,27 @@ export function loadCustomEntities(category) {
     return results;
 }
 
-// Database Persistence with atomic writing & debouncing
+// Database Persistence with atomic writing, write-locking, & debouncing
 let campaignsSaveTimeout = null;
+let campaignsFirstDirtyAt = 0;
+let campaignsWriteInFlight = Promise.resolve();
+let lastCampaignsBakAt = 0;
 let chatSaveTimeout = null;
 const DEBOUNCE_MS = 2000;
+const MAX_WAIT_MS = 10000;
+const BAK_INTERVAL_MS = 60000;
 
 export async function atomicWriteFile(filePath, data) {
     const tempPath = `${filePath}.${Date.now()}.${Math.random().toString(36).slice(2, 7)}.tmp`;
     await fs.promises.writeFile(tempPath, data, 'utf8');
     if (filePath.endsWith('campaigns.json') && fs.existsSync(filePath)) {
-        try {
-            await fs.promises.copyFile(filePath, `${filePath}.bak`);
-        } catch (bakErr) {}
+        const now = Date.now();
+        if (now - lastCampaignsBakAt >= BAK_INTERVAL_MS) {
+            lastCampaignsBakAt = now;
+            try {
+                await fs.promises.copyFile(filePath, `${filePath}.bak`);
+            } catch (bakErr) {}
+        }
     }
     await fs.promises.rename(tempPath, filePath);
 }
@@ -436,6 +445,7 @@ export function saveCampaigns(sync = false) {
             clearTimeout(campaignsSaveTimeout);
             campaignsSaveTimeout = null;
         }
+        campaignsFirstDirtyAt = 0;
         try {
             atomicWriteFileSync(CAMPAIGNS_FILE, JSON.stringify(campaigns));
         } catch (err) {
@@ -444,15 +454,22 @@ export function saveCampaigns(sync = false) {
         return;
     }
 
+    const now = Date.now();
+    if (!campaignsFirstDirtyAt) campaignsFirstDirtyAt = now;
+    const elapsed = now - campaignsFirstDirtyAt;
+    const delay = elapsed >= MAX_WAIT_MS ? 0 : Math.min(DEBOUNCE_MS, MAX_WAIT_MS - elapsed);
+
     if (campaignsSaveTimeout) clearTimeout(campaignsSaveTimeout);
-    campaignsSaveTimeout = setTimeout(async () => {
+    campaignsSaveTimeout = setTimeout(() => {
         campaignsSaveTimeout = null;
-        try {
-            await atomicWriteFile(CAMPAIGNS_FILE, JSON.stringify(campaigns));
-        } catch (err) {
-            console.error('Failed to save campaigns async:', err);
-        }
-    }, DEBOUNCE_MS);
+        campaignsFirstDirtyAt = 0;
+        const payload = JSON.stringify(campaigns);
+        campaignsWriteInFlight = campaignsWriteInFlight
+            .then(() => atomicWriteFile(CAMPAIGNS_FILE, payload))
+            .catch((err) => {
+                console.error('Failed to save campaigns async:', err);
+            });
+    }, delay);
 }
 
 export function saveChat(sync = false) {

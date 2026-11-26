@@ -461,6 +461,24 @@ export function initVttPlayerSheet(vtt) {
         if (builderCache && builderCache.races && builderCache.races.length > 0 && disabledSourcesCache !== null)
             return Promise.resolve(builderCache);
         if (builderPromise) return builderPromise;
+
+        const existingItems =
+            typeof window !== 'undefined' && Array.isArray(window.VTT?.sharedItemCatalog) && window.VTT.sharedItemCatalog.length > 0
+                ? Promise.resolve(window.VTT.sharedItemCatalog)
+                : fetchCatalogJson('/data/items-catalog.json', 'data/items-catalog.json', '/api/items/catalog', []);
+
+        const existingSpellsArr =
+            typeof window !== 'undefined' && window.VTTSpellManager?.getSpellCache?.();
+        const existingSpells =
+            Array.isArray(existingSpellsArr) && existingSpellsArr.length > 0
+                ? Promise.resolve(existingSpellsArr)
+                : fetchCatalogJson(
+                      '/data/spells-catalog.json',
+                      'data/spells-catalog.json',
+                      '/api/compendium/spells/catalog',
+                      []
+                  );
+
         builderPromise = Promise.all([
             fetchCatalogJson(
                 '/data/races-catalog.json',
@@ -493,16 +511,16 @@ export function initVttPlayerSheet(vtt) {
                 '/api/compendium/optionalfeatures/catalog',
                 []
             ),
-            fetchCatalogJson('/data/items-catalog.json', 'data/items-catalog.json', '/api/items/catalog', []),
-            fetchCatalogJson(
-                '/data/spells-catalog.json',
-                'data/spells-catalog.json',
-                '/api/compendium/spells/catalog',
-                []
-            ),
+            existingItems,
+            existingSpells,
             getDisabledSources()
         ])
             .then(([raceData, bgData, classCatalog, classIndex, featsData, optFeaturesData, itemsData, spellsData]) => {
+                const normalizedItems = Array.isArray(itemsData) ? itemsData : itemsData?.item || [];
+                if (typeof window !== 'undefined' && normalizedItems.length > 0) {
+                    window.VTT = window.VTT || {};
+                    window.VTT.sharedItemCatalog = normalizedItems;
+                }
                 builderCache = {
                     races: Array.isArray(raceData) ? raceData : raceData?.race || [],
                     bgs: Array.isArray(bgData) ? bgData : bgData?.background || [],
@@ -510,7 +528,7 @@ export function initVttPlayerSheet(vtt) {
                     classIndex: classIndex || {},
                     feats: Array.isArray(featsData) ? featsData : featsData?.feat || [],
                     optionalFeatures: Array.isArray(optFeaturesData) ? optFeaturesData : [],
-                    items: Array.isArray(itemsData) ? itemsData : itemsData?.item || [],
+                    items: normalizedItems,
                     spells: Array.isArray(spellsData) ? spellsData : spellsData?.spell || []
                 };
                 return builderCache;
@@ -4845,18 +4863,22 @@ export function initVttPlayerSheet(vtt) {
             
             <div class="cs-hp-container" style="margin-bottom:16px;">
                 <div style="display: flex; gap: 4px; margin-bottom: 8px; align-items: center;">
-                    <div class="cs-hp-bar-wrap" style="flex: 1; height: 8px; background: rgba(0,0,0,0.3); border-radius: 4px; overflow: hidden;">
-                        <div class="cs-hp-bar-fill" id="pc-hp-bar" style="height: 100%; background-color: var(--color-success-base, #4caf50); width: ${char.hpMax > 0 ? Math.round((char.hpCurrent / char.hpMax) * 100) : 100}%"></div>
-                    </div>
+                    ${(() => {
+                        const hpPct = char.hpMax > 0 ? Math.max(0, Math.min(100, Math.round((char.hpCurrent / char.hpMax) * 100))) : 100;
+                        const hpStateClass = hpPct <= 25 ? ' danger' : hpPct <= 50 ? ' injured' : '';
+                        return `<div class="cs-hp-bar-wrap" style="flex: 1; height: 8px; background: rgba(0,0,0,0.3); border-radius: 4px; overflow: hidden;">
+                        <div class="cs-hp-bar-fill${hpStateClass}" id="pc-hp-bar" style="height: 100%; width: ${hpPct}%"></div>
+                    </div>`;
+                    })()}
                     <div class="cs-hp-bar-wrap cs-temp-hp-bar-wrap" id="pc-temp-hp-bar-wrap" style="flex: 0 0 20%; height: 8px; background: rgba(0,0,0,0.3); border-radius: 4px; overflow: hidden; display: ${char.tempHp > 0 ? 'block' : 'none'};" title="Temp HP">
-                        <div class="cs-hp-bar-fill cs-temp-hp-bar-fill" id="pc-temp-hp-bar" style="height: 100%; background-color: var(--color-temphp-base, #2196f3); width: 100%;"></div>
+                        <div class="cs-hp-bar-fill cs-temp-hp-bar-fill" id="pc-temp-hp-bar" style="height: 100%; width: 100%;"></div>
                     </div>
                 </div>
                 <div class="cs-hp-controls-row">
                     <div class="cs-hp-group">
                         <div class="cs-hp-label">
                             <button class="btn btn-xs pc-hp-settings-btn" style="background:transparent; border:none; color:var(--color-text-muted); cursor:pointer; padding:0;" title="Configure HP Settings & Toggles"><i class="fa-solid fa-cog"></i></button>
-                            <i class="fa-solid fa-heart" style="color:#e53935; font-size:0.95rem;"></i> HP
+                            <i class="fa-solid fa-heart" style="color:var(--color-danger-base, #e53935); font-size:0.95rem;"></i> HP
                         </div>
                         <div class="cs-hp-controls">
                             <button class="cs-hp-btn" id="pc-hp-minus" title="Damage">−</button>
@@ -5191,17 +5213,17 @@ export function initVttPlayerSheet(vtt) {
                 <div style="display:flex; justify-content:center; align-items:center; margin-top:24px; margin-bottom:12px; gap: 16px; background: rgba(0,0,0,0.2); padding: 12px; border-radius: 8px; border: 1px solid var(--color-border-subtle);">
                     <div style="display:flex; gap:4px; align-items:center;">
                         <span style="font-size:0.75rem; color:var(--color-text-muted); margin-right:4px; font-family:var(--font-heading);">FAILURES</span>
-                        <input type="checkbox" class="pc-ds-failure" data-idx="3" ${char.deathSaves.failures >= 3 ? 'checked' : ''} style="cursor:pointer; width:16px; height:16px; accent-color: #f44336;">
-                        <input type="checkbox" class="pc-ds-failure" data-idx="2" ${char.deathSaves.failures >= 2 ? 'checked' : ''} style="cursor:pointer; width:16px; height:16px; accent-color: #f44336;">
-                        <input type="checkbox" class="pc-ds-failure" data-idx="1" ${char.deathSaves.failures >= 1 ? 'checked' : ''} style="cursor:pointer; width:16px; height:16px; accent-color: #f44336;">
+                        <input type="checkbox" class="pc-ds-failure" data-idx="3" ${char.deathSaves.failures >= 3 ? 'checked' : ''} style="cursor:pointer; width:16px; height:16px; accent-color: var(--color-danger-base, #f44336);">
+                        <input type="checkbox" class="pc-ds-failure" data-idx="2" ${char.deathSaves.failures >= 2 ? 'checked' : ''} style="cursor:pointer; width:16px; height:16px; accent-color: var(--color-danger-base, #f44336);">
+                        <input type="checkbox" class="pc-ds-failure" data-idx="1" ${char.deathSaves.failures >= 1 ? 'checked' : ''} style="cursor:pointer; width:16px; height:16px; accent-color: var(--color-danger-base, #f44336);">
                     </div>
-                    <button id="pc-roll-death-save" class="btn btn-danger" style="border-radius:50%; width:48px; height:48px; display:flex; justify-content:center; align-items:center; box-shadow:0 0 10px rgba(244, 67, 54, 0.5);" title="Roll Death Save">
+                    <button id="pc-roll-death-save" class="btn btn-danger" style="border-radius:50%; width:48px; height:48px; display:flex; justify-content:center; align-items:center; box-shadow:0 0 10px var(--color-danger-glow, rgba(244, 67, 54, 0.5));" title="Roll Death Save">
                         <i class="fa-solid fa-skull" style="font-size:1.5rem;"></i>
                     </button>
                     <div style="display:flex; gap:4px; align-items:center;">
-                        <input type="checkbox" class="pc-ds-success" data-idx="1" ${char.deathSaves.successes >= 1 ? 'checked' : ''} style="cursor:pointer; width:16px; height:16px; accent-color: #4caf50;">
-                        <input type="checkbox" class="pc-ds-success" data-idx="2" ${char.deathSaves.successes >= 2 ? 'checked' : ''} style="cursor:pointer; width:16px; height:16px; accent-color: #4caf50;">
-                        <input type="checkbox" class="pc-ds-success" data-idx="3" ${char.deathSaves.successes >= 3 ? 'checked' : ''} style="cursor:pointer; width:16px; height:16px; accent-color: #4caf50;">
+                        <input type="checkbox" class="pc-ds-success" data-idx="1" ${char.deathSaves.successes >= 1 ? 'checked' : ''} style="cursor:pointer; width:16px; height:16px; accent-color: var(--color-success-base, #4caf50);">
+                        <input type="checkbox" class="pc-ds-success" data-idx="2" ${char.deathSaves.successes >= 2 ? 'checked' : ''} style="cursor:pointer; width:16px; height:16px; accent-color: var(--color-success-base, #4caf50);">
+                        <input type="checkbox" class="pc-ds-success" data-idx="3" ${char.deathSaves.successes >= 3 ? 'checked' : ''} style="cursor:pointer; width:16px; height:16px; accent-color: var(--color-success-base, #4caf50);">
                         <span style="font-size:0.75rem; color:var(--color-text-muted); margin-left:4px; font-family:var(--font-heading);">SUCCESSES</span>
                     </div>
                 </div>

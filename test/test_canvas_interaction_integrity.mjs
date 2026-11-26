@@ -45,6 +45,7 @@ test('Canvas Interaction & Submodule Integrity', async (t) => {
             'RegExp',
             'Set',
             'Map',
+            'WeakMap',
             'Proxy',
             'Reflect',
             'String',

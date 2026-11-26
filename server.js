@@ -75,6 +75,7 @@ function isAllowedWebOrigin(origin, requestHost) {
 }
 
 const app = express();
+app.set('trust proxy', 1);
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
@@ -85,6 +86,7 @@ const io = new Server(httpServer, {
     const allowed = isAllowedWebOrigin(req.headers.origin, req.headers.host);
     cb(null, allowed);
   },
+  perMessageDeflate: { threshold: 1024 },
   maxHttpBufferSize: 5e7, // 50MB: prevents packet overflow disconnections for large maps/drawings
   pingTimeout: 60000,     // 60s: protects against background tab throttling / sleep wake
   pingInterval: 25000     // 25s heartbeat
@@ -326,22 +328,11 @@ app.get(['/sheet', '/sheet.html', '/play/sheet', '/play/sheet.html', '/vtt/sheet
 
 // Static cache options for client assets
 const STATIC_CACHE_OPTS = { maxAge: '2h', etag: true, lastModified: true };
-const CODE_CACHE_OPTS = { maxAge: 0, etag: true, lastModified: true };
+const CODE_CACHE_OPTS = { maxAge: '5m', etag: true, lastModified: true };
 const LIB_CACHE_OPTS = { maxAge: '24h', etag: true, lastModified: true };
 
 // Serve standalone ForgeDVTT client data statically with compression & caching
 app.use(['/data', '/vtt/data', '/play/data'], express.static(VTT_DATA_DIR, STATIC_CACHE_OPTS));
-app.use(['/data', '/vtt/data', '/play/data'], (req, res, next) => {
-  const relPath = req.path.replace(/^[/\\]+/, '');
-  const target = path.resolve(VTT_DATA_DIR, relPath);
-  if (!isValidAssetPath(target, VTT_DATA_DIR)) {
-    return res.status(403).send('Forbidden: Invalid data path');
-  }
-  if (fs.existsSync(target) && fs.statSync(target).isFile()) {
-    return res.sendFile(target, { maxAge: '2h', etag: true });
-  }
-  next();
-});
 
 // SRD CC0 Token fallback: serve .svg token cleanly when legacy .webp path is requested and .webp is absent
 const tokensImgDir = path.join(VTT_DIR, 'img', 'bestiary', 'tokens');
@@ -369,8 +360,10 @@ const VTT_STATIC_MIDDLEWARE = express.static(VTT_DIR, {
   etag: true,
   lastModified: true,
   setHeaders: (res, filePath) => {
-    if (filePath && (filePath.endsWith('.html') || filePath.endsWith('.js') || filePath.endsWith('.mjs'))) {
+    if (filePath && filePath.endsWith('.html')) {
       res.setHeader('Cache-Control', 'no-cache, must-revalidate');
+    } else if (filePath && (filePath.endsWith('.js') || filePath.endsWith('.mjs'))) {
+      res.setHeader('Cache-Control', 'public, max-age=300, must-revalidate');
     }
   }
 });

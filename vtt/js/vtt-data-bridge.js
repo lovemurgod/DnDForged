@@ -101,15 +101,14 @@ export function initVttDataBridge(vtt) {
     // Map importer cache
     let mapCatalog = null;
 
-    // Load normalized D&D 5e Bestiary Catalog
+    // Load normalized D&D 5e Bestiary Catalog (deduplicated per campaignId)
+    let _bestiaryInFlight = null;
+    let _bestiaryLoadedCampId = null;
     loadBestiaryData();
     initSidebarResizer();
 
-    async function loadBestiaryData(explicitCampId = null) {
+    async function loadBestiaryData(explicitCampId = null, force = false) {
         try {
-            listContainer.innerHTML =
-                '<div class="text-muted p-3"><i class="fa-solid fa-spinner fa-spin"></i> Loading normalized bestiary catalog...</div>';
-
             const campId =
                 explicitCampId ||
                 window.VTT?.campaignId ||
@@ -117,25 +116,45 @@ export function initVttDataBridge(vtt) {
                 new URLSearchParams(window.location.search).get('campaignId') ||
                 new URLSearchParams(window.location.search).get('campaign') ||
                 '';
-            const qs = campId ? `?campaignId=${encodeURIComponent(campId)}&_t=${Date.now()}` : `?_t=${Date.now()}`;
+
+            if (!force) {
+                if (_bestiaryInFlight && _bestiaryLoadedCampId === campId) {
+                    return await _bestiaryInFlight;
+                }
+                if (Array.isArray(monsters) && monsters.length > 0 && _bestiaryLoadedCampId === campId) {
+                    return monsters;
+                }
+            }
+
+            _bestiaryLoadedCampId = campId;
+            listContainer.innerHTML =
+                '<div class="text-muted p-3"><i class="fa-solid fa-spinner fa-spin"></i> Loading normalized bestiary catalog...</div>';
+
+            const qs = campId ? `?campaignId=${encodeURIComponent(campId)}` : '';
 
             const origin =
                 typeof window !== 'undefined' && /^https?:/i.test(window.location?.origin || '')
                     ? window.location.origin
                     : '';
-            let catalogRes = await fetch(`${origin}/api/bestiary/catalog${qs}`);
-            if (!catalogRes.ok) {
-                catalogRes = await fetch(`${origin}/data/bestiary-catalog.json${qs}`);
-            }
-            if (!catalogRes.ok) throw new Error('Could not load bestiary catalog');
 
-            monsters = await catalogRes.json();
+            _bestiaryInFlight = (async () => {
+                let catalogRes = await fetch(`${origin}/api/bestiary/catalog${qs}`);
+                if (!catalogRes.ok) {
+                    catalogRes = await fetch(`${origin}/data/bestiary-catalog.json${qs}`);
+                }
+                if (!catalogRes.ok) throw new Error('Could not load bestiary catalog');
+                return await catalogRes.json();
+            })();
+
+            monsters = await _bestiaryInFlight;
+            _bestiaryInFlight = null;
             window.VTT = window.VTT || {};
             window.VTT.bestiaryCatalog = monsters;
             populateFiltersUI();
             setupFilterListeners();
             applyMonsterFilters();
         } catch (e) {
+            _bestiaryInFlight = null;
             console.error('Error fetching normalized bestiary data:', e);
             listContainer.innerHTML =
                 '<div class="text-danger p-3"><i class="fa-solid fa-triangle-exclamation"></i> Error accessing bestiary library.</div>';

@@ -1,163 +1,8 @@
-/**
- * creature-selector-modal.js
- * Universal, high-performance split-pane modal for searching, sorting, filtering,
- * and previewing Bestiary creatures for Companion creation, Custom NPC import, and more.
- */
-
-import { escapeHtml, getSafeVttUrl, resolveMonsterTokenUrl } from '../vtt-utils.js';
-
-// Helper to calculate or fallback token image URL
-export function getCreatureTokenUrl(monster) {
-    if (!monster) return 'favicon.svg';
-    if (monster.tokenImg) return monster.tokenImg;
-    if (monster.tokenUrl) return monster.tokenUrl;
-    if (monster.imgUrl) return monster.imgUrl;
-    if (typeof Renderer !== 'undefined' && Renderer.monster && Renderer.monster.getTokenUrl) {
-        try {
-            const rUrl = Renderer.monster.getTokenUrl(monster);
-            if (rUrl) return rUrl;
-        } catch (_) {}
-    }
-    if (monster.hasToken || monster.source || monster.name) {
-        const resolved = resolveMonsterTokenUrl(monster);
-        if (resolved) return resolved;
-    }
-    if (typeof window !== 'undefined' && window.VTT?.generateArcaneToken) {
-        return window.VTT.generateArcaneToken(monster.name || 'Creature', 'monster');
-    }
-    return 'favicon.svg';
-}
-
-// Parse CR to numeric value for sorting and range comparison
-export function parseCrToNumeric(cr) {
-    if (cr === undefined || cr === null) return 0;
-    if (typeof cr === 'object') cr = cr.cr;
-    const str = String(cr).trim();
-    if (str === '1/8') return 0.125;
-    if (str === '1/4') return 0.25;
-    if (str === '1/2') return 0.5;
-    const val = parseFloat(str);
-    return isNaN(val) ? 0 : val;
-}
-
-// Format CR display string
-export function formatCrDisplay(cr) {
-    if (cr === undefined || cr === null) return '0';
-    if (typeof cr === 'object') return String(cr.cr || '0');
-    return String(cr);
-}
-
-// Compute standard ability modifier string (+X or -X)
-export function formatAbilityModifier(score) {
-    const num = typeof score === 'number' ? score : parseInt(score, 10);
-    if (isNaN(num)) return '+0';
-    const mod = Math.floor((num - 10) / 2);
-    return mod >= 0 ? `+${mod}` : `${mod}`;
-}
-
-let cachedCatalog = null;
-
-export async function loadBestiaryCatalog(explicitCatalog = null) {
-    if (explicitCatalog && Array.isArray(explicitCatalog) && explicitCatalog.length > 0) {
-        return explicitCatalog;
-    }
-    if (cachedCatalog && cachedCatalog.length > 0) {
-        return cachedCatalog;
-    }
-    if (typeof window !== 'undefined' && window.VTT?.bestiaryCatalog && Array.isArray(window.VTT.bestiaryCatalog)) {
-        cachedCatalog = window.VTT.bestiaryCatalog;
-        return cachedCatalog;
-    }
-
-    try {
-        let res = await fetch('/api/bestiary/catalog');
-        if (!res.ok) {
-            res = await fetch('/data/bestiary-catalog.json');
-        }
-        if (res.ok) {
-            const data = await res.json();
-            if (Array.isArray(data)) {
-                cachedCatalog = data;
-                if (typeof window !== 'undefined' && window.VTT) {
-                    window.VTT.bestiaryCatalog = data;
-                }
-                return data;
-            }
-        }
-    } catch (err) {
-        console.warn('[creature-selector-modal] Catalog fetch error:', err);
-    }
-    return [];
-}
-
-/**
- * Opens the two-column Creature Selector Modal
- * @param {Object} options Configuration options
- */
-export async function openCreatureSelectorModal(options = {}) {
-    const {
-        title = 'Select Creature Template',
-        confirmLabel = 'Select Creature',
-        confirmIcon = 'fa-check',
-        onSelect = null,
-        initialFilter = {},
-        catalog = null
-    } = options;
-
-    const allMonsters = await loadBestiaryCatalog(catalog);
-
-    // Collect available metadata for dropdowns and filter drawer
-    const availableTypes = new Set();
-    const availableSources = new Set();
-    const availableSizes = new Set();
-    const availableAlignments = new Set();
-    const availableEnvironments = new Set();
-
-    allMonsters.forEach((m) => {
-        if (m.type) availableTypes.add(m.type);
-        if (m.source) availableSources.add(m.source);
-        if (m.size) availableSizes.add(m.size);
-        if (m.alignment) availableAlignments.add(m.alignment);
-        if (Array.isArray(m.environment)) {
-            m.environment.forEach((env) => availableEnvironments.add(env));
-        }
-    });
-
-    // Modal state
-    const state = {
-        searchQuery: '',
-        sortCol: 'name',
-        sortDir: 'asc',
-        crMin: initialFilter.crMin !== undefined ? initialFilter.crMin : -1,
-        crMax: initialFilter.crMax !== undefined ? initialFilter.crMax : 999,
-        type: initialFilter.type || '',
-        sources: new Set(initialFilter.sources || []),
-        sizes: new Set(initialFilter.sizes || []),
-        alignments: new Set(initialFilter.alignments || []),
-        environments: new Set(initialFilter.environments || []),
-        isAdvancedDrawerOpen: false,
-        filtered: [],
-        selectedMonster: null,
-        fullMonster: null,
-        renderedCount: 0,
-        batchSize: 50
-    };
-
-    // Build DOM structure
-    const overlay = document.createElement('div');
-    overlay.className = 'vtt-sheet-submodal-overlay creature-selector-overlay';
-    overlay.style.cssText =
-        'position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); backdrop-filter:blur(3px); z-index:3100; display:flex; align-items:center; justify-content:center;';
-
-    const modal = document.createElement('div');
-    modal.className = 'vtt-sheet-submodal glassmorphism creature-selector-modal';
-    modal.style.zIndex = '3110';
-
-    modal.innerHTML = `
+import{escapeHtml as u,getSafeVttUrl as Z,resolveMonsterTokenUrl as me}from"../vtt-utils.js";export function getCreatureTokenUrl(i){if(!i)return"favicon.svg";if(i.tokenImg)return i.tokenImg;if(i.tokenUrl)return i.tokenUrl;if(i.imgUrl)return i.imgUrl;if(typeof Renderer<"u"&&Renderer.monster&&Renderer.monster.getTokenUrl)try{const l=Renderer.monster.getTokenUrl(i);if(l)return l}catch{}if(i.hasToken||i.source||i.name){const l=me(i);if(l)return l}return typeof window<"u"&&window.VTT?.generateArcaneToken?window.VTT.generateArcaneToken(i.name||"Creature","monster"):"favicon.svg"}export function parseCrToNumeric(i){if(i==null)return 0;typeof i=="object"&&(i=i.cr);const l=String(i).trim();if(l==="1/8")return .125;if(l==="1/4")return .25;if(l==="1/2")return .5;const f=parseFloat(l);return isNaN(f)?0:f}export function formatCrDisplay(i){return i==null?"0":String(typeof i=="object"?i.cr||"0":i)}export function formatAbilityModifier(i){const l=typeof i=="number"?i:parseInt(i,10);if(isNaN(l))return"+0";const f=Math.floor((l-10)/2);return f>=0?`+${f}`:`${f}`}let S=null;export async function loadBestiaryCatalog(i=null){if(i&&Array.isArray(i)&&i.length>0)return i;if(S&&S.length>0)return S;if(typeof window<"u"&&window.VTT?.bestiaryCatalog&&Array.isArray(window.VTT.bestiaryCatalog))return S=window.VTT.bestiaryCatalog,S;try{let l=await fetch("/api/bestiary/catalog");if(l.ok||(l=await fetch("/data/bestiary-catalog.json")),l.ok){const f=await l.json();if(Array.isArray(f))return S=f,typeof window<"u"&&window.VTT&&(window.VTT.bestiaryCatalog=f),f}}catch(l){console.warn("[creature-selector-modal] Catalog fetch error:",l)}return[]}export async function openCreatureSelectorModal(i={}){const{title:l="Select Creature Template",confirmLabel:f="Select Creature",confirmIcon:j="fa-check",onSelect:R=null,initialFilter:y={},catalog:ee=null}=i,q=await loadBestiaryCatalog(ee),H=new Set,B=new Set,F=new Set,se=new Set,U=new Set;q.forEach(e=>{e.type&&H.add(e.type),e.source&&B.add(e.source),e.size&&F.add(e.size),e.alignment&&se.add(e.alignment),Array.isArray(e.environment)&&e.environment.forEach(a=>U.add(a))});const s={searchQuery:"",sortCol:"name",sortDir:"asc",crMin:y.crMin!==void 0?y.crMin:-1,crMax:y.crMax!==void 0?y.crMax:999,type:y.type||"",sources:new Set(y.sources||[]),sizes:new Set(y.sizes||[]),alignments:new Set(y.alignments||[]),environments:new Set(y.environments||[]),isAdvancedDrawerOpen:!1,filtered:[],selectedMonster:null,fullMonster:null,renderedCount:0,batchSize:50},$=document.createElement("div");$.className="vtt-sheet-submodal-overlay creature-selector-overlay",$.style.cssText="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); backdrop-filter:blur(3px); z-index:3100; display:flex; align-items:center; justify-content:center;";const c=document.createElement("div");c.className="vtt-sheet-submodal glassmorphism creature-selector-modal",c.style.zIndex="3110",c.innerHTML=`
         <div class="creature-selector-header">
             <h3 class="creature-selector-title">
-                <i class="fa-solid ${confirmIcon || 'fa-paw'}"></i>
-                <span>${title}</span>
+                <i class="fa-solid ${j||"fa-paw"}"></i>
+                <span>${l}</span>
             </h3>
             <button id="csm-close-btn" class="btn btn-icon btn-secondary" title="Close"><i class="fa-solid fa-xmark"></i></button>
         </div>
@@ -187,7 +32,7 @@ export async function openCreatureSelectorModal(options = {}) {
                             <option value="1/8">1/8</option>
                             <option value="1/4">1/4</option>
                             <option value="1/2">1/2</option>
-                            ${[...Array(30).keys()].map((i) => `<option value="${i + 1}">${i + 1}</option>`).join('')}
+                            ${[...Array(30).keys()].map(e=>`<option value="${e+1}">${e+1}</option>`).join("")}
                         </select>
                     </div>
                     <div class="csm-filter-group">
@@ -198,19 +43,14 @@ export async function openCreatureSelectorModal(options = {}) {
                             <option value="1/8">1/8</option>
                             <option value="1/4">1/4</option>
                             <option value="1/2">1/2</option>
-                            ${[...Array(30).keys()].map((i) => `<option value="${i + 1}">${i + 1}</option>`).join('')}
+                            ${[...Array(30).keys()].map(e=>`<option value="${e+1}">${e+1}</option>`).join("")}
                         </select>
                     </div>
                     <div class="csm-filter-group" style="flex:1;">
                         <label>Type</label>
                         <select id="csm-type-sel" class="vtt-select">
                             <option value="">All Types</option>
-                            ${Array.from(availableTypes)
-                                .sort()
-                                .map(
-                                    (t) => `<option value="${t}">${t.replace(/\b\w/g, (c) => c.toUpperCase())}</option>`
-                                )
-                                .join('')}
+                            ${Array.from(H).sort().map(e=>`<option value="${e}">${e.replace(/\b\w/g,a=>a.toUpperCase())}</option>`).join("")}
                         </select>
                     </div>
                 </div>
@@ -280,295 +120,38 @@ export async function openCreatureSelectorModal(options = {}) {
                 <div class="csm-preview-footer" id="csm-preview-footer" style="display:none;">
                     <div id="csm-preview-footer-name" class="csm-footer-creature-info"></div>
                     <button id="csm-confirm-btn" class="btn btn-primary btn-sm">
-                        <i class="fa-solid ${confirmIcon || 'fa-check'}"></i>
-                        <span>${confirmLabel}</span>
+                        <i class="fa-solid ${j||"fa-check"}"></i>
+                        <span>${f}</span>
                     </button>
                 </div>
             </div>
         </div>
-    `;
-
-    document.body.appendChild(overlay);
-    document.body.appendChild(modal);
-
-    // Query DOM Elements
-    const searchInput = modal.querySelector('#csm-search-input');
-    const searchClearBtn = modal.querySelector('#csm-search-clear');
-    const filterToggleBtn = modal.querySelector('#csm-filter-toggle');
-    const filterBadge = modal.querySelector('#csm-filter-badge');
-    const advancedDrawer = modal.querySelector('#csm-advanced-drawer');
-    const crMinSel = modal.querySelector('#csm-cr-min');
-    const crMaxSel = modal.querySelector('#csm-cr-max');
-    const typeSel = modal.querySelector('#csm-type-sel');
-    const resetFiltersBtn = modal.querySelector('#csm-reset-filters');
-    const tableHeader = modal.querySelector('#csm-table-header');
-    const resultsList = modal.querySelector('#csm-results-list');
-    const resultsCountEl = modal.querySelector('#csm-results-count');
-    const previewBody = modal.querySelector('#csm-preview-body');
-    const previewFooter = modal.querySelector('#csm-preview-footer');
-    const previewFooterName = modal.querySelector('#csm-preview-footer-name');
-    const confirmBtn = modal.querySelector('#csm-confirm-btn');
-    const backToListBtn = modal.querySelector('#csm-back-to-list-btn');
-    const closeBtn = modal.querySelector('#csm-close-btn');
-
-    // Populate Checkbox Grids for Advanced Filter Drawer
-    function buildCheckboxes(containerId, values, stateSet) {
-        const container = modal.querySelector(`#${containerId}`);
-        if (!container) return;
-        container.innerHTML = '';
-        Array.from(values)
-            .sort()
-            .forEach((val) => {
-                if (!val) return;
-                const label = document.createElement('label');
-                label.className = 'csm-checkbox-label';
-                const cb = document.createElement('input');
-                cb.type = 'checkbox';
-                cb.value = val;
-                cb.checked = stateSet.has(val);
-                cb.addEventListener('change', () => {
-                    if (cb.checked) stateSet.add(val);
-                    else stateSet.delete(val);
-                    applyFiltersAndRender();
-                });
-                label.appendChild(cb);
-                label.appendChild(document.createTextNode(String(val)));
-                container.appendChild(label);
-            });
-    }
-
-    buildCheckboxes('csm-sources-list', availableSources, state.sources);
-    buildCheckboxes('csm-sizes-list', availableSizes, state.sizes);
-    buildCheckboxes('csm-environments-list', availableEnvironments, state.environments);
-
-    // Filter Logic
-    function applyFilters() {
-        const q = state.searchQuery.toLowerCase().trim();
-        state.filtered = allMonsters.filter((m) => {
-            // Text Search
-            if (q) {
-                const nameMatch = m.name && m.name.toLowerCase().includes(q);
-                const typeMatch =
-                    (m.type || '').toLowerCase().includes(q) || (m.subtype || '').toLowerCase().includes(q);
-                const srcMatch = (m.source || '').toLowerCase().includes(q);
-                const crStr = m.cr ? (typeof m.cr === 'object' ? String(m.cr.cr) : String(m.cr)).toLowerCase() : '0';
-                const crMatch = crStr === q || `cr ${crStr}`.includes(q);
-                if (!nameMatch && !typeMatch && !srcMatch && !crMatch) return false;
-            }
-
-            // CR Range
-            const numericCr = m.crNumeric !== undefined ? m.crNumeric : parseCrToNumeric(m.cr);
-            if (state.crMin !== -1 && numericCr < state.crMin) return false;
-            if (state.crMax !== 999 && numericCr > state.crMax) return false;
-
-            // Type
-            if (state.type) {
-                const typeVal = (m.type || '').toLowerCase();
-                const subtypeVal = (m.subtype || '').toLowerCase();
-                if (typeVal !== state.type.toLowerCase() && subtypeVal !== state.type.toLowerCase()) {
-                    return false;
-                }
-            }
-
-            // Advanced Drawer multi-selects
-            if (state.sources.size > 0 && !state.sources.has(m.source)) return false;
-            if (state.sizes.size > 0 && !state.sizes.has(m.size)) return false;
-            if (state.environments.size > 0) {
-                const envs = Array.isArray(m.environment) ? m.environment : [];
-                const hasEnv = envs.some((e) => state.environments.has(e));
-                if (!hasEnv) return false;
-            }
-
-            return true;
-        });
-
-        // Sort filtered list
-        state.filtered.sort((a, b) => {
-            if (state.sortCol === 'name') {
-                const res = (a.name || '').localeCompare(b.name || '');
-                return state.sortDir === 'asc' ? res : -res;
-            } else if (state.sortCol === 'crNumeric') {
-                const crA = a.crNumeric !== undefined ? a.crNumeric : parseCrToNumeric(a.cr);
-                const crB = b.crNumeric !== undefined ? b.crNumeric : parseCrToNumeric(b.cr);
-                const diff = state.sortDir === 'asc' ? crA - crB : crB - crA;
-                if (diff !== 0) return diff;
-                return (a.name || '').localeCompare(b.name || '');
-            } else if (state.sortCol === 'type') {
-                const typeA = a.type || a.subtype || '';
-                const typeB = b.type || b.subtype || '';
-                const diff = state.sortDir === 'asc' ? typeA.localeCompare(typeB) : typeB.localeCompare(typeA);
-                if (diff !== 0) return diff;
-                return (a.name || '').localeCompare(b.name || '');
-            } else if (state.sortCol === 'source') {
-                const srcA = a.source || '';
-                const srcB = b.source || '';
-                const diff = state.sortDir === 'asc' ? srcA.localeCompare(srcB) : srcB.localeCompare(srcA);
-                if (diff !== 0) return diff;
-                return (a.name || '').localeCompare(b.name || '');
-            }
-            return 0;
-        });
-
-        // Update active filter badge
-        let activeFilterCount = 0;
-        if (state.crMin !== -1 || state.crMax !== 999) activeFilterCount++;
-        if (state.type) activeFilterCount++;
-        activeFilterCount += state.sources.size + state.sizes.size + state.environments.size;
-
-        if (activeFilterCount > 0) {
-            filterBadge.textContent = activeFilterCount;
-            filterBadge.style.display = 'inline-flex';
-            filterToggleBtn.classList.add('btn-primary');
-            filterToggleBtn.classList.remove('btn-secondary');
-        } else {
-            filterBadge.style.display = 'none';
-            filterToggleBtn.classList.remove('btn-primary');
-            filterToggleBtn.classList.add('btn-secondary');
-        }
-    }
-
-    // Render list rows batch
-    function renderResults(reset = true) {
-        if (reset) {
-            resultsList.innerHTML = '';
-            state.renderedCount = 0;
-            resultsList.scrollTop = 0;
-        }
-
-        if (state.filtered.length === 0) {
-            resultsList.innerHTML = `
+    `,document.body.appendChild($),document.body.appendChild(c);const T=c.querySelector("#csm-search-input"),A=c.querySelector("#csm-search-clear"),C=c.querySelector("#csm-filter-toggle"),M=c.querySelector("#csm-filter-badge"),te=c.querySelector("#csm-advanced-drawer"),V=c.querySelector("#csm-cr-min"),P=c.querySelector("#csm-cr-max"),I=c.querySelector("#csm-type-sel"),re=c.querySelector("#csm-reset-filters"),Q=c.querySelector("#csm-table-header"),b=c.querySelector("#csm-results-list"),O=c.querySelector("#csm-results-count"),L=c.querySelector("#csm-preview-body"),z=c.querySelector("#csm-preview-footer"),G=c.querySelector("#csm-preview-footer-name"),ie=c.querySelector("#csm-confirm-btn"),ae=c.querySelector("#csm-back-to-list-btn"),ne=c.querySelector("#csm-close-btn");function E(e,a,t){const r=c.querySelector(`#${e}`);r&&(r.innerHTML="",Array.from(a).sort().forEach(n=>{if(!n)return;const o=document.createElement("label");o.className="csm-checkbox-label";const d=document.createElement("input");d.type="checkbox",d.value=n,d.checked=t.has(n),d.addEventListener("change",()=>{d.checked?t.add(n):t.delete(n),g()}),o.appendChild(d),o.appendChild(document.createTextNode(String(n))),r.appendChild(o)}))}E("csm-sources-list",B,s.sources),E("csm-sizes-list",F,s.sizes),E("csm-environments-list",U,s.environments);function ce(){const e=s.searchQuery.toLowerCase().trim();s.filtered=q.filter(t=>{if(e){const n=t.name&&t.name.toLowerCase().includes(e),o=(t.type||"").toLowerCase().includes(e)||(t.subtype||"").toLowerCase().includes(e),d=(t.source||"").toLowerCase().includes(e),v=t.cr?(typeof t.cr=="object"?String(t.cr.cr):String(t.cr)).toLowerCase():"0",w=v===e||`cr ${v}`.includes(e);if(!n&&!o&&!d&&!w)return!1}const r=t.crNumeric!==void 0?t.crNumeric:parseCrToNumeric(t.cr);if(s.crMin!==-1&&r<s.crMin||s.crMax!==999&&r>s.crMax)return!1;if(s.type){const n=(t.type||"").toLowerCase(),o=(t.subtype||"").toLowerCase();if(n!==s.type.toLowerCase()&&o!==s.type.toLowerCase())return!1}return!(s.sources.size>0&&!s.sources.has(t.source)||s.sizes.size>0&&!s.sizes.has(t.size)||s.environments.size>0&&!(Array.isArray(t.environment)?t.environment:[]).some(d=>s.environments.has(d)))}),s.filtered.sort((t,r)=>{if(s.sortCol==="name"){const n=(t.name||"").localeCompare(r.name||"");return s.sortDir==="asc"?n:-n}else if(s.sortCol==="crNumeric"){const n=t.crNumeric!==void 0?t.crNumeric:parseCrToNumeric(t.cr),o=r.crNumeric!==void 0?r.crNumeric:parseCrToNumeric(r.cr),d=s.sortDir==="asc"?n-o:o-n;return d!==0?d:(t.name||"").localeCompare(r.name||"")}else if(s.sortCol==="type"){const n=t.type||t.subtype||"",o=r.type||r.subtype||"",d=s.sortDir==="asc"?n.localeCompare(o):o.localeCompare(n);return d!==0?d:(t.name||"").localeCompare(r.name||"")}else if(s.sortCol==="source"){const n=t.source||"",o=r.source||"",d=s.sortDir==="asc"?n.localeCompare(o):o.localeCompare(n);return d!==0?d:(t.name||"").localeCompare(r.name||"")}return 0});let a=0;(s.crMin!==-1||s.crMax!==999)&&a++,s.type&&a++,a+=s.sources.size+s.sizes.size+s.environments.size,a>0?(M.textContent=a,M.style.display="inline-flex",C.classList.add("btn-primary"),C.classList.remove("btn-secondary")):(M.style.display="none",C.classList.remove("btn-primary"),C.classList.add("btn-secondary"))}function W(e=!0){if(e&&(b.innerHTML="",s.renderedCount=0,b.scrollTop=0),s.filtered.length===0){b.innerHTML=`
                 <div style="padding:24px; text-align:center; color:var(--color-text-muted);">
                     <i class="fa-solid fa-ghost" style="font-size:1.8rem; margin-bottom:8px; opacity:0.4;"></i>
                     <div>No creatures found matching your criteria.</div>
                 </div>
-            `;
-            resultsCountEl.textContent = '0 creatures';
-            return;
-        }
-
-        const nextBatch = state.filtered.slice(state.renderedCount, state.renderedCount + state.batchSize);
-        const fragment = document.createDocumentFragment();
-
-        nextBatch.forEach((monster) => {
-            const row = document.createElement('div');
-            const isSelected =
-                state.selectedMonster &&
-                state.selectedMonster.id === monster.id &&
-                state.selectedMonster.name === monster.name;
-            row.className = `csm-row ${isSelected ? 'active-row' : ''}`;
-            row.dataset.id = monster.id || monster.name;
-
-            const crStr = formatCrDisplay(monster.cr);
-            const typeStr = monster.type || monster.subtype || '—';
-            const spellBadge = monster.hasSpellcasting
-                ? `<span style="color:var(--color-gold-base); margin-left:4px;" title="Spellcaster"><i class="fa-solid fa-wand-magic-sparkles"></i></span>`
-                : '';
-
-            row.innerHTML = `
-                <div class="csm-col-name" title="${monster.name}">
-                    <span class="csm-col-name-text">${monster.name}</span>${spellBadge}
+            `,O.textContent="0 creatures";return}const a=s.filtered.slice(s.renderedCount,s.renderedCount+s.batchSize),t=document.createDocumentFragment();a.forEach(r=>{const n=document.createElement("div"),o=s.selectedMonster&&s.selectedMonster.id===r.id&&s.selectedMonster.name===r.name;n.className=`csm-row ${o?"active-row":""}`,n.dataset.id=r.id||r.name;const d=formatCrDisplay(r.cr),v=r.type||r.subtype||"\u2014",w=r.hasSpellcasting?'<span style="color:var(--color-gold-base); margin-left:4px;" title="Spellcaster"><i class="fa-solid fa-wand-magic-sparkles"></i></span>':"";n.innerHTML=`
+                <div class="csm-col-name" title="${r.name}">
+                    <span class="csm-col-name-text">${r.name}</span>${w}
                 </div>
-                <div class="csm-col-cr"><span class="csm-cr-pill">CR ${crStr}</span></div>
-                <div class="csm-col-type" title="${typeStr}">${typeStr}</div>
-                <div class="csm-col-source"><span class="csm-source-badge">${monster.source || 'SRD'}</span></div>
-            `;
-
-            row.addEventListener('click', () => {
-                selectMonster(monster);
-            });
-
-            fragment.appendChild(row);
-        });
-
-        resultsList.appendChild(fragment);
-        state.renderedCount += nextBatch.length;
-        resultsCountEl.textContent = `Showing ${Math.min(state.renderedCount, state.filtered.length)} of ${state.filtered.length} creatures`;
-    }
-
-    function applyFiltersAndRender() {
-        applyFilters();
-        renderResults(true);
-
-        // Auto-select first monster if current selection is no longer in filtered list
-        if (state.filtered.length > 0) {
-            const stillPresent =
-                state.selectedMonster &&
-                state.filtered.some(
-                    (m) => m.name === state.selectedMonster.name && m.source === state.selectedMonster.source
-                );
-            if (!stillPresent) {
-                selectMonster(state.filtered[0], false);
-            }
-        } else {
-            renderEmptyPreview();
-        }
-    }
-
-    // Scroll listener for batch loading
-    resultsList.addEventListener('scroll', () => {
-        if (state.renderedCount < state.filtered.length) {
-            const { scrollTop, scrollHeight, clientHeight } = resultsList;
-            if (scrollTop + clientHeight >= scrollHeight - 60) {
-                renderResults(false);
-            }
-        }
-    });
-
-    // Select monster and render preview pane
-    async function selectMonster(monster, slideMobile = true) {
-        state.selectedMonster = monster;
-
-        // Highlight selected row
-        resultsList.querySelectorAll('.csm-row').forEach((r) => {
-            const isMatch = r.dataset.id === (monster.id || monster.name);
-            r.classList.toggle('active-row', isMatch);
-        });
-
-        // Handle mobile sliding view
-        if (slideMobile) {
-            modal.classList.add('csm-mobile-preview-active');
-        }
-
-        renderLoadingPreview(monster);
-
-        // Fetch full creature statblock
-        let fullMonster = monster;
-        if (typeof window !== 'undefined' && window.fetchFullCreature) {
-            try {
-                const fetched = await window.fetchFullCreature(monster.source, monster.id || monster.name);
-                if (fetched) fullMonster = fetched;
-            } catch (e) {
-                console.warn('[creature-selector-modal] Full creature hydration fallback:', e);
-            }
-        }
-        state.fullMonster = fullMonster;
-
-        // Render full preview statblock
-        renderStatblockPreview(fullMonster);
-    }
-
-    function renderEmptyPreview() {
-        previewBody.innerHTML = `
+                <div class="csm-col-cr"><span class="csm-cr-pill">CR ${d}</span></div>
+                <div class="csm-col-type" title="${v}">${v}</div>
+                <div class="csm-col-source"><span class="csm-source-badge">${r.source||"SRD"}</span></div>
+            `,n.addEventListener("click",()=>{X(r)}),t.appendChild(n)}),b.appendChild(t),s.renderedCount+=a.length,O.textContent=`Showing ${Math.min(s.renderedCount,s.filtered.length)} of ${s.filtered.length} creatures`}function g(){ce(),W(!0),s.filtered.length>0?s.selectedMonster&&s.filtered.some(a=>a.name===s.selectedMonster.name&&a.source===s.selectedMonster.source)||X(s.filtered[0],!1):oe()}b.addEventListener("scroll",()=>{if(s.renderedCount<s.filtered.length){const{scrollTop:e,scrollHeight:a,clientHeight:t}=b;e+t>=a-60&&W(!1)}});async function X(e,a=!0){s.selectedMonster=e,b.querySelectorAll(".csm-row").forEach(r=>{const n=r.dataset.id===(e.id||e.name);r.classList.toggle("active-row",n)}),a&&c.classList.add("csm-mobile-preview-active"),le(e);let t=e;if(typeof window<"u"&&window.fetchFullCreature)try{const r=await window.fetchFullCreature(e.source,e.id||e.name);r&&(t=r)}catch(r){console.warn("[creature-selector-modal] Full creature hydration fallback:",r)}s.fullMonster=t,de(t)}function oe(){L.innerHTML=`
             <div class="csm-preview-empty-state">
                 <i class="fa-solid fa-dragon csm-empty-icon"></i>
                 <div style="font-weight:600; font-size:1rem; color:var(--color-text-primary);">No Creature Selected</div>
                 <div style="font-size:0.8rem; color:var(--color-text-muted); margin-top:4px;">Adjust your search or filter settings to view creatures.</div>
             </div>
-        `;
-        previewFooter.style.display = 'none';
-    }
-
-    function renderLoadingPreview(monster) {
-        const tokenUrl = escapeHtml(getSafeVttUrl(getCreatureTokenUrl(monster)));
-        const safeName = escapeHtml(monster.name);
-        previewBody.innerHTML = `
+        `,z.style.display="none"}function le(e){const a=u(Z(getCreatureTokenUrl(e))),t=u(e.name);L.innerHTML=`
             <div class="csm-preview-card">
                 <div class="csm-preview-top">
-                    <img src="${tokenUrl}" class="csm-preview-avatar" data-fallback-src="favicon.svg">
+                    <img src="${a}" class="csm-preview-avatar" data-fallback-src="favicon.svg">
                     <div>
-                        <h4 style="margin:0; font-size:1.15rem; color:var(--color-gold-base); font-family:var(--font-heading);">${safeName}</h4>
+                        <h4 style="margin:0; font-size:1.15rem; color:var(--color-gold-base); font-family:var(--font-heading);">${t}</h4>
                         <div style="font-size:0.8rem; color:var(--color-text-muted); margin-top:2px;">
-                            ${escapeHtml(monster.size || '')} ${escapeHtml(monster.type || '')} • CR ${escapeHtml(formatCrDisplay(monster.cr))} [${escapeHtml(monster.source || '')}]
+                            ${u(e.size||"")} ${u(e.type||"")} \u2022 CR ${u(formatCrDisplay(e.cr))} [${u(e.source||"")}]
                         </div>
                     </div>
                 </div>
@@ -577,92 +160,18 @@ export async function openCreatureSelectorModal(options = {}) {
                     <div style="font-size:0.85rem;">Hydrating full statblock...</div>
                 </div>
             </div>
-        `;
-        previewFooter.style.display = 'flex';
-        previewFooterName.innerHTML = `<strong>${safeName}</strong> <span style="color:var(--color-text-muted); font-size:0.8em;">(CR ${escapeHtml(formatCrDisplay(monster.cr))})</span>`;
-    }
-
-    function renderStatblockPreview(m) {
-        const tokenUrl = getCreatureTokenUrl(m);
-        const crStr = formatCrDisplay(m.cr);
-
-        // HP calculation
-        let hpDisplay = '—';
-        if (typeof m.hp === 'number') {
-            hpDisplay = String(m.hp);
-        } else if (m.hp && m.hp.average !== undefined) {
-            hpDisplay = `${m.hp.average}${m.hp.formula ? ` (${m.hp.formula})` : ''}`;
-        }
-
-        // AC calculation
-        let acDisplay = '—';
-        if (Array.isArray(m.ac) && m.ac.length > 0) {
-            const firstAc = m.ac[0];
-            acDisplay =
-                typeof firstAc === 'object'
-                    ? `${firstAc.ac}${firstAc.from ? ` (${firstAc.from.join(', ')})` : ''}`
-                    : String(firstAc);
-        } else if (m.ac !== undefined) {
-            acDisplay = String(m.ac);
-        }
-
-        // Speed calculation
-        let speedDisplay = '30 ft.';
-        if (typeof m.speed === 'string') {
-            speedDisplay = m.speed;
-        } else if (typeof m.speed === 'object' && m.speed !== null) {
-            speedDisplay = Object.entries(m.speed)
-                .map(([mode, val]) =>
-                    mode === 'walk' ? `${val} ft.` : `${mode} ${typeof val === 'object' ? val.number : val} ft.`
-                )
-                .join(', ');
-        }
-
-        // Ability Scores
-        const abilities = [
-            { key: 'STR', val: m.str || 10 },
-            { key: 'DEX', val: m.dex || 10 },
-            { key: 'CON', val: m.con || 10 },
-            { key: 'INT', val: m.int || 10 },
-            { key: 'WIS', val: m.wis || 10 },
-            { key: 'CHA', val: m.cha || 10 }
-        ];
-
-        // Format Trait / Action entries
-        const formatEntries = (entries) => {
-            if (!Array.isArray(entries) || entries.length === 0) return '';
-            return entries
-                .map((entry) => {
-                    const name = entry.name ? `<strong>${entry.name}.</strong> ` : '';
-                    let text = '';
-                    if (Array.isArray(entry.entries)) {
-                        text = entry.entries.map((e) => (typeof e === 'string' ? e : e.text || '')).join(' ');
-                    } else if (typeof entry === 'string') {
-                        text = entry;
-                    }
-                    return `<div class="csm-statblock-entry">${name}${text}</div>`;
-                })
-                .join('');
-        };
-
-        const traitsHtml = formatEntries(m.trait);
-        const actionsHtml = formatEntries(m.action);
-        const bonusActionsHtml = formatEntries(m.bonus);
-        const reactionsHtml = formatEntries(m.reaction);
-        const legendaryHtml = formatEntries(m.legendary);
-
-        previewBody.innerHTML = `
+        `,z.style.display="flex",G.innerHTML=`<strong>${t}</strong> <span style="color:var(--color-text-muted); font-size:0.8em;">(CR ${u(formatCrDisplay(e.cr))})</span>`}function de(e){const a=getCreatureTokenUrl(e),t=formatCrDisplay(e.cr);let r="\u2014";typeof e.hp=="number"?r=String(e.hp):e.hp&&e.hp.average!==void 0&&(r=`${e.hp.average}${e.hp.formula?` (${e.hp.formula})`:""}`);let n="\u2014";if(Array.isArray(e.ac)&&e.ac.length>0){const p=e.ac[0];n=typeof p=="object"?`${p.ac}${p.from?` (${p.from.join(", ")})`:""}`:String(p)}else e.ac!==void 0&&(n=String(e.ac));let o="30 ft.";typeof e.speed=="string"?o=e.speed:typeof e.speed=="object"&&e.speed!==null&&(o=Object.entries(e.speed).map(([p,m])=>p==="walk"?`${m} ft.`:`${p} ${typeof m=="object"?m.number:m} ft.`).join(", "));const d=[{key:"STR",val:e.str||10},{key:"DEX",val:e.dex||10},{key:"CON",val:e.con||10},{key:"INT",val:e.int||10},{key:"WIS",val:e.wis||10},{key:"CHA",val:e.cha||10}],v=p=>!Array.isArray(p)||p.length===0?"":p.map(m=>{const ve=m.name?`<strong>${m.name}.</strong> `:"";let N="";return Array.isArray(m.entries)?N=m.entries.map(D=>typeof D=="string"?D:D.text||"").join(" "):typeof m=="string"&&(N=m),`<div class="csm-statblock-entry">${ve}${N}</div>`}).join(""),w=v(e.trait),_=v(e.action),J=v(e.bonus),K=v(e.reaction),Y=v(e.legendary);L.innerHTML=`
             <div class="csm-preview-card">
                 <!-- Header -->
                 <div class="csm-preview-top">
-                    <img src="${escapeHtml(getSafeVttUrl(tokenUrl))}" class="csm-preview-avatar" data-fallback-src="favicon.svg">
+                    <img src="${u(Z(a))}" class="csm-preview-avatar" data-fallback-src="favicon.svg">
                     <div style="flex:1;">
                         <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-                            <h4 style="margin:0; font-size:1.25rem; color:var(--color-gold-base); font-family:var(--font-heading);">${escapeHtml(m.name)}</h4>
-                            <span class="csm-source-badge">${escapeHtml(m.source || 'SRD')} ${escapeHtml(m.edition || '')}</span>
+                            <h4 style="margin:0; font-size:1.25rem; color:var(--color-gold-base); font-family:var(--font-heading);">${u(e.name)}</h4>
+                            <span class="csm-source-badge">${u(e.source||"SRD")} ${u(e.edition||"")}</span>
                         </div>
                         <div style="font-size:0.8rem; color:var(--color-text-muted); font-style:italic; margin-top:2px;">
-                            ${m.size ? escapeHtml(translateSizeName(m.size)) : 'Medium'} ${escapeHtml(m.type || 'creature')}${m.subtype ? ` (${escapeHtml(m.subtype)})` : ''}, ${escapeHtml(m.alignment || 'unaligned')}
+                            ${e.size?u(ue(e.size)):"Medium"} ${u(e.type||"creature")}${e.subtype?` (${u(e.subtype)})`:""}, ${u(e.alignment||"unaligned")}
                         </div>
                     </div>
                 </div>
@@ -671,229 +180,57 @@ export async function openCreatureSelectorModal(options = {}) {
                 <div class="csm-core-stats-grid">
                     <div class="csm-stat-box">
                         <span class="csm-stat-lbl">Armor Class</span>
-                        <span class="csm-stat-val">${acDisplay}</span>
+                        <span class="csm-stat-val">${n}</span>
                     </div>
                     <div class="csm-stat-box">
                         <span class="csm-stat-lbl">Hit Points</span>
-                        <span class="csm-stat-val">${hpDisplay}</span>
+                        <span class="csm-stat-val">${r}</span>
                     </div>
                     <div class="csm-stat-box">
                         <span class="csm-stat-lbl">Speed</span>
-                        <span class="csm-stat-val">${speedDisplay}</span>
+                        <span class="csm-stat-val">${o}</span>
                     </div>
                     <div class="csm-stat-box">
                         <span class="csm-stat-lbl">Challenge</span>
-                        <span class="csm-stat-val">CR ${crStr}</span>
+                        <span class="csm-stat-val">CR ${t}</span>
                     </div>
                 </div>
 
                 <!-- Ability Scores Grid -->
                 <div class="csm-abilities-grid">
-                    ${abilities
-                        .map(
-                            (a) => `
+                    ${d.map(p=>`
                         <div class="csm-ability-box">
-                            <span class="csm-ability-key">${a.key}</span>
-                            <span class="csm-ability-val">${a.val}</span>
-                            <span class="csm-ability-mod">${formatAbilityModifier(a.val)}</span>
+                            <span class="csm-ability-key">${p.key}</span>
+                            <span class="csm-ability-val">${p.val}</span>
+                            <span class="csm-ability-mod">${formatAbilityModifier(p.val)}</span>
                         </div>
-                    `
-                        )
-                        .join('')}
+                    `).join("")}
                 </div>
 
                 <!-- Metadata details: Senses, Languages, Resistances -->
                 <div class="csm-meta-details">
-                    ${m.save ? `<div><strong>Saving Throws:</strong> ${formatSaves(m.save)}</div>` : ''}
-                    ${m.skill ? `<div><strong>Skills:</strong> ${formatSkills(m.skill)}</div>` : ''}
-                    ${m.senses ? `<div><strong>Senses:</strong> ${Array.isArray(m.senses) ? m.senses.join(', ') : m.senses}</div>` : ''}
-                    ${m.languages ? `<div><strong>Languages:</strong> ${Array.isArray(m.languages) ? m.languages.join(', ') : m.languages}</div>` : ''}
-                    ${m.resistances ? `<div><strong>Damage Resistances:</strong> ${Array.isArray(m.resistances) ? m.resistances.join(', ') : m.resistances}</div>` : ''}
-                    ${m.immunities ? `<div><strong>Damage Immunities:</strong> ${Array.isArray(m.immunities) ? m.immunities.join(', ') : m.immunities}</div>` : ''}
-                    ${m.vulnerabilities ? `<div><strong>Damage Vulnerabilities:</strong> ${Array.isArray(m.vulnerabilities) ? m.vulnerabilities.join(', ') : m.vulnerabilities}</div>` : ''}
+                    ${e.save?`<div><strong>Saving Throws:</strong> ${pe(e.save)}</div>`:""}
+                    ${e.skill?`<div><strong>Skills:</strong> ${fe(e.skill)}</div>`:""}
+                    ${e.senses?`<div><strong>Senses:</strong> ${Array.isArray(e.senses)?e.senses.join(", "):e.senses}</div>`:""}
+                    ${e.languages?`<div><strong>Languages:</strong> ${Array.isArray(e.languages)?e.languages.join(", "):e.languages}</div>`:""}
+                    ${e.resistances?`<div><strong>Damage Resistances:</strong> ${Array.isArray(e.resistances)?e.resistances.join(", "):e.resistances}</div>`:""}
+                    ${e.immunities?`<div><strong>Damage Immunities:</strong> ${Array.isArray(e.immunities)?e.immunities.join(", "):e.immunities}</div>`:""}
+                    ${e.vulnerabilities?`<div><strong>Damage Vulnerabilities:</strong> ${Array.isArray(e.vulnerabilities)?e.vulnerabilities.join(", "):e.vulnerabilities}</div>`:""}
                 </div>
 
                 <!-- Traits -->
-                ${traitsHtml ? `<div class="csm-section"><div class="csm-section-heading">Traits</div>${traitsHtml}</div>` : ''}
+                ${w?`<div class="csm-section"><div class="csm-section-heading">Traits</div>${w}</div>`:""}
 
                 <!-- Actions -->
-                ${actionsHtml ? `<div class="csm-section"><div class="csm-section-heading">Actions</div>${actionsHtml}</div>` : ''}
+                ${_?`<div class="csm-section"><div class="csm-section-heading">Actions</div>${_}</div>`:""}
 
                 <!-- Bonus Actions -->
-                ${bonusActionsHtml ? `<div class="csm-section"><div class="csm-section-heading">Bonus Actions</div>${bonusActionsHtml}</div>` : ''}
+                ${J?`<div class="csm-section"><div class="csm-section-heading">Bonus Actions</div>${J}</div>`:""}
 
                 <!-- Reactions -->
-                ${reactionsHtml ? `<div class="csm-section"><div class="csm-section-heading">Reactions</div>${reactionsHtml}</div>` : ''}
+                ${K?`<div class="csm-section"><div class="csm-section-heading">Reactions</div>${K}</div>`:""}
 
                 <!-- Legendary Actions -->
-                ${legendaryHtml ? `<div class="csm-section"><div class="csm-section-heading">Legendary Actions</div>${legendaryHtml}</div>` : ''}
+                ${Y?`<div class="csm-section"><div class="csm-section-heading">Legendary Actions</div>${Y}</div>`:""}
             </div>
-        `;
-
-        previewFooter.style.display = 'flex';
-        previewFooterName.innerHTML = `<strong>${escapeHtml(m.name)}</strong> <span style="color:var(--color-text-muted); font-size:0.8em;">(CR ${escapeHtml(crStr)})</span>`;
-    }
-
-    function translateSizeName(sizeChar) {
-        const map = { T: 'Tiny', S: 'Small', M: 'Medium', L: 'Large', H: 'Huge', G: 'Gargantuan' };
-        return map[sizeChar] || sizeChar;
-    }
-
-    function formatSaves(saveObj) {
-        if (!saveObj || typeof saveObj !== 'object') return '';
-        return Object.entries(saveObj)
-            .map(([k, v]) => `${k.toUpperCase()} ${v}`)
-            .join(', ');
-    }
-
-    function formatSkills(skillObj) {
-        if (!skillObj || typeof skillObj !== 'object') return '';
-        return Object.entries(skillObj)
-            .map(([k, v]) => `${k.replace(/\b\w/g, (c) => c.toUpperCase())} ${v}`)
-            .join(', ');
-    }
-
-    // Modal Close Cleanup
-    let escListener = null;
-    let searchDebounceTimer = null;
-    const closeModal = () => {
-        if (escListener) window.removeEventListener('keydown', escListener);
-        if (searchDebounceTimer) clearTimeout(searchDebounceTimer);
-        overlay.remove();
-        modal.remove();
-    };
-
-    escListener = (e) => {
-        if (e.key === 'Escape') closeModal();
-    };
-    window.addEventListener('keydown', escListener);
-
-    overlay.addEventListener('click', closeModal);
-    closeBtn.addEventListener('click', closeModal);
-
-    // Mobile Back to Results
-    backToListBtn.addEventListener('click', () => {
-        modal.classList.remove('csm-mobile-preview-active');
-    });
-
-    // Confirm Button
-    confirmBtn.addEventListener('click', () => {
-        if (!state.selectedMonster) return;
-        const chosen = state.selectedMonster;
-        const full = state.fullMonster || chosen;
-        closeModal();
-        if (typeof onSelect === 'function') {
-            onSelect(chosen, full);
-        }
-    });
-
-    // Event Handlers for Filters and Search
-    searchInput.addEventListener('input', (e) => {
-        state.searchQuery = e.target.value;
-        searchClearBtn.style.display = state.searchQuery ? 'block' : 'none';
-        clearTimeout(searchDebounceTimer);
-        searchDebounceTimer = setTimeout(() => {
-            applyFiltersAndRender();
-        }, 100);
-    });
-
-    searchClearBtn.addEventListener('click', () => {
-        if (searchDebounceTimer) clearTimeout(searchDebounceTimer);
-        searchInput.value = '';
-        state.searchQuery = '';
-        searchClearBtn.style.display = 'none';
-        applyFiltersAndRender();
-        searchInput.focus();
-    });
-
-    crMinSel.addEventListener('change', (e) => {
-        state.crMin = e.target.value ? parseCrToNumeric(e.target.value) : -1;
-        applyFiltersAndRender();
-    });
-
-    crMaxSel.addEventListener('change', (e) => {
-        state.crMax = e.target.value ? parseCrToNumeric(e.target.value) : 999;
-        applyFiltersAndRender();
-    });
-
-    typeSel.addEventListener('change', (e) => {
-        state.type = e.target.value;
-        applyFiltersAndRender();
-    });
-
-    filterToggleBtn.addEventListener('click', () => {
-        state.isAdvancedDrawerOpen = !state.isAdvancedDrawerOpen;
-        advancedDrawer.style.display = state.isAdvancedDrawerOpen ? 'block' : 'none';
-    });
-
-    resetFiltersBtn.addEventListener('click', () => {
-        state.crMin = -1;
-        state.crMax = 999;
-        state.type = '';
-        state.sources.clear();
-        state.sizes.clear();
-        state.environments.clear();
-        crMinSel.value = '';
-        crMaxSel.value = '';
-        typeSel.value = '';
-
-        modal.querySelectorAll('.csm-checkbox-label input[type="checkbox"]').forEach((cb) => {
-            cb.checked = false;
-        });
-
-        applyFiltersAndRender();
-    });
-
-    // Sort Click Handlers
-    tableHeader.querySelectorAll('.csm-th').forEach((th) => {
-        th.addEventListener('click', () => {
-            const col = th.dataset.sort;
-            if (state.sortCol === col) {
-                state.sortDir = state.sortDir === 'asc' ? 'desc' : 'asc';
-            } else {
-                state.sortCol = col;
-                state.sortDir = 'asc';
-            }
-
-            // Update UI headers
-            tableHeader.querySelectorAll('.csm-th').forEach((cell) => {
-                const icon = cell.querySelector('.csm-sort-icon');
-                if (cell === th) {
-                    cell.classList.add('sorted');
-                    if (icon) {
-                        if (col === 'name') {
-                            icon.className =
-                                state.sortDir === 'asc'
-                                    ? 'fa-solid fa-arrow-down-a-z csm-sort-icon'
-                                    : 'fa-solid fa-arrow-up-z-a csm-sort-icon';
-                        } else if (col === 'crNumeric') {
-                            icon.className =
-                                state.sortDir === 'asc'
-                                    ? 'fa-solid fa-arrow-down-1-9 csm-sort-icon'
-                                    : 'fa-solid fa-arrow-up-9-1 csm-sort-icon';
-                        } else {
-                            icon.className =
-                                state.sortDir === 'asc'
-                                    ? 'fa-solid fa-arrow-down-short-wide csm-sort-icon'
-                                    : 'fa-solid fa-arrow-up-wide-short csm-sort-icon';
-                        }
-                    }
-                } else {
-                    cell.classList.remove('sorted');
-                    if (icon) icon.className = 'fa-solid fa-sort csm-sort-icon';
-                }
-            });
-
-            applyFiltersAndRender();
-        });
-    });
-
-    // Initial Filter & Render
-    applyFiltersAndRender();
-}
-
-// Ensure global registration on window.VTT
-if (typeof window !== 'undefined') {
-    window.VTT = window.VTT || {};
-    window.VTT.openCreatureSelectorModal = openCreatureSelectorModal;
-}
+        `,z.style.display="flex",G.innerHTML=`<strong>${u(e.name)}</strong> <span style="color:var(--color-text-muted); font-size:0.8em;">(CR ${u(t)})</span>`}function ue(e){return{T:"Tiny",S:"Small",M:"Medium",L:"Large",H:"Huge",G:"Gargantuan"}[e]||e}function pe(e){return!e||typeof e!="object"?"":Object.entries(e).map(([a,t])=>`${a.toUpperCase()} ${t}`).join(", ")}function fe(e){return!e||typeof e!="object"?"":Object.entries(e).map(([a,t])=>`${a.replace(/\b\w/g,r=>r.toUpperCase())} ${t}`).join(", ")}let x=null,h=null;const k=()=>{x&&window.removeEventListener("keydown",x),h&&clearTimeout(h),$.remove(),c.remove()};x=e=>{e.key==="Escape"&&k()},window.addEventListener("keydown",x),$.addEventListener("click",k),ne.addEventListener("click",k),ae.addEventListener("click",()=>{c.classList.remove("csm-mobile-preview-active")}),ie.addEventListener("click",()=>{if(!s.selectedMonster)return;const e=s.selectedMonster,a=s.fullMonster||e;k(),typeof R=="function"&&R(e,a)}),T.addEventListener("input",e=>{s.searchQuery=e.target.value,A.style.display=s.searchQuery?"block":"none",clearTimeout(h),h=setTimeout(()=>{g()},100)}),A.addEventListener("click",()=>{h&&clearTimeout(h),T.value="",s.searchQuery="",A.style.display="none",g(),T.focus()}),V.addEventListener("change",e=>{s.crMin=e.target.value?parseCrToNumeric(e.target.value):-1,g()}),P.addEventListener("change",e=>{s.crMax=e.target.value?parseCrToNumeric(e.target.value):999,g()}),I.addEventListener("change",e=>{s.type=e.target.value,g()}),C.addEventListener("click",()=>{s.isAdvancedDrawerOpen=!s.isAdvancedDrawerOpen,te.style.display=s.isAdvancedDrawerOpen?"block":"none"}),re.addEventListener("click",()=>{s.crMin=-1,s.crMax=999,s.type="",s.sources.clear(),s.sizes.clear(),s.environments.clear(),V.value="",P.value="",I.value="",c.querySelectorAll('.csm-checkbox-label input[type="checkbox"]').forEach(e=>{e.checked=!1}),g()}),Q.querySelectorAll(".csm-th").forEach(e=>{e.addEventListener("click",()=>{const a=e.dataset.sort;s.sortCol===a?s.sortDir=s.sortDir==="asc"?"desc":"asc":(s.sortCol=a,s.sortDir="asc"),Q.querySelectorAll(".csm-th").forEach(t=>{const r=t.querySelector(".csm-sort-icon");t===e?(t.classList.add("sorted"),r&&(a==="name"?r.className=s.sortDir==="asc"?"fa-solid fa-arrow-down-a-z csm-sort-icon":"fa-solid fa-arrow-up-z-a csm-sort-icon":a==="crNumeric"?r.className=s.sortDir==="asc"?"fa-solid fa-arrow-down-1-9 csm-sort-icon":"fa-solid fa-arrow-up-9-1 csm-sort-icon":r.className=s.sortDir==="asc"?"fa-solid fa-arrow-down-short-wide csm-sort-icon":"fa-solid fa-arrow-up-wide-short csm-sort-icon")):(t.classList.remove("sorted"),r&&(r.className="fa-solid fa-sort csm-sort-icon"))}),g()})}),g()}typeof window<"u"&&(window.VTT=window.VTT||{},window.VTT.openCreatureSelectorModal=openCreatureSelectorModal);

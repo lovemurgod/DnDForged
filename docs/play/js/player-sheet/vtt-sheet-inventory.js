@@ -1,151 +1,69 @@
-// DnDForged Player Sheet - Inventory & Equipment Subsystem
-// Handles equipment rendering, container tare/capacity calculations, currency, and drag-and-drop
-
-import { getTotalStat } from './calc/stats.js';
-import {
-    getContainerContentsWeight,
-    getContainerEffectiveWeight as getContainerEffectiveWeightCalc,
-    getContainerCapacityStatus,
-    calculateCharacterTotalWeight,
-    calculateEncumbrance
-} from './calc/containers.js';
-import { bindBagContainerEvents as bindBagContainerEventsExt } from './modals/index.js';
-import { escapeHtml } from '../vtt-utils.js';
-
-/**
- * Render single equipment item row HTML
- */
-export function renderEquipRowHtml(eq, i, char) {
-    const containers = char?.containers || [];
-    const tableLookupName = eq.linkedTable
-        ? typeof eq.linkedTable === 'string'
-            ? eq.linkedTable
-            : eq.linkedTable.name || eq.linkedTable.id
-        : eq.name;
-    const matchedTable =
-        typeof window !== 'undefined' && window.VTT?.rollTablesEngine?.findTableByItemNameSync
-            ? window.VTT.rollTablesEngine.findTableByItemNameSync(tableLookupName)
-            : null;
-    const effectiveTable =
-        matchedTable ||
-        (eq.linkedTable
-            ? {
-                  id: typeof eq.linkedTable === 'string' ? eq.linkedTable : eq.linkedTable.id || eq.linkedTable.name,
-                  name: typeof eq.linkedTable === 'string' ? eq.linkedTable : eq.linkedTable.name || eq.linkedTable.id,
-                  dice: typeof eq.linkedTable === 'object' && eq.linkedTable.dice ? eq.linkedTable.dice : '1d20'
-              }
-            : null);
-
-    return `
-        <div class="equip-row glass-flat" data-idx="${i}" data-container-id="${eq.containerId || ''}" draggable="true" style="padding:8px; display:flex; flex-direction:column; gap:4px; transition: border-color 0.15s, box-shadow 0.15s, opacity 0.15s;">
+import{getTotalStat as k}from"./calc/stats.js";import{getContainerContentsWeight as $,getContainerCapacityStatus as E,calculateCharacterTotalWeight as I,calculateEncumbrance as q}from"./calc/containers.js";import{bindBagContainerEvents as C}from"./modals/index.js";import{escapeHtml as v}from"../vtt-utils.js";export function renderEquipRowHtml(e,d,c){const p=c?.containers||[],y=e.linkedTable?typeof e.linkedTable=="string"?e.linkedTable:e.linkedTable.name||e.linkedTable.id:e.name,r=(typeof window<"u"&&window.VTT?.rollTablesEngine?.findTableByItemNameSync?window.VTT.rollTablesEngine.findTableByItemNameSync(y):null)||(e.linkedTable?{id:typeof e.linkedTable=="string"?e.linkedTable:e.linkedTable.id||e.linkedTable.name,name:typeof e.linkedTable=="string"?e.linkedTable:e.linkedTable.name||e.linkedTable.id,dice:typeof e.linkedTable=="object"&&e.linkedTable.dice?e.linkedTable.dice:"1d20"}:null);return`
+        <div class="equip-row glass-flat" data-idx="${d}" data-container-id="${e.containerId||""}" draggable="true" style="padding:8px; display:flex; flex-direction:column; gap:4px; transition: border-color 0.15s, box-shadow 0.15s, opacity 0.15s;">
             <div style="display:flex; justify-content:space-between; align-items:center;">
-                <div class="pc-equip-drag-handle" data-idx="${i}" title="Click and drag to move/reorder item" style="cursor:grab; padding:2px 8px 2px 2px; opacity:0.6; display:flex; align-items:center; user-select:none; transition:opacity 0.15s, color 0.15s;" onmouseover="this.style.opacity='1'; this.style.color='var(--color-gold-base)';" onmouseout="this.style.opacity='0.6'; this.style.color='inherit';">
+                <div class="pc-equip-drag-handle" data-idx="${d}" title="Click and drag to move/reorder item" style="cursor:grab; padding:2px 8px 2px 2px; opacity:0.6; display:flex; align-items:center; user-select:none; transition:opacity 0.15s, color 0.15s;" onmouseover="this.style.opacity='1'; this.style.color='var(--color-gold-base)';" onmouseout="this.style.opacity='0.6'; this.style.color='inherit';">
                     <i class="fa-solid fa-grip-vertical" style="font-size:0.9rem;"></i>
                 </div>
-                <div class="pc-equip-toggle" data-idx="${i}" style="cursor:pointer; font-weight:600; color:var(--color-text-primary); flex:1; min-width:0; display:flex; align-items:center; gap:6px; padding-right:8px;" title="Click to expand/collapse description">
-                    <i class="fa-solid fa-chevron-right text-gradient-gold" style="font-size:0.8rem; flex-shrink:0; transition:transform 0.2s;" id="pc-equip-chevron-${i}"></i>
-                    <span style="word-break:break-word; overflow-wrap:anywhere;">${eq.name}</span>
+                <div class="pc-equip-toggle" data-idx="${d}" style="cursor:pointer; font-weight:600; color:var(--color-text-primary); flex:1; min-width:0; display:flex; align-items:center; gap:6px; padding-right:8px;" title="Click to expand/collapse description">
+                    <i class="fa-solid fa-chevron-right text-gradient-gold" style="font-size:0.8rem; flex-shrink:0; transition:transform 0.2s;" id="pc-equip-chevron-${d}"></i>
+                    <span style="word-break:break-word; overflow-wrap:anywhere;">${e.name}</span>
                 </div>
                 <div style="display:flex; gap:6px; align-items:center; flex-shrink:0;">
-                    <span style="font-size:0.8rem; color:var(--color-text-muted);">Wt: ${eq.weight || 0} lb</span>
+                    <span style="font-size:0.8rem; color:var(--color-text-muted);">Wt: ${e.weight||0} lb</span>
                     <div style="display:flex; align-items:center; gap:4px; margin: 0 2px;">
-                        <button class="btn btn-xxs btn-secondary pc-equip-qty-minus" data-idx="${i}">-</button>
-                        <span style="font-size:0.8rem; width:16px; text-align:center;">${eq.qty}</span>
-                        <button class="btn btn-xxs btn-secondary pc-equip-qty-plus" data-idx="${i}">+</button>
+                        <button class="btn btn-xxs btn-secondary pc-equip-qty-minus" data-idx="${d}">-</button>
+                        <span style="font-size:0.8rem; width:16px; text-align:center;">${e.qty}</span>
+                        <button class="btn btn-xxs btn-secondary pc-equip-qty-plus" data-idx="${d}">+</button>
                     </div>
-                    <button class="btn btn-xxs btn-secondary pc-equip-ping" data-idx="${i}" title="Ping Item to Chat"><i class="fa-solid fa-comment-dots"></i></button>
+                    <button class="btn btn-xxs btn-secondary pc-equip-ping" data-idx="${d}" title="Ping Item to Chat"><i class="fa-solid fa-comment-dots"></i></button>
                 </div>
             </div>
-            <div class="pc-equip-desc vtt-hidden" id="pc-equip-desc-${i}" style="padding: 8px 4px 0 16px; font-size: 0.85rem; color: var(--color-text-secondary); border-top: 1px solid var(--color-border-subtle); margin-top: 4px; line-height: 1.4;">
+            <div class="pc-equip-desc vtt-hidden" id="pc-equip-desc-${d}" style="padding: 8px 4px 0 16px; font-size: 0.85rem; color: var(--color-text-secondary); border-top: 1px solid var(--color-border-subtle); margin-top: 4px; line-height: 1.4;">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; padding-bottom:6px; border-bottom:1px solid rgba(255,255,255,0.08);">
                     <div style="display:flex; align-items:center; gap:6px;">
                         <span style="font-size:0.75rem; color:var(--color-text-muted);"><i class="fa-solid fa-box-archive" style="color:var(--color-gold-base);"></i> Move to:</span>
-                        <select class="pc-equip-container-select" data-idx="${i}" title="Move to Bag" style="background:rgba(0,0,0,0.5); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); font-size:0.75rem; border-radius:4px; padding:2px 6px; max-width:140px;">
-                            <option value="" ${!eq.containerId ? 'selected' : ''}>Main Inventory</option>
-                            ${containers
-                                .map(
-                                    (c) => `
-                                <option value="${c.id}" ${eq.containerId === c.id ? 'selected' : ''}>📦 ${c.name}</option>
-                            `
-                                )
-                                .join('')}
+                        <select class="pc-equip-container-select" data-idx="${d}" title="Move to Bag" style="background:rgba(0,0,0,0.5); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); font-size:0.75rem; border-radius:4px; padding:2px 6px; max-width:140px;">
+                            <option value="" ${e.containerId?"":"selected"}>Main Inventory</option>
+                            ${p.map(o=>`
+                                <option value="${o.id}" ${e.containerId===o.id?"selected":""}>\u{1F4E6} ${o.name}</option>
+                            `).join("")}
                         </select>
                     </div>
-                    <button class="btn btn-xxs btn-secondary pc-equip-edit" data-idx="${i}" title="Edit Item"><i class="fa-solid fa-pen"></i> Edit Item</button>
+                    <button class="btn btn-xxs btn-secondary pc-equip-edit" data-idx="${d}" title="Edit Item"><i class="fa-solid fa-pen"></i> Edit Item</button>
                 </div>
                 <div style="white-space: pre-wrap;">
-                    ${(function () {
-                        if (!eq.description) return '<i style="opacity:0.5;">No description available.</i>';
-                        let html = eq.description.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-                        html = html.replace(/\*\*(.*?)\*\*(.*?)\*\*/g, '<b>$1</b>');
-                        html = html.replace(/\*(.*?)\*/g, '<i>$1</i>');
-                        html = html.replace(
-                            /---/g,
-                            '<hr style="border:0; border-top:1px solid rgba(255,255,255,0.1); margin:8px 0;">'
-                        );
-                        return html;
-                    })()}
+                    ${(function(){if(!e.description)return'<i style="opacity:0.5;">No description available.</i>';let o=e.description.replace(/</g,"&lt;").replace(/>/g,"&gt;");return o=o.replace(/\*\*(.*?)\*\*(.*?)\*\*/g,"<b>$1</b>"),o=o.replace(/\*(.*?)\*/g,"<i>$1</i>"),o=o.replace(/---/g,'<hr style="border:0; border-top:1px solid rgba(255,255,255,0.1); margin:8px 0;">'),o})()}
                 </div>
-                ${
-                    effectiveTable
-                        ? `
+                ${r?`
                     <div style="margin-top:8px; padding-top:6px; border-top:1px solid rgba(255,255,255,0.08); display:flex; justify-content:flex-end;">
-                        <button type="button" class="btn btn-xs btn-primary pc-item-table-roll-btn" data-table-id="${escapeHtml(effectiveTable.id)}" data-table-name="${escapeHtml(effectiveTable.name)}" data-item-name="${escapeHtml(eq.name)}" style="display:inline-flex; align-items:center; gap:6px;">
-                            <i class="fa-solid fa-dice-d20"></i> Roll Table (${escapeHtml(effectiveTable.dice || 'd100')})
+                        <button type="button" class="btn btn-xs btn-primary pc-item-table-roll-btn" data-table-id="${v(r.id)}" data-table-name="${v(r.name)}" data-item-name="${v(e.name)}" style="display:inline-flex; align-items:center; gap:6px;">
+                            <i class="fa-solid fa-dice-d20"></i> Roll Table (${v(r.dice||"d100")})
                         </button>
                     </div>
-                `
-                        : ''
-                }
+                `:""}
             </div>
         </div>
-    `;
-}
-
-/**
- * Render the full equipment tab HTML for ps-equipment
- */
-export function renderEquipmentHtml(char, ctx) {
-    char.currency = char.currency || { cp: 0, sp: 0, ep: 0, gp: 0, pp: 0 };
-    char.containers = char.containers || [];
-    char.equipment = char.equipment || [];
-    char.equipment.forEach((eq) => {
-        if (eq.containerId === undefined) eq.containerId = null;
-    });
-
-    // Container weight & encumbrance calculations using modular calc engine
-    const weightCalc = calculateCharacterTotalWeight(char);
-    const totalWeight = weightCalc.totalWeight;
-    const coinWeight = weightCalc.coinWeight;
-
-    const strScore = getTotalStat(char, 'str') || 10;
-    const encRule =
-        (typeof document !== 'undefined' && document.getElementById('config-encumbrance-rule')?.value) || 'standard';
-    const carryMult = char.settings?.carryWeightMultiplier || char.carryWeightMultiplier || 1;
-    const encResult = calculateEncumbrance(strScore, totalWeight, encRule, carryMult);
-    const encumbranceStatus = `<span style="color:${encResult.statusColor}; ${encResult.statusKey === 'over' ? 'font-weight:bold;' : ''}">${encResult.statusText}</span>`;
-
-    let html = `
+    `}export function renderEquipmentHtml(e,d){e.currency=e.currency||{cp:0,sp:0,ep:0,gp:0,pp:0},e.containers=e.containers||[],e.equipment=e.equipment||[],e.equipment.forEach(t=>{t.containerId===void 0&&(t.containerId=null)});const c=I(e),p=c.totalWeight,y=c.coinWeight,h=k(e,"str")||10,r=typeof document<"u"&&document.getElementById("config-encumbrance-rule")?.value||"standard",o=e.settings?.carryWeightMultiplier||e.carryWeightMultiplier||1,f=q(h,p,r,o),u=`<span style="color:${f.statusColor}; ${f.statusKey==="over"?"font-weight:bold;":""}">${f.statusText}</span>`;return`
         <div style="display:flex; justify-content:center; gap:16px; margin-bottom:16px; background:rgba(0,0,0,0.2); padding:12px; border-radius:8px; border:1px solid var(--color-border-subtle);">
             <div style="display:flex; flex-direction:column; align-items:center; gap:4px;">
                 <label style="font-size:0.8rem; color:#b87333; font-weight:bold; font-family:var(--font-heading);"><i class="fa-solid fa-coins"></i> CP</label>
-                <input type="number" class="form-control pc-currency-input" data-coin="cp" value="${char.currency.cp || 0}" min="0" style="width:60px; text-align:center; padding:4px;">
+                <input type="number" class="form-control pc-currency-input" data-coin="cp" value="${e.currency.cp||0}" min="0" style="width:60px; text-align:center; padding:4px;">
             </div>
             <div style="display:flex; flex-direction:column; align-items:center; gap:4px;">
                 <label style="font-size:0.8rem; color:#c0c0c0; font-weight:bold; font-family:var(--font-heading);"><i class="fa-solid fa-coins"></i> SP</label>
-                <input type="number" class="form-control pc-currency-input" data-coin="sp" value="${char.currency.sp || 0}" min="0" style="width:60px; text-align:center; padding:4px;">
+                <input type="number" class="form-control pc-currency-input" data-coin="sp" value="${e.currency.sp||0}" min="0" style="width:60px; text-align:center; padding:4px;">
             </div>
             <div style="display:flex; flex-direction:column; align-items:center; gap:4px;">
                 <label style="font-size:0.8rem; color:#50c878; font-weight:bold; font-family:var(--font-heading);"><i class="fa-solid fa-coins"></i> EP</label>
-                <input type="number" class="form-control pc-currency-input" data-coin="ep" value="${char.currency.ep || 0}" min="0" style="width:60px; text-align:center; padding:4px;">
+                <input type="number" class="form-control pc-currency-input" data-coin="ep" value="${e.currency.ep||0}" min="0" style="width:60px; text-align:center; padding:4px;">
             </div>
             <div style="display:flex; flex-direction:column; align-items:center; gap:4px;">
                 <label style="font-size:0.8rem; color:var(--color-gold-base); font-weight:bold; font-family:var(--font-heading);"><i class="fa-solid fa-coins"></i> GP</label>
-                <input type="number" class="form-control pc-currency-input" data-coin="gp" value="${char.currency.gp || 0}" min="0" style="width:60px; text-align:center; padding:4px;">
+                <input type="number" class="form-control pc-currency-input" data-coin="gp" value="${e.currency.gp||0}" min="0" style="width:60px; text-align:center; padding:4px;">
             </div>
             <div style="display:flex; flex-direction:column; align-items:center; gap:4px;">
                 <label style="font-size:0.8rem; color:#e5e4e2; font-weight:bold; font-family:var(--font-heading);"><i class="fa-solid fa-coins"></i> PP</label>
-                <input type="number" class="form-control pc-currency-input" data-coin="pp" value="${char.currency.pp || 0}" min="0" style="width:60px; text-align:center; padding:4px;">
+                <input type="number" class="form-control pc-currency-input" data-coin="pp" value="${e.currency.pp||0}" min="0" style="width:60px; text-align:center; padding:4px;">
             </div>
         </div>
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
@@ -157,466 +75,53 @@ export function renderEquipmentHtml(char, ctx) {
             </div>
         </div>
         <div id="pc-equip-list" style="display:flex; flex-direction:column; gap:8px;">
-            ${(function () {
-                let listHtml = '';
-                // 1. Bags / Containers Accordions
-                (char.containers || []).forEach((c, cIdx) => {
-                    const cItems = char.equipment
-                        .map((eq, i) => ({ eq, i }))
-                        .filter(({ eq }) => eq.containerId === c.id);
-                    const itemWeightSum = getContainerContentsWeight(c, char.equipment);
-                    const cap = getContainerCapacityStatus(c, char.equipment);
-
-                    let weightLabel =
-                        cap.capacity !== null
-                            ? `${itemWeightSum.toFixed(1)} / ${cap.capacity.toFixed(1)} lb`
-                            : `${itemWeightSum.toFixed(1)} lb`;
-
-                    if (c.weightRule === 'fixed') {
-                        weightLabel = `${(parseFloat(c.customWeight) || 0).toFixed(1)} lb (Fixed)`;
-                    } else if (c.weightRule === 'weightless') {
-                        weightLabel = `0.0 lb (Weightless)`;
-                    } else if (parseFloat(c.baseWeight) > 0) {
-                        weightLabel += ` • Base: ${parseFloat(c.baseWeight).toFixed(1)} lb`;
-                    }
-
-                    const overCapBadge = cap.isOverCapacity
-                        ? `<span class="badge" style="background:#ef5350; color:#fff; font-size:0.65rem; padding:1px 6px; margin-left:4px; font-weight:bold;"><i class="fa-solid fa-triangle-exclamation"></i> OVER CAPACITY</span>`
-                        : '';
-
-                    listHtml += `
-                        <div class="pc-bag-card glass-flat" data-container-id="${c.id}" data-container-idx="${cIdx}" draggable="true" style="border:1px solid var(--color-border-subtle); border-radius:8px; margin-bottom:4px; overflow:hidden; transition:border-color 0.15s, box-shadow 0.15s;">
-                            <div class="pc-bag-header" data-container-id="${c.id}" style="padding:8px 12px; background:rgba(0,0,0,0.25); display:flex; justify-content:space-between; align-items:center; cursor:pointer; user-select:none;">
+            ${(function(){let t="";(e.containers||[]).forEach((i,a)=>{const l=e.equipment.map((x,w)=>({eq:x,i:w})).filter(({eq:x})=>x.containerId===i.id),b=$(i,e.equipment),g=E(i,e.equipment);let s=g.capacity!==null?`${b.toFixed(1)} / ${g.capacity.toFixed(1)} lb`:`${b.toFixed(1)} lb`;i.weightRule==="fixed"?s=`${(parseFloat(i.customWeight)||0).toFixed(1)} lb (Fixed)`:i.weightRule==="weightless"?s="0.0 lb (Weightless)":parseFloat(i.baseWeight)>0&&(s+=` \u2022 Base: ${parseFloat(i.baseWeight).toFixed(1)} lb`);const T=g.isOverCapacity?'<span class="badge" style="background:#ef5350; color:#fff; font-size:0.65rem; padding:1px 6px; margin-left:4px; font-weight:bold;"><i class="fa-solid fa-triangle-exclamation"></i> OVER CAPACITY</span>':"";t+=`
+                        <div class="pc-bag-card glass-flat" data-container-id="${i.id}" data-container-idx="${a}" draggable="true" style="border:1px solid var(--color-border-subtle); border-radius:8px; margin-bottom:4px; overflow:hidden; transition:border-color 0.15s, box-shadow 0.15s;">
+                            <div class="pc-bag-header" data-container-id="${i.id}" style="padding:8px 12px; background:rgba(0,0,0,0.25); display:flex; justify-content:space-between; align-items:center; cursor:pointer; user-select:none;">
                                 <div style="display:flex; align-items:center; gap:8px; flex:1; min-width:0;">
-                                    <div class="pc-bag-drag-handle" data-container-idx="${cIdx}" title="Click and drag to reorder bag" style="cursor:grab; opacity:0.5; padding-right:4px;" data-stop-propagation="true">
+                                    <div class="pc-bag-drag-handle" data-container-idx="${a}" title="Click and drag to reorder bag" style="cursor:grab; opacity:0.5; padding-right:4px;" data-stop-propagation="true">
                                         <i class="fa-solid fa-grip-vertical"></i>
                                     </div>
-                                    <i class="fa-solid ${c.icon || 'fa-sack-xmark'} text-gradient-gold" style="font-size:0.95rem; flex-shrink:0;"></i>
-                                    <i class="fa-solid fa-chevron-right text-gradient-gold pc-bag-chevron" data-container-id="${c.id}" style="font-size:0.75rem; flex-shrink:0; transition:transform 0.2s; transform:${c.collapsed ? 'rotate(0deg)' : 'rotate(90deg)'};"></i>
-                                    <span style="font-weight:700; font-size:0.875rem; color:var(--color-text-primary); text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">${escapeHtml(c.name)}</span>
-                                    <span style="font-size:0.75rem; color:var(--color-text-muted); background:rgba(255,255,255,0.08); padding:2px 8px; border-radius:12px;">${cItems.length} item${cItems.length !== 1 ? 's' : ''} • ${weightLabel}${overCapBadge}</span>
+                                    <i class="fa-solid ${i.icon||"fa-sack-xmark"} text-gradient-gold" style="font-size:0.95rem; flex-shrink:0;"></i>
+                                    <i class="fa-solid fa-chevron-right text-gradient-gold pc-bag-chevron" data-container-id="${i.id}" style="font-size:0.75rem; flex-shrink:0; transition:transform 0.2s; transform:${i.collapsed?"rotate(0deg)":"rotate(90deg)"};"></i>
+                                    <span style="font-weight:700; font-size:0.875rem; color:var(--color-text-primary); text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">${v(i.name)}</span>
+                                    <span style="font-size:0.75rem; color:var(--color-text-muted); background:rgba(255,255,255,0.08); padding:2px 8px; border-radius:12px;">${l.length} item${l.length!==1?"s":""} \u2022 ${s}${T}</span>
                                 </div>
                                 <div style="display:flex; gap:6px; align-items:center; flex-shrink:0;" data-stop-propagation="true">
-                                    <button class="btn btn-xxs btn-secondary pc-bag-edit" data-container-id="${c.id}" title="Edit Bag"><i class="fa-solid fa-pen"></i></button>
-                                    <button class="btn btn-xxs btn-danger pc-bag-del" data-container-id="${c.id}" title="Delete Bag"><i class="fa-solid fa-trash"></i></button>
+                                    <button class="btn btn-xxs btn-secondary pc-bag-edit" data-container-id="${i.id}" title="Edit Bag"><i class="fa-solid fa-pen"></i></button>
+                                    <button class="btn btn-xxs btn-danger pc-bag-del" data-container-id="${i.id}" title="Delete Bag"><i class="fa-solid fa-trash"></i></button>
                                 </div>
                             </div>
-                            <div class="pc-bag-contents ${c.collapsed ? 'vtt-hidden' : ''}" data-container-id="${c.id}" style="padding:8px; border-top:1px solid rgba(255,255,255,0.05); display:flex; flex-direction:column; gap:8px; border-left:3px solid var(--color-gold-base); background:rgba(0,0,0,0.15);">
-                                ${cItems.map(({ eq, i }) => renderEquipRowHtml(eq, i, char)).join('')}
-                                ${cItems.length === 0 ? `<div style="font-size:0.8rem; color:var(--color-text-muted); padding:8px; text-align:center; font-style:italic;">Drag items here or drop onto header to move into this bag.</div>` : ''}
+                            <div class="pc-bag-contents ${i.collapsed?"vtt-hidden":""}" data-container-id="${i.id}" style="padding:8px; border-top:1px solid rgba(255,255,255,0.05); display:flex; flex-direction:column; gap:8px; border-left:3px solid var(--color-gold-base); background:rgba(0,0,0,0.15);">
+                                ${l.map(({eq:x,i:w})=>renderEquipRowHtml(x,w,e)).join("")}
+                                ${l.length===0?'<div style="font-size:0.8rem; color:var(--color-text-muted); padding:8px; text-align:center; font-style:italic;">Drag items here or drop onto header to move into this bag.</div>':""}
                             </div>
                         </div>
-                    `;
-                });
-
-                // 2. Main Inventory (Unbagged items)
-                const unbaggedItems = char.equipment.map((eq, i) => ({ eq, i })).filter(({ eq }) => !eq.containerId);
-                listHtml += `
+                    `});const n=e.equipment.map((i,a)=>({eq:i,i:a})).filter(({eq:i})=>!i.containerId);return t+=`
                     <div class="pc-bag-card glass-flat" data-container-id="" style="border:1px solid var(--color-border-subtle); border-radius:8px; margin-bottom:4px; overflow:hidden;">
                         <div class="pc-bag-header pc-main-inv-header" data-container-id="" style="padding:8px 12px; background:rgba(0,0,0,0.2); display:flex; justify-content:space-between; align-items:center; cursor:pointer; user-select:none;">
                             <div style="display:flex; align-items:center; gap:8px; flex:1; min-width:0;">
                                 <i class="fa-solid fa-backpack text-gradient-gold" style="font-size:0.95rem; flex-shrink:0;"></i>
                                 <span style="font-weight:700; font-size:0.875rem; color:var(--color-gold-light);">Main Inventory (Carried)</span>
-                                <span style="font-size:0.75rem; color:var(--color-text-muted); background:rgba(255,255,255,0.08); padding:2px 8px; border-radius:12px;">${unbaggedItems.length} item${unbaggedItems.length !== 1 ? 's' : ''}</span>
+                                <span style="font-size:0.75rem; color:var(--color-text-muted); background:rgba(255,255,255,0.08); padding:2px 8px; border-radius:12px;">${n.length} item${n.length!==1?"s":""}</span>
                             </div>
                         </div>
                         <div class="pc-bag-contents" data-container-id="" style="padding:8px; border-top:1px solid rgba(255,255,255,0.05); display:flex; flex-direction:column; gap:8px;">
-                            ${unbaggedItems.map(({ eq, i }) => renderEquipRowHtml(eq, i, char)).join('')}
-                            ${unbaggedItems.length === 0 && (char.containers || []).length > 0 ? `<div style="font-size:0.8rem; color:var(--color-text-muted); padding:8px; text-align:center; font-style:italic;">All items are packed into bags.</div>` : ''}
-                            ${char.equipment.length === 0 ? `<div style="font-size:0.8rem; color:var(--color-text-muted); padding:8px; text-align:center;">No items added yet.</div>` : ''}
+                            ${n.map(({eq:i,i:a})=>renderEquipRowHtml(i,a,e)).join("")}
+                            ${n.length===0&&(e.containers||[]).length>0?'<div style="font-size:0.8rem; color:var(--color-text-muted); padding:8px; text-align:center; font-style:italic;">All items are packed into bags.</div>':""}
+                            ${e.equipment.length===0?'<div style="font-size:0.8rem; color:var(--color-text-muted); padding:8px; text-align:center;">No items added yet.</div>':""}
                         </div>
                     </div>
-                `;
-                return listHtml;
-            })()}
+                `,t})()}
         </div>
         <div style="margin-top:16px; padding:8px; border-top:1px solid var(--color-border-subtle); display:flex; justify-content:space-between; align-items:center;">
             <div>
                 <span style="font-size:0.9rem; font-family:var(--font-heading); color:var(--color-gold-light);">Total Wt:</span>
-                <span style="font-weight:bold; font-size:1.1rem; margin-left:4px;" title="Includes ${coinWeight.toFixed(2)} lb from coins">${totalWeight.toFixed(1)} / ${encResult.maxThreshold} lb</span>
-                ${carryMult !== 1 ? `<span class="badge" style="background:var(--color-primary, #6366f1); color:#fff; font-size:0.7rem; padding:2px 6px; border-radius:4px; margin-left:6px;" title="Carry Weight Multiplier">${carryMult}x</span>` : ''}
+                <span style="font-weight:bold; font-size:1.1rem; margin-left:4px;" title="Includes ${y.toFixed(2)} lb from coins">${p.toFixed(1)} / ${f.maxThreshold} lb</span>
+                ${o!==1?`<span class="badge" style="background:var(--color-primary, #6366f1); color:#fff; font-size:0.7rem; padding:2px 6px; border-radius:4px; margin-left:6px;" title="Carry Weight Multiplier">${o}x</span>`:""}
             </div>
             <div style="font-size:0.8rem;">
-                Status: ${encumbranceStatus}
+                Status: ${u}
             </div>
         </div>
-    `;
-
-    return html;
-}
-
-/**
- * Attach all interactive listeners and drag-and-drop for the equipment tab
- */
-export function wireInventoryEvents(char, ctx) {
-    const { saveAndEmit, renderSheetData, vtt } = ctx;
-
-    // Currency inputs
-    document.querySelectorAll('.pc-currency-input').forEach((input) =>
-        input.addEventListener('change', (e) => {
-            const coinType = e.currentTarget.dataset.coin;
-            char.currency = char.currency || {};
-            char.currency[coinType] = parseInt(e.currentTarget.value) || 0;
-            saveAndEmit(char);
-            renderSheetData(char);
-        })
-    );
-
-    // Bag container modals and event wiring
-    const modalOptions = ctx.getModalOptions ? ctx.getModalOptions() : ctx;
-    bindBagContainerEventsExt(char, modalOptions);
-
-    // Add item buttons
-    document.getElementById('btn-add-equip-db')?.addEventListener('click', () => {
-        if (ctx.openItemModal) ctx.openItemModal();
-        else if (window.openItemModal) window.openItemModal();
-    });
-    document.getElementById('btn-add-equip-custom')?.addEventListener('click', () => {
-        if (ctx.openCustomItemModal) ctx.openCustomItemModal();
-        else if (window.openCustomItemModal) window.openCustomItemModal();
-    });
-
-    // Quantity modifiers
-    document.querySelectorAll('.pc-equip-qty-minus').forEach((btn) =>
-        btn.addEventListener('click', (e) => {
-            const eq = char.equipment[e.currentTarget.dataset.idx];
-            if (eq && eq.qty > 1) {
-                eq.qty = parseInt(eq.qty) - 1;
-                saveAndEmit(char);
-                renderSheetData(char);
-            }
-        })
-    );
-    document.querySelectorAll('.pc-equip-qty-plus').forEach((btn) =>
-        btn.addEventListener('click', (e) => {
-            const eq = char.equipment[e.currentTarget.dataset.idx];
-            if (eq) {
-                eq.qty = parseInt(eq.qty || 1) + 1;
-                saveAndEmit(char);
-                renderSheetData(char);
-            }
-        })
-    );
-
-    // Edit item
-    document.querySelectorAll('.pc-equip-edit').forEach((btn) =>
-        btn.addEventListener('click', (e) => {
-            const idx = e.currentTarget.dataset.idx;
-            if (ctx.openCustomItemModal) ctx.openCustomItemModal(idx);
-            else if (window.openCustomItemModal) window.openCustomItemModal(idx);
-        })
-    );
-
-    // Delete item
-    document.querySelectorAll('.pc-equip-del').forEach((btn) =>
-        btn.addEventListener('click', (e) => {
-            if (confirm('Delete this item?')) {
-                char.equipment.splice(e.currentTarget.dataset.idx, 1);
-                saveAndEmit(char);
-                renderSheetData(char);
-            }
-        })
-    );
-
-    // Ping item to chat
-    document.querySelectorAll('.pc-equip-ping').forEach((btn) =>
-        btn.addEventListener('click', (e) => {
-            const idx = e.currentTarget.dataset.idx;
-            const eq = char.equipment[idx];
-            if (!eq) return;
-            const isWhisper = Boolean(
-                char?.whisperToGM || (typeof window !== 'undefined' && window.vttPlayerSheetAPI?.isWhisperToGM?.())
-            );
-            const tableLookupName = eq.linkedTable
-                ? typeof eq.linkedTable === 'string'
-                    ? eq.linkedTable
-                    : eq.linkedTable.name || eq.linkedTable.id
-                : eq.name;
-            const matchedTable = window.VTT?.rollTablesEngine?.findTableByItemNameSync
-                ? window.VTT.rollTablesEngine.findTableByItemNameSync(tableLookupName)
-                : null;
-            const effectiveTable =
-                matchedTable ||
-                (eq.linkedTable
-                    ? {
-                          id:
-                              typeof eq.linkedTable === 'string'
-                                  ? eq.linkedTable
-                                  : eq.linkedTable.id || eq.linkedTable.name,
-                          name:
-                              typeof eq.linkedTable === 'string'
-                                  ? eq.linkedTable
-                                  : eq.linkedTable.name || eq.linkedTable.id,
-                          dice: typeof eq.linkedTable === 'object' && eq.linkedTable.dice ? eq.linkedTable.dice : '1d20'
-                      }
-                    : null);
-
-            vtt.socket.emit('chat:msg', {
-                whisperToGM: isWhisper,
-                itemCard: {
-                    charName: char.name,
-                    itemName: eq.name,
-                    weight: eq.weight || 0,
-                    qty: eq.qty || 1,
-                    description: eq.description || '',
-                    linkedTable: effectiveTable
-                        ? { id: effectiveTable.id, name: effectiveTable.name, dice: effectiveTable.dice }
-                        : null
-                }
-            });
-        })
-    );
-
-    // Roll Table from inside expanded item description drawer
-    document.querySelectorAll('.pc-item-table-roll-btn').forEach((btn) =>
-        btn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const tableId = btn.dataset.tableId;
-            const itemName = btn.dataset.itemName;
-            const isWhisper = Boolean(
-                char?.whisperToGM || (typeof window !== 'undefined' && window.vttPlayerSheetAPI?.isWhisperToGM?.())
-            );
-            if (window.VTT?.rollTablesEngine?.rollLinkedTable) {
-                window.VTT.rollTablesEngine.rollLinkedTable(tableId, {
-                    charName: char.name,
-                    abilityName: itemName,
-                    isWhisper
-                });
-            }
-        })
-    );
-
-    // Toggle item description
-    document.querySelectorAll('.pc-equip-toggle').forEach((btn) =>
-        btn.addEventListener('click', (e) => {
-            const idx = e.currentTarget.dataset.idx;
-            const descEl = document.getElementById(`pc-equip-desc-${idx}`);
-            const chevEl = document.getElementById(`pc-equip-chevron-${idx}`);
-            if (descEl) {
-                if (descEl.classList.contains('vtt-hidden')) {
-                    descEl.classList.remove('vtt-hidden');
-                    if (chevEl) chevEl.style.transform = 'rotate(90deg)';
-                } else {
-                    descEl.classList.add('vtt-hidden');
-                    if (chevEl) chevEl.style.transform = 'rotate(0deg)';
-                }
-            }
-        })
-    );
-
-    // Drag-and-drop state
-    let equipDragHandlePressed = false;
-    let equipDraggedIdx = null;
-    let bagDragHandlePressed = false;
-    let bagDraggedIdx = null;
-
-    const clearEquipDropIndicators = () => {
-        document.querySelectorAll('#pc-equip-list .equip-row').forEach((row) => {
-            row.style.borderTop = '';
-            row.style.borderBottom = '';
-            row.style.boxShadow = '';
-            row.style.opacity = '';
-        });
-        document.querySelectorAll('#pc-equip-list .pc-bag-header').forEach((hdr) => {
-            hdr.style.outline = '';
-            hdr.style.background = '';
-        });
-        document.querySelectorAll('#pc-equip-list .pc-bag-card').forEach((card) => {
-            card.style.borderTop = '';
-            card.style.borderBottom = '';
-            card.style.opacity = '';
-        });
-    };
-
-    document.querySelectorAll('.pc-equip-drag-handle').forEach((handle) => {
-        handle.addEventListener('mousedown', () => {
-            equipDragHandlePressed = true;
-        });
-    });
-    document.querySelectorAll('.pc-bag-drag-handle').forEach((handle) => {
-        handle.addEventListener('mousedown', () => {
-            bagDragHandlePressed = true;
-        });
-    });
-
-    window.addEventListener('mouseup', () => {
-        equipDragHandlePressed = false;
-        bagDragHandlePressed = false;
-    });
-
-    // 1. Item Dragging onto Rows
-    document.querySelectorAll('#pc-equip-list .equip-row').forEach((row) => {
-        row.addEventListener('dragstart', (e) => {
-            if (!equipDragHandlePressed) {
-                e.preventDefault();
-                return;
-            }
-            equipDraggedIdx = parseInt(row.dataset.idx);
-            e.dataTransfer.setData('text/plain', equipDraggedIdx.toString());
-            e.dataTransfer.effectAllowed = 'move';
-            setTimeout(() => {
-                row.style.opacity = '0.4';
-            }, 0);
-        });
-
-        row.addEventListener('dragover', (e) => {
-            if (equipDraggedIdx === null || equipDraggedIdx === undefined) return;
-            e.preventDefault();
-            e.stopPropagation();
-            e.dataTransfer.dropEffect = 'move';
-
-            const rect = row.getBoundingClientRect();
-            const midY = rect.top + rect.height / 2;
-            clearEquipDropIndicators();
-            const draggedRow = document.querySelector(`#pc-equip-list .equip-row[data-idx="${equipDraggedIdx}"]`);
-            if (draggedRow) draggedRow.style.opacity = '0.4';
-
-            if (e.clientY < midY) {
-                row.style.borderTop = '2px solid var(--color-gold-base)';
-                row.style.boxShadow = '0 -4px 8px -2px rgba(212, 175, 55, 0.6)';
-            } else {
-                row.style.borderBottom = '2px solid var(--color-gold-base)';
-                row.style.boxShadow = '0 4px 8px -2px rgba(212, 175, 55, 0.6)';
-            }
-        });
-
-        row.addEventListener('drop', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            clearEquipDropIndicators();
-
-            const fromIdx = equipDraggedIdx;
-            const targetIdx = parseInt(row.dataset.idx);
-            const targetContainerId = row.dataset.containerId || null;
-            equipDraggedIdx = null;
-            equipDragHandlePressed = false;
-
-            if (isNaN(fromIdx) || isNaN(targetIdx) || fromIdx === targetIdx) return;
-
-            const rect = row.getBoundingClientRect();
-            const midY = rect.top + rect.height / 2;
-            let insertAt = targetIdx;
-            if (e.clientY >= midY) {
-                insertAt = targetIdx + 1;
-            }
-            if (fromIdx < insertAt) {
-                insertAt--;
-            }
-
-            const [movedItem] = char.equipment.splice(fromIdx, 1);
-            movedItem.containerId = targetContainerId;
-            char.equipment.splice(insertAt, 0, movedItem);
-            saveAndEmit(char);
-            renderSheetData(char);
-        });
-
-        row.addEventListener('dragend', () => {
-            equipDraggedIdx = null;
-            equipDragHandlePressed = false;
-            clearEquipDropIndicators();
-        });
-    });
-
-    // 2. Item Dragging onto Bag Headers (Move into Bag)
-    document.querySelectorAll('#pc-equip-list .pc-bag-header').forEach((hdr) => {
-        hdr.addEventListener('dragover', (e) => {
-            if (equipDraggedIdx === null || equipDraggedIdx === undefined) return;
-            e.preventDefault();
-            e.stopPropagation();
-            e.dataTransfer.dropEffect = 'move';
-            clearEquipDropIndicators();
-            const draggedRow = document.querySelector(`#pc-equip-list .equip-row[data-idx="${equipDraggedIdx}"]`);
-            if (draggedRow) draggedRow.style.opacity = '0.4';
-
-            hdr.style.outline = '2px dashed var(--color-gold-base)';
-            hdr.style.background = 'rgba(212, 175, 55, 0.15)';
-        });
-
-        hdr.addEventListener('drop', (e) => {
-            if (equipDraggedIdx === null || equipDraggedIdx === undefined) return;
-            e.preventDefault();
-            e.stopPropagation();
-            clearEquipDropIndicators();
-
-            const fromIdx = equipDraggedIdx;
-            const targetContainerId = hdr.dataset.containerId || null;
-            equipDraggedIdx = null;
-            equipDragHandlePressed = false;
-
-            if (!isNaN(fromIdx) && char.equipment[fromIdx]) {
-                char.equipment[fromIdx].containerId = targetContainerId;
-                saveAndEmit(char);
-                renderSheetData(char);
-            }
-        });
-    });
-
-    // 3. Container Card Dragging (Reorder Bags)
-    document.querySelectorAll('#pc-equip-list .pc-bag-card[data-container-idx]').forEach((card) => {
-        card.addEventListener('dragstart', (e) => {
-            if (!bagDragHandlePressed) return;
-            bagDraggedIdx = parseInt(card.dataset.containerIdx);
-            e.dataTransfer.setData('text/plain', 'bag_' + bagDraggedIdx);
-            e.dataTransfer.effectAllowed = 'move';
-            setTimeout(() => {
-                card.style.opacity = '0.4';
-            }, 0);
-        });
-
-        card.addEventListener('dragover', (e) => {
-            if (bagDraggedIdx === null || bagDraggedIdx === undefined) return;
-            e.preventDefault();
-            e.stopPropagation();
-            e.dataTransfer.dropEffect = 'move';
-
-            const rect = card.getBoundingClientRect();
-            const midY = rect.top + rect.height / 2;
-            clearEquipDropIndicators();
-            const draggedCard = document.querySelector(
-                `#pc-equip-list .pc-bag-card[data-container-idx="${bagDraggedIdx}"]`
-            );
-            if (draggedCard) draggedCard.style.opacity = '0.4';
-
-            if (e.clientY < midY) {
-                card.style.borderTop = '2px solid var(--color-gold-base)';
-            } else {
-                card.style.borderBottom = '2px solid var(--color-gold-base)';
-            }
-        });
-
-        card.addEventListener('drop', (e) => {
-            if (bagDraggedIdx === null || bagDraggedIdx === undefined) return;
-            e.preventDefault();
-            e.stopPropagation();
-            clearEquipDropIndicators();
-
-            const fromIdx = bagDraggedIdx;
-            const targetIdx = parseInt(card.dataset.containerIdx);
-            bagDraggedIdx = null;
-            bagDragHandlePressed = false;
-
-            if (isNaN(fromIdx) || isNaN(targetIdx) || fromIdx === targetIdx) return;
-
-            const rect = card.getBoundingClientRect();
-            const midY = rect.top + rect.height / 2;
-            let insertAt = targetIdx;
-            if (e.clientY >= midY) {
-                insertAt = targetIdx + 1;
-            }
-            if (fromIdx < insertAt) {
-                insertAt--;
-            }
-
-            const [movedContainer] = char.containers.splice(fromIdx, 1);
-            char.containers.splice(insertAt, 0, movedContainer);
-            saveAndEmit(char);
-            renderSheetData(char);
-        });
-
-        card.addEventListener('dragend', () => {
-            bagDraggedIdx = null;
-            bagDragHandlePressed = false;
-            clearEquipDropIndicators();
-        });
-    });
-}
+    `}export function wireInventoryEvents(e,d){const{saveAndEmit:c,renderSheetData:p,vtt:y}=d;document.querySelectorAll(".pc-currency-input").forEach(t=>t.addEventListener("change",n=>{const i=n.currentTarget.dataset.coin;e.currency=e.currency||{},e.currency[i]=parseInt(n.currentTarget.value)||0,c(e),p(e)}));const h=d.getModalOptions?d.getModalOptions():d;C(e,h),document.getElementById("btn-add-equip-db")?.addEventListener("click",()=>{d.openItemModal?d.openItemModal():window.openItemModal&&window.openItemModal()}),document.getElementById("btn-add-equip-custom")?.addEventListener("click",()=>{d.openCustomItemModal?d.openCustomItemModal():window.openCustomItemModal&&window.openCustomItemModal()}),document.querySelectorAll(".pc-equip-qty-minus").forEach(t=>t.addEventListener("click",n=>{const i=e.equipment[n.currentTarget.dataset.idx];i&&i.qty>1&&(i.qty=parseInt(i.qty)-1,c(e),p(e))})),document.querySelectorAll(".pc-equip-qty-plus").forEach(t=>t.addEventListener("click",n=>{const i=e.equipment[n.currentTarget.dataset.idx];i&&(i.qty=parseInt(i.qty||1)+1,c(e),p(e))})),document.querySelectorAll(".pc-equip-edit").forEach(t=>t.addEventListener("click",n=>{const i=n.currentTarget.dataset.idx;d.openCustomItemModal?d.openCustomItemModal(i):window.openCustomItemModal&&window.openCustomItemModal(i)})),document.querySelectorAll(".pc-equip-del").forEach(t=>t.addEventListener("click",n=>{confirm("Delete this item?")&&(e.equipment.splice(n.currentTarget.dataset.idx,1),c(e),p(e))})),document.querySelectorAll(".pc-equip-ping").forEach(t=>t.addEventListener("click",n=>{const i=n.currentTarget.dataset.idx,a=e.equipment[i];if(!a)return;const l=!!(e?.whisperToGM||typeof window<"u"&&window.vttPlayerSheetAPI?.isWhisperToGM?.()),b=a.linkedTable?typeof a.linkedTable=="string"?a.linkedTable:a.linkedTable.name||a.linkedTable.id:a.name,s=(window.VTT?.rollTablesEngine?.findTableByItemNameSync?window.VTT.rollTablesEngine.findTableByItemNameSync(b):null)||(a.linkedTable?{id:typeof a.linkedTable=="string"?a.linkedTable:a.linkedTable.id||a.linkedTable.name,name:typeof a.linkedTable=="string"?a.linkedTable:a.linkedTable.name||a.linkedTable.id,dice:typeof a.linkedTable=="object"&&a.linkedTable.dice?a.linkedTable.dice:"1d20"}:null);y.socket.emit("chat:msg",{whisperToGM:l,itemCard:{charName:e.name,itemName:a.name,weight:a.weight||0,qty:a.qty||1,description:a.description||"",linkedTable:s?{id:s.id,name:s.name,dice:s.dice}:null}})})),document.querySelectorAll(".pc-item-table-roll-btn").forEach(t=>t.addEventListener("click",n=>{n.stopPropagation();const i=t.dataset.tableId,a=t.dataset.itemName,l=!!(e?.whisperToGM||typeof window<"u"&&window.vttPlayerSheetAPI?.isWhisperToGM?.());window.VTT?.rollTablesEngine?.rollLinkedTable&&window.VTT.rollTablesEngine.rollLinkedTable(i,{charName:e.name,abilityName:a,isWhisper:l})})),document.querySelectorAll(".pc-equip-toggle").forEach(t=>t.addEventListener("click",n=>{const i=n.currentTarget.dataset.idx,a=document.getElementById(`pc-equip-desc-${i}`),l=document.getElementById(`pc-equip-chevron-${i}`);a&&(a.classList.contains("vtt-hidden")?(a.classList.remove("vtt-hidden"),l&&(l.style.transform="rotate(90deg)")):(a.classList.add("vtt-hidden"),l&&(l.style.transform="rotate(0deg)")))}));let r=!1,o=null,f=!1,u=null;const m=()=>{document.querySelectorAll("#pc-equip-list .equip-row").forEach(t=>{t.style.borderTop="",t.style.borderBottom="",t.style.boxShadow="",t.style.opacity=""}),document.querySelectorAll("#pc-equip-list .pc-bag-header").forEach(t=>{t.style.outline="",t.style.background=""}),document.querySelectorAll("#pc-equip-list .pc-bag-card").forEach(t=>{t.style.borderTop="",t.style.borderBottom="",t.style.opacity=""})};document.querySelectorAll(".pc-equip-drag-handle").forEach(t=>{t.addEventListener("mousedown",()=>{r=!0})}),document.querySelectorAll(".pc-bag-drag-handle").forEach(t=>{t.addEventListener("mousedown",()=>{f=!0})}),window.addEventListener("mouseup",()=>{r=!1,f=!1}),document.querySelectorAll("#pc-equip-list .equip-row").forEach(t=>{t.addEventListener("dragstart",n=>{if(!r){n.preventDefault();return}o=parseInt(t.dataset.idx),n.dataTransfer.setData("text/plain",o.toString()),n.dataTransfer.effectAllowed="move",setTimeout(()=>{t.style.opacity="0.4"},0)}),t.addEventListener("dragover",n=>{if(o==null)return;n.preventDefault(),n.stopPropagation(),n.dataTransfer.dropEffect="move";const i=t.getBoundingClientRect(),a=i.top+i.height/2;m();const l=document.querySelector(`#pc-equip-list .equip-row[data-idx="${o}"]`);l&&(l.style.opacity="0.4"),n.clientY<a?(t.style.borderTop="2px solid var(--color-gold-base)",t.style.boxShadow="0 -4px 8px -2px rgba(212, 175, 55, 0.6)"):(t.style.borderBottom="2px solid var(--color-gold-base)",t.style.boxShadow="0 4px 8px -2px rgba(212, 175, 55, 0.6)")}),t.addEventListener("drop",n=>{n.preventDefault(),n.stopPropagation(),m();const i=o,a=parseInt(t.dataset.idx),l=t.dataset.containerId||null;if(o=null,r=!1,isNaN(i)||isNaN(a)||i===a)return;const b=t.getBoundingClientRect(),g=b.top+b.height/2;let s=a;n.clientY>=g&&(s=a+1),i<s&&s--;const[T]=e.equipment.splice(i,1);T.containerId=l,e.equipment.splice(s,0,T),c(e),p(e)}),t.addEventListener("dragend",()=>{o=null,r=!1,m()})}),document.querySelectorAll("#pc-equip-list .pc-bag-header").forEach(t=>{t.addEventListener("dragover",n=>{if(o==null)return;n.preventDefault(),n.stopPropagation(),n.dataTransfer.dropEffect="move",m();const i=document.querySelector(`#pc-equip-list .equip-row[data-idx="${o}"]`);i&&(i.style.opacity="0.4"),t.style.outline="2px dashed var(--color-gold-base)",t.style.background="rgba(212, 175, 55, 0.15)"}),t.addEventListener("drop",n=>{if(o==null)return;n.preventDefault(),n.stopPropagation(),m();const i=o,a=t.dataset.containerId||null;o=null,r=!1,!isNaN(i)&&e.equipment[i]&&(e.equipment[i].containerId=a,c(e),p(e))})}),document.querySelectorAll("#pc-equip-list .pc-bag-card[data-container-idx]").forEach(t=>{t.addEventListener("dragstart",n=>{f&&(u=parseInt(t.dataset.containerIdx),n.dataTransfer.setData("text/plain","bag_"+u),n.dataTransfer.effectAllowed="move",setTimeout(()=>{t.style.opacity="0.4"},0))}),t.addEventListener("dragover",n=>{if(u==null)return;n.preventDefault(),n.stopPropagation(),n.dataTransfer.dropEffect="move";const i=t.getBoundingClientRect(),a=i.top+i.height/2;m();const l=document.querySelector(`#pc-equip-list .pc-bag-card[data-container-idx="${u}"]`);l&&(l.style.opacity="0.4"),n.clientY<a?t.style.borderTop="2px solid var(--color-gold-base)":t.style.borderBottom="2px solid var(--color-gold-base)"}),t.addEventListener("drop",n=>{if(u==null)return;n.preventDefault(),n.stopPropagation(),m();const i=u,a=parseInt(t.dataset.containerIdx);if(u=null,f=!1,isNaN(i)||isNaN(a)||i===a)return;const l=t.getBoundingClientRect(),b=l.top+l.height/2;let g=a;n.clientY>=b&&(g=a+1),i<g&&g--;const[s]=e.containers.splice(i,1);e.containers.splice(g,0,s),c(e),p(e)}),t.addEventListener("dragend",()=>{u=null,f=!1,m()})})}

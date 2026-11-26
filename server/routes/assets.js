@@ -101,6 +101,12 @@ const assetUpload = multer({
     }
 });
 
+const playerAssetUpload = multer({
+    storage: assetStorage,
+    limits: { fileSize: PLAYER_UPLOAD_MAX_BYTES, files: 10 },
+    fileFilter: assetUpload.fileFilter
+});
+
 // Recursively get directory structure for assets
 function getAssetTree(dirPath, relativePath = '') {
     const result = {
@@ -181,7 +187,8 @@ assetsRouter.post('/assets/folder', verifyGmOrSecret, (req, res) => {
 
 // Upload batch assets (GMs upload to chosen folder; players require active session, safe media types & 15 MB cap)
 assetsRouter.post('/assets/upload', verifyPlayerOrGmSession, (req, res) => {
-    assetUpload.any()(req, res, (err) => {
+    const uploader = isAuthorizedGmOrSecret(req) ? assetUpload : playerAssetUpload;
+    uploader.any()(req, res, (err) => {
         if (err) {
             return res.status(400).json({ error: err.message || 'Upload rejected' });
         }

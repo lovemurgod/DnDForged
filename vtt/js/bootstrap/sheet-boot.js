@@ -58,9 +58,16 @@ const dockBtn = document.getElementById('btn-dock-sheet');
 
 if (campBadge) campBadge.textContent = `Campaign: ${savedCampaign}`;
 
-// Initialize 3D Dice Renderer
+// Initialize 3D Dice Renderer lazily unless disabled
 if (window.Dice3D) {
     window.Dice3D.init({ containerId: 'dice-box-canvas-container' });
+} else if (localStorage.getItem('vtt_3d_dice_enabled') !== 'false') {
+    import('../vtt-utils.js')
+        .then((m) => m.ensureDice3DLoaded?.())
+        .then((dice3d) => {
+            if (dice3d) dice3d.init({ containerId: 'dice-box-canvas-container' });
+        })
+        .catch(() => {});
 }
 
 // Initialize Socket.IO or Static/P2P BroadcastChannel Relay Connection
@@ -479,3 +486,18 @@ if (dockBtn) {
         SheetWindowManager.dockBackToMain();
     });
 }
+
+// Live-sync theme, colorblind mode, and font scale when changed in main VTT window
+window.addEventListener('storage', (e) => {
+    if (e.key === 'vtt_theme') {
+        document.documentElement.setAttribute('data-theme', e.newValue || 'classic');
+    } else if (e.key === 'vtt_colorblind_mode') {
+        document.documentElement.setAttribute('data-colorblind', e.newValue || 'none');
+    } else if (e.key === 'vtt_font_scale_v2') {
+        const scaleNum = e.newValue ? parseFloat(e.newValue) : 1.0;
+        if (!isNaN(scaleNum) && scaleNum >= 0.5 && scaleNum <= 2.2) {
+            document.documentElement.style.setProperty('--vtt-font-scale', scaleNum);
+            document.documentElement.style.fontSize = `calc(15px * ${scaleNum})`;
+        }
+    }
+});

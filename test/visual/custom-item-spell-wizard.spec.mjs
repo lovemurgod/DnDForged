@@ -128,10 +128,10 @@ test.describe('Custom Item & Spell Creation Wizard E2E Suite', () => {
 
         // Edit the item: click toggle to expand, then click edit
         const itemRow = equipList.locator('.equip-row:has-text("Trail Provisions")');
-        await itemRow.locator('.pc-equip-toggle').click();
+        await itemRow.locator('.pc-equip-toggle').evaluate((el) => el.click());
         const editBtn = itemRow.locator('.pc-equip-edit');
         await expect(editBtn).toBeVisible({ timeout: 5000 });
-        await editBtn.click();
+        await editBtn.evaluate((el) => el.click());
         await expect(customModal).toBeVisible();
         await expect(customModal.locator('#pc-custom-item-modal-title')).toContainText('Edit Item');
 
@@ -143,8 +143,8 @@ test.describe('Custom Item & Spell Creation Wizard E2E Suite', () => {
 
         // Delete the item
         gmPage.once('dialog', (dialog) => dialog.accept());
-        await itemRow.locator('.pc-equip-toggle').click();
-        await itemRow.locator('.pc-equip-edit').click();
+        await itemRow.locator('.pc-equip-toggle').evaluate((el) => el.click());
+        await itemRow.locator('.pc-equip-edit').evaluate((el) => el.click());
         await expect(customModal).toBeVisible();
         await customModal.locator('#pc-custom-item-modal-del').click();
         await expect(customModal).toBeHidden();

@@ -2,6 +2,19 @@ import express from 'express';
 import path from 'path';
 import fs from 'fs';
 import zlib from 'zlib';
+import { promisify } from 'util';
+
+const gzipAsync = promisify(zlib.gzip);
+const filteredCatalogGzipCache = new Map(); // key -> { buf, etag }
+const compendiumTypeBaseCache = new Map(); // type -> { items, mtimeMs }
+
+function setFilteredCache(key, val) {
+    if (filteredCatalogGzipCache.size >= 32) {
+        const firstKey = filteredCatalogGzipCache.keys().next().value;
+        filteredCatalogGzipCache.delete(firstKey);
+    }
+    filteredCatalogGzipCache.set(key, val);
+}
 import {
     DATA_DIR,
     VTT_DATA_DIR,
@@ -113,13 +126,26 @@ compendiumRouter.get(
         if (disabledSet.size === 0 && customSpells.length === 0) {
             loadGzippedSpellsCatalog();
             if (!gzippedSpellsCatalogBuf) return res.status(404).send('Spells catalog not found');
+            if (spellsCatalogEtag && req.headers['if-none-match'] === spellsCatalogEtag) {
+                return res.status(304).end();
+            }
             res.setHeader('Content-Type', 'application/json; charset=utf-8');
             res.setHeader('Content-Encoding', 'gzip');
-            res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
-            res.setHeader('Pragma', 'no-cache');
-            res.setHeader('Expires', '0');
+            res.setHeader('Cache-Control', 'private, max-age=60, must-revalidate');
+            res.setHeader('Vary', 'Accept-Encoding');
             res.setHeader('ETag', spellsCatalogEtag);
             return res.send(gzippedSpellsCatalogBuf);
+        }
+
+        const cacheKey = `spells|${[...disabledSet].sort().join(',')}|${customSpells.length}`;
+        const cached = filteredCatalogGzipCache.get(cacheKey);
+        if (cached) {
+            if (req.headers['if-none-match'] === cached.etag) return res.status(304).end();
+            res.setHeader('Content-Type', 'application/json; charset=utf-8');
+            res.setHeader('Content-Encoding', 'gzip');
+            res.setHeader('Cache-Control', 'private, max-age=60, must-revalidate');
+            res.setHeader('ETag', cached.etag);
+            return res.send(cached.buf);
         }
 
         const raw = getRawSpellsCatalog();
@@ -142,11 +168,17 @@ compendiumRouter.get(
             }
         }
 
-        const buf = zlib.gzipSync(Buffer.from(JSON.stringify(filtered)));
-        res.setHeader('Content-Type', 'application/json; charset=utf-8');
-        res.setHeader('Content-Encoding', 'gzip');
-        res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
-        res.send(buf);
+        gzipAsync(Buffer.from(JSON.stringify(filtered)))
+            .then((buf) => {
+                const etag = `"spells-f-${buf.length}-${customSpells.length}"`;
+                setFilteredCache(cacheKey, { buf, etag });
+                res.setHeader('Content-Type', 'application/json; charset=utf-8');
+                res.setHeader('Content-Encoding', 'gzip');
+                res.setHeader('Cache-Control', 'private, max-age=60, must-revalidate');
+                res.setHeader('ETag', etag);
+                res.send(buf);
+            })
+            .catch(() => res.status(500).send('Failed to compress spells catalog'));
     }
 );
 
@@ -278,13 +310,26 @@ compendiumRouter.get(
         if (disabledSet.size === 0 && customItems.length === 0) {
             loadGzippedItemsCatalog();
             if (!gzippedItemsCatalogBuf) return res.status(404).send('Items catalog not found');
+            if (itemsCatalogEtag && req.headers['if-none-match'] === itemsCatalogEtag) {
+                return res.status(304).end();
+            }
             res.setHeader('Content-Type', 'application/json; charset=utf-8');
             res.setHeader('Content-Encoding', 'gzip');
-            res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
-            res.setHeader('Pragma', 'no-cache');
-            res.setHeader('Expires', '0');
+            res.setHeader('Cache-Control', 'private, max-age=60, must-revalidate');
+            res.setHeader('Vary', 'Accept-Encoding');
             res.setHeader('ETag', itemsCatalogEtag);
             return res.send(gzippedItemsCatalogBuf);
+        }
+
+        const cacheKey = `items|${[...disabledSet].sort().join(',')}|${customItems.length}`;
+        const cached = filteredCatalogGzipCache.get(cacheKey);
+        if (cached) {
+            if (req.headers['if-none-match'] === cached.etag) return res.status(304).end();
+            res.setHeader('Content-Type', 'application/json; charset=utf-8');
+            res.setHeader('Content-Encoding', 'gzip');
+            res.setHeader('Cache-Control', 'private, max-age=60, must-revalidate');
+            res.setHeader('ETag', cached.etag);
+            return res.send(cached.buf);
         }
 
         const raw = getRawItemsCatalog();
@@ -305,11 +350,17 @@ compendiumRouter.get(
             }
         }
 
-        const buf = zlib.gzipSync(Buffer.from(JSON.stringify(filtered)));
-        res.setHeader('Content-Type', 'application/json; charset=utf-8');
-        res.setHeader('Content-Encoding', 'gzip');
-        res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
-        res.send(buf);
+        gzipAsync(Buffer.from(JSON.stringify(filtered)))
+            .then((buf) => {
+                const etag = `"items-f-${buf.length}-${customItems.length}"`;
+                setFilteredCache(cacheKey, { buf, etag });
+                res.setHeader('Content-Type', 'application/json; charset=utf-8');
+                res.setHeader('Content-Encoding', 'gzip');
+                res.setHeader('Cache-Control', 'private, max-age=60, must-revalidate');
+                res.setHeader('ETag', etag);
+                res.send(buf);
+            })
+            .catch(() => res.status(500).send('Failed to compress items catalog'));
     }
 );
 
@@ -455,9 +506,16 @@ compendiumRouter.get(
 
         let items = [];
         if (fs.existsSync(catPath)) {
-            try {
-                items = JSON.parse(fs.readFileSync(catPath, 'utf8'));
-            } catch (e) {}
+            const cachedType = compendiumTypeBaseCache.get(type);
+            if (cachedType) {
+                items = cachedType.items.slice();
+            } else {
+                try {
+                    const parsed = JSON.parse(fs.readFileSync(catPath, 'utf8'));
+                    compendiumTypeBaseCache.set(type, { items: parsed });
+                    items = parsed.slice();
+                } catch (e) {}
+            }
         }
 
         if (disabledSet.size > 0) {
@@ -761,13 +819,26 @@ compendiumRouter.get(
         if (disabledSet.size === 0 && customMonsters.length === 0) {
             loadGzippedBestiaryCatalog();
             if (!gzippedBestiaryCatalogBuf) return res.status(404).send('Bestiary catalog not found');
+            if (bestiaryCatalogEtag && req.headers['if-none-match'] === bestiaryCatalogEtag) {
+                return res.status(304).end();
+            }
             res.setHeader('Content-Type', 'application/json; charset=utf-8');
             res.setHeader('Content-Encoding', 'gzip');
-            res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
-            res.setHeader('Pragma', 'no-cache');
-            res.setHeader('Expires', '0');
+            res.setHeader('Cache-Control', 'private, max-age=60, must-revalidate');
+            res.setHeader('Vary', 'Accept-Encoding');
             res.setHeader('ETag', bestiaryCatalogEtag);
             return res.send(gzippedBestiaryCatalogBuf);
+        }
+
+        const cacheKey = `bestiary|${[...disabledSet].sort().join(',')}|${customMonsters.length}`;
+        const cached = filteredCatalogGzipCache.get(cacheKey);
+        if (cached) {
+            if (req.headers['if-none-match'] === cached.etag) return res.status(304).end();
+            res.setHeader('Content-Type', 'application/json; charset=utf-8');
+            res.setHeader('Content-Encoding', 'gzip');
+            res.setHeader('Cache-Control', 'private, max-age=60, must-revalidate');
+            res.setHeader('ETag', cached.etag);
+            return res.send(cached.buf);
         }
 
         const raw = getRawBestiaryCatalog();
@@ -803,11 +874,17 @@ compendiumRouter.get(
             }
         }
 
-        const buf = zlib.gzipSync(Buffer.from(JSON.stringify(filtered)));
-        res.setHeader('Content-Type', 'application/json; charset=utf-8');
-        res.setHeader('Content-Encoding', 'gzip');
-        res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
-        res.send(buf);
+        gzipAsync(Buffer.from(JSON.stringify(filtered)))
+            .then((buf) => {
+                const etag = `"bestiary-f-${buf.length}-${customMonsters.length}"`;
+                setFilteredCache(cacheKey, { buf, etag });
+                res.setHeader('Content-Type', 'application/json; charset=utf-8');
+                res.setHeader('Content-Encoding', 'gzip');
+                res.setHeader('Cache-Control', 'private, max-age=60, must-revalidate');
+                res.setHeader('ETag', etag);
+                res.send(buf);
+            })
+            .catch(() => res.status(500).send('Failed to compress bestiary catalog'));
     }
 );
 

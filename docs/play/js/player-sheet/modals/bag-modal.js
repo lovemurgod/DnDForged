@@ -1,17 +1,4 @@
-/**
- * Player Sheet Container & Bag Management Modal
- */
-
-export function ensureBagModalExists(options = {}) {
-    if (document.getElementById('pc-bag-modal')) return;
-
-    const {
-        getCurrentChar = () => window.currentChar,
-        saveAndEmit = (c) => window.saveAndEmit?.(c),
-        renderSheetData = (c) => window.renderSheetData?.(c)
-    } = options;
-
-    const modalHtml = `
+export function ensureBagModalExists(e={}){if(document.getElementById("pc-bag-modal"))return;const{getCurrentChar:m=()=>window.currentChar,saveAndEmit:u=t=>window.saveAndEmit?.(t),renderSheetData:r=t=>window.renderSheetData?.(t)}=e,i=`
         <div id="pc-bag-overlay" class="vtt-sheet-submodal-overlay vtt-hidden" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:3000;"></div>
         <div id="pc-bag-modal" class="vtt-sheet-submodal vtt-hidden" style="position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:#1e1e1e; border:1px solid var(--color-border-subtle); border-radius:8px; z-index:3010; width:420px; max-width:92vw; padding:16px; box-shadow:0 4px 16px rgba(0,0,0,0.6);">
             <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--color-border-subtle); padding-bottom:10px; margin-bottom:12px;">
@@ -27,12 +14,12 @@ export function ensureBagModalExists(options = {}) {
                 <div class="form-group" style="flex:1;">
                     <label style="font-size:0.8rem; font-weight:600; margin-bottom:4px; display:block; color:var(--color-text-primary);">Icon</label>
                     <select id="modal-bag-icon" style="width:100%; padding:6px; font-size:0.85rem; background:#222; border:1px solid var(--color-border-subtle); color:#fff; border-radius:4px;">
-                        <option value="fa-sack-xmark">🎒 Sack (X)</option>
-                        <option value="fa-sack-dollar">💰 Sack ($)</option>
-                        <option value="fa-backpack">🎒 Backpack</option>
-                        <option value="fa-box-archive">📦 Box / Chest</option>
-                        <option value="fa-gem">👛 Pouch / Purse</option>
-                        <option value="fa-briefcase">💼 Satchel / Case</option>
+                        <option value="fa-sack-xmark">\u{1F392} Sack (X)</option>
+                        <option value="fa-sack-dollar">\u{1F4B0} Sack ($)</option>
+                        <option value="fa-backpack">\u{1F392} Backpack</option>
+                        <option value="fa-box-archive">\u{1F4E6} Box / Chest</option>
+                        <option value="fa-gem">\u{1F45B} Pouch / Purse</option>
+                        <option value="fa-briefcase">\u{1F4BC} Satchel / Case</option>
                     </select>
                 </div>
                 <div class="form-group" style="flex:1;">
@@ -63,179 +50,7 @@ export function ensureBagModalExists(options = {}) {
                 <button id="modal-bag-save" class="btn btn-primary btn-xs">Save Bag</button>
             </div>
         </div>
-    `;
-    const div = document.createElement('div');
-    div.innerHTML = modalHtml;
-    document.body.appendChild(div);
+    `,l=document.createElement("div");l.innerHTML=i,document.body.appendChild(l);const o=document.getElementById("modal-bag-rule"),a=document.getElementById("modal-bag-custom-weight-group");o?.addEventListener("change",()=>{a&&(a.style.display=o.value==="fixed"?"block":"none")});const d=()=>{document.getElementById("pc-bag-modal")?.classList.add("vtt-hidden"),document.getElementById("pc-bag-overlay")?.classList.add("vtt-hidden")};document.getElementById("modal-bag-close")?.addEventListener("click",d),document.getElementById("modal-bag-cancel")?.addEventListener("click",d),document.getElementById("pc-bag-overlay")?.addEventListener("click",d),document.getElementById("modal-bag-save")?.addEventListener("click",()=>{const t=m();if(!t)return;const c=document.getElementById("modal-bag-id").value,g=document.getElementById("modal-bag-name").value.trim()||"New Bag",p=document.getElementById("modal-bag-icon").value,b=document.getElementById("modal-bag-rule").value,f=parseFloat(document.getElementById("modal-bag-custom-weight").value)||0,n=parseFloat(document.getElementById("modal-bag-base-weight").value)||0,v=document.getElementById("modal-bag-capacity").value.trim(),y=v!==""&&!isNaN(parseFloat(v))?parseFloat(v):null;if(t.containers=t.containers||[],c){const s=t.containers.find(x=>x.id===c);s&&(s.name=g,s.icon=p,s.weightRule=b,s.customWeight=f,s.baseWeight=n,s.capacity=y)}else{const s={id:"bag_"+Date.now()+Math.random().toString(36).substr(2,5),name:g,icon:p,weightRule:b,customWeight:f,baseWeight:n,capacity:y,collapsed:!1};t.containers.push(s)}d(),u(t),r(t)})}export function openBagModal(e=null,m={}){ensureBagModalExists(m);const{getCurrentChar:u=()=>window.currentChar}=m,r=u();if(!r)return;const i=document.getElementById("pc-bag-modal"),l=document.getElementById("pc-bag-overlay"),o=document.getElementById("modal-bag-title"),a=document.getElementById("modal-bag-id"),d=document.getElementById("modal-bag-name"),t=document.getElementById("modal-bag-icon"),c=document.getElementById("modal-bag-rule"),g=document.getElementById("modal-bag-custom-weight"),p=document.getElementById("modal-bag-base-weight"),b=document.getElementById("modal-bag-capacity"),f=document.getElementById("modal-bag-custom-weight-group");if(r.containers=r.containers||[],e){const n=r.containers.find(v=>v.id===e);n&&(o&&(o.innerHTML='<i class="fa-solid fa-pen"></i> Edit Container'),a&&(a.value=n.id),d&&(d.value=n.name||""),t&&(t.value=n.icon||"fa-sack-xmark"),c&&(c.value=n.weightRule||"standard"),g&&(g.value=n.customWeight!==void 0?n.customWeight:15),p&&(p.value=n.baseWeight!==void 0?n.baseWeight:0),b&&(b.value=n.capacity!==void 0&&n.capacity!==null?n.capacity:""),f&&(f.style.display=n.weightRule==="fixed"?"block":"none"))}else o&&(o.innerHTML='<i class="fa-solid fa-sack-xmark"></i> Create Bag / Pouch'),a&&(a.value=""),d&&(d.value=""),t&&(t.value="fa-sack-xmark"),c&&(c.value="standard"),g&&(g.value=15),p&&(p.value=0),b&&(b.value=""),f&&(f.style.display="none");i?.classList.remove("vtt-hidden"),l?.classList.remove("vtt-hidden")}export function bindBagContainerEvents(e,m={}){if(!e)return;const{saveAndEmit:u=i=>window.saveAndEmit?.(i),renderSheetData:r=i=>window.renderSheetData?.(i)}=m;document.getElementById("btn-create-bag")?.addEventListener("click",()=>openBagModal(null,m)),document.querySelectorAll(".pc-bag-edit").forEach(i=>i.addEventListener("click",l=>{l.stopPropagation(),openBagModal(l.currentTarget.dataset.containerId,m)})),document.querySelectorAll(".pc-bag-del").forEach(i=>i.addEventListener("click",l=>{l.stopPropagation();const o=l.currentTarget.dataset.containerId,a=(e.containers||[]).find(t=>t.id===o);if(!a)return;e.equipment=Array.isArray(e.equipment)?e.equipment:[];const d=e.equipment.filter(t=>t.containerId===o);if(d.length>0){if(!confirm(`Delete container "${a.name}"?
 
-    const ruleSelect = document.getElementById('modal-bag-rule');
-    const customWeightGroup = document.getElementById('modal-bag-custom-weight-group');
-    ruleSelect?.addEventListener('change', () => {
-        if (customWeightGroup) {
-            customWeightGroup.style.display = ruleSelect.value === 'fixed' ? 'block' : 'none';
-        }
-    });
-
-    const closeBagModal = () => {
-        document.getElementById('pc-bag-modal')?.classList.add('vtt-hidden');
-        document.getElementById('pc-bag-overlay')?.classList.add('vtt-hidden');
-    };
-
-    document.getElementById('modal-bag-close')?.addEventListener('click', closeBagModal);
-    document.getElementById('modal-bag-cancel')?.addEventListener('click', closeBagModal);
-    document.getElementById('pc-bag-overlay')?.addEventListener('click', closeBagModal);
-
-    document.getElementById('modal-bag-save')?.addEventListener('click', () => {
-        const char = getCurrentChar();
-        if (!char) return;
-        const id = document.getElementById('modal-bag-id').value;
-        const name = document.getElementById('modal-bag-name').value.trim() || 'New Bag';
-        const icon = document.getElementById('modal-bag-icon').value;
-        const weightRule = document.getElementById('modal-bag-rule').value;
-        const customWeight = parseFloat(document.getElementById('modal-bag-custom-weight').value) || 0;
-        const baseWeight = parseFloat(document.getElementById('modal-bag-base-weight').value) || 0;
-        const rawCap = document.getElementById('modal-bag-capacity').value.trim();
-        const capacity = rawCap !== '' && !isNaN(parseFloat(rawCap)) ? parseFloat(rawCap) : null;
-
-        char.containers = char.containers || [];
-        if (id) {
-            const bag = char.containers.find((c) => c.id === id);
-            if (bag) {
-                bag.name = name;
-                bag.icon = icon;
-                bag.weightRule = weightRule;
-                bag.customWeight = customWeight;
-                bag.baseWeight = baseWeight;
-                bag.capacity = capacity;
-            }
-        } else {
-            const newBag = {
-                id: 'bag_' + Date.now() + Math.random().toString(36).substr(2, 5),
-                name,
-                icon,
-                weightRule,
-                customWeight,
-                baseWeight,
-                capacity,
-                collapsed: false
-            };
-            char.containers.push(newBag);
-        }
-        closeBagModal();
-        saveAndEmit(char);
-        renderSheetData(char);
-    });
-}
-
-export function openBagModal(bagId = null, options = {}) {
-    ensureBagModalExists(options);
-    const { getCurrentChar = () => window.currentChar } = options;
-    const char = getCurrentChar();
-    if (!char) return;
-
-    const modal = document.getElementById('pc-bag-modal');
-    const overlay = document.getElementById('pc-bag-overlay');
-    const titleEl = document.getElementById('modal-bag-title');
-    const idInp = document.getElementById('modal-bag-id');
-    const nameInp = document.getElementById('modal-bag-name');
-    const iconSel = document.getElementById('modal-bag-icon');
-    const ruleSel = document.getElementById('modal-bag-rule');
-    const weightInp = document.getElementById('modal-bag-custom-weight');
-    const baseWeightInp = document.getElementById('modal-bag-base-weight');
-    const capacityInp = document.getElementById('modal-bag-capacity');
-    const customWeightGroup = document.getElementById('modal-bag-custom-weight-group');
-
-    char.containers = char.containers || [];
-    if (bagId) {
-        const bag = char.containers.find((c) => c.id === bagId);
-        if (bag) {
-            if (titleEl) titleEl.innerHTML = `<i class="fa-solid fa-pen"></i> Edit Container`;
-            if (idInp) idInp.value = bag.id;
-            if (nameInp) nameInp.value = bag.name || '';
-            if (iconSel) iconSel.value = bag.icon || 'fa-sack-xmark';
-            if (ruleSel) ruleSel.value = bag.weightRule || 'standard';
-            if (weightInp) weightInp.value = bag.customWeight !== undefined ? bag.customWeight : 15;
-            if (baseWeightInp) baseWeightInp.value = bag.baseWeight !== undefined ? bag.baseWeight : 0;
-            if (capacityInp)
-                capacityInp.value = bag.capacity !== undefined && bag.capacity !== null ? bag.capacity : '';
-            if (customWeightGroup) customWeightGroup.style.display = bag.weightRule === 'fixed' ? 'block' : 'none';
-        }
-    } else {
-        if (titleEl) titleEl.innerHTML = `<i class="fa-solid fa-sack-xmark"></i> Create Bag / Pouch`;
-        if (idInp) idInp.value = '';
-        if (nameInp) nameInp.value = '';
-        if (iconSel) iconSel.value = 'fa-sack-xmark';
-        if (ruleSel) ruleSel.value = 'standard';
-        if (weightInp) weightInp.value = 15;
-        if (baseWeightInp) baseWeightInp.value = 0;
-        if (capacityInp) capacityInp.value = '';
-        if (customWeightGroup) customWeightGroup.style.display = 'none';
-    }
-
-    modal?.classList.remove('vtt-hidden');
-    overlay?.classList.remove('vtt-hidden');
-}
-
-export function bindBagContainerEvents(char, options = {}) {
-    if (!char) return;
-    const { saveAndEmit = (c) => window.saveAndEmit?.(c), renderSheetData = (c) => window.renderSheetData?.(c) } =
-        options;
-
-    document.getElementById('btn-create-bag')?.addEventListener('click', () => openBagModal(null, options));
-
-    document.querySelectorAll('.pc-bag-edit').forEach((btn) =>
-        btn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            openBagModal(e.currentTarget.dataset.containerId, options);
-        })
-    );
-
-    document.querySelectorAll('.pc-bag-del').forEach((btn) =>
-        btn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const cId = e.currentTarget.dataset.containerId;
-            const bag = (char.containers || []).find((c) => c.id === cId);
-            if (!bag) return;
-
-            char.equipment = Array.isArray(char.equipment) ? char.equipment : [];
-            const cItems = char.equipment.filter((eq) => eq.containerId === cId);
-            if (cItems.length > 0) {
-                const choice = confirm(
-                    `Delete container "${bag.name}"?\n\nClick OK to unpack items into Main Inventory.\nClick Cancel to abort deletion.`
-                );
-                if (!choice) return;
-                cItems.forEach((eq) => {
-                    eq.containerId = null;
-                });
-            }
-            char.containers = char.containers.filter((c) => c.id !== cId);
-            saveAndEmit(char);
-            renderSheetData(char);
-        })
-    );
-
-    document.querySelectorAll('.pc-bag-header').forEach((hdr) =>
-        hdr.addEventListener('click', (e) => {
-            const cId = e.currentTarget.dataset.containerId;
-            if (!cId) return;
-            const bag = (char.containers || []).find((c) => c.id === cId);
-            if (bag) {
-                bag.collapsed = !bag.collapsed;
-                saveAndEmit(char);
-                renderSheetData(char);
-            }
-        })
-    );
-
-    document.querySelectorAll('.pc-equip-container-select').forEach((sel) =>
-        sel.addEventListener('change', (e) => {
-            const idx = parseInt(e.currentTarget.dataset.idx);
-            const newContainerId = e.currentTarget.value || null;
-            if (char.equipment && char.equipment[idx]) {
-                char.equipment[idx].containerId = newContainerId;
-                saveAndEmit(char);
-                renderSheetData(char);
-            }
-        })
-    );
-}
+Click OK to unpack items into Main Inventory.
+Click Cancel to abort deletion.`))return;d.forEach(c=>{c.containerId=null})}e.containers=e.containers.filter(t=>t.id!==o),u(e),r(e)})),document.querySelectorAll(".pc-bag-header").forEach(i=>i.addEventListener("click",l=>{const o=l.currentTarget.dataset.containerId;if(!o)return;const a=(e.containers||[]).find(d=>d.id===o);a&&(a.collapsed=!a.collapsed,u(e),r(e))})),document.querySelectorAll(".pc-equip-container-select").forEach(i=>i.addEventListener("change",l=>{const o=parseInt(l.currentTarget.dataset.idx),a=l.currentTarget.value||null;e.equipment&&e.equipment[o]&&(e.equipment[o].containerId=a,u(e),r(e))}))}

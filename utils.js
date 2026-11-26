@@ -98,6 +98,30 @@ export function verifyPassword(password, salt, hash) {
   return timingSafeHexEquals(computedLegacy, hash);
 }
 
+function pbkdf2Async(password, salt, iterations) {
+  return new Promise((resolve, reject) => {
+    crypto.pbkdf2(password, salt, iterations, 64, 'sha256', (err, derivedKey) => {
+      if (err) reject(err);
+      else resolve(derivedKey.toString('hex'));
+    });
+  });
+}
+
+/**
+ * Non-blocking async password verification (prevents event-loop stalls on PBKDF2).
+ * @param {string} password
+ * @param {string} salt
+ * @param {string} hash
+ * @returns {Promise<boolean>}
+ */
+export async function verifyPasswordAsync(password, salt, hash) {
+  if (!password || !salt || !hash) return false;
+  const computedModern = await pbkdf2Async(password, salt, PBKDF2_ITERATIONS);
+  if (timingSafeHexEquals(computedModern, hash)) return true;
+  const computedLegacy = await pbkdf2Async(password, salt, PBKDF2_LEGACY_ITERATIONS);
+  return timingSafeHexEquals(computedLegacy, hash);
+}
+
 /**
  * Updates a specific property on a campaign map.
  * @param {object} campaigns - The global campaigns state object.

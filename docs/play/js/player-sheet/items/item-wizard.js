@@ -1,464 +1,63 @@
-/**
- * Interactive Item Automation Wizard
- * Prompts user for attack macros, AC upgrades, and spell additions when items are added.
- */
-
-import { escapeHtml } from '../../vtt-utils.js';
-
-export async function runItemAutomationWizard(queue, options = {}) {
-    const {
-        getCurrentChar = () => null,
-        ensureItemModalsExist = () => {},
-        saveAndEmit = () => {},
-        renderSheetData = () => {},
-        vttPlayerSheetAPI = window.vttPlayerSheetAPI,
-        VTTSpellManager = window.VTTSpellManager
-    } = options;
-
-    const currentChar = getCurrentChar();
-    if (!queue || !queue.length || !currentChar) return;
-    ensureItemModalsExist();
-
-    const overlay = document.getElementById('pc-item-automation-overlay');
-    const modal = document.getElementById('pc-item-automation-modal');
-    const iconEl = document.getElementById('pc-automation-icon');
-    const titleEl = document.getElementById('pc-automation-title');
-    const stepIndEl = document.getElementById('pc-automation-step-indicator');
-    const bodyEl = document.getElementById('pc-automation-body');
-    const actionsEl = document.getElementById('pc-automation-actions');
-
-    if (!overlay || !modal) return;
-
-    overlay.classList.remove('vtt-hidden');
-    modal.classList.remove('vtt-hidden');
-
-    let stepIndex = 0;
-
-    function nextStep() {
-        stepIndex++;
-        if (stepIndex < queue.length) {
-            renderStep(queue[stepIndex]);
-        } else {
-            overlay.classList.add('vtt-hidden');
-            modal.classList.add('vtt-hidden');
-            saveAndEmit(currentChar);
-            renderSheetData(currentChar);
-        }
-    }
-
-    async function renderStep(step) {
-        stepIndEl.textContent = `Step ${stepIndex + 1} of ${queue.length}`;
-
-        if (step.type === 'weapon') {
-            iconEl.className = 'fa-solid fa-burst text-gradient-gold';
-            titleEl.textContent = 'Create Weapon Macro?';
-
-            const tmpl = step.item.macroTemplate || {};
-            const rawProps = Array.isArray(step.item.properties) ? step.item.properties : [];
-            const props = rawProps.map((p) => (typeof p === 'string' ? p.toLowerCase() : ''));
-            const isFinesse = tmpl.isFinesse !== undefined ? tmpl.isFinesse : props.some((p) => p.includes('finesse'));
-            const isRanged =
-                tmpl.isRanged !== undefined
-                    ? tmpl.isRanged
-                    : step.item.rawType === 'R' ||
-                      (step.item.type || '').toLowerCase().includes('ranged') ||
-                      props.some((p) => p.includes('ammunition'));
-
-            const strVal = parseInt(currentChar.stats?.str) || 10;
-            const dexVal = parseInt(currentChar.stats?.dex) || 10;
-            let chosenStat = 'str';
-            if (isRanged) chosenStat = 'dex';
-            else if (isFinesse) chosenStat = dexVal >= strVal ? 'dex' : 'str';
-            else if (tmpl.attackStat && tmpl.attackStat !== 'auto') chosenStat = tmpl.attackStat;
-
-            let bonusVal = tmpl.attackExtra !== undefined ? tmpl.attackExtra : 0;
-            if (!bonusVal && step.item.bonusWeapon) {
-                bonusVal = parseInt(step.item.bonusWeapon) || 0;
-            } else if (!bonusVal) {
-                const match = step.name.match(/\+(\d+)/);
-                if (match) bonusVal = parseInt(match[1]) || 0;
-            }
-
-            const rangeVal = tmpl.range || '5 ft';
-            const targetVal = tmpl.target || '1 target';
-
-            const dmgRows =
-                tmpl.damageRows && tmpl.damageRows.length > 0
-                    ? tmpl.damageRows.map((r, rIdx) => ({
-                          id: 'dmg_' + Date.now() + '_' + rIdx,
-                          formula: r.formula,
-                          stat: r.stat === 'auto' ? chosenStat : r.stat || '',
-                          extra: r.extra !== undefined ? r.extra : rIdx === 0 ? bonusVal : 0,
-                          type: r.type || '',
-                          label: r.label || ''
-                      }))
-                    : [
-                          {
-                              id: 'dmg_' + Date.now(),
-                              formula: step.item.dmg1 || '1d6',
-                              stat: chosenStat,
-                              extra: bonusVal,
-                              type: step.item.dmgType
-                                  ? step.item.dmgType.charAt(0).toUpperCase() + step.item.dmgType.slice(1)
-                                  : 'Slashing',
-                              label: ''
-                          }
-                      ];
-
-            const damageDisplay = dmgRows
-                .map((r) => {
-                    let s = `${r.formula}`;
-                    if (r.stat) s += ` + ${r.stat.toUpperCase()}`;
-                    if (r.extra) s += ` + ${r.extra}`;
-                    s += ` ${r.type}`;
-                    if (r.label) s += ` (${r.label})`;
-                    return s;
-                })
-                .join(' + ');
-
-            const versatileVal = tmpl.versatile || step.item.dmg2;
-            const versatileText = versatileVal
-                ? `<span style="color:var(--color-text-muted); font-size:0.75rem;">(Versatile: ${versatileVal})</span>`
-                : '';
-
-            bodyEl.innerHTML = `
+import{escapeHtml as k}from"../../vtt-utils.js";export async function runItemAutomationWizard(b,R={}){const{getCurrentChar:z=()=>null,ensureItemModalsExist:P=()=>{},saveAndEmit:w=()=>{},renderSheetData:C=()=>{},vttPlayerSheetAPI:A=window.vttPlayerSheetAPI,VTTSpellManager:j=window.VTTSpellManager}=R,a=z();if(!b||!b.length||!a)return;P();const I=document.getElementById("pc-item-automation-overlay"),M=document.getElementById("pc-item-automation-modal"),E=document.getElementById("pc-automation-icon"),L=document.getElementById("pc-automation-title"),U=document.getElementById("pc-automation-step-indicator"),D=document.getElementById("pc-automation-body"),T=document.getElementById("pc-automation-actions");if(!I||!M)return;I.classList.remove("vtt-hidden"),M.classList.remove("vtt-hidden");let S=0;function y(){S++,S<b.length?H(b[S]):(I.classList.add("vtt-hidden"),M.classList.add("vtt-hidden"),w(a),C(a))}async function H(e){if(U.textContent=`Step ${S+1} of ${b.length}`,e.type==="weapon"){E.className="fa-solid fa-burst text-gradient-gold",L.textContent="Create Weapon Macro?";const n=e.item.macroTemplate||{},m=(Array.isArray(e.item.properties)?e.item.properties:[]).map(o=>typeof o=="string"?o.toLowerCase():""),c=n.isFinesse!==void 0?n.isFinesse:m.some(o=>o.includes("finesse")),d=n.isRanged!==void 0?n.isRanged:e.item.rawType==="R"||(e.item.type||"").toLowerCase().includes("ranged")||m.some(o=>o.includes("ammunition")),l=parseInt(a.stats?.str)||10,i=parseInt(a.stats?.dex)||10;let r="str";d?r="dex":c?r=i>=l?"dex":"str":n.attackStat&&n.attackStat!=="auto"&&(r=n.attackStat);let s=n.attackExtra!==void 0?n.attackExtra:0;if(!s&&e.item.bonusWeapon)s=parseInt(e.item.bonusWeapon)||0;else if(!s){const o=e.name.match(/\+(\d+)/);o&&(s=parseInt(o[1])||0)}const u=n.range||"5 ft",t=n.target||"1 target",v=n.damageRows&&n.damageRows.length>0?n.damageRows.map((o,p)=>({id:"dmg_"+Date.now()+"_"+p,formula:o.formula,stat:o.stat==="auto"?r:o.stat||"",extra:o.extra!==void 0?o.extra:p===0?s:0,type:o.type||"",label:o.label||""})):[{id:"dmg_"+Date.now(),formula:e.item.dmg1||"1d6",stat:r,extra:s,type:e.item.dmgType?e.item.dmgType.charAt(0).toUpperCase()+e.item.dmgType.slice(1):"Slashing",label:""}],h=v.map(o=>{let p=`${o.formula}`;return o.stat&&(p+=` + ${o.stat.toUpperCase()}`),o.extra&&(p+=` + ${o.extra}`),p+=` ${o.type}`,o.label&&(p+=` (${o.label})`),p}).join(" + "),$=n.versatile||e.item.dmg2,g=$?`<span style="color:var(--color-text-muted); font-size:0.75rem;">(Versatile: ${$})</span>`:"";D.innerHTML=`
                 <div style="margin-bottom:12px;">
-                    Would you like to generate an attack macro for <strong style="color:var(--color-gold-light); font-size:1rem;">${escapeHtml(step.name)}</strong> in the <strong>Attacks & Macros</strong> section?
+                    Would you like to generate an attack macro for <strong style="color:var(--color-gold-light); font-size:1rem;">${k(e.name)}</strong> in the <strong>Attacks & Macros</strong> section?
                 </div>
                 <div style="background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); border-radius:6px; padding:12px; display:flex; flex-direction:column; gap:6px; font-size:0.82rem;">
                     <div style="display:flex; justify-content:space-between;">
                         <span style="color:var(--color-text-secondary);">Optimal Stat:</span>
-                        <span style="font-weight:bold; color:var(--color-gold-light);">${chosenStat.toUpperCase()} ${isFinesse ? '(Finesse)' : isRanged ? '(Ranged)' : '(Melee)'}</span>
+                        <span style="font-weight:bold; color:var(--color-gold-light);">${r.toUpperCase()} ${c?"(Finesse)":d?"(Ranged)":"(Melee)"}</span>
                     </div>
                     <div style="display:flex; justify-content:space-between;">
                         <span style="color:var(--color-text-secondary);">Attack Bonus:</span>
-                        <span style="font-weight:bold; color:#4caf50;">Proficiency + ${chosenStat.toUpperCase()} Mod ${bonusVal > 0 ? `+ ${bonusVal}` : ''}</span>
+                        <span style="font-weight:bold; color:#4caf50;">Proficiency + ${r.toUpperCase()} Mod ${s>0?`+ ${s}`:""}</span>
                     </div>
                     <div style="display:flex; justify-content:space-between;">
                         <span style="color:var(--color-text-secondary);">Base Damage:</span>
-                        <span style="font-weight:bold; color:var(--color-text-primary);">${damageDisplay} ${versatileText}</span>
+                        <span style="font-weight:bold; color:var(--color-text-primary);">${h} ${g}</span>
                     </div>
                     <div style="display:flex; justify-content:space-between;">
                         <span style="color:var(--color-text-secondary);">Target Category:</span>
                         <span style="font-weight:bold; color:var(--color-gold-base);"><i class="fa-solid fa-folder"></i> Weapons</span>
                     </div>
                 </div>
-            `;
-
-            actionsEl.innerHTML = `
+            `,T.innerHTML=`
                 <button id="pc-auto-weapon-skip" class="btn btn-secondary btn-sm">Skip</button>
                 <button id="pc-auto-weapon-create" class="btn btn-primary btn-sm"><i class="fa-solid fa-plus"></i> Create Macro</button>
-            `;
+            `,document.getElementById("pc-auto-weapon-skip").onclick=()=>y(),document.getElementById("pc-auto-weapon-create").onclick=()=>{let o=e.desc||"";$&&(o+=(o?`
 
-            document.getElementById('pc-auto-weapon-skip').onclick = () => nextStep();
-            document.getElementById('pc-auto-weapon-create').onclick = () => {
-                let descNote = step.desc || '';
-                if (versatileVal) {
-                    descNote +=
-                        (descNote ? '\n\n' : '') + `*Versatile:* Two-handed attack deals ${versatileVal} damage.`;
-                }
-
-                if (!currentChar.macroCategories) currentChar.macroCategories = [];
-                let weapCat = currentChar.macroCategories.find((c) => c.name.toLowerCase() === 'weapons');
-                if (!weapCat) {
-                    weapCat = { id: 'cat_weapons', name: 'Weapons', collapsed: false };
-                    currentChar.macroCategories.unshift(weapCat);
-                }
-
-                const isMagic = !!(tmpl.isMagic !== undefined
-                    ? tmpl.isMagic
-                    : step.item?.isMagic || step.item?.bonusWeapon || (step.name && /\+\d+/.test(step.name)));
-                const isSilvered = !!(tmpl.isSilvered !== undefined
-                    ? tmpl.isSilvered
-                    : step.item?.isSilvered || (step.name && /silver/i.test(step.name)));
-                const isAdamantine = !!(tmpl.isAdamantine !== undefined
-                    ? tmpl.isAdamantine
-                    : step.item?.isAdamantine || (step.name && /adamant/i.test(step.name)));
-
-                if (!currentChar.macros) currentChar.macros = [];
-                currentChar.macros.push({
-                    id: 'mac_' + Date.now() + Math.random().toString(36).substr(2, 5),
-                    name: step.name,
-                    categoryId: weapCat.id,
-                    description: descNote,
-                    range: rangeVal,
-                    target: targetVal,
-                    attackStat: chosenStat,
-                    attackProf: true,
-                    attackExtra: bonusVal,
-                    critRange: 20,
-                    attackBonus: '',
-                    saveAbility: '',
-                    saveDcStat: 'none',
-                    saveDcExtra: 0,
-                    saveDcCustom: null,
-                    isMagic,
-                    isSilvered,
-                    isAdamantine,
-                    damage: dmgRows
-                });
-
-                saveAndEmit(currentChar);
-                renderSheetData(currentChar);
-                nextStep();
-            };
-        } else if (step.type === 'ac') {
-            iconEl.className = 'fa-solid fa-shield-halved text-gradient-gold';
-            titleEl.textContent = 'Update AC?';
-
-            const currentAC = parseInt(currentChar.ac) || 10;
-            const dexMod = Math.floor(((parseInt(currentChar.stats?.dex) || 10) - 10) / 2);
-
-            const nameLower = (step.item.name || '').toLowerCase();
-            let itemType = (step.item.rawType || step.item.type || '').toUpperCase();
-            if (!itemType || itemType === 'ARMOR' || itemType === 'GEAR') {
-                if (
-                    nameLower.includes('chain mail') ||
-                    nameLower.includes('plate') ||
-                    nameLower.includes('splint') ||
-                    nameLower.includes('ring mail')
-                ) {
-                    itemType = 'HA';
-                } else if (
-                    nameLower.includes('chain shirt') ||
-                    nameLower.includes('scale mail') ||
-                    nameLower.includes('breastplate') ||
-                    nameLower.includes('half plate') ||
-                    nameLower.includes('hide')
-                ) {
-                    itemType = 'MA';
-                } else if (nameLower.includes('leather') || nameLower.includes('padded')) {
-                    itemType = 'LA';
-                } else if (nameLower.includes('shield')) {
-                    itemType = 'S';
-                }
-            }
-            const bonusAc = step.item.bonusAc ? parseInt(step.item.bonusAc) || 0 : 0;
-
-            let overwriteAC = currentAC;
-            let addAC = currentAC;
-            let calcDetail = '';
-
-            if (itemType === 'HA' || itemType.includes('HEAVY')) {
-                const baseAc = step.item.ac !== null && step.item.ac !== undefined ? step.item.ac : 16;
-                overwriteAC = baseAc + bonusAc;
-                addAC = currentAC + (bonusAc || 0);
-                calcDetail = `Heavy Armor (Base ${baseAc}${bonusAc ? ` + ${bonusAc}` : ''}, no DEX mod)`;
-            } else if (itemType === 'MA' || itemType.includes('MEDIUM')) {
-                const baseAc = step.item.ac !== null && step.item.ac !== undefined ? step.item.ac : 14;
-                const cappedDex = Math.min(2, Math.max(0, dexMod));
-                overwriteAC = baseAc + cappedDex + bonusAc;
-                addAC = currentAC + (bonusAc || 0);
-                calcDetail = `Medium Armor (Base ${baseAc} + DEX max 2 [${cappedDex}]${bonusAc ? ` + ${bonusAc}` : ''})`;
-            } else if (itemType === 'LA' || itemType.includes('LIGHT')) {
-                const baseAc = step.item.ac !== null && step.item.ac !== undefined ? step.item.ac : 11;
-                const uncappedDex = Math.max(0, dexMod);
-                overwriteAC = baseAc + uncappedDex + bonusAc;
-                addAC = currentAC + (bonusAc || 0);
-                calcDetail = `Light Armor (Base ${baseAc} + DEX [${uncappedDex}]${bonusAc ? ` + ${bonusAc}` : ''})`;
-            } else if (itemType === 'S' || itemType.includes('SHIELD')) {
-                const shieldBonus = step.item.ac !== null && step.item.ac !== undefined ? step.item.ac : 2 + bonusAc;
-                addAC = currentAC + shieldBonus;
-                overwriteAC = addAC;
-                calcDetail = `Shield (+${shieldBonus} AC)`;
-            } else {
-                const bonus = bonusAc || step.item.ac || 1;
-                addAC = currentAC + bonus;
-                overwriteAC = addAC;
-                calcDetail = `AC Bonus Item (+${bonus} AC)`;
-            }
-
-            bodyEl.innerHTML = `
+`:"")+`*Versatile:* Two-handed attack deals ${$} damage.`),a.macroCategories||(a.macroCategories=[]);let p=a.macroCategories.find(N=>N.name.toLowerCase()==="weapons");p||(p={id:"cat_weapons",name:"Weapons",collapsed:!1},a.macroCategories.unshift(p));const x=!!(n.isMagic!==void 0?n.isMagic:e.item?.isMagic||e.item?.bonusWeapon||e.name&&/\+\d+/.test(e.name)),B=!!(n.isSilvered!==void 0?n.isSilvered:e.item?.isSilvered||e.name&&/silver/i.test(e.name)),V=!!(n.isAdamantine!==void 0?n.isAdamantine:e.item?.isAdamantine||e.name&&/adamant/i.test(e.name));a.macros||(a.macros=[]),a.macros.push({id:"mac_"+Date.now()+Math.random().toString(36).substr(2,5),name:e.name,categoryId:p.id,description:o,range:u,target:t,attackStat:r,attackProf:!0,attackExtra:s,critRange:20,attackBonus:"",saveAbility:"",saveDcStat:"none",saveDcExtra:0,saveDcCustom:null,isMagic:x,isSilvered:B,isAdamantine:V,damage:v}),w(a),C(a),y()}}else if(e.type==="ac"){E.className="fa-solid fa-shield-halved text-gradient-gold",L.textContent="Update AC?";const n=parseInt(a.ac)||10,f=Math.floor(((parseInt(a.stats?.dex)||10)-10)/2),m=(e.item.name||"").toLowerCase();let c=(e.item.rawType||e.item.type||"").toUpperCase();(!c||c==="ARMOR"||c==="GEAR")&&(m.includes("chain mail")||m.includes("plate")||m.includes("splint")||m.includes("ring mail")?c="HA":m.includes("chain shirt")||m.includes("scale mail")||m.includes("breastplate")||m.includes("half plate")||m.includes("hide")?c="MA":m.includes("leather")||m.includes("padded")?c="LA":m.includes("shield")&&(c="S"));const d=e.item.bonusAc&&parseInt(e.item.bonusAc)||0;let l=n,i=n,r="";if(c==="HA"||c.includes("HEAVY")){const s=e.item.ac!==null&&e.item.ac!==void 0?e.item.ac:16;l=s+d,i=n+(d||0),r=`Heavy Armor (Base ${s}${d?` + ${d}`:""}, no DEX mod)`}else if(c==="MA"||c.includes("MEDIUM")){const s=e.item.ac!==null&&e.item.ac!==void 0?e.item.ac:14,u=Math.min(2,Math.max(0,f));l=s+u+d,i=n+(d||0),r=`Medium Armor (Base ${s} + DEX max 2 [${u}]${d?` + ${d}`:""})`}else if(c==="LA"||c.includes("LIGHT")){const s=e.item.ac!==null&&e.item.ac!==void 0?e.item.ac:11,u=Math.max(0,f);l=s+u+d,i=n+(d||0),r=`Light Armor (Base ${s} + DEX [${u}]${d?` + ${d}`:""})`}else if(c==="S"||c.includes("SHIELD")){const s=e.item.ac!==null&&e.item.ac!==void 0?e.item.ac:2+d;i=n+s,l=i,r=`Shield (+${s} AC)`}else{const s=d||e.item.ac||1;i=n+s,l=i,r=`AC Bonus Item (+${s} AC)`}D.innerHTML=`
                 <div style="margin-bottom:12px;">
-                    <strong style="color:var(--color-gold-light); font-size:1rem;">${escapeHtml(step.name)}</strong> modifies Armor Class. How would you like to update your AC?
+                    <strong style="color:var(--color-gold-light); font-size:1rem;">${k(e.name)}</strong> modifies Armor Class. How would you like to update your AC?
                 </div>
                 <div style="background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); border-radius:6px; padding:12px; margin-bottom:12px; font-size:0.85rem;">
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
                         <span style="color:var(--color-text-secondary);">Current AC:</span>
-                        <span style="font-size:1.15rem; font-weight:bold; color:var(--color-gold-base);">${currentAC}</span>
+                        <span style="font-size:1.15rem; font-weight:bold; color:var(--color-gold-base);">${n}</span>
                     </div>
-                    <div style="font-size:0.75rem; color:var(--color-text-muted);">${calcDetail}</div>
+                    <div style="font-size:0.75rem; color:var(--color-text-muted);">${r}</div>
                 </div>
-            `;
-
-            actionsEl.innerHTML = `
-                <button id="pc-auto-ac-skip" class="btn btn-secondary btn-sm">Keep Current (${currentAC})</button>
-                <button id="pc-auto-ac-add" class="btn btn-secondary btn-sm" style="border-color:var(--color-gold-base);"><i class="fa-solid fa-plus"></i> Add (${addAC})</button>
-                <button id="pc-auto-ac-overwrite" class="btn btn-primary btn-sm"><i class="fa-solid fa-check"></i> Overwrite (${overwriteAC})</button>
-            `;
-
-            document.getElementById('pc-auto-ac-skip').onclick = () => nextStep();
-            document.getElementById('pc-auto-ac-add').onclick = () => {
-                currentChar.ac = addAC;
-                saveAndEmit(currentChar);
-                renderSheetData(currentChar);
-                nextStep();
-            };
-            document.getElementById('pc-auto-ac-overwrite').onclick = () => {
-                currentChar.ac = overwriteAC;
-                saveAndEmit(currentChar);
-                renderSheetData(currentChar);
-                nextStep();
-            };
-        } else if (step.type === 'spells') {
-            iconEl.className = 'fa-solid fa-wand-magic-sparkles text-gradient-gold';
-            titleEl.textContent = 'Add Spells?';
-
-            const dcMatch = (step.desc || '').match(/(?:save DC|DC)\s*(\d+)/i);
-            const fixedDc = dcMatch ? parseInt(dcMatch[1]) : null;
-            const atkMatch = (step.desc || '').match(/(?:spell attack bonus of|spell attack bonus)\s*\+?(\d+)/i);
-            const fixedAtk = atkMatch ? parseInt(atkMatch[1]) : null;
-
-            const spellNamesFormatted = (step.spells || []).map((s) => {
-                if (typeof s === 'object' && s !== null) {
-                    return s.name + (s.castLevel ? ` (${s.castLevel}th-level)` : '');
-                }
-                const str = String(s).split('|')[0];
-                const [b, u] = str.split('#');
-                return b.charAt(0).toUpperCase() + b.slice(1) + (u ? ` (${u}th-level)` : '');
-            });
-
-            bodyEl.innerHTML = `
+            `,T.innerHTML=`
+                <button id="pc-auto-ac-skip" class="btn btn-secondary btn-sm">Keep Current (${n})</button>
+                <button id="pc-auto-ac-add" class="btn btn-secondary btn-sm" style="border-color:var(--color-gold-base);"><i class="fa-solid fa-plus"></i> Add (${i})</button>
+                <button id="pc-auto-ac-overwrite" class="btn btn-primary btn-sm"><i class="fa-solid fa-check"></i> Overwrite (${l})</button>
+            `,document.getElementById("pc-auto-ac-skip").onclick=()=>y(),document.getElementById("pc-auto-ac-add").onclick=()=>{a.ac=i,w(a),C(a),y()},document.getElementById("pc-auto-ac-overwrite").onclick=()=>{a.ac=l,w(a),C(a),y()}}else if(e.type==="spells"){E.className="fa-solid fa-wand-magic-sparkles text-gradient-gold",L.textContent="Add Spells?";const n=(e.desc||"").match(/(?:save DC|DC)\s*(\d+)/i),f=n?parseInt(n[1]):null,m=(e.desc||"").match(/(?:spell attack bonus of|spell attack bonus)\s*\+?(\d+)/i),c=m?parseInt(m[1]):null,d=(e.spells||[]).map(l=>{if(typeof l=="object"&&l!==null)return l.name+(l.castLevel?` (${l.castLevel}th-level)`:"");const i=String(l).split("|")[0],[r,s]=i.split("#");return r.charAt(0).toUpperCase()+r.slice(1)+(s?` (${s}th-level)`:"")});D.innerHTML=`
                 <div style="margin-bottom:12px;">
-                    <strong style="color:var(--color-gold-light); font-size:1rem;">${escapeHtml(step.name)}</strong> grants the following spell(s):
+                    <strong style="color:var(--color-gold-light); font-size:1rem;">${k(e.name)}</strong> grants the following spell(s):
                 </div>
                 <div style="background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); border-radius:6px; padding:12px; margin-bottom:12px;">
                     <ul style="margin:0 0 0 16px; padding:0; font-size:0.85rem; color:var(--color-text-primary);">
-                        ${spellNamesFormatted.map((s) => `<li style="margin-bottom:2px; font-weight:600;">${escapeHtml(s)}</li>`).join('')}
+                        ${d.map(l=>`<li style="margin-bottom:2px; font-weight:600;">${k(l)}</li>`).join("")}
                     </ul>
                     <div style="margin-top:8px; padding-top:8px; border-top:1px solid rgba(255,255,255,0.08); font-size:0.75rem; color:var(--color-text-muted); display:flex; justify-content:space-between;">
                         <span>Spell Save DC:</span>
-                        <span style="font-weight:bold; color:var(--color-gold-light);">${fixedDc ? `Fixed DC ${fixedDc}` : `Character Spell DC (${currentChar.spellSettings?.ability || 'INT'})`}</span>
+                        <span style="font-weight:bold; color:var(--color-gold-light);">${f?`Fixed DC ${f}`:`Character Spell DC (${a.spellSettings?.ability||"INT"})`}</span>
                     </div>
                 </div>
-            `;
-
-            actionsEl.innerHTML = `
+            `,T.innerHTML=`
                 <button id="pc-auto-spells-skip" class="btn btn-secondary btn-sm">Skip</button>
                 <button id="pc-auto-spells-add" class="btn btn-primary btn-sm"><i class="fa-solid fa-plus"></i> Add Spells</button>
-            `;
+            `,document.getElementById("pc-auto-spells-skip").onclick=()=>y(),document.getElementById("pc-auto-spells-add").onclick=async()=>{let l=A?.getSpellCache?A.getSpellCache():null;if(!l)try{const i=await fetch("/data/spells-catalog.json?v="+Date.now());i.ok&&(l=await i.json(),A?.setSpellCache&&A.setSpellCache(l))}catch{}(!a.spells||typeof a.spells!="object"||Array.isArray(a.spells))&&(a.spells={cantrip:[],level1:[],level2:[],level3:[],level4:[],level5:[],level6:[],level7:[],level8:[],level9:[]});for(const i of e.spells){let r="",s=null,u="";if(typeof i=="object"&&i!==null)r=(i.cleanName||i.name||"").trim().toLowerCase(),s=i.castLevel||null,u=i.name||r;else{const g=String(i).trim(),[o]=g.split("|"),[p,x]=o.split("#");r=p.trim().toLowerCase(),s=x?parseInt(x):null,u=p.trim()}const t=l?l.find(g=>(g.name||"").toLowerCase()===r):null,v=t?.level!==void 0?t.level:1,h=v===0?"cantrip":`level${v}`;if(a.spells[h]||(a.spells[h]=[]),!a.spells[h].find(g=>(g.name||"").toLowerCase()===r)){const g=t?.time?typeof t.time=="string"?t.time:`${t.time[0]?.number||1} ${t.time[0]?.unit||"action"}`:"1 action",o=t?.range?typeof t.range=="string"?t.range:t.range.type||"":"",p=t?.components?typeof t.components=="string"?t.components:Object.keys(t.components).join(", ").toUpperCase():"",x=t?.duration?typeof t.duration=="string"?t.duration:t.duration[0]?.type==="timed"?`${t.duration[0]?.duration?.amount} ${t.duration[0]?.duration?.type}`:t.duration[0]?.type:"Instantaneous",B=`*(Granted by item: ${e.name}${s?`, cast as ${s}th-level spell`:""})*`;a.spells[h].push({id:"sp_item_"+Date.now()+Math.random().toString(36).substr(2,5),name:t?t.name:u.charAt(0).toUpperCase()+u.slice(1),school:t?.school||"",castingTime:g,range:o,components:p,duration:x,concentration:!!t?.concentration,ritual:!!t?.meta?.ritual,description:(t?.entriesHtml||(Array.isArray(t?.entries)?t.entries.join(`
 
-            document.getElementById('pc-auto-spells-skip').onclick = () => nextStep();
-            document.getElementById('pc-auto-spells-add').onclick = async () => {
-                let spellsCatalog = vttPlayerSheetAPI?.getSpellCache ? vttPlayerSheetAPI.getSpellCache() : null;
-                if (!spellsCatalog) {
-                    try {
-                        const res = await fetch('/data/spells-catalog.json?v=' + Date.now());
-                        if (res.ok) {
-                            spellsCatalog = await res.json();
-                            if (vttPlayerSheetAPI?.setSpellCache) vttPlayerSheetAPI.setSpellCache(spellsCatalog);
-                        }
-                    } catch (e) {}
-                }
+`):""))+`
 
-                if (
-                    !currentChar.spells ||
-                    typeof currentChar.spells !== 'object' ||
-                    Array.isArray(currentChar.spells)
-                ) {
-                    currentChar.spells = {
-                        cantrip: [],
-                        level1: [],
-                        level2: [],
-                        level3: [],
-                        level4: [],
-                        level5: [],
-                        level6: [],
-                        level7: [],
-                        level8: [],
-                        level9: []
-                    };
-                }
-
-                for (const sItem of step.spells) {
-                    let cleanSName = '';
-                    let castLvl = null;
-                    let displayName = '';
-                    if (typeof sItem === 'object' && sItem !== null) {
-                        cleanSName = (sItem.cleanName || sItem.name || '').trim().toLowerCase();
-                        castLvl = sItem.castLevel || null;
-                        displayName = sItem.name || cleanSName;
-                    } else {
-                        const rawStr = String(sItem).trim();
-                        const [cleanPart] = rawStr.split('|');
-                        const [basePart, upcastPart] = cleanPart.split('#');
-                        cleanSName = basePart.trim().toLowerCase();
-                        castLvl = upcastPart ? parseInt(upcastPart) : null;
-                        displayName = basePart.trim();
-                    }
-
-                    const spData = spellsCatalog
-                        ? spellsCatalog.find((s) => (s.name || '').toLowerCase() === cleanSName)
-                        : null;
-
-                    const baseLvl = spData?.level !== undefined ? spData.level : 1;
-                    const levelKey = baseLvl === 0 ? 'cantrip' : `level${baseLvl}`;
-                    if (!currentChar.spells[levelKey]) currentChar.spells[levelKey] = [];
-
-                    const existing = currentChar.spells[levelKey].find(
-                        (s) => (s.name || '').toLowerCase() === cleanSName
-                    );
-                    if (!existing) {
-                        const castTime = spData?.time
-                            ? typeof spData.time === 'string'
-                                ? spData.time
-                                : `${spData.time[0]?.number || 1} ${spData.time[0]?.unit || 'action'}`
-                            : '1 action';
-                        const rangeStr = spData?.range
-                            ? typeof spData.range === 'string'
-                                ? spData.range
-                                : spData.range.type || ''
-                            : '';
-                        const compStr = spData?.components
-                            ? typeof spData.components === 'string'
-                                ? spData.components
-                                : Object.keys(spData.components).join(', ').toUpperCase()
-                            : '';
-                        const durStr = spData?.duration
-                            ? typeof spData.duration === 'string'
-                                ? spData.duration
-                                : spData.duration[0]?.type === 'timed'
-                                  ? `${spData.duration[0]?.duration?.amount} ${spData.duration[0]?.duration?.type}`
-                                  : spData.duration[0]?.type
-                            : 'Instantaneous';
-
-                        const note = `*(Granted by item: ${step.name}${castLvl ? `, cast as ${castLvl}th-level spell` : ''})*`;
-                        currentChar.spells[levelKey].push({
-                            id: 'sp_item_' + Date.now() + Math.random().toString(36).substr(2, 5),
-                            name: spData ? spData.name : displayName.charAt(0).toUpperCase() + displayName.slice(1),
-                            school: spData?.school || '',
-                            castingTime: castTime,
-                            range: rangeStr,
-                            components: compStr,
-                            duration: durStr,
-                            concentration: !!spData?.concentration,
-                            ritual: !!spData?.meta?.ritual,
-                            description:
-                                (spData?.entriesHtml ||
-                                    (Array.isArray(spData?.entries) ? spData.entries.join('\n\n') : '')) +
-                                `\n\n${note}`,
-                            saveAbility: spData?.savingThrow ? spData.savingThrow[0]?.toUpperCase() || '' : '',
-                            saveDcStat: fixedDc ? 'custom' : 'none',
-                            saveDcCustom: fixedDc || null,
-                            attackBonus: fixedAtk ? `+${fixedAtk}` : '',
-                            damageList: spData?.damageList || [],
-                            castLvl: castLvl || baseLvl,
-                            itemOrigin: step.name
-                        });
-                    }
-                }
-
-                saveAndEmit(currentChar);
-                renderSheetData(currentChar);
-                if (VTTSpellManager?.renderSpellbookTab) {
-                    try {
-                        VTTSpellManager.renderSpellbookTab(currentChar);
-                    } catch (e) {}
-                }
-                nextStep();
-            };
-        }
-    }
-
-    renderStep(queue[0]);
-}
+${B}`,saveAbility:t?.savingThrow&&t.savingThrow[0]?.toUpperCase()||"",saveDcStat:f?"custom":"none",saveDcCustom:f||null,attackBonus:c?`+${c}`:"",damageList:t?.damageList||[],castLvl:s||v,itemOrigin:e.name})}}if(w(a),C(a),j?.renderSpellbookTab)try{j.renderSpellbookTab(a)}catch{}y()}}}H(b[0])}

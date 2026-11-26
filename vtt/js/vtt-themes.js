@@ -135,9 +135,12 @@ export const COLORBLIND_MODES = {
         description: 'Default vibrant tri-color palette (Emerald, Gold, Crimson) with Azure Temp HP.',
         preview: {
             success: 'hsl(145, 63%, 42%)',
+            successText: '#111111',
             warning: 'hsl(43, 65%, 52%)',
-            danger: 'hsl(354, 70%, 54%)',
-            temphp: 'hsl(215, 90%, 55%)'
+            danger: 'hsl(354, 70%, 52%)',
+            dangerText: '#ffffff',
+            temphp: 'hsl(215, 90%, 55%)',
+            temphpText: '#111111'
         }
     },
     protanopia: {
@@ -147,9 +150,12 @@ export const COLORBLIND_MODES = {
             'Calibrated Blue & Orange/Yellow contrast scale with dual-coded diagonal hatch patterns (HP ///, Temp HP \\\\\\).',
         preview: {
             success: '#0072b2',
+            successText: '#ffffff',
             warning: '#f0e442',
             danger: '#d55e00',
-            temphp: '#009e73'
+            dangerText: '#111111',
+            temphp: '#009e73',
+            temphpText: '#111111'
         }
     },
     deuteranopia: {
@@ -159,9 +165,12 @@ export const COLORBLIND_MODES = {
             'Okabe-Ito Sky Blue & Amber contrast scale with high-visibility dual patterns (HP \\\\\\, Temp HP ///).',
         preview: {
             success: '#56b4e9',
+            successText: '#111111',
             warning: '#e69f00',
             danger: '#d55e00',
-            temphp: '#0072b2'
+            dangerText: '#111111',
+            temphp: '#0072b2',
+            temphpText: '#ffffff'
         }
     },
     tritanopia: {
@@ -170,9 +179,12 @@ export const COLORBLIND_MODES = {
         description: 'Teal-Cyan & Crimson contrast scale for blue-yellow vision deficiency (HP |||, Temp HP ≡).',
         preview: {
             success: '#009e73',
+            successText: '#111111',
             warning: '#e69f00',
             danger: '#cc79a7',
-            temphp: '#0072b2'
+            dangerText: '#111111',
+            temphp: '#0072b2',
+            temphpText: '#ffffff'
         }
     },
     achromatopsia: {
@@ -181,9 +193,12 @@ export const COLORBLIND_MODES = {
         description: 'Maximum luminance monochrome scale with solid border (HP) and dashed border (Temp HP).',
         preview: {
             success: '#ffffff',
+            successText: '#111111',
             warning: '#9e9e9e',
             danger: '#333333',
-            temphp: '#78909c'
+            dangerText: '#ffffff',
+            temphp: '#78909c',
+            temphpText: '#111111'
         }
     }
 };
@@ -198,7 +213,6 @@ export function initVttThemes(vtt) {
     applyColorblindMode(currentColorblindId);
 
     // Setup UI elements in Settings tab
-    setupSettingsTabs();
     populateThemeSelector(currentThemeId);
     populateColorblindSelector(currentColorblindId);
     setupFontScaleControls();
@@ -272,31 +286,6 @@ export function initVttThemes(vtt) {
         }
     }
 
-    function setupSettingsTabs() {
-        const btnTabPref = document.getElementById('settings-subtab-preferences');
-        const btnTabGm = document.getElementById('settings-subtab-gm');
-        const panelPref = document.getElementById('settings-panel-preferences');
-        const panelGm = document.getElementById('settings-panel-gm');
-
-        if (!btnTabPref || !btnTabGm || !panelPref || !panelGm) return;
-
-        btnTabPref.addEventListener('click', () => {
-            btnTabPref.classList.add('active');
-            btnTabGm.classList.remove('active');
-            panelPref.classList.remove('vtt-hidden');
-            panelGm.classList.add('vtt-hidden');
-            if (window.Dice3D?.playUiClick) window.Dice3D.playUiClick(550);
-        });
-
-        btnTabGm.addEventListener('click', () => {
-            btnTabGm.classList.add('active');
-            btnTabPref.classList.remove('active');
-            panelGm.classList.remove('vtt-hidden');
-            panelPref.classList.add('vtt-hidden');
-            if (window.Dice3D?.playUiClick) window.Dice3D.playUiClick(550);
-        });
-    }
-
     function populateThemeSelector(activeId) {
         const select = document.getElementById('config-visual-theme-select');
         if (!select) return;
@@ -328,7 +317,7 @@ export function initVttThemes(vtt) {
             </div>
             <div class="theme-chip-meta">
                 <span class="theme-chip-font-badge" style="font-family:${theme.font};"><i class="fa-solid fa-font"></i> ${theme.fontBadge}</span>
-                <span class="theme-chip-dice-badge"><i class="fa-solid fa-dice-d20 text-gradient-gold"></i> ${theme.defaultDice.replace('_', ' ')}</span>
+                <span class="theme-chip-dice-badge"><i class="fa-solid fa-dice-d20 text-gradient-gold"></i> ${theme.defaultDice.replaceAll('_', ' ')}</span>
             </div>
             <p class="theme-chip-desc text-muted">${theme.description}</p>
         `;
@@ -387,7 +376,7 @@ export function initVttThemes(vtt) {
         previewContainer.innerHTML = `
             <div style="display: flex; gap: 6px; flex-wrap: wrap;">
                 <div class="cb-preview-item">
-                    <span class="cb-pill" style="background: ${mode.preview.success}; color: #fff;">
+                    <span class="cb-pill" style="background: ${mode.preview.success}; color: ${mode.preview.successText || '#fff'};">
                         <i class="fa-solid fa-circle-check"></i> Healthy
                     </span>
                 </div>
@@ -397,12 +386,12 @@ export function initVttThemes(vtt) {
                     </span>
                 </div>
                 <div class="cb-preview-item">
-                    <span class="cb-pill" style="background: ${mode.preview.danger}; color: #fff;">
+                    <span class="cb-pill" style="background: ${mode.preview.danger}; color: ${mode.preview.dangerText || '#fff'};">
                         <i class="fa-solid fa-skull"></i> Critical
                     </span>
                 </div>
                 <div class="cb-preview-item">
-                    <span class="cb-pill" style="background: ${mode.preview.temphp}; color: #fff;">
+                    <span class="cb-pill" style="background: ${mode.preview.temphp}; color: ${mode.preview.temphpText || '#fff'};">
                         <i class="fa-solid fa-shield-heart"></i> Temp HP
                     </span>
                 </div>

@@ -15,7 +15,7 @@ import {
     revokeGmSessionToken,
     activeGmTokens
 } from '../state.js';
-import { verifyPassword } from '../../utils.js';
+import { verifyPasswordAsync } from '../../utils.js';
 import { p2pBridge } from '../p2p-bridge.js';
 
 export const adminRouter = express.Router();
@@ -186,7 +186,7 @@ export function clearGmAuthFailures(req) {
     gmLoginAttempts.delete(getClientIpKey(req));
 }
 
-adminRouter.post('/gm-login', (req, res) => {
+adminRouter.post('/gm-login', async (req, res) => {
     if (isGmAuthRateLimited(req)) {
         return res.status(429).json({
             success: false,
@@ -207,7 +207,10 @@ adminRouter.post('/gm-login', (req, res) => {
     }
 
     const cleanUser = (username || '').trim();
-    if (cleanUser.toLowerCase() !== gmUser.toLowerCase() || !verifyPassword(String(password || ''), gmSalt, gmHash)) {
+    const valid =
+        cleanUser.toLowerCase() === gmUser.toLowerCase() &&
+        (await verifyPasswordAsync(String(password || ''), gmSalt, gmHash));
+    if (!valid) {
         checkAndRecordGmAuthFailure(req);
         return res.status(401).json({
             success: false,

@@ -133,9 +133,11 @@ export function renderFogOfWarLayer(width, height, options = {}) {
 
         // Calculate token's personal unobstructed Line of Sight (LOS) polygon across the map (stopping at walls)
         const losCacheKey = `${cx.toFixed(1)}_${cy.toFixed(1)}_los_${wallsVersion}`;
+        const losCacheMap = (renderFogOfWarLayer._losPolyWeakMap = renderFogOfWarLayer._losPolyWeakMap || new WeakMap());
+        const cachedLos = losCacheMap.get(source);
         let losPolygon;
-        if (source._losPolyCache && source._losPolyCache.key === losCacheKey) {
-            losPolygon = source._losPolyCache.polygon;
+        if (cachedLos && cachedLos.key === losCacheKey) {
+            losPolygon = cachedLos.polygon;
         } else {
             losPolygon = computeVisPolyFn(
                 cx,
@@ -150,7 +152,7 @@ export function renderFogOfWarLayer(width, height, options = {}) {
                 walls,
                 activeSpatialIndex
             );
-            source._losPolyCache = { key: losCacheKey, polygon: losPolygon };
+            losCacheMap.set(source, { key: losCacheKey, polygon: losPolygon });
         }
         if (losPolygon && losPolygon.length > 2) {
             playerLosPolygons.push(losPolygon);
@@ -165,11 +167,13 @@ export function renderFogOfWarLayer(width, height, options = {}) {
         if (radius <= 0) return;
 
         const cacheKey = `${cx.toFixed(1)}_${cy.toFixed(1)}_${radius.toFixed(1)}_${wallsVersion}`;
+        const polyCacheMap = (renderFogOfWarLayer._polyWeakMap = renderFogOfWarLayer._polyWeakMap || new WeakMap());
+        const cachedPoly = polyCacheMap.get(source);
         let visibilityPolygon;
         if (isDaylightMode || radius >= maxLosRadius) {
             visibilityPolygon = losPolygon;
-        } else if (source._polyCache && source._polyCache.key === cacheKey) {
-            visibilityPolygon = source._polyCache.polygon;
+        } else if (cachedPoly && cachedPoly.key === cacheKey) {
+            visibilityPolygon = cachedPoly.polygon;
         } else {
             visibilityPolygon = computeVisPolyFn(
                 cx,
@@ -184,7 +188,7 @@ export function renderFogOfWarLayer(width, height, options = {}) {
                 walls,
                 activeSpatialIndex
             );
-            source._polyCache = { key: cacheKey, polygon: visibilityPolygon };
+            polyCacheMap.set(source, { key: cacheKey, polygon: visibilityPolygon });
         }
 
         if (visibilityPolygon && visibilityPolygon.length > 2) {

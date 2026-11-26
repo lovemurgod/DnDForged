@@ -126,6 +126,50 @@ function isValidTunnelToken(str) {
   }
 }
 
+function getDefaultUserDataDir() {
+  if (process.env.APPDATA) {
+    return path.join(process.env.APPDATA, 'forgedvtt');
+  }
+  if (process.platform === 'darwin') {
+    return path.join(os.homedir(), 'Library', 'Application Support', 'forgedvtt');
+  }
+  return path.join(process.env.XDG_CONFIG_HOME || path.join(os.homedir(), '.config'), 'forgedvtt');
+}
+
+function getCliArgValue(args, flag) {
+  for (let i = 0; i < args.length; i++) {
+    if (args[i] === flag && args[i + 1]) return args[i + 1];
+    if (args[i].startsWith(`${flag}=`)) return args[i].slice(flag.length + 1);
+  }
+  return '';
+}
+
+export function resolveActiveDataDir(appConfig, options = {}) {
+  const argv = options.argv || process.argv.slice(2);
+  const env = options.env || process.env;
+  const repoDir = options.repoDir || __dirname;
+  const checkExists = options.existsSync || fs.existsSync;
+
+  const cliDataDir = getCliArgValue(argv, '--data-dir').trim();
+  if (cliDataDir) return path.resolve(cliDataDir);
+
+  if (env.FORGEDVTT_DATA_DIR && env.FORGEDVTT_DATA_DIR.trim()) {
+    return path.resolve(env.FORGEDVTT_DATA_DIR.trim());
+  }
+
+  if (appConfig?.campaignDataDir && String(appConfig.campaignDataDir).trim()) {
+    return path.resolve(String(appConfig.campaignDataDir).trim());
+  }
+
+  const legacyRepoDataDir = path.join(repoDir, '.dndforged-data');
+  if (checkExists(path.join(legacyRepoDataDir, 'campaigns.json'))) {
+    return legacyRepoDataDir;
+  }
+
+  const userDataDir = options.userDataDir || getDefaultUserDataDir();
+  return path.join(userDataDir, '.dndforged-data');
+}
+
 function getSavedConfigPath() {
   if (process.env.FORGEDVTT_CONFIG_FILE && fs.existsSync(process.env.FORGEDVTT_CONFIG_FILE)) {
     return process.env.FORGEDVTT_CONFIG_FILE;
@@ -179,21 +223,27 @@ async function main() {
     process.exit(1);
   }
 
-  const tokenFile = path.join(__dirname, '.dndforged-data', 'tunnel-token.txt');
+  const appConfig = getSavedAppConfig();
+  const activeDataDir = resolveActiveDataDir(appConfig);
+  console.log(`📁 Campaign Data Folder: ${activeDataDir}\n`);
+
+  const tokenFile = path.join(activeDataDir, 'tunnel-token.txt');
+  const legacyTokenFile = path.join(__dirname, '.dndforged-data', 'tunnel-token.txt');
   let savedToken = '';
-  if (fs.existsSync(tokenFile)) {
-    const raw = fs.readFileSync(tokenFile, 'utf8').trim();
-    if (isValidTunnelToken(raw)) {
-      savedToken = raw;
+  for (const candidateTokenFile of [tokenFile, legacyTokenFile]) {
+    if (fs.existsSync(candidateTokenFile)) {
+      const raw = fs.readFileSync(candidateTokenFile, 'utf8').trim();
+      if (isValidTunnelToken(raw)) {
+        savedToken = raw;
+        break;
+      }
     }
   }
 
-  const appConfig = getSavedAppConfig();
   if (!savedToken && appConfig?.tunnelToken && isValidTunnelToken(appConfig.tunnelToken)) {
     savedToken = appConfig.tunnelToken.trim();
     try {
-      const dataDir = path.dirname(tokenFile);
-      if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
+      if (!fs.existsSync(activeDataDir)) fs.mkdirSync(activeDataDir, { recursive: true });
       fs.writeFileSync(tokenFile, savedToken, 'utf8');
     } catch (e) { }
   }
@@ -204,8 +254,7 @@ async function main() {
     if (inputToken) {
       if (isValidTunnelToken(inputToken)) {
         token = inputToken;
-        const dataDir = path.join(__dirname, '.dndforged-data');
-        if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
+        if (!fs.existsSync(activeDataDir)) fs.mkdirSync(activeDataDir, { recursive: true });
         fs.writeFileSync(tokenFile, token, 'utf8');
         console.log('✅ Tunnel Token saved for future launches.');
       } else {
@@ -246,15 +295,25 @@ async function main() {
 
   if (isOccupied) {
     let isForgeD = false;
+    let runningDataDir = '';
     try {
       const res = await fetch(`http://127.0.0.1:${requestedPort}/api/server/data-dir`, {
         signal: AbortSignal.timeout(1000)
       });
-      if (res.ok) isForgeD = true;
+      if (res.ok) {
+        isForgeD = true;
+        const info = await res.json().catch(() => null);
+        if (info && typeof info.activeDataDir === 'string') {
+          runningDataDir = info.activeDataDir;
+        }
+      }
     } catch (e) { }
 
     if (isForgeD) {
       console.log(`\nℹ️  ForgeDVTT server is already active on port ${requestedPort}. Reusing existing instance.`);
+      if (runningDataDir && path.resolve(runningDataDir) !== activeDataDir) {
+        console.warn(`⚠️  Warning: Running server is using "${runningDataDir}", which differs from requested "${activeDataDir}".`);
+      }
     } else {
       if (token && isValidTunnelToken(token)) {
         console.error(`\n❌ [Server Error] Port ${requestedPort} is already in use by another application.`);
@@ -284,10 +343,7 @@ async function main() {
     if (cfgPath && !childEnv.FORGEDVTT_CONFIG_FILE) {
       childEnv.FORGEDVTT_CONFIG_FILE = cfgPath;
     }
-    const dataDir = process.env.FORGEDVTT_DATA_DIR || appConfig?.campaignDataDir;
-    if (dataDir) {
-      childEnv.FORGEDVTT_DATA_DIR = dataDir;
-    }
+    childEnv.FORGEDVTT_DATA_DIR = activeDataDir;
     if (process.env.FORGEDVTT_SERVER_SECRET) {
       childEnv.FORGEDVTT_SERVER_SECRET = process.env.FORGEDVTT_SERVER_SECRET;
     }
@@ -307,7 +363,7 @@ async function main() {
   }
 
   console.log('🌐 Launching Cloudflare Tunnel...');
-  const tunnelArgs = ['--protocol', 'http2', '--no-prechecks'];
+  const tunnelArgs = ['--protocol', 'auto', '--no-prechecks'];
   const tunnelEnv = { ...process.env };
 
   if (hasNamedToken) {
@@ -346,10 +402,16 @@ async function main() {
   }
   console.log('\n(Press Ctrl+C at any time to shut down the server and tunnel)\n');
 
-  function shutdown() {
+  async function shutdown() {
     console.log('\n\nShutting down ForgeD VTT online tunnel...');
     try {
-      if (serverProcess && !serverProcess.killed) serverProcess.kill();
+      if (serverProcess && !serverProcess.killed) {
+        await fetch(`http://127.0.0.1:${activePort}/api/server/shutdown`, {
+          method: 'POST',
+          signal: AbortSignal.timeout(1500)
+        }).catch(() => {});
+        if (!serverProcess.killed) serverProcess.kill();
+      }
       if (tunnelProcess && !tunnelProcess.killed) tunnelProcess.kill();
     } catch (e) { }
     process.exit(0);
@@ -359,7 +421,10 @@ async function main() {
   process.on('SIGTERM', shutdown);
 }
 
-main().catch((err) => {
-  console.error('Fatal error:', err);
-  process.exit(1);
-});
+const isDirectRun = process.argv[1] && path.resolve(process.argv[1]) === path.resolve(__filename);
+if (isDirectRun) {
+  main().catch((err) => {
+    console.error('Fatal error:', err);
+    process.exit(1);
+  });
+}
