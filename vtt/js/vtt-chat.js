@@ -2998,7 +2998,7 @@ export function initVttChat(vtt, chatHistory) {
                 } else {
                     avatarHtml = `
                         <div class="init-token-avatar-wrap">
-                            <img class="init-token-avatar" src="${safeTargetImg}" alt="${safeName}" data-fallback-monogram-bg="${escapeHtml(monogram.bg)}" data-fallback-monogram-border="${escapeHtml(monogram.border)}" data-fallback-monogram-color="${escapeHtml(monogram.color)}" data-fallback-monogram-letters="${escapeHtml(monogram.letters)}">
+                            <img class="init-token-avatar" src="${safeTargetImg}" data-raw-src="${escapeHtml(targetImg)}" alt="${safeName}" data-fallback-monogram-bg="${escapeHtml(monogram.bg)}" data-fallback-monogram-border="${escapeHtml(monogram.border)}" data-fallback-monogram-color="${escapeHtml(monogram.color)}" data-fallback-monogram-letters="${escapeHtml(monogram.letters)}">
                         </div>`;
                 }
             }

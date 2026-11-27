@@ -1236,7 +1236,7 @@ export function renderStatBlock(m, panel = null, ctx = {}) {
             typeof window !== 'undefined' && typeof window.getSafeVttUrl === 'function'
                 ? window.getSafeVttUrl(tokenUrl)
                 : tokenUrl;
-        portraitMediaHtml = `<img src="${escapeHtml(safeTokenUrl)}" alt="${safeName}" data-fallback-arcane="${safeName}" style="width:100%; height:100%; object-fit:cover; display:block;">`;
+        portraitMediaHtml = `<img src="${escapeHtml(safeTokenUrl)}" data-raw-src="${escapeHtml(tokenUrl || '')}" alt="${safeName}" data-fallback-arcane="${safeName}" style="width:100%; height:100%; object-fit:cover; display:block;">`;
     }
 
     contentEl.innerHTML = `

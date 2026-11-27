@@ -616,7 +616,7 @@ export function initVttDataBridge(vtt) {
 
             item.innerHTML = `
                 <div class="bestiary-col-name" title="${safeMonsterName}">
-                    <img src="${safeThumbUrl}" alt="" loading="lazy" data-fallback-arcane="${safeMonsterName}" style="width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--color-gold-base); object-fit: cover; flex-shrink: 0;">
+                    <img src="${safeThumbUrl}" data-raw-src="${escapeHtml(imageUrl)}" alt="" loading="lazy" data-fallback-arcane="${safeMonsterName}" style="width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--color-gold-base); object-fit: cover; flex-shrink: 0;">
                     <span class="bestiary-col-name-text">${safeMonsterName}</span>
                     ${spellBadge}
                 </div>
@@ -2423,7 +2423,7 @@ export function initVttDataBridge(vtt) {
                 }
                 mediaHtml = `<iframe src="${escapeHtml(ytUrl)}" frameborder="0" style="width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--color-gold-base); pointer-events:none;"></iframe>`;
             } else {
-                mediaHtml = `<img src="${safeTokenImg}" style="width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--color-gold-base); object-fit: cover;" data-fallback-arcane="${escapeHtml(npc.name || 'NPC')}">`;
+                mediaHtml = `<img src="${safeTokenImg}" data-raw-src="${escapeHtml(tokenImg)}" style="width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--color-gold-base); object-fit: cover;" data-fallback-arcane="${escapeHtml(npc.name || 'NPC')}">`;
             }
 
             const safeNpcId = escapeHtml(npc.id);

@@ -3632,8 +3632,11 @@ export function initVttCanvas(vtt) {
                 setMapBackground(rawUrl);
             }
             if (typeof document !== 'undefined') {
+                const normTarget = String(rawUrl).split('?')[0].replace(/^\/+/, '');
                 document.querySelectorAll('img[data-raw-src], video[data-raw-src]').forEach((el) => {
-                    if (el.dataset.rawSrc === rawUrl) {
+                    const elRaw = el.dataset.rawSrc || '';
+                    const elNorm = elRaw.split('?')[0].replace(/^\/+/, '');
+                    if (elRaw === rawUrl || (normTarget && elNorm === normTarget)) {
                         el.src = getSafeVttUrl(rawUrl);
                     }
                 });

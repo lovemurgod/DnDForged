@@ -292,7 +292,7 @@ import{VTTDiceParser as Ge}from"./vtt-dice-parser.js";import{getSafeVttUrl as ze
                                 <video class="init-token-avatar" src="${H}#t=0.001" muted playsinline preload="metadata"></video>
                             </div>`}else _=`
                         <div class="init-token-avatar-wrap">
-                            <img class="init-token-avatar" src="${H}" alt="${C}" data-fallback-monogram-bg="${c(b.bg)}" data-fallback-monogram-border="${c(b.border)}" data-fallback-monogram-color="${c(b.color)}" data-fallback-monogram-letters="${c(b.letters)}">
+                            <img class="init-token-avatar" src="${H}" data-raw-src="${c(R)}" alt="${C}" data-fallback-monogram-bg="${c(b.bg)}" data-fallback-monogram-border="${c(b.border)}" data-fallback-monogram-color="${c(b.color)}" data-fallback-monogram-letters="${c(b.letters)}">
                         </div>`}const F=x?`${C} (Token Removed)`:$?"Creature":C;let L="";!$&&r&&r.maxHp&&(L=`<span class="init-card-hover-tooltip-hp" style="color: ${h}; border-color: ${h};">${s}</span>`);const j=`
                 <div class="init-card-hover-tooltip">
                     <span class="init-card-hover-tooltip-name">${F}</span>

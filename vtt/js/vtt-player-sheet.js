@@ -3696,13 +3696,14 @@ export function initVttPlayerSheet(vtt) {
                         c.owner === vtt.username ||
                         c.ownerUsername === vtt.username ||
                         (c.assignedPlayers && c.assignedPlayers.includes(vtt.username));
-                    const pcTokenUrl = escapeHtml(getSafeVttUrl(getPlayerActiveTokenUrl(c)));
+                    const rawPcToken = getPlayerActiveTokenUrl(c);
+                    const pcTokenUrl = escapeHtml(getSafeVttUrl(rawPcToken));
                     const pcSafeName = escapeHtml(c.name || 'Hero');
                     return `
                 <div class="init-row char-row" data-id="${c.id}" draggable="true" style="cursor:pointer; display:flex; flex-direction:column; align-items:flex-start; padding:12px; gap:6px;">
                     <div style="display:flex; justify-content:space-between; width:100%; align-items:center; gap:8px;">
                         <div style="display:flex; align-items:center; gap:8px; min-width:0;">
-                            <img src="${pcTokenUrl}" alt="" data-fallback-arcane="${pcSafeName}" style="width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--color-gold-base); object-fit: cover; flex-shrink: 0;">
+                            <img src="${pcTokenUrl}" data-raw-src="${escapeHtml(rawPcToken)}" alt="" data-fallback-arcane="${pcSafeName}" style="width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--color-gold-base); object-fit: cover; flex-shrink: 0;">
                             <span class="init-name" style="font-size:1.05rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${pcSafeName}</span>
                         </div>
                         <div style="display:flex; align-items:center; gap:6px; flex-shrink:0;">
@@ -3753,13 +3754,14 @@ export function initVttPlayerSheet(vtt) {
                         c.owner === vtt.username ||
                         c.ownerUsername === vtt.username ||
                         (c.assignedPlayers && c.assignedPlayers.includes(vtt.username));
-                    const compTokenUrl = escapeHtml(getSafeVttUrl(getPlayerActiveTokenUrl(c)));
+                    const rawCompToken = getPlayerActiveTokenUrl(c);
+                    const compTokenUrl = escapeHtml(getSafeVttUrl(rawCompToken));
                     const compSafeName = escapeHtml(c.name || 'Companion');
                     return `
                 <div class="init-row char-row" data-id="${c.id}" data-is-companion="true" draggable="true" style="cursor:pointer; display:flex; flex-direction:column; align-items:flex-start; padding:12px; gap:6px; border-left:3px solid var(--color-gold-base);">
                     <div style="display:flex; justify-content:space-between; width:100%; align-items:center; gap:8px;">
                         <div style="display:flex; align-items:center; gap:8px; min-width:0;">
-                            <img src="${compTokenUrl}" alt="" data-fallback-arcane="${compSafeName}" style="width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--color-gold-base); object-fit: cover; flex-shrink: 0;">
+                            <img src="${compTokenUrl}" data-raw-src="${escapeHtml(rawCompToken)}" alt="" data-fallback-arcane="${compSafeName}" style="width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--color-gold-base); object-fit: cover; flex-shrink: 0;">
                             <span class="init-name" style="font-size:1.05rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;"><i class="fa-solid fa-paw" style="margin-right:4px; font-size:0.8rem;"></i> ${compSafeName}</span>
                         </div>
                         <div style="display:flex; align-items:center; gap:6px; flex-shrink:0;">
@@ -5065,7 +5067,7 @@ export function initVttPlayerSheet(vtt) {
             }
             mediaHtml = `<iframe src="${ytUrl}" draggable="false" frameborder="0" style="width: 100%; height: 100%; pointer-events:none;"></iframe>`;
         } else {
-            mediaHtml = `<img src="${escapeHtml(getSafeVttUrl(activeImageUrl))}" data-fallback-arcane="${escapeHtml(char.name || 'Hero')}" draggable="false" style="width: 100%; height: 100%; object-fit: cover;">`;
+            mediaHtml = `<img src="${escapeHtml(getSafeVttUrl(activeImageUrl))}" data-raw-src="${escapeHtml(activeImageUrl)}" data-fallback-arcane="${escapeHtml(char.name || 'Hero')}" draggable="false" style="width: 100%; height: 100%; object-fit: cover;">`;
         }
 
         const classSummaryText =
