@@ -2932,10 +2932,11 @@ i[class*="fa-regular"] {
 
 .section-intro>p:last-child,
 .page-intro>p:last-child {
-    max-width: 880px;
+    max-width: min(88ch, 100%);
     color: #b6c2d2;
     font-size: 1.05rem;
-    text-wrap: pretty;
+    line-height: 1.65;
+    text-wrap: normal;
 }
 
 .role-grid {
@@ -3240,9 +3241,11 @@ i[class*="fa-regular"] {
 }
 
 .guide-header-box>p:last-child {
-    max-width: 720px !important;
+    max-width: min(88ch, 100%) !important;
     margin: 0 !important;
     color: #b6c2d2 !important;
+    line-height: 1.65;
+    text-wrap: normal;
 }
 
 .guide-header-box .eyebrow {
@@ -4323,40 +4326,40 @@ i.gold,
     }
 }
 
-/* Unified Guide Switcher across getting-started, guide, and app-guide */
+/* Secondary Sub-Navigation Header across getting-started, guide, and app-guide */
 .guide-switcher {
-    display: inline-flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    padding: 6px;
-    margin-bottom: 20px;
-    border-radius: 12px;
-    background: rgba(15, 23, 42, 0.72);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    width: 100%;
+    padding: 0 clamp(20px, 5vw, 76px);
+    display: flex;
+    align-items: center;
+    gap: clamp(16px, 2.5vw, 32px);
+    background: rgba(12, 18, 32, 0.92);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(10px);
+    overflow-x: auto;
 }
 
 .guide-switcher a {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    padding: 8px 14px;
-    border-radius: 8px;
-    color: var(--text-secondary);
+    padding: 12px 4px;
+    color: #94a3b8;
     text-decoration: none;
     font-size: 0.9rem;
     font-weight: 600;
-    transition: background-color 0.18s ease, color 0.18s ease;
+    white-space: nowrap;
+    border-bottom: 2px solid transparent;
+    transition: color 0.18s ease, border-color 0.18s ease;
 }
 
 .guide-switcher a:hover {
-    color: var(--text-primary);
-    background: rgba(255, 255, 255, 0.06);
+    color: #f8fafc;
 }
 
 .guide-switcher a[aria-current="page"] {
-    background: rgba(212, 175, 55, 0.18);
     color: var(--color-gold-bright);
-    border: 1px solid rgba(212, 175, 55, 0.4);
+    border-bottom-color: var(--color-gold-bright);
 }
 
 /* Hero Eyebrow Quote + Outcome-First H1 */

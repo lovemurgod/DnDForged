@@ -146,6 +146,10 @@ fs.writeFileSync(path.join(docsPrepDir, 'static-flag.js'), 'window.__FORGEDVTT_S
 if (fs.existsSync(prepIndex)) {
     let prepHtml = fs.readFileSync(prepIndex, 'utf8');
     prepHtml = prepHtml.replace(
+        '<link rel="icon" type="image/png" href="icon.png">',
+        '<link rel="icon" type="image/x-icon" href="../favicon.ico">\n  <link rel="icon" type="image/svg+xml" href="../favicon.svg">\n  <link rel="icon" type="image/png" sizes="96x96" href="../favicon-96x96.png">\n  <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">'
+    );
+    prepHtml = prepHtml.replace(
         '<script src="static-storage-driver.js"></script>',
         '<script src="static-flag.js"></script>\n  <script src="static-storage-driver.js"></script>'
     );
