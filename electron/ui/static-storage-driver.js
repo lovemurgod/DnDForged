@@ -277,6 +277,7 @@
                 try {
                     const savedHandle = await idbGet('fs_dir_handle');
                     if (savedHandle) {
+                        this._savedDirHandle = savedHandle;
                         this.rememberedFolderName = savedHandle.name || '';
                         const perm = await savedHandle.queryPermission({ mode: 'readwrite' });
                         if (perm === 'granted') {
@@ -294,6 +295,9 @@
 
         getDataPathLabel() {
             if (this.dirHandle) {
+                if (this.lastMediaSyncError) {
+                    return `Local Folder: ${this.dirHandle.name} (Media sync warning: ${this.lastMediaSyncError})`;
+                }
                 const countText =
                     typeof this.syncedMediaCount === 'number'
                         ? ` (${this.syncedMediaCount} media file${this.syncedMediaCount === 1 ? '' : 's'} synced)`
@@ -334,17 +338,20 @@
         async reconnectRememberedFolder() {
             if (!this.hasFsAccess) return false;
             try {
-                const savedHandle = await idbGet('fs_dir_handle');
+                const savedHandle = this._savedDirHandle || (await idbGet('fs_dir_handle'));
                 if (!savedHandle) return false;
+                this._savedDirHandle = savedHandle;
                 const perm = await savedHandle.requestPermission({ mode: 'readwrite' });
                 if (perm === 'granted') {
                     this.dirHandle = savedHandle;
                     this.rememberedFolderName = savedHandle.name || '';
                     this.needsFolderReconnect = false;
-                    await this.reloadAll();
+                    await this.reloadAll({ preferDisk: true });
                     return true;
                 }
-            } catch (_) {}
+            } catch (err) {
+                console.warn('[Static Storage] Reconnect failed:', err);
+            }
             return false;
         }
 
@@ -448,7 +455,11 @@
                 await idbSet('chatLogs', this.chatLogs);
                 await idbSet('sourcesConfig', this.sourcesConfig);
                 await idbSet('gmCredentials', this.gmCredentials);
-                await this._syncAssetsWithDir().catch(() => {});
+                this.lastMediaSyncError = null;
+                await this._syncAssetsWithDir().catch((err) => {
+                    console.warn('[Static Storage] Media sync error:', err);
+                    this.lastMediaSyncError = err?.message || 'IndexedDB sync failed';
+                });
             } else {
                 const idbCamps = await idbGet('campaigns');
                 this.campaigns =

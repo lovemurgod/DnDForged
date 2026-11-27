@@ -17,14 +17,6 @@ body {
     width: 100vw;
 }
 
-body:not(.vtt-standard-cursors) {
-    cursor: var(--vtt-cursor-default, default);
-}
-
-body:not(.vtt-standard-cursors) :is(button, a, select, summary, [role="button"], .clickable) {
-    cursor: var(--vtt-cursor-pointer, pointer);
-}
-
 /* Accessible keyboard focus indicators */
 :focus-visible {
     outline: 2px solid var(--color-gold-light, #f5c453);

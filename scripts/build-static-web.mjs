@@ -196,14 +196,40 @@ for (const cssFile of [
     }
 }
 
+const buildTag = Date.now().toString(36);
+const rewriteJsModuleSpecifiers = (code) =>
+    code.replace(
+        /((?:from|import)\s*\(?\s*['"])(\.\.?\/[^'"?]+\.js)(['"])/g,
+        (_, p1, spec, p3) => `${p1}${spec}?v=${buildTag}${p3}`
+    );
+
 const jsFilesToMinify = [...collectFiles(path.join(docsPlayDir, 'js'), '.js'), ...collectFiles(docsPrepDir, '.js')];
 let minifiedCount = 0;
 for (const jsFile of jsFilesToMinify) {
     if (path.basename(jsFile) === 'static-flag.js') continue;
     const src = fs.readFileSync(jsFile, 'utf8');
     const res = await esbuild.transform(src, { loader: 'js', minify: true });
-    fs.writeFileSync(jsFile, res.code, 'utf8');
+    fs.writeFileSync(jsFile, rewriteJsModuleSpecifiers(res.code), 'utf8');
     minifiedCount++;
+}
+
+for (const htmlFile of [
+    path.join(docsPlayDir, 'index.html'),
+    path.join(docsPlayDir, 'sheet.html'),
+    path.join(docsPrepDir, 'index.html')
+]) {
+    if (!fs.existsSync(htmlFile)) continue;
+    let html = fs.readFileSync(htmlFile, 'utf8');
+    html = html.replace(
+        /(<(?:script|link)\b[^>]*?\b(?:src|href)=["'])([^"'?#]+\.(?:js|css))(?:\?[^"']*)?(["'])/gi,
+        (m, p1, assetPath, p3) => {
+            if (/^https?:\/\//i.test(assetPath) || assetPath.startsWith('/socket.io/') || assetPath.includes('static-flag.js')) {
+                return m;
+            }
+            return `${p1}${assetPath}?v=${buildTag}${p3}`;
+        }
+    );
+    fs.writeFileSync(htmlFile, html, 'utf8');
 }
 
 console.log(`✅ Minified ${minifiedCount} JS files & bundled/minified CSS for docs/play/ and docs/prep/.`);

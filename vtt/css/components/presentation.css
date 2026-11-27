@@ -226,3 +226,12 @@ body.vtt-presentation-mode.vtt-tv-cursor-hidden .vtt-tv-utility-pill:not(:focus-
 .vtt-tv-sync-pill.is-frozen .tv-status-dot {
     background: #f59e0b;
 }
+
+/* Global Theme-Matched UI Cursors (placed at end of cascade so component rules do not override) */
+body:not(.vtt-standard-cursors) {
+    cursor: var(--vtt-cursor-default, default);
+}
+
+body:not(.vtt-standard-cursors) :is(button, a, select, summary, [role='button'], .btn, .clickable) {
+    cursor: var(--vtt-cursor-pointer, pointer);
+}
