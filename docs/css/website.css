@@ -2932,11 +2932,11 @@ i[class*="fa-regular"] {
 
 .section-intro>p:last-child,
 .page-intro>p:last-child {
-    max-width: min(88ch, 100%);
+    max-width: 100%;
     color: #b6c2d2;
     font-size: 1.05rem;
     line-height: 1.65;
-    text-wrap: normal;
+    text-wrap: wrap;
 }
 
 .role-grid {
@@ -3241,11 +3241,11 @@ i[class*="fa-regular"] {
 }
 
 .guide-header-box>p:last-child {
-    max-width: min(88ch, 100%) !important;
+    max-width: 100% !important;
     margin: 0 !important;
     color: #b6c2d2 !important;
     line-height: 1.65;
-    text-wrap: normal;
+    text-wrap: wrap;
 }
 
 .guide-header-box .eyebrow {
@@ -4332,6 +4332,7 @@ i.gold,
     padding: 0 clamp(20px, 5vw, 76px);
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: clamp(16px, 2.5vw, 32px);
     background: rgba(12, 18, 32, 0.92);
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
