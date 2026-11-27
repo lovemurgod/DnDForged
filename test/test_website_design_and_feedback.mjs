@@ -77,11 +77,11 @@ test('Website Design & Feedback Page Verification Suite', async (t) => {
     await t.test('5. Verify index.html tabletop showcase & hero copy, and getting-started.html requirements tabs', () => {
         const indexContent = fs.readFileSync(path.join(ROOT_DIR, 'index.html'), 'utf8');
         assert.ok(indexContent.includes('showcase-section'), 'index.html must contain tabletop showcase section');
-        assert.ok(indexContent.includes('showcase-tab-btn'), 'index.html must contain showcase tab buttons');
-        assert.ok(indexContent.includes('showcase-panel'), 'index.html must contain showcase panels');
-        assert.ok(indexContent.includes('showcase-mass-combat.jpg'), 'index.html must embed mass combat screenshot');
-        assert.ok(indexContent.includes('showcase-spellbook.jpg'), 'index.html must embed spellbook screenshot');
-        assert.ok(indexContent.includes('showcase-statblock-saves.jpg'), 'index.html must embed statblock saves screenshot');
+        assert.ok(indexContent.includes('showcase-grid'), 'index.html must contain side-by-side showcase grid');
+        assert.ok(indexContent.includes('showcase-lightbox'), 'index.html must contain showcase lightbox modal');
+        assert.ok(indexContent.includes('Preview.gif'), 'index.html must embed Preview.gif');
+        assert.ok(indexContent.includes('Mass%20Attack.gif'), 'index.html must embed Mass Attack.gif');
+        assert.ok(indexContent.includes('Mass%20Saves.gif'), 'index.html must embed Mass Saves.gif');
         assert.ok(indexContent.includes('guide-callout-dual'), 'index.html must contain dual guide callouts');
         assert.ok(/Game\s+Master\s*\(DM\)/.test(indexContent), 'index.html must connect Game Master and DM');
 
