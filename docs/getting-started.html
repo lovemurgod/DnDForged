@@ -86,35 +86,28 @@
   <header class="site-header">
     <a class="site-brand" href="index.html" aria-label="ForgeDVTT home"><img src="img/TextLogo.png" alt="ForgeDVTT"></a>
     <nav class="site-nav" aria-label="Main navigation">
-      <a href="index.html">Home</a>
       <div class="nav-dropdown">
         <button type="button" class="nav-dropdown-toggle" aria-haspopup="true" aria-expanded="false">
           Features <i class="fa-solid fa-chevron-down" style="font-size: 0.7rem;" aria-hidden="true"></i>
         </button>
         <div class="nav-dropdown-menu">
           <a href="portal-dungeons.html"><i class="fa-solid fa-dungeon" aria-hidden="true"></i> Portal Dungeons</a>
-          <a href="self-hosted-vtt.html"><i class="fa-solid fa-network-wired" aria-hidden="true"></i> Offline &amp;
-            Tunnels</a>
+          <a href="self-hosted-vtt.html"><i class="fa-solid fa-network-wired" aria-hidden="true"></i> Offline &amp; Tunnels</a>
           <a href="tv-gaming-table.html"><i class="fa-solid fa-tv" aria-hidden="true"></i> TV Gaming Table</a>
         </div>
       </div>
-      <div class="nav-dropdown is-active">
-        <button type="button" class="nav-dropdown-toggle" aria-haspopup="true" aria-expanded="false">
-          Getting Started <i class="fa-solid fa-chevron-down" style="font-size: 0.7rem;" aria-hidden="true"></i>
-        </button>
-        <div class="nav-dropdown-menu">
-          <a href="getting-started.html" aria-current="page"><i class="fa-solid fa-play" aria-hidden="true"></i> Getting
-            Started</a>
-          <a href="guide.html"><i class="fa-solid fa-dice-d20" aria-hidden="true"></i> Play Guide</a>
-          <a href="app-guide.html"><i class="fa-solid fa-sliders" aria-hidden="true"></i> App Guide</a>
-        </div>
-      </div>
+      <a href="getting-started.html" aria-current="page">Guide</a>
       <a href="prep/">Session Prep</a>
       <a href="feedback.html">Feedback</a>
     </nav>
     <a class="btn-vtt-gold site-download" href="play/"><i class="fa-solid fa-dice-d20" aria-hidden="true"></i> Play Online</a>
   </header>
   <main class="main-wrapper site-main">
+    <nav class="guide-switcher" aria-label="Guide sections">
+      <a href="getting-started.html" aria-current="page"><i class="fa-solid fa-play" aria-hidden="true"></i> Getting Started</a>
+      <a href="guide.html"><i class="fa-solid fa-dice-d20" aria-hidden="true"></i> Play Guide</a>
+      <a href="app-guide.html"><i class="fa-solid fa-sliders" aria-hidden="true"></i> App Guide</a>
+    </nav>
     <section class="page-intro" aria-labelledby="start-title">
       <p class="eyebrow">Your first game</p>
       <h1 id="start-title">Let’s get your table ready.</h1>
@@ -292,6 +285,171 @@
       <p class="troubleshooting-guide">Need more help? <a href="guide.html#guide-hosting-setup">Read Cloudflare hosting
           help</a> or <a href="guide.html">search the Guide</a>.</p>
     </section>
+    <section class="system-req-section" aria-labelledby="requirements-heading">
+      <div class="section-intro">
+        <p class="eyebrow"><i class="fa-solid fa-microchip" aria-hidden="true"></i> Performance &amp; Hardware</p>
+        <h2 id="requirements-heading">System Requirements</h2>
+        <p>ForgeDVTT runs directly in any modern web browser for both GMs and players. The optional Offline Desktop App
+          runs on Windows 10/11 for local LAN tables and dedicated hosting.</p>
+      </div>
+
+      <!-- Quick Summary Cards -->
+      <div class="req-summary-cards">
+        <div class="req-summary-card gm-summary">
+          <div class="req-summary-icon"><i class="fa-solid fa-desktop" aria-hidden="true"></i></div>
+          <div class="req-summary-content">
+            <h4>Game Master (Browser P2P or Offline Windows App)</h4>
+            <p>Host online in any modern browser, or use Windows 10/11 (64-bit, 4 GB+ RAM) for offline LAN play and
+              dedicated local SSD storage.</p>
+          </div>
+        </div>
+        <div class="req-summary-card player-summary">
+          <div class="req-summary-icon"><i class="fa-solid fa-globe" aria-hidden="true"></i></div>
+          <div class="req-summary-content">
+            <h4>Players (Web Browser)</h4>
+            <p>Any modern browser on PC, Mac, Linux, iPad, Android, or Chromebook. <strong>Zero installation</strong>
+              required to join.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Interactive Tier Tabs -->
+      <div class="req-tab-nav" role="tablist" aria-label="System requirement profiles">
+        <button type="button" class="req-tab-btn is-active" role="tab" id="tab-btn-tactical" aria-selected="true"
+          aria-controls="req-panel-tactical">
+          <i class="fa-solid fa-shield-halved" aria-hidden="true"></i> Tactical Essentials (Lightweight)
+        </button>
+        <button type="button" class="req-tab-btn" role="tab" id="tab-btn-cinematic" aria-selected="false"
+          aria-controls="req-panel-cinematic">
+          <i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> Cinematic Immersion (High Performance)
+        </button>
+      </div>
+
+      <!-- Profile 1: Low Feature Use -->
+      <div class="req-tier-card req-tab-panel is-active" id="req-panel-tactical" role="tabpanel"
+        aria-labelledby="tab-btn-tactical">
+        <div class="req-tier-header">
+          <div>
+            <h3 class="req-tier-title">
+              <i class="fa-solid fa-shield-halved" aria-hidden="true"></i> Low Feature Use: Tactical Essentials
+            </h3>
+            <p class="req-tier-desc">Static image battlemaps, 2D token movement, character sheets, and standard dice
+              rolling.</p>
+          </div>
+          <span class="manual-section-badge"
+            style="background: rgba(111, 162, 71, 0.2); border-color: rgba(111, 162, 71, 0.5); color: #85c35b;">Lightweight</span>
+        </div>
+
+        <div class="manual-table-wrap">
+          <table class="manual-table">
+            <thead>
+              <tr>
+                <th style="width: 24%;">Component</th>
+                <th style="width: 38%;"><i class="fa-solid fa-desktop" style="color: var(--color-vtt-blue-bright);"
+                    aria-hidden="true"></i> Game Master (Browser P2P / Offline App)</th>
+                <th style="width: 38%;"><i class="fa-solid fa-globe" style="color: var(--color-gold-bright);"
+                    aria-hidden="true"></i> Players (Web Browser)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Operating System</strong></td>
+                <td>Windows 10 or 11 (64-bit)</td>
+                <td>Any (Windows, macOS, iOS, Android, Linux, ChromeOS)</td>
+              </tr>
+              <tr>
+                <td><strong>Processor (CPU)</strong></td>
+                <td>Dual-Core 2.0 GHz (Intel Core i3 / AMD Ryzen 3 or newer)</td>
+                <td>Standard modern mobile, tablet, or desktop processor</td>
+              </tr>
+              <tr>
+                <td><strong>Memory (RAM)</strong></td>
+                <td>4 GB RAM</td>
+                <td>2 GB RAM</td>
+              </tr>
+              <tr>
+                <td><strong>Graphics (GPU)</strong></td>
+                <td>Integrated graphics (Intel UHD / AMD Radeon) with WebGL support</td>
+                <td>Any modern browser with WebGL enabled</td>
+              </tr>
+              <tr>
+                <td><strong>Storage</strong></td>
+                <td><strong>Zero install</strong> in browser (or ~500 MB for optional Windows app)</td>
+                <td><strong>Zero install</strong> (no storage required)</td>
+              </tr>
+              <tr>
+                <td><strong>Internet</strong></td>
+                <td>3–5 Mbps stable upload speed</td>
+                <td>Standard broadband or mobile data (1–2 Mbps)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Profile 2: High Feature Use -->
+      <div class="req-tier-card req-tab-panel" id="req-panel-cinematic" role="tabpanel"
+        aria-labelledby="tab-btn-cinematic">
+        <div class="req-tier-header">
+          <div>
+            <h3 class="req-tier-title">
+              <i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> High Feature Use: Cinematic Immersion
+            </h3>
+            <p class="req-tier-desc">4K animated video battlemaps, real-time line-of-sight &amp; darkness, multi-layer
+              weather particles, and 3D physics dice.</p>
+          </div>
+          <span class="manual-section-badge"
+            style="background: rgba(56, 189, 248, 0.2); border-color: rgba(56, 189, 248, 0.5); color: #7dd3fc;">Cinematic</span>
+        </div>
+
+        <div class="manual-table-wrap">
+          <table class="manual-table">
+            <thead>
+              <tr>
+                <th style="width: 24%;">Component</th>
+                <th style="width: 38%;"><i class="fa-solid fa-desktop" style="color: var(--color-vtt-blue-bright);"
+                    aria-hidden="true"></i> Game Master (Browser P2P / Offline App)</th>
+                <th style="width: 38%;"><i class="fa-solid fa-globe" style="color: var(--color-gold-bright);"
+                    aria-hidden="true"></i> Players (Web Browser)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Operating System</strong></td>
+                <td>Windows 10 or 11 (64-bit)</td>
+                <td>Windows, macOS, Linux, iPadOS, Android</td>
+              </tr>
+              <tr>
+                <td><strong>Processor (CPU)</strong></td>
+                <td>Quad-Core 3.0+ GHz (Intel Core i5 / AMD Ryzen 5 or newer)</td>
+                <td>Quad-Core desktop CPU or modern tablet (iPad Air/Pro, Galaxy Tab)</td>
+              </tr>
+              <tr>
+                <td><strong>Memory (RAM)</strong></td>
+                <td>8 GB to 16 GB RAM (smooth multi-tab caching &amp; popouts)</td>
+                <td>4 GB to 8 GB RAM</td>
+              </tr>
+              <tr>
+                <td><strong>Graphics (GPU)</strong></td>
+                <td>Dedicated GPU (NVIDIA GTX 1050 / AMD RX 560 or newer) or Intel Iris Xe</td>
+                <td>Dedicated GPU or modern integrated graphics with WebGL 2.0</td>
+              </tr>
+              <tr>
+                <td><strong>Storage</strong></td>
+                <td>Browser storage / local folder (or 5 GB+ SSD for optional Windows app)</td>
+                <td>Standard browser cache</td>
+              </tr>
+              <tr>
+                <td><strong>Internet</strong></td>
+                <td>10+ Mbps upload speed (for streaming video maps to 4–6 players)</td>
+                <td>Broadband connection (5+ Mbps download)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
   </main>
   <a href="#" id="site-back-to-top" class="site-back-to-top" aria-label="Back to top of page">
     <i class="fa-solid fa-arrow-up" aria-hidden="true"></i>
@@ -359,6 +517,20 @@
     });
     document.addEventListener('click', () => {
       document.querySelectorAll('.nav-dropdown').forEach(d => d.classList.remove('is-open'));
+    });
+    document.querySelectorAll('.req-tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.req-tab-btn').forEach(b => {
+          b.classList.remove('is-active');
+          b.setAttribute('aria-selected', 'false');
+        });
+        document.querySelectorAll('.req-tab-panel').forEach(p => p.classList.remove('is-active'));
+        btn.classList.add('is-active');
+        btn.setAttribute('aria-selected', 'true');
+        const targetId = btn.getAttribute('aria-controls');
+        const targetPanel = document.getElementById(targetId);
+        if (targetPanel) targetPanel.classList.add('is-active');
+      });
     });
     const backToTopBtn = document.getElementById('site-back-to-top');
     if (backToTopBtn) {

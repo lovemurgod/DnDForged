@@ -44,9 +44,7 @@ test('Website Design & Feedback Page Verification Suite', async (t) => {
         for (const page of PAGES) {
             const content = fs.readFileSync(path.join(ROOT_DIR, page), 'utf8');
             assert.ok(content.includes('href="index.html"'), `${page} must link to Home`);
-            assert.ok(content.includes('href="getting-started.html"'), `${page} must link to Getting Started`);
-            assert.ok(content.includes('href="guide.html"'), `${page} must link to Play Guide`);
-            assert.ok(content.includes('href="app-guide.html"'), `${page} must link to App Guide`);
+            assert.ok(content.includes('href="getting-started.html"'), `${page} must link to Guide (Getting Started)`);
             assert.ok(content.includes('portal-dungeons.html'), `${page} must include Portal Dungeons in navigation`);
             assert.ok(
                 content.includes('self-hosted-vtt.html'),
@@ -54,9 +52,17 @@ test('Website Design & Feedback Page Verification Suite', async (t) => {
             );
             assert.ok(content.includes('tv-gaming-table.html'), `${page} must include TV Gaming Table in navigation`);
             assert.ok(/Features\s*<i/.test(content), `${page} must have Features dropdown toggle in navigation`);
-            assert.ok(/Play Guide<\/a>/.test(content), `${page} must have Play Guide navigation label`);
-            assert.ok(/App Guide<\/a>/.test(content), `${page} must have App Guide navigation label`);
+            assert.ok(/>Guide<\/a>/.test(content), `${page} must have simplified Guide navigation label`);
+            assert.ok(content.includes('href="prep/"'), `${page} must link to Session Prep in navigation`);
             assert.ok(content.includes('href="feedback.html"'), `${page} must link to Feedback in navigation`);
+        }
+
+        for (const guidePage of ['getting-started.html', 'guide.html', 'app-guide.html']) {
+            const content = fs.readFileSync(path.join(ROOT_DIR, guidePage), 'utf8');
+            assert.ok(content.includes('class="guide-switcher"'), `${guidePage} must render unified guide switcher`);
+            assert.ok(content.includes('Getting Started</a>'), `${guidePage} switcher must link to Getting Started`);
+            assert.ok(content.includes('Play Guide</a>'), `${guidePage} switcher must link to Play Guide`);
+            assert.ok(content.includes('App Guide</a>'), `${guidePage} switcher must link to App Guide`);
         }
     });
 
@@ -68,14 +74,22 @@ test('Website Design & Feedback Page Verification Suite', async (t) => {
         }
     });
 
-    await t.test('5. Verify index.html requirements tab switcher, summary cards & hero copy', () => {
-        const content = fs.readFileSync(path.join(ROOT_DIR, 'index.html'), 'utf8');
-        assert.ok(content.includes('req-tab-nav'), 'index.html must contain requirement tab navigation');
-        assert.ok(content.includes('req-tab-btn'), 'index.html must contain requirement tab buttons');
-        assert.ok(content.includes('req-tab-panel'), 'index.html must contain requirement tab panels');
-        assert.ok(content.includes('req-summary-cards'), 'index.html must contain requirement summary cards');
-        assert.ok(content.includes('guide-callout-dual'), 'index.html must contain dual guide callouts');
-        assert.ok(/Game\s+Master\s*\(DM\)/.test(content), 'index.html must connect Game Master and DM');
+    await t.test('5. Verify index.html tabletop showcase & hero copy, and getting-started.html requirements tabs', () => {
+        const indexContent = fs.readFileSync(path.join(ROOT_DIR, 'index.html'), 'utf8');
+        assert.ok(indexContent.includes('showcase-section'), 'index.html must contain tabletop showcase section');
+        assert.ok(indexContent.includes('showcase-tab-btn'), 'index.html must contain showcase tab buttons');
+        assert.ok(indexContent.includes('showcase-panel'), 'index.html must contain showcase panels');
+        assert.ok(indexContent.includes('showcase-mass-combat.jpg'), 'index.html must embed mass combat screenshot');
+        assert.ok(indexContent.includes('showcase-spellbook.jpg'), 'index.html must embed spellbook screenshot');
+        assert.ok(indexContent.includes('showcase-statblock-saves.jpg'), 'index.html must embed statblock saves screenshot');
+        assert.ok(indexContent.includes('guide-callout-dual'), 'index.html must contain dual guide callouts');
+        assert.ok(/Game\s+Master\s*\(DM\)/.test(indexContent), 'index.html must connect Game Master and DM');
+
+        const startContent = fs.readFileSync(path.join(ROOT_DIR, 'getting-started.html'), 'utf8');
+        assert.ok(startContent.includes('req-tab-nav'), 'getting-started.html must contain requirement tab navigation');
+        assert.ok(startContent.includes('req-tab-btn'), 'getting-started.html must contain requirement tab buttons');
+        assert.ok(startContent.includes('req-tab-panel'), 'getting-started.html must contain requirement tab panels');
+        assert.ok(startContent.includes('req-summary-cards'), 'getting-started.html must contain requirement summary cards');
     });
 
     await t.test('6. Verify getting-started.html distinct setup checkpoints', () => {
