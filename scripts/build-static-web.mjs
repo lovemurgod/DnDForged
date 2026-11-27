@@ -223,7 +223,11 @@ for (const htmlFile of [
     html = html.replace(
         /(<(?:script|link)\b[^>]*?\b(?:src|href)=["'])([^"'?#]+\.(?:js|css))(?:\?[^"']*)?(["'])/gi,
         (m, p1, assetPath, p3) => {
-            if (/^https?:\/\//i.test(assetPath) || assetPath.startsWith('/socket.io/') || assetPath.includes('static-flag.js')) {
+            if (
+                /^https?:\/\//i.test(assetPath) ||
+                assetPath.startsWith('/socket.io/') ||
+                assetPath.includes('static-flag.js')
+            ) {
                 return m;
             }
             return `${p1}${assetPath}?v=${buildTag}${p3}`;

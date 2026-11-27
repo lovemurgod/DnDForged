@@ -8,7 +8,7 @@ import {
     DEFAULT_TOKEN_DROP_CONFIG
 } from './canvas/tokens/vtt-canvas-token-drop-config.js';
 import { openCreatureSelectorModal } from './modals/creature-selector-modal.js';
-import { resolveMonsterTokenUrl, escapeHtml } from './vtt-utils.js';
+import { resolveMonsterTokenUrl, escapeHtml, getSafeVttUrl } from './vtt-utils.js';
 
 export function initVttDataBridge(vtt) {
     const listContainer = document.getElementById('library-monster-list');
