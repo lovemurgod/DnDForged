@@ -118,6 +118,46 @@ export function setupSocketSync(ctx = {}) {
         }
     });
 
+    socket.on('campaign:patch', (patch) => {
+        if (!patch || typeof patch !== 'object' || !vtt.campaignState) return;
+        const camp = vtt.campaignState;
+
+        if (patch.scope === 'map_meta' && patch.mapId && patch.updates && camp.maps?.[patch.mapId]) {
+            Object.assign(camp.maps[patch.mapId], patch.updates);
+            if (patch.mapId === ctx.currentMapId) {
+                if (patch.updates.grid && ctx.grid && typeof ctx.grid === 'object') {
+                    Object.assign(ctx.grid, patch.updates.grid);
+                }
+                if (typeof ctx.renderAll === 'function') {
+                    ctx.renderAll();
+                }
+            }
+        } else if (patch.scope === 'map_order') {
+            if (Array.isArray(patch.mapOrder)) {
+                camp.mapOrder = patch.mapOrder;
+            }
+            if (patch.mapId && camp.maps?.[patch.mapId] && patch.folder !== undefined) {
+                camp.maps[patch.mapId].folder = patch.folder;
+            }
+        } else if (patch.scope === 'map_folders') {
+            if (Array.isArray(patch.mapFolders)) {
+                camp.mapFolders = patch.mapFolders;
+            }
+            if (patch.renamedFrom && patch.renamedTo && camp.maps) {
+                Object.values(camp.maps).forEach((m) => {
+                    if (m && m.folder === patch.renamedFrom) {
+                        m.folder = patch.renamedTo;
+                    }
+                });
+            }
+        }
+
+        const mapModal = typeof document !== 'undefined' ? document.getElementById('modal-upload-map') : null;
+        if (mapModal && !mapModal.classList.contains('vtt-hidden') && typeof ctx.renderMapGrid === 'function') {
+            ctx.renderMapGrid();
+        }
+    });
+
     // Fast-path immediate notification for party/player map activation
     socket.on('map:activated', (data) => {
         if (!data || !data.mapId) return;

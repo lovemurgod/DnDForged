@@ -372,6 +372,9 @@ export function setupToolControls(context = {}) {
                     context.renderPlacedTrapsList?.();
                     context.renderPlacedPortalsList?.();
                 }
+
+                vtt?.syncCanvasCursor?.();
+                if (typeof window !== 'undefined') window.VTT?.syncCanvasCursor?.();
             });
         }
     });

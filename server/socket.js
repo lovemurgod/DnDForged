@@ -34,6 +34,11 @@ export function broadcastCampaignSync(campaignId) {
     }
 }
 
+export function broadcastCampaignPatch(campaignId, patch) {
+    if (!activeIo || !campaignId || !patch) return;
+    activeIo.to(campaignId).emit('campaign:patch', patch);
+}
+
 function getOnlinePlayersList(campaignId) {
     if (!activeIo) return [];
     const room = activeIo.sockets.adapter.rooms.get(campaignId);
@@ -280,7 +285,14 @@ export function initSocketServer(io) {
         // Handle player/GM registration to a campaign room
         socket.on(
             'join',
-            async ({ campaignId, username, role, isSubWindow, gmPassword, gmSessionToken: providedGmSessionToken } = {}) => {
+            async ({
+                campaignId,
+                username,
+                role,
+                isSubWindow,
+                gmPassword,
+                gmSessionToken: providedGmSessionToken
+            } = {}) => {
                 const isLocal = isLoopbackRequest(socket.handshake);
                 let targetCampaignId = campaignId || socketSubdomain || 'default';
 
@@ -1086,7 +1098,11 @@ export function initSocketServer(io) {
             if (data.mapId && data.updates && campaigns[campaignId].maps[data.mapId]) {
                 Object.assign(campaigns[campaignId].maps[data.mapId], data.updates);
                 saveCampaigns();
-                broadcastCampaignSync(campaignId);
+                broadcastCampaignPatch(campaignId, {
+                    scope: 'map_meta',
+                    mapId: data.mapId,
+                    updates: data.updates
+                });
             }
         });
 
@@ -1128,7 +1144,12 @@ export function initSocketServer(io) {
             }
 
             saveCampaigns();
-            broadcastCampaignSync(campaignId);
+            broadcastCampaignPatch(campaignId, {
+                scope: 'map_order',
+                mapOrder: camp.mapOrder,
+                mapId,
+                folder
+            });
         });
 
         // Create a new map folder (GM only)
@@ -1143,7 +1164,10 @@ export function initSocketServer(io) {
                 camp.mapFolders.push(folderName);
                 camp.mapFolders.sort();
                 saveCampaigns();
-                broadcastCampaignSync(campaignId);
+                broadcastCampaignPatch(campaignId, {
+                    scope: 'map_folders',
+                    mapFolders: camp.mapFolders
+                });
             }
         });
 
@@ -1172,7 +1196,12 @@ export function initSocketServer(io) {
                 });
             }
             saveCampaigns();
-            broadcastCampaignSync(campaignId);
+            broadcastCampaignPatch(campaignId, {
+                scope: 'map_folders',
+                mapFolders: camp.mapFolders,
+                renamedFrom: oldFolder,
+                renamedTo: newFolder
+            });
         });
 
         // Delete a map folder (GM only)
@@ -1938,7 +1967,28 @@ export function initSocketServer(io) {
                         );
                         return;
                     }
+                    if (existing.isCompanion) {
+                        sanitizedCharacter.isCompanion = true;
+                    } else {
+                        delete sanitizedCharacter.isCompanion;
+                    }
+                    if (existing.isCustomNpc) {
+                        sanitizedCharacter.isCustomNpc = true;
+                    } else {
+                        delete sanitizedCharacter.isCustomNpc;
+                    }
+                    if (!existing.isCompanion && !existing.isCustomNpc && existing.monsterData === undefined) {
+                        delete sanitizedCharacter.monsterData;
+                    }
                 } else {
+                    if (sanitizedCharacter.isCompanion || sanitizedCharacter.isCustomNpc) {
+                        console.warn(
+                            `[Security] Non-GM user ${socket.username} attempted to create companion/NPC ${charId}`
+                        );
+                        delete sanitizedCharacter.isCompanion;
+                        delete sanitizedCharacter.isCustomNpc;
+                        delete sanitizedCharacter.monsterData;
+                    }
                     sanitizedCharacter.owner = socket.username;
                     sanitizedCharacter.ownerUsername = socket.username;
                     if (!sanitizedCharacter.assignedPlayers) sanitizedCharacter.assignedPlayers = [socket.username];
@@ -2152,7 +2202,11 @@ export function initSocketServer(io) {
                 saveCampaigns();
             }
 
-            broadcastCampaignSync(campaignId);
+            broadcastCampaignPatch(campaignId, {
+                scope: 'map_meta',
+                mapId,
+                updates: { name }
+            });
         });
 
         // Delete a map (GM only)

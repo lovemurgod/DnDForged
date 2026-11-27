@@ -17,6 +17,36 @@ body {
     width: 100vw;
 }
 
+/* Accessible keyboard focus indicators */
+:focus-visible {
+    outline: 2px solid var(--color-gold-light, #f5c453);
+    outline-offset: 2px;
+}
+
+/* Respect OS reduced-motion preference & unified Eco/Reduce-Motion mode */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+html.vtt-reduce-motion *,
+html.vtt-reduce-motion *::before,
+html.vtt-reduce-motion *::after,
+body.vtt-reduce-motion *,
+body.vtt-reduce-motion *::before,
+body.vtt-reduce-motion *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+}
+
 /* ==========================================================================
    Universal Font Awesome Anti-Faux-Bolding & Vector Normalization
    Shields 350+ VTT icon glyphs against container font-weight & italic bleed.

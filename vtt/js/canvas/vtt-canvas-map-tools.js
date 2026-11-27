@@ -3,6 +3,7 @@
 
 import { isPointInsideGeometry, renderPlacedTrapsList } from './vtt-canvas-traps.js';
 import { escapeHtml } from '../vtt-utils.js';
+import { applyCanvasCursor, resolveCanvasCursor } from './vtt-canvas-cursors.js';
 
 import {
     calcPortalCenter,
@@ -1577,13 +1578,11 @@ export function handleMapToolMouseMove(mouse, e, context = {}) {
             hoveredMapToolHandle = handleHit;
             if (handleHit.type === 'rotate') {
                 hoveredRotatePortalId = handleHit.portal.id;
-                canvasInteraction.style.cursor = 'grab';
-                if (viewport) viewport.style.cursor = 'grab';
+                applyCanvasCursor('grab', [canvasInteraction, viewport]);
                 renderAll();
                 return;
             } else if (handleHit.type === 'resize') {
-                canvasInteraction.style.cursor = handleHit.handle.cursor || 'pointer';
-                if (viewport) viewport.style.cursor = handleHit.handle.cursor || 'pointer';
+                applyCanvasCursor(handleHit.handle.cursor || 'pointer', [canvasInteraction, viewport]);
                 renderAll();
                 return;
             }
@@ -1593,14 +1592,13 @@ export function handleMapToolMouseMove(mouse, e, context = {}) {
         if (selItem) {
             const rHandle = getMapToolResizeHandleAt(selItem, mouse);
             if (rHandle) {
-                canvasInteraction.style.cursor = rHandle.cursor;
-                if (viewport) viewport.style.cursor = rHandle.cursor;
+                applyCanvasCursor(rHandle.cursor, [canvasInteraction, viewport]);
                 return;
             }
         }
     }
-    canvasInteraction.style.cursor = '';
-    if (viewport) viewport.style.cursor = '';
+    const baseCursor = resolveCanvasCursor({ activeTool: context.activeTool || 'maptools' });
+    applyCanvasCursor(baseCursor, [canvasInteraction, viewport]);
 
     if (!isDrawingMapTool) return;
     mapToolCurrentPoint = { x: mouse.x, y: mouse.y };

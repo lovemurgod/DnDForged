@@ -2,6 +2,17 @@
 import { VTTDiceParser } from './vtt-dice-parser.js';
 import { resolveMonsterTokenUrl, escapeHtml } from './vtt-utils.js';
 import {
+    buildCharacterExportPayload,
+    triggerJsonDownload,
+    parseImportedSheetJson,
+    validateImportedSheetEntity,
+    findImportConflict,
+    prepareImportedCharacter,
+    canUserOverwriteCharacter,
+    detectCrossCampaignAssetUrls,
+    validateImportFileSize
+} from './player-sheet/vtt-sheet-json-io.js';
+import {
     cleanId,
     resolveCharClassLevel,
     injectDiceChips,
@@ -463,12 +474,13 @@ export function initVttPlayerSheet(vtt) {
         if (builderPromise) return builderPromise;
 
         const existingItems =
-            typeof window !== 'undefined' && Array.isArray(window.VTT?.sharedItemCatalog) && window.VTT.sharedItemCatalog.length > 0
+            typeof window !== 'undefined' &&
+            Array.isArray(window.VTT?.sharedItemCatalog) &&
+            window.VTT.sharedItemCatalog.length > 0
                 ? Promise.resolve(window.VTT.sharedItemCatalog)
                 : fetchCatalogJson('/data/items-catalog.json', 'data/items-catalog.json', '/api/items/catalog', []);
 
-        const existingSpellsArr =
-            typeof window !== 'undefined' && window.VTTSpellManager?.getSpellCache?.();
+        const existingSpellsArr = typeof window !== 'undefined' && window.VTTSpellManager?.getSpellCache?.();
         const existingSpells =
             Array.isArray(existingSpellsArr) && existingSpellsArr.length > 0
                 ? Promise.resolve(existingSpellsArr)
@@ -3690,6 +3702,7 @@ export function initVttPlayerSheet(vtt) {
                         <span class="init-name" style="font-size:1.05rem;">${c.name}</span>
                         <div style="display:flex; align-items:center; gap:6px;">
                             <button class="btn-mobile-spawn-token btn-char-spawn" data-id="${c.id}" title="Spawn on Map"><i class="fa-solid fa-plus pointer-events-none"></i></button>
+                            <button class="btn btn-xxs btn-secondary btn-char-export" data-id="${c.id}" title="Export JSON"><i class="fa-solid fa-file-export pointer-events-none"></i></button>
                             ${canDelete ? `<button class="btn btn-xxs btn-danger btn-char-delete" data-id="${c.id}" title="Delete Character"><i class="fa-solid fa-trash pointer-events-none"></i></button>` : ''}
                         </div>
                     </div>
@@ -3741,6 +3754,7 @@ export function initVttPlayerSheet(vtt) {
                         <span class="init-name" style="font-size:1.05rem;"><i class="fa-solid fa-paw" style="margin-right:4px; font-size:0.8rem;"></i> ${c.name}</span>
                         <div style="display:flex; align-items:center; gap:6px;">
                             <button class="btn-mobile-spawn-token btn-char-spawn" data-id="${c.id}" title="Spawn on Map"><i class="fa-solid fa-plus pointer-events-none"></i></button>
+                            <button class="btn btn-xxs btn-secondary btn-char-export" data-id="${c.id}" title="Export JSON"><i class="fa-solid fa-file-export pointer-events-none"></i></button>
                             ${canDelete ? `<button class="btn btn-xxs btn-danger btn-char-delete" data-id="${c.id}" title="Delete Companion"><i class="fa-solid fa-trash pointer-events-none"></i></button>` : ''}
                         </div>
                     </div>
@@ -3840,9 +3854,34 @@ export function initVttPlayerSheet(vtt) {
             });
 
             row.addEventListener('click', (e) => {
-                if (e.target.closest('.btn-char-delete') || e.target.closest('.btn-char-spawn')) return;
+                if (
+                    e.target.closest('.btn-char-delete') ||
+                    e.target.closest('.btn-char-spawn') ||
+                    e.target.closest('.btn-char-export')
+                ) {
+                    return;
+                }
                 const id = row.dataset.id;
                 openSheet(id);
+            });
+        });
+
+        charListEl.querySelectorAll('.btn-char-export').forEach((btn) => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const id = btn.dataset.id;
+                const char = vtt.campaignState?.characters?.[id];
+                if (!char) return;
+                try {
+                    const { payload, fileName } = buildCharacterExportPayload(char);
+                    triggerJsonDownload(payload, fileName);
+                    if (typeof window !== 'undefined' && typeof window.showToast === 'function') {
+                        window.showToast(`Exported "${char.name || 'Character'}" to ${fileName}`, 'success');
+                    }
+                } catch (err) {
+                    console.error('[vtt-player-sheet] JSON export error:', err);
+                    alert(`Failed to export JSON: ${err.message}`);
+                }
             });
         });
 
@@ -3898,6 +3937,213 @@ export function initVttPlayerSheet(vtt) {
                     }
                 }
             });
+        });
+    }
+
+    const btnCharImportJson = document.getElementById('btn-char-import-json');
+    const inputCharImportJson = document.getElementById('input-char-import-json');
+
+    function promptSheetImportConflict(existingChar, importedName, remainingCount = 0) {
+        return new Promise((resolve) => {
+            const overlay = document.createElement('div');
+            overlay.className = 'vtt-sheet-submodal-overlay vtt-sheet-submodal-high';
+            overlay.style.cssText =
+                'position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:3020;';
+            const modal = document.createElement('div');
+            modal.className = 'vtt-sheet-submodal vtt-sheet-submodal-high glassmorphism';
+            modal.style.cssText =
+                'position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:3025; width:min(440px, 92vw); padding:16px; border-radius:8px; border:1px solid var(--color-border-subtle);';
+
+            const label = existingChar.isCompanion ? 'Companion' : 'Character';
+            const batchButtonsHtml =
+                remainingCount > 0
+                    ? `<button type="button" id="imp-conflict-copy-all" class="btn btn-secondary btn-sm">Copy All</button>
+                       <button type="button" id="imp-conflict-overwrite-all" class="btn btn-primary btn-sm">Overwrite All</button>`
+                    : '';
+
+            modal.innerHTML = `
+                <h4 style="margin-top:0; color:var(--color-gold-base);"><i class="fa-solid fa-file-import"></i> Import Conflict</h4>
+                <p style="font-size:0.9rem; color:var(--color-text-secondary); line-height:1.45;">
+                    A ${label} named <strong>${escapeHtml(existingChar.name || importedName)}</strong> already exists in this campaign.
+                </p>
+                <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:16px; flex-wrap:wrap;">
+                    <button type="button" id="imp-conflict-cancel" class="btn btn-secondary btn-sm">Cancel</button>
+                    <button type="button" id="imp-conflict-copy" class="btn btn-secondary btn-sm">Create Copy</button>
+                    <button type="button" id="imp-conflict-overwrite" class="btn btn-primary btn-sm">Overwrite Existing</button>
+                    ${batchButtonsHtml}
+                </div>
+            `;
+
+            document.body.appendChild(overlay);
+            document.body.appendChild(modal);
+
+            const onKeyDown = (ev) => {
+                if (ev.key === 'Escape') {
+                    ev.preventDefault();
+                    finish('cancel');
+                }
+            };
+
+            const finish = (choice) => {
+                document.removeEventListener('keydown', onKeyDown);
+                overlay.remove();
+                modal.remove();
+                resolve(choice);
+            };
+
+            document.addEventListener('keydown', onKeyDown);
+            overlay.addEventListener('click', () => finish('cancel'));
+            modal.querySelector('#imp-conflict-cancel')?.addEventListener('click', () => finish('cancel'));
+            modal.querySelector('#imp-conflict-copy')?.addEventListener('click', () => finish('copy'));
+            modal.querySelector('#imp-conflict-overwrite')?.addEventListener('click', () => finish('overwrite'));
+            modal.querySelector('#imp-conflict-copy-all')?.addEventListener('click', () => finish('copy_all'));
+            modal
+                .querySelector('#imp-conflict-overwrite-all')
+                ?.addEventListener('click', () => finish('overwrite_all'));
+        });
+    }
+
+    if (btnCharImportJson && inputCharImportJson) {
+        btnCharImportJson.addEventListener('click', () => {
+            inputCharImportJson.value = '';
+            inputCharImportJson.click();
+        });
+
+        inputCharImportJson.addEventListener('change', async (e) => {
+            const file = e.target.files?.[0];
+            if (!file) return;
+
+            try {
+                validateImportFileSize(file);
+                const rawText = await file.text();
+                const parsed = parseImportedSheetJson(rawText);
+                const isGM = vtt.role === 'GM';
+                const username = vtt.username || '';
+                const isP2P = Boolean(vtt.socket?.isP2P || (typeof window !== 'undefined' && window.__FORGEDVTT_P2P__));
+                if (!vtt.campaignState) vtt.campaignState = {};
+                if (!vtt.campaignState.characters) vtt.campaignState.characters = {};
+
+                let importedCount = 0;
+                let batchMode = null;
+                let crossCampaignAssetCount = 0;
+                const errors = [];
+
+                for (let idx = 0; idx < parsed.items.length; idx++) {
+                    const rawItem = parsed.items[idx];
+                    const remainingCount = parsed.items.length - idx - 1;
+                    let validated;
+                    try {
+                        validated = validateImportedSheetEntity(rawItem, {
+                            isGM,
+                            declaredEntityType: parsed.entityType
+                        });
+                    } catch (itemErr) {
+                        errors.push(itemErr.message);
+                        continue;
+                    }
+
+                    const { conflictTarget, canOverwrite } = findImportConflict(
+                        validated.entity,
+                        vtt.campaignState.characters,
+                        { isGM, username }
+                    );
+
+                    let mode = 'copy';
+                    if (conflictTarget && canOverwrite) {
+                        if (batchMode) {
+                            mode = batchMode;
+                        } else {
+                            const choice = await promptSheetImportConflict(
+                                conflictTarget,
+                                validated.entity.name,
+                                remainingCount
+                            );
+                            if (choice === 'cancel') continue;
+                            if (choice === 'copy_all') {
+                                batchMode = 'copy';
+                                mode = 'copy';
+                            } else if (choice === 'overwrite_all') {
+                                batchMode = 'overwrite';
+                                mode = 'overwrite';
+                            } else {
+                                mode = choice;
+                            }
+                        }
+                    }
+
+                    // Enforce P2P 10-character limit before optimistic insert
+                    if (!isGM && isP2P && mode !== 'overwrite') {
+                        const ownedCount = Object.values(vtt.campaignState.characters).filter((ch) =>
+                            canUserOverwriteCharacter(ch, { isGM: false, username })
+                        ).length;
+                        if (ownedCount >= 10) {
+                            errors.push('P2P character limit reached (maximum 10 characters per player).');
+                            continue;
+                        }
+                    }
+
+                    const prepared = prepareImportedCharacter(validated.entity, {
+                        mode,
+                        conflictTarget,
+                        existingCharacters: vtt.campaignState.characters,
+                        isGM,
+                        username
+                    });
+
+                    const crossUrls = detectCrossCampaignAssetUrls(prepared, vtt.campaignId);
+                    crossCampaignAssetCount += crossUrls.length;
+
+                    vtt.campaignState.characters[prepared.id] = prepared;
+                    if (vtt.socket) {
+                        vtt.socket.emit('character:update', { character: prepared });
+                    }
+
+                    // Refresh open sheet immediately if we overwrote it
+                    if (currentChar && currentChar.id === prepared.id) {
+                        currentChar = prepared;
+                        renderSheetData(currentChar);
+                    }
+                    if (
+                        prepared.isCompanion &&
+                        vtt.creatureSheet?.getLinkedCharacterId?.() === prepared.id &&
+                        typeof vtt.creatureSheet.openSheet === 'function'
+                    ) {
+                        vtt.creatureSheet.openSheet(
+                            prepared.monsterData,
+                            vtt.creatureSheet.getLinkedTokenId?.() || null,
+                            prepared.id
+                        );
+                    }
+
+                    importedCount += 1;
+                }
+
+                if (importedCount > 0) {
+                    renderCharacterList();
+                    if (typeof window !== 'undefined' && typeof window.showToast === 'function') {
+                        window.showToast(
+                            `Imported ${importedCount} ${importedCount === 1 ? 'sheet' : 'sheets'} from JSON.`,
+                            'success'
+                        );
+                        if (crossCampaignAssetCount > 0) {
+                            window.showToast(
+                                `Note: ${crossCampaignAssetCount} campaign-local image URL(s) from another campaign may need to be re-uploaded.`,
+                                'warning'
+                            );
+                        }
+                    }
+                }
+                if (errors.length > 0 && importedCount === 0) {
+                    alert(errors[0]);
+                } else if (errors.length > 0) {
+                    alert(`Imported ${importedCount} sheet(s), skipped ${errors.length}: ${errors[0]}`);
+                }
+            } catch (err) {
+                console.error('[vtt-player-sheet] JSON import error:', err);
+                alert(err.message || 'Failed to import JSON file.');
+            } finally {
+                inputCharImportJson.value = '';
+            }
         });
     }
 
@@ -4864,7 +5110,10 @@ export function initVttPlayerSheet(vtt) {
             <div class="cs-hp-container" style="margin-bottom:16px;">
                 <div style="display: flex; gap: 4px; margin-bottom: 8px; align-items: center;">
                     ${(() => {
-                        const hpPct = char.hpMax > 0 ? Math.max(0, Math.min(100, Math.round((char.hpCurrent / char.hpMax) * 100))) : 100;
+                        const hpPct =
+                            char.hpMax > 0
+                                ? Math.max(0, Math.min(100, Math.round((char.hpCurrent / char.hpMax) * 100)))
+                                : 100;
                         const hpStateClass = hpPct <= 25 ? ' danger' : hpPct <= 50 ? ' injured' : '';
                         return `<div class="cs-hp-bar-wrap" style="flex: 1; height: 8px; background: rgba(0,0,0,0.3); border-radius: 4px; overflow: hidden;">
                         <div class="cs-hp-bar-fill${hpStateClass}" id="pc-hp-bar" style="height: 100%; width: ${hpPct}%"></div>

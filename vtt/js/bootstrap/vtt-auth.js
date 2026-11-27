@@ -311,6 +311,10 @@ export function setupLoginHandlers(callbacks = {}) {
 
     const setConnectionMode = (p2p) => {
         isP2PMode = p2p;
+        const advDisclosure = document.getElementById('login-advanced-connection');
+        if (p2p && advDisclosure) {
+            advDisclosure.open = true;
+        }
         const hintText = document.getElementById('login-connection-hint-text');
         if (p2p) {
             tabP2P?.classList.add('active');

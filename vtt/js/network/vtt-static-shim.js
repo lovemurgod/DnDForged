@@ -116,23 +116,33 @@
     }
 
     async function idbSet(key, val, storeName = STATIC_STORE) {
-        try {
-            const db = await openStaticIdb();
-            if (!db || !db.objectStoreNames.contains(storeName)) return;
-            await new Promise((resolve, reject) => {
+        const db = await openStaticIdb();
+        if (!db || !db.objectStoreNames.contains(storeName)) {
+            throw new Error(`IndexedDB store "${storeName}" is unavailable`);
+        }
+        return await new Promise((resolve, reject) => {
+            try {
                 const tx = db.transaction(storeName, 'readwrite');
                 const store = tx.objectStore(storeName);
-                if (storeName === ASSET_STORE) {
-                    store.put(val);
-                } else {
-                    store.put(val, key);
-                }
-                tx.oncomplete = () => resolve();
-                tx.onerror = () => reject(tx.error);
-            });
-        } catch (_) {
-            /* ignore IDB write errors */
-        }
+                const req = storeName === ASSET_STORE ? store.put(val) : store.put(val, key);
+                let settled = false;
+                const fail = (err) => {
+                    if (settled) return;
+                    settled = true;
+                    reject(err instanceof Error ? err : new Error(String(err || 'IndexedDB write failed')));
+                };
+                req.onerror = () => fail(req.error || tx.error || new Error('IndexedDB put request failed'));
+                tx.oncomplete = () => {
+                    if (settled) return;
+                    settled = true;
+                    resolve();
+                };
+                tx.onerror = () => fail(tx.error || req.error || new Error('IndexedDB transaction failed'));
+                tx.onabort = () => fail(tx.error || new Error('IndexedDB transaction aborted'));
+            } catch (err) {
+                reject(err instanceof Error ? err : new Error(String(err || 'IndexedDB write failed')));
+            }
+        });
     }
 
     async function idbDelete(key, storeName = ASSET_STORE) {
@@ -335,34 +345,138 @@
 
         async putBlobRecord(record) {
             if (!record || !record.id || !record.blob) return false;
-            await idbSet(record.id, record, ASSET_STORE);
-            if (!blobUrlCache.has(record.id) && typeof URL?.createObjectURL === 'function') {
-                blobUrlCache.set(record.id, URL.createObjectURL(record.blob));
+            try {
+                await idbSet(record.id, record, ASSET_STORE);
+                if (!blobUrlCache.has(record.id) && typeof URL?.createObjectURL === 'function') {
+                    blobUrlCache.set(record.id, URL.createObjectURL(record.blob));
+                }
+                return true;
+            } catch (err) {
+                console.error('[Static Persistence] Failed to store asset blob in IndexedDB:', err);
+                notifyPersistenceFailure(err, 'asset');
+                return false;
             }
-            return true;
         }
     };
 
     let _persistTimer = null;
-    global.__persistStaticCampaign = function (campaignObj) {
-        if (!campaignObj || !campaignObj.id) return;
-        campaignObj.updatedAt = Date.now();
-        if (_persistTimer) clearTimeout(_persistTimer);
-        _persistTimer = setTimeout(async () => {
+    let _pendingCampaignObj = null;
+    let _pendingPersistWaiters = [];
+    let _persistInFlight = null;
+    let _lastPersistError = null;
+    let _lastSavedAt = null;
+    let _lastPersistToastAt = 0;
+
+    function formatPersistenceErrorMessage(err, kind = 'campaign') {
+        const name = err?.name || '';
+        const raw = err?.message || String(err || 'Unknown storage error');
+        if (name === 'QuotaExceededError' || /quota/i.test(raw)) {
+            return `Browser storage quota exceeded; ${kind} changes could not be saved.`;
+        }
+        return `Failed to save ${kind} to browser storage: ${raw}`;
+    }
+
+    function notifyPersistenceFailure(err, kind = 'campaign') {
+        const message = formatPersistenceErrorMessage(err, kind);
+        _lastPersistError = message;
+        const now = Date.now();
+        if (now - _lastPersistToastAt >= 5000) {
+            _lastPersistToastAt = now;
+            if (typeof global.showToast === 'function') {
+                global.showToast(message, 'error');
+            } else if (global.vttEventBus && typeof global.vttEventBus.emit === 'function') {
+                global.vttEventBus.emit('toast:show', { msg: message, type: 'error' });
+            } else if (global.JqueryUtil && typeof global.JqueryUtil.doToast === 'function') {
+                global.JqueryUtil.doToast({ content: message, type: 'danger' });
+            }
+        }
+        if (typeof global.dispatchEvent === 'function' && typeof global.CustomEvent === 'function') {
+            global.dispatchEvent(
+                new global.CustomEvent('forgedvtt:persistence-error', {
+                    detail: { kind, message, error: err }
+                })
+            );
+        }
+    }
+
+    async function executePendingCampaignPersist() {
+        const campaignObj = _pendingCampaignObj;
+        const waiters = _pendingPersistWaiters;
+        _pendingCampaignObj = null;
+        _pendingPersistWaiters = [];
+        if (!campaignObj || !campaignObj.id) {
+            for (const w of waiters) w.resolve({ ok: true, skipped: true });
+            return { ok: true, skipped: true };
+        }
+        const run = (async () => {
             try {
                 const existing = (await idbGet('campaigns')) || {};
                 existing[campaignObj.id] = campaignObj;
                 await idbSet('campaigns', existing);
+                _lastPersistError = null;
+                _lastSavedAt = campaignObj.updatedAt || Date.now();
                 staticSyncChannel?.postMessage({
                     type: 'campaigns-updated',
                     senderId: 'play',
                     campaignId: campaignObj.id,
                     updatedAt: campaignObj.updatedAt
                 });
-            } catch (_) {
-                /* ignore campaign persist errors */
+                const res = { ok: true, campaignId: campaignObj.id, updatedAt: campaignObj.updatedAt };
+                for (const w of waiters) w.resolve(res);
+                return res;
+            } catch (err) {
+                console.error('[Static Persistence] Failed to save campaign to IndexedDB:', err);
+                notifyPersistenceFailure(err, 'campaign');
+                for (const w of waiters) w.reject(err);
+                throw err;
+            } finally {
+                if (_persistInFlight === run) _persistInFlight = null;
             }
-        }, 200);
+        })();
+        _persistInFlight = run;
+        return await run;
+    }
+
+    global.__persistStaticCampaign = function (campaignObj) {
+        if (!campaignObj || !campaignObj.id) return Promise.resolve({ ok: true, skipped: true });
+        campaignObj.updatedAt = Date.now();
+        _pendingCampaignObj = campaignObj;
+        if (_persistTimer) clearTimeout(_persistTimer);
+        return new Promise((resolve, reject) => {
+            _pendingPersistWaiters.push({ resolve, reject });
+            _persistTimer = setTimeout(() => {
+                _persistTimer = null;
+                executePendingCampaignPersist().catch(() => {});
+            }, 200);
+        });
+    };
+
+    /**
+     * Explicitly flushes any debounced campaign write and awaits in-flight IndexedDB
+     * transaction completion. Note: browsers do not guarantee async IndexedDB completion
+     * inside synchronous pagehide/beforeunload handlers, so callers should invoke and
+     * await this before explicit navigation or export actions.
+     */
+    global.__flushStaticCampaign = async function () {
+        if (_persistTimer) {
+            clearTimeout(_persistTimer);
+            _persistTimer = null;
+        }
+        if (_pendingCampaignObj) {
+            return await executePendingCampaignPersist();
+        }
+        if (_persistInFlight) {
+            return await _persistInFlight;
+        }
+        return { ok: true, flushed: false };
+    };
+
+    global.__getStaticPersistenceStatus = function () {
+        return {
+            pending: Boolean(_persistTimer || _pendingCampaignObj || _persistInFlight),
+            lastError: _lastPersistError,
+            lastSavedAt: _lastSavedAt
+        };
     };
 
     function jsonResponse(obj, status = 200) {
@@ -871,11 +985,17 @@
         if (pathname.startsWith('/api/campaigns/')) {
             const campId = decodeURIComponent(pathname.slice('/api/campaigns/'.length));
             if (method === 'PUT' || method === 'POST') {
-                const body = parseJsonBody(init);
-                const stored = (await idbGet('campaigns')) || {};
-                stored[campId] = { ...(stored[campId] || {}), ...body, id: campId, updatedAt: Date.now() };
-                await idbSet('campaigns', stored);
-                return jsonResponse({ success: true, campaign: stored[campId] });
+                try {
+                    const body = parseJsonBody(init);
+                    const stored = (await idbGet('campaigns')) || {};
+                    stored[campId] = { ...(stored[campId] || {}), ...body, id: campId, updatedAt: Date.now() };
+                    await idbSet('campaigns', stored);
+                    return jsonResponse({ success: true, campaign: stored[campId] });
+                } catch (err) {
+                    console.error('[Static Persistence] Failed to persist campaign API write:', err);
+                    notifyPersistenceFailure(err, 'campaign');
+                    return jsonResponse({ error: formatPersistenceErrorMessage(err, 'campaign') }, 500);
+                }
             }
             const stored = await idbGet('campaigns');
             if (stored && stored[campId]) {

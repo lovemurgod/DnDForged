@@ -2376,9 +2376,15 @@ export function initVttMobileAdapter(vtt) {
     // 4D. ONE-TAP BATTERY / ECO MODE CONTROLLER
     // ========================================================================
     function setupMobileEcoMode() {
-        const savedEco = localStorage.getItem('vtt_eco_mode') === 'true';
-        if (savedEco) {
+        const savedEco = localStorage.getItem('vtt_eco_mode');
+        if (savedEco === 'true') {
             setEcoMode(true, false);
+        } else if (
+            savedEco === null &&
+            typeof window.VTT_IS_REDUCED_MOTION === 'function' &&
+            window.VTT_IS_REDUCED_MOTION()
+        ) {
+            setEcoMode(true, false, false);
         }
 
         if (mobileToolEco) {
@@ -2393,9 +2399,13 @@ export function initVttMobileAdapter(vtt) {
         return isEcoModeActive;
     }
 
-    function setEcoMode(enable, showToast = true) {
+    function setEcoMode(enable, showToast = true, persist = true) {
         isEcoModeActive = !!enable;
-        localStorage.setItem('vtt_eco_mode', isEcoModeActive ? 'true' : 'false');
+        if (persist) {
+            localStorage.setItem('vtt_eco_mode', isEcoModeActive ? 'true' : 'false');
+        }
+        document.documentElement.classList.toggle('vtt-reduce-motion', isEcoModeActive);
+        document.body?.classList.toggle('vtt-reduce-motion', isEcoModeActive);
 
         // Weather Engine particle pause/resume
         const weather = vtt.weatherEngine || window.VTT?.weatherEngine;

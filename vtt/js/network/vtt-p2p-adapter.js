@@ -17,6 +17,13 @@
     const CHUNK_SIZE = 16 * 1024; // 16 KB binary/RPC chunks safe for desktop and mobile WebRTC stacks
     const MAX_ASSET_CHUNKS = 8192; // 128 MB max chunked payload
     const MAX_ASSET_BYTES = 100 * 1024 * 1024;
+    const MAX_RPC_BYTES = 16 * 1024 * 1024; // 16 MB max JSON RPC payload
+    const MAX_RPC_CHUNKS = Math.ceil(MAX_RPC_BYTES / CHUNK_SIZE); // 1024 chunks
+    const MAX_RPC_CHUNK_BYTES = CHUNK_SIZE * 2; // 32 KB max per individual RPC chunk
+    const MAX_PEER_RPC_BYTES = 16 * 1024 * 1024; // 16 MB per-peer active RPC memory budget
+    const MAX_GLOBAL_RPC_BYTES = 48 * 1024 * 1024; // 48 MB global active RPC memory budget
+    const BACKPRESSURE_HIGH_WATER_MARK = 256 * 1024;
+    const BACKPRESSURE_LOW_WATER_MARK = 64 * 1024;
     const TRANSPARENT_ASSET_PLACEHOLDER =
         'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="1" height="1"/>';
     const SAFE_P2P_ASSET_MIMES = new Set([
@@ -78,14 +85,25 @@
     ]);
 
     function isSafeIceEntry(s) {
-        if (!s || !s.urls) return false;
+        if (!s || typeof s !== 'object' || !s.urls) return false;
         const urls = Array.isArray(s.urls) ? s.urls : [s.urls];
+        // Intentionally allow only stun: and turns: (TURN over TLS); reject unencrypted turn: or other schemes.
         return urls.length > 0 && urls.every((u) => typeof u === 'string' && /^(stun|turns):/i.test(u.trim()));
     }
 
+    function normalizeIceUrls(urls) {
+        const list = Array.isArray(urls) ? urls : [urls];
+        return list.map((u) => String(u).trim().toLowerCase()).sort().join('|');
+    }
+
+    function hasIceEntry(servers, candidate) {
+        const target = normalizeIceUrls(candidate.urls);
+        return servers.some((x) => normalizeIceUrls(x.urls) === target);
+    }
+
     function loadConfiguredIceServers(explicitServers) {
-        const servers =
-            Array.isArray(explicitServers) && explicitServers.length ? [...explicitServers] : [...DEFAULT_ICE_SERVERS];
+        const validExplicit = Array.isArray(explicitServers) ? explicitServers.filter(isSafeIceEntry) : [];
+        const servers = validExplicit.length ? [...validExplicit] : [...DEFAULT_ICE_SERVERS];
         try {
             if (typeof window !== 'undefined' && window.location?.hash) {
                 const hashMatch = window.location.hash.match(/ice=([^&]+)/);
@@ -94,7 +112,7 @@
                     const parsed = JSON.parse(decoded);
                     if (Array.isArray(parsed)) {
                         for (const s of parsed) {
-                            if (isSafeIceEntry(s)) servers.push(s);
+                            if (isSafeIceEntry(s) && !hasIceEntry(servers, s)) servers.push(s);
                         }
                     }
                 }
@@ -105,7 +123,7 @@
                     const parsed = JSON.parse(saved);
                     if (Array.isArray(parsed)) {
                         for (const s of parsed) {
-                            if (s && s.urls && !servers.some((x) => x.urls === s.urls)) {
+                            if (isSafeIceEntry(s) && !hasIceEntry(servers, s)) {
                                 servers.push(s);
                             }
                         }
@@ -125,6 +143,7 @@
             this.gmPassword = options.gmPassword || null;
             this.hostKey = options.hostKey || null;
             this.expectedHostKey = options.expectedHostKey || null;
+            this.hostIdentityVerified = false;
             this.iceServers = loadConfiguredIceServers(options.iceServers);
 
             this.id = 'p2p_' + Math.random().toString(36).substring(2, 10);
@@ -626,23 +645,63 @@
 
             switch (payload.type) {
                 case 'rpc-start': {
-                    const { id, totalChunks } = payload;
-                    if (!id || !Number.isInteger(totalChunks) || totalChunks < 1 || totalChunks > MAX_ASSET_CHUNKS)
+                    const { id, totalChunks, totalBytes } = payload;
+                    if (
+                        typeof id !== 'string' ||
+                        !id ||
+                        id.length > 128 ||
+                        !Number.isInteger(totalChunks) ||
+                        totalChunks < 1 ||
+                        totalChunks > MAX_RPC_CHUNKS
+                    ) {
+                        console.warn(`[P2P Security] Rejected invalid RPC transfer header "${id}" (${totalChunks} chunks)`);
                         return;
+                    }
+                    if (
+                        totalBytes !== undefined &&
+                        (!Number.isFinite(totalBytes) || totalBytes <= 0 || totalBytes > MAX_RPC_BYTES)
+                    ) {
+                        console.warn(`[P2P Security] Rejected oversized RPC transfer "${id}" (${totalBytes} bytes)`);
+                        return;
+                    }
                     const peerKey = senderPeer?.id || 'host';
+                    const declaredBytes = Number.isFinite(totalBytes) ? totalBytes : totalChunks * CHUNK_SIZE;
                     let peerRpcCount = 0;
-                    for (const t of this._rpcTransfers.values()) {
-                        if (t.peerKey === peerKey) peerRpcCount++;
+                    let peerRpcBytes = 0;
+                    let globalRpcBytes = 0;
+                    for (const [tid, t] of this._rpcTransfers.entries()) {
+                        if (tid === id) continue;
+                        const tBytes = Math.max(t.receivedBytes || 0, t.declaredBytes || 0);
+                        globalRpcBytes += tBytes;
+                        if (t.peerKey === peerKey) {
+                            peerRpcCount++;
+                            peerRpcBytes += tBytes;
+                        }
                     }
                     if (!this._rpcTransfers.has(id) && (this._rpcTransfers.size >= 16 || peerRpcCount >= 4)) {
+                        return;
+                    }
+                    if (
+                        peerRpcBytes + declaredBytes > MAX_PEER_RPC_BYTES ||
+                        globalRpcBytes + declaredBytes > MAX_GLOBAL_RPC_BYTES
+                    ) {
+                        console.warn(
+                            `[P2P Security] Rejected RPC transfer "${id}" exceeding memory budget (peer=${peerRpcBytes + declaredBytes}, global=${globalRpcBytes + declaredBytes})`
+                        );
                         return;
                     }
                     const existing = this._rpcTransfers.get(id);
                     if (existing?.timeoutId) clearTimeout(existing.timeoutId);
                     const timeoutId = setTimeout(() => this._rpcTransfers.delete(id), 30000);
+                    const maxBytes = Number.isFinite(totalBytes)
+                        ? Math.min(MAX_RPC_BYTES, Math.ceil(totalBytes * 1.1) + 1024)
+                        : MAX_RPC_BYTES;
                     this._rpcTransfers.set(id, {
                         chunks: new Array(totalChunks),
                         receivedCount: 0,
+                        receivedBytes: 0,
+                        declaredBytes,
+                        maxBytes,
                         totalChunks,
                         peerKey,
                         timeoutId
@@ -653,8 +712,30 @@
                 case 'rpc-chunk': {
                     const { id, index, data } = payload;
                     const transfer = this._rpcTransfers.get(id);
-                    if (!transfer || !Number.isInteger(index) || index < 0 || index >= transfer.totalChunks) return;
-                    if (!transfer.chunks[index] && typeof data === 'string') {
+                    if (
+                        !transfer ||
+                        !Number.isInteger(index) ||
+                        index < 0 ||
+                        index >= transfer.totalChunks ||
+                        typeof data !== 'string'
+                    ) {
+                        return;
+                    }
+                    if (data.length > MAX_RPC_CHUNK_BYTES) {
+                        clearTimeout(transfer.timeoutId);
+                        this._rpcTransfers.delete(id);
+                        console.warn(`[P2P Security] Rejected oversized RPC chunk for "${id}" (${data.length} bytes)`);
+                        return;
+                    }
+                    if (!transfer.chunks[index]) {
+                        const nextBytes = transfer.receivedBytes + data.length;
+                        if (nextBytes > transfer.maxBytes) {
+                            clearTimeout(transfer.timeoutId);
+                            this._rpcTransfers.delete(id);
+                            console.warn(`[P2P Security] Aborted RPC transfer "${id}" exceeding byte limit (${nextBytes})`);
+                            return;
+                        }
+                        transfer.receivedBytes = nextBytes;
                         transfer.chunks[index] = data;
                         transfer.receivedCount++;
                         if (transfer.receivedCount === transfer.totalChunks) {
@@ -800,14 +881,28 @@
                     }
 
                     // Client-side Host Identity Verification when invite link carries ?pk=
-                    if (!this.isHost && event === 'joined' && this.expectedHostKey) {
+                    if (!this.isHost && event === 'joined') {
                         const receivedKey = args?.[0]?.hostKey || null;
-                        if (receivedKey !== this.expectedHostKey) {
-                            this._dispatch('join_rejected', {
-                                reason: 'Host identity verification failed (invite key mismatch).'
-                            });
-                            this.disconnect();
-                            return;
+                        if (this.expectedHostKey) {
+                            if (!receivedKey) {
+                                this.hostIdentityVerified = false;
+                                this._dispatch('join_rejected', {
+                                    reason: 'Host identity verification failed (host did not provide an identity key).'
+                                });
+                                this.disconnect();
+                                return;
+                            }
+                            if (receivedKey !== this.expectedHostKey) {
+                                this.hostIdentityVerified = false;
+                                this._dispatch('join_rejected', {
+                                    reason: 'Host identity verification failed (invite key mismatch).'
+                                });
+                                this.disconnect();
+                                return;
+                            }
+                            this.hostIdentityVerified = true;
+                        } else {
+                            this.hostIdentityVerified = false;
                         }
                     }
 
@@ -1062,6 +1157,43 @@
             }
         }
 
+        _cleanupPeerTransfers(peerKey) {
+            if (!peerKey) return;
+            for (const [id, t] of this._rpcTransfers.entries()) {
+                if (t.peerKey === peerKey) {
+                    if (t.timeoutId) clearTimeout(t.timeoutId);
+                    this._rpcTransfers.delete(id);
+                }
+            }
+            for (const [id, t] of this._assetTransfers.entries()) {
+                if (t.peerKey === peerKey) {
+                    if (t.timeoutId) clearTimeout(t.timeoutId);
+                    this._assetTransfers.delete(id);
+                }
+            }
+        }
+
+        _getChannelForPeer(peer, preferAssets = false) {
+            if (!peer) return null;
+            if (preferAssets && peer.assetsChannel?.readyState === 'open') {
+                return peer.assetsChannel;
+            }
+            if (peer.conn?.dataChannel) return peer.conn.dataChannel;
+            if (peer.eventsChannel) return peer.eventsChannel;
+            return null;
+        }
+
+        _isPeerWritable(peer, preferAssets = false) {
+            if (!peer) return false;
+            if (preferAssets && peer.assetsChannel?.readyState === 'open') return true;
+            if (peer.conn?.open) {
+                const dc = peer.conn.dataChannel;
+                return !dc || dc.readyState === undefined || dc.readyState === 'open';
+            }
+            if (peer.eventsChannel?.readyState === 'open') return true;
+            return false;
+        }
+
         _sendRawPacket(peer, text, preferAssets = false) {
             const ch = preferAssets && peer.assetsChannel?.readyState === 'open' ? peer.assetsChannel : null;
             if (ch) {
@@ -1074,11 +1206,49 @@
         }
 
         _getBufferedAmount(peer, preferAssets = false) {
-            const dc =
-                preferAssets && peer.assetsChannel?.readyState === 'open'
-                    ? peer.assetsChannel
-                    : peer.conn?.dataChannel || peer.eventsChannel;
+            const dc = this._getChannelForPeer(peer, preferAssets);
             return dc && typeof dc.bufferedAmount === 'number' ? dc.bufferedAmount : 0;
+        }
+
+        async _waitForBackpressure(peer, preferAssets = false, highWaterMark = BACKPRESSURE_HIGH_WATER_MARK) {
+            if (!this._isPeerWritable(peer, preferAssets)) return false;
+            const dc = this._getChannelForPeer(peer, preferAssets);
+            if (!dc || typeof dc.bufferedAmount !== 'number' || dc.bufferedAmount <= highWaterMark) {
+                return true;
+            }
+
+            if (typeof dc.bufferedAmountLowThreshold === 'number') {
+                try {
+                    dc.bufferedAmountLowThreshold = Math.min(BACKPRESSURE_LOW_WATER_MARK, Math.floor(highWaterMark / 2));
+                } catch (_) {}
+            }
+
+            const maxWaitMs = 10000;
+            const startedAt = Date.now();
+            while (this._isPeerWritable(peer, preferAssets) && dc.bufferedAmount > highWaterMark) {
+                if (Date.now() - startedAt >= maxWaitMs) {
+                    return false;
+                }
+                await new Promise((resolve) => {
+                    let settled = false;
+                    const done = () => {
+                        if (settled) return;
+                        settled = true;
+                        clearTimeout(timer);
+                        if (typeof dc.removeEventListener === 'function') {
+                            dc.removeEventListener('bufferedamountlow', done);
+                            dc.removeEventListener('close', done);
+                        }
+                        resolve();
+                    };
+                    if (typeof dc.addEventListener === 'function') {
+                        dc.addEventListener('bufferedamountlow', done, { once: true });
+                        dc.addEventListener('close', done, { once: true });
+                    }
+                    const timer = setTimeout(done, 25);
+                });
+            }
+            return this._isPeerWritable(peer, preferAssets);
         }
 
         async _streamAssetToPeer(peer, assetId, base64Data, mimeType = 'image/jpeg', meta = {}) {
@@ -1093,9 +1263,11 @@
                 mimeType,
                 meta
             });
-            this._sendToPeer(peer, startPacket, true);
+            await this._sendToPeer(peer, startPacket, true);
 
             for (let i = 0; i < totalChunks; i++) {
+                const canWrite = await this._waitForBackpressure(peer, true);
+                if (!canWrite) return;
                 const chunkPacket = JSON.stringify({
                     type: 'asset-chunk',
                     id: assetId,
@@ -1103,14 +1275,12 @@
                     data: base64Data.slice(i * CHUNK_SIZE, (i + 1) * CHUNK_SIZE)
                 });
                 this._sendRawPacket(peer, chunkPacket, true);
-                if (i % 10 === 0 || this._getBufferedAmount(peer, true) > 256 * 1024) {
-                    await new Promise((r) => setTimeout(r, 8));
-                }
             }
         }
 
-        _sendToPeer(peer, message, preferAssets = false) {
+        async _sendToPeer(peer, message, preferAssets = false) {
             try {
+                if (!this._isPeerWritable(peer, preferAssets)) return;
                 const str = typeof message === 'string' ? message : JSON.stringify(message);
                 if (str.length <= CHUNK_SIZE) {
                     this._sendRawPacket(peer, str, preferAssets);
@@ -1118,8 +1288,14 @@
                 }
                 const rpcId = `rpc_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
                 const totalChunks = Math.ceil(str.length / CHUNK_SIZE);
-                this._sendRawPacket(peer, JSON.stringify({ type: 'rpc-start', id: rpcId, totalChunks }), preferAssets);
+                this._sendRawPacket(
+                    peer,
+                    JSON.stringify({ type: 'rpc-start', id: rpcId, totalChunks, totalBytes: str.length }),
+                    preferAssets
+                );
                 for (let i = 0; i < totalChunks; i++) {
+                    const canWrite = await this._waitForBackpressure(peer, preferAssets);
+                    if (!canWrite) return;
                     this._sendRawPacket(
                         peer,
                         JSON.stringify({
@@ -1164,7 +1340,7 @@
             });
             for (const [, peer] of this.peers.entries()) {
                 if (peer.joined) {
-                    this._sendToPeer(peer, startPacket, true);
+                    await this._sendToPeer(peer, startPacket, true);
                 }
             }
 
@@ -1176,17 +1352,16 @@
                     index: i,
                     data: chunkSlice
                 });
-                let needsBackpressure = false;
+                const slowPeers = [];
                 for (const [, peer] of this.peers.entries()) {
-                    if (!peer.joined) continue;
+                    if (!peer.joined || !this._isPeerWritable(peer, true)) continue;
                     this._sendRawPacket(peer, chunkPacket, true);
-                    if (this._getBufferedAmount(peer, true) > 256 * 1024) {
-                        needsBackpressure = true;
+                    if (this._getBufferedAmount(peer, true) > BACKPRESSURE_HIGH_WATER_MARK) {
+                        slowPeers.push(peer);
                     }
                 }
-
-                if (i % 10 === 0 || needsBackpressure) {
-                    await new Promise((r) => setTimeout(r, 8));
+                if (slowPeers.length > 0) {
+                    await Promise.all(slowPeers.map((p) => this._waitForBackpressure(p, true)));
                 }
             }
         }
@@ -1225,12 +1400,14 @@
                 this._handleIncomingData(event.data, peerRecord);
             };
             eventsChannel.onclose = () => {
+                this._cleanupPeerTransfers(peerId);
                 this.peers.delete(peerId);
                 this._syncPeersToBackendBridge();
                 this._dispatch('peer:disconnected', { peerId });
             };
             pc.onconnectionstatechange = () => {
                 if (['failed', 'closed'].includes(pc.connectionState)) {
+                    this._cleanupPeerTransfers(peerId);
                     this.peers.delete(peerId);
                     this._syncPeersToBackendBridge();
                     this._dispatch('peer:disconnected', { peerId });
@@ -1469,12 +1646,14 @@
             });
             conn.on('data', (data) => this._handleIncomingData(data, peerRecord));
             conn.on('close', () => {
+                this._cleanupPeerTransfers(peerId);
                 this.peers.delete(peerId);
                 this._syncPeersToBackendBridge();
                 this._dispatch('peer:disconnected', { peerId });
             });
             conn.on('error', (err) => {
                 console.warn(`[P2P Adapter] Peer connection error (${peerId}):`, err);
+                this._cleanupPeerTransfers(peerId);
                 this.peers.delete(peerId);
                 this._syncPeersToBackendBridge();
                 this._dispatch('peer:disconnected', { peerId });

@@ -32,16 +32,7 @@
     }
 }
 
-/* Custom cursors and styling for interactive tools */
-.tool-mode-measure {
-    cursor: crosshair !important;
-}
-.tool-mode-ping {
-    cursor: cell !important;
-}
-.tool-mode-wall {
-    cursor: pointer !important;
-}
+/* Tool mode hooks (cursors are managed by vtt-canvas-cursors.js priority resolver) */
 
 /* Tabletop Layers Floating Panel */
 #panel-layers-config {

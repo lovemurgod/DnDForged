@@ -20,11 +20,11 @@
     <meta name="apple-mobile-web-app-title" content="ForgeD VTT">
     <link rel="manifest" href="site.webmanifest">
 
-    <!-- Fonts & Icons -->
+    <!-- Fonts & Icons (Core fonts loaded at boot; theme-specific fonts lazy-loaded on demand) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@400;600;700;800&family=Exo+2:wght@400;600;700;800&family=MedievalSharp&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Orbitron:wght@400;600;700;800&family=Outfit:wght@600;700;900&family=Rajdhani:wght@500;600;700&family=Rye&family=Syne:wght@500;600;700;800&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Outfit:wght@600;700;900&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
 
@@ -82,65 +82,70 @@
                             <span id="login-error-text"></span>
                         </div>
 
-                        <!-- Connection Mode Selector -->
-                        <div class="login-connection-tabs" style="display: flex; gap: 8px; margin-bottom: 8px;">
-                            <button type="button" class="btn btn-primary btn-sm active" id="tab-login-server"
-                                style="flex: 1;"
-                                title="Offline / Host Server: Connects through your local Windows app, LAN, or Cloudflare Tunnel. 100% reliable everywhere, even on mobile phones (4G/5G) and strict Wi-Fi firewalls."><i
-                                    class="fa-solid fa-server"></i> Offline / Host Server <i class="fa-solid fa-circle-info"
-                                    style="font-size: 0.75rem; opacity: 0.7; margin-left: 4px;"></i></button>
-                            <button type="button" class="btn btn-secondary btn-sm" id="tab-login-p2p" style="flex: 1;"
-                                title="Online (Direct P2P): Instant browser-to-browser play with zero downloads or servers. Best for fast online sessions."><i
-                                    class="fa-solid fa-bolt"></i> Online (Direct P2P) <i class="fa-solid fa-circle-info"
-                                    style="font-size: 0.75rem; opacity: 0.7; margin-left: 4px;"></i></button>
-                        </div>
-                        <div id="login-connection-hint"
-                            style="margin-bottom: 14px; font-size: 0.78rem; color: var(--color-gold-light); line-height: 1.35; padding: 6px 10px; background: rgba(0,0,0,0.25); border-radius: 6px; border: 1px solid rgba(255,255,255,0.06);">
-                            <span id="login-connection-hint-text"><i class="fa-solid fa-shield-halved"
-                                    style="margin-right: 4px; color: #38bdf8;"></i> <strong>Offline / Host Server:</strong>
-                                Connect via local desktop app, LAN, or Cloudflare Tunnel. Highly reliable across all networks and strict
-                                firewalls.</span>
-                        </div>
+                        <!-- Advanced Connection Mode Selector (Default: Offline / Host Server) -->
+                        <details id="login-advanced-connection" style="margin-bottom: 14px;">
+                            <summary style="cursor: pointer; font-size: 0.8rem; color: var(--color-text-muted, #94a3b8); margin-bottom: 8px; user-select: none;">
+                                <i class="fa-solid fa-sliders" aria-hidden="true"></i> Advanced Connection (Direct P2P / Mode)
+                            </summary>
+                            <div class="login-connection-tabs" style="display: flex; gap: 8px; margin-bottom: 8px;">
+                                <button type="button" class="btn btn-primary btn-sm active" id="tab-login-server"
+                                    style="flex: 1;"
+                                    title="Offline / Host Server: Connects through your local Windows app, LAN, or Cloudflare Tunnel. 100% reliable everywhere, even on mobile phones (4G/5G) and strict Wi-Fi firewalls."><i
+                                        class="fa-solid fa-server"></i> Offline / Host Server <i class="fa-solid fa-circle-info"
+                                        style="font-size: 0.75rem; opacity: 0.7; margin-left: 4px;"></i></button>
+                                <button type="button" class="btn btn-secondary btn-sm" id="tab-login-p2p" style="flex: 1;"
+                                    title="Online (Direct P2P): Instant browser-to-browser play with zero downloads or servers. Best for fast online sessions."><i
+                                        class="fa-solid fa-bolt"></i> Online (Direct P2P) <i class="fa-solid fa-circle-info"
+                                        style="font-size: 0.75rem; opacity: 0.7; margin-left: 4px;"></i></button>
+                            </div>
+                            <div id="login-connection-hint"
+                                style="margin-bottom: 10px; font-size: 0.78rem; color: var(--color-gold-light); line-height: 1.35; padding: 6px 10px; background: rgba(0,0,0,0.25); border-radius: 6px; border: 1px solid rgba(255,255,255,0.06);">
+                                <span id="login-connection-hint-text"><i class="fa-solid fa-shield-halved"
+                                        style="margin-right: 4px; color: #38bdf8;"></i> <strong>Offline / Host Server:</strong>
+                                    Connect via local desktop app, LAN, or Cloudflare Tunnel. Highly reliable across all networks and strict
+                                    firewalls.</span>
+                            </div>
 
-                        <!-- P2P Room Configuration Fields -->
-                        <div id="login-p2p-group" class="vtt-hidden"
-                            style="margin-bottom: 14px; background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px; border: 1px solid var(--color-border-subtle);">
-                            <div style="display: flex; gap: 6px; margin-bottom: 10px;">
-                                <button type="button" class="btn btn-primary btn-xs active" id="btn-p2p-mode-host" style="flex: 1;">
-                                    <i class="fa-solid fa-crown"></i> Host Game (GM)
-                                </button>
-                                <button type="button" class="btn btn-secondary btn-xs" id="btn-p2p-mode-join" style="flex: 1;">
-                                    <i class="fa-solid fa-right-to-bracket"></i> Join Room (Player)
-                                </button>
-                            </div>
-                            <div class="form-group" style="margin-bottom: 8px;">
-                                <label for="login-p2p-code"><i class="fa-solid fa-key"></i> P2P Room Code</label>
-                                <div style="display: flex; gap: 6px; align-items: center;">
-                                    <input type="text" id="login-p2p-code" placeholder="Auto-generated for Host, or enter ABCD-2345"
-                                        style="text-transform: uppercase; flex: 1;">
-                                    <button type="button" id="btn-login-p2p-regen" class="btn btn-secondary btn-xs"
-                                        title="Generate New Room Code"><i class="fa-solid fa-rotate"></i></button>
-                                    <button type="button" id="btn-login-p2p-copy" class="btn btn-secondary btn-xs"
-                                        title="Copy Player Invite Link"><i class="fa-solid fa-link"></i></button>
-                                </div>
-                            </div>
-                            <details style="margin-top: 6px;">
-                                <summary style="font-size: 0.78rem; color: var(--color-gold-light); cursor: pointer;"><i
-                                        class="fa-solid fa-file-lines"></i> Serverless Manual WebRTC (Offer / Answer)</summary>
-                                <div id="login-p2p-manual-host-wrap" style="margin-top: 6px;">
-                                    <button type="button" id="btn-login-p2p-manual-host" class="btn btn-secondary btn-xs btn-block">
-                                        <i class="fa-solid fa-handshake"></i> Host via Manual Invite Text
+                            <!-- P2P Room Configuration Fields -->
+                            <div id="login-p2p-group" class="vtt-hidden"
+                                style="background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px; border: 1px solid var(--color-border-subtle);">
+                                <div style="display: flex; gap: 6px; margin-bottom: 10px;">
+                                    <button type="button" class="btn btn-primary btn-xs active" id="btn-p2p-mode-host" style="flex: 1;">
+                                        <i class="fa-solid fa-crown"></i> Host Game (GM)
+                                    </button>
+                                    <button type="button" class="btn btn-secondary btn-xs" id="btn-p2p-mode-join" style="flex: 1;">
+                                        <i class="fa-solid fa-right-to-bracket"></i> Join Room (Player)
                                     </button>
                                 </div>
-                                <textarea id="login-p2p-manual" placeholder="Players: paste GM's dndvtt://offer/... here"
-                                    style="width: 100%; height: 60px; font-size: 0.75rem; font-family: monospace; margin-top: 4px;"></textarea>
-                                <div id="login-p2p-answer-group" class="vtt-hidden" style="margin-top: 8px;">
-                                    <label for="login-p2p-answer-output" style="font-size: 0.75rem; color: #38bdf8;">Your P2P Answer (Send back to GM):</label>
-                                    <textarea id="login-p2p-answer-output" readonly data-select-on-click="true"
-                                        style="width: 100%; height: 60px; font-size: 0.75rem; font-family: monospace; margin-top: 4px;"></textarea>
+                                <div class="form-group" style="margin-bottom: 8px;">
+                                    <label for="login-p2p-code"><i class="fa-solid fa-key"></i> P2P Room Code</label>
+                                    <div style="display: flex; gap: 6px; align-items: center;">
+                                        <input type="text" id="login-p2p-code" placeholder="Auto-generated for Host, or enter ABCD-2345"
+                                            style="text-transform: uppercase; flex: 1;">
+                                        <button type="button" id="btn-login-p2p-regen" class="btn btn-secondary btn-xs"
+                                            title="Generate New Room Code"><i class="fa-solid fa-rotate"></i></button>
+                                        <button type="button" id="btn-login-p2p-copy" class="btn btn-secondary btn-xs"
+                                            title="Copy Player Invite Link"><i class="fa-solid fa-link"></i></button>
+                                    </div>
                                 </div>
-                            </details>
-                        </div>
+                                <details style="margin-top: 6px;">
+                                    <summary style="font-size: 0.78rem; color: var(--color-gold-light); cursor: pointer;"><i
+                                            class="fa-solid fa-file-lines"></i> Serverless Manual WebRTC (Offer / Answer)</summary>
+                                    <div id="login-p2p-manual-host-wrap" style="margin-top: 6px;">
+                                        <button type="button" id="btn-login-p2p-manual-host" class="btn btn-secondary btn-xs btn-block">
+                                            <i class="fa-solid fa-handshake"></i> Host via Manual Invite Text
+                                        </button>
+                                    </div>
+                                    <textarea id="login-p2p-manual" placeholder="Players: paste GM's dndvtt://offer/... here"
+                                        style="width: 100%; height: 60px; font-size: 0.75rem; font-family: monospace; margin-top: 4px;"></textarea>
+                                    <div id="login-p2p-answer-group" class="vtt-hidden" style="margin-top: 8px;">
+                                        <label for="login-p2p-answer-output" style="font-size: 0.75rem; color: #38bdf8;">Your P2P Answer (Send back to GM):</label>
+                                        <textarea id="login-p2p-answer-output" readonly data-select-on-click="true"
+                                            style="width: 100%; height: 60px; font-size: 0.75rem; font-family: monospace; margin-top: 4px;"></textarea>
+                                    </div>
+                                </details>
+                            </div>
+                        </details>
 
                         <div class="form-group">
                             <label for="login-username"><i class="fa-solid fa-user"></i> Player Name</label>
@@ -1476,6 +1481,12 @@
                             <button id="btn-char-add" class="btn btn-xxs btn-secondary" title="Create New Character">
                                 <i class="fa-solid fa-plus"></i> New
                             </button>
+                            <button id="btn-char-import-json" class="btn btn-xxs btn-secondary"
+                                title="Import Character or Companion JSON">
+                                <i class="fa-solid fa-file-import"></i> Import
+                            </button>
+                            <input type="file" id="input-char-import-json" accept=".json,application/json"
+                                class="vtt-hidden" style="display:none;">
                             <button id="btn-char-add-companion" class="btn btn-xxs btn-secondary gm-only"
                                 title="Add Player Companion">
                                 <i class="fa-solid fa-paw"></i> Companion
@@ -1552,6 +1563,16 @@
 
                                     <!-- Live Swatch & Font Preview Chip -->
                                     <div id="theme-preview-chip" class="theme-preview-chip"></div>
+
+                                    <!-- Themed Battlemap Cursors Toggle -->
+                                    <div class="config-setting" style="margin-top: 10px;">
+                                        <label for="config-themed-cursors-toggle"
+                                            title="Use theme-matched game and precision cursors on the battlemap canvas (uncheck for standard OS cursors)">
+                                            Themed Battlemap Cursors
+                                        </label>
+                                        <input type="checkbox" id="config-themed-cursors-toggle" checked
+                                            style="width: auto; cursor: pointer;">
+                                    </div>
 
                                     <!-- GM Broadcast Theme Button -->
                                     <button id="btn-gm-broadcast-theme" class="btn btn-xs btn-secondary gm-only"
@@ -2528,8 +2549,14 @@
                                             <i class="fa-solid fa-arrow-up-right-from-square"></i> Open Presentation
                                             Window
                                         </button>
+                                        <button id="btn-copy-presentation-url" class="btn btn-sm btn-secondary"
+                                            title="Copy TV Display URL for wireless TV or second device"
+                                            aria-label="Copy TV Display URL">
+                                            <i class="fa-solid fa-link"></i>
+                                        </button>
                                         <button id="btn-close-presentation" class="btn btn-sm btn-danger vtt-hidden"
-                                            title="Close Presentation Window">
+                                            title="Close Presentation Window"
+                                            aria-label="Close Presentation Window">
                                             <i class="fa-solid fa-xmark"></i>
                                         </button>
                                     </div>
@@ -2543,6 +2570,10 @@
                                         Uncheck to freeze the player display while you inspect secret areas on the GM
                                         view.
                                     </p>
+                                    <button id="btn-push-presentation-view" class="btn btn-sm btn-secondary btn-block"
+                                        style="margin-top: 10px;">
+                                        <i class="fa-solid fa-crosshairs"></i> Push Current View to TV
+                                    </button>
                                 </div>
                             </div>
                         </details>

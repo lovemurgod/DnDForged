@@ -30,8 +30,14 @@ export function panTo(targetX, targetY, targetZoom = null, duration = 350, conte
 
     const endPanX = viewCenterW - targetX * finalZoom;
     const endPanY = viewCenterH - targetY * finalZoom;
+    const effectiveDuration =
+        typeof window !== 'undefined' &&
+        typeof window.VTT_IS_REDUCED_MOTION === 'function' &&
+        window.VTT_IS_REDUCED_MOTION()
+            ? 0
+            : duration;
 
-    if (duration <= 0) {
+    if (effectiveDuration <= 0) {
         context.panX = endPanX;
         context.panY = endPanY;
         context.zoom = finalZoom;

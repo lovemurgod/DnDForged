@@ -923,35 +923,49 @@
             if (senderRole === 'GM') {
                 camp.initiative = data.initiative;
             } else {
-                const cur = camp.initiative || {
-                    combatants: [],
-                    currentRound: 1,
-                    activeTurnIndex: -1,
-                    isVisible: false
-                };
-                const nextCombatants = Array.isArray(cur.combatants) ? [...cur.combatants] : [];
+                if (camp.isPaused) return true;
+                const cur = camp.initiative;
+                if (!cur || !Array.isArray(cur.combatants)) return true;
+                const nextCombatants = [...cur.combatants];
                 const incoming = Array.isArray(data.initiative.combatants) ? data.initiative.combatants : [];
+                let anyUpdated = false;
+                const activeMapId = resolveTargetMapId(camp, null, senderRole, senderName);
+                const activeTokens = camp.maps?.[activeMapId]?.tokens || {};
+
                 for (const c of incoming) {
                     if (!c || typeof c !== 'object') continue;
-                    const charMatch = c.characterId ? camp.characters?.[c.characterId] : null;
-                    if (!charMatch || !isCharacterControlled(charMatch, senderRole, senderName)) continue;
                     const idx = nextCombatants.findIndex(
                         (ec) =>
-                            ec &&
-                            ((c.id && ec.id === c.id) ||
-                                (c.characterId && ec.characterId === c.characterId) ||
-                                (c.tokenId && ec.tokenId === c.tokenId) ||
-                                (c.name && ec.name && ec.name.toLowerCase() === String(c.name).toLowerCase()))
+                            ec && (c.id ? ec.id === c.id : Boolean(c.characterId && ec.characterId === c.characterId))
                     );
-                    if (idx !== -1) {
-                        const existing = nextCombatants[idx];
-                        const existingChar = existing?.characterId ? camp.characters?.[existing.characterId] : null;
-                        if (existingChar && !isCharacterControlled(existingChar, senderRole, senderName)) continue;
-                        nextCombatants[idx] = { ...existing, ...c };
-                    } else {
-                        nextCombatants.push(c);
+                    if (idx === -1) continue;
+
+                    const existing = nextCombatants[idx];
+                    const existingChar = existing?.characterId ? camp.characters?.[existing.characterId] : null;
+                    const existingTok = existing?.tokenId ? activeTokens[existing.tokenId] : null;
+                    const controlsCombatant = existingChar
+                        ? isCharacterControlled(existingChar, senderRole, senderName)
+                        : existingTok
+                          ? isTokenControlled(existingTok, camp, senderRole, senderName)
+                          : false;
+                    if (!controlsCombatant) continue;
+
+                    const sanitizedPatch = {};
+                    if (c.score !== undefined) {
+                        const parsedScore = parseFloat(c.score);
+                        if (!Number.isFinite(parsedScore)) continue;
+                        sanitizedPatch.score = Math.max(-100, Math.min(1000, parsedScore));
                     }
+                    if (typeof c.name === 'string') {
+                        const cleanName = stripTags(c.name).trim().slice(0, 100);
+                        if (cleanName) sanitizedPatch.name = cleanName;
+                    }
+                    if (Object.keys(sanitizedPatch).length === 0) continue;
+
+                    nextCombatants[idx] = { ...existing, ...sanitizedPatch };
+                    anyUpdated = true;
                 }
+                if (!anyUpdated) return true;
                 nextCombatants.sort((a, b) => (parseFloat(b.score) || 0) - (parseFloat(a.score) || 0));
                 camp.initiative = { ...cur, combatants: nextCombatants };
             }
@@ -990,12 +1004,18 @@
                     sanitized.ownerUsername = senderName;
                     sanitized.assignedPlayers = [senderName];
                     sanitized.players = [senderName];
+                    delete sanitized.isCompanion;
+                    delete sanitized.isCustomNpc;
                     delete sanitized.monsterData;
                 } else {
                     sanitized.owner = existing.owner;
                     sanitized.ownerUsername = existing.ownerUsername;
                     sanitized.assignedPlayers = existing.assignedPlayers;
                     sanitized.players = existing.players;
+                    if (existing.isCompanion) sanitized.isCompanion = true;
+                    else delete sanitized.isCompanion;
+                    if (existing.isCustomNpc) sanitized.isCustomNpc = true;
+                    else delete sanitized.isCustomNpc;
                     if (existing.monsterData !== undefined) sanitized.monsterData = existing.monsterData;
                     else delete sanitized.monsterData;
                 }

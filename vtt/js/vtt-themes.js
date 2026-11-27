@@ -4,6 +4,8 @@
  * WebGL 3D dice skin auto-synchronization, and real-time GM atmospheric broadcasts.
  */
 
+import { setActiveCursorTheme } from './canvas/vtt-canvas-cursors.js';
+
 export const THEMES = {
     classic: {
         id: 'classic',
@@ -128,6 +130,17 @@ export const THEMES = {
     }
 };
 
+const THEME_FONT_SPECS = {
+    jungle: 'MedievalSharp',
+    gothic: 'Cinzel+Decorative:wght@700;900',
+    celestial: 'Orbitron:wght@400;600;700;800',
+    hellscape: 'Rye',
+    cyberpunk: 'Rajdhani:wght@500;600;700',
+    parchment: 'Alegreya:ital,wght@0,400;0,500;0,600;0,700;1,400',
+    abyssal: 'Syne:wght@500;600;700;800',
+    frostpeak: 'Exo+2:wght@400;600;700;800'
+};
+
 export const COLORBLIND_MODES = {
     none: {
         id: 'none',
@@ -217,6 +230,7 @@ export function initVttThemes(vtt) {
     populateColorblindSelector(currentColorblindId);
     setupFontScaleControls();
     setupDiceSyncControls(syncDiceWithTheme);
+    setupThemedCursorControls(vtt);
     setupGmBroadcastControls(vtt);
     setupSocketListeners(vtt);
 
@@ -237,13 +251,29 @@ export function initVttThemes(vtt) {
 
     // --- Helper Functions ---
 
+    function ensureThemeFontLoaded(themeId) {
+        const spec = THEME_FONT_SPECS[themeId];
+        if (!spec || typeof document === 'undefined') return;
+        const linkId = `vtt-theme-font-${themeId}`;
+        if (document.getElementById(linkId)) return;
+        const link = document.createElement('link');
+        link.id = linkId;
+        link.rel = 'stylesheet';
+        link.href = `https://fonts.googleapis.com/css2?family=${spec}&display=swap`;
+        document.head.appendChild(link);
+    }
+
     function applyTheme(themeId, syncDice = true) {
         if (!THEMES[themeId]) themeId = 'classic';
         currentThemeId = themeId;
 
+        ensureThemeFontLoaded(themeId);
+
         // Apply HTML attribute for CSS rules
         document.documentElement.setAttribute('data-theme', themeId);
         localStorage.setItem('vtt_theme', themeId);
+        setActiveCursorTheme(themeId);
+        window.VTT?.syncCanvasCursor?.();
 
         // Update 3D Dice theme profile if engine available
         if (window.Dice3D) {
@@ -495,6 +525,27 @@ export function initVttThemes(vtt) {
             diceSkinSelect.addEventListener('change', () => {
                 syncCb.checked = false;
                 localStorage.setItem('vtt_theme_sync_dice', 'false');
+            });
+        }
+    }
+
+    function setupThemedCursorControls(vtt) {
+        const cursorCb = document.getElementById('config-themed-cursors-toggle');
+        const isEnabled = localStorage.getItem('vtt_themed_cursors') !== 'false';
+        if (typeof document !== 'undefined' && document.body) {
+            document.body.classList.toggle('vtt-standard-cursors', !isEnabled);
+        }
+
+        if (cursorCb) {
+            cursorCb.checked = isEnabled;
+            cursorCb.addEventListener('change', (e) => {
+                const enabled = Boolean(e.target.checked);
+                localStorage.setItem('vtt_themed_cursors', String(enabled));
+                if (typeof document !== 'undefined' && document.body) {
+                    document.body.classList.toggle('vtt-standard-cursors', !enabled);
+                }
+                vtt?.syncCanvasCursor?.();
+                window.VTT?.syncCanvasCursor?.();
             });
         }
     }

@@ -246,6 +246,8 @@ screen and (pointer: coarse) and (max-width: 1366px) {
     body.mobile-sheet-open #vtt-sidebar-zoom,
     body.mobile-sheet-open #vtt-mobile-nav,
     body.mobile-sheet-open #vtt-coordinates-indicator,
+    body.mobile-sheet-open #btn-token-locator,
+    body.mobile-sheet-open #vtt-token-locator-panel,
     body:has(#player-sheet-panel.open) #vtt-mobile-tools-fab,
     body:has(#player-sheet-panel.open) #vtt-mobile-tools-menu,
     body:has(#player-sheet-panel.open) #vtt-mobile-combat-pill,
@@ -254,6 +256,8 @@ screen and (pointer: coarse) and (max-width: 1366px) {
     body:has(#player-sheet-panel.open) #vtt-mobile-nav,
     body:has(#player-sheet-panel.open) #vtt-sidebar,
     body:has(#player-sheet-panel.open) #vtt-coordinates-indicator,
+    body:has(#player-sheet-panel.open) #btn-token-locator,
+    body:has(#player-sheet-panel.open) #vtt-token-locator-panel,
     body:has(#player-sheet-panel:not(.minimized)) #vtt-mobile-tools-fab,
     body:has(#player-sheet-panel:not(.minimized)) #vtt-mobile-tools-menu,
     body:has(#player-sheet-panel:not(.minimized)) #vtt-mobile-combat-pill,
@@ -261,6 +265,8 @@ screen and (pointer: coarse) and (max-width: 1366px) {
     body:has(#player-sheet-panel:not(.minimized)) #vtt-sidebar-zoom,
     body:has(#player-sheet-panel:not(.minimized)) #vtt-mobile-nav,
     body:has(#player-sheet-panel:not(.minimized)) #vtt-coordinates-indicator,
+    body:has(#player-sheet-panel:not(.minimized)) #btn-token-locator,
+    body:has(#player-sheet-panel:not(.minimized)) #vtt-token-locator-panel,
     body:has(#creature-sheet-panel.open) #vtt-mobile-tools-fab,
     body:has(#creature-sheet-panel.open) #vtt-mobile-tools-menu,
     body:has(#creature-sheet-panel.open) #vtt-mobile-combat-pill,
@@ -269,6 +275,8 @@ screen and (pointer: coarse) and (max-width: 1366px) {
     body:has(#creature-sheet-panel.open) #vtt-mobile-nav,
     body:has(#creature-sheet-panel.open) #vtt-sidebar,
     body:has(#creature-sheet-panel.open) #vtt-coordinates-indicator,
+    body:has(#creature-sheet-panel.open) #btn-token-locator,
+    body:has(#creature-sheet-panel.open) #vtt-token-locator-panel,
     body:has(#creature-sheet-panel:not(.minimized)) #vtt-mobile-tools-fab,
     body:has(#creature-sheet-panel:not(.minimized)) #vtt-mobile-tools-menu,
     body:has(#creature-sheet-panel:not(.minimized)) #vtt-mobile-combat-pill,
@@ -276,12 +284,16 @@ screen and (pointer: coarse) and (max-width: 1366px) {
     body:has(#creature-sheet-panel:not(.minimized)) #vtt-sidebar-zoom,
     body:has(#creature-sheet-panel:not(.minimized)) #vtt-mobile-nav,
     body:has(#creature-sheet-panel:not(.minimized)) #vtt-coordinates-indicator,
+    body:has(#creature-sheet-panel:not(.minimized)) #btn-token-locator,
+    body:has(#creature-sheet-panel:not(.minimized)) #vtt-token-locator-panel,
     body:has(#vtt-sidebar.mobile-drawer-open) #vtt-mobile-tools-fab,
     body:has(#vtt-sidebar.mobile-drawer-open) #vtt-mobile-tools-menu,
     body:has(#vtt-sidebar.mobile-drawer-open) #vtt-mobile-combat-pill,
     body:has(#vtt-sidebar.mobile-drawer-open) #vtt-initiative-carousel-container,
     body:has(#vtt-sidebar.mobile-drawer-open) #vtt-sidebar-zoom,
     body:has(#vtt-sidebar.mobile-drawer-open) #vtt-coordinates-indicator,
+    body:has(#vtt-sidebar.mobile-drawer-open) #btn-token-locator,
+    body:has(#vtt-sidebar.mobile-drawer-open) #vtt-token-locator-panel,
     body:has(.vtt-mobile-bottom-sheet:not(.vtt-hidden)) #vtt-mobile-nav,
     body:has(.vtt-mobile-bottom-sheet:not(.vtt-hidden)) #vtt-initiative-carousel-container,
     body:has(.vtt-mobile-bottom-sheet:not(.vtt-hidden)) #vtt-coordinates-indicator,
@@ -1950,6 +1962,13 @@ screen and (pointer: coarse) and (max-width: 1366px) {
 
     #vtt-token-locator-panel {
         z-index: 40 !important;
+    }
+
+    /* Ensure slideout tab monograms remain legible on mobile & tablet */
+    .tab-handle-monogram {
+        font-size: 12px !important;
+        line-height: 1 !important;
+        font-weight: 700 !important;
     }
 
     /* ========================================================================

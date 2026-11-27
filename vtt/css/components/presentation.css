@@ -101,3 +101,128 @@ body.vtt-presentation-mode #vtt-initiative-carousel-container .init-card-menu-bt
 body.vtt-presentation-mode #vtt-initiative-carousel-container button {
     display: none !important;
 }
+
+/* Auto-hide cursor on idle TV display */
+body.vtt-presentation-mode.vtt-tv-cursor-hidden,
+body.vtt-presentation-mode.vtt-tv-cursor-hidden * {
+    cursor: none !important;
+}
+
+/* TV Corner Utility Pill (auto-fades on idle) */
+.vtt-tv-utility-pill {
+    position: fixed;
+    bottom: 16px;
+    right: 16px;
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: rgba(10, 14, 23, 0.86);
+    border: 1px solid rgba(212, 175, 55, 0.35);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    pointer-events: auto;
+    opacity: 0.92;
+    transition: opacity 0.25s ease;
+}
+
+body.vtt-presentation-mode.vtt-tv-cursor-hidden .vtt-tv-utility-pill:not(:focus-within) {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.vtt-tv-utility-pill button {
+    background: rgba(255, 255, 255, 0.08);
+    color: #f1f5f9;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 999px;
+    padding: 5px 10px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.vtt-tv-utility-pill button:hover {
+    background: rgba(212, 175, 55, 0.2);
+    border-color: rgba(212, 175, 55, 0.6);
+}
+
+/* 1-Inch Physical Grid Calibration Modal on TV Window */
+.vtt-tv-cal-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 3000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.72);
+    pointer-events: auto;
+}
+
+.vtt-tv-cal-card {
+    background: #0f172a;
+    color: #f1f5f9;
+    border: 1px solid rgba(212, 175, 55, 0.5);
+    border-radius: 14px;
+    padding: 20px 24px;
+    width: min(380px, 92vw);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.75);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.vtt-tv-cal-square-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    background: rgba(0, 0, 0, 0.45);
+    border-radius: 8px;
+    border: 1px dashed rgba(255, 255, 255, 0.2);
+}
+
+.vtt-tv-cal-square {
+    border: 2px solid #f5c453;
+    background: rgba(245, 196, 83, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #f5c453;
+}
+
+/* GM HUD Floating TV Sync Pill */
+.vtt-tv-sync-pill {
+    position: fixed;
+    bottom: 18px;
+    left: 78px;
+    z-index: 1100;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: rgba(10, 14, 23, 0.9);
+    border: 1px solid rgba(212, 175, 55, 0.45);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.vtt-tv-sync-pill .tv-status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #22c55e;
+}
+
+.vtt-tv-sync-pill.is-frozen .tv-status-dot {
+    background: #f59e0b;
+}

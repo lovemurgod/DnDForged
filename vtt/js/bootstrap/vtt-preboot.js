@@ -28,5 +28,20 @@
             document.documentElement.style.setProperty('--vtt-font-scale', scaleNum);
             document.documentElement.style.fontSize = 'calc(15px * ' + scaleNum + ')';
         }
+
+        window.VTT_IS_REDUCED_MOTION = function () {
+            try {
+                const ecoOverride = localStorage.getItem('vtt_eco_mode');
+                if (ecoOverride === 'true') return true;
+                if (ecoOverride === 'false') return false;
+                return Boolean(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+            } catch (e) {
+                return false;
+            }
+        };
+
+        if (window.VTT_IS_REDUCED_MOTION()) {
+            document.documentElement.classList.add('vtt-reduce-motion');
+        }
     } catch (e) {}
 })();

@@ -78,6 +78,7 @@ import {
     showWallSettingsModal as showWallSettingsModalExt,
     closeAnyWallModal as closeAnyWallModalExt
 } from './vtt-canvas-wall-modals.js';
+import { applyCanvasCursor, resolveCanvasCursor } from './vtt-canvas-cursors.js';
 
 export function setupPointerInteraction(ctx = {}) {
     const vtt = ctx.vtt || (typeof window !== 'undefined' ? window.VTT : {});
@@ -111,6 +112,37 @@ export function setupPointerInteraction(ctx = {}) {
         ctx.selectedMapToolItems?.clear();
         ctx.selectedMapToolItem = null;
     };
+
+    const syncCanvasCursor = (extraState = {}) => {
+        if (!canvasInteraction) return;
+        const paintSubTool = extraState.paintSubTool !== undefined ? extraState.paintSubTool : ctx.paintSubTool || 'pencil';
+        const cursorKey = resolveCanvasCursor({
+            isPanning: ctx.isPanning,
+            isRotating: Boolean(activeRotateTokenId || ctx.activeRotatePortalId || ctx.isRotatingLight),
+            activeResizeCursor: extraState.activeResizeCursor || null,
+            isSpacePressed,
+            hoveredDoorLocked: Boolean(extraState.hoveredDoorLocked),
+            hoveredRotateHandle: Boolean(
+                extraState.hoveredRotateHandle || hoveredRotateTokenId || hoveredRotatePortalId
+            ),
+            hoveredResizeCursor:
+                extraState.hoveredResizeCursor ||
+                hoveredGroupResizeHandle?.cursor ||
+                hoveredResizeTokenHandle?.cursor ||
+                null,
+            hoveredInteractive: Boolean(
+                extraState.hoveredInteractive ||
+                    ctx.hoverTokenId ||
+                    ctx.hoveredNoteId ||
+                    ctx.hoveredShapeComponent
+            ),
+            activeTool: ctx.activeTool,
+            paintSubTool
+        });
+        applyCanvasCursor(cursorKey, canvasInteraction);
+    };
+    ctx.syncCanvasCursor = syncCanvasCursor;
+    if (vtt) vtt.syncCanvasCursor = syncCanvasCursor;
 
     // Transient interaction state variables
     let lastMouseEvent = null;
@@ -753,7 +785,7 @@ export function setupPointerInteraction(ctx = {}) {
                 startPanX = e.clientX - ctx.panX;
                 startPanY = e.clientY - ctx.panY;
                 if (canvasInteraction && isSpacePanning) {
-                    canvasInteraction.style.cursor = 'grabbing';
+                    syncCanvasCursor();
                 }
                 return;
             }
@@ -1668,7 +1700,7 @@ export function setupPointerInteraction(ctx = {}) {
                     if (angleNum) angleNum.value = deg;
                     if (angleVal) angleVal.textContent = `${deg}°`;
 
-                    canvasInteraction.style.cursor = 'grabbing';
+                    syncCanvasCursor();
                     renderAll();
                 }
                 return;
@@ -1692,10 +1724,10 @@ export function setupPointerInteraction(ctx = {}) {
                     ctx.hoveredMapToolHandle = handleHit;
                     if (handleHit.type === 'rotate') {
                         hoveredRotatePortalId = handleHit.portal.id;
-                        canvasInteraction.style.cursor = 'grab';
+                        syncCanvasCursor({ hoveredRotateHandle: true });
                         renderAll();
                     } else if (handleHit.type === 'resize') {
-                        canvasInteraction.style.cursor = handleHit.handle.cursor || 'pointer';
+                        syncCanvasCursor({ hoveredResizeCursor: handleHit.handle.cursor || 'pointer' });
                         renderAll();
                     }
                 }
@@ -1827,12 +1859,12 @@ export function setupPointerInteraction(ctx = {}) {
                     if (selItem) {
                         const rHandle = getMapToolResizeHandleAt(selItem, mouse);
                         if (rHandle) {
-                            canvasInteraction.style.cursor = rHandle.cursor;
+                            syncCanvasCursor({ hoveredResizeCursor: rHandle.cursor });
                         }
                         if (ctx.selectedMapToolItem.type === 'portal' && !selItem.isRadial) {
                             const hPos = getPortalRotationHandlePos(selItem);
                             if (hPos && Math.hypot(mouse.x - hPos.x, mouse.y - hPos.y) <= 14 / ctx.zoom) {
-                                canvasInteraction.style.cursor = 'grab';
+                                syncCanvasCursor({ hoveredRotateHandle: true });
                             }
                         }
                     }
@@ -1853,7 +1885,7 @@ export function setupPointerInteraction(ctx = {}) {
                             w: 'ew-resize',
                             e: 'ew-resize'
                         };
-                        canvasInteraction.style.cursor = cursors[handle] || 'pointer';
+                        syncCanvasCursor({ hoveredResizeCursor: cursors[handle] || 'pointer' });
                     }
                 }
 
@@ -2017,7 +2049,7 @@ export function setupPointerInteraction(ctx = {}) {
 
                 if (newHoveredGroupHandle) {
                     hoveredGroupResizeHandle = newHoveredGroupHandle;
-                    canvasInteraction.style.cursor = newHoveredGroupHandle.cursor;
+                    syncCanvasCursor({ hoveredResizeCursor: newHoveredGroupHandle.cursor });
                 } else {
                     hoveredGroupResizeHandle = null;
                 }
@@ -2058,20 +2090,26 @@ export function setupPointerInteraction(ctx = {}) {
                     hoveredResizeTokenId = newHoveredResizeTokenId;
                     hoveredResizeTokenHandle = newHoveredResizeTokenHandle;
                     if (hoveredResizeTokenHandle && !hoveredGroupResizeHandle) {
-                        canvasInteraction.style.cursor = hoveredResizeTokenHandle.cursor || 'nwse-resize';
+                        syncCanvasCursor({ hoveredResizeCursor: hoveredResizeTokenHandle.cursor || 'nwse-resize' });
                     }
                     renderAll();
                 }
                 if (hoveredRotateTokenId !== newHoveredRotateTokenId) {
                     hoveredRotateTokenId = newHoveredRotateTokenId;
-                    if (hoveredRotateTokenId && !hoveredGroupResizeHandle) canvasInteraction.style.cursor = 'grab';
+                    if (hoveredRotateTokenId && !hoveredGroupResizeHandle) {
+                        syncCanvasCursor({ hoveredRotateHandle: true });
+                    }
                     renderAll();
                 }
                 // Interactive doors/windows hover
                 const hoveredDoorAction = getInteractiveDoorAtCoord(mouse.x, mouse.y);
+                let hoveredDoorLocked = false;
                 if (hoveredDoorAction) {
-                    canvasInteraction.style.cursor = 'pointer';
                     const w = ctx.walls[hoveredDoorAction.wallIdx];
+                    hoveredDoorLocked = Boolean(
+                        hoveredDoorAction.action === 'toggleOpen' && w?.isLocked && vtt.role !== 'GM'
+                    );
+                    syncCanvasCursor({ hoveredInteractive: true, hoveredDoorLocked });
                     let tip = '';
                     if (hoveredDoorAction.action === 'toggleOpen') {
                         tip =
@@ -2106,7 +2144,7 @@ export function setupPointerInteraction(ctx = {}) {
                     !activeRotateTokenId &&
                     !hoveredDoorAction
                 ) {
-                    canvasInteraction.style.cursor = '';
+                    syncCanvasCursor();
                 }
 
                 if (
@@ -2122,7 +2160,10 @@ export function setupPointerInteraction(ctx = {}) {
                     const newHoveredNote = getNoteAtCoord(mouse.x, mouse.y);
                     if (newHoveredNote !== ctx.hoveredNoteId) {
                         ctx.hoveredNoteId = newHoveredNote;
-                        canvasInteraction.style.cursor = ctx.hoveredNoteId ? 'pointer' : '';
+                        syncCanvasCursor({
+                            hoveredInteractive: Boolean(hoveredDoorAction || ctx.hoveredNoteId || ctx.hoverTokenId),
+                            hoveredDoorLocked
+                        });
                         renderAll();
                     }
 
@@ -2132,8 +2173,10 @@ export function setupPointerInteraction(ctx = {}) {
                         const newHoverTokenId = newHoveredToken ? newHoveredToken.id : null;
                         if (newHoverTokenId !== ctx.hoverTokenId) {
                             ctx.hoverTokenId = newHoverTokenId;
-                            if (ctx.hoverTokenId) canvasInteraction.style.cursor = 'pointer';
-                            else if (!ctx.hoveredNoteId) canvasInteraction.style.cursor = '';
+                            syncCanvasCursor({
+                                hoveredInteractive: Boolean(hoveredDoorAction || ctx.hoverTokenId || ctx.hoveredNoteId),
+                                hoveredDoorLocked
+                            });
                             if (window.VTT?.sheetDock?.highlightTabForToken) {
                                 window.VTT.sheetDock.highlightTabForToken(ctx.hoverTokenId);
                             }
@@ -2165,7 +2208,10 @@ export function setupPointerInteraction(ctx = {}) {
                         }
                     } else if (ctx.hoverTokenId !== null) {
                         ctx.hoverTokenId = null;
-                        if (!ctx.hoveredNoteId) canvasInteraction.style.cursor = '';
+                        syncCanvasCursor({
+                            hoveredInteractive: Boolean(hoveredDoorAction || ctx.hoveredNoteId),
+                            hoveredDoorLocked
+                        });
                         renderAll();
                         hideGmTokenTooltip();
                     }
@@ -2667,12 +2713,15 @@ export function setupPointerInteraction(ctx = {}) {
                         points
                     });
                 }
+                syncCanvasCursor();
                 renderAll();
             } else if (ctx.localIsShaping && ctx.activeTool === 'shape') {
                 const mouse = getCanvasMouseCoords(e);
                 ctx.localShapeEnd = e.altKey ? mouse : snapToSmartGrid(mouse.x, mouse.y);
+                syncCanvasCursor();
                 renderAll();
             } else if (ctx.activeTool === 'lighting') {
+                syncCanvasCursor();
                 const mouse = getCanvasMouseCoords(e);
                 if (ctx.activeDragLightId) {
                     const nx = mouse.x;
@@ -2725,13 +2774,7 @@ export function setupPointerInteraction(ctx = {}) {
                 const subTool = getPaintSubTool();
                 const gridSnap = getPaintGridSnap();
 
-                if (subTool === 'text') {
-                    canvasInteraction.style.cursor = 'text';
-                } else if (subTool === 'eraser') {
-                    canvasInteraction.style.cursor = 'cell';
-                } else {
-                    canvasInteraction.style.cursor = 'crosshair';
-                }
+                syncCanvasCursor({ paintSubTool: subTool });
                 const mouse = getCanvasMouseCoords(e);
                 ctx.currentMouseCoords = mouse;
                 if (subTool === 'eraser' && !ctx.isDrawingPaint) {
@@ -2782,6 +2825,8 @@ export function setupPointerInteraction(ctx = {}) {
             } else if (ctx.activeTool === 'maptools' || ctx.activeTool === 'map-tools') {
                 const mouse = ctx.currentMouseCoords || getCanvasMouseCoords(e);
                 handleMapToolMouseMove(mouse, e);
+            } else {
+                syncCanvasCursor();
             }
         });
     }
@@ -2800,7 +2845,7 @@ export function setupPointerInteraction(ctx = {}) {
                 ctx.isPanning = false;
                 isSpacePanning = false;
                 if (canvasInteraction) {
-                    canvasInteraction.style.cursor = isSpacePressed ? 'grab' : '';
+                    syncCanvasCursor();
                 }
                 const tokenHudLayer =
                     typeof document !== 'undefined' ? document.getElementById('vtt-token-hud-layer') : null;
@@ -3542,7 +3587,7 @@ export function setupPointerInteraction(ctx = {}) {
                 ) {
                     isSpacePressed = true;
                     if (canvasInteraction && !ctx.isPanning) {
-                        canvasInteraction.style.cursor = 'grab';
+                        syncCanvasCursor();
                     }
                 }
             }
@@ -3552,13 +3597,13 @@ export function setupPointerInteraction(ctx = {}) {
             if (e.code === 'Space' || e.key === ' ') {
                 isSpacePressed = false;
                 if (canvasInteraction && !ctx.isPanning) {
-                    canvasInteraction.style.cursor = '';
+                    syncCanvasCursor();
                 }
                 if (ctx.isPanning && isSpacePanning) {
                     ctx.isPanning = false;
                     isSpacePanning = false;
                     if (canvasInteraction) {
-                        canvasInteraction.style.cursor = '';
+                        syncCanvasCursor();
                     }
                     const tokenHudLayer =
                         typeof document !== 'undefined' ? document.getElementById('vtt-token-hud-layer') : null;
@@ -3575,7 +3620,7 @@ export function setupPointerInteraction(ctx = {}) {
         window.addEventListener('blur', () => {
             isSpacePressed = false;
             if (canvasInteraction) {
-                canvasInteraction.style.cursor = '';
+                syncCanvasCursor();
             }
             if (ctx.isPanning) {
                 ctx.isPanning = false;
@@ -3591,6 +3636,8 @@ export function setupPointerInteraction(ctx = {}) {
             }
         });
     }
+
+    syncCanvasCursor();
 
     return {
         getInteractiveDoorAtCoord

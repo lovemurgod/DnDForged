@@ -1252,7 +1252,11 @@
 
     function isEnabled() {
         const val = localStorage.getItem(STORAGE_KEY_ENABLED);
-        return val === null ? true : val === 'true';
+        if (val !== null) return val === 'true';
+        if (typeof window !== 'undefined' && typeof window.VTT_IS_REDUCED_MOTION === 'function') {
+            return !window.VTT_IS_REDUCED_MOTION();
+        }
+        return true;
     }
 
     function setEnabled(enabled) {
