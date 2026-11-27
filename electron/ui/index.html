@@ -162,44 +162,7 @@
               </button>
             </div>
             <div class="online-security-notice vtt-hidden" id="online-security-notice">
-              🔒 Set a <strong>GM Username &amp; Password</strong> below to enable online tunneling and P2P sharing.
-            </div>
-          </div>
-        </section>
-
-        <!-- Master GM Login & Server Security Credentials Card -->
-        <section class="card gm-credentials-card span-2">
-          <div class="card-header">
-            <h2>👑 Master GM &amp; Server Security Credentials</h2>
-            <span class="badge" id="gm-cred-status-badge">Checking...</span>
-          </div>
-          <div class="card-body">
-            <p class="section-desc">
-              Protects your Game Master seat and is <strong>required</strong> before starting online hosting (Cloudflare Tunnel, P2P sharing, or remote dashboard access). Local offline play works with or without a password.
-            </p>
-            <div class="credentials-form-row">
-              <div class="input-group">
-                <label for="gm-username-input">GM Username</label>
-                <input type="text" id="gm-username-input" placeholder="e.g. DungeonMaster" />
-              </div>
-              <div class="input-group">
-                <label for="gm-password-input">GM Password</label>
-                <div class="password-field-wrap">
-                  <input type="password" id="gm-password-input"
-                    placeholder="Enter new password (or leave blank to keep)" />
-                  <button type="button" class="btn-toggle-pw" id="btn-toggle-pw-visibility"
-                    title="Show/Hide Password">👁️</button>
-                </div>
-              </div>
-              <div class="cred-actions" style="display: flex; gap: 8px;">
-                <button class="btn btn-accent" id="btn-save-gm-creds">
-                  💾 Save Credentials
-                </button>
-                <button class="btn btn-outline" id="btn-clear-gm-password" type="button"
-                  title="Remove password (only allowed when offline)">
-                  🔓 Remove Password
-                </button>
-              </div>
+              🔒 Set a <strong>GM Username &amp; Password</strong> in <strong>GM Dashboard</strong> to enable online tunneling and P2P sharing.
             </div>
           </div>
         </section>
@@ -355,6 +318,43 @@
     <!-- VIEW 2: GM DASHBOARD -->
     <main class="dashboard-view" id="view-gm">
       <div class="gm-grid">
+        <!-- Master GM Login & Server Security Credentials Card -->
+        <section class="card gm-credentials-card">
+          <div class="card-header">
+            <h2>👑 Master GM &amp; Server Security Credentials</h2>
+            <span class="badge" id="gm-cred-status-badge">Checking...</span>
+          </div>
+          <div class="card-body">
+            <p class="section-desc">
+              Protects your Game Master seat and is <strong>required</strong> before starting online hosting (Cloudflare Tunnel, P2P sharing, or remote dashboard access). Local offline play works with or without a password.
+            </p>
+            <div class="credentials-form-row">
+              <div class="input-group">
+                <label for="gm-username-input">GM Username</label>
+                <input type="text" id="gm-username-input" placeholder="e.g. DungeonMaster" />
+              </div>
+              <div class="input-group">
+                <label for="gm-password-input">GM Password</label>
+                <div class="password-field-wrap">
+                  <input type="password" id="gm-password-input"
+                    placeholder="Enter new password (or leave blank to keep)" />
+                  <button type="button" class="btn-toggle-pw" id="btn-toggle-pw-visibility"
+                    title="Show/Hide Password">👁️</button>
+                </div>
+              </div>
+              <div class="cred-actions" style="display: flex; gap: 8px;">
+                <button class="btn btn-accent" id="btn-save-gm-creds">
+                  💾 Save Credentials
+                </button>
+                <button class="btn btn-outline" id="btn-clear-gm-password" type="button"
+                  title="Remove password (only allowed when offline)">
+                  🔓 Remove Password
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <!-- Online P2P & Storage Quick-Launch Bar (Static Web / Browser Prep) -->
         <section class="card prep-p2p-launch-bar static-web-only" id="prep-static-launch-card">
           <div class="prep-launch-group">
@@ -395,6 +395,14 @@
           <div class="card-header">
             <h2><i class="fa-solid fa-book-bookmark" aria-hidden="true"></i> Campaigns Management</h2>
             <div class="card-header-actions">
+              <button class="btn btn-sm btn-outline web-prep-only" id="btn-gm-web-copy-share"
+                title="Copy Player Share Link">
+                <i class="fa-solid fa-link" aria-hidden="true"></i> Copy Share Link
+              </button>
+              <button class="btn btn-sm btn-gold web-prep-only" id="btn-gm-web-open-table"
+                title="Open Tabletop in Browser">
+                <i class="fa-solid fa-dice-d20" aria-hidden="true"></i> Open Table
+              </button>
               <button class="btn btn-sm btn-outline web-prep-only" id="btn-gm-export-backup"
                 title="Export full campaign backup JSON">
                 <i class="fa-solid fa-floppy-disk" aria-hidden="true"></i> Backup

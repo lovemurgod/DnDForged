@@ -4,6 +4,8 @@
  * and REST GM authorization headers injector for ForgeDVTT.
  */
 
+import { generateArcaneTokenDataUrl } from '../creature-sheet/creature-renderer.js';
+
 export function initVttGlobals() {
     if (typeof window === 'undefined') return;
 
@@ -24,6 +26,9 @@ export function initVttGlobals() {
         dataBridge: null
     };
 
+    if (!window.VTT.generateArcaneToken) {
+        window.VTT.generateArcaneToken = generateArcaneTokenDataUrl;
+    }
     window.vttSanitizeHtml = vttSanitizeHtml;
     window.vttAuthHeaders = vttAuthHeaders;
 }

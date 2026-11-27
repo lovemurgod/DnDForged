@@ -30,6 +30,7 @@ export function getPlayerActiveTokenUrl(c) {
         const u = typeof raw === 'string' ? raw : raw?.url || '';
         if (u) return u;
     }
+    const fallbackCat = c.isCompanion ? 'companion' : 'player';
     return (
         c.tokenImage ||
         c.avatar ||
@@ -37,6 +38,9 @@ export function getPlayerActiveTokenUrl(c) {
         c.avatarUrl ||
         (c.monsterData && typeof window.Renderer !== 'undefined' && window.Renderer.monster
             ? window.Renderer.monster.getTokenUrl(c.monsterData)
+            : null) ||
+        (typeof window !== 'undefined' && window.VTT?.generateArcaneToken
+            ? window.VTT.generateArcaneToken(c.name || 'Hero', fallbackCat)
             : null) ||
         'favicon.svg'
     );

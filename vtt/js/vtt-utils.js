@@ -7,6 +7,7 @@
  * @returns {string} Safe resolved URL
  */
 const SAFE_DATA_IMAGE_RE = /^data:image\/(png|jpeg|jpg|gif|webp|avif|svg\+xml);base64,[a-z0-9+/=\s]+$/i;
+const SAFE_DATA_SVG_UTF8_RE = /^data:image\/svg\+xml(?:;charset=utf-8|;utf8)?,/i;
 const URL_SCHEME_RE = /^([a-zA-Z][a-zA-Z0-9+.-]*):/;
 
 export function getSafeVttUrl(url) {
@@ -24,7 +25,15 @@ export function getSafeVttUrl(url) {
     if (schemeMatch) {
         const scheme = schemeMatch[1].toLowerCase();
         if (scheme === 'data') {
-            if (!SAFE_DATA_IMAGE_RE.test(cleaned)) return '';
+            if (SAFE_DATA_SVG_UTF8_RE.test(cleaned)) {
+                let decodedSvg = cleaned;
+                try {
+                    decodedSvg = decodeURIComponent(cleaned);
+                } catch {}
+                if (/<script[\s>]|javascript:|on[a-z]+\s*=/i.test(decodedSvg)) return '';
+            } else if (!SAFE_DATA_IMAGE_RE.test(cleaned)) {
+                return '';
+            }
         } else if (scheme !== 'http' && scheme !== 'https' && scheme !== 'blob' && scheme !== 'forgedvtt-asset') {
             return '';
         }

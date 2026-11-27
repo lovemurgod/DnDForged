@@ -607,9 +607,17 @@ export function initVttDataBridge(vtt) {
             const editionClass = monster.edition === '2024' ? 'edition-2024' : '';
             const typeLabel = monster.type || monster.subtype || '—';
 
+            // Calculate VTT attributes
+            const hp = monster.hp || calculateMonsterHp(monster);
+            const size = translateSizeCategory(monster.sizeCategory || monster.size);
+            const imageUrl = monster.tokenImg || getMonsterImageUrl(monster);
+            const safeThumbUrl = escapeHtml(getSafeVttUrl(imageUrl));
+            const safeMonsterName = escapeHtml(monster.name);
+
             item.innerHTML = `
-                <div class="bestiary-col-name" title="${escapeHtml(monster.name)}">
-                    <span class="bestiary-col-name-text">${escapeHtml(monster.name)}</span>
+                <div class="bestiary-col-name" title="${safeMonsterName}">
+                    <img src="${safeThumbUrl}" alt="" loading="lazy" data-fallback-arcane="${safeMonsterName}" style="width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--color-gold-base); object-fit: cover; flex-shrink: 0;">
+                    <span class="bestiary-col-name-text">${safeMonsterName}</span>
                     ${spellBadge}
                 </div>
                 <div class="bestiary-col-cr" title="CR ${escapeHtml(crStr)}">${escapeHtml(crStr)}</div>
@@ -618,11 +626,6 @@ export function initVttDataBridge(vtt) {
                     <span class="bestiary-source-pill ${editionClass}">${escapeHtml(monster.source)}</span>
                 </div>
             `;
-
-            // Calculate VTT attributes
-            const hp = monster.hp || calculateMonsterHp(monster);
-            const size = translateSizeCategory(monster.sizeCategory || monster.size);
-            const imageUrl = monster.tokenImg || getMonsterImageUrl(monster);
 
             // Mobile 1-tap spawn button
             const spawnBtn = document.createElement('button');
@@ -2401,7 +2404,7 @@ export function initVttDataBridge(vtt) {
                 }
             }
 
-            const safeTokenImg = escapeHtml(tokenImg);
+            const safeTokenImg = escapeHtml(getSafeVttUrl(tokenImg));
             const cleanUrl = tokenImg.split('?')[0].toLowerCase();
             const isVideo = cleanUrl.match(/\.(mp4|webm|ogg)$/i);
             const isYoutube = cleanUrl.includes('youtube.com') || cleanUrl.includes('youtu.be');
@@ -2420,7 +2423,7 @@ export function initVttDataBridge(vtt) {
                 }
                 mediaHtml = `<iframe src="${escapeHtml(ytUrl)}" frameborder="0" style="width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--color-gold-base); pointer-events:none;"></iframe>`;
             } else {
-                mediaHtml = `<img src="${safeTokenImg}" style="width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--color-gold-base); object-fit: cover;" data-fallback-src="favicon.svg">`;
+                mediaHtml = `<img src="${safeTokenImg}" style="width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--color-gold-base); object-fit: cover;" data-fallback-arcane="${escapeHtml(npc.name || 'NPC')}">`;
             }
 
             const safeNpcId = escapeHtml(npc.id);

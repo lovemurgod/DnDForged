@@ -88,25 +88,28 @@
             </div>
 
             <!-- Server Port & Networking Settings -->
-            <div class="server-port-config-box" style="margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 10px;">
-              <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
-                <div style="display: flex; flex-direction: column; gap: 2px;">
-                  <label for="server-port-input" style="font-size: 12px; font-weight: 500; color: var(--text-muted);">Localhost Port</label>
-                  <span class="field-hint" style="font-size: 11px; color: var(--text-dim);">Custom port (1024 - 65535)</span>
+            <details class="advanced-settings-disclosure" id="advanced-port-disclosure">
+              <summary>Advanced Port Settings</summary>
+              <div class="server-port-config-box" style="margin-top: 10px; display: flex; flex-direction: column; gap: 10px;">
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+                  <div style="display: flex; flex-direction: column; gap: 2px;">
+                    <label for="server-port-input" style="font-size: 12px; font-weight: 500; color: var(--text-muted);">Localhost Port</label>
+                    <span class="field-hint" style="font-size: 11px; color: var(--text-dim);">Custom port (1024 - 65535)</span>
+                  </div>
+                  <input type="number" id="server-port-input" min="1024" max="65535" value="5050" style="width: 90px; text-align: center; background: rgba(0, 0, 0, 0.3); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 6px 8px; color: var(--text-main); font-family: var(--font-mono); font-size: 13px;" />
                 </div>
-                <input type="number" id="server-port-input" min="1024" max="65535" value="5050" style="width: 90px; text-align: center; background: rgba(0, 0, 0, 0.3); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 6px 8px; color: var(--text-main); font-family: var(--font-mono); font-size: 13px; outline: none;" />
-              </div>
-              <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
-                <div style="display: flex; flex-direction: column; gap: 2px;">
-                  <span style="font-size: 12px; font-weight: 500; color: var(--text-muted);">Auto-assign if busy</span>
-                  <span class="field-hint" style="font-size: 11px; color: var(--text-dim);">Automatically use next open port if occupied</span>
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+                  <div style="display: flex; flex-direction: column; gap: 2px;">
+                    <span style="font-size: 12px; font-weight: 500; color: var(--text-muted);">Auto-assign if busy</span>
+                    <span class="field-hint" style="font-size: 11px; color: var(--text-dim);">Automatically use next open port if occupied</span>
+                  </div>
+                  <label class="switch-label" style="display: flex; align-items: center; cursor: pointer; margin: 0;">
+                    <input type="checkbox" id="server-auto-port-check" checked />
+                    <span class="switch-slider"></span>
+                  </label>
                 </div>
-                <label class="switch-label" style="display: flex; align-items: center; cursor: pointer; margin: 0;">
-                  <input type="checkbox" id="server-auto-port-check" checked />
-                  <span class="switch-slider"></span>
-                </label>
               </div>
-            </div>
+            </details>
           </div>
         </section>
 
@@ -117,16 +120,7 @@
             <span class="badge badge-accent" id="tunnel-badge">Cloudflare</span>
           </div>
           <div class="card-body">
-            <!-- Mode Switcher -->
-            <div class="mode-selector-wrap">
-              <label class="mode-label">Hosting Domain Mode:</label>
-              <div class="mode-selector">
-                <button type="button" class="mode-btn active" id="mode-btn-subdomain">ForgeDVTT Subdomain</button>
-                <button type="button" class="mode-btn" id="mode-btn-custom">Custom Domain</button>
-              </div>
-            </div>
-
-            <!-- Subdomain Mode Inputs -->
+            <!-- Subdomain Mode Inputs (Default Primary Flow) -->
             <div class="input-group" id="subdomain-group">
               <label for="subdomain-input">Game Subdomain Slug</label>
               <div class="subdomain-field">
@@ -146,10 +140,24 @@
                 reverse proxy.</small>
             </div>
 
-            <div class="input-group token-group">
-              <label for="token-input">Cloudflare Tunnel Token <small>(Optional / Custom)</small></label>
-              <input type="password" id="token-input" placeholder="Paste custom Cloudflare token if needed..." />
-            </div>
+            <details class="advanced-settings-disclosure" id="advanced-tunnel-disclosure">
+              <summary>Advanced Domain &amp; Tunnel Token</summary>
+              <div style="margin-top: 10px; display: flex; flex-direction: column; gap: 10px;">
+                <!-- Mode Switcher -->
+                <div class="mode-selector-wrap">
+                  <label class="mode-label">Hosting Domain Mode:</label>
+                  <div class="mode-selector">
+                    <button type="button" class="mode-btn active" id="mode-btn-subdomain">ForgeDVTT Subdomain</button>
+                    <button type="button" class="mode-btn" id="mode-btn-custom">Custom Domain</button>
+                  </div>
+                </div>
+
+                <div class="input-group token-group">
+                  <label for="token-input">Cloudflare Tunnel Token <small>(Optional / Custom)</small></label>
+                  <input type="password" id="token-input" placeholder="Paste custom Cloudflare token if needed..." />
+                </div>
+              </div>
+            </details>
 
             <div class="tunnel-actions">
               <button class="btn btn-accent" id="btn-toggle-tunnel">
@@ -157,44 +165,7 @@
               </button>
             </div>
             <div class="online-security-notice vtt-hidden" id="online-security-notice">
-              🔒 Set a <strong>GM Username &amp; Password</strong> below to enable online tunneling and P2P sharing.
-            </div>
-          </div>
-        </section>
-
-        <!-- Master GM Login & Server Security Credentials Card -->
-        <section class="card gm-credentials-card span-2">
-          <div class="card-header">
-            <h2>👑 Master GM &amp; Server Security Credentials</h2>
-            <span class="badge" id="gm-cred-status-badge">Checking...</span>
-          </div>
-          <div class="card-body">
-            <p class="section-desc">
-              Protects your Game Master seat and is <strong>required</strong> before starting online hosting (Cloudflare Tunnel, P2P sharing, or remote dashboard access). Local offline play works with or without a password.
-            </p>
-            <div class="credentials-form-row">
-              <div class="input-group">
-                <label for="gm-username-input">GM Username</label>
-                <input type="text" id="gm-username-input" placeholder="e.g. DungeonMaster" />
-              </div>
-              <div class="input-group">
-                <label for="gm-password-input">GM Password</label>
-                <div class="password-field-wrap">
-                  <input type="password" id="gm-password-input"
-                    placeholder="Enter new password (or leave blank to keep)" />
-                  <button type="button" class="btn-toggle-pw" id="btn-toggle-pw-visibility"
-                    title="Show/Hide Password">👁️</button>
-                </div>
-              </div>
-              <div class="cred-actions" style="display: flex; gap: 8px;">
-                <button class="btn btn-accent" id="btn-save-gm-creds">
-                  💾 Save Credentials
-                </button>
-                <button class="btn btn-outline" id="btn-clear-gm-password" type="button"
-                  title="Remove password (only allowed when offline)">
-                  🔓 Remove Password
-                </button>
-              </div>
+              🔒 Set a <strong>GM Username &amp; Password</strong> in <strong>GM Dashboard</strong> to enable online tunneling and P2P sharing.
             </div>
           </div>
         </section>
@@ -350,6 +321,43 @@
     <!-- VIEW 2: GM DASHBOARD -->
     <main class="dashboard-view" id="view-gm">
       <div class="gm-grid">
+        <!-- Master GM Login & Server Security Credentials Card -->
+        <section class="card gm-credentials-card">
+          <div class="card-header">
+            <h2>👑 Master GM &amp; Server Security Credentials</h2>
+            <span class="badge" id="gm-cred-status-badge">Checking...</span>
+          </div>
+          <div class="card-body">
+            <p class="section-desc">
+              Protects your Game Master seat and is <strong>required</strong> before starting online hosting (Cloudflare Tunnel, P2P sharing, or remote dashboard access). Local offline play works with or without a password.
+            </p>
+            <div class="credentials-form-row">
+              <div class="input-group">
+                <label for="gm-username-input">GM Username</label>
+                <input type="text" id="gm-username-input" placeholder="e.g. DungeonMaster" />
+              </div>
+              <div class="input-group">
+                <label for="gm-password-input">GM Password</label>
+                <div class="password-field-wrap">
+                  <input type="password" id="gm-password-input"
+                    placeholder="Enter new password (or leave blank to keep)" />
+                  <button type="button" class="btn-toggle-pw" id="btn-toggle-pw-visibility"
+                    title="Show/Hide Password">👁️</button>
+                </div>
+              </div>
+              <div class="cred-actions" style="display: flex; gap: 8px;">
+                <button class="btn btn-accent" id="btn-save-gm-creds">
+                  💾 Save Credentials
+                </button>
+                <button class="btn btn-outline" id="btn-clear-gm-password" type="button"
+                  title="Remove password (only allowed when offline)">
+                  🔓 Remove Password
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <!-- Online P2P & Storage Quick-Launch Bar (Static Web / Browser Prep) -->
         <section class="card prep-p2p-launch-bar static-web-only" id="prep-static-launch-card">
           <div class="prep-launch-group">
@@ -390,6 +398,14 @@
           <div class="card-header">
             <h2><i class="fa-solid fa-book-bookmark" aria-hidden="true"></i> Campaigns Management</h2>
             <div class="card-header-actions">
+              <button class="btn btn-sm btn-outline web-prep-only" id="btn-gm-web-copy-share"
+                title="Copy Player Share Link">
+                <i class="fa-solid fa-link" aria-hidden="true"></i> Copy Share Link
+              </button>
+              <button class="btn btn-sm btn-gold web-prep-only" id="btn-gm-web-open-table"
+                title="Open Tabletop in Browser">
+                <i class="fa-solid fa-dice-d20" aria-hidden="true"></i> Open Table
+              </button>
               <button class="btn btn-sm btn-outline web-prep-only" id="btn-gm-export-backup"
                 title="Export full campaign backup JSON">
                 <i class="fa-solid fa-floppy-disk" aria-hidden="true"></i> Backup

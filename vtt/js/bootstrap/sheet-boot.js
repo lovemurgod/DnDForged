@@ -1,5 +1,6 @@
 import { SheetWindowManager } from '../vtt-sheet-popout.js';
 import { initVttCreatureSheet } from '../vtt-creature-sheet.js';
+import { generateArcaneTokenDataUrl } from '../creature-sheet/creature-renderer.js';
 import { initVttSpellManager } from '../vtt-spell-manager.js';
 import { initVttPlayerSheet } from '../vtt-player-sheet.js';
 
@@ -49,7 +50,8 @@ window.VTT = {
     creatureSheet: null,
     playerSheet: null,
     isStandaloneSheet: true,
-    sheetWindowManager: SheetWindowManager
+    sheetWindowManager: SheetWindowManager,
+    generateArcaneToken: generateArcaneTokenDataUrl
 };
 
 const titleEl = document.getElementById('header-sheet-title');

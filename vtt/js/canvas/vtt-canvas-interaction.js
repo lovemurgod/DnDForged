@@ -137,7 +137,8 @@ export function setupPointerInteraction(ctx = {}) {
             activeTool: ctx.activeTool,
             paintSubTool
         });
-        applyCanvasCursor(cursorKey, canvasInteraction);
+        const cursorTargets = [canvasInteraction, ctx.viewport].filter(Boolean);
+        applyCanvasCursor(cursorKey, cursorTargets);
     };
     ctx.syncCanvasCursor = syncCanvasCursor;
     if (vtt) vtt.syncCanvasCursor = syncCanvasCursor;

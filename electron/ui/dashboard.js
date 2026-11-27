@@ -514,7 +514,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (currentStatus?.gmUsername && currentStatus?.hasGmPassword) {
             return true;
         }
-        alert(`Please set and save a GM Username and Password in Hosting & Server before ${actionLabel}.`);
+        alert(`Please set and save a GM Username and Password in GM Dashboard before ${actionLabel}.`);
         if (gmUsernameInput && !gmUsernameInput.value.trim()) {
             gmUsernameInput.focus();
         } else if (gmPasswordInput) {
@@ -1860,7 +1860,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         ['btn-prep-regen-p2p-code', btnRegenP2pCode],
         ['btn-prep-copy-p2p-link', btnCopyP2pLink],
         ['btn-prep-open-play', btnLaunchBrowserP2p],
-        ['btn-prep-choose-folder', btnChangeDataDir]
+        ['btn-prep-choose-folder', btnChangeDataDir],
+        ['btn-gm-web-open-table', btnLaunchBrowserVtt]
     ];
     prepQuickBindings.forEach(([quickId, targetBtn]) => {
         const quickEl = document.getElementById(quickId);
@@ -1868,6 +1869,18 @@ document.addEventListener('DOMContentLoaded', async () => {
             quickEl.addEventListener('click', () => targetBtn.click());
         }
     });
+
+    const btnGmWebCopyShare = document.getElementById('btn-gm-web-copy-share');
+    if (btnGmWebCopyShare && btnCopyUrl) {
+        btnGmWebCopyShare.addEventListener('click', () => {
+            btnCopyUrl.click();
+            const origHtml = btnGmWebCopyShare.innerHTML;
+            btnGmWebCopyShare.textContent = '✅ Copied!';
+            setTimeout(() => {
+                btnGmWebCopyShare.innerHTML = origHtml;
+            }, 2000);
+        });
+    }
 
     // Folders handlers
     btnOpenDataDir.addEventListener('click', () => {

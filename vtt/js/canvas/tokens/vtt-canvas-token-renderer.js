@@ -5,7 +5,19 @@
  */
 
 import { CONDITION_ICONS } from './vtt-canvas-token-rollers.js';
-import { getSafeVttUrl } from '../../vtt-utils.js';
+import { getSafeVttUrl, escapeHtml } from '../../vtt-utils.js';
+
+function buildInitialTokenSvgDataUrl(name, color) {
+    const initial = escapeHtml((name || 'C').charAt(0).toUpperCase());
+    const safeColor = escapeHtml(color || '#dc3545');
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="${safeColor}" stroke="#ffffff" stroke-width="4"/><text x="50" y="65" font-size="44" font-family="sans-serif" font-weight="bold" fill="#ffffff" text-anchor="middle">${initial}</text></svg>`;
+    if (typeof btoa === 'function') {
+        try {
+            return 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svg)));
+        } catch {}
+    }
+    return 'data:image/svg+xml,' + encodeURIComponent(svg);
+}
 import { loadPlayerTokenPrefs } from './vtt-canvas-token-config.js';
 import { resolveRenderDispositionColor } from './vtt-canvas-token-drop-config.js';
 import {
@@ -731,9 +743,8 @@ export function renderTokensLayer(context = {}) {
                         node.onerror = () => {
                             if (node.dataset.failed) return;
                             node.dataset.failed = 'true';
-                            const initial = (token.name || 'C').charAt(0).toUpperCase();
                             const color = token.color || (token.isPlayer ? '#007bff' : '#dc3545');
-                            node.src = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="${encodeURIComponent(color)}" stroke="%23ffffff" stroke-width="4"/><text x="50" y="65" font-size="44" font-family="sans-serif" font-weight="bold" fill="%23ffffff" text-anchor="middle">${initial}</text></svg>`;
+                            node.src = buildInitialTokenSvgDataUrl(token.name, color);
                         };
                         node.dataset.rawSrc = token.img;
                         node.setAttribute('src', getSafeVttUrl(token.img));
@@ -760,9 +771,8 @@ export function renderTokensLayer(context = {}) {
                             fallbackImg.id = node.id;
                             fallbackImg.style.position = 'absolute';
                             fallbackImg.style.pointerEvents = 'none';
-                            const initial = (token.name || 'C').charAt(0).toUpperCase();
                             const color = token.color || (token.isPlayer ? '#007bff' : '#dc3545');
-                            fallbackImg.src = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="${encodeURIComponent(color)}" stroke="%23ffffff" stroke-width="4"/><text x="50" y="65" font-size="44" font-family="sans-serif" font-weight="bold" fill="%23ffffff" text-anchor="middle">${initial}</text></svg>`;
+                            fallbackImg.src = buildInitialTokenSvgDataUrl(token.name, color);
                             if (node.parentNode) node.parentNode.replaceChild(fallbackImg, node);
                         };
                     } else {
@@ -804,9 +814,8 @@ export function renderTokensLayer(context = {}) {
                         node.onerror = () => {
                             if (node.dataset.failed) return;
                             node.dataset.failed = 'true';
-                            const initial = (token.name || 'C').charAt(0).toUpperCase();
                             const color = token.color || (token.isPlayer ? '#007bff' : '#dc3545');
-                            node.src = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="${encodeURIComponent(color)}" stroke="%23ffffff" stroke-width="4"/><text x="50" y="65" font-size="44" font-family="sans-serif" font-weight="bold" fill="%23ffffff" text-anchor="middle">${initial}</text></svg>`;
+                            node.src = buildInitialTokenSvgDataUrl(token.name, color);
                         };
                     }
                     node.dataset.rawSrc = token.img;
