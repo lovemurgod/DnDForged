@@ -446,3 +446,10 @@ export function applyCanvasCursor(cursorKey, elements = [], options = {}) {
     }
     return cssValue;
 }
+
+export function syncGlobalThemedCursors(themeId = getActiveCursorTheme(), themed = areThemedCursorsEnabled()) {
+    if (typeof document === 'undefined' || !document.documentElement) return;
+    const rootStyle = document.documentElement.style;
+    rootStyle.setProperty('--vtt-cursor-default', getCursorCssValue('default', themeId, themed));
+    rootStyle.setProperty('--vtt-cursor-pointer', getCursorCssValue('pointer', themeId, themed));
+}

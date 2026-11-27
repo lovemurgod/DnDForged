@@ -4,7 +4,7 @@
  * WebGL 3D dice skin auto-synchronization, and real-time GM atmospheric broadcasts.
  */
 
-import { setActiveCursorTheme } from './canvas/vtt-canvas-cursors.js';
+import { setActiveCursorTheme, syncGlobalThemedCursors } from './canvas/vtt-canvas-cursors.js';
 
 export const THEMES = {
     classic: {
@@ -273,6 +273,7 @@ export function initVttThemes(vtt) {
         document.documentElement.setAttribute('data-theme', themeId);
         localStorage.setItem('vtt_theme', themeId);
         setActiveCursorTheme(themeId);
+        syncGlobalThemedCursors(themeId);
         window.VTT?.syncCanvasCursor?.();
 
         // Update 3D Dice theme profile if engine available
@@ -535,6 +536,7 @@ export function initVttThemes(vtt) {
         if (typeof document !== 'undefined' && document.body) {
             document.body.classList.toggle('vtt-standard-cursors', !isEnabled);
         }
+        syncGlobalThemedCursors(currentThemeId, isEnabled);
 
         if (cursorCb) {
             cursorCb.checked = isEnabled;
@@ -544,6 +546,7 @@ export function initVttThemes(vtt) {
                 if (typeof document !== 'undefined' && document.body) {
                     document.body.classList.toggle('vtt-standard-cursors', !enabled);
                 }
+                syncGlobalThemedCursors(currentThemeId, enabled);
                 vtt?.syncCanvasCursor?.();
                 window.VTT?.syncCanvasCursor?.();
             });

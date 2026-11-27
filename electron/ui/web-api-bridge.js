@@ -191,6 +191,8 @@
                     registeredUrl: 'https://forgedvtt.com',
                     dataDir: drv().getDataPathLabel(),
                     backupsDir: drv().getDataPathLabel(),
+                    needsFolderReconnect: Boolean(drv().needsFolderReconnect),
+                    rememberedFolderName: drv().rememberedFolderName || '',
                     gmUsername: creds.username || '',
                     hasGmPassword: Boolean(creds.hasPassword),
                     p2p: drv().getP2pStatus(),
@@ -230,6 +232,11 @@
         selectDataFolder: async () => {
             if (!isStatic()) return { canceled: true };
             return await drv().pickCampaignFolder();
+        },
+        reconnectDataFolder: async () => {
+            if (!isStatic()) return { success: false };
+            const ok = await drv().reconnectRememberedFolder();
+            return { success: ok, path: drv().getDataPathLabel() };
         },
         selectBackupsFolder: async () => ({ canceled: true }),
         openDataFolder: () => {},

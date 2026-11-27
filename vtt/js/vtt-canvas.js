@@ -5444,6 +5444,9 @@ export function initVttCanvas(vtt) {
             set localShapeEnd(v) {
                 localShapeEnd = v;
             },
+            get viewport() {
+                return viewport;
+            },
             get measureAnchorPoints() {
                 return measureAnchorPoints;
             },
@@ -5553,6 +5556,9 @@ export function initVttCanvas(vtt) {
             },
             set localShapeEnd(v) {
                 localShapeEnd = v;
+            },
+            get viewport() {
+                return viewport;
             },
             get measureAnchorPoints() {
                 return measureAnchorPoints;

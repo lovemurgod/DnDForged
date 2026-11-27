@@ -16,7 +16,7 @@
   <link rel="icon" type="image/svg+xml" href="../favicon.svg">
   <link rel="icon" type="image/png" sizes="96x96" href="../favicon-96x96.png">
   <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
-  <link rel="stylesheet" href="dashboard.css?v=2">
+  <link rel="stylesheet" href="dashboard.css?v=3">
 </head>
 
 <body>
@@ -387,9 +387,14 @@
               <span class="prep-launch-eyebrow"><i class="fa-solid fa-hard-drive" aria-hidden="true"></i> Local Storage</span>
               <span id="prep-static-storage-label" class="prep-storage-label">Browser Storage (IndexedDB)</span>
             </div>
-            <button type="button" class="btn btn-sm btn-outline" id="btn-prep-choose-folder" title="Sync campaigns directly with a local folder on your computer">
-              <i class="fa-solid fa-folder-open" aria-hidden="true"></i> Choose Folder
-            </button>
+            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+              <button type="button" class="btn btn-sm btn-gold vtt-hidden" id="btn-prep-reconnect-folder" title="Restore read/write permission to your previously linked folder">
+                <i class="fa-solid fa-plug-circle-check" aria-hidden="true"></i> Reconnect
+              </button>
+              <button type="button" class="btn btn-sm btn-outline" id="btn-prep-choose-folder" title="Sync campaigns directly with a local folder on your computer">
+                <i class="fa-solid fa-folder-open" aria-hidden="true"></i> Choose Folder
+              </button>
+            </div>
           </div>
         </section>
 

@@ -85,6 +85,8 @@ export function setupPointerInteraction(ctx = {}) {
     const canvasInteraction =
         ctx.canvasInteraction ||
         (typeof document !== 'undefined' ? document.getElementById('vtt-canvas-interaction') : null);
+    const viewportEl =
+        ctx.viewport || (typeof document !== 'undefined' ? document.getElementById('vtt-canvas-viewport') : null);
     if (!canvasInteraction) return;
 
     if (!ctx.selectedTokenIds) ctx.selectedTokenIds = new Set();
@@ -137,7 +139,7 @@ export function setupPointerInteraction(ctx = {}) {
             activeTool: ctx.activeTool,
             paintSubTool
         });
-        const cursorTargets = [canvasInteraction, ctx.viewport].filter(Boolean);
+        const cursorTargets = [canvasInteraction, ctx.viewport || viewportEl].filter(Boolean);
         applyCanvasCursor(cursorKey, cursorTargets);
     };
     ctx.syncCanvasCursor = syncCanvasCursor;

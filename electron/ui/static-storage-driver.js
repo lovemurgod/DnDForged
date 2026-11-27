@@ -294,13 +294,17 @@
 
         getDataPathLabel() {
             if (this.dirHandle) {
-                return `Local Folder: ${this.dirHandle.name}`;
+                const countText =
+                    typeof this.syncedMediaCount === 'number'
+                        ? ` (${this.syncedMediaCount} media file${this.syncedMediaCount === 1 ? '' : 's'} synced)`
+                        : '';
+                return `Local Folder: ${this.dirHandle.name}${countText}`;
             }
             if (this.needsFolderReconnect && this.rememberedFolderName) {
-                return `Local Folder (${this.rememberedFolderName}) paused — Click "Change Folder..." to reconnect`;
+                return `Local Folder (${this.rememberedFolderName}) paused — Click "Reconnect" to restore access`;
             }
             if (this.hasFsAccess) {
-                return 'Browser Storage (Click "Change Folder..." to link a PC folder)';
+                return 'Browser Storage (Click "Choose Folder" to link a PC folder)';
             }
             return 'Browser Storage (IndexedDB)';
         }
@@ -616,10 +620,9 @@
             };
 
             const tree = (await idbGet('assetTree')) || { name: 'Root', path: '', type: 'folder', children: [] };
+            let syncedCount = 0;
 
-            // 1. Sync E:\ForgeDVTT\assets\** (supports both forgedvtt-asset:// manifest records & desktop /assets/* files)
-            try {
-                const assetsDir = await this.dirHandle.getDirectoryHandle('assets', { create: false });
+            const syncAssetsSubdir = async (assetsDir) => {
                 let manifest = {};
                 try {
                     const mfh = await assetsDir.getFileHandle('manifest.json');
@@ -643,6 +646,7 @@
                             blob: file,
                             createdAt: meta.createdAt || Date.now()
                         });
+                        syncedCount++;
                     } else {
                         const urlPath = `/assets/${rel}`;
                         await putAssetRecord({
@@ -656,13 +660,12 @@
                             createdAt: file.lastModified || Date.now()
                         });
                         insertTreeNode(tree, rel, urlPath);
+                        syncedCount++;
                     }
                 }
-            } catch (_) {}
+            };
 
-            // 2. Sync E:\ForgeDVTT\uploads\** (desktop /vtt-uploads/* campaign/token uploads)
-            try {
-                const uploadsDir = await this.dirHandle.getDirectoryHandle('uploads', { create: false });
+            const syncUploadsSubdir = async (uploadsDir) => {
                 const uploadFiles = await walkDirFiles(uploadsDir);
                 for (const { name, rel, handle } of uploadFiles) {
                     const file = await handle.getFile();
@@ -678,9 +681,38 @@
                         createdAt: file.lastModified || Date.now()
                     });
                     insertTreeNode(tree, `uploads/${rel}`, urlPath);
+                    syncedCount++;
+                }
+            };
+
+            // 1. Sync top-level assets/ & uploads/
+            try {
+                const assetsDir = await this.dirHandle.getDirectoryHandle('assets', { create: false });
+                await syncAssetsSubdir(assetsDir);
+            } catch (_) {}
+
+            try {
+                const uploadsDir = await this.dirHandle.getDirectoryHandle('uploads', { create: false });
+                await syncUploadsSubdir(uploadsDir);
+            } catch (_) {}
+
+            // 2. Sync per-campaign campaigns/<id>/uploads/ & campaigns/<id>/assets/
+            try {
+                const campaignsDir = await this.dirHandle.getDirectoryHandle('campaigns', { create: false });
+                for await (const [, campHandle] of campaignsDir.entries()) {
+                    if (campHandle.kind !== 'directory') continue;
+                    try {
+                        const campUploads = await campHandle.getDirectoryHandle('uploads', { create: false });
+                        await syncUploadsSubdir(campUploads);
+                    } catch (_) {}
+                    try {
+                        const campAssets = await campHandle.getDirectoryHandle('assets', { create: false });
+                        await syncAssetsSubdir(campAssets);
+                    } catch (_) {}
                 }
             } catch (_) {}
 
+            this.syncedMediaCount = syncedCount;
             await idbSet('assetTree', tree);
             await this._mirrorIdbAssetsToDir().catch(() => {});
         }

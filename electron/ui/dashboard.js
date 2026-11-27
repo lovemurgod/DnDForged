@@ -468,6 +468,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (prepStaticStorageLabel && status.staticWebMode) {
             prepStaticStorageLabel.textContent = status.dataDir || 'Browser Storage (IndexedDB)';
         }
+        const btnPrepReconnect = document.getElementById('btn-prep-reconnect-folder');
+        if (btnPrepReconnect && status.staticWebMode) {
+            const needsReconnect = Boolean(status.needsFolderReconnect);
+            btnPrepReconnect.classList.toggle('vtt-hidden', !needsReconnect);
+            if (needsReconnect) {
+                const name = status.rememberedFolderName || 'Folder';
+                btnPrepReconnect.innerHTML = `<i class="fa-solid fa-plug-circle-check" aria-hidden="true"></i> Reconnect ${escapeHtml(name)}`;
+            }
+        }
 
         // Domain preferences
         if (status.subdomain && !subdomainInput.value) {
@@ -1882,6 +1891,27 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
+    const btnPrepReconnectFolder = document.getElementById('btn-prep-reconnect-folder');
+    if (btnPrepReconnectFolder) {
+        btnPrepReconnectFolder.addEventListener('click', async () => {
+            if (typeof api.reconnectDataFolder !== 'function') return;
+            btnPrepReconnectFolder.disabled = true;
+            btnPrepReconnectFolder.textContent = 'Reconnecting...';
+            try {
+                const res = await api.reconnectDataFolder();
+                if (res?.success) {
+                    const status = await api.getStatus();
+                    updateUI(status);
+                    loadGmCampaigns();
+                } else {
+                    alert('Folder permission was not granted. Click "Choose Folder" to pick the folder manually.');
+                }
+            } finally {
+                btnPrepReconnectFolder.disabled = false;
+            }
+        });
+    }
+
     // Folders handlers
     btnOpenDataDir.addEventListener('click', () => {
         api.openDataFolder();
@@ -1895,6 +1925,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         const res = await api.selectDataFolder();
         if (res.success) {
             dataPathPreview.textContent = res.path;
+            const prepLabel = document.getElementById('prep-static-storage-label');
+            if (prepLabel) prepLabel.textContent = res.path;
+            const btnReconnect = document.getElementById('btn-prep-reconnect-folder');
+            if (btnReconnect) btnReconnect.classList.add('vtt-hidden');
             appendLogLine(
                 `[Folders] Active Campaign Data folder changed to: ${res.path}${res.imported ? ' (Existing data copied)' : ''}`
             );
