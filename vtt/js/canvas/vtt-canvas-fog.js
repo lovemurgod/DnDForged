@@ -133,7 +133,8 @@ export function renderFogOfWarLayer(width, height, options = {}) {
 
         // Calculate token's personal unobstructed Line of Sight (LOS) polygon across the map (stopping at walls)
         const losCacheKey = `${cx.toFixed(1)}_${cy.toFixed(1)}_los_${wallsVersion}`;
-        const losCacheMap = (renderFogOfWarLayer._losPolyWeakMap = renderFogOfWarLayer._losPolyWeakMap || new WeakMap());
+        const losCacheMap = (renderFogOfWarLayer._losPolyWeakMap =
+            renderFogOfWarLayer._losPolyWeakMap || new WeakMap());
         const cachedLos = losCacheMap.get(source);
         let losPolygon;
         if (cachedLos && cachedLos.key === losCacheKey) {

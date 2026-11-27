@@ -111,18 +111,10 @@ test('CSS Decomposition: Theme, Tokens & Colorblind Accessibility', async (t) =>
         expectedFilters.forEach((filter) => {
             const selector = `[data-colorblind="${filter}"]`;
             assert.ok(themeContent.includes(selector), `theme.css must define colorblind selector ${selector}`);
-            const blockMatch = themeContent.match(
-                new RegExp(`\\[data-colorblind="${filter}"\\]\\s*\\{([^}]+)\\}`)
-            );
+            const blockMatch = themeContent.match(new RegExp(`\\[data-colorblind="${filter}"\\]\\s*\\{([^}]+)\\}`));
             assert.ok(blockMatch, `theme.css must have a CSS rule block for ${selector}`);
-            assert.ok(
-                blockMatch[1].includes('--color-warning-base'),
-                `${selector} must override --color-warning-base`
-            );
-            assert.ok(
-                !blockMatch[1].includes('--color-gold-base'),
-                `${selector} must not override --color-gold-base`
-            );
+            assert.ok(blockMatch[1].includes('--color-warning-base'), `${selector} must override --color-warning-base`);
+            assert.ok(!blockMatch[1].includes('--color-gold-base'), `${selector} must not override --color-gold-base`);
         });
     });
 });

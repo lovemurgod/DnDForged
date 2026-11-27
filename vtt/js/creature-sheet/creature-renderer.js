@@ -1275,7 +1275,8 @@ export function renderStatBlock(m, panel = null, ctx = {}) {
             <div class="cs-hp-row">
                 <div style="display: flex; gap: 4px; margin-bottom: 8px; align-items: center; width: 100%;">
                     ${(() => {
-                        const csHpPct = hpMax > 0 ? Math.max(0, Math.min(100, Math.round((hpCurrent / hpMax) * 100))) : 100;
+                        const csHpPct =
+                            hpMax > 0 ? Math.max(0, Math.min(100, Math.round((hpCurrent / hpMax) * 100))) : 100;
                         const csHpStateClass = csHpPct <= 25 ? ' danger' : csHpPct <= 50 ? ' injured' : '';
                         return `<div class="cs-hp-bar-wrap" style="flex: 1;">
                         <div class="cs-hp-bar-fill${csHpStateClass}" id="cs-hp-bar" style="width: ${csHpPct}%"></div>

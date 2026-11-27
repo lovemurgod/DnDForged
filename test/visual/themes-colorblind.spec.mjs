@@ -9,9 +9,12 @@ test.describe('Themes & Color-Blindness Accessibility E2E', () => {
     test('switches all 11 themes and decouples colorblind warning tokens from theme accents', async ({ page }) => {
         // Open Settings tab and Appearance & Themes accordion
         await page.click('[data-tab="tab-config"]');
-        await page.locator('#tab-config details.config-accordion-section').first().evaluate((el) => {
-            el.open = true;
-        });
+        await page
+            .locator('#tab-config details.config-accordion-section')
+            .first()
+            .evaluate((el) => {
+                el.open = true;
+            });
 
         const themeSelect = page.locator('#config-visual-theme-select');
         await expect(themeSelect).toBeVisible();
@@ -83,11 +86,16 @@ test.describe('Themes & Color-Blindness Accessibility E2E', () => {
         expect(achromState.healthyColor).toBe('rgb(17, 17, 17)');
     });
 
-    test('renders 4 preview pills for every colorblind mode and updates HP bar colors by threshold', async ({ page }) => {
+    test('renders 4 preview pills for every colorblind mode and updates HP bar colors by threshold', async ({
+        page
+    }) => {
         await page.click('[data-tab="tab-config"]');
-        await page.locator('#tab-config details.config-accordion-section').first().evaluate((el) => {
-            el.open = true;
-        });
+        await page
+            .locator('#tab-config details.config-accordion-section')
+            .first()
+            .evaluate((el) => {
+                el.open = true;
+            });
 
         const cbSelect = page.locator('#config-colorblind-select');
         for (const mode of ['none', 'protanopia', 'deuteranopia', 'tritanopia', 'achromatopsia']) {

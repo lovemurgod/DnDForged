@@ -14,7 +14,11 @@ function parseCssColorToRgb(colorStr) {
     const str = colorStr.trim().toLowerCase();
     if (str.startsWith('#')) {
         let hex = str.slice(1);
-        if (hex.length === 3) hex = hex.split('').map((c) => c + c).join('');
+        if (hex.length === 3)
+            hex = hex
+                .split('')
+                .map((c) => c + c)
+                .join('');
         return [parseInt(hex.slice(0, 2), 16), parseInt(hex.slice(2, 4), 16), parseInt(hex.slice(4, 6), 16)];
     }
     const hslMatch = str.match(/hsl\(\s*([\d.]+)\s*,\s*([\d.]+)%\s*,\s*([\d.]+)%\s*\)/);
@@ -145,36 +149,48 @@ test('Themes & Colorblindness Remediation Integrity', async (t) => {
         const csSrc = fs.readFileSync(path.resolve('vtt/js/creature-sheet/creature-renderer.js'), 'utf8');
         assert.ok(!psSrc.includes('color:#e53935'), 'vtt-player-sheet.js must not hardcode #e53935 heart icon');
         assert.ok(!csSrc.includes('color: #e53935'), 'creature-renderer.js must not hardcode #e53935 heart icon');
-        assert.ok(!psSrc.includes('accent-color: #f44336'), 'vtt-player-sheet.js must not hardcode #f44336 death saves');
-        assert.ok(!psSrc.includes('accent-color: #4caf50'), 'vtt-player-sheet.js must not hardcode #4caf50 death saves');
+        assert.ok(
+            !psSrc.includes('accent-color: #f44336'),
+            'vtt-player-sheet.js must not hardcode #f44336 death saves'
+        );
+        assert.ok(
+            !psSrc.includes('accent-color: #4caf50'),
+            'vtt-player-sheet.js must not hardcode #4caf50 death saves'
+        );
     });
 
-    await t.test('resolveDispositionColor stays canonical and resolveRenderDispositionColor adapts at render time', () => {
-        const prevDoc = globalThis.document;
-        try {
-            globalThis.document = {
-                documentElement: {
-                    getAttribute: (attr) => (attr === 'data-colorblind' ? 'protanopia' : null)
-                }
-            };
-            assert.equal(resolveDispositionColor('hostile'), DISPOSITION_COLORS.hostile);
-            assert.equal(resolveDispositionColor('friendly'), DISPOSITION_COLORS.friendly);
-            assert.equal(
-                resolveRenderDispositionColor(DISPOSITION_COLORS.hostile),
-                COLORBLIND_DISPOSITION_COLORS.protanopia.hostile
-            );
-            assert.equal(
-                resolveRenderDispositionColor(DISPOSITION_COLORS.friendly),
-                COLORBLIND_DISPOSITION_COLORS.protanopia.friendly
-            );
-        } finally {
-            globalThis.document = prevDoc;
+    await t.test(
+        'resolveDispositionColor stays canonical and resolveRenderDispositionColor adapts at render time',
+        () => {
+            const prevDoc = globalThis.document;
+            try {
+                globalThis.document = {
+                    documentElement: {
+                        getAttribute: (attr) => (attr === 'data-colorblind' ? 'protanopia' : null)
+                    }
+                };
+                assert.equal(resolveDispositionColor('hostile'), DISPOSITION_COLORS.hostile);
+                assert.equal(resolveDispositionColor('friendly'), DISPOSITION_COLORS.friendly);
+                assert.equal(
+                    resolveRenderDispositionColor(DISPOSITION_COLORS.hostile),
+                    COLORBLIND_DISPOSITION_COLORS.protanopia.hostile
+                );
+                assert.equal(
+                    resolveRenderDispositionColor(DISPOSITION_COLORS.friendly),
+                    COLORBLIND_DISPOSITION_COLORS.protanopia.friendly
+                );
+            } finally {
+                globalThis.document = prevDoc;
+            }
         }
-    });
+    );
 
     await t.test('Popout sheet-boot.js listens to storage events for live theme/colorblind/font sync', () => {
         const bootSrc = fs.readFileSync(path.resolve('vtt/js/bootstrap/sheet-boot.js'), 'utf8');
-        assert.ok(bootSrc.includes("window.addEventListener('storage'"), 'sheet-boot.js must listen for storage events');
+        assert.ok(
+            bootSrc.includes("window.addEventListener('storage'"),
+            'sheet-boot.js must listen for storage events'
+        );
         assert.ok(bootSrc.includes('vtt_theme'), 'sheet-boot.js must sync vtt_theme');
         assert.ok(bootSrc.includes('vtt_colorblind_mode'), 'sheet-boot.js must sync vtt_colorblind_mode');
         assert.ok(bootSrc.includes('vtt_font_scale_v2'), 'sheet-boot.js must sync vtt_font_scale_v2');

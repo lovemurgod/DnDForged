@@ -91,7 +91,10 @@ function getDuplicateSpellNameSet(effectiveCache) {
     const dups = new Set();
     for (const s of effectiveCache) {
         if (!s || !s.name) continue;
-        const key = String(s.name).toLowerCase().replace(/\s*\[.*?\]$/, '').trim();
+        const key = String(s.name)
+            .toLowerCase()
+            .replace(/\s*\[.*?\]$/, '')
+            .trim();
         const src = String(s.source || '').toUpperCase();
         const prev = seen.get(key);
         if (prev === undefined) seen.set(key, src);

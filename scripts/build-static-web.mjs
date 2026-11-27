@@ -196,10 +196,7 @@ for (const cssFile of [
     }
 }
 
-const jsFilesToMinify = [
-    ...collectFiles(path.join(docsPlayDir, 'js'), '.js'),
-    ...collectFiles(docsPrepDir, '.js')
-];
+const jsFilesToMinify = [...collectFiles(path.join(docsPlayDir, 'js'), '.js'), ...collectFiles(docsPrepDir, '.js')];
 let minifiedCount = 0;
 for (const jsFile of jsFilesToMinify) {
     if (path.basename(jsFile) === 'static-flag.js') continue;

@@ -115,7 +115,8 @@ export function setupPointerInteraction(ctx = {}) {
 
     const syncCanvasCursor = (extraState = {}) => {
         if (!canvasInteraction) return;
-        const paintSubTool = extraState.paintSubTool !== undefined ? extraState.paintSubTool : ctx.paintSubTool || 'pencil';
+        const paintSubTool =
+            extraState.paintSubTool !== undefined ? extraState.paintSubTool : ctx.paintSubTool || 'pencil';
         const cursorKey = resolveCanvasCursor({
             isPanning: ctx.isPanning,
             isRotating: Boolean(activeRotateTokenId || ctx.activeRotatePortalId || ctx.isRotatingLight),
@@ -131,10 +132,7 @@ export function setupPointerInteraction(ctx = {}) {
                 hoveredResizeTokenHandle?.cursor ||
                 null,
             hoveredInteractive: Boolean(
-                extraState.hoveredInteractive ||
-                    ctx.hoverTokenId ||
-                    ctx.hoveredNoteId ||
-                    ctx.hoveredShapeComponent
+                extraState.hoveredInteractive || ctx.hoverTokenId || ctx.hoveredNoteId || ctx.hoveredShapeComponent
             ),
             activeTool: ctx.activeTool,
             paintSubTool

@@ -93,7 +93,10 @@
 
     function normalizeIceUrls(urls) {
         const list = Array.isArray(urls) ? urls : [urls];
-        return list.map((u) => String(u).trim().toLowerCase()).sort().join('|');
+        return list
+            .map((u) => String(u).trim().toLowerCase())
+            .sort()
+            .join('|');
     }
 
     function hasIceEntry(servers, candidate) {
@@ -654,7 +657,9 @@
                         totalChunks < 1 ||
                         totalChunks > MAX_RPC_CHUNKS
                     ) {
-                        console.warn(`[P2P Security] Rejected invalid RPC transfer header "${id}" (${totalChunks} chunks)`);
+                        console.warn(
+                            `[P2P Security] Rejected invalid RPC transfer header "${id}" (${totalChunks} chunks)`
+                        );
                         return;
                     }
                     if (
@@ -732,7 +737,9 @@
                         if (nextBytes > transfer.maxBytes) {
                             clearTimeout(transfer.timeoutId);
                             this._rpcTransfers.delete(id);
-                            console.warn(`[P2P Security] Aborted RPC transfer "${id}" exceeding byte limit (${nextBytes})`);
+                            console.warn(
+                                `[P2P Security] Aborted RPC transfer "${id}" exceeding byte limit (${nextBytes})`
+                            );
                             return;
                         }
                         transfer.receivedBytes = nextBytes;
@@ -1219,7 +1226,10 @@
 
             if (typeof dc.bufferedAmountLowThreshold === 'number') {
                 try {
-                    dc.bufferedAmountLowThreshold = Math.min(BACKPRESSURE_LOW_WATER_MARK, Math.floor(highWaterMark / 2));
+                    dc.bufferedAmountLowThreshold = Math.min(
+                        BACKPRESSURE_LOW_WATER_MARK,
+                        Math.floor(highWaterMark / 2)
+                    );
                 } catch (_) {}
             }
 

@@ -64,9 +64,11 @@ export const THEME_CURSOR_PROFILES = {
         pointerPath: 'M3 2L18 11L11.5 13L15.5 20.5L13 22L9 14.5L4.5 18.5Z',
         pointerAccent: 'M5 4.8L13.5 10.2L9.5 11.4L5 6.8Z',
         hoverExtra: '<polygon points="14,13 16,15 14,17 12,15" fill="{trim}" opacity="0.9"/>',
-        grabExtra: '<path d="M8.5 16.5H15.5M10 14L12 12.5L14 14" fill="none" stroke="{trim}" stroke-width="1.2" stroke-linecap="round"/>',
+        grabExtra:
+            '<path d="M8.5 16.5H15.5M10 14L12 12.5L14 14" fill="none" stroke="{trim}" stroke-width="1.2" stroke-linecap="round"/>',
         lockedExtra: '<polygon points="12,9 18,12 18,20 6,20 6,12" fill="{fill}" stroke="#e53935" stroke-width="1.4"/>',
-        pingExtra: '<polygon points="12,3 14,9 20,12 14,15 12,21 10,15 4,12 10,9" fill="none" stroke="{accent}" stroke-width="1.6"/>'
+        pingExtra:
+            '<polygon points="12,3 14,9 20,12 14,15 12,21 10,15 4,12 10,9" fill="none" stroke="{accent}" stroke-width="1.6"/>'
     },
     jungle: {
         fill: '#122316',
@@ -75,10 +77,14 @@ export const THEME_CURSOR_PROFILES = {
         outline: '#050d07',
         pointerPath: 'M3 2C10 4 15 8 19 12L11.5 13.5L14 21L11 22L8.5 14.5L4 17.5C4.5 12 3.5 7 3 2Z',
         pointerAccent: 'M5.2 4.8C9.5 6.5 12.5 9 14.5 11.2L9.8 12.1Z',
-        hoverExtra: '<path d="M12 17C13.8 15 16 14 17.5 14.5" fill="none" stroke="{trim}" stroke-width="1.3" stroke-linecap="round"/>',
-        grabExtra: '<path d="M8 15.5C10.5 14 13.5 14 16 15.5" fill="none" stroke="{trim}" stroke-width="1.3" stroke-linecap="round"/>',
-        lockedExtra: '<rect x="6" y="10" width="12" height="10" rx="4" fill="{fill}" stroke="#e53935" stroke-width="1.4"/><path d="M7 13L17 17" stroke="{accent}" stroke-width="1" opacity="0.7"/>',
-        pingExtra: '<circle cx="12" cy="12" r="7" fill="none" stroke="{accent}" stroke-width="1.6" stroke-dasharray="3 2"/>'
+        hoverExtra:
+            '<path d="M12 17C13.8 15 16 14 17.5 14.5" fill="none" stroke="{trim}" stroke-width="1.3" stroke-linecap="round"/>',
+        grabExtra:
+            '<path d="M8 15.5C10.5 14 13.5 14 16 15.5" fill="none" stroke="{trim}" stroke-width="1.3" stroke-linecap="round"/>',
+        lockedExtra:
+            '<rect x="6" y="10" width="12" height="10" rx="4" fill="{fill}" stroke="#e53935" stroke-width="1.4"/><path d="M7 13L17 17" stroke="{accent}" stroke-width="1" opacity="0.7"/>',
+        pingExtra:
+            '<circle cx="12" cy="12" r="7" fill="none" stroke="{accent}" stroke-width="1.6" stroke-dasharray="3 2"/>'
     },
     gothic: {
         fill: '#181320',
@@ -88,9 +94,11 @@ export const THEME_CURSOR_PROFILES = {
         pointerPath: 'M3 2L17.5 10.5L12.5 12.5L16.5 20.5L13.5 21.8L9.5 14L6.5 19L5.5 14.5L3 2Z',
         pointerAccent: 'M4.8 4.4L13.2 9.8L10.4 11L6.4 8Z',
         hoverExtra: '<path d="M14 12L16 15L14 18L12 15Z" fill="{accent}" opacity="0.85"/>',
-        grabExtra: '<path d="M9 17L12 13L15 17" fill="none" stroke="{trim}" stroke-width="1.2" stroke-linejoin="round"/>',
+        grabExtra:
+            '<path d="M9 17L12 13L15 17" fill="none" stroke="{trim}" stroke-width="1.2" stroke-linejoin="round"/>',
         lockedExtra: '<path d="M6 12L12 9L18 12V20H6Z" fill="{fill}" stroke="#e53935" stroke-width="1.4"/>',
-        pingExtra: '<path d="M12 3L15 9L21 12L15 15L12 21L9 15L3 12L9 9Z" fill="none" stroke="{accent}" stroke-width="1.5"/>'
+        pingExtra:
+            '<path d="M12 3L15 9L21 12L15 15L12 21L9 15L3 12L9 9Z" fill="none" stroke="{accent}" stroke-width="1.5"/>'
     },
     celestial: {
         fill: '#0f1730',
@@ -102,7 +110,8 @@ export const THEME_CURSOR_PROFILES = {
         hoverExtra: '<path d="M14 12.5V16.5M12 14.5H16" stroke="{trim}" stroke-width="1.3" stroke-linecap="round"/>',
         grabExtra: '<circle cx="12" cy="15" r="2.1" fill="none" stroke="{trim}" stroke-width="1.2"/>',
         lockedExtra: '<circle cx="12" cy="15" r="5.5" fill="{fill}" stroke="#e53935" stroke-width="1.4"/>',
-        pingExtra: '<circle cx="12" cy="12" r="6.5" fill="none" stroke="{accent}" stroke-width="1.5"/><path d="M12 2V5M12 19V22M2 12H5M19 12H22" stroke="{trim}" stroke-width="1.6" stroke-linecap="round"/>'
+        pingExtra:
+            '<circle cx="12" cy="12" r="6.5" fill="none" stroke="{accent}" stroke-width="1.5"/><path d="M12 2V5M12 19V22M2 12H5M19 12H22" stroke="{trim}" stroke-width="1.6" stroke-linecap="round"/>'
     },
     hellscape: {
         fill: '#22110c',
@@ -112,8 +121,10 @@ export const THEME_CURSOR_PROFILES = {
         pointerPath: 'M3 2L18.5 10L12 12.5L16 21L12.5 22L8.8 14.2L4.2 18L5.5 11.5Z',
         pointerAccent: 'M5.2 4.6L14 9.6L10.2 11.2Z',
         hoverExtra: '<polygon points="14,12 16.5,16.5 11.5,16.5" fill="{trim}" opacity="0.85"/>',
-        grabExtra: '<path d="M8.5 16L10.5 13.5L12 16L13.5 13.5L15.5 16" fill="none" stroke="{trim}" stroke-width="1.2" stroke-linecap="round"/>',
-        lockedExtra: '<polygon points="12,9.5 18.5,14 16,20 8,20 5.5,14" fill="{fill}" stroke="#e53935" stroke-width="1.4"/>',
+        grabExtra:
+            '<path d="M8.5 16L10.5 13.5L12 16L13.5 13.5L15.5 16" fill="none" stroke="{trim}" stroke-width="1.2" stroke-linecap="round"/>',
+        lockedExtra:
+            '<polygon points="12,9.5 18.5,14 16,20 8,20 5.5,14" fill="{fill}" stroke="#e53935" stroke-width="1.4"/>',
         pingExtra: '<polygon points="12,3 19,12 12,21 5,12" fill="none" stroke="{accent}" stroke-width="1.7"/>'
     },
     cyberpunk: {
@@ -124,9 +135,12 @@ export const THEME_CURSOR_PROFILES = {
         pointerPath: 'M3 2L19 9.5L13 12.5L16.5 19.5L13.5 21.5L9.5 14L4.5 17.5Z',
         pointerAccent: 'M5.5 4.6L14.5 9.2L11 11.2Z',
         hoverExtra: '<rect x="12.2" y="13.2" width="3.6" height="3.6" fill="none" stroke="{trim}" stroke-width="1.2"/>',
-        grabExtra: '<path d="M8.5 15H11L12.5 13.5H15.5" fill="none" stroke="{trim}" stroke-width="1.3" stroke-linecap="round"/>',
-        lockedExtra: '<polygon points="8,10 16,10 18.5,15 16,20 8,20 5.5,15" fill="{fill}" stroke="#e53935" stroke-width="1.4"/>',
-        pingExtra: '<polygon points="12,3 19.5,7.5 19.5,16.5 12,21 4.5,16.5 4.5,7.5" fill="none" stroke="{trim}" stroke-width="1.5"/>'
+        grabExtra:
+            '<path d="M8.5 15H11L12.5 13.5H15.5" fill="none" stroke="{trim}" stroke-width="1.3" stroke-linecap="round"/>',
+        lockedExtra:
+            '<polygon points="8,10 16,10 18.5,15 16,20 8,20 5.5,15" fill="{fill}" stroke="#e53935" stroke-width="1.4"/>',
+        pingExtra:
+            '<polygon points="12,3 19.5,7.5 19.5,16.5 12,21 4.5,16.5 4.5,7.5" fill="none" stroke="{trim}" stroke-width="1.5"/>'
     },
     parchment: {
         fill: '#2c231a',
@@ -136,9 +150,12 @@ export const THEME_CURSOR_PROFILES = {
         pointerPath: 'M3 2C8 4 14 7.5 18 11.5L11.5 13L14.5 20.5L12 21.8L8.8 14.5L4.5 18Z',
         pointerAccent: 'M5 4.5L13 9.8L9.8 11.2Z',
         hoverExtra: '<circle cx="14" cy="15" r="1.7" fill="{trim}" opacity="0.85"/>',
-        grabExtra: '<path d="M9 16.5C11 17.5 13 17.5 15 16.5" fill="none" stroke="{trim}" stroke-width="1.3" stroke-linecap="round"/>',
-        lockedExtra: '<path d="M6 10H18V16C18 18.5 15 20.5 12 20.5C9 20.5 6 18.5 6 16Z" fill="{fill}" stroke="#e53935" stroke-width="1.4"/>',
-        pingExtra: '<circle cx="12" cy="12" r="7" fill="none" stroke="{accent}" stroke-width="1.6"/><circle cx="12" cy="12" r="3.2" fill="none" stroke="{trim}" stroke-width="1.2"/>'
+        grabExtra:
+            '<path d="M9 16.5C11 17.5 13 17.5 15 16.5" fill="none" stroke="{trim}" stroke-width="1.3" stroke-linecap="round"/>',
+        lockedExtra:
+            '<path d="M6 10H18V16C18 18.5 15 20.5 12 20.5C9 20.5 6 18.5 6 16Z" fill="{fill}" stroke="#e53935" stroke-width="1.4"/>',
+        pingExtra:
+            '<circle cx="12" cy="12" r="7" fill="none" stroke="{accent}" stroke-width="1.6"/><circle cx="12" cy="12" r="3.2" fill="none" stroke="{trim}" stroke-width="1.2"/>'
     },
     abyssal: {
         fill: '#081d2a',
@@ -147,10 +164,14 @@ export const THEME_CURSOR_PROFILES = {
         outline: '#020a10',
         pointerPath: 'M3 2L18.5 10.5L11.8 13L15 21L12.2 21.8L9 14.2L4.2 18Z',
         pointerAccent: 'M5.2 4.8L14 9.8L10 11.4Z',
-        hoverExtra: '<path d="M11.5 15.5Q14 13.5 16.5 15.5" fill="none" stroke="{trim}" stroke-width="1.3" stroke-linecap="round"/>',
-        grabExtra: '<path d="M8.5 15.5Q10.5 13.8 12 15.5T15.5 15.5" fill="none" stroke="{trim}" stroke-width="1.2" stroke-linecap="round"/>',
-        lockedExtra: '<rect x="6" y="10" width="12" height="10" rx="5" fill="{fill}" stroke="#e53935" stroke-width="1.4"/>',
-        pingExtra: '<circle cx="12" cy="12" r="7.5" fill="none" stroke="{accent}" stroke-width="1.5"/><circle cx="12" cy="12" r="4" fill="none" stroke="{trim}" stroke-width="1.4"/>'
+        hoverExtra:
+            '<path d="M11.5 15.5Q14 13.5 16.5 15.5" fill="none" stroke="{trim}" stroke-width="1.3" stroke-linecap="round"/>',
+        grabExtra:
+            '<path d="M8.5 15.5Q10.5 13.8 12 15.5T15.5 15.5" fill="none" stroke="{trim}" stroke-width="1.2" stroke-linecap="round"/>',
+        lockedExtra:
+            '<rect x="6" y="10" width="12" height="10" rx="5" fill="{fill}" stroke="#e53935" stroke-width="1.4"/>',
+        pingExtra:
+            '<circle cx="12" cy="12" r="7.5" fill="none" stroke="{accent}" stroke-width="1.5"/><circle cx="12" cy="12" r="4" fill="none" stroke="{trim}" stroke-width="1.4"/>'
     },
     feywild: {
         fill: '#221235',
@@ -160,9 +181,12 @@ export const THEME_CURSOR_PROFILES = {
         pointerPath: 'M3 2C9.5 4.5 15 8 18.5 11.5L11.5 13.2L14.8 20.8L12 22L8.8 14.5L4 17.8Z',
         pointerAccent: 'M5.2 4.8L13.8 10L10 11.5Z',
         hoverExtra: '<circle cx="13" cy="14" r="1" fill="{trim}"/><circle cx="15.5" cy="16" r="1.2" fill="{accent}"/>',
-        grabExtra: '<path d="M9 14.5C10.5 16 13.5 16 15 14.5" fill="none" stroke="{trim}" stroke-width="1.3" stroke-linecap="round"/>',
-        lockedExtra: '<rect x="6.5" y="10" width="11" height="10" rx="3.5" fill="{fill}" stroke="#e53935" stroke-width="1.4"/><circle cx="8.5" cy="12" r="0.9" fill="{trim}"/>',
-        pingExtra: '<circle cx="12" cy="12" r="6.8" fill="none" stroke="{accent}" stroke-width="1.5" stroke-dasharray="2 2"/>'
+        grabExtra:
+            '<path d="M9 14.5C10.5 16 13.5 16 15 14.5" fill="none" stroke="{trim}" stroke-width="1.3" stroke-linecap="round"/>',
+        lockedExtra:
+            '<rect x="6.5" y="10" width="11" height="10" rx="3.5" fill="{fill}" stroke="#e53935" stroke-width="1.4"/><circle cx="8.5" cy="12" r="0.9" fill="{trim}"/>',
+        pingExtra:
+            '<circle cx="12" cy="12" r="6.8" fill="none" stroke="{accent}" stroke-width="1.5" stroke-dasharray="2 2"/>'
     },
     frostpeak: {
         fill: '#10222f',
@@ -171,10 +195,13 @@ export const THEME_CURSOR_PROFILES = {
         outline: '#050d14',
         pointerPath: 'M3 2L18.5 10.2L12 12.6L15.2 21L12.4 22L9 14.4L4.2 18Z',
         pointerAccent: 'M5.4 4.8L14.2 9.8L10.2 11.4Z',
-        hoverExtra: '<path d="M12.5 13L15.5 16M15.5 13L12.5 16" stroke="{trim}" stroke-width="1.2" stroke-linecap="round"/>',
+        hoverExtra:
+            '<path d="M12.5 13L15.5 16M15.5 13L12.5 16" stroke="{trim}" stroke-width="1.2" stroke-linecap="round"/>',
         grabExtra: '<polygon points="12,13 14.5,15.5 12,18 9.5,15.5" fill="none" stroke="{trim}" stroke-width="1.2"/>',
-        lockedExtra: '<polygon points="9,10 15,10 18,13 18,17 15,20 9,20 6,17 6,13" fill="{fill}" stroke="#e53935" stroke-width="1.4"/>',
-        pingExtra: '<polygon points="12,3 17,7 19,12 17,17 12,21 7,17 5,12 7,7" fill="none" stroke="{accent}" stroke-width="1.5"/>'
+        lockedExtra:
+            '<polygon points="9,10 15,10 18,13 18,17 15,20 9,20 6,17 6,13" fill="{fill}" stroke="#e53935" stroke-width="1.4"/>',
+        pingExtra:
+            '<polygon points="12,3 17,7 19,12 17,17 12,21 7,17 5,12 7,7" fill="none" stroke="{accent}" stroke-width="1.5"/>'
     },
     solaris: {
         fill: '#2b1f0a',
@@ -183,10 +210,13 @@ export const THEME_CURSOR_PROFILES = {
         outline: '#120c03',
         pointerPath: 'M3 2L19 10.5L12 12.8L15.5 21L12.5 22L9 14.4L4.2 18Z',
         pointerAccent: 'M5.4 4.8L14.2 10L10.2 11.5Z',
-        hoverExtra: '<circle cx="14" cy="15" r="1.4" fill="{trim}"/><path d="M14 12V13M14 17V18M11 15H12M16 15H17" stroke="{accent}" stroke-width="1.1"/>',
+        hoverExtra:
+            '<circle cx="14" cy="15" r="1.4" fill="{trim}"/><path d="M14 12V13M14 17V18M11 15H12M16 15H17" stroke="{accent}" stroke-width="1.1"/>',
         grabExtra: '<circle cx="12" cy="15" r="1.6" fill="{trim}"/>',
-        lockedExtra: '<rect x="6" y="10" width="12" height="10" rx="2" fill="{fill}" stroke="#e53935" stroke-width="1.4"/><path d="M7.5 12L16.5 18" stroke="{trim}" stroke-width="0.9" opacity="0.6"/>',
-        pingExtra: '<circle cx="12" cy="12" r="5.5" fill="none" stroke="{accent}" stroke-width="1.6"/><path d="M12 2V5M12 19V22M2 12H5M19 12H22M4.9 4.9L7 7M17 17L19.1 19.1M19.1 4.9L17 7M7 17L4.9 19.1" stroke="{trim}" stroke-width="1.4" stroke-linecap="round"/>'
+        lockedExtra:
+            '<rect x="6" y="10" width="12" height="10" rx="2" fill="{fill}" stroke="#e53935" stroke-width="1.4"/><path d="M7.5 12L16.5 18" stroke="{trim}" stroke-width="0.9" opacity="0.6"/>',
+        pingExtra:
+            '<circle cx="12" cy="12" r="5.5" fill="none" stroke="{accent}" stroke-width="1.6"/><path d="M12 2V5M12 19V22M2 12H5M19 12H22M4.9 4.9L7 7M17 17L19.1 19.1M19.1 4.9L17 7M7 17L4.9 19.1" stroke="{trim}" stroke-width="1.4" stroke-linecap="round"/>'
     }
 };
 

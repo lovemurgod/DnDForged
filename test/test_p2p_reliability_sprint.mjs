@@ -22,7 +22,12 @@ function createMockIndexedDB({ failMode = null } = {}) {
                 onabort: null,
                 objectStore: () => ({
                     get: (key) => {
-                        const req = { result: storeData.get(`${storeName}:${key}`), error: null, onsuccess: null, onerror: null };
+                        const req = {
+                            result: storeData.get(`${storeName}:${key}`),
+                            error: null,
+                            onsuccess: null,
+                            onerror: null
+                        };
                         queueMicrotask(() => req.onsuccess?.());
                         return req;
                     },
@@ -231,7 +236,10 @@ test('[Priority 3] P2P data-channel backpressure pauses on high bufferedAmount a
     // Wait a tick for rpc-start + chunk 0 to send and pause on bufferedAmount
     await new Promise((r) => setTimeout(r, 20));
     const countWhilePaused = sent.length;
-    assert.ok(countWhilePaused >= 1 && countWhilePaused < 4, `Expected send to pause under backpressure, sent=${countWhilePaused}`);
+    assert.ok(
+        countWhilePaused >= 1 && countWhilePaused < 4,
+        `Expected send to pause under backpressure, sent=${countWhilePaused}`
+    );
 
     // Drain buffer and emit bufferedamountlow
     mockChannel.bufferedAmount = 0;
@@ -269,9 +277,23 @@ test('[Priority 4] Initiative update permissions enforce ownership and field all
                 activeTurnIndex: 1,
                 isVisible: true,
                 combatants: [
-                    { id: 'init_alice', characterId: 'char_alice', name: 'Alice', score: 12, layer: 'token', isPlayer: true },
+                    {
+                        id: 'init_alice',
+                        characterId: 'char_alice',
+                        name: 'Alice',
+                        score: 12,
+                        layer: 'token',
+                        isPlayer: true
+                    },
                     { id: 'init_bob', characterId: 'char_bob', name: 'Bob', score: 15, layer: 'token', isPlayer: true },
-                    { id: 'init_dragon', characterId: null, name: 'Ancient Dragon', score: 20, layer: 'gm', isPlayer: false }
+                    {
+                        id: 'init_dragon',
+                        characterId: null,
+                        name: 'Ancient Dragon',
+                        score: 20,
+                        layer: 'gm',
+                        isPlayer: false
+                    }
                 ]
             }
         }
@@ -340,7 +362,11 @@ test('[Priority 5] P2P host identity verification handles verified, missing, mis
     const clientOk = new VttP2PAdapter({ isHost: false, expectedHostKey: 'pk_secret_123' });
     let joinedCount = 0;
     clientOk.on('joined', () => joinedCount++);
-    clientOk._handleIncomingData({ type: 'event', event: 'joined', args: [{ role: 'Player', hostKey: 'pk_secret_123' }] });
+    clientOk._handleIncomingData({
+        type: 'event',
+        event: 'joined',
+        args: [{ role: 'Player', hostKey: 'pk_secret_123' }]
+    });
     assert.strictEqual(joinedCount, 1);
     assert.strictEqual(clientOk.hostIdentityVerified, true);
 
@@ -360,7 +386,11 @@ test('[Priority 5] P2P host identity verification handles verified, missing, mis
     clientMismatch.on('join_rejected', (d) => {
         mismatchReason = d.reason;
     });
-    clientMismatch._handleIncomingData({ type: 'event', event: 'joined', args: [{ role: 'Player', hostKey: 'wrong_key' }] });
+    clientMismatch._handleIncomingData({
+        type: 'event',
+        event: 'joined',
+        args: [{ role: 'Player', hostKey: 'wrong_key' }]
+    });
     assert.ok(/mismatch/i.test(mismatchReason));
     assert.strictEqual(clientMismatch.hostIdentityVerified, false);
 

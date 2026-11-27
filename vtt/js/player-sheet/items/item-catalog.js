@@ -1079,7 +1079,11 @@ export function openItemModal(options = {}) {
     if (itemCache) {
         populateItemFilterDropdowns(itemCache.items);
         renderItemSearchList(options);
-    } else if (typeof window !== 'undefined' && Array.isArray(window.VTT?.sharedItemCatalog) && window.VTT.sharedItemCatalog.length > 0) {
+    } else if (
+        typeof window !== 'undefined' &&
+        Array.isArray(window.VTT?.sharedItemCatalog) &&
+        window.VTT.sharedItemCatalog.length > 0
+    ) {
         itemCache = {
             items: window.VTT.sharedItemCatalog,
             fluffDict: {},

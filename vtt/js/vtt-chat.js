@@ -499,7 +499,9 @@ export function initVttChat(vtt, chatHistory) {
         const cfg3dVol = document.getElementById('config-3d-dice-volume');
 
         if (cfg3dEnable) {
-            cfg3dEnable.checked = window.Dice3D ? window.Dice3D.isEnabled() : localStorage.getItem('vtt_3d_dice_enabled') !== 'false';
+            cfg3dEnable.checked = window.Dice3D
+                ? window.Dice3D.isEnabled()
+                : localStorage.getItem('vtt_3d_dice_enabled') !== 'false';
             cfg3dEnable.addEventListener('change', (e) => {
                 const enabled = e.target.checked;
                 if (window.Dice3D) {
