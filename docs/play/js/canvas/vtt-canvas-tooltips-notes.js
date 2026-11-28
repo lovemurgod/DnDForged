@@ -1,4 +1,4 @@
-import{CONDITION_ICONS as M}from"./tokens/vtt-canvas-token-rollers.js?v=mwzii5ci";import{escapeHtml as k}from"../vtt-utils.js?v=mwzii5ci";export function injectGmTooltipStyles(t=typeof document<"u"?document:null){if(!t||t.getElementById("vtt-gm-tooltip-styles"))return;const r=t.createElement("style");r.id="vtt-gm-tooltip-styles",r.textContent=`
+import{CONDITION_ICONS as M}from"./tokens/vtt-canvas-token-rollers.js?v=mx0ag5ip";import{escapeHtml as k}from"../vtt-utils.js?v=mx0ag5ip";export function injectGmTooltipStyles(t=typeof document<"u"?document:null){if(!t||t.getElementById("vtt-gm-tooltip-styles"))return;const r=t.createElement("style");r.id="vtt-gm-tooltip-styles",r.textContent=`
         #vtt-gm-token-tooltip {
             position: fixed;
             z-index: 99999;

@@ -10,7 +10,7 @@ import { getPlayerMapOverride, escapeHtml } from '../vtt-utils.js';
 export function preloadVttModules() {
     return (async () => {
         try {
-            const _v = '1.0.8'; // Versioned cache key
+            const _v = '1.0.9'; // Versioned cache key
             const [
                 canvasMod,
                 creatureMod,

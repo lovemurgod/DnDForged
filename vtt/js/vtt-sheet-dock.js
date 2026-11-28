@@ -12,6 +12,25 @@
  * - Clean native sheet rendering with zero layout modification
  */
 
+import { getSafeVttUrl } from './vtt-utils.js';
+
+function resolveCharDockAvatar(c) {
+    if (!c) return null;
+    if (Array.isArray(c.tokenImages) && c.tokenImages.length > 0 && c.activeTokenIndex !== -1) {
+        const idx =
+            typeof c.activeTokenIndex === 'number' &&
+            c.activeTokenIndex >= 0 &&
+            c.activeTokenIndex < c.tokenImages.length
+                ? c.activeTokenIndex
+                : 0;
+        const entry = c.tokenImages[idx] || c.tokenImages[0];
+        const u = typeof entry === 'string' ? entry : entry?.url || '';
+        if (u && u !== 'img/logo.png') return u;
+    }
+    const fallback = c.avatar || c.tokenImage || c.portrait;
+    return fallback && fallback !== 'img/logo.png' ? fallback : null;
+}
+
 export function escapeHtml(str) {
     if (!str) return '';
     return String(str)
@@ -361,7 +380,7 @@ export class SheetDockManager {
             if (this.vtt.campaignState?.characters?.[id || characterId]) {
                 const c = this.vtt.campaignState.characters[id || characterId];
                 tabName = c.name || tabName;
-                tabAvatar = c.avatar || c.tokenImage || tabAvatar;
+                tabAvatar = resolveCharDockAvatar(c) || tabAvatar;
             }
         }
         // 2. Named Custom NPC or Companion -> Individual Tab
@@ -385,11 +404,11 @@ export class SheetDockManager {
             if (characterId && this.vtt.campaignState?.characters?.[characterId]) {
                 const c = this.vtt.campaignState.characters[characterId];
                 tabName = c.name || tabName;
-                tabAvatar = c.avatar || c.tokenImage || tabAvatar;
+                tabAvatar = resolveCharDockAvatar(c) || tabAvatar;
             } else if (id && this.vtt.campaignState?.characters?.[id]) {
                 const c = this.vtt.campaignState.characters[id];
                 tabName = c.name || tabName;
-                tabAvatar = c.avatar || c.tokenImage || tabAvatar;
+                tabAvatar = resolveCharDockAvatar(c) || tabAvatar;
             } else if (monsterData) {
                 tabName = monsterData.name || tabName;
                 tabAvatar = monsterData.tokenUrl || monsterData.img || tabAvatar;
@@ -416,15 +435,18 @@ export class SheetDockManager {
 
         let tabStaticAvatar = null;
         if (charRef) {
-            const candidates = [charRef.portrait, charRef.avatar, charRef.tokenImage].filter(
-                (u) => u && typeof u === 'string' && u !== 'img/logo.png' && !isAnimatedMedia(u)
-            );
+            const candidates = [
+                resolveCharDockAvatar(charRef),
+                charRef.portrait,
+                charRef.avatar,
+                charRef.tokenImage
+            ].filter((u) => u && typeof u === 'string' && u !== 'img/logo.png' && !isVideoMedia(u));
             if (candidates.length > 0) tabStaticAvatar = candidates[0];
         }
         if (
             !tabStaticAvatar &&
             monsterData?.img &&
-            !isAnimatedMedia(monsterData.img) &&
+            !isVideoMedia(monsterData.img) &&
             monsterData.img !== 'img/logo.png'
         ) {
             tabStaticAvatar = monsterData.img;
@@ -800,10 +822,10 @@ export class SheetDockManager {
             if (!targetStaticUrl) {
                 const rawAvatar = tab.avatar && tab.avatar !== 'img/logo.png' ? tab.avatar : null;
                 if (rawAvatar) {
-                    if (!isAnimatedMedia(rawAvatar)) {
+                    if (!isVideoMedia(rawAvatar)) {
                         targetStaticUrl = rawAvatar;
                     } else {
-                        // Animated media (video or GIF)
+                        // Video media: extract static frame
                         const cached = this.portraitCache ? this.portraitCache.get(rawAvatar) : null;
                         if (cached) {
                             targetStaticUrl = cached;
@@ -822,8 +844,9 @@ export class SheetDockManager {
             }
 
             const safeName = escapeHtml(tab.name);
-            const mediaHtml = targetStaticUrl
-                ? `<img src="${targetStaticUrl}" alt="${safeName}" class="tab-handle-avatar" data-tab-key="${tab.key}">`
+            const resolvedStaticUrl = targetStaticUrl ? escapeHtml(getSafeVttUrl(targetStaticUrl)) : '';
+            const mediaHtml = resolvedStaticUrl
+                ? `<img src="${resolvedStaticUrl}" data-raw-src="${escapeHtml(targetStaticUrl)}" alt="${safeName}" class="tab-handle-avatar" data-tab-key="${tab.key}">`
                 : monogramHtml;
 
             html += `

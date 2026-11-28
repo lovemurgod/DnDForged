@@ -198,10 +198,12 @@ for (const cssFile of [
 
 const buildTag = Date.now().toString(36);
 const rewriteJsModuleSpecifiers = (code) =>
-    code.replace(
-        /((?:from|import)\s*\(?\s*['"])(\.\.?\/[^'"?]+\.js)(['"])/g,
-        (_, p1, spec, p3) => `${p1}${spec}?v=${buildTag}${p3}`
-    );
+    code
+        .replace(
+            /((?:from|import)\s*\(?\s*['"])(\.\.?\/[^'"?]+\.js)(['"])/g,
+            (_, p1, spec, p3) => `${p1}${spec}?v=${buildTag}${p3}`
+        )
+        .replace(/(\.\.?\/[^'"?`]+\.js)\?v=\$\{[^}]+\}/g, `$1?v=${buildTag}`);
 
 const jsFilesToMinify = [...collectFiles(path.join(docsPlayDir, 'js'), '.js'), ...collectFiles(docsPrepDir, '.js')];
 let minifiedCount = 0;
